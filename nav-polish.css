@@ -1,0 +1,107 @@
+.navbar {
+    display: grid;
+    grid-template-columns: minmax(190px, auto) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+}
+
+.brand {
+    min-width: 0;
+    font-size: clamp(18px, 2vw, 23px);
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+}
+
+.brand-logo {
+    height: 52px;
+    flex: 0 0 auto;
+}
+
+.nav-links {
+    min-width: 0;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    max-width: 100%;
+    padding: 5px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.54);
+    overflow: hidden;
+}
+
+body.dark-theme .nav-links,
+.dark-theme .nav-links {
+    background: rgba(17, 32, 51, 0.5);
+}
+
+.nav-links a {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.nav-actions {
+    min-width: 0;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.nav-actions .btn {
+    padding: 12px 15px;
+    border-radius: 15px;
+    white-space: nowrap;
+}
+
+@media (max-width: 1120px) {
+    .navbar {
+        grid-template-columns: 1fr auto;
+        row-gap: 12px;
+    }
+
+    .nav-links {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-self: stretch;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .nav-links::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-actions {
+        grid-column: 2;
+    }
+}
+
+@media (max-width: 720px) {
+    .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px;
+    }
+
+    .brand-logo {
+        height: 48px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .nav-actions .btn {
+        display: none;
+    }
+}

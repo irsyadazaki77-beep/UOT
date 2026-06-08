@@ -1,0 +1,2849 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universe Of Tech - Tech Quiz Arena</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --green: #32d66b;
+            --green-dark: #17a84d;
+            --blue: #4f8cff;
+            --yellow: #ffd166;
+            --orange: #ff9f43;
+            --purple: #8b5cf6;
+            --pink: #ff5ea8;
+            --cyan: #3ddbd9;
+            --dark: #112033;
+            --navy: #0d1b2c;
+            --muted: #667085;
+            --soft: #f4f8fb;
+            --white: #ffffff;
+            --border: #e5edf5;
+            --danger: #ef4444;
+            --shadow: 0 24px 60px rgba(17, 32, 51, 0.14);
+            --shadow-soft: 0 14px 35px rgba(17, 32, 51, 0.09);
+
+            /* Theme specific variables */
+            --bg-page: radial-gradient(circle at 9% 8%, rgba(50, 214, 107, 0.2), transparent 28%),
+                radial-gradient(circle at 88% 12%, rgba(79, 140, 255, 0.2), transparent 30%),
+                radial-gradient(circle at 45% 92%, rgba(255, 209, 102, 0.18), transparent 30%),
+                linear-gradient(180deg, #fbfdff 0%, #eef7f2 100%);
+            --navbar-bg: rgba(255, 255, 255, 0.86);
+            --card-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        body.dark-theme {
+            --dark: #f4f8fb;
+            --muted: #98a2b3;
+            --soft: #0b1523;
+            --white: #112033;
+            --border: #1e2f47;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+            --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.3);
+
+            --bg-page: radial-gradient(circle at top left, rgba(50, 214, 107, 0.15), transparent 30%),
+                       radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.12), transparent 28%),
+                       linear-gradient(180deg, #0d1726 0%, #080f1a 100%);
+            --navbar-bg: rgba(17, 32, 51, 0.85);
+            --card-bg: rgba(17, 32, 51, 0.75);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Inter", sans-serif;
+            color: var(--dark);
+            background: var(--bg-page);
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.22;
+            background-image:
+                linear-gradient(rgba(79, 140, 255, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(50, 214, 107, 0.11) 1px, transparent 1px);
+            background-size: 52px 52px;
+            mask-image: linear-gradient(180deg, #000 0%, transparent 80%);
+            animation: gridDrift 18s linear infinite;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.18;
+            background:
+                radial-gradient(circle at 18% 32%, rgba(61, 219, 217, 0.32) 0 2px, transparent 3px),
+                radial-gradient(circle at 72% 22%, rgba(255, 209, 102, 0.35) 0 2px, transparent 3px),
+                radial-gradient(circle at 86% 68%, rgba(139, 92, 246, 0.3) 0 2px, transparent 3px),
+                radial-gradient(circle at 32% 78%, rgba(50, 214, 107, 0.28) 0 2px, transparent 3px);
+            background-size: 260px 260px;
+            animation: starfield 16s linear infinite;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        select {
+            font: inherit;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        select:focus-visible {
+            outline: 3px solid rgba(79, 140, 255, 0.45);
+            outline-offset: 3px;
+        }
+
+        .arena-glow {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .arena-glow span {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 70px;
+            filter: blur(12px);
+            opacity: 0.2;
+            animation: float 9s ease-in-out infinite alternate;
+        }
+
+        .arena-glow span:nth-child(1) {
+            right: -95px;
+            top: 130px;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+        }
+
+        .arena-glow span:nth-child(2) {
+            left: -120px;
+            top: 520px;
+            animation-delay: 1.4s;
+            background: linear-gradient(135deg, var(--yellow), var(--purple));
+        }
+
+        .arena-glow span:nth-child(3) {
+            right: 18%;
+            bottom: -170px;
+            animation-delay: 2.2s;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            padding-bottom: 18px;
+        }
+
+        .navbar {
+            width: min(1180px, calc(100% - 40px));
+            margin: 24px auto 0;
+            padding: 14px 18px;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 16px;
+            z-index: 10;
+            transition: box-shadow 0.3s ease;
+        }
+        body.dark-theme .navbar {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            font-size: 26px;
+            letter-spacing: -0.04em;
+            cursor: pointer;
+        }
+
+        .brand-logo {
+            height: 64px;
+            width: auto;
+            object-fit: contain;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .brand:hover .brand-logo {
+            transform: scale(1.15) rotate(12deg);
+        }
+
+        .brand:active .brand-logo {
+            transform: scale(0.92) rotate(-8deg);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--muted);
+            font-weight: 800;
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        .nav-links a {
+            white-space: nowrap;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--green-dark);
+            background: rgba(50, 214, 107, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .nav-links a.active {
+            color: white;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            box-shadow: 0 8px 20px rgba(50, 214, 107, 0.25);
+        }
+        
+        .dark-theme .nav-links a:hover {
+            background: rgba(50, 214, 107, 0.15);
+            color: var(--green);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            min-height: 46px;
+            border: 0;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 900;
+            border-radius: 18px;
+            padding: 13px 19px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .btn::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.28) 42%, transparent 62%);
+            transform: translateX(-120%);
+            transition: transform 0.55s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:hover::after {
+            transform: translateX(120%);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+            transform: none;
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            box-shadow: 0 14px 26px rgba(23, 168, 77, 0.28);
+        }
+
+        .btn-blue {
+            color: white;
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            box-shadow: 0 14px 26px rgba(79, 140, 255, 0.28);
+        }
+
+        .btn-ghost {
+            background: #eef7f2;
+            color: var(--green-dark);
+        }
+
+        .btn-dark {
+            background: var(--dark);
+            color: white;
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .hero {
+            width: min(1180px, calc(100% - 40px));
+            margin: 58px auto 0;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 390px;
+            gap: 34px;
+            align-items: stretch;
+        }
+
+        .hero-copy {
+            min-height: 438px;
+            padding: 44px;
+            border-radius: 40px;
+            background:
+                linear-gradient(135deg, rgba(13, 27, 44, 0.96), rgba(23, 42, 66, 0.94)),
+                radial-gradient(circle at 80% 20%, rgba(50, 214, 107, 0.34), transparent 32%);
+            color: white;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+            isolation: isolate;
+            animation: heroReveal 0.7s ease both;
+        }
+
+        .hero-copy::before,
+        .hero-copy::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            border-radius: 44px;
+            animation: float 8s ease-in-out infinite alternate;
+        }
+
+        .hero-copy::before {
+            right: -100px;
+            bottom: -112px;
+            width: 330px;
+            height: 330px;
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.28), rgba(79, 140, 255, 0.24));
+            transform: rotate(14deg);
+        }
+
+        .hero-copy::after {
+            width: 160px;
+            height: 160px;
+            left: 48%;
+            top: -60px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.05);
+            animation-delay: 1.6s;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 999px;
+            color: var(--yellow);
+            font-size: 13px;
+            font-weight: 900;
+            margin-bottom: 22px;
+            animation: badgeFloat 3.8s ease-in-out infinite;
+        }
+
+        h1 {
+            max-width: 780px;
+            font-size: clamp(40px, 7vw, 76px);
+            line-height: 0.95;
+            letter-spacing: -0.07em;
+            margin-bottom: 22px;
+        }
+
+        .hero-copy p {
+            max-width: 700px;
+            color: rgba(255, 255, 255, 0.78);
+            line-height: 1.75;
+            font-weight: 650;
+            font-size: 17px;
+        }
+
+        .hero-actions,
+        .panel-actions,
+        .quiz-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hero-actions {
+            margin-top: 32px;
+        }
+
+        .status-panel {
+            display: grid;
+            gap: 16px;
+        }
+
+        .metric-card,
+        .setup-card,
+        .quiz-shell,
+        .side-card,
+        .result-card,
+        .session-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .metric-card {
+            min-height: 128px;
+            border-radius: 30px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+            animation: slideUp 0.52s ease both;
+        }
+
+        .metric-card:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+
+        .metric-card:nth-child(3) {
+            animation-delay: 0.16s;
+        }
+
+        .metric-card::after {
+            content: "";
+            position: absolute;
+            right: -24px;
+            bottom: -32px;
+            width: 104px;
+            height: 104px;
+            border-radius: 30px;
+            background: rgba(79, 140, 255, 0.1);
+            transform: rotate(18deg);
+            animation: tileSpin 8s ease-in-out infinite alternate;
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-weight: 850;
+            font-size: 13px;
+        }
+
+        .metric-value {
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .metric-note {
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            width: min(1180px, calc(100% - 40px));
+            margin: 34px auto 0;
+        }
+
+        .setup-card {
+            border-radius: 34px;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) auto auto;
+            gap: 16px;
+            align-items: end;
+            animation: slideUp 0.48s ease both;
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .field select {
+            width: 100%;
+            min-height: 48px;
+            padding: 0 14px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--white);
+            color: var(--dark);
+            font-weight: 850;
+            outline: none;
+        }
+
+        .arena {
+            width: min(1180px, calc(100% - 40px));
+            margin: 26px auto 0;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 330px;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .quiz-shell {
+            border-radius: 38px;
+            overflow: hidden;
+            position: relative;
+            isolation: isolate;
+        }
+
+        .quiz-shell::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: conic-gradient(from 180deg, rgba(50, 214, 107, 0.32), rgba(79, 140, 255, 0.18), rgba(139, 92, 246, 0.22), rgba(50, 214, 107, 0.32));
+            opacity: 0;
+            filter: blur(18px);
+            animation: borderOrbit 7s linear infinite;
+            transition: opacity 0.25s ease;
+        }
+
+        .quiz-shell.combo-active {
+            box-shadow: 0 22px 64px rgba(50, 214, 107, 0.22);
+        }
+
+        .quiz-shell.combo-active::before {
+            opacity: 0.55;
+        }
+
+        .quiz-shell.answer-burst {
+            animation: shellBump 0.34s ease both;
+        }
+
+        .quiz-top {
+            padding: 24px;
+            background:
+                linear-gradient(135deg, #0d1b2c, #132d4a),
+                radial-gradient(circle at 90% 10%, rgba(50, 214, 107, 0.36), transparent 26%);
+            color: white;
+            display: grid;
+            gap: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-top::after {
+            content: "";
+            position: absolute;
+            inset: auto -18% -72px 48%;
+            height: 150px;
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.2), rgba(255, 209, 102, 0.22));
+            border-radius: 36px;
+            transform: rotate(-8deg);
+            animation: scanRibbon 5.5s ease-in-out infinite alternate;
+        }
+
+        .quiz-top::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.08) 45%, transparent 62%);
+            transform: translateX(-100%);
+            animation: panelSweep 5s ease-in-out infinite;
+        }
+
+        .quiz-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pill-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 9px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .timer {
+            min-width: 116px;
+            text-align: center;
+            padding: 12px 14px;
+            border-radius: 18px;
+            background: var(--white);
+            color: var(--dark);
+            font-weight: 900;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+        }
+
+        .timer.is-time-warning {
+            color: white;
+            background: linear-gradient(135deg, var(--danger), var(--orange));
+            animation: pulse 0.85s ease-in-out infinite alternate;
+        }
+
+        .progress-track {
+            height: 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--green), var(--yellow));
+            border-radius: inherit;
+            transition: width 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after,
+        .combo-fill::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.52), transparent);
+            transform: translateX(-100%);
+            animation: barShine 1.8s linear infinite;
+        }
+
+        .combo-meter {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 12px;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+        }
+
+        .combo-track {
+            height: 8px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.14);
+            overflow: hidden;
+        }
+
+        .combo-fill {
+            width: 0%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            transition: width 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-area {
+            padding: 28px;
+            min-height: 480px;
+        }
+
+        .question-card {
+            animation: questionIn 0.38s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+            transform-origin: top left;
+        }
+
+        .question-label {
+            color: var(--green-dark);
+            font-weight: 900;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+        }
+
+        .question-title {
+            font-size: clamp(24px, 4vw, 38px);
+            line-height: 1.1;
+            letter-spacing: -0.05em;
+            margin-bottom: 22px;
+        }
+
+        .answer-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .answer-option {
+            width: 100%;
+            min-height: 66px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: var(--soft);
+            color: var(--dark);
+            cursor: pointer;
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr);
+            gap: 14px;
+            align-items: center;
+            text-align: left;
+            font-weight: 850;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .answer-option::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mx, 18%) var(--my, 50%), rgba(79, 140, 255, 0.12), transparent 34%);
+            opacity: 0;
+            transition: opacity 0.22s ease;
+        }
+
+        .answer-option:hover {
+            transform: translateY(-2px);
+            border-color: rgba(79, 140, 255, 0.42);
+            background: var(--white);
+            box-shadow: 0 14px 30px rgba(17, 32, 51, 0.08);
+        }
+
+        .answer-option:hover::after {
+            opacity: 1;
+        }
+
+        .answer-option[disabled] {
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .answer-option.hidden-choice {
+            display: none;
+        }
+
+        .answer-option.is-correct {
+            border-color: rgba(23, 168, 77, 0.7);
+            background: rgba(50, 214, 107, 0.14);
+            animation: correctGlow 0.64s ease both;
+        }
+
+        .answer-option.is-wrong {
+            border-color: rgba(239, 68, 68, 0.6);
+            background: rgba(239, 68, 68, 0.1);
+            animation: wrongWobble 0.42s ease both;
+        }
+
+        .answer-key {
+            width: 42px;
+            height: 42px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            background: var(--white);
+            color: var(--blue);
+            font-weight: 900;
+            box-shadow: 0 8px 22px rgba(17, 32, 51, 0.08);
+        }
+
+        .feedback {
+            display: none;
+            margin-top: 18px;
+            padding: 18px;
+            border-radius: 22px;
+            background: var(--soft);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            line-height: 1.65;
+            font-weight: 750;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: slideUp 0.25s ease both;
+        }
+
+        .feedback strong {
+            color: var(--dark);
+        }
+
+        .quiz-actions {
+            margin-top: 20px;
+            justify-content: space-between;
+        }
+
+        .question-toolbar {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .question-toolbar .stat-line {
+            min-height: 58px;
+        }
+
+        .utility-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .side-stack {
+            display: grid;
+            gap: 16px;
+        }
+
+        .side-card,
+        .result-card,
+        .session-card {
+            border-radius: 30px;
+            padding: 22px;
+            animation: slideUp 0.45s ease both;
+        }
+
+        .side-card h3,
+        .result-card h3,
+        .session-card h3 {
+            font-size: 22px;
+            letter-spacing: -0.04em;
+            margin-bottom: 16px;
+        }
+
+        .stat-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .stat-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 18px;
+            background: var(--soft);
+            font-weight: 900;
+        }
+
+        .stat-line span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .topic-list,
+        .review-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .question-map {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .question-jump {
+            width: 100%;
+            min-height: 42px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--soft);
+            color: var(--dark);
+            cursor: pointer;
+            font-weight: 900;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .question-jump::after {
+            content: "";
+            position: absolute;
+            inset: auto 8px 7px 8px;
+            height: 3px;
+            border-radius: 99px;
+            background: rgba(79, 140, 255, 0.28);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.2s ease;
+        }
+
+        .question-jump:hover {
+            transform: translateY(-2px);
+            border-color: rgba(79, 140, 255, 0.42);
+            background: var(--white);
+        }
+
+        .question-jump:hover::after,
+        .question-jump.current::after {
+            transform: scaleX(1);
+        }
+
+        .question-jump.current {
+            color: white;
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            box-shadow: 0 10px 20px rgba(79, 140, 255, 0.25);
+            animation: currentQuestionPulse 1.5s ease-in-out infinite alternate;
+        }
+
+        .question-jump.answered {
+            border-color: rgba(23, 168, 77, 0.36);
+            background: rgba(50, 214, 107, 0.14);
+            animation: mapPop 0.28s ease both;
+        }
+
+        .question-jump.wrong {
+            border-color: rgba(239, 68, 68, 0.32);
+            background: rgba(239, 68, 68, 0.09);
+        }
+
+        .question-jump.flagged {
+            box-shadow: inset 0 -4px 0 rgba(255, 209, 102, 0.95);
+            animation: flagWink 1.4s ease-in-out infinite alternate;
+        }
+
+        .question-jump.bookmarked {
+            box-shadow: inset 0 4px 0 rgba(139, 92, 246, 0.65);
+        }
+
+        .legend-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 850;
+        }
+
+        .legend-list span {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 99px;
+            background: #e8eef4;
+        }
+
+        .legend-dot.current {
+            background: var(--blue);
+        }
+
+        .legend-dot.answered {
+            background: var(--green);
+        }
+
+        .legend-dot.flagged {
+            background: var(--yellow);
+        }
+
+        .legend-dot.bookmarked {
+            background: var(--purple);
+        }
+
+        .topic-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+            padding: 12px;
+            border-radius: 18px;
+            background: var(--soft);
+            font-weight: 900;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .topic-item:hover {
+            transform: translateY(-2px);
+            background: var(--white);
+            box-shadow: 0 12px 26px rgba(17, 32, 51, 0.07);
+        }
+
+        .topic-item small {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .mini-bar {
+            width: 78px;
+            height: 9px;
+            background: #e8eef4;
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .mini-bar span {
+            display: block;
+            height: 100%;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            border-radius: 99px;
+        }
+
+        .result-card {
+            display: none;
+            margin-top: 24px;
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.12), rgba(79, 140, 255, 0.1)), white;
+        }
+
+        .result-card.show {
+            display: block;
+            animation: scoreBurst 0.42s ease both;
+        }
+
+        .result-card.show .result-score {
+            animation: numberBounce 0.72s cubic-bezier(0.22, 1.25, 0.36, 1) both;
+        }
+
+        .result-score {
+            font-size: clamp(44px, 8vw, 82px);
+            line-height: 1;
+            letter-spacing: -0.08em;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .result-mini {
+            border-radius: 18px;
+            padding: 13px;
+            background: rgba(255, 255, 255, 0.76);
+            border: 1px solid var(--border);
+        }
+
+        .result-mini span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 850;
+            margin-bottom: 5px;
+        }
+
+        .result-mini strong {
+            font-size: 22px;
+            letter-spacing: -0.04em;
+        }
+
+        .review-item {
+            padding: 14px;
+            border-radius: 18px;
+            background: #f5f8fb;
+            border: 1px solid var(--border);
+            font-weight: 850;
+        }
+
+        .review-item.is-correct {
+            border-color: rgba(23, 168, 77, 0.35);
+            background: rgba(50, 214, 107, 0.1);
+        }
+
+        .review-item.is-wrong {
+            border-color: rgba(239, 68, 68, 0.32);
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .review-item small {
+            display: block;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .empty-state {
+            color: var(--muted);
+            line-height: 1.6;
+            font-weight: 750;
+        }
+
+        .confetti-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 40;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 9px;
+            height: 14px;
+            border-radius: 4px;
+            opacity: 0.92;
+            animation: confettiFall 820ms ease-out forwards;
+        }
+
+        .spark-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 99px;
+            opacity: 0.92;
+            animation: sparkPop 620ms ease-out forwards;
+        }
+
+        footer {
+            width: min(1180px, calc(100% - 40px));
+            margin: 48px auto 30px;
+            padding: 26px 0;
+            color: var(--muted);
+            font-weight: 750;
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+
+            to {
+                transform: translateY(34px) rotate(8deg) scale(1.05);
+            }
+        }
+
+        @keyframes gridDrift {
+            from {
+                background-position: 0 0, 0 0;
+            }
+
+            to {
+                background-position: 52px 52px, 52px 52px;
+            }
+        }
+
+        @keyframes starfield {
+            from {
+                background-position: 0 0;
+                transform: translateY(0);
+            }
+
+            to {
+                background-position: 260px 520px;
+                transform: translateY(-24px);
+            }
+        }
+
+        @keyframes logoPulse {
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                box-shadow: 0 12px 30px rgba(50, 214, 107, 0.35);
+            }
+
+            50% {
+                transform: translateY(-2px) scale(1.04);
+                box-shadow: 0 18px 38px rgba(79, 140, 255, 0.32);
+            }
+        }
+
+        @keyframes heroReveal {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes badgeFloat {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-4px);
+            }
+        }
+
+        @keyframes tileSpin {
+            from {
+                transform: rotate(18deg) translateY(0);
+            }
+
+            to {
+                transform: rotate(32deg) translateY(-10px);
+            }
+        }
+
+        @keyframes borderOrbit {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes shellBump {
+            0% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.008);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes scanRibbon {
+            from {
+                transform: rotate(-8deg) translateX(0);
+            }
+
+            to {
+                transform: rotate(-8deg) translateX(-34px);
+            }
+        }
+
+        @keyframes panelSweep {
+            0%,
+            42% {
+                transform: translateX(-110%);
+            }
+
+            68%,
+            100% {
+                transform: translateX(110%);
+            }
+        }
+
+        @keyframes barShine {
+            to {
+                transform: translateX(120%);
+            }
+        }
+
+        @keyframes questionIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px) rotateX(7deg) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0) scale(1);
+            }
+        }
+
+        @keyframes correctGlow {
+            0% {
+                transform: scale(0.985);
+                box-shadow: 0 0 0 rgba(50, 214, 107, 0);
+            }
+
+            55% {
+                transform: scale(1.018);
+                box-shadow: 0 18px 36px rgba(50, 214, 107, 0.24);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 10px 26px rgba(50, 214, 107, 0.12);
+            }
+        }
+
+        @keyframes wrongWobble {
+            0%,
+            100% {
+                transform: translateX(0) rotate(0);
+            }
+
+            22% {
+                transform: translateX(-7px) rotate(-0.5deg);
+            }
+
+            48% {
+                transform: translateX(6px) rotate(0.5deg);
+            }
+
+            72% {
+                transform: translateX(-3px) rotate(-0.25deg);
+            }
+        }
+
+        @keyframes currentQuestionPulse {
+            from {
+                box-shadow: 0 10px 20px rgba(79, 140, 255, 0.25);
+            }
+
+            to {
+                box-shadow: 0 14px 28px rgba(139, 92, 246, 0.38);
+            }
+        }
+
+        @keyframes mapPop {
+            from {
+                transform: scale(0.92);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes flagWink {
+            from {
+                filter: saturate(1);
+            }
+
+            to {
+                filter: saturate(1.45) brightness(1.03);
+            }
+        }
+
+        @keyframes numberBounce {
+            0% {
+                transform: translateY(14px) scale(0.92);
+            }
+
+            62% {
+                transform: translateY(-4px) scale(1.04);
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.98);
+            }
+
+            65% {
+                transform: scale(1.018);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                box-shadow: 0 12px 26px rgba(239, 68, 68, 0.2);
+            }
+
+            to {
+                transform: scale(1.04);
+                box-shadow: 0 18px 34px rgba(239, 68, 68, 0.34);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scoreBurst {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translate3d(0, -20px, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate3d(var(--drift), 190px, 0) rotate(280deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes sparkPop {
+            0% {
+                transform: translate3d(0, 0, 0) scale(0.4);
+                opacity: 0;
+            }
+
+            30% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate3d(var(--spark-x), var(--spark-y), 0) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 1060px) {
+
+            .hero,
+            .arena,
+            .setup-card {
+                grid-template-columns: 1fr;
+            }
+
+            .status-panel {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1061px) {
+            .quiz-shell {
+                position: sticky;
+                top: 104px;
+                align-self: start;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .navbar {
+                width: min(100% - 24px, 1180px);
+                border-radius: 22px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero,
+            .section,
+            .arena,
+            footer {
+                width: min(100% - 24px, 1180px);
+            }
+
+            .hero {
+                margin-top: 36px;
+            }
+
+            .hero-copy {
+                min-height: auto;
+                padding: 30px;
+                border-radius: 32px;
+            }
+
+            .status-panel,
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .setup-card,
+            .question-area,
+            .quiz-top,
+            .side-card,
+            .result-card,
+            .session-card {
+                padding: 18px;
+            }
+
+            .quiz-shell,
+            .setup-card {
+                border-radius: 28px;
+            }
+
+            .answer-option {
+                grid-template-columns: 36px minmax(0, 1fr);
+            }
+
+            .answer-key {
+                width: 36px;
+                height: 36px;
+                border-radius: 13px;
+            }
+
+            .quiz-actions,
+            footer {
+                flex-direction: column;
+            }
+
+            .question-toolbar,
+            .legend-list {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-actions .btn,
+            .utility-actions,
+            .utility-actions .btn,
+            .panel-actions .btn {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.001ms !important;
+            }
+
+            .confetti-piece {
+                display: none;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="nav-polish.css">
+</head>
+
+<body>
+    <div class="arena-glow" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+
+    <main class="page">
+        <nav class="navbar">
+            <a href="index.html" class="brand">
+                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                Universe Of Tech
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html" class="active">Quiz</a>
+                <a href="snbt.html">TKA</a>
+                <a href="tka-lms.html">LMS TKA</a>
+                <a href="library.html">Library</a>
+                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <a class="btn btn-ghost" href="index.html">Masuk</a>
+                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-copy">
+                <div class="hero-content">
+                    <div class="badge">Tech Quiz Arena - streak, review, dan rekomendasi belajar</div>
+                    <h1>Naik level tech skill lewat quiz yang responsif.</h1>
+                    <p>
+                        Pilih materi, atur level, kejar streak, pakai bantuan saat buntu, lalu baca analisis performa
+                        yang langsung menunjuk area tech yang perlu kamu latih berikutnya.
+                    </p>
+                </div>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#arena">Mulai Quiz</a>
+                    <a class="btn btn-blue" href="#review">Lihat Review</a>
+                </div>
+            </div>
+
+            <aside class="status-panel">
+                <div class="metric-card">
+                    <span class="metric-label">Best Score</span>
+                    <strong class="metric-value" id="bestScore">0%</strong>
+                    <span class="metric-note">Tersimpan otomatis</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Streak Aktif</span>
+                    <strong class="metric-value" id="streakValue">0</strong>
+                    <span class="metric-note">Combo menyala saat beruntun</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Bank Soal Tech</span>
+                    <strong class="metric-value" id="bankSize">60</strong>
+                    <span class="metric-note">6 kategori terkurasi</span>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section" aria-label="Pengaturan quiz">
+            <div class="setup-card">
+                <div class="field">
+                    <label for="category">Materi</label>
+                    <select id="category">
+                        <option value="all">Semua Materi</option>
+                        <option value="programming">Programming</option>
+                        <option value="database">Database & SQL</option>
+                        <option value="design">UI/UX Design</option>
+                        <option value="analytics">Business Analytics</option>
+                        <option value="web">Web Development</option>
+                        <option value="cyber">Cyber & Data Literacy</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="difficulty">Level</label>
+                    <select id="difficulty">
+                        <option value="all">Campuran</option>
+                        <option value="easy">Pemanasan</option>
+                        <option value="medium">Normal</option>
+                        <option value="hard">Challenge</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="amount">Jumlah Soal</label>
+                    <select id="amount">
+                        <option value="5">5 soal</option>
+                        <option value="10" selected>10 soal</option>
+                        <option value="15">15 soal</option>
+                        <option value="20">20 soal</option>
+                        <option value="30">30 soal</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="mode">Mode</label>
+                    <select id="mode">
+                        <option value="practice">Practice</option>
+                        <option value="exam">Exam Timer</option>
+                        <option value="sprint">Sprint</option>
+                        <option value="review">Review Mode</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="startBtn">Mulai</button>
+                <button class="btn btn-danger" id="resetBtn">Reset</button>
+            </div>
+        </section>
+
+        <section class="arena" id="arena">
+            <div class="quiz-shell" id="quizShell">
+                <div class="quiz-top">
+                    <div class="quiz-meta">
+                        <div class="pill-row">
+                            <span class="pill" id="counterPill">Soal 0/0</span>
+                            <span class="pill" id="categoryPill">Semua Materi</span>
+                            <span class="pill" id="levelPill">Campuran</span>
+                            <span class="pill" id="modePill">Practice</span>
+                        </div>
+                        <div class="timer" id="timer">00:00</div>
+                    </div>
+                    <div class="progress-track" aria-label="Progress quiz">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="combo-meter">
+                        <div class="combo-track"><div class="combo-fill" id="comboFill"></div></div>
+                        <span id="comboLabel">Combo x0</span>
+                    </div>
+                </div>
+
+                <div class="question-area">
+                    <div class="question-card" id="questionCard">
+                        <div class="question-label" id="questionLabel">Pertanyaan aktif</div>
+                        <h2 class="question-title" id="questionText">Klik Mulai untuk memulai sesi quiz tech.</h2>
+                        <div class="answer-grid" id="answers"></div>
+                    </div>
+
+                    <div class="feedback" id="feedback"></div>
+
+                    <div class="quiz-actions">
+                        <div class="utility-actions">
+                            <button class="btn btn-ghost" id="hintBtn" disabled>Hint</button>
+                            <button class="btn btn-ghost" id="fiftyBtn" disabled>50:50</button>
+                            <button class="btn btn-ghost" id="bookmarkBtn" disabled>Simpan Soal</button>
+                            <button class="btn btn-ghost" id="flagBtn" disabled>Ragu-ragu</button>
+                        </div>
+                        <button class="btn btn-blue" id="skipBtn" disabled>Lewati</button>
+                        <button class="btn btn-dark" id="nextBtn" disabled>Berikutnya</button>
+                    </div>
+
+                    <div class="question-toolbar" aria-label="Ringkasan progres soal">
+                        <div class="stat-line"><span>Terjawab</span><strong id="answeredValue">0</strong></div>
+                        <div class="stat-line"><span>Belum</span><strong id="unansweredValue">0</strong></div>
+                        <div class="stat-line"><span>Ragu</span><strong id="flaggedValue">0</strong></div>
+                    </div>
+
+                    <div class="result-card" id="resultCard">
+                        <h3>Hasil Sesi</h3>
+                        <div class="result-score" id="finalScore">0%</div>
+                        <p class="empty-state" id="resultSummary"></p>
+                        <div class="result-grid">
+                            <div class="result-mini"><span>Benar</span><strong id="resultCorrect">0</strong></div>
+                            <div class="result-mini"><span>Salah</span><strong id="resultWrong">0</strong></div>
+                            <div class="result-mini"><span>Streak</span><strong id="resultBestStreak">0</strong></div>
+                            <div class="result-mini"><span>Sisa Waktu</span><strong id="resultTimeLeft">0:00</strong></div>
+                        </div>
+                        <div class="panel-actions" style="margin-top: 18px;">
+                            <button class="btn btn-primary" id="retryBtn">Ulangi Quiz</button>
+                            <button class="btn btn-blue" id="reviewBtn">Review Jawaban</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="side-stack">
+                <div class="side-card" id="questionMapCard">
+                    <h3>Pilih Nomor Soal</h3>
+                    <div class="question-map" id="questionMap">
+                        <p class="empty-state">Mulai quiz untuk membuka nomor soal.</p>
+                    </div>
+                    <div class="legend-list" aria-label="Legenda nomor soal">
+                        <span><i class="legend-dot current"></i>Aktif</span>
+                        <span><i class="legend-dot answered"></i>Terjawab</span>
+                        <span><i class="legend-dot flagged"></i>Ragu</span>
+                        <span><i class="legend-dot bookmarked"></i>Disimpan</span>
+                    </div>
+                </div>
+
+                <div class="side-card" id="liveStatsCard">
+                    <h3>Live Stats</h3>
+                    <div class="stat-list">
+                        <div class="stat-line"><span>Benar</span><strong id="correctValue">0</strong></div>
+                        <div class="stat-line"><span>Salah</span><strong id="wrongValue">0</strong></div>
+                        <div class="stat-line"><span>Akurasi</span><strong id="accuracyValue">0%</strong></div>
+                        <div class="stat-line"><span>Bantuan</span><strong id="helpValue">2</strong></div>
+                        <div class="stat-line"><span>Waktu</span><strong id="timeStat">0:00</strong></div>
+                    </div>
+                </div>
+
+                <div class="side-card">
+                    <h3>Performa Kategori</h3>
+                    <div class="topic-list" id="categoryPerformance">
+                        <div class="topic-item">
+                            <div>Belum ada data<small>Mulai quiz untuk melihat akurasi per kategori.</small></div>
+                            <div class="mini-bar"><span style="width: 20%"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-card">
+                    <h3>Rekomendasi</h3>
+                    <div class="topic-list" id="recommendations">
+                        <div class="topic-item">
+                            <div>Mulai satu sesi dulu<small>Rekomendasi muncul setelah quiz berjalan.</small></div>
+                            <div class="mini-bar"><span style="width: 20%"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="session-card">
+                    <h3>Sesi Terakhir</h3>
+                    <div class="topic-list" id="lastSession">
+                        <p class="empty-state">Belum ada sesi tersimpan.</p>
+                    </div>
+                </div>
+
+                <div class="side-card">
+                    <h3>Soal Disimpan</h3>
+                    <div class="review-list" id="bookmarks">
+                        <p class="empty-state">Belum ada soal yang disimpan.</p>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section" id="review">
+            <div class="side-card">
+                <h3>Review Jawaban</h3>
+                <div class="review-list" id="reviewList">
+                    <p class="empty-state">Selesaikan quiz untuk melihat pembahasan per soal.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <span>Universe Of Tech Quiz Arena</span>
+            <span>Practice - Exam - Sprint - Review</span>
+        </footer>
+    </main>
+
+    <script>
+        const questionBank = [
+            { id: "programming-1", category: "programming", difficulty: "easy", question: "Apa fungsi variabel dalam program?", answers: ["Menyimpan nilai yang bisa digunakan ulang", "Menghapus error otomatis", "Mengubah desain database", "Menjalankan internet"], correct: 0, hint: "Bayangkan kotak bernama yang berisi data.", explanation: "Variabel dipakai untuk menyimpan nilai, lalu nilai itu dapat dibaca atau diubah selama program berjalan." },
+            { id: "programming-2", category: "programming", difficulty: "easy", question: "Apa arti tipe data boolean?", answers: ["Nilai benar atau salah", "Daftar gambar", "Koneksi server", "Ukuran layar"], correct: 0, hint: "Biasanya bernilai true atau false.", explanation: "Boolean digunakan untuk kondisi logika seperti valid atau tidak valid, aktif atau tidak aktif." },
+            { id: "programming-3", category: "programming", difficulty: "easy", question: "Mengapa komentar kode sebaiknya dipakai seperlunya?", answers: ["Agar menjelaskan bagian yang tidak langsung jelas tanpa membuat kode bising", "Agar semua baris kode menjadi hijau", "Agar program selalu lebih cepat", "Agar tidak perlu testing"], correct: 0, hint: "Komentar bagus membantu pembaca, bukan mengganti kode yang jelas.", explanation: "Komentar paling berguna untuk menjelaskan alasan atau konteks, bukan mengulang hal yang sudah jelas dari kode." },
+            { id: "programming-4", category: "programming", difficulty: "easy", question: "Apa tujuan dasar conditional statement seperti if?", answers: ["Menjalankan kode tertentu hanya saat kondisi terpenuhi", "Menyimpan file gambar", "Membuat database baru", "Menghapus semua bug"], correct: 0, hint: "Pikirkan percabangan keputusan.", explanation: "Conditional statement membuat program dapat memilih alur berdasarkan kondisi tertentu." },
+            { id: "programming-5", category: "programming", difficulty: "medium", question: "Kapan loop paling tepat digunakan?", answers: ["Saat perlu mengulang instruksi dengan pola tertentu", "Saat ingin membuat warna tombol", "Saat membuat nama file", "Saat menutup browser"], correct: 0, hint: "Cari kebutuhan yang terjadi berkali-kali.", explanation: "Loop membantu menjalankan blok kode berulang kali sampai kondisi tertentu terpenuhi." },
+            { id: "programming-6", category: "programming", difficulty: "medium", question: "Apa manfaat memecah kode menjadi function kecil?", answers: ["Kode lebih mudah diuji, dibaca, dan digunakan ulang", "Kode selalu lebih cepat tanpa pengecualian", "Program tidak perlu data", "Semua bug langsung hilang"], correct: 0, hint: "Pikirkan maintainability.", explanation: "Function kecil membuat tanggung jawab kode lebih jelas sehingga mudah diuji, dirawat, dan dipakai ulang." },
+            { id: "programming-7", category: "programming", difficulty: "medium", question: "Apa yang biasanya dilakukan proses debugging?", answers: ["Menemukan penyebab error dan memperbaiki perilaku program", "Mengubah semua teks menjadi kapital", "Menghapus dokumentasi", "Membuat logo aplikasi"], correct: 0, hint: "Debugging mencari akar masalah.", explanation: "Debugging bukan hanya menebak perbaikan, tetapi melacak data, alur, dan kondisi yang membuat program gagal." },
+            { id: "programming-8", category: "programming", difficulty: "hard", question: "Mengapa asynchronous programming penting pada aplikasi modern?", answers: ["Agar operasi lambat seperti network tidak memblokir alur utama", "Agar semua kode berjalan tanpa urutan", "Agar database tidak dibutuhkan", "Agar CSS bisa dihapus"], correct: 0, hint: "Network request bisa lama.", explanation: "Async membantu aplikasi tetap responsif saat menunggu operasi I/O seperti fetch API, file, atau database." },
+            { id: "programming-9", category: "programming", difficulty: "hard", question: "Apa risiko utama global state yang tidak terkendali?", answers: ["Perubahan dari banyak tempat sulit dilacak dan memicu bug tersembunyi", "Semua variabel menjadi lebih aman", "UI otomatis responsif", "Testing menjadi tidak perlu"], correct: 0, hint: "Semakin banyak tempat bisa mengubah state, semakin sulit dilacak.", explanation: "Global state perlu dibatasi atau dikelola jelas agar perubahan data tidak menimbulkan efek samping yang sulit diprediksi." },
+            { id: "programming-10", category: "programming", difficulty: "hard", question: "Apa prinsip utama clean code?", answers: ["Kode mudah dipahami, bernama jelas, dan punya tanggung jawab terarah", "Kode harus selalu paling pendek", "Kode harus tanpa function", "Kode harus menyembunyikan semua maksudnya"], correct: 0, hint: "Pembaca kode adalah target utama.", explanation: "Clean code memprioritaskan kejelasan, struktur, nama yang bermakna, dan desain yang mudah dirawat." },
+            { id: "programming-11", category: "programming", difficulty: "easy", question: "Apa output dari ekspresi 5 + '5' dalam JavaScript?", answers: ["'55'", "'10'", "Error", "NaN"], correct: 0, hint: "JavaScript akan melakukan konversi tipe data otomatis (coercion).", explanation: "Operator + pada string dan number akan mengakibatkan number dikoersi menjadi string, lalu digabungkan (concatenated)." },
+            { id: "programming-12", category: "programming", difficulty: "easy", question: "Di bawah ini yang merupakan struktur data dengan prinsip FIFO (First In First Out) adalah?", answers: ["Queue (Antrean)", "Stack (Tumpukan)", "Array", "Tree"], correct: 0, hint: "Seperti antrean bioskop.", explanation: "Queue (antrean) memproses data yang pertama kali masuk terlebih dahulu, sedangkan Stack menggunakan prinsip LIFO (Last In First Out)." },
+            { id: "programming-13", category: "programming", difficulty: "medium", question: "Apa perbedaan utama antara compiler dan interpreter?", answers: ["Compiler menerjemahkan seluruh kode sekaligus, Interpreter menerjemahkan baris demi baris", "Compiler hanya untuk bahasa C, sedangkan interpreter hanya untuk Python", "Compiler tidak menghasilkan file output, interpreter menghasilkan file exe", "Interpreter membuat program berjalan jauh lebih cepat daripada compiler"], correct: 0, hint: "Pikirkan waktu penerjemahan kode.", explanation: "Compiler menerjemahkan seluruh source code menjadi machine code sebelum dijalankan, sedangkan interpreter menerjemahkan dan mengeksekusi instruksi baris demi baris saat program berjalan." },
+            { id: "programming-14", category: "programming", difficulty: "medium", question: "Dalam paradigma Object-Oriented Programming (OOP), apa yang dimaksud dengan Inheritance?", answers: ["Kemampuan suatu class untuk mewarisi sifat dan metode dari class lain", "Kemampuan menyembunyikan detail implementasi internal", "Kemampuan membuat objek tanpa class", "Kemampuan mengubah tipe data variabel secara dinamis"], correct: 0, hint: "Konsep pewarisan dalam keluarga.", explanation: "Inheritance (pewarisan) memungkinkan sebuah subclass mewarisi attribute and method dari superclass, mendukung reusability kode." },
+            { id: "programming-15", category: "programming", difficulty: "medium", question: "Apakah fungsi dari Git dalam pengembangan perangkat lunak?", answers: ["Melacak perubahan pada kode sumber dan memfasilitasi kolaborasi tim", "Mengompilasi kode program menjadi aplikasi", "Menyimpan data user secara online", "Memperbaiki bug secara otomatis menggunakan AI"], correct: 0, hint: "Berhubungan dengan version control.", explanation: "Git adalah distributed version control system yang mencatat riwayat perubahan file kode dan membantu developer bekerja bersama pada project yang sama." },
+            { id: "programming-16", category: "programming", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Time Complexity' dalam analisis algoritma?", answers: ["Representasi jumlah waktu atau langkah yang dibutuhkan algoritma untuk berjalan seiring bertambahnya ukuran input", "Lama waktu yang dibutuhkan developer untuk menulis kode program", "Waktu yang diperlukan CPU untuk melakukan restart", "Kecepatan internet saat mengunduh dependency library"], correct: 0, hint: "Pikirkan performa kode terhadap ukuran data (N).", explanation: "Time complexity (biasanya diukur dengan Big O notation) mengukur bagaimana jumlah operasi/waktu eksekusi suatu algoritma bertumbuh seiring bertambahnya ukuran input data." },
+            { id: "programming-17", category: "programming", difficulty: "hard", question: "Manakah penjelasan terbaik mengenai rekursi (recursion) dalam pemrograman?", answers: ["Sebuah fungsi yang memanggil dirinya sendiri sampai mencapai base case", "Sebuah loop yang berjalan tanpa henti (infinite loop)", "Metode untuk mengamankan data rahasia user", "Cara untuk menggabungkan dua file database"], correct: 0, hint: "Memanggil diri sendiri.", explanation: "Rekursi adalah teknik pemrograman di mana sebuah fungsi memanggil dirinya sendiri untuk memecahkan sub-masalah yang lebih kecil, dengan base case sebagai batas berhenti." },
+            { id: "programming-18", category: "programming", difficulty: "easy", question: "Mana yang merupakan contoh nama variabel yang valid menurut konvensi camelCase?", answers: ["totalHargaBarang", "total-harga-barang", "TotalHargaBarang", "total_harga_barang"], correct: 0, hint: "Kata pertama huruf kecil, kata berikutnya berawalan huruf besar.", explanation: "Konvensi camelCase diawali dengan huruf kecil, dan huruf pertama kata berikutnya ditulis dengan huruf besar tanpa spasi atau karakter khusus." },
+            { id: "programming-19", category: "programming", difficulty: "medium", question: "Dalam OOP, apa arti dari Polymorphism?", answers: ["Satu antarmuka atau metode yang dapat memiliki banyak bentuk tindakan yang berbeda", "Kemampuan membuat objek menjadi tidak dapat diubah (immutable)", "Proses enkripsi data sebelum disimpan", "Membagi program menjadi beberapa server"], correct: 0, hint: "Poly berarti banyak, morph berarti bentuk.", explanation: "Polymorphism memungkinkan objek dari kelas-kelas berbeda merespons pesan atau metode yang sama dengan cara yang sesuai dengan spesifik kelas masing-masing." },
+            { id: "programming-20", category: "programming", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Memory Leak'?", answers: ["Kondisi di mana memori yang dialokasikan tidak dibebaskan kembali meskipun sudah tidak digunakan", "Kerusakan fisik pada modul RAM di komputer", "Pencurian data memori oleh hacker pihak ketiga", "Proses pembersihan cache browser secara otomatis"], correct: 0, hint: "Memori terbuang sia-sia dan terus berkurang.", explanation: "Memory leak terjadi saat program mengalokasikan memori dinamis di RAM tetapi gagal membebaskannya (deallocation) setelah selesai digunakan, yang lama-kelamaan dapat menghabiskan memori sistem." },
+
+            { id: "database-1", category: "database", difficulty: "easy", question: "Apa fungsi utama primary key dalam tabel database?", answers: ["Mengidentifikasi setiap baris secara unik", "Menghapus tabel", "Mengubah warna kolom", "Membuat animasi data"], correct: 0, hint: "Satu baris, satu identitas.", explanation: "Primary key memastikan setiap record memiliki identitas unik agar mudah direferensikan." },
+            { id: "database-2", category: "database", difficulty: "easy", question: "Apa itu record dalam database relasional?", answers: ["Satu baris data dalam tabel", "Satu warna tombol", "Satu folder gambar", "Satu jenis animasi"], correct: 0, hint: "Tabel punya kolom dan baris.", explanation: "Record adalah satu baris yang berisi nilai untuk kolom-kolom dalam sebuah tabel." },
+            { id: "database-3", category: "database", difficulty: "easy", question: "Perintah SQL SELECT digunakan untuk apa?", answers: ["Mengambil data dari tabel", "Menghapus aplikasi", "Mengubah ukuran layar", "Membuat ikon"], correct: 0, hint: "SELECT berkaitan dengan membaca data.", explanation: "SELECT digunakan untuk membaca data dari satu atau lebih tabel sesuai kolom dan filter yang dibutuhkan." },
+            { id: "database-4", category: "database", difficulty: "easy", question: "Apa fungsi klausa WHERE dalam SQL?", answers: ["Menyaring baris berdasarkan kondisi", "Membuat tabel selalu kosong", "Mengganti nama database", "Mengurutkan warna UI"], correct: 0, hint: "WHERE adalah filter.", explanation: "WHERE membatasi hasil query hanya pada baris yang memenuhi kondisi tertentu." },
+            { id: "database-5", category: "database", difficulty: "medium", question: "JOIN dalam SQL digunakan untuk apa?", answers: ["Menggabungkan data dari beberapa tabel yang saling berelasi", "Mengompres gambar", "Mengubah font", "Mengunci laptop"], correct: 0, hint: "Relasi antar tabel adalah kata kuncinya.", explanation: "JOIN menghubungkan tabel berdasarkan kolom terkait sehingga data bisa dibaca dalam satu hasil query." },
+            { id: "database-6", category: "database", difficulty: "medium", question: "Apa tujuan normalisasi database?", answers: ["Mengurangi duplikasi dan menjaga konsistensi data", "Membuat semua tabel menjadi satu kolom", "Menghapus kebutuhan query", "Membuat UI lebih berwarna"], correct: 0, hint: "Normalisasi menata struktur data.", explanation: "Normalisasi memecah data ke struktur yang lebih tepat agar redundansi turun dan update lebih aman." },
+            { id: "database-7", category: "database", difficulty: "medium", question: "Apa manfaat transaction dalam database?", answers: ["Menjaga beberapa operasi berhasil semua atau batal semua", "Membuat query selalu cepat", "Mengubah SQL menjadi HTML", "Menghapus kebutuhan backup"], correct: 0, hint: "Pikirkan atomicity.", explanation: "Transaction menjaga integritas data saat beberapa operasi harus dianggap sebagai satu kesatuan." },
+            { id: "database-8", category: "database", difficulty: "hard", question: "Mengapa index database perlu dipakai dengan bijak?", answers: ["Index mempercepat baca, tetapi bisa menambah beban tulis dan storage", "Index selalu membuat semua query sempurna", "Index mengganti kebutuhan primary key", "Index hanya untuk desain UI"], correct: 0, hint: "Ada tradeoff antara read dan write.", explanation: "Index dapat mempercepat pencarian, tetapi terlalu banyak index memperlambat insert/update dan memakai ruang tambahan." },
+            { id: "database-9", category: "database", difficulty: "hard", question: "Apa penyebab umum query menjadi lambat pada tabel besar?", answers: ["Filter tidak memanfaatkan index dan membaca terlalu banyak baris", "Nama tabel terlalu pendek", "Terlalu banyak komentar CSS", "Tombol submit berwarna biru"], correct: 0, hint: "Perhatikan jumlah baris yang discan.", explanation: "Query lambat sering terjadi karena full scan, join tidak efisien, atau index yang tidak cocok dengan pola filter." },
+            { id: "database-10", category: "database", difficulty: "hard", question: "Apa risiko menyimpan data turunan tanpa strategi sinkronisasi?", answers: ["Nilainya bisa tidak konsisten dengan sumber data utama", "Database menjadi tidak bisa dibaca", "Semua query gagal otomatis", "Primary key berubah menjadi string"], correct: 0, hint: "Data yang sama di dua tempat harus dijaga.", explanation: "Denormalisasi bisa berguna untuk performa, tetapi perlu strategi agar data turunan tetap selaras." },
+            { id: "database-11", category: "database", difficulty: "easy", question: "Apakah kegunaan utama dari SQL FOREIGN KEY?", answers: ["Menghubungkan baris di satu tabel dengan baris di tabel lainnya", "Membuat tabel baru secara otomatis", "Mengubah tipe data kolom menjadi string", "Menghapus database cadangan"], correct: 0, hint: "Berhubungan dengan relasi antar tabel.", explanation: "Foreign Key adalah kolom yang merujuk ke Primary Key di tabel lain, menjaga integritas referensial antara kedua tabel tersebut." },
+            { id: "database-12", category: "database", difficulty: "easy", question: "Apakah kepanjangan dari SQL?", answers: ["Structured Query Language", "Simple Queue List", "System Query Locator", "Sequential Query Log"], correct: 0, hint: "Bahasa terstruktur untuk database.", explanation: "SQL singkatan dari Structured Query Language, bahasa standar untuk memanipulasi dan mengambil data dari database relasional." },
+            { id: "database-13", category: "database", difficulty: "medium", question: "Manakah di bawah ini yang merupakan ciri utama database NoSQL (non-relasional) dibanding SQL?", answers: ["Skema data fleksibel atau tanpa skema tetap, mendukung skalabilitas horizontal", "Hanya bisa dijalankan di sistem operasi Linux", "Tidak mendukung penyimpanan data teks", "Selalu menggunakan tabel dengan baris dan kolom yang kaku"], correct: 0, hint: "Pikirkan format dokumen atau key-value yang fleksibel.", explanation: "NoSQL didesain untuk menangani data tidak terstruktur atau semi-terstruktur dengan skema fleksibel dan biasanya lebih mudah diskalakan secara horizontal (menambah server)." },
+            { id: "database-14", category: "database", difficulty: "medium", question: "Apakah fungsi dari klausa GROUP BY dalam query SQL?", answers: ["Mengelompokkan baris yang memiliki nilai sama ke dalam baris ringkasan", "Mengurutkan data dari nilai terbesar ke terkecil", "Membatasi jumlah data yang ditampilkan di layar", "Menggabungkan dua tabel tanpa relasi"], correct: 0, hint: "Sering digunakan bersama fungsi agregasi seperti COUNT, SUM, atau AVG.", explanation: "GROUP BY digunakan bersama fungsi agregasi untuk mengelompokkan baris data berdasarkan satu atau beberapa kolom untuk menghasilkan ringkasan data." },
+            { id: "database-15", category: "database", difficulty: "medium", question: "Apakah yang dimaksud dengan 'Database Transaction'?", answers: ["Satu unit kerja logis yang berisi satu atau beberapa operasi SQL yang harus sukses semua atau gagal semua", "Proses transfer data database antar perusahaan", "Biaya sewa layanan cloud database per bulan", "Proses ekspor data ke format file Excel"], correct: 0, hint: "Pikirkan konsep 'All or Nothing'.", explanation: "Transaction mengelompokkan beberapa operasi database sehingga jika salah satu gagal, seluruh perubahan dibatalkan (rollback) untuk menjaga konsistensi data." },
+            { id: "database-16", category: "database", difficulty: "hard", question: "Apakah kepanjangan dari ACID dalam prinsip database relasional?", answers: ["Atomicity, Consistency, Isolation, Durability", "Access, Control, Index, Data", "Accuracy, Cloud, Integration, Delivery", "Authentication, Cipher, Integrity, Decentralization"], correct: 0, hint: "Menjamin transaksi database yang andal.", explanation: "ACID adalah standar transaksi database: Atomicity (semua atau tidak sama sekali), Consistency (validitas data), Isolation (transaksi tidak saling mengganggu), dan Durability (data permanen setelah commit)." },
+            { id: "database-17", category: "database", difficulty: "hard", question: "Dalam indexing database relasional, manakah struktur data yang paling umum digunakan?", answers: ["B-Tree atau B+ Tree", "Stack", "Queue", "Linked List"], correct: 0, hint: "Struktur pohon yang seimbang untuk pencarian cepat.", explanation: "B-Tree/B+ Tree digunakan karena mempertahankan data terurut dan memungkinkan pencarian, akses berurutan, penyisipan, dan penghapusan dalam waktu logaritmik." },
+            { id: "database-18", category: "database", difficulty: "easy", question: "Klausa SQL ORDER BY digunakan untuk apa?", answers: ["Mengurutkan hasil query berdasarkan kolom tertentu secara ascending atau descending", "Membatasi baris data yang diambil", "Menghitung jumlah baris data", "Menghapus data duplikat"], correct: 0, hint: "Berkaitan dengan urutan alfabet atau angka.", explanation: "ORDER BY digunakan untuk mengurutkan hasil query, baik secara terkecil-terbesar (ASC) maupun terbesar-terkecil (DESC)." },
+            { id: "database-19", category: "database", difficulty: "medium", question: "Manakah database berikut yang termasuk kategori NoSQL Document-Oriented?", answers: ["MongoDB", "MySQL", "PostgreSQL", "SQLite"], correct: 0, hint: "Menggunakan format JSON/BSON untuk menyimpan data.", explanation: "MongoDB menyimpan data dalam dokumen fleksibel mirip JSON, menjadikannya salah satu database NoSQL Document-Oriented terpopuler." },
+            { id: "database-20", category: "database", difficulty: "hard", question: "Apa tujuan dari replikasi database (Database Replication)?", answers: ["Menyalin data ke server database lain untuk redundansi, high availability, dan pembagian beban baca", "Menghapus duplikasi data di satu tabel", "Mengubah database relasional menjadi NoSQL", "Meningkatkan kecepatan query write dengan membagi satu baris data"], correct: 0, hint: "Pikirkan backup aktif dan pembagian beban kerja.", explanation: "Replikasi database menyalin data secara real-time ke satu atau lebih server replika untuk memastikan jika server utama mati, aplikasi tetap bisa berjalan (failover)." },
+
+            { id: "design-1", category: "design", difficulty: "easy", question: "Apa tujuan utama wireframe?", answers: ["Menyusun struktur dan alur layar sebelum desain visual detail", "Menghitung pajak aplikasi", "Membuat database production", "Menghapus semua teks"], correct: 0, hint: "Ini tahap rangka awal.", explanation: "Wireframe membantu tim melihat struktur, hirarki, dan alur sebelum masuk ke visual final." },
+            { id: "design-2", category: "design", difficulty: "easy", question: "Apa arti visual hierarchy dalam UI?", answers: ["Pengaturan elemen agar pengguna tahu mana yang paling penting", "Daftar warna acak", "Teknik backup database", "Cara mematikan animasi"], correct: 0, hint: "Hierarchy membantu perhatian pengguna.", explanation: "Visual hierarchy memakai ukuran, warna, jarak, dan kontras untuk mengarahkan perhatian." },
+            { id: "design-3", category: "design", difficulty: "easy", question: "Mengapa tombol utama biasanya dibuat lebih menonjol?", answers: ["Agar aksi prioritas mudah ditemukan", "Agar semua elemen sama penting", "Agar halaman lebih berat", "Agar teks hilang"], correct: 0, hint: "Primary action perlu jelas.", explanation: "Tombol utama menuntun pengguna ke aksi paling penting dalam konteks layar tersebut." },
+            { id: "design-4", category: "design", difficulty: "easy", question: "Apa fungsi spacing dalam layout?", answers: ["Memberi jarak agar informasi mudah dipindai dan tidak terasa sesak", "Mengganti semua ikon", "Membuat server cepat", "Menyimpan password"], correct: 0, hint: "Ruang kosong juga bagian desain.", explanation: "Spacing membantu pengelompokan, keterbacaan, dan ritme visual dalam antarmuka itu." },
+            { id: "design-5", category: "design", difficulty: "medium", question: "Apa manfaat usability testing?", answers: ["Menemukan masalah penggunaan dari perilaku pengguna nyata", "Membuat logo otomatis", "Mengganti server", "Memperbesar semua tombol tanpa alasan"], correct: 0, hint: "Uji dengan manusia, bukan asumsi saja.", explanation: "Usability testing memperlihatkan titik bingung, hambatan, dan kebutuhan pengguna saat memakai produk." },
+            { id: "design-6", category: "design", difficulty: "medium", question: "Mengapa aksesibilitas penting dalam produk digital?", answers: ["Agar lebih banyak orang bisa memakai produk dengan nyaman", "Agar warna selalu hitam putih", "Agar aplikasi hanya bisa dibuka admin", "Agar tidak perlu desain responsif"], correct: 0, hint: "Tidak semua pengguna memakai perangkat dengan cara yang sama.", explanation: "Aksesibilitas mempertimbangkan kontras, keyboard, screen reader, ukuran teks, dan kebutuhan pengguna yang beragam." },
+            { id: "design-7", category: "design", difficulty: "medium", question: "Apa contoh microcopy yang baik?", answers: ["Teks singkat yang menjelaskan aksi atau status dengan jelas", "Paragraf panjang di semua tombol", "Nama variabel database", "Kode CSS untuk shadow"], correct: 0, hint: "Microcopy membantu pengguna memahami apa yang terjadi.", explanation: "Microcopy seperti label tombol, pesan error, dan helper text harus ringkas, jelas, dan sesuai konteks." },
+            { id: "design-8", category: "design", difficulty: "hard", question: "Design system yang baik biasanya membantu apa?", answers: ["Konsistensi UI, kecepatan produksi, dan kualitas kolaborasi", "Menghapus kebutuhan riset", "Membuat semua halaman identik total", "Mengganti semua developer"], correct: 0, hint: "Komponen dan aturan yang bisa dipakai bersama.", explanation: "Design system menyediakan komponen, token, dan pedoman agar desain lebih konsisten dan tim lebih efisien." },
+            { id: "design-9", category: "design", difficulty: "hard", question: "Mengapa kontras warna harus diuji, bukan hanya dilihat sekilas?", answers: ["Persepsi warna berbeda dan standar aksesibilitas butuh rasio yang cukup", "Karena semua warna pasti gagal", "Karena kontras hanya untuk gambar", "Karena browser tidak mendukung warna"], correct: 0, hint: "Kontras memengaruhi keterbacaan.", explanation: "Uji kontras membantu memastikan teks dapat dibaca oleh pengguna dengan kondisi visual dan perangkat yang berbeda." },
+            { id: "design-10", category: "design", difficulty: "hard", question: "Apa risiko membuat UI terlalu dekoratif pada tool produktivitas?", answers: ["Workflow inti bisa lambat dipindai dan aksi penting tenggelam", "Semua pengguna pasti lebih cepat", "Data menjadi lebih akurat", "Backend otomatis aman"], correct: 0, hint: "Tool kerja butuh kejelasan dan efisiensi.", explanation: "Dekorasi yang berlebihan dapat mengganggu pemindaian, prioritas aksi, dan fokus pengguna." },
+            { id: "design-11", category: "design", difficulty: "easy", question: "Apakah kegunaan utama dari Figma dalam alur kerja UI/UX?", answers: ["Membuat desain antarmuka, komponen interaktif, dan kolaborasi tim secara real-time", "Menulis kode backend Node.js", "Menguji performa database SQL", "Membuat server host lokal"], correct: 0, hint: "Tool desain berbasis web terpopuler saat ini.", explanation: "Figma adalah aplikasi desain grafis vektor dan prototyping yang berfokus pada kolaborasi real-time untuk tim UI/UX." },
+            { id: "design-12", category: "design", difficulty: "easy", question: "Apakah warna merah dalam desain UI paling sering digunakan untuk melambangkan?", answers: ["Aksi berbahaya, error, atau pembatalan (destructive action)", "Status sukses atau penyelesaian tugas", "Warna latar belakang default mode malam", "Tombol navigasi menu utama"], correct: 0, hint: "Pikirkan sinyal bahaya atau peringatan.", explanation: "Merah secara psikologis menarik perhatian kuat dan sering digunakan untuk error, peringatan, atau tombol hapus permanen." },
+            { id: "design-13", category: "design", difficulty: "medium", question: "Apakah yang dimaksud dengan 'Color Contrast Ratio' dalam standar aksesibilitas web?", answers: ["Perbandingan tingkat kecerahan antara teks dan latar belakangnya agar mudah dibaca", "Jumlah kombinasi warna yang digunakan dalam satu halaman", "Kecepatan transisi warna saat tombol di-hover", "Proses kalibrasi warna monitor desainer"], correct: 0, hint: "Membantu pengguna dengan gangguan penglihatan membaca teks Anda.", explanation: "Rasio kontras warna membandingkan luminansi teks dengan latar belakangnya. WCAG menetapkan kontras minimum (misal 4.5:1 untuk teks normal) untuk aksesibilitas yang baik." },
+            { id: "design-14", category: "design", difficulty: "medium", question: "Apakah perbedaan utama antara UI (User Interface) dan UX (User Experience)?", answers: ["UI berfokus pada keindahan visual antarmuka, sedangkan UX berfokus pada kenyamanan dan kemudahan pengguna saat memakai aplikasi", "UI adalah coding frontend, UX adalah coding backend", "UI hanya untuk website desktop, UX hanya untuk aplikasi mobile", "UI dikerjakan oleh manajer produk, UX dikerjakan oleh developer"], correct: 0, hint: "Pikirkan aspek 'estetika' vs 'pengalaman/perasaan'.", explanation: "UI mengurusi tata letak, warna, tipografi, dan aset visual (tampilan). UX mengurusi riset pengguna, alur navigasi, struktur informasi, dan kemudahan interaksi (rasa)." },
+            { id: "design-15", category: "design", difficulty: "medium", question: "Apakah fungsi dari 'Grid System' dalam desain layout UI?", answers: ["Membantu menyusun elemen visual agar rapi, konsisten, sejajar, dan proporsional", "Membuat grid database untuk menyimpan gambar", "Mempercepat waktu loading asset gambar", "Mengenkripsi file desain sebelum dikirim"], correct: 0, hint: "Struktur garis bantu vertikal dan horizontal.", explanation: "Grid system (seperti 8px grid atau 12-column grid) digunakan untuk menyelaraskan elemen desain secara konsisten di berbagai ukuran layar." },
+            { id: "design-16", category: "design", difficulty: "hard", question: "Apakah yang dimaksud dengan prinsip 'Fitts's Law' dalam UX Design?", answers: ["Waktu untuk menjangkau target tergantung pada ukuran target dan jarak ke target tersebut", "Semakin banyak pilihan yang diberikan, semakin lama pengguna mengambil keputusan", "Desain harus selalu menggunakan warna pastel", "Website harus dimuat kurang dari 3 detik"], correct: 0, hint: "Tombol yang besar dan dekat lebih mudah diklik.", explanation: "Hukum Fitts menyatakan bahwa target yang berukuran besar dan diletakkan di tempat yang mudah dijangkau (seperti pojok layar atau dekat kursor) akan lebih cepat dan mudah diklik oleh pengguna." },
+            { id: "design-17", category: "design", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Heuristic Evaluation'?", answers: ["Metode pemeriksaan kegunaan (usability) sistem berdasarkan aturan desain praktis (heuristics)", "Proses analisis performa server menggunakan algoritma machine learning", "Pengujian kecepatan loading halaman web secara berkala", "Uji coba keamanan server dari serangan siber"], correct: 0, hint: "Mengevaluasi dengan 10 standar emas Usability milik Jakob Nielsen.", explanation: "Evaluasi heuristik adalah metode audit UX di mana ahli mengevaluasi antarmuka produk digital terhadap prinsip-prinsip kegunaan yang sudah diakui umum (seperti 10 Usability Heuristics Jakob Nielsen)." },
+            { id: "design-18", category: "design", difficulty: "easy", question: "Apakah kepanjangan dari SVG dalam tipe file aset desain?", answers: ["Scalable Vector Graphics", "Standard Visual Grid", "Simple Vector Template", "System Visual Graphic"], correct: 0, hint: "Gambar vektor yang tidak pecah saat diperbesar.", explanation: "SVG (Scalable Vector Graphics) adalah format file gambar berbasis XML yang dapat diskalakan tanpa kehilangan resolusi atau kualitas visualnya." },
+            { id: "design-19", category: "design", difficulty: "medium", question: "Manakah di bawah ini yang menggambarkan prinsip 'Hick's Law'?", answers: ["Waktu yang dibutuhkan untuk mengambil keputusan meningkat seiring bertambahnya jumlah dan kompleksitas pilihan", "Pengguna menghaisu sebagian besar waktu mereka di situs lain", "Elemen yang diletakkan berdekatan dianggap memiliki fungsi serupa", "Desain harus selalu menyembunyikan detail teknis"], correct: 0, hint: "Terlalu banyak pilihan menu membuat pengguna bingung dan lambat memilih.", explanation: "Hukum Hick menyatakan bahwa semakin banyak pilihan yang disajikan kepada pengguna, semakin lama waktu yang mereka butuhkan untuk berinteraksi dan membuat keputusan." },
+            { id: "design-20", category: "design", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Design Tokens'?", answers: ["Variabel visual terkecil (seperti warna, font, spacing) yang disimpan dalam format netral (JSON) untuk menjaga konsistensi di berbagai platform", "Mata uang kripto khusus untuk membayar desainer grafis", "Kunci keamanan untuk membuka file proyek Figma", "Kode promo diskon untuk membeli aset desain premium"], correct: 0, hint: "Menghubungkan variabel desain dengan kode developer secara otomatis.", explanation: "Design Tokens adalah unit keputusan desain atomik (seperti nilai HSL warna atau unit rem ukuran font) yang diekspor sebagai JSON/YAML agar bisa digunakan langsung oleh tim frontend (Web, iOS, Android) untuk menjaga konsistensi desain sistem." },
+
+            { id: "analytics-1", category: "analytics", difficulty: "easy", question: "Apa itu KPI?", answers: ["Ukuran penting untuk menilai pencapaian tujuan", "Nama bahasa pemrograman", "Format gambar", "Jenis tombol navigasi"], correct: 0, hint: "KPI berhubungan dengan target.", explanation: "KPI adalah metrik utama yang dipakai untuk mengevaluasi performa terhadap tujuan tertentu." },
+            { id: "analytics-2", category: "analytics", difficulty: "easy", question: "Apa fungsi dashboard analitik?", answers: ["Meringkas metrik penting agar mudah dipantau", "Menulis kode otomatis", "Menghapus database", "Mengganti UI menjadi gelap"], correct: 0, hint: "Dashboard membantu melihat status.", explanation: "Dashboard menyatukan metrik penting agar tim bisa memantau kondisi dan perubahan dengan cepat." },
+            { id: "analytics-3", category: "analytics", difficulty: "easy", question: "Apa arti conversion rate?", answers: ["Persentase pengguna yang menyelesaikan aksi target", "Jumlah warna dalam halaman", "Ukuran file gambar", "Durasi animasi tombol"], correct: 0, hint: "Conversion berkaitan dengan aksi target.", explanation: "Conversion rate mengukur proporsi pengguna yang melakukan aksi penting seperti daftar, beli, atau menyelesaikan kuis." },
+            { id: "analytics-4", category: "analytics", difficulty: "easy", question: "Apa itu data segmentasi?", answers: ["Membagi data ke kelompok bermakna untuk analisis lebih jelas", "Menghapus semua data kecil", "Mengubah data menjadi gambar", "Menyimpan data tanpa kategori"], correct: 0, hint: "Segmentasi memecah audiens atau data.", explanation: "Segmentasi membantu menemukan pola yang mungkin tertutup jika semua data digabung." },
+            { id: "analytics-5", category: "analytics", difficulty: "medium", question: "Mengapa funnel analysis berguna?", answers: ["Melihat titik pengguna banyak berhenti dalam sebuah alur", "Menghapus data duplikat otomatis", "Membuat password", "Mengubah warna chart"], correct: 0, hint: "Perhatikan perjalanan pengguna dari awal sampai akhir.", explanation: "Funnel analysis menunjukkan tahap mana yang kehilangan banyak pengguna sehingga tim tahu prioritas perbaikan." },
+            { id: "analytics-6", category: "analytics", difficulty: "medium", question: "Apa tujuan A/B testing?", answers: ["Membandingkan dua varian untuk melihat mana yang lebih efektif", "Membuat dua database identik", "Menghapus kebutuhan data", "Mengganti bahasa coding"], correct: 0, hint: "A dan B adalah dua versi.", explanation: "A/B testing membantu mengambil keputusan berbasis data dengan membandingkan performa dua varian." },
+            { id: "analytics-7", category: "analytics", difficulty: "medium", question: "Mengapa data outlier perlu diperiksa?", answers: ["Outlier bisa menunjukkan error, kasus ekstrem, atau insight penting", "Outlier selalu harus dihapus", "Outlier hanya muncul di gambar", "Outlier membuat chart tidak bisa dibuka"], correct: 0, hint: "Nilai ekstrem punya cerita.", explanation: "Outlier tidak otomatis salah. Ia perlu diperiksa karena bisa berasal dari error atau fenomena penting." },
+            { id: "analytics-8", category: "analytics", difficulty: "hard", question: "Apa risiko mengambil keputusan hanya dari rata-rata?", answers: ["Rata-rata bisa menyembunyikan outlier dan perbedaan antar segmen", "Rata-rata selalu salah", "Rata-rata hanya untuk UI", "Data tidak bisa dihitung"], correct: 0, hint: "Segmentasi sering membuka cerita yang tertutup.", explanation: "Rata-rata berguna, tetapi dapat menutup variasi penting. Segmentasi, distribusi, dan outlier perlu ikut dilihat." },
+            { id: "analytics-9", category: "analytics", difficulty: "hard", question: "Mengapa korelasi tidak otomatis berarti sebab-akibat?", answers: ["Dua metrik bisa bergerak bersama karena faktor lain", "Korelasi selalu palsu", "Sebab-akibat hanya ada di CSS", "Data angka tidak bisa dibandingkan"], correct: 0, hint: "Ada kemungkinan variabel ketiga.", explanation: "Korelasi menunjukkan hubungan, tetapi eksperimen atau analisis lebih lanjut dibutuhkan untuk menyimpulkan kausalitas." },
+            { id: "analytics-10", category: "analytics", difficulty: "hard", question: "Apa masalah umum vanity metric?", answers: ["Terlihat bagus tetapi tidak selalu terkait keputusan atau tujuan bisnis", "Tidak bisa divisualisasikan", "Selalu lebih akurat dari KPI", "Hanya berlaku untuk database"], correct: 0, hint: "Metrik cantik belum tentu actionable.", explanation: "Vanity metric bisa membuat performa tampak bagus tanpa memberi arah tindakan yang berarti." },
+            { id: "analytics-11", category: "analytics", difficulty: "easy", question: "Apakah kepanjangan dari CAC dalam analisis bisnis?", answers: ["Customer Acquisition Cost", "Customer Active Count", "Click Action Rate", "Company Asset Cost"], correct: 0, hint: "Biaya untuk mendapatkan pelanggan baru.", explanation: "CAC mengukur total biaya pemasaran dan penjualan yang dikeluarkan untuk meyakinkan satu pelanggan baru agar membeli produk Anda." },
+            { id: "analytics-12", category: "analytics", difficulty: "easy", question: "Dalam visualisasi data, kapankah pie chart paling tepat digunakan?", answers: ["Untuk membandingkan bagian-bagian kecil yang membentuk satu kesatuan penuh (persentase total)", "Untuk melacak tren data dari waktu ke waktu", "Untuk menunjukkan hubungan korelasi antara dua variabel angka", "Untuk memvisualisasikan data geografi"], correct: 0, hint: "Menunjukkan proporsi bagian dari 100%.", explanation: "Pie chart terbaik untuk menampilkan komposisi statis dari bagian-bagian kecil yang secara kumulatif membentuk 100%." },
+            { id: "analytics-13", category: "analytics", difficulty: "medium", question: "Apakah yang dimaksud dengan 'Churn Rate'?", answers: ["Persentase pelanggan yang berhenti berlangganan atau berhenti menggunakan produk dalam jangka waktu tertentu", "Jumlah rata-rata klik yang didapatkan oleh sebuah iklan banner", "Kecepatan loading database saat memproses data transaksi", "Jumlah keuntungan bersih yang didapatkan per hari"], correct: 0, hint: "Berkaitan dengan pelanggan yang pergi/hilang.", explanation: "Churn rate mengukur tingkat kehilangan pelanggan, metrik krusial bagi bisnis berbasis langganan (SaaS) untuk mengukur kepuasan pelanggan." },
+            { id: "analytics-14", category: "analytics", difficulty: "medium", question: "Apakah perbedaan utama antara korelasi (correlation) dan kausalitas (causality)?", answers: ["Korelasi menunjukkan hubungan statistik antara dua variabel, sedangkan kausalitas membuktikan bahwa perubahan satu variabel menyebabkan perubahan pada variabel lain", "Korelasi hanya untuk data kualitatif, kausalitas hanya untuk data kuantitatif", "Korelasi selalu benar, kausalitas hanya hipotesis", "Korelasi dikerjakan oleh data analyst, kausalitas dikerjakan oleh developer"], correct: 0, hint: "Ingat pepatah 'Correlation does not imply causation'.", explanation: "Korelasi berarti dua variabel bergerak bersama secara statistik, namun belum tentu salah satunya menyebabkan yang lain terjadi (bisa jadi ada faktor luar/variabel ketiga)." },
+            { id: "analytics-15", category: "analytics", difficulty: "medium", question: "Apakah kegunaan utama dari scatter plot dalam analisis data?", answers: ["Melihat pola sebaran dan hubungan korelasi antara dua variabel numerik", "Menampilkan struktur hierarki manajemen perusahaan", "Mengurutkan data kategori dari yang tertinggi", "Menghitung rata-rata nilai matematika"], correct: 0, hint: "Menggunakan koordinat kartesius untuk memplot titik-titik data.", explanation: "Scatter plot menempatkan titik-titik data berdasarkan nilai X dan Y untuk melihat apakah ada hubungan (positif, negatif, atau acak) di antara kedua variabel tersebut." },
+            { id: "analytics-16", category: "analytics", difficulty: "hard", question: "Apakah yang dimaksud dengan 'LTV' (Lifetime Value) pelanggan dan mengapa ia penting dibandingkan CAC?", answers: ["Perkiraan total pendapatan yang akan dihasilkan pelanggan selama hubungan bisnis mereka dengan perusahaan; LTV harus lebih tinggi dari CAC agar bisnis profitabel", "Durasi waktu pelanggan membuka aplikasi web; LTV tinggi berarti server lambat", "Jumlah aset komputer yang dipinjamkan ke pelanggan", "Biaya hukum untuk menyelesaikan komplain dari pelanggan"], correct: 0, hint: "Hubungan nilai jangka panjang vs biaya akuisisi.", explanation: "LTV mengukur kontribusi keuangan jangka panjang seorang pelanggan. Rasio LTV:CAC yang sehat (biasanya 3:1) menunjukkan model bisnis berkelanjutan dan menguntungkan." },
+            { id: "analytics-17", category: "analytics", difficulty: "hard", question: "Dalam statistika, apakah yang dimaksud dengan 'P-value'?", answers: ["Probabilitas mendapatkan hasil ekstrem yang diamati jika hipotesis nol (H0) benar; digunakan untuk menentukan signifikansi statistik", "Jumlah data outlier yang ditemukan dalam sampel", "Nilai rata-rata dari seluruh populasi data", "Persentase data yang hilang akibat error teknis"], correct: 0, hint: "Nilai batas signifikansi yang biasanya dibandingkan dengan alpha (0.05).", explanation: "P-value mengukur kekuatan bukti melawan hipotesis nol. P-value < 0.05 biasanya dianggap signifikan secara statistik, menolak hipotesis nol untuk mendapat dukungan hipotesis alternatif." },
+            { id: "analytics-18", category: "analytics", difficulty: "easy", question: "Apakah kepanjangan dari SQL dalam data analytics?", answers: ["Structured Query Language", "System Query Link", "Simple Quantized Layout", "Standardized Queue Logic"], correct: 0, hint: "Bahasa standar untuk berinteraksi dengan database data.", explanation: "SQL digunakan analis data untuk mengambil, memfilter, dan mengagregasi data dari database relasional sebelum dianalisis." },
+            { id: "analytics-19", category: "analytics", difficulty: "medium", question: "Manakah definisi yang tepat untuk 'Cohort Analysis'?", answers: ["Analisis perilaku sekelompok pengguna yang berbagi karakteristik atau pengalaman yang sama dalam rentang waktu tertentu", "Proses pembersihan data dari nilai kosong menggunakan algoritma python", "Metode untuk mengamankan hak akses database", "Penghitungan laba bersih sebelum dipotong pajak"], correct: 0, hint: "Mengelompokkan pengguna berdasarkan bulan pendaftaran mereka.", explanation: "Cohort Analysis membagi pengguna ke dalam kelompok (kohort) berdasarkan tanggal aktivitas awal mereka untuk melihat bagaimana retensi atau perilaku mereka berubah seiring waktu." },
+            { id: "analytics-20", category: "analytics", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Predictive Analytics'?", answers: ["Penggunaan data historis, algoritma statistik, dan teknik machine learning untuk memprediksi hasil di masa depan", "Laporan ringkasan tentang penjualan perusahaan di bulan lalu", "Sistem pendeteksi virus komputer yang berjalan di server", "Proses mengarsipkan data lama yang sudah tidak aktif ke cold storage"], correct: 0, hint: "Berfokus pada peramalan masa depan (forecasting).", explanation: "Predictive analytics melampaui analisis data deskriptif (apa yang terjadi) untuk memprediksi tren dan perilaku masa depan berdasarkan pola data historis." },
+
+            { id: "web-1", category: "web", difficulty: "easy", question: "Apa fungsi HTML dalam halaman web?", answers: ["Menyusun struktur konten halaman", "Mengatur query database", "Menjalankan server fisik", "Mengenkripsi password"], correct: 0, hint: "HTML adalah kerangka konten.", explanation: "HTML mendefinisikan struktur seperti heading, paragraf, link, form, dan elemen halaman." },
+            { id: "web-2", category: "web", difficulty: "easy", question: "Apa fungsi CSS?", answers: ["Mengatur tampilan visual seperti layout, warna, dan spacing", "Menyimpan data permanen", "Mengirim email otomatis", "Membuat primary key"], correct: 0, hint: "CSS bicara soal gaya visual.", explanation: "CSS mengontrol presentasi halaman web, termasuk responsif, animasi, dan komponen visual." },
+            { id: "web-3", category: "web", difficulty: "easy", question: "Apa fungsi JavaScript di browser?", answers: ["Membuat halaman interaktif dan merespons aksi pengguna", "Mengganti semua file menjadi gambar", "Mencetak database", "Menghapus kebutuhan HTML"], correct: 0, hint: "Interaksi adalah kata kuncinya.", explanation: "JavaScript memungkinkan validasi form, update UI, fetch data, dan logika interaktif di browser." },
+            { id: "web-4", category: "web", difficulty: "easy", question: "Apa arti responsive design?", answers: ["Tampilan menyesuaikan ukuran layar dan perangkat", "Server merespons lebih cepat", "Semua tombol berkedip", "Website hanya untuk desktop"], correct: 0, hint: "Pikirkan mobile dan desktop.", explanation: "Responsive design membuat layout tetap nyaman di berbagai ukuran layar." },
+            { id: "web-5", category: "web", difficulty: "medium", question: "Apa kegunaan fetch API?", answers: ["Mengambil atau mengirim data melalui request HTTP", "Menggambar ikon SVG otomatis", "Mengubah font Google", "Membuat file zip"], correct: 0, hint: "Fetch berkaitan dengan network request.", explanation: "Fetch API digunakan untuk berkomunikasi dengan server, biasanya mengambil JSON atau mengirim data." },
+            { id: "web-6", category: "web", difficulty: "medium", question: "Mengapa semantic HTML penting?", answers: ["Membantu aksesibilitas, SEO, dan struktur dokumen yang jelas", "Agar CSS tidak perlu ditulis", "Agar semua gambar hilang", "Agar database otomatis terhubung"], correct: 0, hint: "Makna elemen penting.", explanation: "Semantic HTML seperti nav, main, section, dan button memberi makna yang dapat dipahami browser dan assistive tech." },
+            { id: "web-7", category: "web", difficulty: "medium", question: "Apa penyebab umum layout shift?", answers: ["Ukuran elemen seperti gambar tidak disiapkan sebelum konten dimuat", "Terlalu banyak primary key", "Nama class terlalu panjang", "Semua link memakai href"], correct: 0, hint: "Layout berubah setelah loading.", explanation: "Layout shift terjadi ketika elemen berubah posisi setelah konten lain dimuat, misalnya gambar tanpa dimensi tetap." },
+            { id: "web-8", category: "web", difficulty: "hard", question: "Mengapa event delegation berguna?", answers: ["Satu listener parent bisa menangani banyak child dinamis", "Semua event jadi lebih lambat", "CSS otomatis dibuat", "HTML tidak perlu struktur"], correct: 0, hint: "Parent bisa mendengar klik child.", explanation: "Event delegation memanfaatkan bubbling untuk menangani elemen dinamis tanpa memasang listener satu per satu." },
+            { id: "web-9", category: "web", difficulty: "hard", question: "Apa risiko menyimpan token sensitif di localStorage?", answers: ["Token rentan dicuri jika terjadi XSS", "Token otomatis terenkripsi kuat", "Token tidak bisa dibaca JavaScript", "Browser menolak semua localStorage"], correct: 0, hint: "localStorage bisa dibaca JavaScript.", explanation: "Jika aplikasi terkena XSS, script berbahaya dapat membaca localStorage dan mengambil token sensitif." },
+            { id: "web-10", category: "web", difficulty: "hard", question: "Apa fungsi lazy loading pada aset web?", answers: ["Menunda pemuatan aset sampai benar-benar dibutuhkan", "Memuat semua aset dua kali", "Menghapus gambar dari DOM", "Membuat CSS tidak berlaku"], correct: 0, hint: "Tidak semua aset harus dimuat di awal.", explanation: "Lazy loading dapat mempercepat load awal dengan menunda gambar atau modul yang belum terlihat." },
+            { id: "web-11", category: "web", difficulty: "easy", question: "Apakah fungsi utama dari protokol HTTPS dibanding HTTP biasa?", answers: ["Mengamankan komunikasi data dengan enkripsi SSL/TLS agar tidak bisa diintip pihak luar", "Mempercepat loading website dengan kompresi gambar", "Membuat desain website menjadi responsif otomatis", "Mencegah website mati saat diakses banyak pengunjung"], correct: 0, hint: "Pikirkan keamanan enkripsi data sensitif.", explanation: "HTTPS (Hypertext Transfer Protocol Secure) mengenkripsi seluruh pertukaran data antara browser dan server untuk melindunginya dari intersepsi (eavesdropping)." },
+            { id: "web-12", category: "web", difficulty: "easy", question: "Manakah tag HTML yang digunakan untuk membuat link ke halaman lain?", answers: ["<a>", "<link>", "<href>", "<button>"], correct: 0, hint: "Singkatan dari 'anchor'.", explanation: "Tag <a> (anchor) digunakan bersama atribut href untuk membuat hyperlink ke halaman web atau file lain." },
+            { id: "web-13", category: "web", difficulty: "medium", question: "Apakah kegunaan utama dari CSS Flexbox?", answers: ["Menyusun tata letak elemen secara satu dimensi (baris atau kolom) agar responsif dan mudah sejajar", "Menghubungkan frontend dengan database relasional", "Mengatur fungsi interaktif seperti pop-up login", "Membuat animasi 3D yang berat di web"], correct: 0, hint: "Solusi layout satu dimensi yang fleksibel.", explanation: "Flexbox (Flexible Box Layout) memudahkan perataan, distribusi ruang, dan penyusunan elemen di dalam container, bahkan saat ukurannya dinamis." },
+            { id: "web-14", category: "web", difficulty: "medium", question: "Apakah perbedaan utama antara Cookies, LocalStorage, dan SessionStorage di browser?", answers: ["Cookies dikirim ke server pada setiap request, LocalStorage bertahan selamanya, sedangkan SessionStorage hilang saat tab ditutup", "LocalStorage dikirim ke server, Cookies hanya disimpan di browser lokal", "SessionStorage bertahan selamanya, LocalStorage hilang saat browser ditutup", "Ketiganya memiliki kapasitas penyimpanan yang sama persis yaitu 100 GB"], correct: 0, hint: "Pikirkan masa aktif penyimpanan dan komunikasi dengan server.", explanation: "Cookies digunakan untuk autentikasi dan dikirim ke server. LocalStorage menyimpan data secara permanen di browser (kapasitas ~5-10MB). SessionStorage hanya menyimpan data selama sesi tab aktif." },
+            { id: "web-15", category: "web", difficulty: "medium", question: "Apakah kepanjangan dari API dalam konteks web development?", answers: ["Application Programming Interface", "Active Performance Indicator", "Automated Program Integration", "Advanced Protocol Internet"], correct: 0, hint: "Jembatan komunikasi antar aplikasi.", explanation: "API adalah sekumpulan definisi dan protokol yang memungkinkan satu aplikasi perangkat lunak berinteraksi dan berbagi data dengan aplikasi lainnya." },
+            { id: "web-16", category: "web", difficulty: "hard", question: "Apakah yang dimaksud dengan CORS (Cross-Origin Resource Sharing)?", answers: ["Mekanisme keamanan browser untuk membatasi request resource dari origin yang berbeda dari origin situs saat ini", "Proses mengompres file CSS dan JS menjadi ukuran yang sangat kecil", "Sistem distribusi beban server web menggunakan CDN global", "Algoritma enkripsi password yang aman di server backend"], correct: 0, hint: "Browser memblokir fetch API dari domain lain jika header CORS tidak disiapkan.", explanation: "CORS adalah kebijakan keamanan browser (Same-Origin Policy) yang mencegah script berbahaya membaca resource sensitif dari origin (domain/protokol/port) lain kecuali server tujuan mengizinkannya secara eksplisit lewat header HTTP." },
+            { id: "web-17", category: "web", difficulty: "hard", question: "Dalam optimasi performa web, apakah yang dimaksud dengan metrik 'LCP' (Largest Contentful Paint)?", answers: ["Waktu yang dibutuhkan browser untuk merender elemen visual terbesar (seperti gambar banner atau teks utama) di layar", "Kecepatan server merespons koneksi internet pertama kali", "Jumlah total bytes file javascript yang diunduh oleh halaman", "Durasi waktu yang diperlukan pengguna untuk berpindah halaman"], correct: 0, hint: "Salah satu metrik Core Web Vitals penting dari Google.", explanation: "LCP mengukur waktu rendering konten utama halaman web. LCP yang baik adalah kurang dari 2.5 detik untuk memberikan pengalaman pengguna yang responsif." },
+            { id: "web-18", category: "web", difficulty: "easy", question: "Apakah fungsi dari tag HTML <meta charset='UTF-8'>?", answers: ["Menentukan encoding karakter dokumen agar browser menampilkan teks bahasa dunia dengan benar", "Mengatur warna latar belakang halaman web menjadi transparan", "Menyisipkan file stylesheet eksternal", "Menghubungkan halaman web dengan library JavaScript jQuery"], correct: 0, hint: "Berhubungan dengan encoding teks.", explanation: "UTF-8 mendukung hampir semua karakter tulisan dunia, memastikan browser menampilkan simbol dan alfabet khusus secara akurat." },
+            { id: "web-19", category: "web", difficulty: "medium", question: "Manakah status kode HTTP yang menunjukkan bahwa resource tidak ditemukan di server?", answers: ["404 Not Found", "500 Internal Server Error", "200 OK", "302 Found (Redirect)"], correct: 0, hint: "Sangat populer saat halaman web rusak atau hilang.", explanation: "Status 404 adalah kode respons standar HTTP yang menunjukkan bahwa server tidak dapat menemukan berkas yang diminta oleh pengguna." },
+            { id: "web-20", category: "web", difficulty: "hard", question: "Apakah perbedaan utama antara Single Page Application (SPA) dan Multi Page Application (MPA)?", answers: ["SPA memuat satu dokumen HTML awal dan memperbarui konten secara dinamis tanpa reload halaman, sedangkan MPA memuat dokumen HTML baru dari server setiap kali pindah halaman", "SPA ditulis dengan Python, MPA ditulis dengan PHP", "SPA hanya mendukung perangkat mobile, MPA mendukung semua perangkat", "SPA tidak bisa memiliki link eksternal, MPA bisa"], correct: 0, hint: "Pikirkan perilaku reload halaman browser saat pindah menu.", explanation: "SPA (seperti aplikasi React/Vue) menawarkan transisi yang lebih mulus dan cepat karena hanya meminta data (JSON) dari server, bukan dokumen HTML utuh seperti MPA tradisional." },
+
+            { id: "cyber-1", category: "cyber", difficulty: "easy", question: "Apa ciri password yang lebih aman?", answers: ["Panjang, unik, dan sulit ditebak", "Sama untuk semua akun", "Berisi nama sendiri saja", "Disimpan di komentar publik"], correct: 0, hint: "Panjang dan unik lebih penting.", explanation: "Password kuat sebaiknya panjang, unik per layanan, dan dikelola dengan password manager bila memungkinkan." },
+            { id: "cyber-2", category: "cyber", difficulty: "easy", question: "Apa itu phishing?", answers: ["Upaya menipu pengguna agar memberikan data sensitif", "Teknik mempercepat CSS", "Jenis database relasional", "Metode desain ikon"], correct: 0, hint: "Biasanya lewat pesan palsu.", explanation: "Phishing memancing korban lewat email, chat, atau halaman palsu agar memberikan password, OTP, atau data penting." },
+            { id: "cyber-3", category: "cyber", difficulty: "easy", question: "Mengapa update software penting?", answers: ["Sering membawa perbaikan keamanan dan bug", "Agar semua data hilang", "Agar password menjadi pendek", "Agar layar selalu gelap"], correct: 0, hint: "Patch keamanan sering datang lewat update.", explanation: "Update software dapat menutup celah keamanan yang sudah diketahui dan meningkatkan stabilitas." },
+            { id: "cyber-4", category: "cyber", difficulty: "easy", question: "Apa tujuan two-factor authentication?", answers: ["Menambah lapisan verifikasi selain password", "Menghapus akun lama", "Membuat UI lebih ramai", "Mengganti username"], correct: 0, hint: "Password bukan satu-satunya bukti.", explanation: "2FA mengurangi risiko akun diambil alih meski password bocor." },
+            { id: "cyber-5", category: "cyber", difficulty: "medium", question: "Apa prinsip least privilege?", answers: ["Memberi akses minimum yang dibutuhkan untuk tugas", "Memberi akses admin ke semua orang", "Menghapus semua role", "Membuka database publik"], correct: 0, hint: "Akses secukupnya.", explanation: "Least privilege membatasi dampak kesalahan atau kebocoran dengan memberi izin sesuai kebutuhan saja." },
+            { id: "cyber-6", category: "cyber", difficulty: "medium", question: "Mengapa backup perlu diuji restore-nya?", answers: ["Backup belum terbukti berguna sampai bisa dipulihkan", "Agar file backup lebih besar", "Agar password berubah", "Agar query lebih lambat"], correct: 0, hint: "Backup yang tidak bisa dipulihkan tidak banyak membantu.", explanation: "Uji restore memastikan data benar-benar dapat dikembalikan saat insiden terjadi." },
+            { id: "cyber-7", category: "cyber", difficulty: "medium", question: "Apa itu data minimization?", answers: ["Mengumpulkan data secukupnya sesuai kebutuhan", "Menghapus semua data penting", "Menyimpan data tanpa izin", "Membuat data tidak bisa dicari"], correct: 0, hint: "Ambil yang perlu saja.", explanation: "Data minimization mengurangi risiko privasi dan keamanan dengan tidak mengumpulkan data berlebihan." },
+            { id: "cyber-8", category: "cyber", difficulty: "hard", question: "Apa risiko XSS pada aplikasi web?", answers: ["Script berbahaya dapat berjalan di browser pengguna", "Server selalu mati total", "CSS tidak bisa dimuat", "Database otomatis terenkripsi"], correct: 0, hint: "XSS menyisipkan script.", explanation: "XSS memungkinkan penyerang menjalankan script di konteks situs, mencuri data, atau memanipulasi halaman." },
+            { id: "cyber-9", category: "cyber", difficulty: "hard", question: "Mengapa input user harus divalidasi di server juga?", answers: ["Validasi client bisa dilewati atau dimanipulasi", "Server tidak bisa membaca input", "Browser selalu benar", "CSS bisa mengganti database"], correct: 0, hint: "Client bukan sumber kepercayaan.", explanation: "Validasi server wajib karena request bisa dibuat langsung tanpa mengikuti aturan UI di browser." },
+            { id: "cyber-10", category: "cyber", difficulty: "hard", question: "Apa manfaat audit log pada sistem penting?", answers: ["Mencatat aktivitas agar insiden dan perubahan bisa ditelusuri", "Menghapus error otomatis", "Mengganti backup", "Membuat semua user admin"], correct: 0, hint: "Log membantu investigasi.", explanation: "Audit log memberi jejak aktivitas penting sehingga tim dapat meninjau perubahan, akses, dan potensi insiden." },
+            { id: "cyber-11", category: "cyber", difficulty: "easy", question: "Apakah yang dimaksud dengan VPN (Virtual Private Network)?", answers: ["Layanan yang mengenkripsi lalu lintas internet Anda dan menyembunyikan identitas online Anda dengan merutekannya melalui server aman", "Aplikasi untuk mempercepat koneksi Wi-Fi secara gratis", "Antivirus untuk membersihkan file sampah di komputer", "Database khusus untuk menyimpan password akun media sosial"], correct: 0, hint: "Membuat terowongan enkripsi privat di internet publik.", explanation: "VPN mengamankan koneksi internet Anda dengan mengenkripsi data Anda dan menyembunyikan alamat IP asli Anda untuk menjaga privasi." },
+            { id: "cyber-12", category: "cyber", difficulty: "easy", question: "Apakah kepanjangan dari MFA dalam keamanan siber?", answers: ["Multi-Factor Authentication", "Malicious File Analyzer", "Mobile Firewall Access", "Main Frame Auditor"], correct: 0, hint: "Membutuhkan lebih dari sekadar password untuk masuk.", explanation: "MFA adalah metode verifikasi identitas yang mengharuskan pengguna memberikan dua atau lebih faktor verifikasi untuk mendapatkan akses ke akun." },
+            { id: "cyber-13", category: "cyber", difficulty: "medium", question: "Apakah yang dimaksud dengan serangan Ransomware?", answers: ["Malware yang mengenkripsi file korban dan menuntut pembayaran tebusan untuk kunci dekripsi", "Serangan yang membuat server web mati akibat dibanjiri trafik palsu", "Teknik mencuri informasi kartu kredit lewat form login palsu", "Penyusupan ke ruang server fisik untuk mencuri komputer"], correct: 0, hint: "Ransom berarti tebusan.", explanation: "Ransomware adalah jenis perangkat perusak (malware) berbahaya yang menyandera data komputer dengan enkripsi kuat, lalu memeras korban untuk membayar uang tebusan." },
+            { id: "cyber-14", category: "cyber", difficulty: "medium", question: "Apakah perbedaan utama antara enkripsi simetris (symmetric encryption) dan enkripsi asimetris (asymmetric encryption)?", answers: ["Enkripsi simetris menggunakan satu kunci untuk enkripsi dan dekripsi, sedangkan asimetris menggunakan sepasang kunci (kunci publik dan kunci privat)", "Enkripsi simetris hanya untuk teks pendek, asimetris untuk file besar", "Enkripsi simetris tidak aman, asimetris sangat aman", "Enkripsi simetris diproses oleh hardware, asimetris oleh software"], correct: 0, hint: "Jumlah kunci rahasia yang digunakan.", explanation: "Enkripsi simetris lebih cepat tetapi membutuhkan transfer kunci aman. Enkripsi asimetris menyelesaikan masalah distribusi kunci dengan menggunakan Public Key untuk enkripsi dan Private Key untuk dekripsi." },
+            { id: "cyber-15", category: "cyber", difficulty: "medium", question: "Apakah yang dimaksud dengan 'Social Engineering' dalam keamanan informasi?", answers: ["Teknik manipulasi psikologis untuk membohongi orang agar membocorkan informasi rahasia atau melakukan tindakan tertentu", "Pekerjaan membangun jaringan server yang ramah lingkungan", "Cara membuat postingan media sosial yang cepat viral", "Proses audit hubungan interpersonal di dalam kantor"], correct: 0, hint: "Meretas manusia, bukan meretas sistem komputer langsung.", explanation: "Social engineering menargetkan kerentanan manusia (seperti rasa percaya, takut, atau tergesa-gesa) untuk menipu mereka agar memberikan data login, OTP, atau uang." },
+            { id: "cyber-16", category: "cyber", difficulty: "hard", question: "Apakah yang dimaksud dengan serangan 'Man-in-the-Middle' (MitM)?", answers: ["Penyerang secara diam-diam mencegat dan mengubah komunikasi antara dua pihak yang percaya mereka terhubung langsung satu sama lain", "Serangan fisik dengan merusak kabel internet bawah laut", "Proses membagi tugas server backend secara adil", "Hacker yang menyamar menjadi staf IT internal perusahaan"], correct: 0, hint: "Pikirkan penyadap di antara pengirim dan penerima.", explanation: "Serangan MitM sering terjadi pada jaringan Wi-Fi publik yang tidak aman, di mana penyerang berada di tengah lalu lintas komunikasi untuk mencuri data sensitif seperti password atau data kartu kredit." },
+            { id: "cyber-17", category: "cyber", difficulty: "hard", question: "Manakah deskripsi terbaik untuk prinsip keamanan 'Zero Trust'?", answers: ["Jangan pernah percaya, selalu verifikasi; setiap permintaan akses harus diautentikasi, diotorisasi, dan dienkripsi sebelum diizinkan", "Sistem keamanan yang tidak membutuhkan password sama sekali", "Database yang tidak memiliki aturan hak akses user", "Kepercayaan penuh pada firewall perimeter untuk mengamankan jaringan internal"], correct: 0, hint: "Mengasumsikan jaringan internal sudah disusupi.", explanation: "Model Zero Trust meniadakan anggapan bahwa segala sesuatu di dalam jaringan internal aman. Ia mewajibkan verifikasi ketat untuk setiap perangkat dan pengguna, di mana pun lokasinya." },
+            { id: "cyber-18", category: "cyber", difficulty: "easy", question: "Di bawah ini, manakah yang merupakan contoh malware?", answers: ["Virus, Trojan, Worm, dan Spyware", "Windows Defender, Avast, dan Kaspersky", "Chrome, Firefox, dan Safari", "MySQL, MongoDB, dan Oracle"], correct: 0, hint: "Perangkat lunak berbahaya.", explanation: "Malware (malicious software) adalah istilah umum untuk program berbahaya yang dirancang untuk merusak, mengganggu, atau menyusup ke sistem komputer tanpa izin." },
+            { id: "cyber-19", category: "cyber", difficulty: "medium", question: "Apakah kegunaan utama dari Firewall dalam sistem jaringan?", answers: ["Memantau dan menyaring lalu lintas jaringan masuk dan keluar berdasarkan aturan keamanan yang ditentukan", "Menghapus virus dan malware yang sudah masuk ke harddisk", "Mempercepat transfer file antar komputer di kantor", "Mengubah IP address komputer menjadi IP address server otomatis"], correct: 0, hint: "Pikirkan pos penjaga gerbang masuk jaringan.", explanation: "Firewall bertindak sebagai penghalang antara jaringan internal tepercaya dan jaringan eksternal yang tidak tepercaya (seperti internet) untuk memblokir akses ilegal." },
+            { id: "cyber-20", category: "cyber", difficulty: "hard", question: "Apakah yang dimaksud dengan serangan SQL Injection (SQLi) dan bagaimana cara terbaik untuk mencegahnya?", answers: ["Penyisipan kode SQL berbahaya ke input form untuk memanipulasi query database; dicegah dengan Prepared Statements (Parameterized Queries)", "Memasukkan terlalu banyak data ke tabel database; dicegah dengan normalisasi tabel", "Serangan menghapus file backup database; dicegah dengan enkripsi harddisk", "Mengganti password database secara paksa; dicegah dengan two-factor authentication"], correct: 0, hint: "Memisahkan data dari instruksi SQL menggunakan parameterized query.", explanation: "SQLi terjadi saat input pengguna langsung digabungkan ke string SQL. Prepared Statements memisahkan kode SQL dari input data sehingga database memperlakukan input murni sebagai data, bukan perintah yang bisa dieksekusi." }
+        ];
+
+        const labels = {
+            all: "Semua Materi",
+            programming: "Programming",
+            database: "Database & SQL",
+            design: "UI/UX Design",
+            analytics: "Business Analytics",
+            web: "Web Development",
+            cyber: "Cyber & Data Literacy",
+            easy: "Pemanasan",
+            medium: "Normal",
+            hard: "Challenge",
+            practice: "Practice",
+            exam: "Exam Timer",
+            sprint: "Sprint",
+            review: "Review Mode"
+        };
+
+        const storageKeys = {
+            best: "eduquestBestScore",
+            last: "eduquestLastSession",
+            bookmarks: "eduquestBookmarks"
+        };
+
+        const state = {
+            activeQuestions: [],
+            current: 0,
+            correct: 0,
+            wrong: 0,
+            streak: 0,
+            bestStreak: 0,
+            selected: [],
+            visited: [],
+            flagged: [],
+            bookmarks: [],
+            answered: false,
+            usedHint: false,
+            usedFifty: false,
+            helpUsed: 0,
+            timeLeft: 0,
+            initialTime: 0,
+            timerId: null,
+            running: false,
+            mode: "practice"
+        };
+
+        const els = {
+            category: document.getElementById("category"),
+            difficulty: document.getElementById("difficulty"),
+            amount: document.getElementById("amount"),
+            mode: document.getElementById("mode"),
+            startBtn: document.getElementById("startBtn"),
+            resetBtn: document.getElementById("resetBtn"),
+            quizShell: document.getElementById("quizShell"),
+            questionCard: document.getElementById("questionCard"),
+            counterPill: document.getElementById("counterPill"),
+            categoryPill: document.getElementById("categoryPill"),
+            levelPill: document.getElementById("levelPill"),
+            modePill: document.getElementById("modePill"),
+            timer: document.getElementById("timer"),
+            progressFill: document.getElementById("progressFill"),
+            comboFill: document.getElementById("comboFill"),
+            comboLabel: document.getElementById("comboLabel"),
+            questionLabel: document.getElementById("questionLabel"),
+            questionText: document.getElementById("questionText"),
+            answers: document.getElementById("answers"),
+            feedback: document.getElementById("feedback"),
+            hintBtn: document.getElementById("hintBtn"),
+            fiftyBtn: document.getElementById("fiftyBtn"),
+            bookmarkBtn: document.getElementById("bookmarkBtn"),
+            flagBtn: document.getElementById("flagBtn"),
+            skipBtn: document.getElementById("skipBtn"),
+            nextBtn: document.getElementById("nextBtn"),
+            questionMap: document.getElementById("questionMap"),
+            questionMapCard: document.getElementById("questionMapCard"),
+            liveStatsCard: document.getElementById("liveStatsCard"),
+            arena: document.getElementById("arena"),
+            correctValue: document.getElementById("correctValue"),
+            wrongValue: document.getElementById("wrongValue"),
+            accuracyValue: document.getElementById("accuracyValue"),
+            helpValue: document.getElementById("helpValue"),
+            timeStat: document.getElementById("timeStat"),
+            answeredValue: document.getElementById("answeredValue"),
+            unansweredValue: document.getElementById("unansweredValue"),
+            flaggedValue: document.getElementById("flaggedValue"),
+            bestScore: document.getElementById("bestScore"),
+            streakValue: document.getElementById("streakValue"),
+            bankSize: document.getElementById("bankSize"),
+            categoryPerformance: document.getElementById("categoryPerformance"),
+            recommendations: document.getElementById("recommendations"),
+            bookmarks: document.getElementById("bookmarks"),
+            lastSession: document.getElementById("lastSession"),
+            resultCard: document.getElementById("resultCard"),
+            finalScore: document.getElementById("finalScore"),
+            resultSummary: document.getElementById("resultSummary"),
+            resultCorrect: document.getElementById("resultCorrect"),
+            resultWrong: document.getElementById("resultWrong"),
+            resultBestStreak: document.getElementById("resultBestStreak"),
+            resultTimeLeft: document.getElementById("resultTimeLeft"),
+            retryBtn: document.getElementById("retryBtn"),
+            reviewBtn: document.getElementById("reviewBtn"),
+            reviewList: document.getElementById("reviewList"),
+            confettiLayer: document.getElementById("confettiLayer")
+        };
+
+        function shuffle(items) {
+            return [...items].sort(() => Math.random() - 0.5);
+        }
+
+        function readJson(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (error) {
+                return fallback;
+            }
+        }
+
+        function writeJson(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function normalizeQuestion(item) {
+            return { ...item, answers: [...item.answers] };
+        }
+
+        function shuffleAnswers(item) {
+            const mapped = item.answers.map((text, index) => ({ text, originalIndex: index }));
+            const shuffled = shuffle(mapped);
+            return {
+                ...item,
+                shuffledAnswers: shuffled,
+                shuffledCorrect: shuffled.findIndex((answer) => answer.originalIndex === item.correct)
+            };
+        }
+
+        function loadBestScore() {
+            const saved = Number(localStorage.getItem(storageKeys.best) || 0);
+            els.bestScore.textContent = `${saved}%`;
+        }
+
+        function loadBookmarks() {
+            state.bookmarks = readJson(storageKeys.bookmarks, []);
+            renderBookmarks();
+        }
+
+        function getTimeLimit() {
+            const amount = Number(els.amount.value);
+            if (els.mode.value === "sprint") return amount * 25;
+            if (els.mode.value === "exam") return amount * 50;
+            if (els.mode.value === "review") return amount * 120;
+            return amount * 90;
+        }
+
+        function formatTime(seconds) {
+            const safeSeconds = Math.max(0, seconds);
+            const minutes = Math.floor(safeSeconds / 60);
+            const rest = String(safeSeconds % 60).padStart(2, "0");
+            return `${minutes}:${rest}`;
+        }
+
+        function pickQuestions() {
+            const category = els.category.value;
+            const difficulty = els.difficulty.value;
+            const amount = Number(els.amount.value);
+            const exact = questionBank.filter((item) => {
+                const matchCategory = category === "all" || item.category === category;
+                const matchDifficulty = difficulty === "all" || item.difficulty === difficulty;
+                return matchCategory && matchDifficulty;
+            });
+            const categoryFallback = questionBank.filter((item) => category === "all" || item.category === category);
+            const difficultyFallback = questionBank.filter((item) => difficulty === "all" || item.difficulty === difficulty);
+            const source = exact.length ? exact : categoryFallback.length ? categoryFallback : difficultyFallback.length ? difficultyFallback : questionBank;
+            return shuffle(source).slice(0, Math.min(amount, source.length)).map((item) => shuffleAnswers(normalizeQuestion(item)));
+        }
+
+        function startQuiz() {
+            clearInterval(state.timerId);
+            state.mode = els.mode.value;
+            if (state.mode === "review") {
+                startReviewMode();
+                return;
+            }
+
+            state.activeQuestions = pickQuestions();
+            state.current = 0;
+            state.correct = 0;
+            state.wrong = 0;
+            state.streak = 0;
+            state.bestStreak = 0;
+            state.selected = [];
+            state.visited = Array(state.activeQuestions.length).fill(false);
+            state.flagged = Array(state.activeQuestions.length).fill(false);
+            state.answered = false;
+            state.usedHint = false;
+            state.usedFifty = false;
+            state.helpUsed = 0;
+            state.timeLeft = getTimeLimit();
+            state.initialTime = state.timeLeft;
+            state.running = true;
+
+            els.categoryPill.textContent = labels[els.category.value];
+            els.levelPill.textContent = labels[els.difficulty.value];
+            els.modePill.textContent = labels[state.mode];
+            els.resultCard.classList.remove("show");
+            els.feedback.classList.remove("show");
+            els.hintBtn.disabled = false;
+            els.fiftyBtn.disabled = false;
+            els.bookmarkBtn.disabled = false;
+            els.flagBtn.disabled = false;
+            els.skipBtn.disabled = false;
+            els.nextBtn.disabled = true;
+
+            renderQuestion();
+            renderStats();
+            renderRecommendations();
+            renderCategoryPerformance();
+            renderReview();
+            updateSidebarVisibility();
+            if (els.arena) {
+                els.arena.scrollIntoView({ behavior: "smooth" });
+            }
+            tickTimer();
+            state.timerId = setInterval(tickTimer, 1000);
+        }
+
+        function startReviewMode() {
+            const last = readJson(storageKeys.last, null);
+            state.running = false;
+            state.activeQuestions = [];
+            state.selected = last?.answers || [];
+            state.visited = [];
+            state.flagged = [];
+            state.correct = last?.correct || 0;
+            state.wrong = last?.wrong || 0;
+            state.streak = 0;
+            state.bestStreak = last?.bestStreak || 0;
+            state.timeLeft = last?.timeLeft || 0;
+            state.initialTime = last?.initialTime || 0;
+
+            els.categoryPill.textContent = "Sesi Terakhir";
+            els.levelPill.textContent = "Review";
+            els.modePill.textContent = "Review Mode";
+            els.counterPill.textContent = last ? `${last.answers.length} jawaban` : "Belum ada sesi";
+            els.timer.textContent = formatTime(state.timeLeft);
+            els.progressFill.style.width = last ? "100%" : "0%";
+            els.comboFill.style.width = "0%";
+            els.comboLabel.textContent = `Best combo x${state.bestStreak}`;
+            els.questionLabel.textContent = "Review Mode";
+            els.questionText.textContent = last ? "Review jawaban sesi terakhir sudah dibuka di bagian bawah." : "Belum ada sesi terakhir untuk direview.";
+            els.answers.innerHTML = "";
+            els.feedback.classList.remove("show");
+            els.resultCard.classList.remove("show");
+            disableQuizControls();
+            renderStats();
+            renderReview();
+            renderLastSession();
+            renderCategoryPerformance();
+            renderQuestionMap();
+            updateSidebarVisibility();
+            document.getElementById("review").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function tickTimer() {
+            els.timer.textContent = formatTime(state.timeLeft);
+            els.timeStat.textContent = formatTime(state.timeLeft);
+            els.timer.classList.toggle("is-time-warning", state.running && state.timeLeft <= 30);
+            if (!state.running) return;
+            if (state.timeLeft <= 0) {
+                finishQuiz();
+                return;
+            }
+            state.timeLeft -= 1;
+        }
+
+        function renderQuestion() {
+            const item = state.activeQuestions[state.current];
+            if (!item) return;
+
+            const savedAnswer = state.selected[state.current];
+            state.answered = Boolean(savedAnswer);
+            state.visited[state.current] = true;
+            state.usedHint = false;
+            state.usedFifty = false;
+            els.feedback.classList.remove("show");
+            els.feedback.innerHTML = "";
+            els.answers.innerHTML = "";
+            els.nextBtn.disabled = false;
+            els.hintBtn.disabled = state.mode !== "practice" || state.answered;
+            els.fiftyBtn.disabled = state.mode !== "practice" || state.answered;
+            els.bookmarkBtn.disabled = isCurrentBookmarked();
+            els.flagBtn.disabled = false;
+            els.flagBtn.textContent = state.flagged[state.current] ? "Batal Ragu" : "Ragu-ragu";
+            els.skipBtn.disabled = !hasUnansweredQuestion();
+            els.nextBtn.textContent = !hasUnansweredQuestion() && state.current >= state.activeQuestions.length - 1 ? "Selesai" : "Berikutnya";
+            els.questionCard.style.animation = "none";
+            requestAnimationFrame(() => {
+                els.questionCard.style.animation = "";
+            });
+
+            const total = state.activeQuestions.length;
+            const answeredCount = state.correct + state.wrong;
+            els.counterPill.textContent = `Soal ${state.current + 1}/${total}`;
+            els.progressFill.style.width = `${(answeredCount / total) * 100}%`;
+            els.questionLabel.textContent = `${labels[item.category]} - ${labels[item.difficulty]}`;
+            els.questionText.textContent = item.question;
+
+            item.shuffledAnswers.forEach((answer, index) => {
+                const option = document.createElement("button");
+                option.className = "answer-option";
+                option.type = "button";
+                option.dataset.index = index;
+                option.innerHTML = `<span class="answer-key">${String.fromCharCode(65 + index)}</span><span>${answer.text}</span>`;
+                option.addEventListener("click", () => chooseAnswer(index));
+                if (savedAnswer) {
+                    option.disabled = true;
+                    if (index === item.shuffledCorrect) option.classList.add("is-correct");
+                    if (answer.text === savedAnswer.selectedText && !savedAnswer.isCorrect) option.classList.add("is-wrong");
+                }
+                els.answers.appendChild(option);
+            });
+            if (savedAnswer) {
+                els.feedback.innerHTML = `<strong>${savedAnswer.isCorrect ? "Benar." : "Belum tepat."}</strong> ${savedAnswer.explanation}`;
+                els.feedback.classList.add("show");
+            }
+            updateComboMeter();
+            renderQuestionMap();
+            renderStats();
+        }
+
+        function chooseAnswer(index) {
+            if (state.answered) return;
+
+            const item = state.activeQuestions[state.current];
+            const selectedAnswer = item.shuffledAnswers[index];
+            const correctAnswer = item.shuffledAnswers[item.shuffledCorrect];
+            const isCorrect = index === item.shuffledCorrect;
+            state.answered = true;
+            state.selected[state.current] = {
+                id: item.id,
+                question: item.question,
+                category: item.category,
+                difficulty: item.difficulty,
+                selectedText: selectedAnswer.text,
+                correctText: correctAnswer.text,
+                explanation: item.explanation,
+                hint: item.hint,
+                isCorrect
+            };
+
+            if (isCorrect) {
+                state.correct += 1;
+                state.streak += 1;
+                state.bestStreak = Math.max(state.bestStreak, state.streak);
+                launchConfetti(12);
+                launchSparks(14);
+            } else {
+                state.wrong += 1;
+                state.streak = 0;
+                launchSparks(8, true);
+            }
+
+            els.quizShell.classList.remove("answer-burst");
+            requestAnimationFrame(() => {
+                els.quizShell.classList.add("answer-burst");
+            });
+
+            [...els.answers.children].forEach((button) => {
+                const buttonIndex = Number(button.dataset.index);
+                button.disabled = true;
+                if (buttonIndex === item.shuffledCorrect) button.classList.add("is-correct");
+                if (buttonIndex === index && !isCorrect) button.classList.add("is-wrong");
+            });
+
+            els.feedback.innerHTML = `<strong>${isCorrect ? "Benar." : "Belum tepat."}</strong> ${item.explanation}`;
+            els.feedback.classList.add("show");
+            els.nextBtn.disabled = false;
+            els.nextBtn.textContent = !hasUnansweredQuestion() && state.current >= state.activeQuestions.length - 1 ? "Selesai" : "Berikutnya";
+            els.skipBtn.disabled = !hasUnansweredQuestion();
+            renderStats();
+            renderRecommendations();
+            renderCategoryPerformance();
+            renderQuestionMap();
+            updateComboMeter();
+        }
+
+        function showHint() {
+            if (!state.running || state.answered || state.usedHint) return;
+            const item = state.activeQuestions[state.current];
+            state.usedHint = true;
+            state.helpUsed += 1;
+            els.hintBtn.disabled = true;
+            els.feedback.innerHTML = `<strong>Hint:</strong> ${item.hint}`;
+            els.feedback.classList.add("show");
+            renderStats();
+        }
+
+        function useFifty() {
+            if (!state.running || state.answered || state.usedFifty) return;
+            const item = state.activeQuestions[state.current];
+            const wrongOptions = item.shuffledAnswers
+                .map((answer, index) => index)
+                .filter((index) => index !== item.shuffledCorrect);
+            shuffle(wrongOptions).slice(0, 2).forEach((index) => {
+                const option = els.answers.querySelector(`[data-index="${index}"]`);
+                if (option) option.classList.add("hidden-choice");
+            });
+            state.usedFifty = true;
+            state.helpUsed += 1;
+            els.fiftyBtn.disabled = true;
+            renderStats();
+        }
+
+        function isCurrentBookmarked() {
+            const item = state.activeQuestions[state.current];
+            return Boolean(item && state.bookmarks.some((bookmark) => bookmark.id === item.id));
+        }
+
+        function hasUnansweredQuestion() {
+            return state.activeQuestions.some((item, index) => !state.selected[index]);
+        }
+
+        function findNextUnanswered(fromIndex = state.current) {
+            if (!state.activeQuestions.length) return -1;
+            for (let offset = 1; offset <= state.activeQuestions.length; offset += 1) {
+                const index = (fromIndex + offset) % state.activeQuestions.length;
+                if (!state.selected[index]) return index;
+            }
+            return -1;
+        }
+
+        function goToQuestion(index) {
+            if (!state.running || index < 0 || index >= state.activeQuestions.length) return;
+            state.current = index;
+            renderQuestion();
+        }
+
+        function skipQuestion() {
+            if (!state.running) return;
+            const nextIndex = findNextUnanswered(state.current);
+            if (nextIndex === -1) {
+                finishQuiz();
+                return;
+            }
+            goToQuestion(nextIndex);
+        }
+
+        function toggleFlagQuestion() {
+            if (!state.running || !state.activeQuestions.length) return;
+            state.flagged[state.current] = !state.flagged[state.current];
+            els.flagBtn.textContent = state.flagged[state.current] ? "Batal Ragu" : "Ragu-ragu";
+            renderQuestionMap();
+            renderStats();
+        }
+
+        function bookmarkQuestion() {
+            if (!state.running) return;
+            const item = state.activeQuestions[state.current];
+            const saved = {
+                id: item.id,
+                question: item.question,
+                category: item.category,
+                difficulty: item.difficulty,
+                hint: item.hint,
+                explanation: item.explanation
+            };
+            const exists = state.bookmarks.some((bookmark) => bookmark.id === saved.id);
+            if (!exists) {
+                state.bookmarks.unshift(saved);
+                state.bookmarks = state.bookmarks.slice(0, 20);
+                writeJson(storageKeys.bookmarks, state.bookmarks);
+                renderBookmarks();
+            }
+            els.bookmarkBtn.disabled = true;
+            renderQuestionMap();
+        }
+
+        function nextQuestion() {
+            if (state.current < state.activeQuestions.length - 1) {
+                state.current += 1;
+                renderQuestion();
+                return;
+            }
+
+            const nextUnanswered = findNextUnanswered(state.current);
+            if (nextUnanswered !== -1) {
+                state.current = nextUnanswered;
+                renderQuestion();
+                return;
+            }
+
+            if (state.current >= state.activeQuestions.length - 1) {
+                finishQuiz();
+                return;
+            }
+        }
+
+        function finishQuiz() {
+            clearInterval(state.timerId);
+            state.running = false;
+            const total = state.activeQuestions.length || 1;
+            const unanswered = Math.max(0, total - state.correct - state.wrong);
+            const missed = state.wrong + unanswered;
+            const score = Math.round((state.correct / total) * 100);
+            const currentBest = Number(localStorage.getItem(storageKeys.best) || 0);
+            if (score > currentBest) {
+                localStorage.setItem(storageKeys.best, String(score));
+            }
+
+            const session = {
+                date: new Date().toISOString(),
+                score,
+                correct: state.correct,
+                wrong: missed,
+                answeredWrong: state.wrong,
+                unanswered,
+                total,
+                mode: state.mode,
+                category: els.category.value,
+                difficulty: els.difficulty.value,
+                bestStreak: state.bestStreak,
+                helpUsed: state.helpUsed,
+                timeLeft: state.timeLeft,
+                initialTime: state.initialTime,
+                flagged: state.flagged.filter(Boolean).length,
+                answers: state.selected.filter(Boolean)
+            };
+            writeJson(storageKeys.last, session);
+
+            // Update shared stats in localStorage for homepage integration
+            try {
+                let streakVal = Number(localStorage.getItem("eduquestStreak") || 12);
+                let xpVal = Number(localStorage.getItem("eduquestXP") || 8960);
+                
+                // Add XP (+20 XP per correct answer)
+                xpVal += (state.correct * 20);
+                
+                // If score is good (>= 70), increment streak
+                if (score >= 70) {
+                    streakVal += 1;
+                }
+                
+                // Calculate new level
+                let newLvl = Math.floor(xpVal / 700) + 1;
+                
+                localStorage.setItem("eduquestXP", String(xpVal));
+                localStorage.setItem("eduquestStreak", String(streakVal));
+                localStorage.setItem("eduquestLevel", String(newLvl));
+                localStorage.setItem("lastSyncedSessionDate", session.date); // mark as synced
+            } catch (e) {
+                console.error("Gagal menyimpan integrasi stats:", e);
+            }
+
+            els.progressFill.style.width = "100%";
+            disableQuizControls();
+            els.finalScore.textContent = `${score}%`;
+            els.resultSummary.textContent = buildSummary(score);
+            els.resultCorrect.textContent = state.correct;
+            els.resultWrong.textContent = missed;
+            els.resultBestStreak.textContent = state.bestStreak;
+            els.resultTimeLeft.textContent = formatTime(state.timeLeft);
+            els.resultCard.classList.add("show");
+            if (score >= 70) launchConfetti(30);
+            loadBestScore();
+            renderStats();
+            renderRecommendations();
+            renderCategoryPerformance();
+            renderReview();
+            renderLastSession();
+            renderQuestionMap();
+            updateSidebarVisibility();
+        }
+
+        function disableQuizControls() {
+            els.hintBtn.disabled = true;
+            els.fiftyBtn.disabled = true;
+            els.bookmarkBtn.disabled = true;
+            els.flagBtn.disabled = true;
+            els.skipBtn.disabled = true;
+            els.nextBtn.disabled = true;
+            els.timer.classList.remove("is-time-warning");
+        }
+
+        function buildSummary(score) {
+            if (score >= 90) return "Mantap. Akurasi kamu sudah tajam, coba Sprint 30 soal atau fokus level Challenge.";
+            if (score >= 75) return "Solid. Kamu sudah kuat, tinggal review beberapa celah dan jaga konsistensi streak.";
+            if (score >= 60) return "Fondasinya mulai kebentuk. Review kategori terlemah lalu ulangi 10 soal Practice.";
+            return "Ini data awal yang bagus. Mulai dari rekomendasi, pakai Practice, dan incar streak kecil dulu.";
+        }
+
+        function renderStats() {
+            const answered = state.correct + state.wrong;
+            const accuracy = answered ? Math.round((state.correct / answered) * 100) : 0;
+            const helpLeft = state.mode === "practice" && state.running ? Math.max(0, 2 - Number(state.usedHint) - Number(state.usedFifty)) : 0;
+            const total = state.activeQuestions.length;
+            const unanswered = Math.max(0, total - answered);
+            const flagged = state.flagged.filter(Boolean).length;
+            els.correctValue.textContent = state.correct;
+            els.wrongValue.textContent = state.wrong;
+            els.accuracyValue.textContent = `${accuracy}%`;
+            els.helpValue.textContent = helpLeft;
+            els.streakValue.textContent = state.streak;
+            els.timeStat.textContent = formatTime(state.timeLeft);
+            els.answeredValue.textContent = answered;
+            els.unansweredValue.textContent = unanswered;
+            els.flaggedValue.textContent = flagged;
+        }
+
+        function updateSidebarVisibility() {
+            const showActiveStats = state.running || state.activeQuestions.length > 0;
+            if (els.questionMapCard) els.questionMapCard.style.display = showActiveStats ? "block" : "none";
+            if (els.liveStatsCard) els.liveStatsCard.style.display = showActiveStats ? "block" : "none";
+        }
+
+        function renderQuestionMap() {
+            if (!state.activeQuestions.length) {
+                els.questionMap.innerHTML = `<p class="empty-state">Mulai quiz untuk membuka nomor soal.</p>`;
+                return;
+            }
+
+            els.questionMap.innerHTML = "";
+            state.activeQuestions.forEach((item, index) => {
+                const button = document.createElement("button");
+                const answer = state.selected[index];
+                button.type = "button";
+                button.className = "question-jump";
+                button.textContent = index + 1;
+                button.setAttribute("aria-label", `Buka soal nomor ${index + 1}`);
+                if (index === state.current) button.classList.add("current");
+                if (answer) button.classList.add("answered", answer.isCorrect ? "correct" : "wrong");
+                if (state.flagged[index]) button.classList.add("flagged");
+                if (state.bookmarks.some((bookmark) => bookmark.id === item.id)) button.classList.add("bookmarked");
+                button.addEventListener("click", () => goToQuestion(index));
+                els.questionMap.appendChild(button);
+            });
+        }
+
+        function updateComboMeter() {
+            const total = state.activeQuestions.length || 1;
+            const width = Math.min(100, (state.streak / Math.min(5, total)) * 100);
+            els.comboFill.style.width = `${width}%`;
+            els.comboLabel.textContent = `Combo x${state.streak}`;
+            els.quizShell.classList.toggle("combo-active", state.streak >= 3);
+        }
+
+        function renderRecommendations() {
+            const wrongByCategory = state.selected.reduce((acc, item) => {
+                if (item && !item.isCorrect) acc[item.category] = (acc[item.category] || 0) + 1;
+                return acc;
+            }, {});
+            const entries = Object.entries(wrongByCategory).sort((a, b) => b[1] - a[1]);
+
+            if (!entries.length) {
+                els.recommendations.innerHTML = `
+                    <div class="topic-item">
+                        <div>Pertahankan ritme<small>Belum ada pola salah yang perlu dikejar.</small></div>
+                        <div class="mini-bar"><span style="width: 86%"></span></div>
+                    </div>`;
+                return;
+            }
+
+            els.recommendations.innerHTML = entries.map(([category, count]) => {
+                const width = Math.min(100, 42 + count * 18);
+                return `
+                    <div class="topic-item">
+                        <div>${labels[category]}<small>${count} jawaban perlu direview. Mulai dari pembahasan soal terkait.</small></div>
+                        <div class="mini-bar"><span style="width: ${width}%"></span></div>
+                    </div>`;
+            }).join("");
+        }
+
+        function renderCategoryPerformance() {
+            const answered = state.selected.filter(Boolean);
+            if (!answered.length) {
+                els.categoryPerformance.innerHTML = `
+                    <div class="topic-item">
+                        <div>Belum ada data<small>Mulai quiz untuk melihat akurasi per kategori.</small></div>
+                        <div class="mini-bar"><span style="width: 20%"></span></div>
+                    </div>`;
+                return;
+            }
+
+            const grouped = answered.reduce((acc, item) => {
+                if (!acc[item.category]) acc[item.category] = { total: 0, correct: 0 };
+                acc[item.category].total += 1;
+                if (item.isCorrect) acc[item.category].correct += 1;
+                return acc;
+            }, {});
+
+            els.categoryPerformance.innerHTML = Object.entries(grouped).map(([category, data]) => {
+                const accuracy = Math.round((data.correct / data.total) * 100);
+                return `
+                    <div class="topic-item">
+                        <div>${labels[category]}<small>${data.correct}/${data.total} benar - akurasi ${accuracy}%</small></div>
+                        <div class="mini-bar"><span style="width: ${Math.max(10, accuracy)}%"></span></div>
+                    </div>`;
+            }).join("");
+        }
+
+        function renderBookmarks() {
+            if (!state.bookmarks.length) {
+                els.bookmarks.innerHTML = `<p class="empty-state">Belum ada soal yang disimpan.</p>`;
+                return;
+            }
+
+            els.bookmarks.innerHTML = state.bookmarks.map((item) => `
+                <div class="review-item">
+                    ${item.question}
+                    <small>${labels[item.category]} - ${labels[item.difficulty]}<br>${item.hint}</small>
+                </div>
+            `).join("");
+        }
+
+        function renderReview() {
+            const answered = state.selected.filter(Boolean);
+            if (!answered.length) {
+                els.reviewList.innerHTML = `<p class="empty-state">Selesaikan quiz untuk melihat pembahasan per soal.</p>`;
+                return;
+            }
+
+            els.reviewList.innerHTML = answered.map((item, index) => `
+                <div class="review-item ${item.isCorrect ? "is-correct" : "is-wrong"}">
+                    ${index + 1}. ${item.question}
+                    <small>
+                        Status: ${item.isCorrect ? "Benar" : "Salah"}<br>
+                        Jawaban kamu: ${item.selectedText}<br>
+                        Jawaban benar: ${item.correctText}<br>
+                        Hint: ${item.hint}<br>
+                        ${item.explanation}
+                    </small>
+                </div>
+            `).join("");
+        }
+
+        function renderLastSession() {
+            const last = readJson(storageKeys.last, null);
+            if (!last) {
+                els.lastSession.innerHTML = `<p class="empty-state">Belum ada sesi tersimpan.</p>`;
+                return;
+            }
+
+            const date = new Date(last.date);
+            els.lastSession.innerHTML = `
+                <div class="topic-item">
+                    <div>${last.score}% - ${labels[last.mode]}<small>${last.correct}/${last.total} benar - ${date.toLocaleDateString("id-ID")}</small></div>
+                    <div class="mini-bar"><span style="width: ${last.score}%"></span></div>
+                </div>
+                <div class="topic-item">
+                    <div>Best streak ${last.bestStreak}<small>Bantuan dipakai ${last.helpUsed} kali - sisa waktu ${formatTime(last.timeLeft)}</small></div>
+                    <div class="mini-bar"><span style="width: ${Math.min(100, last.bestStreak * 20)}%"></span></div>
+                </div>`;
+        }
+
+        function launchConfetti(count) {
+            const colors = ["#32d66b", "#4f8cff", "#ffd166", "#8b5cf6", "#3ddbd9", "#ff9f43"];
+            for (let i = 0; i < count; i += 1) {
+                const piece = document.createElement("span");
+                piece.className = "confetti-piece";
+                piece.style.left = `${45 + Math.random() * 20}%`;
+                piece.style.top = `${16 + Math.random() * 12}%`;
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.setProperty("--drift", `${Math.random() * 220 - 110}px`);
+                piece.style.animationDelay = `${Math.random() * 120}ms`;
+                els.confettiLayer.appendChild(piece);
+                setTimeout(() => piece.remove(), 1050);
+            }
+        }
+
+        function launchSparks(count, danger = false) {
+            const colors = danger ? ["#ef4444", "#ff9f43", "#ffd166"] : ["#32d66b", "#3ddbd9", "#4f8cff", "#ffd166"];
+            for (let i = 0; i < count; i += 1) {
+                const spark = document.createElement("span");
+                spark.className = "spark-piece";
+                spark.style.left = `${48 + Math.random() * 12}%`;
+                spark.style.top = `${42 + Math.random() * 12}%`;
+                spark.style.background = colors[Math.floor(Math.random() * colors.length)];
+                spark.style.setProperty("--spark-x", `${Math.random() * 180 - 90}px`);
+                spark.style.setProperty("--spark-y", `${Math.random() * 120 - 80}px`);
+                spark.style.animationDelay = `${Math.random() * 80}ms`;
+                els.confettiLayer.appendChild(spark);
+                setTimeout(() => spark.remove(), 820);
+            }
+        }
+
+        function resetProgress() {
+            clearInterval(state.timerId);
+            localStorage.removeItem(storageKeys.best);
+            localStorage.removeItem(storageKeys.last);
+            localStorage.removeItem(storageKeys.bookmarks);
+            state.activeQuestions = [];
+            state.current = 0;
+            state.correct = 0;
+            state.wrong = 0;
+            state.streak = 0;
+            state.bestStreak = 0;
+            state.selected = [];
+            state.visited = [];
+            state.flagged = [];
+            state.bookmarks = [];
+            state.running = false;
+            state.timeLeft = 0;
+            state.initialTime = 0;
+            els.counterPill.textContent = "Soal 0/0";
+            els.categoryPill.textContent = "Semua Materi";
+            els.levelPill.textContent = "Campuran";
+            els.modePill.textContent = "Practice";
+            els.timer.textContent = "00:00";
+            els.progressFill.style.width = "0%";
+            els.comboFill.style.width = "0%";
+            els.comboLabel.textContent = "Combo x0";
+            els.questionLabel.textContent = "Pertanyaan aktif";
+            els.questionText.textContent = "Progress lokal sudah direset. Klik Mulai untuk sesi baru.";
+            els.answers.innerHTML = "";
+            els.feedback.classList.remove("show");
+            els.resultCard.classList.remove("show");
+            disableQuizControls();
+            renderQuestionMap();
+            loadBestScore();
+            renderStats();
+            renderBookmarks();
+            renderReview();
+            renderLastSession();
+            renderRecommendations();
+            renderCategoryPerformance();
+            updateSidebarVisibility();
+        }
+
+        els.startBtn.addEventListener("click", startQuiz);
+        els.resetBtn.addEventListener("click", resetProgress);
+        els.hintBtn.addEventListener("click", showHint);
+        els.fiftyBtn.addEventListener("click", useFifty);
+        els.bookmarkBtn.addEventListener("click", bookmarkQuestion);
+        els.flagBtn.addEventListener("click", toggleFlagQuestion);
+        els.skipBtn.addEventListener("click", skipQuestion);
+        els.nextBtn.addEventListener("click", nextQuestion);
+        els.retryBtn.addEventListener("click", startQuiz);
+        els.reviewBtn.addEventListener("click", () => document.getElementById("review").scrollIntoView({ behavior: "smooth" }));
+
+        // --- DARK / LIGHT MODE LOGIC ---
+        function initTheme() {
+            const themeToggleBtn = document.getElementById("themeToggleBtn");
+            const savedTheme = localStorage.getItem("eduquest_theme") || "light";
+            
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-theme");
+                themeToggleBtn.textContent = "☀️";
+            } else {
+                document.body.classList.remove("dark-theme");
+                themeToggleBtn.textContent = "🌙";
+            }
+
+            themeToggleBtn.addEventListener("click", () => {
+                document.body.classList.toggle("dark-theme");
+                const isDark = document.body.classList.contains("dark-theme");
+                localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
+                themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+                
+                themeToggleBtn.style.transform = "scale(0.9)";
+                setTimeout(() => themeToggleBtn.style.transform = "none", 150);
+            });
+        }
+        initTheme();
+
+        els.bankSize.textContent = questionBank.length;
+        loadBestScore();
+        loadBookmarks();
+        renderStats();
+        renderLastSession();
+        renderCategoryPerformance();
+        renderQuestionMap();
+        updateSidebarVisibility();
+    </script>
+</body>
+
+</html>

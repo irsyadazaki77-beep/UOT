@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TKA - Universe Of Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+</head>
+
+<body data-page="snbt">
+    <div class="noise"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main class="page">
+        <nav class="navbar">
+            <a href="index.html" class="brand">
+                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                Universe Of Tech
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="snbt.html" class="active">TKA</a>
+                <a href="tka-lms.html">LMS TKA</a>
+                <a href="library.html">Library</a>
+                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <a class="btn btn-ghost" href="index.html">Masuk</a>
+                <a class="btn btn-primary" href="tka-lms.html">LMS TKA</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div>
+                <div class="badge">Mode TKA SMA/SMK 2026</div>
+                <h1>Latihan TKA resmi-rasa, <span class="gradient-text">diagnosis skor</span>, dan roadmap personal.</h1>
+                <p>Berlatih mata pelajaran wajib dan pilihan dengan soal kontekstual, pembahasan langsung, catatan kelemahan, serta simulasi mini yang meniru ritme Tes Kemampuan Akademik.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="tka-lms.html">Masuk LMS TKA</a>
+                    <a class="btn btn-blue" href="#tryout">Latihan Cepat</a>
+                </div>
+            </div>
+            <aside class="hero-panel">
+                <div class="panel-top">
+                    <div>
+                        <div class="section-kicker">Dashboard</div>
+                        <h2 class="panel-title">Kesiapan TKA kamu</h2>
+                    </div>
+                    <div class="progress-ring" id="snbtRing"><span id="snbtRingText">0%</span></div>
+                </div>
+                <div class="metric-grid">
+                    <div class="metric-card"><strong id="snbtDone">0</strong><span>Soal dikerjakan</span></div>
+                    <div class="metric-card"><strong id="snbtAccuracy">0%</strong><span>Akurasi</span></div>
+                    <div class="metric-card"><strong id="snbtLevel">Fondasi</strong><span>Level kesiapan</span></div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Fitur TKA</div>
+                    <h2>Belajar sesuai teknis tes.</h2>
+                </div>
+                <p>TKA mengukur capaian akademik per mata pelajaran. Untuk SMA/SMK, pola belajarnya perlu memadukan mapel wajib, dua pilihan, latihan HOTS, dan manajemen waktu.</p>
+            </div>
+            <div class="card-grid">
+                <article class="card"><div class="card-icon">1</div><h3>Pemetaan Mapel</h3><p>Bahasa Indonesia, Matematika, Bahasa Inggris, dan dua mapel pilihan dipetakan ke porsi belajar mingguan.</p></article>
+                <article class="card"><div class="card-icon">2</div><h3>Simulasi Mini</h3><p>Soal diputar per mapel dengan indikator level, estimasi waktu, pilihan jawaban, dan pembahasan setelah menjawab.</p></article>
+                <article class="card"><div class="card-icon">3</div><h3>Diagnosis Kelemahan</h3><p>Akurasi tersimpan lokal, lalu sistem memberi rekomendasi drill dan strategi review untuk sesi berikutnya.</p></article>
+            </div>
+        </section>
+
+        <section class="section workspace" id="planner">
+            <div class="toolbox">
+                <div class="section-kicker">Planner</div>
+                <h2>Susun rencana TKA.</h2>
+                <div class="field">
+                    <label for="targetScore">Target skor</label>
+                    <input id="targetScore" type="number" min="400" max="850" value="680">
+                </div>
+                <div class="field">
+                    <label for="studyWeeks">Sisa waktu belajar</label>
+                    <input id="studyWeeks" type="number" min="2" max="24" value="6">
+                </div>
+                <div class="field">
+                    <label for="focusArea">Fokus terlemah</label>
+                    <select id="focusArea">
+                        <option>Matematika wajib</option>
+                        <option>Bahasa Indonesia</option>
+                        <option>Bahasa Inggris</option>
+                        <option>Mapel pilihan 1</option>
+                        <option>Mapel pilihan 2</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="firstElective">Mapel pilihan 1</label>
+                    <select id="firstElective">
+                        <option>Fisika</option>
+                        <option>Kimia</option>
+                        <option>Biologi</option>
+                        <option>Ekonomi</option>
+                        <option>Sosiologi</option>
+                        <option>Geografi</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="secondElective">Mapel pilihan 2</label>
+                    <select id="secondElective">
+                        <option>Kimia</option>
+                        <option>Fisika</option>
+                        <option>Biologi</option>
+                        <option>Ekonomi</option>
+                        <option>Sosiologi</option>
+                        <option>Geografi</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="buildTKAPlan">Perbarui Rencana</button>
+            </div>
+            <div class="result-panel">
+                <div class="section-kicker">Roadmap</div>
+                <h2>Jalur mingguan</h2>
+                <div class="plan-list" id="snbtPlanList"></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Teknis TKA</div>
+                    <h2>Alur latihan yang dipakai halaman ini.</h2>
+                </div>
+                <p>Diringkas dari informasi resmi TKA: asesmen terstandar, berbasis mata pelajaran, hasilnya dapat menjadi bahan seleksi dan pemetaan capaian akademik.</p>
+            </div>
+            <div class="tka-flow">
+                <article class="flow-step"><span>01</span><strong>Pilih Mapel</strong><p>Mulai dari tiga mapel wajib, lalu tambah dua mapel pilihan sesuai target prodi.</p></article>
+                <article class="flow-step"><span>02</span><strong>Kerjakan Soal</strong><p>Latihan dibuat pendek agar bisa rutin: pahami teks/data, hitung, simpulkan, lalu jawab.</p></article>
+                <article class="flow-step"><span>03</span><strong>Baca Pembahasan</strong><p>Setiap jawaban langsung membuka alasan benar dan titik konsep yang perlu diulang.</p></article>
+                <article class="flow-step"><span>04</span><strong>Review Kelemahan</strong><p>Dashboard mengubah akurasi menjadi level kesiapan dan saran porsi belajar berikutnya.</p></article>
+            </div>
+        </section>
+
+        <section class="section" id="tryout">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Simulasi Mini</div>
+                    <h2>Bank soal TKA interaktif.</h2>
+                </div>
+                <div class="chips">
+                    <button class="tool-chip active" data-snbt-subject="indonesia">B. Indonesia</button>
+                    <button class="tool-chip" data-snbt-subject="matematika">Matematika</button>
+                    <button class="tool-chip" data-snbt-subject="inggris">B. Inggris</button>
+                    <button class="tool-chip" data-snbt-subject="pilihan">Mapel Pilihan</button>
+                </div>
+            </div>
+            <div class="quiz-box">
+                <div class="quiz-meta" id="snbtQuestionMeta"></div>
+                <h3 id="snbtQuestion">Pertanyaan akan muncul di sini.</h3>
+                <div class="answer-grid" id="snbtAnswers"></div>
+                <div class="quiz-actions">
+                    <p class="muted" id="snbtFeedback">Pilih jawaban untuk melihat pembahasan singkat.</p>
+                    <button class="btn btn-blue" id="nextTKAQuestion" type="button">Soal Berikutnya</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="section workspace">
+            <div class="result-panel">
+                <div class="section-kicker">Diagnosis</div>
+                <h2>Rekomendasi sesi berikutnya</h2>
+                <div class="diagnostic-card" id="tkaDiagnostic"></div>
+            </div>
+            <div class="result-panel">
+                <div class="section-kicker">Checklist</div>
+                <h2>Siap simulasi penuh</h2>
+                <div class="tka-checklist">
+                    <label><input type="checkbox" data-tka-check="wajib"> 3 mapel wajib sudah latihan minimal 2 set</label>
+                    <label><input type="checkbox" data-tka-check="pilihan"> 2 mapel pilihan sudah dipilih sesuai target prodi</label>
+                    <label><input type="checkbox" data-tka-check="waktu"> Sudah mencoba latihan dengan batas waktu</label>
+                    <label><input type="checkbox" data-tka-check="review"> Punya catatan salah dan konsep yang harus diulang</label>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <span>© 2026 Universe Of Tech. TKA practice mode.</span>
+            <span>Progress disimpan lokal di browser kamu.</span>
+        </footer>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script src="feature-pages.js"></script>
+</body>
+
+</html>

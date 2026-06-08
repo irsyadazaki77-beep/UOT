@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LMS TKA - Universe Of Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+</head>
+
+<body data-page="tka-lms">
+    <div class="noise"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main class="page">
+        <nav class="navbar">
+            <a href="index.html" class="brand">
+                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                Universe Of Tech
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="snbt.html">TKA</a>
+                <a href="tka-lms.html" class="active">LMS TKA</a>
+                <a href="library.html">Library</a>
+                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">ðŸŒ™</button>
+                <a class="btn btn-ghost" href="snbt.html">Dashboard</a>
+                <a class="btn btn-primary" href="#lms-workspace">Mulai Soal</a>
+            </div>
+        </nav>
+
+        <section class="hero lms-hero">
+            <div>
+                <div class="badge">LMS TKA adaptif</div>
+                <h1>LMS latihan TKA dengan <span class="gradient-text">sesi adaptif, review queue, dan analytics</span>.</h1>
+                <p>Latihan dibangun dari pola TKA resmi, simulasi, dan prediksi. Kamu bisa belajar per mapel, mengejar target sesi, menandai review, mencatat konsep, dan memantau kelemahan secara lokal.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#lms-workspace">Buka Katalog</a>
+                    <a class="btn btn-blue" href="#lms-dashboard">Lihat Progress</a>
+                </div>
+            </div>
+            <aside class="hero-panel lms-overview-card" id="lms-dashboard">
+                <div class="panel-top">
+                    <div>
+                        <div class="section-kicker">Progress LMS</div>
+                        <h2 class="panel-title">Kesiapan latihan</h2>
+                    </div>
+                    <span class="mini-tag">48 soal</span>
+                </div>
+                <div class="lms-progress-track"><div id="tkaLmsProgressBar"></div></div>
+                <div class="metric-grid">
+                    <div class="metric-card"><strong id="tkaLmsDone">0/48</strong><span>Selesai</span></div>
+                    <div class="metric-card"><strong id="tkaLmsAccuracy">0%</strong><span>Akurasi</span></div>
+                    <div class="metric-card"><strong id="tkaLmsStreak">0</strong><span>Streak</span></div>
+                </div>
+                <div class="metric-grid lms-mini-metrics">
+                    <div class="metric-card"><strong id="tkaLmsReviewCount">0</strong><span>Review</span></div>
+                    <div class="metric-card"><strong id="tkaLmsMastery">0%</strong><span>Mastery</span></div>
+                    <div class="metric-card"><strong id="tkaLmsSessionTarget">0/10</strong><span>Target sesi</span></div>
+                </div>
+                <div class="diagnostic-row lms-weak-row">
+                    <span>Mapel terlemah</span>
+                    <strong id="tkaLmsWeak">Belum ada</strong>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Paket V1</div>
+                    <h2>Wajib lengkap, pilihan populer.</h2>
+                </div>
+                <p>Bahasa Indonesia, Matematika, Bahasa Inggris, Fisika, Kimia, Biologi, Ekonomi, Sosiologi, dan Geografi sudah tersedia dengan campuran soal dasar hingga prediksi.</p>
+            </div>
+            <div class="card-grid">
+                <article class="card"><div class="card-icon">A</div><h3>48 Soal Adaptif</h3><p>Soal dibuat orisinal dari pola asesmen akademik, bukan salinan mentah dari bank soal publik.</p></article>
+                <article class="card"><div class="card-icon">B</div><h3>Mode Sesi</h3><p>Latihan semua soal, belum dijawab, salah, atau hanya soal yang kamu tandai review.</p></article>
+                <article class="card"><div class="card-icon">C</div><h3>Catatan & Analytics</h3><p>Catatan per soal, akurasi per mapel, timer, target sesi, dan queue review tersimpan di browser.</p></article>
+            </div>
+        </section>
+
+        <section class="section lms-command-center">
+            <div class="lms-command-card">
+                <div>
+                    <div class="section-kicker">Session Control</div>
+                    <h2>Mode belajar hari ini</h2>
+                    <p class="muted">Pilih mode sesuai kebutuhan: pemanasan, mengejar soal baru, memperbaiki salah, atau mengulang soal yang ditandai.</p>
+                </div>
+                <div class="lms-filter-group">
+                    <span>Mode sesi</span>
+                    <div class="chips">
+                        <button class="tool-chip active" data-tka-mode="all">Semua</button>
+                        <button class="tool-chip" data-tka-mode="unanswered">Belum dijawab</button>
+                        <button class="tool-chip" data-tka-mode="wrong">Salah</button>
+                        <button class="tool-chip" data-tka-mode="review">Review</button>
+                    </div>
+                </div>
+            </div>
+            <div class="lms-command-card">
+                <div>
+                    <div class="section-kicker">Timer</div>
+                    <h2 id="tkaTimerDisplay">00:00</h2>
+                    <p class="muted">Gunakan timer untuk melatih ritme pengerjaan tanpa harus membuka aplikasi lain.</p>
+                </div>
+                <div class="inline-actions">
+                    <button class="btn btn-primary" id="tkaTimerToggle" type="button">Mulai Timer</button>
+                    <button class="btn btn-ghost" id="tkaTimerReset" type="button">Reset</button>
+                </div>
+            </div>
+            <div class="lms-command-card">
+                <div>
+                    <div class="section-kicker">Target</div>
+                    <h2>Paket sesi</h2>
+                    <p class="muted">Batasi daftar soal agar sesi latihan tetap fokus dan tidak terasa melelahkan.</p>
+                </div>
+                <div class="field">
+                    <label for="tkaSessionSize">Jumlah soal sesi</label>
+                    <select id="tkaSessionSize">
+                        <option value="5">5 soal</option>
+                        <option value="10" selected>10 soal</option>
+                        <option value="20">20 soal</option>
+                        <option value="all">Semua soal</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="section tka-lms-shell" id="lms-workspace">
+            <aside class="lms-sidebar">
+                <div class="section-kicker">Katalog Mapel</div>
+                <h2>Pilih mapel.</h2>
+                <div class="lms-subject-list" id="tkaLmsSubjects"></div>
+            </aside>
+
+            <div class="lms-main">
+                <div class="lms-filter-panel">
+                    <div>
+                        <div class="section-kicker">Filter Soal</div>
+                        <h2>Atur sesi latihan.</h2>
+                    </div>
+                    <div class="field">
+                        <label for="tkaQuestionSearch">Cari skill atau kata kunci</label>
+                        <input id="tkaQuestionSearch" type="search" placeholder="contoh: peluang, inferensi, ekologi">
+                    </div>
+                    <div class="lms-filter-group">
+                        <span>Kesulitan</span>
+                        <div class="chips">
+                            <button class="tool-chip active" data-tka-difficulty="all">Semua</button>
+                            <button class="tool-chip" data-tka-difficulty="dasar">Dasar</button>
+                            <button class="tool-chip" data-tka-difficulty="sedang">Sedang</button>
+                            <button class="tool-chip" data-tka-difficulty="hots">HOTS</button>
+                            <button class="tool-chip" data-tka-difficulty="prediksi">Prediksi</button>
+                        </div>
+                    </div>
+                    <div class="lms-filter-group">
+                        <span>Tipe soal</span>
+                        <div class="chips">
+                            <button class="tool-chip active" data-tka-type="all">Semua</button>
+                            <button class="tool-chip" data-tka-type="single">Pilihan ganda</button>
+                            <button class="tool-chip" data-tka-type="multi">Pilihan kompleks</button>
+                            <button class="tool-chip" data-tka-type="truefalse">Benar/Salah</button>
+                        </div>
+                    </div>
+                    <button class="btn btn-ghost" id="tkaResetFilters" type="button">Reset Filter</button>
+                </div>
+
+                <div class="lms-study-grid">
+                    <section class="quiz-box lms-question-card">
+                        <div class="lms-question-hud">
+                            <span id="tkaQuestionCounter">Soal 0/0</span>
+                            <span id="tkaQuestionStatus">Belum dijawab</span>
+                        </div>
+                        <div class="quiz-meta" id="tkaLmsQuestionMeta"></div>
+                        <h3 id="tkaLmsQuestionTitle">Pilih soal untuk mulai latihan.</h3>
+                        <p class="lms-stimulus" id="tkaLmsStimulus">Gunakan katalog mapel dan filter untuk menemukan paket soal yang ingin dikerjakan.</p>
+                        <div class="answer-grid" id="tkaLmsAnswers"></div>
+                        <div class="lms-explanation" id="tkaLmsExplanation">
+                            <p class="muted">Pembahasan akan muncul setelah kamu submit jawaban.</p>
+                        </div>
+                        <div class="lms-note-box">
+                            <label for="tkaQuestionNote">Catatan konsep</label>
+                            <textarea id="tkaQuestionNote" placeholder="Tulis alasan salah, rumus, kata kunci, atau strategi pengerjaan..."></textarea>
+                            <button class="btn btn-ghost" id="tkaSaveNote" type="button">Simpan Catatan</button>
+                        </div>
+                        <div class="quiz-actions">
+                            <div class="lms-source"><span>Sumber pola</span><strong id="tkaLmsSource">Pola adaptif TKA</strong></div>
+                            <div class="inline-actions">
+                                <button class="btn btn-ghost" id="tkaPrevQuestion" type="button">Sebelumnya</button>
+                                <button class="btn btn-ghost" id="tkaShowHint" type="button">Hint</button>
+                                <button class="btn btn-ghost" id="tkaMarkReview" type="button">Tandai Review</button>
+                                <button class="btn btn-primary" id="tkaSubmitAnswer" type="button">Submit</button>
+                                <button class="btn btn-blue" id="tkaNextQuestion" type="button">Soal Berikutnya</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <aside class="result-panel lms-question-list-panel">
+                        <div class="section-kicker">Daftar Soal</div>
+                        <h2>Antrian latihan</h2>
+                        <div class="lms-question-list" id="tkaQuestionList"></div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <section class="section lms-analytics-section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Analytics</div>
+                    <h2>Peta kekuatan per mapel.</h2>
+                </div>
+                <p>Gunakan ringkasan ini untuk memilih sesi berikutnya: ulang mapel merah, lanjutkan mapel stabil, dan pertahankan streak pada mapel hijau.</p>
+            </div>
+            <div class="lms-analytics-grid" id="tkaAnalyticsGrid"></div>
+            <div class="lms-danger-zone">
+                <div>
+                    <div class="section-kicker">Progress Lokal</div>
+                    <h2>Kelola data latihan</h2>
+                    <p class="muted">Reset hanya menghapus progres LMS TKA di browser ini. Bank soal dan halaman tidak berubah.</p>
+                </div>
+                <button class="btn btn-ghost" id="tkaResetProgress" type="button">Reset Progress LMS</button>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Catatan Sumber</div>
+                    <h2>Aman untuk latihan mandiri.</h2>
+                </div>
+                <p>Konten soal mengikuti format dan kompetensi umum TKA, lalu ditulis ulang sebagai soal prediktif/adaptif agar tidak mengambil soal berhak cipta secara mentah.</p>
+            </div>
+            <div class="tka-flow">
+                <article class="flow-step"><span>01</span><strong>Adaptasi resmi</strong><p>Mengikuti kerangka asesmen dan gaya soal akademik berbasis mapel.</p></article>
+                <article class="flow-step"><span>02</span><strong>Pola TKA 2025</strong><p>Meniru cara berpikir soal: stimulus, analisis, inferensi, hitungan, dan validasi pernyataan.</p></article>
+                <article class="flow-step"><span>03</span><strong>Prediksi</strong><p>Soal dibuat untuk melatih konsep yang mungkin muncul, bukan mengklaim bocoran.</p></article>
+                <article class="flow-step"><span>04</span><strong>Review</strong><p>Soal salah otomatis cocok untuk diulang setelah konsepnya dipelajari ulang.</p></article>
+            </div>
+        </section>
+
+        <footer>
+            <span>2026 Universe Of Tech. LMS TKA practice mode.</span>
+            <span>Progress disimpan lokal di browser kamu.</span>
+        </footer>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script src="feature-pages.js"></script>
+</body>
+
+</html>

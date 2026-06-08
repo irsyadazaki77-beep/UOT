@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universe Of Tech - Materi Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --green: #32d66b;
+            --green-dark: #17a84d;
+            --blue: #4f8cff;
+            --yellow: #ffd166;
+            --orange: #ff9f43;
+            --purple: #8b5cf6;
+            --dark: #112033;
+            --muted: #667085;
+            --soft: #f4f8fb;
+            --white: #ffffff;
+            --border: #e5edf5;
+            --shadow: 0 24px 60px rgba(17, 32, 51, 0.12);
+            --shadow-soft: 0 14px 35px rgba(17, 32, 51, 0.08);
+
+            /* Theme specific variables */
+            --bg-page: radial-gradient(circle at top left, rgba(50, 214, 107, 0.2), transparent 30%),
+                       radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.18), transparent 28%),
+                       radial-gradient(circle at 50% 86%, rgba(255, 209, 102, 0.16), transparent 30%),
+                       linear-gradient(180deg, #fbfdff 0%, #eef7f2 100%);
+            --navbar-bg: rgba(255, 255, 255, 0.82);
+            --card-bg: rgba(255, 255, 255, 0.82);
+            --badge-bg: rgba(255, 255, 255, 0.86);
+            --item-bg: #f4f8fb;
+            --dark-panel-bg: #102033;
+        }
+
+        body.dark-theme {
+            --dark: #f4f8fb;
+            --muted: #98a2b3;
+            --soft: #0b1523;
+            --white: #112033;
+            --border: #1e2f47;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+            --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.3);
+
+            --bg-page: radial-gradient(circle at top left, rgba(50, 214, 107, 0.15), transparent 30%),
+                       radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.12), transparent 28%),
+                       radial-gradient(circle at 50% 86%, rgba(255, 209, 102, 0.12), transparent 30%),
+                       linear-gradient(180deg, #0d1726 0%, #080f1a 100%);
+            --navbar-bg: rgba(17, 32, 51, 0.85);
+            --card-bg: rgba(17, 32, 51, 0.75);
+            --badge-bg: rgba(17, 32, 51, 0.86);
+            --item-bg: #172a42;
+            --dark-panel-bg: #091420;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Inter", sans-serif;
+            background: var(--bg-page);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .noise,
+        .orb {
+            pointer-events: none;
+            position: fixed;
+        }
+
+        .noise {
+            inset: 0;
+            opacity: 0.05;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .orb {
+            width: 360px;
+            height: 360px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.24), rgba(79, 140, 255, 0.18));
+            filter: blur(16px);
+            z-index: 0;
+            animation: floatOrb 10s ease-in-out infinite alternate;
+        }
+
+        .orb.one {
+            top: 110px;
+            right: -160px;
+        }
+
+        .orb.two {
+            bottom: 30px;
+            left: -190px;
+            animation-delay: 1.5s;
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.28), rgba(139, 92, 246, 0.16));
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+        }
+
+        .navbar {
+            width: min(1180px, calc(100% - 40px));
+            margin: 24px auto 0;
+            padding: 14px 18px;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 16px;
+            z-index: 10;
+            transition: box-shadow 0.3s ease;
+        }
+        body.dark-theme .navbar {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 900;
+            font-size: 26px;
+            letter-spacing: -0.04em;
+            cursor: pointer;
+        }
+
+        .brand-logo {
+            height: 64px;
+            width: auto;
+            object-fit: contain;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .brand:hover .brand-logo {
+            transform: scale(1.15) rotate(12deg);
+        }
+
+        .brand:active .brand-logo {
+            transform: scale(0.92) rotate(-8deg);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        .nav-links a {
+            white-space: nowrap;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .nav-links a:hover {
+            color: var(--green-dark);
+            background: rgba(50, 214, 107, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .nav-links a.active {
+            color: white;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            box-shadow: 0 8px 20px rgba(50, 214, 107, 0.25);
+        }
+        
+        .dark-theme .nav-links a:hover {
+            background: rgba(50, 214, 107, 0.15);
+            color: var(--green);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            border: 0;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 900;
+            border-radius: 18px;
+            padding: 13px 20px;
+            transition: 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, var(--green), var(--green-dark));
+            box-shadow: 0 14px 26px rgba(23, 168, 77, 0.28);
+        }
+
+        .btn-blue {
+            color: white;
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            box-shadow: 0 14px 26px rgba(79, 140, 255, 0.28);
+        }
+
+        .btn-ghost {
+            background: #eef7f2;
+            color: var(--green-dark);
+        }
+
+        .hero {
+            width: min(1180px, calc(100% - 40px));
+            margin: 72px auto 0;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 420px;
+            gap: 46px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.86);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: 900;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            font-size: clamp(44px, 7vw, 78px);
+            line-height: 0.94;
+            letter-spacing: -0.07em;
+            font-weight: 950;
+            max-width: 720px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--green-dark), var(--blue), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 18px;
+            line-height: 1.7;
+            margin-top: 24px;
+            max-width: 650px;
+            font-weight: 500;
+        }
+
+        .hero-actions,
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard {
+            background: #102033;
+            color: white;
+            border-radius: 42px;
+            padding: 18px;
+            box-shadow: 0 35px 90px rgba(17, 32, 51, 0.26);
+            transform: rotate(1deg);
+            animation: floatPanel 5s ease-in-out infinite;
+        }
+
+        .dashboard-inner {
+            min-height: 430px;
+            border-radius: 32px;
+            padding: 22px;
+            background:
+                radial-gradient(circle at 80% 0%, rgba(50, 214, 107, 0.28), transparent 30%),
+                linear-gradient(180deg, #172a42 0%, #0f2033 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .dashboard-inner::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .terminal {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 14px;
+        }
+
+        .terminal-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.64);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .dots {
+            display: flex;
+            gap: 7px;
+        }
+
+        .dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 99px;
+            background: var(--green);
+        }
+
+        .dots span:nth-child(2) {
+            background: var(--yellow);
+        }
+
+        .dots span:nth-child(3) {
+            background: var(--purple);
+        }
+
+        .code-line {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.86);
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .code-line span {
+            color: var(--yellow);
+        }
+
+        .meter {
+            height: 10px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.16);
+            overflow: hidden;
+        }
+
+        .meter span {
+            display: block;
+            height: 100%;
+            width: var(--value);
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+        }
+
+        .section {
+            width: min(1180px, calc(100% - 40px));
+            margin: 92px auto 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section-kicker {
+            color: var(--green-dark);
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .section h2 {
+            font-size: clamp(32px, 4vw, 52px);
+            letter-spacing: -0.06em;
+            line-height: 1;
+        }
+
+        .section-header p {
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 460px;
+            font-weight: 500;
+        }
+
+        .filter-row {
+            margin-top: 0;
+            margin-bottom: 24px;
+        }
+
+        .filter-btn {
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.86);
+            padding: 11px 15px;
+            cursor: pointer;
+            color: var(--muted);
+            font-weight: 900;
+            transition: 0.25s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            color: white;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .module-card,
+        .path-card,
+        .glossary-card,
+        .check-card {
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+            border-radius: 30px;
+        }
+
+        .module-card {
+            min-height: 310px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.28s ease;
+        }
+
+        .module-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.1), transparent 52%);
+            opacity: 0;
+            transition: 0.28s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow);
+        }
+
+        .module-card:hover::before {
+            opacity: 1;
+        }
+
+        .module-top,
+        .module-body,
+        .module-footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        .module-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 22px;
+            display: grid;
+            place-items: center;
+            background: #eef7f2;
+            color: var(--green-dark);
+            font-size: 19px;
+            font-weight: 950;
+            margin-bottom: 18px;
+        }
+
+        .module-card[data-topic="database"] .module-icon,
+        .module-card[data-topic="web"] .module-icon,
+        .module-card[data-topic="cloud"] .module-icon {
+            background: #edf4ff;
+            color: var(--blue);
+        }
+
+        .module-card[data-topic="design"] .module-icon,
+        .module-card[data-topic="cyber"] .module-icon,
+        .module-card[data-topic="ai"] .module-icon {
+            background: #f4efff;
+            color: var(--purple);
+        }
+
+        .module-card[data-topic="analytics"] .module-icon,
+        .module-card[data-topic="git"] .module-icon {
+            background: #fff7df;
+            color: #b7791f;
+        }
+
+        .module-card h3 {
+            font-size: 22px;
+            letter-spacing: -0.04em;
+            margin-bottom: 10px;
+        }
+
+        .module-card p {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 14px;
+            font-weight: 550;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .tag {
+            border-radius: 999px;
+            padding: 7px 10px;
+            background: #f2f6fb;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .module-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .level {
+            color: var(--green-dark);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .mini-link {
+            color: var(--blue);
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .path-layout {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 22px;
+        }
+
+        .path-card,
+        .glossary-card,
+        .check-card {
+            padding: 26px;
+        }
+
+        .path-card h3,
+        .glossary-card h3,
+        .check-card h3 {
+            font-size: 28px;
+            letter-spacing: -0.05em;
+            margin-bottom: 18px;
+        }
+
+        .timeline {
+            display: grid;
+            gap: 14px;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 14px;
+            align-items: start;
+        }
+
+        .timeline-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            color: white;
+            display: grid;
+            place-items: center;
+            font-weight: 950;
+            box-shadow: 0 12px 24px rgba(79, 140, 255, 0.22);
+        }
+
+        .timeline-item strong {
+            display: block;
+            margin-bottom: 5px;
+            letter-spacing: -0.03em;
+        }
+
+        .timeline-item span {
+            color: var(--muted);
+            line-height: 1.55;
+            font-size: 14px;
+            font-weight: 550;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .term {
+            padding: 15px;
+            border-radius: 20px;
+            background: #f5f8fb;
+            font-weight: 900;
+        }
+
+        .term span {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 6px;
+            font-weight: 650;
+        }
+
+        .check-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .check-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px;
+            align-items: start;
+            padding: 14px;
+            border-radius: 20px;
+            background: #f5f8fb;
+            cursor: pointer;
+            font-weight: 850;
+        }
+
+        .check-item input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--green-dark);
+            margin-top: 2px;
+        }
+
+        .progress-panel {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.12), rgba(79, 140, 255, 0.1));
+            font-weight: 900;
+        }
+
+        .progress-panel .meter {
+            background: #dfe8f1;
+            margin-top: 12px;
+        }
+
+        .cta {
+            width: min(1180px, calc(100% - 40px));
+            margin: 92px auto 50px;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            color: white;
+            border-radius: 44px;
+            padding: 54px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            gap: 30px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cta::after {
+            content: "TECH";
+            position: absolute;
+            right: 26px;
+            bottom: -34px;
+            font-size: 118px;
+            line-height: 1;
+            font-weight: 950;
+            opacity: 0.14;
+            transform: rotate(-8deg);
+        }
+
+        .cta h2 {
+            font-size: clamp(34px, 5vw, 58px);
+            line-height: 1;
+            letter-spacing: -0.06em;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.7;
+            font-weight: 600;
+            max-width: 620px;
+        }
+
+        .cta-actions {
+            display: flex;
+            justify-content: end;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta .btn {
+            background: white;
+            color: var(--green-dark);
+            box-shadow: 0 16px 30px rgba(17, 32, 51, 0.16);
+        }
+
+        footer {
+            width: min(1180px, calc(100% - 40px));
+            margin: 80px auto 40px;
+            border-top: 1px solid var(--border);
+            display: grid;
+            gap: 40px;
+            color: var(--muted);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-brand .brand {
+            font-size: 24px;
+            font-weight: 905;
+            color: var(--dark);
+            letter-spacing: -0.04em;
+        }
+
+        .footer-brand p {
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--muted);
+            font-weight: 550;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--dark);
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .footer-links a {
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--green-dark);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .social-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: var(--item-bg);
+            border: 1px solid var(--border);
+            color: var(--dark);
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            background: var(--green);
+            color: white;
+            border-color: transparent;
+        }
+
+        .language-select {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--item-bg);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 12px;
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 700;
+            width: fit-content;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .language-select select {
+            background: transparent;
+            border: 0;
+            color: inherit;
+            font-weight: inherit;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .store-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #112033;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .store-badge:hover {
+            transform: translateY(-2px);
+        }
+
+        .store-badge span {
+            display: block;
+        }
+
+        .store-badge .store-sub {
+            display: block;
+            font-size: 9px;
+            text-transform: uppercase;
+            opacity: 0.65;
+            letter-spacing: 0.05em;
+        }
+
+        .store-badge .store-title {
+            display: block;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 600;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            gap: 18px;
+        }
+
+        .footer-legal-links a:hover {
+            color: var(--green-dark);
+        }
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            background: var(--item-bg);
+            color: var(--dark);
+            border: 1px solid var(--border);
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 18px;
+        }
+        .theme-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* Scroll Progress Indicator */
+        .scroll-progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 9999;
+        }
+        .scroll-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--green), var(--blue), var(--purple));
+            box-shadow: 0 0 8px rgba(50, 214, 107, 0.6);
+            transition: width 0.1s ease-out;
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Smooth filter transition */
+        .module-card {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                        box-shadow 0.28s ease;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        .module-card.filtered-out {
+            opacity: 0;
+            transform: scale(0.85) translateY(12px);
+        }
+
+        /* Confetti Canvas */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        /* Dark Mode Custom Adjustments */
+        .navbar {
+            background: var(--navbar-bg);
+            border: 1px solid var(--border);
+        }
+        .badge {
+            background: var(--badge-bg);
+            border: 1px solid var(--border);
+        }
+        .module-card,
+        .path-card,
+        .glossary-card,
+        .check-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+        }
+        .term {
+            background: var(--item-bg);
+        }
+        .check-item {
+            background: var(--item-bg);
+        }
+        .dark-theme .dashboard {
+            background: var(--dark-panel-bg);
+        }
+        .dark-theme .dashboard-inner {
+            background: radial-gradient(circle at 80% 0%, rgba(50, 214, 107, 0.18), transparent 30%),
+                        linear-gradient(180deg, #112033 0%, #0d1b2c 100%);
+        }
+        .dark-theme .code-line {
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .dark-theme .timeline-number {
+            box-shadow: 0 12px 24px rgba(79, 140, 255, 0.12);
+        }
+        .dark-theme .progress-panel {
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.06), rgba(79, 140, 255, 0.05));
+        }
+        .dark-theme .progress-panel .meter {
+            background: #172a42;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatOrb {
+            from {
+                transform: translateY(0) scale(1);
+            }
+
+            to {
+                transform: translateY(45px) scale(1.08);
+            }
+        }
+
+        @keyframes floatPanel {
+
+            0%,
+            100% {
+                transform: rotate(1deg) translateY(0);
+            }
+
+            50% {
+                transform: rotate(-1deg) translateY(-12px);
+            }
+        }
+
+        @media (max-width: 980px) {
+
+            .hero,
+            .path-layout,
+            .cta {
+                grid-template-columns: 1fr;
+            }
+
+            .module-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-header {
+                align-items: start;
+                flex-direction: column;
+            }
+
+            .cta-actions {
+                justify-content: start;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .navbar {
+                width: min(100% - 24px, 1180px);
+                border-radius: 22px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero,
+            .section,
+            .cta,
+            footer {
+                width: min(100% - 24px, 1180px);
+            }
+
+            .hero {
+                margin-top: 46px;
+            }
+
+            .module-grid,
+            .glossary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard {
+                transform: none;
+            }
+
+            .dashboard-inner {
+                min-height: 380px;
+            }
+
+            .section {
+                margin-top: 70px;
+            }
+
+            .cta {
+                padding: 34px;
+                border-radius: 34px;
+            }
+
+            footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="nav-polish.css">
+</head>
+
+<body>
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+    </div>
+    <canvas id="confettiCanvas"></canvas>
+    <div class="noise"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main class="page">
+        <nav class="navbar">
+            <a href="index.html" class="brand">
+                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                Universe Of Tech
+            </a>
+
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html" class="active">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="snbt.html">TKA</a>
+                <a href="tka-lms.html">LMS TKA</a>
+                <a href="library.html">Library</a>
+                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <a class="btn btn-ghost" href="index.html">Masuk</a>
+                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div>
+                <div class="badge">Materi Tech - learning path, konsep, dan latihan</div>
+                <h1>Bangun fondasi <span class="gradient-text">tech skill</span> yang rapi dan siap dipakai.</h1>
+                <p>
+                    Pelajari pemrograman, web, database, UI/UX, analytics, dan keamanan digital lewat modul singkat
+                    yang terstruktur. Tandai checklist belajar kamu, lalu lanjutkan ke quiz untuk menguji pemahaman.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#modul">Jelajahi Materi</a>
+                    <a class="btn btn-blue" href="quiz.html">Latihan Quiz</a>
+                </div>
+            </div>
+
+            <aside class="dashboard" aria-label="Preview materi tech">
+                <div class="dashboard-inner">
+                    <div class="terminal">
+                        <div class="terminal-top">
+                            <div class="dots"><span></span><span></span><span></span></div>
+                            <span>universeoftech/tech-path</span>
+                        </div>
+                        <div class="code-line">Programming <span>core logic</span></div>
+                        <div class="meter"><span style="--value: 82%"></span></div>
+                        <div class="code-line">Web Development <span>UI + API</span></div>
+                        <div class="meter"><span style="--value: 74%"></span></div>
+                        <div class="code-line">Database <span>SQL + data</span></div>
+                        <div class="meter"><span style="--value: 68%"></span></div>
+                        <div class="code-line">Cyber Literacy <span>safe habits</span></div>
+                        <div class="meter"><span style="--value: 58%"></span></div>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section" id="modul">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Modul Tech</div>
+                    <h2>Pilih topik yang ingin kamu kuasai.</h2>
+                </div>
+                <p>
+                    Setiap kartu berisi ringkasan konsep, kata kunci, dan arah latihan. Gunakan filter untuk fokus
+                    pada satu bidang.
+                </p>
+            </div>
+
+            <div class="filter-row" aria-label="Filter materi">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="programming">Programming</button>
+                <button class="filter-btn" data-filter="web">Web</button>
+                <button class="filter-btn" data-filter="database">Database</button>
+                <button class="filter-btn" data-filter="design">UI/UX</button>
+                <button class="filter-btn" data-filter="analytics">Analytics</button>
+                <button class="filter-btn" data-filter="cyber">Cyber</button>
+                <button class="filter-btn" data-filter="ai">AI & ML</button>
+                <button class="filter-btn" data-filter="cloud">Cloud</button>
+                <button class="filter-btn" data-filter="mobile">Mobile</button>
+                <button class="filter-btn" data-filter="git">Git</button>
+            </div>
+
+            <div class="module-grid reveal" id="moduleGrid">
+                <article class="module-card" data-topic="programming" data-href="materi-basic.html?topik=programming">
+                    <div class="module-top">
+                        <div class="module-icon">PG</div>
+                        <h3>Dasar Pemrograman</h3>
+                        <p>Mulai dari variabel, tipe data, percabangan, loop, function, debugging, dan cara membaca alur kode.</p>
+                        <div class="tag-list"><span class="tag">Logic</span><span class="tag">Function</span><span class="tag">Debug</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula</span><a class="mini-link" href="materi-basic.html?topik=programming">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="web" data-href="materi-basic.html?topik=web">
+                    <div class="module-top">
+                        <div class="module-icon">WEB</div>
+                        <h3>Web Development</h3>
+                        <p>Pelajari HTML semantik, CSS responsif, JavaScript browser, DOM, event, fetch API, dan performa dasar.</p>
+                        <div class="tag-list"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula-Menengah</span><a class="mini-link" href="materi-basic.html?topik=web">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="database" data-href="materi-basic.html?topik=database">
+                    <div class="module-top">
+                        <div class="module-icon">DB</div>
+                        <h3>Database & SQL</h3>
+                        <p>Pahami tabel, primary key, relasi, SELECT, WHERE, JOIN, index, normalisasi, dan transaction.</p>
+                        <div class="tag-list"><span class="tag">SQL</span><span class="tag">JOIN</span><span class="tag">Index</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah</span><a class="mini-link" href="materi-basic.html?topik=database">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="design" data-href="materi-basic.html?topik=design">
+                    <div class="module-top">
+                        <div class="module-icon">UX</div>
+                        <h3>UI/UX Design</h3>
+                        <p>Bangun sense desain lewat hierarchy, spacing, wireframe, aksesibilitas, microcopy, dan usability testing.</p>
+                        <div class="tag-list"><span class="tag">Wireframe</span><span class="tag">A11y</span><span class="tag">Testing</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula-Menengah</span><a class="mini-link" href="materi-basic.html?topik=design">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="analytics" data-href="materi-basic.html?topik=analytics">
+                    <div class="module-top">
+                        <div class="module-icon">AN</div>
+                        <h3>Business Analytics</h3>
+                        <p>Kenali KPI, conversion rate, funnel, segmentasi, outlier, dashboard, A/B testing, dan interpretasi data.</p>
+                        <div class="tag-list"><span class="tag">KPI</span><span class="tag">Funnel</span><span class="tag">A/B Test</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah</span><a class="mini-link" href="materi-basic.html?topik=analytics">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="cyber" data-href="materi-basic.html?topik=cyber">
+                    <div class="module-top">
+                        <div class="module-icon">SEC</div>
+                        <h3>Cyber & Data Literacy</h3>
+                        <p>Pelajari password aman, phishing, 2FA, least privilege, backup, XSS, validasi input, dan audit log.</p>
+                        <div class="tag-list"><span class="tag">2FA</span><span class="tag">XSS</span><span class="tag">Privacy</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah</span><a class="mini-link" href="materi-basic.html?topik=cyber">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="ai" data-href="materi-basic.html?topik=ai">
+                    <div class="module-top">
+                        <div class="module-icon">AI</div>
+                        <h3>AI & Machine Learning</h3>
+                        <p>Kenali konsep neural network, training data, bias model, inference, prompt engineering, dan etika AI.</p>
+                        <div class="tag-list"><span class="tag">AI</span><span class="tag">Model</span><span class="tag">Training</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah-Lanjut</span><a class="mini-link" href="materi-basic.html?topik=ai">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="cloud" data-href="materi-basic.html?topik=cloud">
+                    <div class="module-top">
+                        <div class="module-icon">CLD</div>
+                        <h3>Cloud & DevOps</h3>
+                        <p>Pelajari serverless, container (Docker), CI/CD pipeline, monitoring, virtualisasi, dan scalability.</p>
+                        <div class="tag-list"><span class="tag">Docker</span><span class="tag">CI/CD</span><span class="tag">Cloud</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah-Lanjut</span><a class="mini-link" href="materi-basic.html?topik=cloud">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="mobile" data-href="materi-basic.html?topik=mobile">
+                    <div class="module-top">
+                        <div class="module-icon">MOB</div>
+                        <h3>Mobile Development</h3>
+                        <p>Pahami siklus hidup aplikasi, state management, hybrid vs native, push notification, dan offline storage.</p>
+                        <div class="tag-list"><span class="tag">Native</span><span class="tag">Hybrid</span><span class="tag">State</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula-Menengah</span><a class="mini-link" href="materi-basic.html?topik=mobile">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="git" data-href="materi-basic.html?topik=git">
+                    <div class="module-top">
+                        <div class="module-icon">GIT</div>
+                        <h3>Git & Version Control</h3>
+                        <p>Kuasai branching, commit, merge, conflict resolution, pull request, dan kolaborasi repositori.</p>
+                        <div class="tag-list"><span class="tag">Branch</span><span class="tag">Commit</span><span class="tag">Merge</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula</span><a class="mini-link" href="materi-basic.html?topik=git">Buka Materi</a></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Learning Path</div>
+                    <h2>Urutan belajar yang disarankan.</h2>
+                </div>
+                <p>Ikuti dari fondasi logika sampai keamanan agar pemahaman tech kamu tidak lompat-lompat.</p>
+            </div>
+
+            <div class="path-layout reveal">
+                <div class="path-card">
+                    <h3>Roadmap 10 langkah</h3>
+                    <div class="timeline">
+                        <div class="timeline-item"><div class="timeline-number">1</div><div><strong>Logika pemrograman</strong><span>Biasakan membaca input, proses, output, dan alur kondisi.</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">2</div><div><strong>Struktur web</strong><span>Gabungkan HTML, CSS, dan JavaScript untuk membuat UI yang hidup.</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">3</div><div><strong>Data dan SQL</strong><span>Pahami bagaimana data disimpan, dicari, digabung, dan dijaga konsisten.</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">4</div><div><strong>Desain pengalaman</strong><span>Latih layout, hierarchy, aksesibilitas, dan validasi ide lewat pengguna.</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">5</div><div><strong>Analitik produk</strong><span>Baca metrik, funnel, segmentasi, dan eksperimen dengan hati-hati.</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">6</div><div><strong>Keamanan dasar</strong><span>Bangun kebiasaan aman saat membuat, memakai, dan menyimpan data.</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">7</div><div><strong>Kolaborasi kode (Git)</strong><span>Gunakan version control untuk melacak perubahan dan berkolaborasi tim.</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">8</div><div><strong>Pengembangan mobile</strong><span>Buat aplikasi yang berjalan mulus di perangkat genggam iOS maupun Android.</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">9</div><div><strong>Infrastruktur Cloud & DevOps</strong><span>Otomatisasi pengujian dan deploy aplikasi ke server awan (cloud).</span></div></div>
+                        <div class="timeline-item"><div class="timeline-number">10</div><div><strong>Kecerdasan buatan (AI)</strong><span>Integrasikan model kecerdasan buatan untuk membuat aplikasi lebih pintar.</span></div></div>
+                    </div>
+                </div>
+
+                <div class="check-card">
+                    <h3>Checklist belajar</h3>
+                    <div class="check-list" id="checkList">
+                        <label class="check-item"><input type="checkbox" data-check="logic"> Bisa menjelaskan variabel, kondisi, loop, dan function.</label>
+                        <label class="check-item"><input type="checkbox" data-check="web"> Bisa membuat halaman responsif sederhana dengan HTML, CSS, dan JS.</label>
+                        <label class="check-item"><input type="checkbox" data-check="sql"> Bisa membaca query SELECT, WHERE, JOIN, dan index dasar.</label>
+                        <label class="check-item"><input type="checkbox" data-check="ux"> Bisa menilai layout dari hierarchy, spacing, kontras, dan aksesibilitas.</label>
+                        <label class="check-item"><input type="checkbox" data-check="data"> Bisa membedakan KPI, funnel, segmentasi, outlier, dan vanity metric.</label>
+                        <label class="check-item"><input type="checkbox" data-check="safe"> Bisa mengenali phishing, XSS, password lemah, dan kebutuhan 2FA.</label>
+                        <label class="check-item"><input type="checkbox" data-check="git"> Bisa melakukan commit, branching, push, dan resolve conflict di Git.</label>
+                        <label class="check-item"><input type="checkbox" data-check="mobile"> Bisa membedakan aplikasi native dan hybrid serta siklus hidup mobile app.</label>
+                        <label class="check-item"><input type="checkbox" data-check="cloud"> Bisa menjelaskan konsep container (Docker) dan alur CI/CD dasar.</label>
+                        <label class="check-item"><input type="checkbox" data-check="ai"> Bisa menjelaskan perbedaan training data, model inference, dan bias pada AI.</label>
+                    </div>
+                    <div class="progress-panel">
+                        <span id="progressText">Progress 0/10 selesai</span>
+                        <div class="meter"><span id="progressFill" style="--value: 0%"></span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Glossary Cepat</div>
+                    <h2>Istilah penting yang sering muncul.</h2>
+                </div>
+                <p>Gunakan bagian ini sebagai pengingat cepat sebelum masuk ke quiz atau membuat project kecil.</p>
+            </div>
+
+            <div class="glossary-card reveal">
+                <div class="glossary-grid">
+                    <div class="term">API<span>Jembatan komunikasi antar aplikasi atau layanan.</span></div>
+                    <div class="term">DOM<span>Representasi struktur halaman web yang bisa diubah JavaScript.</span></div>
+                    <div class="term">Primary Key<span>Identitas unik untuk setiap baris data dalam tabel.</span></div>
+                    <div class="term">Index<span>Struktur bantu agar pencarian data tertentu lebih cepat.</span></div>
+                    <div class="term">Wireframe<span>Rangka awal layar sebelum visual detail dibuat.</span></div>
+                    <div class="term">Funnel<span>Urutan langkah pengguna dari awal sampai aksi target.</span></div>
+                    <div class="term">XSS<span>Serangan yang menyisipkan script berbahaya ke halaman web.</span></div>
+                    <div class="term">A/B Testing<span>Perbandingan dua varian untuk melihat mana yang lebih efektif.</span></div>
+                    <div class="term">NoSQL<span>Database non-relasional yang menyimpan data dalam format dokumen atau key-value.</span></div>
+                    <div class="term">CORS<span>Cross-Origin Resource Sharing, mekanisme keamanan browser untuk membatasi request lintas domain.</span></div>
+                    <div class="term">LCP<span>Largest Contentful Paint, metrik kecepatan render elemen terbesar di halaman web.</span></div>
+                    <div class="term">MFA<span>Multi-Factor Authentication, metode keamanan dengan verifikasi identitas berlapis.</span></div>
+                    <div class="term">Ransomware<span>Malware yang mengenkripsi data korban dan meminta tebusan untuk kunci dekripsi.</span></div>
+                    <div class="term">Inheritance<span>Pewarisan sifat/fungsi dari satu kelas ke kelas lain dalam konsep OOP.</span></div>
+                    <div class="term">Zero Trust<span>Model keamanan IT yang tidak mempercayai entitas apa pun secara default.</span></div>
+                    <div class="term">MVC<span>Model-View-Controller, pola arsitektur software pemisah logika, tampilan, dan data.</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta reveal">
+            <div>
+                <h2>Sudah baca materinya? Uji langsung di Quiz Arena.</h2>
+                <p>Quiz tech sudah punya kategori yang sama dengan halaman materi ini, jadi kamu bisa latihan sesuai topik yang baru dipelajari.</p>
+            </div>
+            <div class="cta-actions">
+                <a class="btn" href="quiz.html">Mulai Quiz Tech</a>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-grid">
+                <!-- Column 1: Brand -->
+                <div class="footer-col footer-brand">
+                    <a href="#" class="brand">
+                        <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                        Universe Of Tech
+                    </a>
+                    <p>Platform pembelajaran interaktif berbasis game harian yang bikin belajar menjadi adiktif, produktif, dan menyenangkan.</p>
+                    <div class="language-select">
+                        <span>🌐</span>
+                        <select aria-label="Pilih Bahasa">
+                            <option>Bahasa Indonesia</option>
+                            <option>English</option>
+                            <option>Basa Jawa</option>
+                            <option>Basa Sunda</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Column 2: Belajar -->
+                <div class="footer-col">
+                    <h4>Materi Belajar</h4>
+                    <ul class="footer-links">
+                        <li><a href="materi-basic.html">Dasar Pemrograman</a></li>
+                        <li><a href="materi.html">Database & SQL</a></li>
+                        <li><a href="materi.html">UI/UX Design</a></li>
+                        <li><a href="materi.html">Business Analytics</a></li>
+                        <li><a href="materi.html">Web Development</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Fitur -->
+                <div class="footer-col">
+                    <h4>Fitur Utama</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#fitur">Quiz Adaptif</a></li>
+                        <li><a href="index.html#fitur">Daily Streak</a></li>
+                        <li><a href="index.html#fitur">Progress Tracker</a></li>
+                        <li><a href="index.html#ranking">Leaderboard</a></li>
+                        <li><a href="quiz.html">Quiz Arena ⚡</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Perusahaan -->
+                <div class="footer-col">
+                    <h4>Perusahaan</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Tentang Kami</a></li>
+                        <li><a href="#">Karier</a></li>
+                        <li><a href="#">Blog Edukasi</a></li>
+                        <li><a href="#">Hubungi Kami</a></li>
+                        <li><a href="#">Pers & Media</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 5: Download App -->
+                <div class="footer-col">
+                    <h4>Download App</h4>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button class="store-badge" aria-label="Unduh di App Store">
+                            <span style="font-size: 20px;">🍎</span>
+                            <div>
+                                <span class="store-sub">Download on the</span>
+                                <span class="store-title">App Store</span>
+                            </div>
+                        </button>
+                        <button class="store-badge" aria-label="Unduh di Google Play">
+                            <span style="font-size: 20px;">🤖</span>
+                            <div>
+                                <span class="store-sub">GET IT ON</span>
+                                <span class="store-title">Google Play</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="social-links">
+                        <button class="social-btn" aria-label="Instagram">📸</button>
+                        <button class="social-btn" aria-label="Twitter">🐦</button>
+                        <button class="social-btn" aria-label="TikTok">🎵</button>
+                        <button class="social-btn" aria-label="LinkedIn">💼</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Bar -->
+            <div class="footer-bottom">
+                <span>© 2026 Universe Of Tech. Built with passion for better learning.</span>
+                <div class="footer-legal-links">
+                    <a href="#">Kebijakan Privasi</a>
+                    <a href="#">Syarat Ketentuan</a>
+                    <a href="#">Kebijakan Cookie</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // --- SELECTORS & STATE ---
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const moduleCards = document.querySelectorAll(".module-card");
+        const checkboxes = document.querySelectorAll("[data-check]");
+        const progressText = document.getElementById("progressText");
+        const progressFill = document.getElementById("progressFill");
+        const storageKey = "eduquestMateriProgress";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Setup Theme (Dark / Light Mode)
+            initTheme();
+
+            // Setup Scroll Progress & Reveal
+            initScrollProgress();
+            initScrollReveal();
+
+            // Load saved progress
+            const savedProgress = readProgress();
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = Boolean(savedProgress[checkbox.dataset.check]);
+                checkbox.addEventListener("change", () => updateProgress(true));
+            });
+            updateProgress(false);
+        });
+
+        // --- 1. DARK / LIGHT MODE LOGIC ---
+        function initTheme() {
+            const themeToggleBtn = document.getElementById("themeToggleBtn");
+            const savedTheme = localStorage.getItem("eduquest_theme") || "light";
+            
+            if (savedTheme === "dark") {
+                document.body.classList.add("dark-theme");
+                themeToggleBtn.textContent = "☀️";
+            } else {
+                document.body.classList.remove("dark-theme");
+                themeToggleBtn.textContent = "🌙";
+            }
+
+            themeToggleBtn.addEventListener("click", () => {
+                document.body.classList.toggle("dark-theme");
+                const isDark = document.body.classList.contains("dark-theme");
+                localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
+                themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+                
+                themeToggleBtn.style.transform = "scale(0.9)";
+                setTimeout(() => themeToggleBtn.style.transform = "none", 150);
+            });
+        }
+
+        // --- 2. SCROLL PROGRESS & REVEAL LOGIC ---
+        function initScrollProgress() {
+            window.addEventListener("scroll", () => {
+                const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+                const progressEl = document.getElementById("scrollProgressBar");
+                if (progressEl) {
+                    progressEl.style.width = scrolled + "%";
+                }
+            });
+        }
+
+        // IntersectionObserver for reveal animations
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("revealed");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.05,
+                rootMargin: "0px 0px -30px 0px"
+            });
+
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // --- 3. SMOOTH STAGGERED FILTER LOGIC ---
+        function applyFilter(topic) {
+            moduleCards.forEach((card, index) => {
+                const isVisible = topic === "all" || card.dataset.topic === topic;
+                
+                if (isVisible) {
+                    if (card.style.display === "none") {
+                        card.style.display = "flex";
+                        card.classList.add("filtered-out");
+                    }
+                    setTimeout(() => {
+                        card.classList.remove("filtered-out");
+                    }, index * 20);
+                } else {
+                    card.classList.add("filtered-out");
+                    setTimeout(() => {
+                        if (card.classList.contains("filtered-out")) {
+                            card.style.display = "none";
+                        }
+                    }, 350);
+                }
+            });
+        }
+
+        filterButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                filterButtons.forEach((item) => item.classList.remove("active"));
+                button.classList.add("active");
+                applyFilter(button.dataset.filter);
+            });
+        });
+
+        moduleCards.forEach((card) => {
+            card.addEventListener("click", (event) => {
+                if (event.target.closest("a")) return;
+                window.location.href = card.dataset.href;
+            });
+        });
+
+        // --- 4. PROGRESS TRACKER LOGIC ---
+        function readProgress() {
+            try {
+                return JSON.parse(localStorage.getItem(storageKey) || "{}");
+            } catch (error) {
+                return {};
+            }
+        }
+
+        function writeProgress(progress) {
+            localStorage.setItem(storageKey, JSON.stringify(progress));
+        }
+
+        function updateProgress(isUserInteraction = false) {
+            const progress = {};
+            let done = 0;
+            checkboxes.forEach((checkbox) => {
+                progress[checkbox.dataset.check] = checkbox.checked;
+                if (checkbox.checked) done += 1;
+            });
+            const total = checkboxes.length || 1;
+            progressText.textContent = `Progress ${done}/${total} selesai`;
+            progressFill.style.setProperty("--value", `${Math.round((done / total) * 100)}%`);
+            writeProgress(progress);
+
+            if (isUserInteraction && done === total) {
+                triggerConfetti();
+            }
+        }
+
+        // --- 5. CANVAS CONFETTI PARTICLE SYSTEM ---
+        function triggerConfetti() {
+            const canvas = document.getElementById("confettiCanvas");
+            if (!canvas) return;
+            const ctx = canvas.getContext("2d");
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const colors = ["#32d66b", "#4f8cff", "#ffd166", "#ff9f43", "#8b5cf6", "#ff4d6d"];
+            const particleCount = 120;
+            const particles = [];
+            
+            class Particle {
+                constructor() {
+                    this.x = canvas.width / 2;
+                    this.y = canvas.height + 15;
+                    this.radius = Math.random() * 6 + 4;
+                    this.vx = Math.random() * 14 - 7;
+                    this.vy = -(Math.random() * 15 + 10);
+                    this.gravity = 0.38;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.opacity = 1;
+                    this.decay = Math.random() * 0.012 + 0.008;
+                }
+                
+                update() {
+                    this.vy += this.gravity;
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.opacity -= this.decay;
+                }
+                
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            
+            let animationFrameId;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let active = false;
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    if (p.opacity > 0) {
+                        p.update();
+                        p.draw();
+                        active = true;
+                    }
+                }
+                if (active) {
+                    animationFrameId = requestAnimationFrame(animate);
+                } else {
+                    cancelAnimationFrame(animationFrameId);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            
+            animate();
+        }
+    </script>
+</body>
+
+</html>

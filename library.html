@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library - Universe Of Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+</head>
+
+<body data-page="library">
+    <div class="noise"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main class="page">
+        <nav class="navbar">
+            <a href="index.html" class="brand">
+                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                Universe Of Tech
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="snbt.html">TKA</a>
+                <a href="tka-lms.html">LMS TKA</a>
+                <a href="library.html" class="active">Library</a>
+                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <a class="btn btn-ghost" href="index.html">Masuk</a>
+                <a class="btn btn-primary" href="#koleksi">Buka Koleksi</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div>
+                <div class="badge">Pusat materi pribadi</div>
+                <h1>Simpan, cari, dan rapikan <span class="gradient-text">materi belajar</span> favoritmu.</h1>
+                <p>Library dibuat sebagai ruang baca cepat untuk modul, rangkuman, cheatsheet, flashcard, dan catatan personal yang ingin kamu kunjungi lagi.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#koleksi">Cari Materi</a>
+                    <a class="btn btn-blue" href="#catatan">Tulis Catatan</a>
+                </div>
+            </div>
+            <aside class="hero-panel">
+                <div class="panel-top">
+                    <div>
+                        <div class="section-kicker">Koleksi</div>
+                        <h2 class="panel-title">Daftar tersimpan</h2>
+                    </div>
+                    <span class="mini-tag">Auto save</span>
+                </div>
+                <div class="saved-list" id="savedList"></div>
+            </aside>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Fitur Library</div>
+                    <h2>Ruang belajar yang tidak berantakan.</h2>
+                </div>
+                <p>Setiap kartu bisa disimpan ke daftar pribadi, dicari berdasarkan topik, dan dipadukan dengan catatan mandiri.</p>
+            </div>
+            <div class="card-grid">
+                <article class="card"><div class="card-icon">1</div><h3>Filter Topik</h3><p>Pisahkan materi programming, database, design, analytics, web, dan TKA.</p></article>
+                <article class="card"><div class="card-icon">2</div><h3>Koleksi Tersimpan</h3><p>Materi pilihan masuk ke panel koleksi dan tetap ada saat halaman dibuka ulang.</p></article>
+                <article class="card"><div class="card-icon">3</div><h3>Catatan Cepat</h3><p>Tulis ringkasan belajar harian agar review berikutnya tidak mulai dari nol.</p></article>
+            </div>
+        </section>
+
+        <section class="section" id="koleksi">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Katalog</div>
+                    <h2>Temukan materi.</h2>
+                </div>
+                <input class="search-input" id="librarySearch" type="search" placeholder="Cari judul, tipe, atau topik..." style="max-width:360px;">
+            </div>
+            <div class="chips" style="margin-bottom:18px;">
+                <button class="tool-chip active" data-library-filter="all">Semua</button>
+                <button class="tool-chip" data-library-filter="programming">Programming</button>
+                <button class="tool-chip" data-library-filter="database">Database</button>
+                <button class="tool-chip" data-library-filter="design">Design</button>
+                <button class="tool-chip" data-library-filter="analytics">Analytics</button>
+                <button class="tool-chip" data-library-filter="snbt">TKA</button>
+            </div>
+            <div class="resource-grid" id="resourceGrid"></div>
+        </section>
+
+        <section class="section workspace" id="catatan">
+            <div class="toolbox">
+                <div class="section-kicker">Catatan</div>
+                <h2>Review singkat.</h2>
+                <p class="muted" style="margin:12px 0 18px;">Gunakan area ini untuk menulis hal penting dari materi yang baru kamu baca.</p>
+                <div class="field">
+                    <label for="libraryNote">Catatan belajar</label>
+                    <textarea id="libraryNote" placeholder="Contoh: SQL JOIN dipakai untuk menggabungkan tabel berdasarkan kolom yang berelasi."></textarea>
+                </div>
+                <button class="btn btn-primary" id="saveLibraryNote">Simpan Catatan</button>
+            </div>
+            <div class="result-panel">
+                <div class="section-kicker">Saran sesi</div>
+                <h2>Ritme 25 menit</h2>
+                <div class="plan-list">
+                    <div class="plan-item"><div><strong>5 menit</strong><span class="muted">Baca ulang ringkasan atau cheatsheet.</span></div><span class="mini-tag">Warm up</span></div>
+                    <div class="plan-item"><div><strong>15 menit</strong><span class="muted">Kerjakan modul utama dan tulis satu konsep baru.</span></div><span class="mini-tag">Focus</span></div>
+                    <div class="plan-item"><div><strong>5 menit</strong><span class="muted">Simpan materi penting dan jadwalkan quiz berikutnya.</span></div><span class="mini-tag">Review</span></div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <span>© 2026 Universe Of Tech. Personal learning library.</span>
+            <span>Koleksi dan catatan disimpan lokal di browser kamu.</span>
+        </footer>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script src="feature-pages.js"></script>
+</body>
+
+</html>
