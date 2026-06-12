@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Latihan Bahasa - Wonderful Indonesia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="latihan-bahasa.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body data-page="wonder-latihan-custom">
+    <!-- CANVAS CONFETTI UNTUK PERAYAAN NAIK LEVEL -->
+    <canvas id="confettiCanvas" style="position: fixed; inset: 0; pointer-events: none; z-index: 9999; width: 100%; height: 100%;"></canvas>
+
+    <div class="noise"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main class="page">
+        <!-- NAVBAR UTAMA -->
+        <nav class="navbar">
+            <a href="index.html" class="brand">
+                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                Universe Of Tech
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="snbt.html">TKA</a>
+                <a href="tka-lms.html">LMS TKA</a>
+                <a href="library.html">Library</a>
+                <a href="bahasa-daerah.html" class="active">Wonderful Indonesia</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">&#127769;</button>
+                <a class="btn btn-ghost" id="navDetailLink" href="daerah-detail.html">Detail</a>
+                <a class="btn btn-primary" id="navQuizLink" href="quiz-budaya.html">Quiz</a>
+            </div>
+        </nav>
+
+        <!-- HERO BANNER DAERAH -->
+        <section class="section wonder-page-hero compact">
+            <div>
+                <span class="mini-tag" id="placeRegion">Region</span>
+                <h1>Latihan <span id="placeTitle">Daerah</span></h1>
+                <p id="placeSummary">Flashcard dan kosakata daerah.</p>
+            </div>
+            <aside class="wonder-fact-card">
+                <span>Panduan Belajar</span>
+                <p>Kumpulkan XP, selesaikan Misi Harian, naikkan Level Kebudayaanmu, dan uji kemampuan bicaramu!</p>
+            </aside>
+        </section>
+
+        <!-- CONTAINER LATIHAN INTERAKTIF -->
+        <section class="latihan-container" id="latihan">
+            <!-- SIDEBAR DAERAH CEPAT -->
+            <aside class="latihan-sidebar">
+                <div class="sidebar-title">
+                    <span>Daerah Aktif</span>
+                    <span id="regionCount">0/18</span>
+                </div>
+                <nav class="region-nav-list" id="regionNavList">
+                    <!-- Populated by JavaScript -->
+                </nav>
+            </aside>
+
+            <!-- KONTEN UTAMA DAN DASHBOARD -->
+            <div class="latihan-main">
+                <!-- Header Status Daerah Aktif -->
+                <header class="latihan-dash-header">
+                    <div class="latihan-dash-meta">
+                        <span class="mini-tag" id="activePlaceRegion">Region</span>
+                        <h2>
+                            <span id="activePlaceTitle">Nama Daerah</span>
+                            <span class="region-mark-pill" id="activePlaceMark">BD</span>
+                        </h2>
+                        <p id="activePlaceSummary">Ringkasan kebudayaan daerah aktif.</p>
+                    </div>
+                    <div class="latihan-dash-actions">
+                        <button class="btn btn-ghost" id="activePlaceFavorite">♡ Favorit</button>
+                        <button class="btn btn-ghost" id="activePlaceMastered">🗹 Dikuasai</button>
+                        <a class="btn btn-primary" id="activePlaceQuizLink" href="#">Uji Kuis</a>
+                    </div>
+                </header>
+
+                <!-- HUD LEVELING & DAILY QUESTS (GAMIFIKASI LANJUT) -->
+                <div class="latihan-hud-container">
+                    <!-- Progress Level -->
+                    <div class="latihan-hud-level-card">
+                        <div class="level-badge-wrap">
+                            <div class="circular-progress-svg">
+                                <svg viewBox="0 0 36 36">
+                                    <defs>
+                                        <linearGradient id="levelProgressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="var(--green)" />
+                                            <stop offset="100%" stop-color="var(--blue)" />
+                                        </linearGradient>
+                                    </defs>
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="circle-fill" id="levelProgressCircle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <span class="level-num-txt" id="userLevelNum">1</span>
+                            </div>
+                        </div>
+                        <div class="level-info-txt">
+                            <span class="level-label">Gelar Kebudayaan</span>
+                            <strong id="userLevelTitle">Scout Pemula</strong>
+                            <div class="xp-range-txt">
+                                <span id="userCurrentXp">0</span> / <span id="userNextLevelXp">100</span> XP
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Misi Harian -->
+                    <div class="latihan-hud-quests-card">
+                        <div class="quests-card-title"><i class="fa-solid fa-bullseye"></i> MISI HARIAN (DAILY QUESTS)</div>
+                        <div class="quests-list" id="dailyQuestsList">
+                            <!-- Populated dynamically by JS -->
+                            <div class="quest-item">
+                                <div class="quest-checkbox"></div>
+                                <div class="quest-desc">Memuat misi harian...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Statistik Sesi Latihan -->
+                <div class="latihan-stats-panel">
+                    <div class="latihan-stat-card" title="Kemajuan pengerjaan berturut-turut hari ini">
+                        <div class="latihan-stat-icon"><i class="fa-solid fa-fire text-orange"></i></div>
+                        <div class="latihan-stat-info">
+                            <strong id="sessionStreak">0</strong>
+                            <span>Streak Hari</span>
+                        </div>
+                    </div>
+                    <div class="latihan-stat-card" title="Akurasi jawaban kuis Anda">
+                        <div class="latihan-stat-icon"><i class="fa-solid fa-crosshairs text-blue"></i></div>
+                        <div class="latihan-stat-info">
+                            <strong id="sessionAccuracy">0%</strong>
+                            <span>Akurasi Soal</span>
+                        </div>
+                    </div>
+                    <div class="latihan-stat-card" title="XP (Experience Points) latihan yang diraih sesi ini">
+                        <div class="latihan-stat-icon"><i class="fa-solid fa-wand-magic-sparkles text-purple"></i></div>
+                        <div class="latihan-stat-info">
+                            <strong id="sessionXp">0 XP</strong>
+                            <span>XP Sesi</span>
+                        </div>
+                    </div>
+                    <div class="latihan-stat-card" title="Lama sesi belajar berjalan saat ini">
+                        <div class="latihan-stat-icon"><i class="fa-regular fa-clock text-muted"></i></div>
+                        <div class="latihan-stat-info">
+                            <strong id="sessionTimer">00:00</strong>
+                            <span>Waktu Sesi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Pemilih Mode Belajar -->
+                <div class="latihan-tabs-bar" role="tablist">
+                    <button class="latihan-tab-btn active" data-mode="flashcard" role="tab" aria-selected="true"><i class="fa-solid fa-layer-group"></i> Flashcard</button>
+                    <button class="latihan-tab-btn" data-mode="quiz" role="tab" aria-selected="false"><i class="fa-solid fa-list-check"></i> Pilihan Ganda</button>
+                    <button class="latihan-tab-btn" data-mode="writing" role="tab" aria-selected="false"><i class="fa-solid fa-pen-clip"></i> Ketik Jawaban</button>
+                    <button class="latihan-tab-btn" data-mode="speaking" role="tab" aria-selected="false"><i class="fa-solid fa-microphone"></i> Latihan Bicara</button>
+                    <button class="latihan-tab-btn" data-mode="match" role="tab" aria-selected="false"><i class="fa-solid fa-puzzle-piece"></i> Jodohkan Kata</button>
+                </div>
+
+                <!-- WORKSPACE MODUL BELAJAR -->
+                <!-- Mode 1: Flashcard -->
+                <div class="latihan-workspace-panel active" id="view-flashcard" role="tabpanel">
+                    <div class="flashcard-interactive-view">
+                        <div class="flashcard-meter" style="width: 100%; max-width: 540px;">
+                            <span id="flashcardProgress">Kartu 1/4</span>
+                            <div><i id="flashcardBar" style="width: 25%;"></i></div>
+                        </div>
+
+                        <div class="flashcard-3d-wrapper">
+                            <div class="flashcard-3d-card" id="flashcardCard" title="Klik untuk membalik kartu">
+                                <!-- Bagian Depan (Bahasa Daerah) -->
+                                <div class="flashcard-face face-front">
+                                    <small id="cardFrontCategory">Sapaan</small>
+                                    <strong id="cardFrontText">Kata Daerah</strong>
+                                    <!-- Pelafalan Fonetik -->
+                                    <span class="card-phonetic-guide" id="cardFrontPhonetic">/fonetik/</span>
+                                    <p>Klik untuk melihat terjemahan & fakta budaya</p>
+                                    <button class="audio-visual-trigger" id="listenFront" aria-label="Dengar lafal daerah">
+                                        <span><i class="fa-solid fa-volume-high"></i></span>
+                                        <div class="audio-wave-anim" id="frontWave">
+                                            <div class="audio-wave-bar"></div>
+                                            <div class="audio-wave-bar"></div>
+                                            <div class="audio-wave-bar"></div>
+                                            <div class="audio-wave-bar"></div>
+                                        </div>
+                                    </button>
+                                </div>
+                                <!-- Bagian Belakang (Bahasa Indonesia) -->
+                                <div class="flashcard-face face-back">
+                                    <small>Arti Terjemahan</small>
+                                    <strong id="cardBackText">Artinya</strong>
+                                    <p id="cardBackContext">Penjelasan penggunaan kata daerah.</p>
+                                    
+                                    <!-- Trivia Budaya Box -->
+                                    <div class="card-trivia-box">
+                                        <span>💡 INFO BUDAYA</span>
+                                        <p id="cardBackTrivia">Fakta menarik tentang istilah ini.</p>
+                                    </div>
+
+                                    <button class="audio-visual-trigger" id="listenBack" aria-label="Dengar terjemahan">
+                                        <span><i class="fa-solid fa-volume-high"></i></span>
+                                        <div class="audio-wave-anim" id="backWave">
+                                            <div class="audio-wave-bar"></div>
+                                            <div class="audio-wave-bar"></div>
+                                            <div class="audio-wave-bar"></div>
+                                            <div class="audio-wave-bar"></div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Opsi Putar Suara & Kecepatan -->
+                        <div class="autoplay-panel">
+                            <label>
+                                <input type="checkbox" id="autoplayToggle" />
+                                <span>Putar Otomatis (3s)</span>
+                            </label>
+                            <div class="autoplay-bar">
+                                <div class="autoplay-bar-fill" id="autoplayFill"></div>
+                            </div>
+                            <select id="ttsSpeed" aria-label="Kecepatan Lafal">
+                                <option value="1.0">1.0x Normal</option>
+                                <option value="0.75">0.75x Lambat</option>
+                            </select>
+                        </div>
+
+                        <!-- Navigasi Dek Flashcard -->
+                        <div class="flashcard-deck-tools">
+                            <button class="btn btn-ghost" id="prevCard" aria-label="Sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+                            <div class="flashcard-deck-controls">
+                                <button class="btn btn-ghost" id="starCard" title="Simpan kata ini sebagai favorit"><i class="fa-regular fa-star"></i> Favorit Kata</button>
+                                <button class="btn btn-ghost" id="masterCard" title="Tandai kata ini sudah dikuasai"><i class="fa-regular fa-circle-check"></i> Dikuasai</button>
+                            </div>
+                            <button class="btn btn-primary" id="nextCard" aria-label="Berikutnya">Berikutnya <i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mode 2: Quiz Pilihan Ganda -->
+                <div class="latihan-workspace-panel" id="view-quiz" role="tabpanel">
+                    <div class="quiz-mode-view">
+                        <div class="quiz-question-box">
+                            <span id="quizQuestionCount">Soal 1/5</span>
+                            <h3 id="quizQuestionText">Pertanyaan kuis memuat di sini...</h3>
+                        </div>
+                        <div class="quiz-grid-options" id="quizOptionsContainer">
+                            <!-- JS Generated Buttons -->
+                        </div>
+                        <div class="quiz-feedback-box" id="quizFeedback">
+                            Pilih jawaban yang paling tepat!
+                        </div>
+                        <div style="display: flex; justify-content: flex-end; gap: 10px; width: 100%;">
+                            <button class="btn btn-primary" id="quizNextBtn" style="display: none;">Soal Berikutnya <i class="fa-solid fa-chevron-right"></i></button>
+                            <button class="btn btn-blue" id="quizRestartBtn" style="display: none;">Mulai Ulang Kuis</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mode 3: Writing (Ketik Jawaban) -->
+                <div class="latihan-workspace-panel" id="view-writing" role="tabpanel">
+                    <div class="writing-mode-view">
+                        <div class="writing-prompt-card">
+                            <small id="writingCategory">Kategori Kata</small>
+                            <h3 id="writingPromptText">Kata Daerah</h3>
+                            <p>Ketik terjemahan bahasa Indonesia yang tepat!</p>
+                        </div>
+                        <div class="writing-input-wrapper">
+                            <input type="text" class="writing-input-field" id="writingInput" placeholder="Ketik jawaban di sini..." autocomplete="off" />
+                            <button class="btn btn-primary writing-submit-btn" id="writingSubmit">Periksa</button>
+                        </div>
+                        <div class="writing-feedback" id="writingFeedback">
+                            Masukkan jawaban Anda untuk memulai pemeriksaan.
+                        </div>
+                        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                            <button class="btn btn-ghost" id="writingHintBtn">💡 Petunjuk</button>
+                            <button class="btn btn-blue" id="writingNextBtn" style="display: none;">Berikutnya <i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mode 4: Latihan Bicara (Speaking Practice) -->
+                <div class="latihan-workspace-panel" id="view-speaking" role="tabpanel">
+                    <div class="speaking-mode-view">
+                        <div class="speaking-prompt-card">
+                            <small id="speakingCategory">Percakapan</small>
+                            <h3 id="speakingPromptText">Kata Daerah</h3>
+                            <span class="speaking-phonetic-guide" id="speakingPhonetic">/fonetik/</span>
+                            <p>Aktifkan mikrofon dan ucapkan kalimat di atas dengan lantang!</p>
+                        </div>
+                        
+                        <div class="speaking-mic-wrapper">
+                            <button class="speaking-mic-btn" id="speakingMicBtn" aria-label="Mulai Merekam">
+                                <span class="mic-icon">🎙️</span>
+                                <div class="mic-pulse-ring" id="micPulseRing"></div>
+                            </button>
+                            <span class="speaking-status-text" id="speakingStatusText">Klik ikon mikrofon untuk berbicara</span>
+                        </div>
+
+                        <div class="speaking-transcript-box" id="speakingTranscriptBox" style="display: none;">
+                            <span>Hasil Suara Anda:</span>
+                            <strong id="speakingTranscriptText">...</strong>
+                        </div>
+
+                        <div class="speaking-feedback" id="speakingFeedback">
+                            Klik mikrofon dan sebutkan lafal daerah di atas.
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                            <button class="btn btn-ghost" id="speakingListenBtn"><i class="fa-solid fa-volume-high"></i> Dengar Contoh</button>
+                            <button class="btn btn-blue" id="speakingNextBtn" style="display: none;">Kata Berikutnya <i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mode 5: Match Game (Jodohkan Kata) -->
+                <div class="latihan-workspace-panel" id="view-match" role="tabpanel">
+                    <div class="match-mode-view">
+                        <div class="match-game-header">
+                            <div class="match-timer-container">
+                                <span>Sisa Waktu:</span>
+                                <div class="match-timer-bar">
+                                    <div class="match-timer-fill" id="matchTimerFill"></div>
+                                </div>
+                                <span id="matchTimerText">30s</span>
+                            </div>
+                            <div>
+                                Skor Sesi: <span id="matchScore">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Grid Permainan Pencocokan -->
+                        <div class="match-grid-board" id="matchGridBoard">
+                            <!-- Populated cards by JS -->
+                        </div>
+
+                        <!-- Papan Akhir Game Over -->
+                        <div class="match-game-over" id="matchGameOver" style="display: none;">
+                            <h4>🎮 Pencocokan Selesai!</h4>
+                            <div class="match-score-summary">
+                                <div class="match-score-pill">
+                                    <strong id="matchFinalScore">0</strong>
+                                    <span>Skor Anda</span>
+                                </div>
+                                <div class="match-score-pill">
+                                    <strong id="matchHighScore">0</strong>
+                                    <span>Skor Tertinggi</span>
+                                </div>
+                            </div>
+                            <p id="matchGameMessage">Selamat! Anda berhasil mencocokkan kata dengan sangat cepat.</p>
+                            <button class="btn btn-primary" id="matchRestartBtn">Main Lagi <i class="fa-solid fa-rotate-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KAMUS DAERAH INTERAKTIF -->
+                <section class="latihan-vocab-panel">
+                    <div class="vocab-panel-header">
+                        <div>
+                            <div class="section-kicker">Kamus Daerah</div>
+                            <h2>Daftar Kosakata</h2>
+                        </div>
+                        <div class="vocab-filter-chips">
+                            <button class="vocab-filter-btn active" data-filter="all">Semua Kata</button>
+                            <button class="vocab-filter-btn" data-filter="starred"><i class="fa-solid fa-star"></i> Bintang</button>
+                            <button class="vocab-filter-btn" data-filter="mastered"><i class="fa-regular fa-circle-check"></i> Dikuasai</button>
+                        </div>
+                    </div>
+
+                    <div class="vocab-search-row">
+                        <div class="vocab-search-input-wrap">
+                            <input type="text" class="search-input" id="vocabSearch" placeholder="Cari kata daerah atau arti..." autocomplete="off" />
+                            <button class="vocab-search-clear" id="vocabSearchClear">×</button>
+                        </div>
+                    </div>
+
+                    <!-- List container kosakata -->
+                    <div class="vocab-interactive-list" id="vocabInteractiveList">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <!-- FOOTER HALAMAN -->
+        <footer>
+            <span>© 2026 Universe Of Tech. Latihan Wonderful Indonesia.</span>
+            <span><a id="footerDetailLink" href="daerah-detail.html">Kembali ke detail daerah</a></span>
+        </footer>
+    </main>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- DATA & LOGIKA DASAR -->
+    <script src="wonderful-data.js"></script>
+    <script src="wonderful-core.js"></script>
+    <script src="latihan-bahasa.js"></script>
+</body>
+
+</html>

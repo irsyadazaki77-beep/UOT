@@ -3,8 +3,27 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0d1b2c" />
     <title>Universe Of Tech - Tech Quiz Arena</title>
+    <meta name="description" content="Uji keahlian pemrograman, database SQL, UI/UX, dan cyber security Anda di Tech Quiz Arena Universe Of Tech." />
+    <link rel="canonical" href="http://localhost:8000/quiz.html" />
+    <meta property="og:title" content="Universe Of Tech - Tech Quiz Arena" />
+    <meta property="og:description" content="Naik level tech skill lewat quiz yang responsif dan dapatkan point XP harian." />
+    <meta property="og:image" content="logo.png" />
+    <meta property="og:type" content="website" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Universe Of Tech - Tech Quiz Arena",
+      "description": "Latihan dan uji pemahaman dasar pemrograman, database SQL, UI/UX, dan cyber security.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Universe Of Tech"
+      }
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
@@ -1591,14 +1610,20 @@
         }
     </style>
     <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="lms-quiz.css">
+    <link rel="stylesheet" href="quiz-modern.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
+    <a class="skip-link" href="#quizMainContent">Lewati ke konten utama</a>
     <div class="arena-glow" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+    <div class="quiz-toast" id="quizToast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-    <main class="page">
-        <nav class="navbar">
+    <main class="page" id="quizMainContent">
+        <nav class="navbar" aria-label="Navigasi utama">
             <a href="index.html" class="brand">
                 <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
                 Universe Of Tech
@@ -1615,13 +1640,39 @@
             </div>
 
             <div class="nav-actions">
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <button class="sound-toggle-btn" id="soundToggleBtn" type="button" aria-label="Nonaktifkan suara" aria-pressed="true" title="Suara">🔊</button>
+                <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Aktifkan tema gelap" aria-pressed="false" title="Tema tampilan">🌙</button>
                 <a class="btn btn-ghost" href="index.html">Masuk</a>
                 <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
         </nav>
 
-        <section class="hero">
+        <header class="quiz-page-intro">
+            <div>
+                <span class="quiz-eyebrow">Learning command center</span>
+                <h1>Belajar terarah, latihan cepat, progres tetap terbaca.</h1>
+                <p>Pilih jalur LMS untuk belajar bertahap atau masuk ke arena untuk menguji pemahaman dalam sesi singkat.</p>
+            </div>
+            <div class="quiz-intro-points" aria-label="Keunggulan halaman quiz">
+                <span><strong>120</strong> soal aktif</span>
+                <span><strong>3</strong> learning path</span>
+                <span><strong>Auto</strong> simpan progres</span>
+            </div>
+        </header>
+
+        <div class="lms-tab-container">
+            <div class="lms-tab-nav" role="tablist">
+                <button class="lms-tab-btn active" id="lmsClassroomTab" data-tab="lms-classroom" role="tab" aria-controls="lms-classroom-tab" aria-selected="true">🎓 Jalur Belajar <small>Materi dan sertifikat</small></button>
+                <button class="lms-tab-btn" id="quickArenaTab" data-tab="quick-arena" role="tab" aria-controls="quick-arena-tab" aria-selected="false" tabindex="-1">🎮 Quick Quiz Arena <small>Latihan 5-30 soal</small></button>
+            </div>
+        </div>
+
+        <div class="tab-content active" id="lms-classroom-tab" role="tabpanel" aria-labelledby="lmsClassroomTab" tabindex="0">
+            <!-- LMS classroom content is injected dynamically -->
+        </div>
+
+        <div class="tab-content" id="quick-arena-tab" role="tabpanel" aria-labelledby="quickArenaTab" tabindex="0">
+            <section class="hero">
             <div class="hero-copy">
                 <div class="hero-content">
                     <div class="badge">Tech Quiz Arena - streak, review, dan rekomendasi belajar</div>
@@ -1656,7 +1707,14 @@
             </aside>
         </section>
 
-        <section class="section" aria-label="Pengaturan quiz">
+        <section class="section quiz-setup-section" aria-labelledby="quizSetupTitle">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">Atur sesi</span>
+                    <h2 id="quizSetupTitle">Buat latihan yang pas untuk targetmu</h2>
+                </div>
+                <p id="modeDescription">Practice memberi waktu longgar, hint, dan bantuan 50:50.</p>
+            </div>
             <div class="setup-card">
                 <div class="field">
                     <label for="category">Materi</label>
@@ -1698,8 +1756,16 @@
                         <option value="review">Review Mode</option>
                     </select>
                 </div>
-                <button class="btn btn-primary" id="startBtn">Mulai</button>
-                <button class="btn btn-danger" id="resetBtn">Reset</button>
+                <button class="btn btn-primary" id="startBtn" type="button">Mulai Sesi</button>
+                <button class="btn btn-danger" id="resetBtn" type="button">Reset Data</button>
+            </div>
+            <div class="setup-summary" id="setupSummary" aria-live="polite"></div>
+            <div class="focus-room-note">
+                <span aria-hidden="true">↗</span>
+                <div>
+                    <strong>Pengerjaan dibuka di Focus Room</strong>
+                    <p>Satu layar penuh tanpa perlu scroll. Progres sementara tetap tersimpan jika halaman tidak sengaja dimuat ulang.</p>
+                </div>
             </div>
         </section>
 
@@ -1715,7 +1781,7 @@
                         </div>
                         <div class="timer" id="timer">00:00</div>
                     </div>
-                    <div class="progress-track" aria-label="Progress quiz">
+                    <div class="progress-track" id="quizProgressTrack" role="progressbar" aria-label="Progress quiz" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
                     <div class="combo-meter">
@@ -1731,7 +1797,7 @@
                         <div class="answer-grid" id="answers"></div>
                     </div>
 
-                    <div class="feedback" id="feedback"></div>
+                    <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
 
                     <div class="quiz-actions">
                         <div class="utility-actions">
@@ -1749,8 +1815,9 @@
                         <div class="stat-line"><span>Belum</span><strong id="unansweredValue">0</strong></div>
                         <div class="stat-line"><span>Ragu</span><strong id="flaggedValue">0</strong></div>
                     </div>
+                    <p class="keyboard-hint" id="keyboardHint">Pintasan: tekan 1-4 untuk menjawab, H untuk hint, F untuk tandai ragu, dan → untuk lanjut.</p>
 
-                    <div class="result-card" id="resultCard">
+                    <div class="result-card" id="resultCard" aria-live="polite">
                         <h3>Hasil Sesi</h3>
                         <div class="result-score" id="finalScore">0%</div>
                         <p class="empty-state" id="resultSummary"></p>
@@ -1829,9 +1896,9 @@
             </aside>
         </section>
 
-        <section class="section" id="review">
+        <section class="section" id="review" aria-labelledby="reviewTitle">
             <div class="side-card">
-                <h3>Review Jawaban</h3>
+                <h3 id="reviewTitle">Review Jawaban</h3>
                 <div class="review-list" id="reviewList">
                     <p class="empty-state">Selesaikan quiz untuk melihat pembahasan per soal.</p>
                 </div>
@@ -1842,8 +1909,12 @@
             <span>Universe Of Tech Quiz Arena</span>
             <span>Practice - Exam - Sprint - Review</span>
         </footer>
-    </main>
+    </div>
+</main>
 
+    <script src="app-data.js"></script>
+    <script src="sound-engine.js"></script>
+    <script src="rpg-engine.js"></script>
     <script>
         const questionBank = [
             { id: "programming-1", category: "programming", difficulty: "easy", question: "Apa fungsi variabel dalam program?", answers: ["Menyimpan nilai yang bisa digunakan ulang", "Menghapus error otomatis", "Mengubah desain database", "Menjalankan internet"], correct: 0, hint: "Bayangkan kotak bernama yang berisi data.", explanation: "Variabel dipakai untuk menyimpan nilai, lalu nilai itu dapat dibaca atau diubah selama program berjalan." },
@@ -2078,7 +2149,12 @@
         };
 
         function shuffle(items) {
-            return [...items].sort(() => Math.random() - 0.5);
+            const result = [...items];
+            for (let index = result.length - 1; index > 0; index -= 1) {
+                const swapIndex = Math.floor(Math.random() * (index + 1));
+                [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+            }
+            return result;
         }
 
         function readJson(key, fallback) {
@@ -2091,7 +2167,11 @@
         }
 
         function writeJson(key, value) {
-            localStorage.setItem(key, JSON.stringify(value));
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (error) {
+                console.warn("Penyimpanan lokal tidak tersedia:", error);
+            }
         }
 
         function normalizeQuestion(item) {
@@ -2198,6 +2278,47 @@
             state.timerId = setInterval(tickTimer, 1000);
         }
 
+        function launchFullscreenQuiz() {
+            if (els.mode.value === "review") {
+                startReviewMode();
+                return;
+            }
+
+            const questions = pickQuestions();
+            if (!questions.length) {
+                if (typeof window.showQuizToast === "function") {
+                    window.showQuizToast("Tidak ada soal yang cocok dengan filter tersebut.", "warning");
+                }
+                return;
+            }
+
+            const payload = {
+                version: 1,
+                createdAt: new Date().toISOString(),
+                config: {
+                    category: els.category.value,
+                    difficulty: els.difficulty.value,
+                    amount: questions.length,
+                    mode: els.mode.value,
+                    categoryLabel: labels[els.category.value],
+                    difficultyLabel: labels[els.difficulty.value],
+                    modeLabel: labels[els.mode.value]
+                },
+                timeLimit: getTimeLimit(),
+                questions
+            };
+
+            try {
+                sessionStorage.setItem("eduquestQuizSession", JSON.stringify(payload));
+                window.location.href = "quiz-session.html";
+            } catch (error) {
+                console.error("Gagal menyiapkan sesi fullscreen:", error);
+                if (typeof window.showQuizToast === "function") {
+                    window.showQuizToast("Sesi tidak dapat dibuka. Coba muat ulang halaman.", "warning");
+                }
+            }
+        }
+
         function startReviewMode() {
             const last = readJson(storageKeys.last, null);
             state.running = false;
@@ -2276,6 +2397,8 @@
             const answeredCount = state.correct + state.wrong;
             els.counterPill.textContent = `Soal ${state.current + 1}/${total}`;
             els.progressFill.style.width = `${(answeredCount / total) * 100}%`;
+            const progressValue = Math.round((answeredCount / total) * 100);
+            document.getElementById("quizProgressTrack")?.setAttribute("aria-valuenow", String(progressValue));
             els.questionLabel.textContent = `${labels[item.category]} - ${labels[item.difficulty]}`;
             els.questionText.textContent = item.question;
 
@@ -2285,6 +2408,7 @@
                 option.type = "button";
                 option.dataset.index = index;
                 option.innerHTML = `<span class="answer-key">${String.fromCharCode(65 + index)}</span><span>${answer.text}</span>`;
+                option.setAttribute("aria-label", `Pilihan ${String.fromCharCode(65 + index)}: ${answer.text}`);
                 option.addEventListener("click", () => chooseAnswer(index));
                 if (savedAnswer) {
                     option.disabled = true;
@@ -2326,11 +2450,13 @@
                 state.correct += 1;
                 state.streak += 1;
                 state.bestStreak = Math.max(state.bestStreak, state.streak);
+                playSound('success');
                 launchConfetti(12);
                 launchSparks(14);
             } else {
                 state.wrong += 1;
                 state.streak = 0;
+                playSound('laser');
                 launchSparks(8, true);
             }
 
@@ -2500,7 +2626,6 @@
                 answers: state.selected.filter(Boolean)
             };
             writeJson(storageKeys.last, session);
-
             // Update shared stats in localStorage for homepage integration
             try {
                 let streakVal = Number(localStorage.getItem("eduquestStreak") || 12);
@@ -2521,11 +2646,16 @@
                 localStorage.setItem("eduquestStreak", String(streakVal));
                 localStorage.setItem("eduquestLevel", String(newLvl));
                 localStorage.setItem("lastSyncedSessionDate", session.date); // mark as synced
+
+                // Sync with global RPG engine
+                loadRPG();
+                addXp(state.correct * 20);
             } catch (e) {
                 console.error("Gagal menyimpan integrasi stats:", e);
             }
 
             els.progressFill.style.width = "100%";
+            document.getElementById("quizProgressTrack")?.setAttribute("aria-valuenow", "100");
             disableQuizControls();
             els.finalScore.textContent = `${score}%`;
             els.resultSummary.textContent = buildSummary(score);
@@ -2543,6 +2673,9 @@
             renderLastSession();
             renderQuestionMap();
             updateSidebarVisibility();
+            if (typeof window.showQuizToast === "function") {
+                window.showQuizToast(`Sesi selesai dengan skor ${score}%.`, score >= 70 ? "success" : "warning");
+            }
         }
 
         function disableQuizControls() {
@@ -2780,6 +2913,7 @@
             els.modePill.textContent = "Practice";
             els.timer.textContent = "00:00";
             els.progressFill.style.width = "0%";
+            document.getElementById("quizProgressTrack")?.setAttribute("aria-valuenow", "0");
             els.comboFill.style.width = "0%";
             els.comboLabel.textContent = "Combo x0";
             els.questionLabel.textContent = "Pertanyaan aktif";
@@ -2797,23 +2931,59 @@
             renderRecommendations();
             renderCategoryPerformance();
             updateSidebarVisibility();
+            if (typeof window.showQuizToast === "function") {
+                window.showQuizToast("Data Quick Quiz berhasil direset.");
+            }
         }
 
-        els.startBtn.addEventListener("click", startQuiz);
-        els.resetBtn.addEventListener("click", resetProgress);
-        els.hintBtn.addEventListener("click", showHint);
-        els.fiftyBtn.addEventListener("click", useFifty);
-        els.bookmarkBtn.addEventListener("click", bookmarkQuestion);
-        els.flagBtn.addEventListener("click", toggleFlagQuestion);
-        els.skipBtn.addEventListener("click", skipQuestion);
-        els.nextBtn.addEventListener("click", nextQuestion);
-        els.retryBtn.addEventListener("click", startQuiz);
-        els.reviewBtn.addEventListener("click", () => document.getElementById("review").scrollIntoView({ behavior: "smooth" }));
+        els.startBtn.addEventListener("click", () => {
+            if (state.running && !window.confirm("Sesi masih berjalan. Mulai sesi baru dan tinggalkan progres saat ini?")) return;
+            playSound('click');
+            launchFullscreenQuiz();
+        });
+        els.resetBtn.addEventListener("click", () => {
+            if (!window.confirm("Reset skor terbaik, sesi terakhir, dan soal tersimpan di Quick Quiz?")) return;
+            playSound('click');
+            resetProgress();
+        });
+        els.hintBtn.addEventListener("click", () => {
+            playSound('click');
+            showHint();
+        });
+        els.fiftyBtn.addEventListener("click", () => {
+            playSound('click');
+            useFifty();
+        });
+        els.bookmarkBtn.addEventListener("click", () => {
+            playSound('click');
+            bookmarkQuestion();
+        });
+        els.flagBtn.addEventListener("click", () => {
+            playSound('click');
+            toggleFlagQuestion();
+        });
+        els.skipBtn.addEventListener("click", () => {
+            playSound('click');
+            skipQuestion();
+        });
+        els.nextBtn.addEventListener("click", () => {
+            playSound('click');
+            nextQuestion();
+        });
+        els.retryBtn.addEventListener("click", () => {
+            playSound('click');
+            startQuiz();
+        });
+        els.reviewBtn.addEventListener("click", () => {
+            playSound('click');
+            document.getElementById("review").scrollIntoView({ behavior: "smooth" });
+        });
 
         // --- DARK / LIGHT MODE LOGIC ---
         function initTheme() {
             const themeToggleBtn = document.getElementById("themeToggleBtn");
             const savedTheme = localStorage.getItem("eduquest_theme") || "light";
+            if (!themeToggleBtn) return;
             
             if (savedTheme === "dark") {
                 document.body.classList.add("dark-theme");
@@ -2822,18 +2992,41 @@
                 document.body.classList.remove("dark-theme");
                 themeToggleBtn.textContent = "🌙";
             }
+            themeToggleBtn.setAttribute("aria-pressed", String(savedTheme === "dark"));
+            themeToggleBtn.setAttribute("aria-label", savedTheme === "dark" ? "Aktifkan tema terang" : "Aktifkan tema gelap");
 
             themeToggleBtn.addEventListener("click", () => {
                 document.body.classList.toggle("dark-theme");
                 const isDark = document.body.classList.contains("dark-theme");
                 localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
                 themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+                themeToggleBtn.setAttribute("aria-pressed", String(isDark));
+                themeToggleBtn.setAttribute("aria-label", isDark ? "Aktifkan tema terang" : "Aktifkan tema gelap");
                 
                 themeToggleBtn.style.transform = "scale(0.9)";
                 setTimeout(() => themeToggleBtn.style.transform = "none", 150);
             });
         }
         initTheme();
+
+        // Interactive sound button
+        const soundBtn = document.getElementById("soundToggleBtn");
+        if (soundBtn) {
+            soundEnabled = localStorage.getItem("eduquest_sound") !== "off";
+            soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+            soundBtn.setAttribute("aria-pressed", String(soundEnabled));
+            soundBtn.setAttribute("aria-label", soundEnabled ? "Nonaktifkan suara" : "Aktifkan suara");
+            soundBtn.addEventListener("click", () => {
+                soundEnabled = !soundEnabled;
+                soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+                soundBtn.setAttribute("aria-pressed", String(soundEnabled));
+                soundBtn.setAttribute("aria-label", soundEnabled ? "Nonaktifkan suara" : "Aktifkan suara");
+                localStorage.setItem("eduquest_sound", soundEnabled ? "on" : "off");
+                playSound('click');
+            });
+        }
+
+        loadRPG(); // Load the RPG state for audio setup and sync
 
         els.bankSize.textContent = questionBank.length;
         loadBestScore();
@@ -2842,8 +3035,11 @@
         renderLastSession();
         renderCategoryPerformance();
         renderQuestionMap();
+        window.questionBank = questionBank;
         updateSidebarVisibility();
     </script>
+    <script src="lms-quiz.js"></script>
+    <script src="quiz-modern.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,263 @@
+/* ==========================================================================
+   Bahasa Daerah - Hardware Accelerated Premium Animations (60 FPS)
+   ========================================================================== */
+
+/* 1. Indonesia SVG Map Hover Glow & Spring Transitions */
+.map-region {
+    cursor: pointer;
+    outline: none;
+    will-change: transform, filter;
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), filter 0.35s ease;
+    backface-visibility: hidden;
+}
+
+.map-region:hover {
+    transform: scale(1.03) translate3d(0, -2px, 0);
+    filter: drop-shadow(0 10px 20px rgba(50, 214, 107, 0.42));
+}
+
+.map-region path {
+    transition: fill 0.35s ease, stroke 0.35s ease, stroke-width 0.35s ease;
+}
+
+.map-region.active path {
+    fill: url(#activeIslandGradient) !important;
+    stroke: var(--green) !important;
+    stroke-width: 2px !important;
+}
+
+/* 2. Interactive Cursor Follow Glow on Culture Cards */
+.culture-card-link {
+    position: relative;
+    overflow: hidden;
+    will-change: transform, border-color, box-shadow;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease !important;
+    backface-visibility: hidden;
+}
+
+.culture-card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(200px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(50, 214, 107, 0.12), transparent 85%);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.culture-card-link:hover::after {
+    opacity: 1;
+}
+
+.culture-card-link:hover {
+    transform: translate3d(0, -8px, 0) scale(1.02) !important;
+    border-color: var(--green) !important;
+    box-shadow: 0 20px 40px rgba(50, 214, 107, 0.2) !important;
+}
+
+/* 3. Achievements Lencana / Badges Floating & Lock Shake */
+.badge-item {
+    will-change: transform, filter, box-shadow;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), filter 0.3s ease;
+    backface-visibility: hidden;
+}
+
+.badge-item:not(.locked) {
+    animation: softBob 5s ease-in-out infinite alternate;
+    border-color: rgba(50, 214, 107, 0.45) !important;
+    box-shadow: 0 10px 30px rgba(50, 214, 107, 0.1) !important;
+    background: linear-gradient(180deg, var(--white) 0%, rgba(50, 214, 107, 0.04) 100%) !important;
+    transform: translate3d(0, 0, 0);
+}
+
+.badge-item.locked {
+    opacity: 0.58;
+    filter: grayscale(0.9);
+}
+
+.badge-item.locked:hover {
+    filter: grayscale(0.4);
+    transform: scale(0.96);
+    animation: badgeShake 0.4s ease;
+}
+
+@keyframes badgeShake {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(0.96); }
+    20%, 60% { transform: translate3d(-4px, 0, 0) scale(0.96); }
+    40%, 80% { transform: translate3d(4px, 0, 0) scale(0.96); }
+}
+
+/* 4. Active Region Chips Glow Pulse */
+.region-chip {
+    will-change: transform, box-shadow;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    position: relative;
+    overflow: hidden;
+    backface-visibility: hidden;
+}
+
+.region-chip:hover {
+    transform: scale(1.08) translate3d(0, -2px, 0);
+    box-shadow: 0 8px 20px rgba(102, 112, 133, 0.12);
+}
+
+.region-chip.active {
+    animation: activeChipGlow 2.5s infinite ease-in-out;
+    transform: scale(1.05) translate3d(0, 0, 0);
+}
+
+@keyframes activeChipGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(50, 214, 107, 0.35); }
+    50% { box-shadow: 0 0 15px 5px rgba(50, 214, 107, 0.18); }
+}
+
+/* 5. Drawer Phrase Cards Staggered Slide In */
+.drawer-phrase-card {
+    will-change: transform, opacity;
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    animation: drawerPhraseSlide 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.drawer-phrase-card:nth-child(1) { animation-delay: 50ms; }
+.drawer-phrase-card:nth-child(2) { animation-delay: 100ms; }
+.drawer-phrase-card:nth-child(3) { animation-delay: 150ms; }
+.drawer-phrase-card:nth-child(4) { animation-delay: 200ms; }
+
+@keyframes drawerPhraseSlide {
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* 6. Micro-animations for Badges and Mini Tags */
+.badge, .mini-tag {
+    will-change: transform;
+    animation: badgePulse 3.5s infinite ease-in-out alternate;
+    transform: translate3d(0, 0, 0);
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, 0, 0) scale(1.035); opacity: 0.94; }
+}
+
+/* 7. Wavy Floating Phone Mockup */
+.language-phone {
+    will-change: transform;
+    animation: phoneMockupBob 6s ease-in-out infinite alternate !important;
+}
+
+@keyframes phoneMockupBob {
+    0% { transform: rotate(2deg) translate3d(0, 0, 0); }
+    100% { transform: rotate(3.5deg) translate3d(0, -14px, 0); }
+}
+
+/* 8. Global Transition smoothness overrides */
+.btn, .filter-opt-btn, .clear-search-btn {
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.drawer-overlay {
+    transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.detail-drawer {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 680px !important;
+    max-width: 90vw !important;
+    max-height: 85vh !important;
+    border-radius: 28px !important;
+    border: 1px solid var(--border) !important;
+    transform: translate(-50%, -50%) scale(0.95) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25) !important;
+    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.detail-drawer.active {
+    transform: translate(-50%, -50%) scale(1) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* ==========================================================================
+   9. Layout Spacing Overrides (Fix Cramped/Mepet Elements)
+   ========================================================================== */
+body[data-page="bahasa"] .indonesia-map-panel {
+    margin-bottom: 28px !important;
+}
+
+body[data-page="bahasa"] .search-filter-panel {
+    margin-bottom: 28px !important;
+}
+
+body[data-page="bahasa"] .region-chip-row {
+    margin-top: 8px !important;
+    margin-bottom: 32px !important;
+    gap: 12px !important;
+}
+
+body[data-page="bahasa"] .culture-grid-header {
+    margin-bottom: 28px !important;
+    padding: 20px 24px !important;
+}
+
+body[data-page="bahasa"] .culture-grid {
+    gap: 28px 24px !important;
+}
+
+body[data-page="bahasa"] .culture-card-main {
+    padding: 22px 24px !important;
+    gap: 18px !important;
+}
+
+body[data-page="bahasa"] .culture-card-actions a {
+    min-height: 48px !important;
+    font-size: 14px !important;
+}
+
+/* Responsive Overrides */
+@media (max-width: 720px) {
+    body[data-page="bahasa"] .indonesia-map-panel {
+        margin-bottom: 20px !important;
+    }
+    body[data-page="bahasa"] .search-filter-panel {
+        margin-bottom: 20px !important;
+    }
+    body[data-page="bahasa"] .region-chip-row {
+        margin-bottom: 24px !important;
+    }
+    body[data-page="bahasa"] .culture-grid-header {
+        padding: 16px !important;
+        margin-bottom: 20px !important;
+    }
+    body[data-page="bahasa"] .culture-grid {
+        gap: 18px 16px !important;
+    }
+    body[data-page="bahasa"] .culture-card-main {
+        padding: 18px !important;
+        gap: 14px !important;
+    }
+    body[data-page="bahasa"] .detail-drawer {
+        width: 94vw !important;
+        max-width: 94vw !important;
+        max-height: 90vh !important;
+        border-radius: 24px !important;
+        transform: translate(-50%, -50%) scale(0.95) !important;
+    }
+    body[data-page="bahasa"] .detail-drawer.active {
+        transform: translate(-50%, -50%) scale(1) !important;
+    }
+}
+

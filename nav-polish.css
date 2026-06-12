@@ -105,3 +105,56 @@ body.dark-theme .nav-links,
         display: none;
     }
 }
+
+/* Premium Theme Transitions */
+body,
+.navbar,
+.card,
+.content-card,
+.module-card,
+.hero,
+.hero-copy,
+.side-panel,
+.side-card,
+.setup-card,
+.quiz-shell,
+.zaki-ai-panel,
+.zaki-bubble,
+footer {
+    transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Touch Targets Accessibility for Interactive Elements */
+.theme-toggle-btn,
+.sound-toggle-btn,
+.social-btn,
+.store-badge,
+.btn,
+.topic-link,
+.filter-btn,
+.question-jump,
+#zakiAiBtn,
+#zakiMicBtn,
+#zakiSendBtn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile Kanban Scroll Snap Layout */
+@media (max-width: 768px) {
+    .kanban-board {
+        display: flex !important;
+        overflow-x: auto !important;
+        gap: 16px !important;
+        padding-bottom: 8px !important;
+        scroll-snap-type: x mandatory !important;
+    }
+
+    .kanban-column {
+        flex: 0 0 85% !important;
+        scroll-snap-align: start !important;
+    }
+}

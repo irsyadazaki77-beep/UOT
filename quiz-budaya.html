@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Quiz Budaya - Wonderful Indonesia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body data-page="wonder-quiz">
+    <div class="noise"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main class="page">
+        <nav class="navbar">
+            <a href="index.html" class="brand">
+                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                Universe Of Tech
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="snbt.html">TKA</a>
+                <a href="tka-lms.html">LMS TKA</a>
+                <a href="library.html">Library</a>
+                <a href="bahasa-daerah.html" class="active">Wonderful Indonesia</a>
+            </div>
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">&#127769;</button>
+                <a class="btn btn-ghost" data-place-link="daerah-detail.html" href="daerah-detail.html">Detail</a>
+                <a class="btn btn-primary" data-place-link="latihan-bahasa.html" href="latihan-bahasa.html">Latihan</a>
+            </div>
+        </nav>
+
+        <section class="section wonder-page-hero compact">
+            <div>
+                <span class="mini-tag" id="placeRegion">Region</span>
+                <h1>Quiz <span id="placeTitle">Daerah</span></h1>
+                <p id="placeSummary">Uji pemahaman budaya lokal setelah membaca detail dan latihan flashcard.</p>
+            </div>
+            <aside class="wonder-fact-card" id="quizProgressSummary">
+                <strong>0% akurasi</strong>
+                <span>0/0 jawaban benar</span>
+            </aside>
+        </section>
+
+        <section class="section quiz-finale-section" id="quiz-budaya">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Quiz Budaya</div>
+                    <h2 id="languageQuizQuestion">Pertanyaan akan muncul di sini.</h2>
+                </div>
+                <p id="placeFact">Fakta cepat daerah.</p>
+            </div>
+            <div class="quiz-box">
+                <div class="quiz-meta-row">
+                    <span class="mini-tag" id="placeMark">BD</span>
+                    <button class="btn btn-ghost" id="nextCultureQuiz">Quiz Region Berikutnya</button>
+                </div>
+                <div class="answer-grid" id="languageAnswers"></div>
+            </div>
+        </section>
+
+        <footer>
+            <span>© 2026 Universe Of Tech. Quiz Wonderful Indonesia.</span>
+            <span><a href="bahasa-daerah.html">Kembali ke katalog</a></span>
+        </footer>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script src="wonderful-data.js"></script>
+    <script src="wonderful-core.js"></script>
+    <script src="wonderful-pages.js"></script>
+</body>
+
+</html>

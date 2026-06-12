@@ -992,6 +992,474 @@ function initTKALMSPage() {
             options: ["Benar", "Salah"],
             correct: 0,
             explanation: "Kelembapan menyatakan banyaknya uap air di udara."
+        },
+        {
+            id: "ind-09",
+            subject: "indonesia",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Kalimat efektif",
+            prompt: "Kalimat yang paling efektif adalah...",
+            stimulus: "Kalimat efektif memiliki struktur jelas, tidak boros kata, dan tidak ambigu.",
+            options: ["Para siswa-siswa sedang belajar.", "Siswa sedang belajar.", "Siswa-siswa para sedang belajar.", "Sedang belajar para siswa-siswa."],
+            correct: 1,
+            explanation: "Kalimat 'Siswa sedang belajar' ringkas, jelas, dan tidak memakai bentuk jamak ganda."
+        },
+        {
+            id: "ind-10",
+            subject: "indonesia",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Tujuan teks",
+            prompt: "Tujuan utama teks tersebut adalah...",
+            stimulus: "Poster sekolah mengajak siswa membawa botol minum sendiri agar sampah plastik saat kegiatan olahraga berkurang.",
+            options: ["Menghibur pembaca dengan cerita", "Mengajak pembaca mengubah perilaku", "Menjelaskan sejarah plastik", "Membandingkan dua jenis olahraga"],
+            correct: 1,
+            explanation: "Kata 'mengajak' dan tujuan mengurangi sampah menunjukkan fungsi persuasif."
+        },
+        {
+            id: "ind-11",
+            subject: "indonesia",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Kritik data",
+            prompt: "Pilih dua kelemahan data yang dapat membuat kesimpulan penelitian kurang kuat.",
+            stimulus: "Kesimpulan: Semua siswa lebih suka belajar malam. Data diambil dari 12 siswa dalam satu kelas dan hanya selama satu hari.",
+            options: ["Sampel terlalu kecil", "Waktu pengamatan terlalu singkat", "Topik penelitian terlalu jelas", "Data sudah mewakili semua sekolah"],
+            correct: [0, 1],
+            explanation: "Sampel kecil dan waktu pengamatan singkat membuat generalisasi 'semua siswa' tidak kuat."
+        },
+        {
+            id: "ind-12",
+            subject: "indonesia",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "Kohesi teks",
+            prompt: "Tentukan benar/salah: Kata hubung 'namun' tepat dipakai untuk menghubungkan dua gagasan yang berlawanan.",
+            stimulus: "Kohesi teks terbentuk ketika hubungan antargagasan ditandai secara tepat.",
+            options: ["Benar", "Salah"],
+            correct: 0,
+            explanation: "'Namun' menyatakan pertentangan atau kontras antara dua gagasan."
+        },
+        {
+            id: "mat-09",
+            subject: "matematika",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Bilangan berpangkat",
+            prompt: "Nilai 2 pangkat 5 adalah...",
+            stimulus: "Perpangkatan berarti perkalian berulang.",
+            options: ["10", "16", "25", "32"],
+            correct: 3,
+            explanation: "2 pangkat 5 = 2 x 2 x 2 x 2 x 2 = 32."
+        },
+        {
+            id: "mat-10",
+            subject: "matematika",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Barisan aritmetika",
+            prompt: "Suku ke-10 dari barisan 3, 7, 11, 15, ... adalah...",
+            stimulus: "Barisan aritmetika memiliki beda tetap.",
+            options: ["35", "37", "39", "41"],
+            correct: 2,
+            explanation: "a10 = 3 + 9(4) = 39."
+        },
+        {
+            id: "mat-11",
+            subject: "matematika",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Interpretasi grafik",
+            prompt: "Pilih dua pernyataan yang benar jika grafik penjualan naik dari Januari ke Maret lalu turun pada April.",
+            stimulus: "Data penjualan: Januari 40, Februari 55, Maret 70, April 50.",
+            options: ["Penjualan tertinggi terjadi pada Maret", "April lebih rendah daripada Februari", "Januari lebih tinggi daripada April", "Ada kenaikan berurutan dari Januari sampai Maret"],
+            correct: [0, 3],
+            explanation: "Nilai tertinggi adalah Maret 70, dan Januari-Februari-Maret meningkat berurutan."
+        },
+        {
+            id: "mat-12",
+            subject: "matematika",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "Akar kuadrat",
+            prompt: "Tentukan benar/salah: Akar kuadrat dari 144 adalah 12.",
+            stimulus: "Akar kuadrat adalah bilangan yang jika dikuadratkan menghasilkan nilai awal.",
+            options: ["Benar", "Salah"],
+            correct: 0,
+            explanation: "12 x 12 = 144."
+        },
+        {
+            id: "eng-09",
+            subject: "inggris",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Grammar",
+            prompt: "Choose the correct sentence.",
+            stimulus: "Subject-verb agreement is needed in a complete sentence.",
+            options: ["She go to school.", "She goes to school.", "She going school.", "She gone to school."],
+            correct: 1,
+            explanation: "For third-person singular subject, use 'goes'."
+        },
+        {
+            id: "eng-10",
+            subject: "inggris",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Cause and effect",
+            prompt: "What is the effect mentioned in the text?",
+            stimulus: "Because the laboratory was renovated, students could conduct experiments more safely.",
+            options: ["The laboratory was closed forever", "Students could experiment more safely", "The school cancelled science class", "The renovation was unsafe"],
+            correct: 1,
+            explanation: "The effect after the cause is safer experiments for students."
+        },
+        {
+            id: "eng-11",
+            subject: "inggris",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Argument support",
+            prompt: "Choose two details that support the idea that public transport can reduce pollution.",
+            stimulus: "A report says one bus can carry many passengers and reduce the number of private cars on the road.",
+            options: ["One bus carries many passengers", "Fewer private cars may be used", "Every passenger must buy a car", "Roads become longer"],
+            correct: [0, 1],
+            explanation: "Carrying many passengers and reducing private cars both support lower pollution."
+        },
+        {
+            id: "eng-12",
+            subject: "inggris",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "Paraphrase",
+            prompt: "True or false: 'Students are required to wear uniforms' means students must wear uniforms.",
+            stimulus: "Paraphrasing checks whether two statements keep the same meaning.",
+            options: ["True", "False"],
+            correct: 0,
+            explanation: "'Are required to' means 'must'."
+        },
+        {
+            id: "fis-05",
+            subject: "fisika",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Massa jenis",
+            prompt: "Benda bermassa 200 g memiliki volume 100 cm3. Massa jenisnya adalah...",
+            stimulus: "Massa jenis = massa / volume.",
+            options: ["1 g/cm3", "2 g/cm3", "3 g/cm3", "4 g/cm3"],
+            correct: 1,
+            explanation: "200 / 100 = 2 g/cm3."
+        },
+        {
+            id: "fis-06",
+            subject: "fisika",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Kalor",
+            prompt: "Jika benda menerima kalor, suhu benda umumnya...",
+            stimulus: "Kalor adalah energi yang berpindah karena perbedaan suhu.",
+            options: ["Menurun terus", "Naik jika tidak terjadi perubahan wujud", "Selalu tetap", "Menjadi nol"],
+            correct: 1,
+            explanation: "Kalor dapat menaikkan suhu selama tidak digunakan untuk perubahan wujud."
+        },
+        {
+            id: "fis-07",
+            subject: "fisika",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Gelombang",
+            prompt: "Pilih dua besaran yang menentukan cepat rambat gelombang.",
+            stimulus: "Cepat rambat gelombang dapat dinyatakan dengan v = f x lambda.",
+            options: ["Frekuensi", "Panjang gelombang", "Warna meja", "Massa pengamat"],
+            correct: [0, 1],
+            explanation: "Rumus v = f x lambda memuat frekuensi dan panjang gelombang."
+        },
+        {
+            id: "fis-08",
+            subject: "fisika",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "Tekanan",
+            prompt: "Tentukan benar/salah: Semakin kecil luas bidang tekan, tekanan dapat menjadi semakin besar jika gaya tetap.",
+            stimulus: "Tekanan = gaya / luas bidang tekan.",
+            options: ["Benar", "Salah"],
+            correct: 0,
+            explanation: "Dengan gaya tetap, luas lebih kecil menghasilkan tekanan lebih besar."
+        },
+        {
+            id: "kim-05",
+            subject: "kimia",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Tabel periodik",
+            prompt: "Unsur dengan lambang Na adalah...",
+            stimulus: "Lambang unsur berasal dari nama Latin atau nama internasional.",
+            options: ["Natrium", "Nitrogen", "Neon", "Nikel"],
+            correct: 0,
+            explanation: "Na adalah lambang untuk Natrium."
+        },
+        {
+            id: "kim-06",
+            subject: "kimia",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Ikatan kimia",
+            prompt: "Ikatan ion umumnya terbentuk karena...",
+            stimulus: "Ikatan ion melibatkan perpindahan elektron antara atom.",
+            options: ["Pemakaian pasangan elektron bersama", "Serah terima elektron", "Pelepasan neutron", "Penggabungan inti atom"],
+            correct: 1,
+            explanation: "Ikatan ion terjadi melalui serah terima elektron."
+        },
+        {
+            id: "kim-07",
+            subject: "kimia",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Kesetimbangan",
+            prompt: "Pilih dua faktor yang dapat menggeser kesetimbangan reaksi.",
+            stimulus: "Prinsip Le Chatelier menjelaskan respons sistem terhadap perubahan kondisi.",
+            options: ["Konsentrasi", "Suhu", "Warna buku catatan", "Nama laboratorium"],
+            correct: [0, 1],
+            explanation: "Perubahan konsentrasi dan suhu dapat menggeser posisi kesetimbangan."
+        },
+        {
+            id: "kim-08",
+            subject: "kimia",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "pH",
+            prompt: "Tentukan benar/salah: Larutan dengan pH 9 bersifat basa.",
+            stimulus: "pH di atas 7 menunjukkan sifat basa.",
+            options: ["Benar", "Salah"],
+            correct: 0,
+            explanation: "pH 9 lebih besar dari 7, sehingga bersifat basa."
+        },
+        {
+            id: "bio-05",
+            subject: "biologi",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Fotosintesis",
+            prompt: "Zat yang dibutuhkan tumbuhan untuk fotosintesis adalah...",
+            stimulus: "Fotosintesis menggunakan cahaya, air, dan karbon dioksida.",
+            options: ["Oksigen saja", "Karbon dioksida dan air", "Protein hewani", "Garam dapur saja"],
+            correct: 1,
+            explanation: "Fotosintesis memerlukan CO2, air, dan cahaya."
+        },
+        {
+            id: "bio-06",
+            subject: "biologi",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Sistem pernapasan",
+            prompt: "Pertukaran oksigen dan karbon dioksida pada manusia terutama terjadi di...",
+            stimulus: "Struktur paru-paru memiliki kantung kecil tempat difusi gas.",
+            options: ["Alveolus", "Kerongkongan", "Lambung", "Rongga hidung saja"],
+            correct: 0,
+            explanation: "Alveolus adalah tempat utama pertukaran gas."
+        },
+        {
+            id: "bio-07",
+            subject: "biologi",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Rantai makanan",
+            prompt: "Pilih dua akibat yang mungkin terjadi jika populasi predator puncak turun drastis.",
+            stimulus: "Predator puncak membantu menjaga keseimbangan populasi tingkat trofik di bawahnya.",
+            options: ["Populasi mangsa dapat meningkat", "Keseimbangan ekosistem dapat terganggu", "Semua produsen pasti punah seketika", "Energi berhenti mengalir total"],
+            correct: [0, 1],
+            explanation: "Turunnya predator dapat menaikkan mangsa dan mengganggu keseimbangan ekosistem."
+        },
+        {
+            id: "bio-08",
+            subject: "biologi",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "Enzim",
+            prompt: "Tentukan benar/salah: Enzim bekerja optimal pada rentang suhu dan pH tertentu.",
+            stimulus: "Kerja enzim dipengaruhi kondisi lingkungan.",
+            options: ["Benar", "Salah"],
+            correct: 0,
+            explanation: "Enzim memiliki kondisi optimum, termasuk suhu dan pH tertentu."
+        },
+        {
+            id: "eko-05",
+            subject: "ekonomi",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Kelangkaan",
+            prompt: "Kelangkaan terjadi karena...",
+            stimulus: "Kebutuhan manusia tidak terbatas, sedangkan alat pemuas kebutuhan terbatas.",
+            options: ["Kebutuhan terbatas dan sumber daya tidak terbatas", "Kebutuhan tidak terbatas dan sumber daya terbatas", "Semua barang gratis", "Semua orang memiliki pendapatan sama"],
+            correct: 1,
+            explanation: "Kelangkaan muncul karena kebutuhan melebihi ketersediaan sumber daya."
+        },
+        {
+            id: "eko-06",
+            subject: "ekonomi",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Penawaran",
+            prompt: "Jika harga naik dan faktor lain tetap, jumlah barang yang ditawarkan produsen cenderung...",
+            stimulus: "Hukum penawaran menggambarkan hubungan harga dan jumlah yang ditawarkan.",
+            options: ["Naik", "Turun", "Selalu nol", "Tidak pernah berubah"],
+            correct: 0,
+            explanation: "Harga lebih tinggi biasanya mendorong produsen menawarkan lebih banyak barang."
+        },
+        {
+            id: "eko-07",
+            subject: "ekonomi",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Kebijakan ekonomi",
+            prompt: "Pilih dua kebijakan yang dapat membantu menekan konsumsi barang berbahaya.",
+            stimulus: "Pemerintah ingin mengurangi konsumsi barang yang berdampak buruk bagi kesehatan.",
+            options: ["Menaikkan cukai", "Kampanye edukasi risiko", "Memberi subsidi besar", "Menghapus semua informasi bahaya"],
+            correct: [0, 1],
+            explanation: "Cukai menaikkan harga, edukasi mengubah perilaku melalui informasi."
+        },
+        {
+            id: "eko-08",
+            subject: "ekonomi",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "Uang",
+            prompt: "Tentukan benar/salah: Salah satu fungsi uang adalah sebagai alat tukar.",
+            stimulus: "Uang mempermudah transaksi dibanding barter.",
+            options: ["Benar", "Salah"],
+            correct: 0,
+            explanation: "Uang berfungsi sebagai alat tukar, satuan hitung, dan penyimpan nilai."
+        },
+        {
+            id: "sos-05",
+            subject: "sosiologi",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Sosialisasi",
+            prompt: "Proses belajar nilai dan norma masyarakat disebut...",
+            stimulus: "Individu mempelajari cara bertingkah laku melalui keluarga, sekolah, teman, dan media.",
+            options: ["Sosialisasi", "Urbanisasi", "Globalisasi", "Stratifikasi"],
+            correct: 0,
+            explanation: "Sosialisasi adalah proses belajar nilai dan norma sosial."
+        },
+        {
+            id: "sos-06",
+            subject: "sosiologi",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Konflik sosial",
+            prompt: "Perbedaan kepentingan antarkelompok dapat memicu...",
+            stimulus: "Konflik sosial dapat muncul ketika tujuan atau kepentingan pihak-pihak bertentangan.",
+            options: ["Konflik sosial", "Asimilasi otomatis", "Mobilitas geografis saja", "Integrasi sempurna"],
+            correct: 0,
+            explanation: "Perbedaan kepentingan merupakan salah satu pemicu konflik sosial."
+        },
+        {
+            id: "sos-07",
+            subject: "sosiologi",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Perubahan sosial",
+            prompt: "Pilih dua faktor yang dapat mempercepat perubahan sosial.",
+            stimulus: "Perubahan sosial dipengaruhi faktor internal dan eksternal masyarakat.",
+            options: ["Kemajuan teknologi", "Kontak dengan budaya lain", "Larangan semua komunikasi", "Tidak adanya pendidikan sama sekali"],
+            correct: [0, 1],
+            explanation: "Teknologi dan kontak budaya mempercepat masuknya gagasan baru."
+        },
+        {
+            id: "sos-08",
+            subject: "sosiologi",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "Stratifikasi",
+            prompt: "Tentukan benar/salah: Stratifikasi sosial berkaitan dengan pelapisan masyarakat.",
+            stimulus: "Pelapisan sosial dapat dilihat dari ekonomi, pendidikan, pekerjaan, atau kekuasaan.",
+            options: ["Benar", "Salah"],
+            correct: 0,
+            explanation: "Stratifikasi sosial berarti pelapisan masyarakat."
+        },
+        {
+            id: "geo-05",
+            subject: "geografi",
+            difficulty: "dasar",
+            type: "single",
+            sourceKind: "adaptasi resmi",
+            skill: "Litosfer",
+            prompt: "Lapisan bumi tempat manusia hidup dan melakukan aktivitas disebut...",
+            stimulus: "Permukaan bumi merupakan bagian luar yang berhubungan dengan batuan dan tanah.",
+            options: ["Litosfer", "Kromosfer", "Fotosfer", "Termosfer saja"],
+            correct: 0,
+            explanation: "Litosfer adalah lapisan batuan atau kerak bumi."
+        },
+        {
+            id: "geo-06",
+            subject: "geografi",
+            difficulty: "sedang",
+            type: "single",
+            sourceKind: "pola tka 2025",
+            skill: "Hidrologi",
+            prompt: "Proses berubahnya air laut menjadi uap air karena panas matahari disebut...",
+            stimulus: "Siklus hidrologi melibatkan penguapan, kondensasi, dan presipitasi.",
+            options: ["Evaporasi", "Kondensasi", "Infiltrasi", "Presipitasi"],
+            correct: 0,
+            explanation: "Evaporasi adalah proses penguapan air."
+        },
+        {
+            id: "geo-07",
+            subject: "geografi",
+            difficulty: "hots",
+            type: "multi",
+            sourceKind: "prediksi",
+            skill: "Analisis wilayah",
+            prompt: "Pilih dua indikator yang relevan untuk menilai kerentanan banjir wilayah kota.",
+            stimulus: "Kerentanan banjir dipengaruhi kondisi fisik dan penggunaan lahan.",
+            options: ["Ketinggian wilayah", "Kapasitas drainase", "Nama jalan", "Warna cat rumah"],
+            correct: [0, 1],
+            explanation: "Ketinggian wilayah dan drainase berkaitan langsung dengan risiko banjir."
+        },
+        {
+            id: "geo-08",
+            subject: "geografi",
+            difficulty: "prediksi",
+            type: "truefalse",
+            sourceKind: "prediksi",
+            skill: "Demografi",
+            prompt: "Tentukan benar/salah: Kepadatan penduduk dihitung dari jumlah penduduk dibagi luas wilayah.",
+            stimulus: "Kepadatan penduduk menunjukkan banyaknya penduduk per satuan luas.",
+            options: ["Benar", "Salah"],
+            correct: 0,
+            explanation: "Rumus kepadatan penduduk adalah jumlah penduduk / luas wilayah."
         }
     ];
 
@@ -1527,7 +1995,7 @@ function initLibraryPage() {
 }
 
 function initBahasaPage() {
-    const regions = ["Semua", "Sumatra", "Jawa", "Kalimantan", "Sulawesi", "Bali-Nusa", "Papua"];
+    const regions = ["Semua", "Sumatra", "Jawa", "Kalimantan", "Sulawesi", "Bali-Nusa", "Papua Raya", "Maluku"];
     const places = [
         {
             id: "jawa",
@@ -1684,18 +2152,172 @@ function initBahasaPage() {
             quiz: { q: "Pacuan sapi khas Madura disebut...", answers: ["Karapan Sapi", "Pacu Jawi", "Makepung", "Pasola"], correct: 0 }
         },
         {
-            id: "papua",
+            id: "papua-provinsi",
             label: "Papua",
-            region: "Papua",
-            mark: "PP",
-            summary: "Papua memiliki lanskap alam luar biasa, honai, tifa, noken, dan keragaman bahasa yang sangat besar.",
-            cards: [["Selamat pagi", "Selamat pagi", "Sapaan umum."], ["Wa wa wa", "Salam hangat", "Sapaan ramah di beberapa konteks lokal."], ["Apa kabar?", "Apa kabar?", "Sapaan umum."]],
-            phrases: [["Saya mau belajar.", "Saya ingin belajar."], ["Mari jaga alam.", "Ajakan merawat lingkungan."], ["Kita saudara.", "Ungkapan kebersamaan."]],
-            destination: ["Raja Ampat", "Kepulauan dengan laut jernih, karang, dan biodiversitas tinggi."],
+            region: "Papua Raya",
+            mark: "PA",
+            summary: "Provinsi Papua kini berpusat di wilayah utara dan timur, dengan Jayapura, Danau Sentani, tifa, noken, dan bahasa-bahasa pesisir yang beragam.",
+            cards: [["Wa wa", "Salam hangat", "Sapaan ramah yang sering diasosiasikan dengan suasana Papua."], ["Mace", "Ibu atau perempuan dewasa", "Panggilan akrab dalam percakapan Papua."], ["Pace", "Bapak atau laki-laki dewasa", "Panggilan akrab sehari-hari."]],
+            phrases: [["Saya mau belajar budaya Papua.", "Niat belajar budaya lokal."], ["Mari jaga Danau Sentani.", "Ajakan merawat alam."], ["Kitorang bersaudara.", "Ungkapan kebersamaan."], ["Terima kasih banyak.", "Ungkapan apresiasi."]],
+            destination: ["Danau Sentani", "Danau luas dekat Jayapura yang dikenal dengan pulau-pulau kecil, festival budaya, dan lanskap perbukitan."],
             food: ["Papeda", "Olahan sagu bertekstur kenyal yang sering disantap dengan ikan kuah kuning."],
-            tradition: ["Noken", "Tas rajut tradisional Papua yang dipakai untuk membawa barang dan simbol kehidupan."],
-            fact: "Papua adalah salah satu wilayah dengan keragaman bahasa lokal terbesar di dunia.",
-            quiz: { q: "Makanan khas Papua berbahan sagu yang terkenal adalah...", answers: ["Papeda", "Rendang", "Gudeg", "Kerak Telor"], correct: 0 }
+            tradition: ["Festival Danau Sentani", "Perayaan budaya yang menampilkan tari, musik, perahu, dan keragaman masyarakat sekitar danau."],
+            fact: "Setelah pemekaran 2022, Provinsi Papua tetap menjadi pintu penting untuk mengenal budaya pesisir utara Tanah Papua.",
+            quiz: { q: "Destinasi dan festival budaya yang lekat dengan Provinsi Papua adalah...", answers: ["Danau Sentani", "Jam Gadang", "Tana Toraja", "Pulau Penyengat"], correct: 0 }
+        },
+        {
+            id: "papua-barat",
+            label: "Papua Barat",
+            region: "Papua Raya",
+            mark: "PB",
+            summary: "Papua Barat dikenal dengan Manokwari, Pegunungan Arfak, Teluk Cenderawasih, tradisi pesisir, dan lanskap hutan pegunungan.",
+            cards: [["Selamat pagi", "Selamat pagi", "Sapaan umum lintas komunitas."], ["Kitorang", "Kita atau kami", "Kata sehari-hari dalam Melayu Papua."], ["Sa senang belajar", "Saya senang belajar", "Kalimat sederhana untuk latihan."]],
+            phrases: [["Kitorang jaga hutan.", "Kami menjaga hutan."], ["Sa mau lihat Pegunungan Arfak.", "Saya ingin melihat Pegunungan Arfak."], ["Mari belajar dari masyarakat lokal.", "Ajakan menghargai pengetahuan setempat."]],
+            destination: ["Pegunungan Arfak", "Kawasan pegunungan dekat Manokwari dengan danau, burung endemik, dan komunitas adat yang kuat."],
+            food: ["Ikan Bakar Manokwari", "Ikan bakar dengan sambal khas yang kuat dan segar."],
+            tradition: ["Rumah Kaki Seribu", "Rumah tradisional suku Arfak dengan banyak tiang penyangga sebagai ciri arsitektur."],
+            fact: "Papua Barat memiliki kekayaan ekologi dari pesisir Teluk Cenderawasih sampai dataran tinggi Arfak.",
+            quiz: { q: "Rumah tradisional suku Arfak di Papua Barat dikenal sebagai...", answers: ["Rumah Kaki Seribu", "Rumah Gadang", "Joglo", "Tongkonan"], correct: 0 }
+        },
+        {
+            id: "papua-selatan",
+            label: "Papua Selatan",
+            region: "Papua Raya",
+            mark: "PS",
+            summary: "Papua Selatan meliputi kawasan Merauke dan sekitarnya, dikenal dengan budaya Marind, rawa, savana, sagu, dan Taman Nasional Wasur.",
+            cards: [["Izakod bekai izakod kai", "Satu hati satu tujuan", "Semboyan yang sering dilekatkan dengan Merauke."], ["Sagu", "Pangan pokok", "Bahan makanan penting di banyak komunitas Papua."], ["Amai", "Sapaan hangat", "Contoh sapaan sederhana untuk latihan."]],
+            phrases: [["Saya mau belajar tentang Merauke.", "Niat belajar daerah selatan Papua."], ["Mari jaga rawa dan savana.", "Ajakan menjaga ekosistem."], ["Sagu penting untuk hidup.", "Kalimat tentang pangan lokal."]],
+            destination: ["Taman Nasional Wasur", "Kawasan rawa, savana, dan keanekaragaman hayati di sekitar Merauke."],
+            food: ["Sagu Sep", "Olahan sagu bakar khas Merauke yang dekat dengan kehidupan masyarakat setempat."],
+            tradition: ["Budaya Marind", "Tradisi masyarakat Marind yang kuat dengan identitas klan, alam, dan cerita leluhur."],
+            fact: "Papua Selatan adalah salah satu provinsi baru yang diresmikan pada 2022 berdasarkan UU Nomor 14 Tahun 2022.",
+            quiz: { q: "Provinsi Papua Selatan berpusat kuat pada kawasan budaya dan alam di sekitar...", answers: ["Merauke", "Bandung", "Banjarmasin", "Bukittinggi"], correct: 0 }
+        },
+        {
+            id: "papua-tengah",
+            label: "Papua Tengah",
+            region: "Papua Raya",
+            mark: "PT",
+            summary: "Papua Tengah memiliki Nabire, Mimika, Paniai, dan wilayah pegunungan-danau yang kaya budaya Mee, Amungme, Kamoro, dan komunitas lain.",
+            cards: [["Amapane", "Terima kasih", "Ungkapan apresiasi dalam salah satu konteks lokal Papua Tengah."], ["Danau", "Danau", "Kata kunci lanskap Paniai."], ["Sa belajar pelan-pelan", "Saya belajar pelan-pelan", "Kalimat latihan."]],
+            phrases: [["Saya mau kenal budaya Mee.", "Niat mengenal budaya lokal."], ["Danau Paniai indah.", "Kalimat tentang destinasi."], ["Kitorang hormati adat.", "Kami menghormati adat."]],
+            destination: ["Danau Paniai", "Danau dataran tinggi yang menjadi ruang hidup, perikanan, dan identitas masyarakat sekitar."],
+            food: ["Udang Selingkuh", "Kuliner air tawar populer di kawasan pegunungan Papua."],
+            tradition: ["Noken", "Tas rajut multifungsi yang juga menjadi simbol identitas, kerja, dan kehidupan sosial."],
+            fact: "Papua Tengah dibentuk melalui UU Nomor 15 Tahun 2022, dengan Nabire sebagai ibu kota provinsi.",
+            quiz: { q: "Ibu kota Provinsi Papua Tengah berada di...", answers: ["Nabire", "Sorong", "Denpasar", "Medan"], correct: 0 }
+        },
+        {
+            id: "papua-pegunungan",
+            label: "Papua Pegunungan",
+            region: "Papua Raya",
+            mark: "PG",
+            summary: "Papua Pegunungan adalah provinsi dataran tinggi dengan Wamena, Lembah Baliem, honai, mumi adat, dan kebun-kebun pegunungan.",
+            cards: [["Wamena", "Kota di Lembah Baliem", "Pintu masuk penting kawasan pegunungan."], ["Honai", "Rumah adat", "Rumah bundar khas masyarakat pegunungan."], ["Apen", "Ubi", "Contoh pangan penting di dataran tinggi."]],
+            phrases: [["Saya mau belajar tentang honai.", "Niat belajar arsitektur lokal."], ["Lembah Baliem luas.", "Kalimat tentang destinasi."], ["Mari hormati kepala suku.", "Ajakan menghargai struktur adat."]],
+            destination: ["Lembah Baliem", "Lembah dataran tinggi yang dikenal dengan festival budaya, honai, kebun, dan panorama pegunungan."],
+            food: ["Ubi Bakar Batu", "Ubi dan bahan pangan lokal yang dimasak dalam tradisi bakar batu."],
+            tradition: ["Bakar Batu", "Tradisi memasak komunal dengan batu panas untuk merayakan kebersamaan dan momen adat."],
+            fact: "Papua Pegunungan dibentuk melalui UU Nomor 16 Tahun 2022 dan menjadi provinsi yang seluruh wilayahnya berada di pedalaman pegunungan.",
+            quiz: { q: "Rumah adat yang lekat dengan Papua Pegunungan disebut...", answers: ["Honai", "Baileo", "Rumah Gadang", "Lamin"], correct: 0 }
+        },
+        {
+            id: "papua-barat-daya",
+            label: "Papua Barat Daya",
+            region: "Papua Raya",
+            mark: "BD",
+            summary: "Papua Barat Daya berpusat di Sorong dan mencakup Raja Ampat, dengan budaya pesisir, pulau karang, sasi laut, dan jalur maritim.",
+            cards: [["Sorong", "Kota gerbang Raja Ampat", "Kata kunci wilayah Papua Barat Daya."], ["Sasi", "Aturan adat menjaga alam", "Praktik konservasi lokal di wilayah timur Indonesia."], ["Kitorang jaga laut", "Kami menjaga laut", "Kalimat latihan."]],
+            phrases: [["Saya mau ke Raja Ampat.", "Niat perjalanan budaya dan alam."], ["Sasi menjaga laut.", "Kalimat tentang tradisi konservasi."], ["Terumbu karang harus dijaga.", "Ajakan menjaga ekosistem."]],
+            destination: ["Raja Ampat", "Kepulauan dengan laut jernih, karang, dan biodiversitas tinggi."],
+            food: ["Ikan Kuah Kuning", "Olahan ikan berbumbu kunyit yang sering disantap dengan papeda."],
+            tradition: ["Sasi Laut", "Aturan adat untuk mengatur waktu pemanfaatan sumber daya laut agar tetap lestari."],
+            fact: "Papua Barat Daya menjadi provinsi ke-38 Indonesia melalui UU Nomor 29 Tahun 2022.",
+            quiz: { q: "Provinsi Papua Barat Daya dikenal sebagai gerbang menuju...", answers: ["Raja Ampat", "Malioboro", "Danau Toba", "Kota Tua"], correct: 0 }
+        },
+        {
+            id: "sasak",
+            label: "Sasak",
+            region: "Bali-Nusa",
+            mark: "SK",
+            summary: "Sasak di Lombok dikenal dengan desa adat, tenun, lumbung, pantai, dan tradisi yang dekat dengan ritme agraris.",
+            cards: [["Selamat semeton", "Salam saudara", "Sapaan bernuansa persaudaraan."], ["Matur tampiasih", "Terima kasih", "Ungkapan apresiasi."], ["Napi kabar?", "Apa kabar?", "Sapaan umum."], ["Titiang mele belajar", "Saya ingin belajar", "Niat belajar sederhana."]],
+            phrases: [["Ayo melajah budaya.", "Mari belajar budaya."], ["Ampure.", "Maaf atau permisi."], ["Silaq mampir.", "Silakan singgah."]],
+            destination: ["Desa Sade", "Desa adat Sasak dengan rumah tradisional, tenun, dan pola hidup komunal."],
+            food: ["Ayam Taliwang", "Ayam berbumbu pedas gurih yang menjadi ikon kuliner Lombok."],
+            tradition: ["Bau Nyale", "Tradisi menangkap cacing laut yang terhubung dengan legenda Putri Mandalika."],
+            fact: "Tradisi Bau Nyale memadukan cerita rakyat, kalender alam, dan perayaan komunitas pesisir.",
+            quiz: { q: "Tradisi Lombok yang berkaitan dengan legenda Putri Mandalika adalah...", answers: ["Bau Nyale", "Sekaten", "Tabuik", "Pasola"], correct: 0 }
+        },
+        {
+            id: "toraja",
+            label: "Toraja",
+            region: "Sulawesi",
+            mark: "TJ",
+            summary: "Toraja memiliki arsitektur tongkonan, ukiran, upacara adat, kopi, dan lanskap dataran tinggi yang khas.",
+            cards: [["Melo tongan", "Baik sekali", "Ungkapan positif."], ["Kurre sumanga'", "Terima kasih", "Ucapan syukur atau terima kasih."], ["Umba susi kabar?", "Bagaimana kabar?", "Sapaan umum."], ["Tabe'", "Permisi", "Sapaan sopan."]],
+            phrases: [["Aku la belajar budaya.", "Saya akan belajar budaya."], ["Tabe' lako mai.", "Permisi ke sini."], ["Kurre sumanga' sola nasang.", "Terima kasih semuanya."]],
+            destination: ["Kete Kesu", "Kawasan adat dengan tongkonan, ukiran, dan situs budaya Toraja."],
+            food: ["Pa'piong", "Hidangan berbumbu yang dimasak dalam bambu."],
+            tradition: ["Tongkonan", "Rumah adat beratap melengkung yang menjadi pusat identitas keluarga Toraja."],
+            fact: "Tongkonan bukan hanya rumah, tetapi juga simbol garis keturunan dan ruang musyawarah keluarga.",
+            quiz: { q: "Rumah adat Toraja yang beratap melengkung disebut...", answers: ["Tongkonan", "Joglo", "Baileo", "Lamin"], correct: 0 }
+        },
+        {
+            id: "melayu-riau",
+            label: "Melayu Riau",
+            region: "Sumatra",
+            mark: "MR",
+            summary: "Melayu Riau kuat dengan pantun, gurindam, tanjak, zapin, dan sejarah literasi maritim Nusantara.",
+            cards: [["Selamat pagi", "Selamat pagi", "Sapaan umum."], ["Terima kasih", "Terima kasih", "Ungkapan apresiasi."], ["Apa khabar?", "Apa kabar?", "Sapaan harian."], ["Mohon izin", "Permisi", "Ungkapan sopan."]],
+            phrases: [["Saya hendak belajar.", "Saya ingin belajar."], ["Silakan singgah.", "Ajak mampir."], ["Elok budi elok bahasa.", "Budi dan bahasa perlu dijaga."]],
+            destination: ["Pulau Penyengat", "Pulau bersejarah dengan jejak sastra, kerajaan, dan Masjid Raya Sultan Riau."],
+            food: ["Gulai Ikan Patin", "Olahan ikan patin berbumbu gurih yang populer di Riau."],
+            tradition: ["Pantun Melayu", "Tradisi tutur berima yang menyampaikan nasihat, humor, dan nilai sosial."],
+            fact: "Pantun Melayu membantu menjaga kecakapan berbahasa, etika, dan memori budaya lisan.",
+            quiz: { q: "Tradisi tutur berima yang lekat dengan budaya Melayu adalah...", answers: ["Pantun", "Haiku", "Mantra Bali", "Syair bebas"], correct: 0 }
+        },
+        {
+            id: "lampung",
+            label: "Lampung",
+            region: "Sumatra",
+            mark: "LP",
+            summary: "Lampung dikenal dengan tapis, aksara Lampung, siger, gajah, dan wilayah pesisir yang strategis.",
+            cards: [["Tabik pun", "Salam hormat", "Sapaan sopan khas Lampung."], ["Terima kasih", "Terima kasih", "Ucapan apresiasi."], ["Api kabar?", "Apa kabar?", "Sapaan umum."], ["Nyak haga belajar", "Saya ingin belajar", "Kalimat niat belajar."]],
+            phrases: [["Tabik pun, ulun belajar.", "Salam, saya belajar."], ["Sikam jama-jama.", "Kita bersama-sama."], ["Pekon sai indah.", "Kampung yang indah."]],
+            destination: ["Way Kambas", "Taman nasional yang dikenal dengan konservasi gajah dan ekosistem hutan."],
+            food: ["Seruit", "Hidangan ikan dengan sambal dan lalapan khas Lampung."],
+            tradition: ["Kain Tapis", "Kain tradisional bersulam benang emas yang dipakai dalam acara adat."],
+            fact: "Siger menjadi simbol kehormatan dan identitas perempuan Lampung dalam banyak representasi budaya.",
+            quiz: { q: "Kain tradisional Lampung yang bersulam benang emas disebut...", answers: ["Tapis", "Ulos", "Sasirangan", "Songket Palembang"], correct: 0 }
+        },
+        {
+            id: "ambon",
+            label: "Ambon",
+            region: "Maluku",
+            mark: "AM",
+            summary: "Ambon mewakili kekayaan Maluku: musik, rempah, pela gandong, pantai, dan tradisi persaudaraan lintas komunitas.",
+            cards: [["Selamat pagi", "Selamat pagi", "Sapaan umum."], ["Tarima kasih", "Terima kasih", "Ungkapan apresiasi."], ["Apa kabar?", "Apa kabar?", "Sapaan umum."], ["Beta mau belajar", "Saya ingin belajar", "Niat belajar."]],
+            phrases: [["Ale sehat?", "Kamu sehat?"], ["Mari katong jaga budaya.", "Mari kita menjaga budaya."], ["Seng apa-apa.", "Tidak apa-apa."]],
+            destination: ["Pantai Natsepa", "Pantai populer di Ambon dengan suasana pesisir dan kuliner rujak natsepa."],
+            food: ["Ikan Kuah Kuning", "Olahan ikan berbumbu kunyit yang sering disantap dengan papeda."],
+            tradition: ["Pela Gandong", "Ikatan persaudaraan antarnegeri yang menjaga solidaritas sosial."],
+            fact: "Maluku sering disebut kepulauan rempah karena peran historis pala dan cengkih dalam perdagangan dunia.",
+            quiz: { q: "Ikatan persaudaraan antarnegeri di Maluku dikenal sebagai...", answers: ["Pela Gandong", "Mapalus", "Subak", "Sasi Bali"], correct: 0 }
+        },
+        {
+            id: "gorontalo",
+            label: "Gorontalo",
+            region: "Sulawesi",
+            mark: "GT",
+            summary: "Gorontalo memiliki tradisi lisan, adat Hulondalo, benteng bersejarah, dan kuliner laut yang kuat.",
+            cards: [["Mopotuwawu", "Bersatu", "Nilai kebersamaan."], ["Tabea", "Permisi atau salam", "Sapaan sopan."], ["Wolo kabar?", "Apa kabar?", "Sapaan umum."], ["Ami belajar", "Saya belajar", "Kalimat belajar."]],
+            phrases: [["Tabea, ami mo belajar.", "Permisi, saya mau belajar."], ["Delo u lipu.", "Cinta tanah kelahiran."], ["Ayo mo hulondalo.", "Mari mengenal Gorontalo."]],
+            destination: ["Benteng Otanaha", "Situs bersejarah di perbukitan dengan panorama Danau Limboto."],
+            food: ["Binte Biluhuta", "Sup jagung khas Gorontalo dengan rasa segar gurih."],
+            tradition: ["Tumbilotohe", "Tradisi malam pasang lampu menjelang akhir Ramadan."],
+            fact: "Tumbilotohe membuat kampung bercahaya dengan lampu tradisional dan memperkuat suasana kebersamaan.",
+            quiz: { q: "Tradisi malam pasang lampu di Gorontalo disebut...", answers: ["Tumbilotohe", "Bau Nyale", "Sekaten", "Dugderan"], correct: 0 }
         }
     ];
 
@@ -1707,33 +2329,165 @@ function initBahasaPage() {
     const answerGrid = document.getElementById("languageAnswers");
     const regionChips = document.getElementById("regionChips");
     const cultureGrid = document.getElementById("cultureGrid");
+    const languageSearch = document.getElementById("languageSearch");
+    const routeGoal = document.getElementById("routeGoal");
+    const sortCulture = document.getElementById("sortCulture");
+    const sessionTarget = document.getElementById("sessionTarget");
+    const languageRecommendation = document.getElementById("languageRecommendation");
+    const quickBrief = document.getElementById("quickBrief");
+    const compareSelect = document.getElementById("compareSelect");
+    const compareOutput = document.getElementById("compareOutput");
+    const journeyGrid = document.getElementById("journeyGrid");
+    const listenWord = document.getElementById("listenWord");
+    const toggleFavorite = document.getElementById("toggleFavorite");
+    const markMastered = document.getElementById("markMastered");
+    const nextCultureQuiz = document.getElementById("nextCultureQuiz");
+    const resetLanguageProgress = document.getElementById("resetLanguageProgress");
+    const startRecommendedRoute = document.getElementById("startRecommendedRoute");
+    const randomCulture = document.getElementById("randomCulture");
+    const focusPapua = document.getElementById("focusPapua");
+    const quickQuiz = document.getElementById("quickQuiz");
+    const copyMission = document.getElementById("copyMission");
+    const flashcardProgress = document.getElementById("flashcardProgress");
+    const flashcardBar = document.getElementById("flashcardBar");
+    const flowCards = Array.from(document.querySelectorAll(".learning-flow-card"));
+    const cultureResultTitle = document.getElementById("cultureResultTitle");
+    const cultureResultMeta = document.getElementById("cultureResultMeta");
     let currentIndex = 0;
     let showingMeaning = false;
+    let collectionMode = storage.get("wonder_mode", "semua");
     let selectedRegion = storage.get("wonder_region", "Semua");
     let selectedPlaceId = storage.get("wonder_place", "jawa");
-    const progress = storage.get("bahasa_progress", { reviewed: 9, correct: 6, explored: ["jawa"], quizDone: 0 });
+    let sortMode = storage.get("wonder_sort", "recommended");
+    let targetCount = Number(storage.get("wonder_target", 3)) || 3;
+    const progress = storage.get("bahasa_progress", { reviewed: 0, correct: 0, explored: [], quizDone: 0, favorites: [], mastered: [], streak: 0, lastActiveDay: "" });
 
+    if (selectedRegion === "Papua-Maluku") selectedRegion = "Papua Raya";
     if (!regions.includes(selectedRegion)) selectedRegion = "Semua";
+    if (selectedPlaceId === "papua") selectedPlaceId = "papua-provinsi";
     if (!places.some(place => place.id === selectedPlaceId)) selectedPlaceId = "jawa";
     languageSelect.innerHTML = places.map(place => `<option value="${place.id}">${place.label}</option>`).join("");
     languageSelect.value = selectedPlaceId;
+    compareSelect.innerHTML = places.map(place => `<option value="${place.id}">${place.label}</option>`).join("");
+    compareSelect.value = places.find(place => place.id !== selectedPlaceId)?.id || selectedPlaceId;
+    if (!["semua", "belum", "favorit", "mastered"].includes(collectionMode)) collectionMode = "semua";
+    if (!["recommended", "az", "region", "unexplored"].includes(sortMode)) sortMode = "recommended";
+    if (![3, 5, 7, 10].includes(targetCount)) targetCount = 3;
+    if (sortCulture) sortCulture.value = sortMode;
+    if (sessionTarget) sessionTarget.value = String(targetCount);
 
     function getSelectedPlace() {
         return places.find(place => place.id === selectedPlaceId) || places[0];
+    }
+
+    function setActiveFlow(stepId) {
+        flowCards.forEach(card => {
+            const isActive = card.dataset.flowStep === stepId;
+            card.classList.toggle("active", isActive);
+            if (isActive) {
+                card.setAttribute("aria-current", "step");
+            } else {
+                card.removeAttribute("aria-current");
+            }
+        });
+    }
+
+    function setOptionalText(id, value) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = value;
     }
 
     function getFilteredPlaces() {
         return selectedRegion === "Semua" ? places : places.filter(place => place.region === selectedRegion);
     }
 
+    function getSearchQuery() {
+        return (languageSearch?.value || "").trim().toLowerCase();
+    }
+
+    function matchesSearch(place) {
+        const query = getSearchQuery();
+        if (!query) return true;
+        const haystack = [
+            place.label,
+            place.region,
+            place.summary,
+            place.destination[0],
+            place.destination[1],
+            place.food[0],
+            place.food[1],
+            place.tradition[0],
+            place.tradition[1],
+            place.fact,
+            ...place.cards.flat(),
+            ...place.phrases.flat()
+        ].join(" ").toLowerCase();
+        return haystack.includes(query);
+    }
+
+    function getVisiblePlaces() {
+        const explored = new Set(progress.explored || []);
+        const favorites = new Set(progress.favorites || []);
+        const mastered = new Set(progress.mastered || []);
+        const visible = getFilteredPlaces().filter(place => {
+            if (!matchesSearch(place)) return false;
+            if (collectionMode === "belum") return !explored.has(place.id);
+            if (collectionMode === "favorit") return favorites.has(place.id);
+            if (collectionMode === "mastered") return mastered.has(place.id);
+            return true;
+        });
+        const sorted = [...visible];
+        if (sortMode === "az") {
+            sorted.sort((a, b) => a.label.localeCompare(b.label));
+        } else if (sortMode === "region") {
+            sorted.sort((a, b) => `${a.region} ${a.label}`.localeCompare(`${b.region} ${b.label}`));
+        } else if (sortMode === "unexplored") {
+            sorted.sort((a, b) => Number(explored.has(a.id)) - Number(explored.has(b.id)) || a.label.localeCompare(b.label));
+        }
+        return sorted;
+    }
+
+    function todayKey() {
+        return new Date().toISOString().slice(0, 10);
+    }
+
+    function recordActivity() {
+        const today = todayKey();
+        if (progress.lastActiveDay !== today) {
+            progress.streak = (progress.streak || 0) + 1;
+            progress.lastActiveDay = today;
+        }
+    }
+
+    function toggleSetValue(key, value) {
+        const values = new Set(progress[key] || []);
+        if (values.has(value)) {
+            values.delete(value);
+        } else {
+            values.add(value);
+        }
+        progress[key] = Array.from(values);
+        updateMetrics();
+    }
+
     function updateMetrics() {
         const exploredCount = new Set(progress.explored || []).size;
+        const favoriteCount = new Set(progress.favorites || []).size;
+        const masteredCount = new Set(progress.mastered || []).size;
         const accuracy = Math.round((progress.correct / Math.max(progress.reviewed, 1)) * 100);
+        const remainingCount = Math.max(places.length - exploredCount, 0);
+        const completion = Math.round((exploredCount / places.length) * 100);
         document.getElementById("languageReviewed").textContent = progress.reviewed;
         document.getElementById("languageCorrect").textContent = `${accuracy}%`;
         document.getElementById("languageTotal").textContent = places.length;
         document.getElementById("missionCount").textContent = `${exploredCount}/${places.length}`;
         document.getElementById("missionBar").style.width = `${Math.round((exploredCount / places.length) * 100)}%`;
+        setOptionalText("languageFavoriteCount", favoriteCount);
+        setOptionalText("languageMasteredCount", masteredCount);
+        setOptionalText("languageStreakCount", progress.streak || 0);
+        setOptionalText("languageVisibleCount", getVisiblePlaces().length);
+        setOptionalText("languageRemainingCount", remainingCount);
+        setOptionalText("languageCompletionCount", `${completion}%`);
 
         let badge = "Explorer Baru";
         let title = "Mulai jelajah pertamamu.";
@@ -1755,14 +2509,21 @@ function initBahasaPage() {
         document.getElementById("missionBadge").textContent = badge;
         document.getElementById("missionTitle").textContent = title;
         document.getElementById("missionText").textContent = text;
-        document.getElementById("phoneRegionTitle").textContent = `${getFilteredPlaces().length} pilihan`;
+        document.getElementById("phoneRegionTitle").textContent = `${getVisiblePlaces().length} pilihan`;
         document.getElementById("phoneRegionText").textContent = selectedRegion === "Semua" ? "Jelajah semua region Indonesia." : `Fokus region ${selectedRegion}.`;
+        document.querySelector(".language-progress-track div").style.width = `${Math.round((exploredCount / places.length) * 100)}%`;
+        toggleFavorite.textContent = (progress.favorites || []).includes(selectedPlaceId) ? "Hapus Favorit" : "Favorit";
+        markMastered.textContent = (progress.mastered || []).includes(selectedPlaceId) ? "Sudah Dikuasai" : "Tandai Dikuasai";
         storage.set("bahasa_progress", progress);
         storage.set("wonder_region", selectedRegion);
         storage.set("wonder_place", selectedPlaceId);
+        storage.set("wonder_mode", collectionMode);
+        storage.set("wonder_sort", sortMode);
+        storage.set("wonder_target", targetCount);
     }
 
     function markExplored(placeId) {
+        recordActivity();
         const explored = new Set(progress.explored || []);
         const before = explored.size;
         explored.add(placeId);
@@ -1774,17 +2535,20 @@ function initBahasaPage() {
     }
 
     function selectRegion(region) {
+        if (region === "Papua") region = "Papua Raya";
         selectedRegion = region;
-        const firstPlace = getFilteredPlaces()[0];
+        const firstPlace = getVisiblePlaces()[0] || getFilteredPlaces()[0];
         if (firstPlace) selectedPlaceId = firstPlace.id;
         currentIndex = 0;
         languageSelect.value = selectedPlaceId;
+        setActiveFlow("jelajah-region");
         renderAll();
     }
 
     function syncIndonesiaMap() {
         document.querySelectorAll(".map-region").forEach(regionEl => {
-            regionEl.classList.toggle("active", regionEl.dataset.region === selectedRegion);
+            const mapRegion = regionEl.dataset.region === "Papua" ? "Papua Raya" : regionEl.dataset.region;
+            regionEl.classList.toggle("active", mapRegion === selectedRegion);
         });
     }
 
@@ -1813,25 +2577,134 @@ function initBahasaPage() {
 
     function renderCultureGrid() {
         const explored = new Set(progress.explored || []);
-        cultureGrid.innerHTML = getFilteredPlaces().map(place => `
-            <button class="culture-card ${place.id === selectedPlaceId ? "active" : ""}" data-place="${place.id}">
+        const favorites = new Set(progress.favorites || []);
+        const mastered = new Set(progress.mastered || []);
+        const visiblePlaces = getVisiblePlaces();
+        const query = getSearchQuery();
+        const modeLabel = {
+            semua: "Semua kartu",
+            belum: "Belum dibuka",
+            favorit: "Favorit",
+            mastered: "Dikuasai"
+        }[collectionMode] || "Semua kartu";
+        const sortLabel = {
+            recommended: "Rekomendasi",
+            az: "Nama A-Z",
+            region: "Region",
+            unexplored: "Belum dijelajahi dulu"
+        }[sortMode] || "Rekomendasi";
+        if (cultureResultTitle) {
+            cultureResultTitle.textContent = `${visiblePlaces.length} kartu ditemukan`;
+        }
+        if (cultureResultMeta) {
+            cultureResultMeta.textContent = `${selectedRegion === "Semua" ? "Semua region" : selectedRegion} - ${modeLabel} - ${sortLabel}${query ? ` - Pencarian "${query}"` : ""}`;
+        }
+        cultureGrid.innerHTML = visiblePlaces.length ? visiblePlaces.map(place => `
+            <button class="culture-card ${place.id === selectedPlaceId ? "active" : ""} ${favorites.has(place.id) ? "is-favorite" : ""} ${mastered.has(place.id) ? "is-mastered" : ""}" data-place="${place.id}">
                 <span class="culture-mark">${place.mark}</span>
                 <div>
                     <strong>${place.label}</strong>
                     <p>${place.summary}</p>
-                    <small>${place.region} - ${place.destination[0]} - ${explored.has(place.id) ? "Sudah dijelajahi" : "Belum dibuka"}</small>
+                    <small>${place.region} - ${place.destination[0]} - ${mastered.has(place.id) ? "Dikuasai" : explored.has(place.id) ? "Sudah dijelajahi" : "Belum dibuka"}${favorites.has(place.id) ? " - Favorit" : ""}</small>
                 </div>
             </button>
-        `).join("");
+        `).join("") : `<div class="empty-state">Tidak ada daerah yang cocok dengan filter. Coba ubah mode koleksi atau kata pencarian.</div>`;
         cultureGrid.querySelectorAll(".culture-card").forEach(card => {
             card.addEventListener("click", () => {
                 selectedPlaceId = card.dataset.place;
                 languageSelect.value = selectedPlaceId;
                 currentIndex = 0;
                 markExplored(selectedPlaceId);
+                setActiveFlow("latihan");
                 renderAll();
             });
         });
+    }
+
+    function getRecommendedPlace() {
+        const explored = new Set(progress.explored || []);
+        const mastered = new Set(progress.mastered || []);
+        const candidates = getFilteredPlaces().filter(place => matchesSearch(place));
+        return candidates.find(place => !explored.has(place.id))
+            || candidates.find(place => !mastered.has(place.id))
+            || candidates[0]
+            || places[0];
+    }
+
+    function renderRecommendation() {
+        const recommended = getRecommendedPlace();
+        const goalCopy = {
+            balanced: "Mulai dari kosakata, lanjut fakta, lalu jawab quiz budaya.",
+            language: `Fokuskan pada ${recommended.cards.length} kosakata dan ${recommended.phrases.length} frasa harian.`,
+            food: `Pelajari kuliner ${recommended.food[0]} dan kaitannya dengan lanskap lokal.`,
+            travel: `Gunakan ${recommended.destination[0]} sebagai pintu masuk memahami wilayahnya.`,
+            tradition: `Dalami ${recommended.tradition[0]} sebagai identitas budaya utama.`
+        }[routeGoal?.value || "balanced"] || "Mulai dari kosakata, lanjut fakta, lalu jawab quiz budaya.";
+        if (!languageRecommendation) return;
+        languageRecommendation.innerHTML = `
+            <h3>${recommended.label}</h3>
+            <p>${goalCopy}</p>
+            <small class="mini-tag">${recommended.region} - ${recommended.destination[0]}</small>
+        `;
+        if (startRecommendedRoute) startRecommendedRoute.dataset.place = recommended.id;
+        if (quickBrief) {
+            const explored = new Set(progress.explored || []);
+            quickBrief.innerHTML = `
+                <strong>Brief cepat</strong>
+                <p>${explored.has(recommended.id) ? "Lanjutkan pendalaman" : "Buka daerah baru"}: ${recommended.cards[0][0]}, ${recommended.food[0]}, dan ${recommended.tradition[0]}.</p>
+            `;
+        }
+    }
+
+    function renderDossier() {
+        const selected = getSelectedPlace();
+        document.getElementById("skillFocusTitle").textContent = `${selected.label}: frasa sopan dan identitas lokal`;
+        document.getElementById("skillFocusText").textContent = `Prioritaskan sapaan "${selected.cards[0][0]}", ucapan terima kasih, dan satu frasa percakapan. Setelah itu hubungkan dengan fakta: ${selected.fact}`;
+        document.getElementById("miniProjectTitle").textContent = `Kartu Cerita ${selected.destination[0]}`;
+        document.getElementById("miniProjectText").textContent = `Buat 4 kalimat pendek: sapaan lokal, alasan mengunjungi ${selected.destination[0]}, kuliner ${selected.food[0]}, dan tradisi ${selected.tradition[0]}.`;
+    }
+
+    function renderCompare() {
+        const selected = getSelectedPlace();
+        if (compareSelect.value === selected.id) {
+            compareSelect.value = places.find(place => place.id !== selected.id)?.id || selected.id;
+        }
+        const compared = places.find(place => place.id === compareSelect.value) || places[0];
+        compareOutput.innerHTML = `
+            <div class="compare-row">
+                <span>${selected.label} vs ${compared.label}</span>
+                <p><strong>Bahasa:</strong> ${selected.cards[0][0]} dibanding ${compared.cards[0][0]}.</p>
+                <p><strong>Budaya:</strong> ${selected.tradition[0]} dibanding ${compared.tradition[0]}.</p>
+                <p><strong>Kuliner:</strong> ${selected.food[0]} dibanding ${compared.food[0]}.</p>
+            </div>
+        `;
+    }
+
+    function renderJourney() {
+        const favorites = new Set(progress.favorites || []);
+        const explored = new Set(progress.explored || []);
+        const prioritized = [
+            ...places.filter(place => !explored.has(place.id)),
+            ...places.filter(place => favorites.has(place.id)),
+            ...places
+        ];
+        const uniqueRoute = Array.from(new Map(prioritized.map(place => [place.id, place])).values()).slice(0, 7);
+        const actionByGoal = {
+            balanced: place => `Flashcard, baca fakta, lalu jawab quiz ${place.label}.`,
+            language: place => `Hafalkan sapaan "${place.cards[0][0]}" dan ulangi 3 frasa.`,
+            food: place => `Catat bahan atau ciri rasa ${place.food[0]}.`,
+            travel: place => `Buat alasan singkat mengunjungi ${place.destination[0]}.`,
+            tradition: place => `Ringkas makna ${place.tradition[0]} dalam 2 kalimat.`
+        };
+        const planner = actionByGoal[routeGoal?.value || "balanced"] || actionByGoal.balanced;
+        journeyGrid.innerHTML = uniqueRoute.slice(0, targetCount).map((place, index) => `
+            <article class="journey-day">
+                <span>Hari ${index + 1}</span>
+                <strong>${place.label}</strong>
+                <p>${planner(place)}</p>
+                <small>${place.region} - ${place.destination[0]}</small>
+            </article>
+        `).join("");
     }
 
     function renderCultureDetails() {
@@ -1846,18 +2719,24 @@ function initBahasaPage() {
         document.getElementById("foodDesc").textContent = selected.food[1];
         document.getElementById("traditionName").textContent = selected.tradition[0];
         document.getElementById("traditionDesc").textContent = selected.tradition[1];
+        renderDossier();
+        renderCompare();
     }
 
     function renderLanguageQuiz() {
         const selected = getSelectedPlace();
         const correctAnswer = selected.quiz.answers[selected.quiz.correct];
         const answers = [...selected.quiz.answers].sort(() => Math.random() - 0.5);
+        document.getElementById("languageQuizMeta").textContent = `${selected.label} - ${selected.region}`;
         quizQuestion.textContent = selected.quiz.q;
+        answerGrid.classList.remove("answered");
         answerGrid.innerHTML = answers.map(answer => `<button class="answer-btn">${answer}</button>`).join("");
         answerGrid.querySelectorAll("button").forEach(btn => {
             btn.addEventListener("click", () => {
+                recordActivity();
                 progress.reviewed += 1;
                 progress.quizDone = (progress.quizDone || 0) + 1;
+                answerGrid.classList.add("answered");
                 if (btn.textContent === correctAnswer) {
                     progress.correct += 1;
                     btn.classList.add("correct");
@@ -1880,15 +2759,23 @@ function initBahasaPage() {
         const selected = getSelectedPlace();
         const card = selected.cards[currentIndex % selected.cards.length];
         showingMeaning = false;
+        flashcard.classList.remove("is-flipped", "is-flipping");
         flashcard.innerHTML = `<small>${selected.label}</small><strong>${card[0]}</strong><span>${card[2]}</span>`;
+        if (flashcardProgress && flashcardBar) {
+            const activeIndex = (currentIndex % selected.cards.length) + 1;
+            flashcardProgress.textContent = `Kartu ${activeIndex}/${selected.cards.length}`;
+            flashcardBar.style.width = `${Math.round((activeIndex / selected.cards.length) * 100)}%`;
+        }
         phraseGrid.innerHTML = selected.phrases.map(item => `
             <article class="phrase-card"><strong>${item[0]}</strong><p class="muted">${item[1]}</p></article>
         `).join("");
-        vocabList.innerHTML = selected.cards.map(item => `
-            <div class="vocab-item"><div><strong>${item[0]}</strong><span class="muted">${item[1]}</span></div><span class="mini-tag">Kosakata</span></div>
+        vocabList.innerHTML = selected.cards.map((item, index) => `
+            <div class="vocab-item ${index === currentIndex % selected.cards.length ? "is-active" : ""}"><div><strong>${item[0]}</strong><span class="muted">${item[1]}</span></div><span class="mini-tag">${item[2]}</span></div>
         `).join("");
         renderCultureDetails();
         renderLanguageQuiz();
+        renderRecommendation();
+        renderJourney();
     }
 
     function renderAll() {
@@ -1897,19 +2784,33 @@ function initBahasaPage() {
         renderCultureGrid();
         renderLanguage();
         updateMetrics();
+        document.querySelectorAll(".language-mode").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.mode === collectionMode);
+        });
     }
 
     flashcard.addEventListener("click", () => {
         const selected = getSelectedPlace();
         const card = selected.cards[currentIndex % selected.cards.length];
         showingMeaning = !showingMeaning;
-        flashcard.innerHTML = showingMeaning
-            ? `<small>Arti</small><strong>${card[1]}</strong><span>${card[0]}</span>`
-            : `<small>${selected.label}</small><strong>${card[0]}</strong><span>${card[2]}</span>`;
+        flashcard.classList.add("is-flipping");
+        window.setTimeout(() => {
+            flashcard.classList.toggle("is-flipped", showingMeaning);
+            flashcard.innerHTML = showingMeaning
+                ? `<small>Arti</small><strong>${card[1]}</strong><span>${card[0]}</span>`
+                : `<small>${selected.label}</small><strong>${card[0]}</strong><span>${card[2]}</span>`;
+            flashcard.classList.remove("is-flipping");
+        }, 120);
+    });
+    flowCards.forEach(card => {
+        card.addEventListener("click", () => {
+            setActiveFlow(card.dataset.flowStep);
+        });
     });
     document.getElementById("nextWord").addEventListener("click", () => {
         currentIndex += 1;
         progress.reviewed += 1;
+        recordActivity();
         markExplored(selectedPlaceId);
         renderAll();
         updateMetrics();
@@ -1919,10 +2820,166 @@ function initBahasaPage() {
         selectedRegion = getSelectedPlace().region;
         currentIndex = 0;
         markExplored(selectedPlaceId);
+        setActiveFlow("latihan");
+        renderAll();
+    });
+    languageSearch?.addEventListener("input", () => {
+        const firstVisible = getVisiblePlaces()[0];
+        if (firstVisible && !getVisiblePlaces().some(place => place.id === selectedPlaceId)) {
+            selectedPlaceId = firstVisible.id;
+            languageSelect.value = selectedPlaceId;
+            currentIndex = 0;
+        }
+        renderAll();
+    });
+    document.querySelectorAll(".language-mode").forEach(btn => {
+        btn.addEventListener("click", () => {
+            collectionMode = btn.dataset.mode;
+            const firstVisible = getVisiblePlaces()[0];
+            if (firstVisible) {
+                selectedPlaceId = firstVisible.id;
+                languageSelect.value = selectedPlaceId;
+                currentIndex = 0;
+            }
+            renderAll();
+        });
+    });
+    routeGoal?.addEventListener("change", () => {
+        renderRecommendation();
+        renderJourney();
+    });
+    sortCulture?.addEventListener("change", () => {
+        sortMode = sortCulture.value;
+        const firstVisible = getVisiblePlaces()[0];
+        if (firstVisible && !getVisiblePlaces().some(place => place.id === selectedPlaceId)) {
+            selectedPlaceId = firstVisible.id;
+            languageSelect.value = selectedPlaceId;
+            currentIndex = 0;
+        }
+        renderAll();
+    });
+    sessionTarget?.addEventListener("change", () => {
+        targetCount = Number(sessionTarget.value) || 3;
+        renderJourney();
+        updateMetrics();
+    });
+    compareSelect.addEventListener("change", renderCompare);
+    randomCulture?.addEventListener("click", () => {
+        const visible = getVisiblePlaces();
+        const pool = visible.length ? visible : places;
+        const randomPlace = pool[Math.floor(Math.random() * pool.length)];
+        selectedPlaceId = randomPlace.id;
+        selectedRegion = randomPlace.region;
+        languageSelect.value = selectedPlaceId;
+        currentIndex = 0;
+        markExplored(selectedPlaceId);
+        renderAll();
+        setActiveFlow("latihan");
+        showToast(`Rute acak membuka ${randomPlace.label}.`);
+    });
+    focusPapua?.addEventListener("click", () => {
+        selectRegion("Papua Raya");
+        document.getElementById("jelajah-region").scrollIntoView({ behavior: "smooth", block: "start" });
+        showToast("Fokus dipindahkan ke Papua Raya.");
+    });
+    quickQuiz?.addEventListener("click", () => {
+        const visible = getVisiblePlaces();
+        const currentPosition = Math.max(0, visible.findIndex(place => place.id === selectedPlaceId));
+        const nextPlace = visible[(currentPosition + 1) % Math.max(visible.length, 1)] || places[0];
+        selectedPlaceId = nextPlace.id;
+        selectedRegion = nextPlace.region;
+        languageSelect.value = selectedPlaceId;
+        currentIndex = 0;
+        renderAll();
+        document.getElementById("languageQuizQuestion").scrollIntoView({ behavior: "smooth", block: "center" });
+        setActiveFlow("quiz-budaya");
+    });
+    copyMission?.addEventListener("click", async () => {
+        const selected = getSelectedPlace();
+        const mission = `Misi ${selected.label}: hafalkan "${selected.cards[0][0]}", pelajari ${selected.food[0]}, kunjungi cerita ${selected.destination[0]}, lalu jawab quiz budaya.`;
+        try {
+            await navigator.clipboard.writeText(mission);
+            showToast("Misi belajar disalin.");
+        } catch {
+            showToast(mission);
+        }
+    });
+    toggleFavorite.addEventListener("click", () => {
+        toggleSetValue("favorites", selectedPlaceId);
+        showToast((progress.favorites || []).includes(selectedPlaceId) ? "Daerah masuk favorit." : "Daerah dihapus dari favorit.");
+        renderAll();
+    });
+    markMastered.addEventListener("click", () => {
+        toggleSetValue("mastered", selectedPlaceId);
+        showToast((progress.mastered || []).includes(selectedPlaceId) ? "Daerah ditandai dikuasai." : "Status dikuasai dibatalkan.");
+        renderAll();
+    });
+    listenWord.addEventListener("click", () => {
+        const selected = getSelectedPlace();
+        const card = selected.cards[currentIndex % selected.cards.length];
+        if (!("speechSynthesis" in window)) {
+            showToast("Browser belum mendukung suara otomatis.");
+            return;
+        }
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(`${card[0]}. Artinya ${card[1]}.`);
+        utterance.lang = "id-ID";
+        utterance.rate = 0.88;
+        window.speechSynthesis.speak(utterance);
+    });
+    nextCultureQuiz.addEventListener("click", () => {
+        const visible = getVisiblePlaces();
+        const currentPosition = Math.max(0, visible.findIndex(place => place.id === selectedPlaceId));
+        const nextPlace = visible[(currentPosition + 1) % Math.max(visible.length, 1)] || places[(places.findIndex(place => place.id === selectedPlaceId) + 1) % places.length];
+        selectedPlaceId = nextPlace.id;
+        selectedRegion = nextPlace.region;
+        languageSelect.value = selectedPlaceId;
+        currentIndex = 0;
+        renderAll();
+    });
+    startRecommendedRoute?.addEventListener("click", () => {
+        const placeId = startRecommendedRoute.dataset.place;
+        if (!placeId) return;
+        selectedPlaceId = placeId;
+        selectedRegion = getSelectedPlace().region;
+        languageSelect.value = selectedPlaceId;
+        currentIndex = 0;
+        markExplored(selectedPlaceId);
+        renderAll();
+        document.getElementById("latihan").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    resetLanguageProgress?.addEventListener("click", () => {
+        progress.reviewed = 0;
+        progress.correct = 0;
+        progress.explored = [];
+        progress.quizDone = 0;
+        progress.favorites = [];
+        progress.mastered = [];
+        progress.streak = 0;
+        progress.lastActiveDay = "";
+        collectionMode = "semua";
+        selectedRegion = "Semua";
+        selectedPlaceId = "jawa";
+        languageSelect.value = selectedPlaceId;
+        if (languageSearch) languageSearch.value = "";
+        currentIndex = 0;
+        showToast("Progress Wonderful Indonesia direset.");
         renderAll();
     });
 
     bindIndonesiaMap();
+    if ("IntersectionObserver" in window) {
+        const flowObserver = new IntersectionObserver(entries => {
+            const visible = entries
+                .filter(entry => entry.isIntersecting)
+                .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (visible?.target?.id) setActiveFlow(visible.target.id);
+        }, { rootMargin: "-30% 0px -55% 0px", threshold: [0.18, 0.35, 0.6] });
+        ["jelajah-region", "latihan", "quiz-budaya"].forEach(id => {
+            const section = document.getElementById(id);
+            if (section) flowObserver.observe(section);
+        });
+    }
     renderAll();
 }
 

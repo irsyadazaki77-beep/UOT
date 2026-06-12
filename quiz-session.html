@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#08111f">
+    <title>Quiz Focus Room - Universe Of Tech</title>
+    <meta name="description" content="Ruang pengerjaan quiz fullscreen Universe Of Tech.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="quiz-session.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+</head>
+<body>
+    <main class="focus-room" id="focusRoom">
+        <header class="focus-header">
+            <a class="focus-brand" href="quiz.html" id="exitLink" aria-label="Keluar ke halaman quiz">
+                <img src="logo.png" alt="" aria-hidden="true">
+                <span>Focus Room</span>
+            </a>
+
+            <div class="focus-session-meta" aria-label="Informasi sesi">
+                <span id="sessionCategory">Semua Materi</span>
+                <span id="sessionDifficulty">Campuran</span>
+                <span id="sessionMode">Practice</span>
+            </div>
+
+            <div class="focus-header-actions">
+                <button class="icon-button" id="soundButton" type="button" aria-label="Nonaktifkan suara" aria-pressed="true">🔊</button>
+                <button class="icon-button" id="themeButton" type="button" aria-label="Aktifkan tema terang" aria-pressed="true">☀️</button>
+                <button class="exit-button" id="exitButton" type="button">Keluar</button>
+            </div>
+        </header>
+
+        <div class="focus-progress" id="focusProgress" role="progressbar" aria-label="Progres quiz" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <span id="progressBar"></span>
+        </div>
+
+        <section class="focus-layout">
+            <article class="question-stage" id="questionStage">
+                <div class="question-overline">
+                    <span id="questionCounter">Soal 1/10</span>
+                    <span id="questionTopic">Programming · Normal</span>
+                </div>
+
+                <h1 id="questionText">Menyiapkan pertanyaan...</h1>
+                <div class="answer-list" id="answerList" aria-label="Pilihan jawaban"></div>
+                <div class="answer-feedback" id="answerFeedback" role="status" aria-live="polite"></div>
+            </article>
+
+            <aside class="focus-sidebar" id="focusSidebar">
+                <div class="timer-card" id="timerCard">
+                    <span>Sisa waktu</span>
+                    <strong id="timerValue">00:00</strong>
+                </div>
+
+                <div class="session-stats">
+                    <div><span>Benar</span><strong id="correctStat">0</strong></div>
+                    <div><span>Salah</span><strong id="wrongStat">0</strong></div>
+                    <div><span>Ragu</span><strong id="flaggedStat">0</strong></div>
+                    <div><span>Combo</span><strong id="streakStat">x0</strong></div>
+                </div>
+
+                <div class="question-nav-head">
+                    <strong>Navigator soal</strong>
+                    <button id="closeNavigator" type="button" aria-label="Tutup navigator">×</button>
+                </div>
+                <div class="question-navigator" id="questionNavigator"></div>
+                <div class="nav-legend">
+                    <span><i class="current"></i>Aktif</span>
+                    <span><i class="answered"></i>Terjawab</span>
+                    <span><i class="flagged"></i>Ragu</span>
+                </div>
+            </aside>
+        </section>
+
+        <footer class="focus-actions">
+            <div class="assist-actions">
+                <button class="action-button subtle" id="navigatorButton" type="button">Nomor Soal</button>
+                <button class="action-button subtle" id="hintButton" type="button">Hint</button>
+                <button class="action-button subtle" id="fiftyButton" type="button">50:50</button>
+                <button class="action-button subtle" id="bookmarkButton" type="button">Simpan</button>
+                <button class="action-button subtle" id="flagButton" type="button">Ragu</button>
+            </div>
+            <div class="primary-actions">
+                <button class="action-button secondary" id="skipButton" type="button">Lewati</button>
+                <button class="action-button primary" id="nextButton" type="button">Berikutnya</button>
+            </div>
+        </footer>
+
+        <section class="result-overlay" id="resultOverlay" aria-live="polite" hidden>
+            <div class="result-panel">
+                <span class="result-kicker">Sesi selesai</span>
+                <div class="result-score" id="resultScore">0%</div>
+                <h2 id="resultTitle">Hasil latihanmu sudah siap.</h2>
+                <p id="resultMessage"></p>
+                <div class="result-stats">
+                    <div><span>Benar</span><strong id="resultCorrect">0</strong></div>
+                    <div><span>Salah/Kosong</span><strong id="resultWrong">0</strong></div>
+                    <div><span>Best combo</span><strong id="resultStreak">0</strong></div>
+                    <div><span>XP didapat</span><strong id="resultXp">0</strong></div>
+                </div>
+                <div class="result-actions">
+                    <button class="action-button secondary" id="reviewResultButton" type="button">Lihat Review</button>
+                    <button class="action-button primary" id="retrySessionButton" type="button">Ulangi Sesi</button>
+                    <a class="action-button subtle" id="resultBackLink" href="quiz.html">Kembali</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="focus-toast" id="focusToast" role="status" aria-live="polite"></div>
+    </main>
+
+    <script src="app-data.js"></script>
+    <script src="sound-engine.js"></script>
+    <script src="rpg-engine.js"></script>
+    <script src="quiz-session.js"></script>
+</body>
+</html>

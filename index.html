@@ -1,14 +1,31 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Universe Of Tech - Belajar Jadi Seru</title>
+    <meta name="description"
+        content="Universe Of Tech adalah platform pembelajaran tech interaktif berbasis RPG harian. Pelajari coding, SQL database, UI/UX, dan cyber security secara adiktif." />
+    <link rel="canonical" href="http://localhost:8000/index.html" />
+    <meta property="og:title" content="Universe Of Tech - Belajar Jadi Seru" />
+    <meta property="og:description"
+        content="Kembangkan skill teknologi Anda dengan quest interaktif harian, leaderboard mingguan, dan asisten mentor AI." />
+    <meta property="og:image" content="logo.png" />
+    <meta property="og:type" content="website" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Universe Of Tech",
+      "url": "http://localhost:8000/index.html",
+      "description": "Platform pembelajaran teknologi interaktif berbasis RPG."
+    }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --green: #32d66b;
@@ -27,8 +44,8 @@
 
             /* Theme specific variables */
             --bg-page: radial-gradient(circle at top left, rgba(50, 214, 107, 0.2), transparent 30%),
-                       radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.18), transparent 28%),
-                       linear-gradient(180deg, #fbfdff 0%, #eef7f2 100%);
+                radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.18), transparent 28%),
+                linear-gradient(180deg, #fbfdff 0%, #eef7f2 100%);
             --navbar-bg: rgba(255, 255, 255, 0.82);
             --card-bg: rgba(255, 255, 255, 0.82);
             --badge-bg: rgba(255, 255, 255, 0.86);
@@ -46,8 +63,8 @@
             --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.3);
 
             --bg-page: radial-gradient(circle at top left, rgba(50, 214, 107, 0.15), transparent 30%),
-                       radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.12), transparent 28%),
-                       linear-gradient(180deg, #0d1726 0%, #080f1a 100%);
+                radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.12), transparent 28%),
+                linear-gradient(180deg, #0d1726 0%, #080f1a 100%);
             --navbar-bg: rgba(17, 32, 51, 0.85);
             --card-bg: rgba(17, 32, 51, 0.75);
             --badge-bg: rgba(17, 32, 51, 0.86);
@@ -157,6 +174,7 @@
             z-index: 10;
             transition: box-shadow 0.3s ease;
         }
+
         body.dark-theme .navbar {
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 1px 1px rgba(255, 255, 255, 0.05);
         }
@@ -215,7 +233,7 @@
             background: linear-gradient(135deg, var(--green), var(--blue));
             box-shadow: 0 8px 20px rgba(50, 214, 107, 0.25);
         }
-        
+
         .dark-theme .nav-links a:hover {
             background: rgba(50, 214, 107, 0.15);
             color: var(--green);
@@ -406,6 +424,7 @@
                 opacity: 0;
                 transform: translateY(8px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -1273,6 +1292,7 @@
                 gap: 10px;
             }
         }
+
         /* --- NEW FEATURE WORK BY ANTIGRAVITY --- */
 
         /* Scroll Progress Indicator */
@@ -1285,6 +1305,7 @@
             background: transparent;
             z-index: 9999;
         }
+
         .scroll-progress-bar {
             height: 100%;
             width: 0%;
@@ -1299,6 +1320,7 @@
             transform: translateY(30px);
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .reveal.revealed {
             opacity: 1;
             transform: translateY(0);
@@ -1309,52 +1331,65 @@
             background: var(--navbar-bg);
             border: 1px solid var(--border);
         }
+
         .badge {
             background: var(--badge-bg);
             border: 1px solid var(--border);
         }
+
         .stat-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
         }
+
         .feature-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
         }
+
         .course-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
         }
+
         .rank-card,
         .achievement-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
         }
+
         .rank-item {
             background: var(--item-bg);
         }
+
         .achievement {
             background: var(--item-bg);
         }
+
         .phone {
             background: var(--dark-phone-bg);
         }
+
         .dark-theme .screen {
             background: linear-gradient(180deg, #112033 0%, #0d1b2c 100%);
             color: #f4f8fb;
         }
+
         .dark-theme .profile-pill {
             background: #172a42;
             color: #f4f8fb;
         }
+
         .dark-theme .path-item {
             background: #172a42;
             border-color: #1e2f47;
             color: #f4f8fb;
         }
+
         .dark-theme .path-icon {
             background: #0d1b2c;
         }
+
         .dark-theme .floating-card {
             background: rgba(17, 32, 51, 0.92);
             border-color: #1e2f47;
@@ -1375,6 +1410,7 @@
             transition: all 0.25s ease;
             font-size: 18px;
         }
+
         .theme-toggle-btn:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-soft);
@@ -1384,6 +1420,7 @@
         .screen {
             transition: all 0.3s ease;
         }
+
         .phone-btn-active {
             border: 2px solid var(--green) !important;
             box-shadow: 0 0 10px rgba(50, 214, 107, 0.3);
@@ -1397,10 +1434,12 @@
             margin-top: 30px;
             align-items: center;
         }
+
         .showcase-tabs {
             display: grid;
             gap: 15px;
         }
+
         .showcase-tab {
             display: flex;
             align-items: center;
@@ -1412,15 +1451,18 @@
             cursor: pointer;
             transition: all 0.28s ease;
         }
+
         .showcase-tab:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-soft);
         }
+
         .showcase-tab.active {
             border-color: var(--green);
             background: linear-gradient(135deg, rgba(50, 214, 107, 0.08), transparent);
             box-shadow: var(--shadow-soft);
         }
+
         .showcase-tab-icon {
             width: 52px;
             height: 52px;
@@ -1430,20 +1472,24 @@
             font-size: 24px;
             background: var(--item-bg);
         }
+
         .showcase-tab.active .showcase-tab-icon {
             background: var(--green);
             color: white;
         }
+
         .showcase-tab h3 {
             font-size: 18px;
             letter-spacing: -0.03em;
             margin-bottom: 4px;
         }
+
         .showcase-tab p {
             font-size: 13px;
             color: var(--muted);
             line-height: 1.5;
         }
+
         .showcase-display {
             background: #102033;
             border-radius: 36px;
@@ -1456,6 +1502,7 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
         .showcase-display::before {
             content: "";
             position: absolute;
@@ -1463,6 +1510,7 @@
             background: radial-gradient(circle at 70% 30%, rgba(79, 140, 255, 0.15), transparent 50%);
             pointer-events: none;
         }
+
         .showcase-screen {
             display: none;
             color: white;
@@ -1470,9 +1518,11 @@
             position: relative;
             z-index: 1;
         }
+
         .showcase-screen.active {
             display: block;
         }
+
         .showcase-screen-header {
             font-size: 14px;
             font-weight: 900;
@@ -1484,23 +1534,29 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         /* Demo Inner UI */
-        .showcase-quiz-demo, .showcase-streak-demo, .showcase-tracker-demo, .showcase-leaderboard-demo {
+        .showcase-quiz-demo,
+        .showcase-streak-demo,
+        .showcase-tracker-demo,
+        .showcase-leaderboard-demo {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
             padding: 24px;
         }
+
         .demo-question {
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 15px;
         }
+
         .demo-options {
             display: grid;
             gap: 10px;
         }
+
         .demo-opt {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -1512,18 +1568,22 @@
             text-align: left;
             transition: all 0.2s ease;
         }
+
         .demo-opt:hover {
             background: rgba(255, 255, 255, 0.16);
             transform: translateX(3px);
         }
+
         .demo-opt.correct-clicked {
             background: rgba(50, 214, 107, 0.25) !important;
             border-color: var(--green) !important;
         }
+
         .demo-opt.wrong-clicked {
             background: rgba(255, 94, 168, 0.25) !important;
             border-color: #ff5ea8 !important;
         }
+
         .demo-feedback {
             margin-top: 15px;
             font-size: 14px;
@@ -1534,15 +1594,18 @@
         .showcase-streak-demo {
             text-align: center;
         }
+
         .streak-flame {
             font-size: 48px;
             animation: pulse 1.5s infinite;
         }
+
         .streak-days {
             font-size: 24px;
             font-weight: 900;
             margin: 10px 0;
         }
+
         .btn-sm {
             padding: 9px 15px;
             font-size: 12px;
@@ -1566,15 +1629,25 @@
             margin-bottom: 8px;
             font-weight: 700;
         }
-        .demo-leader-item.gold { border-left: 4px solid var(--yellow); }
-        .demo-leader-item.silver { border-left: 4px solid #ced4da; }
-        .demo-leader-item.bronze { border-left: 4px solid #cd7f32; }
+
+        .demo-leader-item.gold {
+            border-left: 4px solid var(--yellow);
+        }
+
+        .demo-leader-item.silver {
+            border-left: 4px solid #ced4da;
+        }
+
+        .demo-leader-item.bronze {
+            border-left: 4px solid #cd7f32;
+        }
 
         /* Diagnostic Quiz Container */
         .diagnostic-container {
             max-width: 760px;
             margin: 30px auto 0;
         }
+
         .diagnostic-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -1584,13 +1657,16 @@
             position: relative;
             overflow: hidden;
         }
+
         .diag-step {
             display: none;
             animation: fadeIn 0.4s ease;
         }
+
         .diag-step.active {
             display: block;
         }
+
         .diag-number {
             font-size: 12px;
             font-weight: 900;
@@ -1600,17 +1676,20 @@
             display: block;
             margin-bottom: 12px;
         }
+
         .diag-step h3 {
             font-size: 24px;
             letter-spacing: -0.04em;
             margin-bottom: 24px;
             line-height: 1.2;
         }
+
         .diag-options {
             display: grid;
             gap: 12px;
             margin-bottom: 24px;
         }
+
         .diag-pill {
             background: var(--item-bg);
             border: 1px solid var(--border);
@@ -1623,16 +1702,19 @@
             transition: all 0.25s ease;
             font-size: 15px;
         }
+
         .diag-pill:hover {
             transform: translateY(-2px);
             border-color: var(--blue);
             box-shadow: var(--shadow-soft);
         }
+
         .diag-pill.selected {
             background: linear-gradient(135deg, var(--green), var(--green-dark));
             color: white;
             border-color: transparent;
         }
+
         .diag-actions {
             display: flex;
             justify-content: space-between;
@@ -1643,6 +1725,7 @@
         .diag-result-content {
             margin-top: 15px;
         }
+
         .diag-result-badge {
             display: inline-block;
             padding: 8px 16px;
@@ -1653,14 +1736,17 @@
             font-size: 14px;
             margin-bottom: 15px;
         }
+
         .dark-theme .diag-result-badge {
             background: rgba(50, 214, 107, 0.15);
         }
+
         .diag-roadmap {
             display: grid;
             gap: 15px;
             margin: 20px 0;
         }
+
         .diag-road-item {
             display: flex;
             align-items: flex-start;
@@ -1669,6 +1755,7 @@
             padding: 16px;
             border-radius: 20px;
         }
+
         .road-icon {
             width: 40px;
             height: 40px;
@@ -1679,11 +1766,13 @@
             place-items: center;
             font-size: 18px;
         }
+
         .diag-road-item strong {
             display: block;
             font-size: 14px;
             margin-bottom: 3px;
         }
+
         .diag-road-item p {
             font-size: 12px;
             color: var(--muted);
@@ -1696,6 +1785,7 @@
             display: grid;
             gap: 15px;
         }
+
         .faq-item {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -1703,6 +1793,7 @@
             overflow: hidden;
             transition: all 0.3s ease;
         }
+
         .faq-question {
             width: 100%;
             display: flex;
@@ -1717,22 +1808,27 @@
             font-size: 16px;
             color: var(--dark);
         }
+
         .faq-arrow {
             font-size: 12px;
             color: var(--muted);
             transition: transform 0.3s ease;
         }
+
         .faq-item.open .faq-arrow {
             transform: rotate(180deg);
         }
+
         .faq-answer {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
+
         .faq-answer-inner {
             padding: 0 28px 22px;
         }
+
         .faq-answer p {
             color: var(--muted);
             line-height: 1.7;
@@ -1747,6 +1843,7 @@
             gap: 20px;
             margin-top: 30px;
         }
+
         .testimonial-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -1755,33 +1852,40 @@
             box-shadow: var(--shadow-soft);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .testimonial-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow);
         }
+
         .testi-header {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 15px;
         }
+
         .testi-avatar {
             font-size: 32px;
         }
+
         .testi-header h4 {
             font-size: 15px;
             letter-spacing: -0.02em;
         }
+
         .testi-header span {
             display: block;
             font-size: 11px;
             color: var(--muted);
             font-weight: 700;
         }
+
         .testi-rating {
             margin-left: auto;
             font-size: 12px;
         }
+
         .testi-text {
             font-size: 13.5px;
             line-height: 1.65;
@@ -1808,12 +1912,15 @@
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             max-width: 320px;
         }
+
         .dark-theme .live-ticker {
             background: rgba(17, 32, 51, 0.9);
         }
+
         .live-ticker.show {
             transform: translateX(0);
         }
+
         .ticker-badge {
             width: 36px;
             height: 36px;
@@ -1823,20 +1930,25 @@
             place-items: center;
             font-size: 18px;
         }
+
         .dark-theme .ticker-badge {
             background: #172a42;
         }
+
         .ticker-info {
             font-size: 12px;
             line-height: 1.4;
         }
+
         .ticker-info strong {
             display: block;
             font-weight: 800;
         }
+
         .ticker-info span {
             color: var(--muted);
         }
+
         .ticker-close {
             background: transparent;
             border: 0;
@@ -1850,10 +1962,13 @@
 
         /* Responsive styling for showcase & testimonials */
         @media (max-width: 980px) {
-            .showcase-layout, .testimonials-grid {
+
+            .showcase-layout,
+            .testimonials-grid {
                 grid-template-columns: 1fr;
             }
         }
+
         @media (max-width: 720px) {
             .live-ticker {
                 bottom: 12px;
@@ -1864,6 +1979,8 @@
         }
     </style>
     <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -1955,39 +2072,39 @@
                             <div class="progress-bar">
                                 <div class="progress-fill"></div>
                             </div>
-                              <div class="path">
-                            <div class="path-item" id="path-materi" onclick="changePhoneScreen('materi')">
-                                <div class="path-icon">📘</div>
-                                <div>
-                                    <h4>Materi Singkat</h4>
-                                    <span>3 menit baca</span>
+                            <div class="path">
+                                <div class="path-item" id="path-materi" onclick="changePhoneScreen('materi')">
+                                    <div class="path-icon">📘</div>
+                                    <div>
+                                        <h4>Materi Singkat</h4>
+                                        <span>3 menit baca</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="path-item" id="path-quiz" onclick="changePhoneScreen('quiz')">
-                                <div class="path-icon">⚡</div>
-                                <div>
-                                    <h4>Quiz Cepat</h4>
-                                    <span>10 soal adaptif</span>
+                                <div class="path-item" id="path-quiz" onclick="changePhoneScreen('quiz')">
+                                    <div class="path-icon">⚡</div>
+                                    <div>
+                                        <h4>Quiz Cepat</h4>
+                                        <span>10 soal adaptif</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="path-item" id="path-audio" onclick="changePhoneScreen('audio')">
-                                <div class="path-icon">🎧</div>
-                                <div>
-                                    <h4>Review Audio</h4>
-                                    <span>Belajar sambil rebahan produktif</span>
+                                <div class="path-item" id="path-audio" onclick="changePhoneScreen('audio')">
+                                    <div class="path-icon">🎧</div>
+                                    <div>
+                                        <h4>Review Audio</h4>
+                                        <span>Belajar sambil rebahan produktif</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="path-item" id="path-challenge" onclick="changePhoneScreen('challenge')">
-                                <div class="path-icon">🏅</div>
-                                <div>
-                                    <h4>Final Challenge</h4>
-                                    <span>Buka sertifikat mini</span>
+                                <div class="path-item" id="path-challenge" onclick="changePhoneScreen('challenge')">
+                                    <div class="path-icon">🏅</div>
+                                    <div>
+                                        <h4>Final Challenge</h4>
+                                        <span>Buka sertifikat mini</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
 
         <section id="fitur" class="section">
@@ -2006,7 +2123,8 @@
                         <div class="showcase-tab-icon">🧩</div>
                         <div>
                             <h3>Quiz Adaptif</h3>
-                            <p>Soal menyesuaikan level pengguna secara real-time agar tidak terlalu gampang atau menyiksa.</p>
+                            <p>Soal menyesuaikan level pengguna secara real-time agar tidak terlalu gampang atau
+                                menyiksa.</p>
                         </div>
                     </div>
                     <div class="showcase-tab" data-feature="streak">
@@ -2055,8 +2173,10 @@
                         <div class="showcase-streak-demo">
                             <div class="streak-flame">🔥</div>
                             <div class="streak-days" id="demoStreakVal">12 Hari Streak!</div>
-                            <p style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 15px;">Lengkapi quiz hari ini untuk menjaga api streak tetap menyala.</p>
-                            <button class="btn btn-primary btn-sm" id="claimStreakBtn" onclick="increaseStreakDemo(this)">Klaim Streak Hari Ini</button>
+                            <p style="font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 15px;">Lengkapi quiz
+                                hari ini untuk menjaga api streak tetap menyala.</p>
+                            <button class="btn btn-primary btn-sm" id="claimStreakBtn"
+                                onclick="increaseStreakDemo(this)">Klaim Streak Hari Ini</button>
                         </div>
                     </div>
 
@@ -2069,19 +2189,34 @@
                                 <span>Dasar Pemrograman</span>
                                 <span>72%</span>
                             </div>
-                            <div class="progress-bar" style="margin-top: 5px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;"><div class="progress-fill" style="width: 72%; height: 100%; background: var(--green); border-radius: 4px;"></div></div>
-                            
+                            <div class="progress-bar"
+                                style="margin-top: 5px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                <div class="progress-fill"
+                                    style="width: 72%; height: 100%; background: var(--green); border-radius: 4px;">
+                                </div>
+                            </div>
+
                             <div class="tracker-row" style="margin-top: 15px;">
                                 <span>Database & SQL</span>
                                 <span>48%</span>
                             </div>
-                            <div class="progress-bar" style="margin-top: 5px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;"><div class="progress-fill" style="width: 48%; height: 100%; background: var(--blue); border-radius: 4px;"></div></div>
-                            
+                            <div class="progress-bar"
+                                style="margin-top: 5px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                <div class="progress-fill"
+                                    style="width: 48%; height: 100%; background: var(--blue); border-radius: 4px;">
+                                </div>
+                            </div>
+
                             <div class="tracker-row" style="margin-top: 15px;">
                                 <span>UI/UX Design</span>
                                 <span>63%</span>
                             </div>
-                            <div class="progress-bar" style="margin-top: 5px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;"><div class="progress-fill" style="width: 63%; height: 100%; background: var(--purple); border-radius: 4px;"></div></div>
+                            <div class="progress-bar"
+                                style="margin-top: 5px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                <div class="progress-fill"
+                                    style="width: 63%; height: 100%; background: var(--purple); border-radius: 4px;">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -2102,7 +2237,9 @@
                                 <span>🥉 Daniel</span>
                                 <span>8,210 XP</span>
                             </div>
-                            <button class="btn btn-ghost btn-sm" style="margin-top: 15px; width: 100%; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.1);" onclick="boostXPDemo(this)">Tambahkan +100 XP (Simulasi)</button>
+                            <button class="btn btn-ghost btn-sm"
+                                style="margin-top: 15px; width: 100%; background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.1);"
+                                onclick="boostXPDemo(this)">Tambahkan +100 XP (Simulasi)</button>
                         </div>
                     </div>
                 </div>
@@ -2125,17 +2262,21 @@
                     <h3>Statistik</h3>
                     <p>Ringkasan performa, akurasi quiz, streak, waktu belajar, dan materi yang masih perlu dikejar.</p>
                 </div>
-                <div class="feature-card" id="snbt" role="link" tabindex="0" onclick="location.href='snbt.html'" onkeydown="if(event.key==='Enter') location.href='snbt.html'">
+                <div class="feature-card" id="snbt" role="link" tabindex="0" onclick="location.href='snbt.html'"
+                    onkeydown="if(event.key==='Enter') location.href='snbt.html'">
                     <div class="feature-icon">🎓</div>
                     <h3>TKA</h3>
                     <p>Latihan soal, tryout singkat, pembahasan, dan tracker target untuk persiapan masuk kampus.</p>
                 </div>
-                <div class="feature-card" id="library" role="link" tabindex="0" onclick="location.href='library.html'" onkeydown="if(event.key==='Enter') location.href='library.html'">
+                <div class="feature-card" id="library" role="link" tabindex="0" onclick="location.href='library.html'"
+                    onkeydown="if(event.key==='Enter') location.href='library.html'">
                     <div class="feature-icon">📚</div>
                     <h3>Library</h3>
                     <p>Kumpulan modul, rangkuman, flashcard, audio review, dan materi favorit dalam satu tempat.</p>
                 </div>
-                <div class="feature-card" id="bahasa-daerah" role="link" tabindex="0" onclick="location.href='bahasa-daerah.html'" onkeydown="if(event.key==='Enter') location.href='bahasa-daerah.html'">
+                <div class="feature-card" id="bahasa-daerah" role="link" tabindex="0"
+                    onclick="location.href='bahasa-daerah.html'"
+                    onkeydown="if(event.key==='Enter') location.href='bahasa-daerah.html'">
                     <div class="feature-icon">🗣️</div>
                     <h3>Wonderful Indonesia</h3>
                     <p>Ruang belajar budaya, kosakata lokal, percakapan dasar, dan kekayaan Indonesia.</p>
@@ -2150,7 +2291,8 @@
                     <div class="section-kicker">Rekomendasi Jalur</div>
                     <h2>Temukan jalur belajarmu dalam 30 detik.</h2>
                 </div>
-                <p>Jawab 3 pertanyaan singkat dan algoritma pintar kami akan langsung membuat peta jalan belajar khusus buat kamu.</p>
+                <p>Jawab 3 pertanyaan singkat dan algoritma pintar kami akan langsung membuat peta jalan belajar khusus
+                    buat kamu.</p>
             </div>
 
             <div class="diagnostic-container">
@@ -2160,10 +2302,14 @@
                         <span class="diag-number">1 / 3</span>
                         <h3>Apa fokus belajar yang paling ingin kamu kuasai saat ini?</h3>
                         <div class="diag-options">
-                            <button class="diag-pill" data-val="programming" onclick="selectDiagOption(1, this)">💻 Dasar Pemrograman</button>
-                            <button class="diag-pill" data-val="database" onclick="selectDiagOption(1, this)">🗄️ Database & SQL</button>
-                            <button class="diag-pill" data-val="design" onclick="selectDiagOption(1, this)">🎨 UI/UX Design</button>
-                            <button class="diag-pill" data-val="analytics" onclick="selectDiagOption(1, this)">📊 Business Analytics</button>
+                            <button class="diag-pill" data-val="programming" onclick="selectDiagOption(1, this)">💻
+                                Dasar Pemrograman</button>
+                            <button class="diag-pill" data-val="database" onclick="selectDiagOption(1, this)">🗄️
+                                Database & SQL</button>
+                            <button class="diag-pill" data-val="design" onclick="selectDiagOption(1, this)">🎨 UI/UX
+                                Design</button>
+                            <button class="diag-pill" data-val="analytics" onclick="selectDiagOption(1, this)">📊
+                                Business Analytics</button>
                         </div>
                         <div class="diag-actions">
                             <div></div>
@@ -2175,9 +2321,12 @@
                         <span class="diag-number">2 / 3</span>
                         <h3>Berapa banyak waktu yang bisa kamu luangkan setiap harinya?</h3>
                         <div class="diag-options">
-                            <button class="diag-pill" data-val="10" onclick="selectDiagOption(2, this)">⚡ 10 Menit/hari (Micro-learning)</button>
-                            <button class="diag-pill" data-val="30" onclick="selectDiagOption(2, this)">🚀 30 Menit/hari (Konsisten)</button>
-                            <button class="diag-pill" data-val="60" onclick="selectDiagOption(2, this)">🔥 1 Jam+/hari (Intensif)</button>
+                            <button class="diag-pill" data-val="10" onclick="selectDiagOption(2, this)">⚡ 10 Menit/hari
+                                (Micro-learning)</button>
+                            <button class="diag-pill" data-val="30" onclick="selectDiagOption(2, this)">🚀 30 Menit/hari
+                                (Konsisten)</button>
+                            <button class="diag-pill" data-val="60" onclick="selectDiagOption(2, this)">🔥 1 Jam+/hari
+                                (Intensif)</button>
                         </div>
                         <div class="diag-actions">
                             <button class="btn btn-ghost" onclick="prevDiagStep(2)">➔ Kembali</button>
@@ -2189,13 +2338,17 @@
                         <span class="diag-number">3 / 3</span>
                         <h3>Apa tingkat pengalaman belajarmu saat ini di bidang ini?</h3>
                         <div class="diag-options">
-                            <button class="diag-pill" data-val="newbie" onclick="selectDiagOption(3, this)">🥚 Pemula Sekali (Belum pernah coba)</button>
-                            <button class="diag-pill" data-val="intermediate" onclick="selectDiagOption(3, this)">🐣 Pernah Belajar (Paham dasar-dasar)</button>
-                            <button class="diag-pill" data-val="pro" onclick="selectDiagOption(3, this)">🦅 Mahir (Ingin mempertajam skill)</button>
+                            <button class="diag-pill" data-val="newbie" onclick="selectDiagOption(3, this)">🥚 Pemula
+                                Sekali (Belum pernah coba)</button>
+                            <button class="diag-pill" data-val="intermediate" onclick="selectDiagOption(3, this)">🐣
+                                Pernah Belajar (Paham dasar-dasar)</button>
+                            <button class="diag-pill" data-val="pro" onclick="selectDiagOption(3, this)">🦅 Mahir (Ingin
+                                mempertajam skill)</button>
                         </div>
                         <div class="diag-actions">
                             <button class="btn btn-ghost" onclick="prevDiagStep(3)">➔ Kembali</button>
-                            <button class="btn btn-primary" onclick="calculateDiagResult()">Lihat Rekomendasi Jalur ➔</button>
+                            <button class="btn btn-primary" onclick="calculateDiagResult()">Lihat Rekomendasi Jalur
+                                ➔</button>
                         </div>
                     </div>
                     <!-- Result Step -->
@@ -2204,7 +2357,7 @@
                         <div class="diag-result-content">
                             <div class="diag-result-badge" id="diag-res-badge">Dasar Pemrograman</div>
                             <p id="diag-res-desc" style="font-size: 14.5px; margin-bottom: 20px; line-height: 1.6;"></p>
-                            
+
                             <div class="diag-roadmap">
                                 <div class="diag-road-item">
                                     <span class="road-icon">📘</span>
@@ -2224,14 +2377,16 @@
                                     <span class="road-icon">🏆</span>
                                     <div>
                                         <strong id="diag-road-title-3">Hari 11-15: Proyek Mini & Ujian</strong>
-                                        <p id="diag-road-3">Membuat mini project dan klaim sertifikat Universe Of Tech.</p>
+                                        <p id="diag-road-3">Membuat mini project dan klaim sertifikat Universe Of Tech.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="diag-actions" style="margin-top: 25px;">
                                 <button class="btn btn-ghost" onclick="resetDiag()">Coba Lagi ↺</button>
-                                <a id="diag-start-btn" class="btn btn-primary" href="materi.html">Mulai Belajar Jalur Ini 🚀</a>
+                                <a id="diag-start-btn" class="btn btn-primary" href="materi.html">Mulai Belajar Jalur
+                                    Ini 🚀</a>
                             </div>
                         </div>
                     </div>
@@ -2367,7 +2522,8 @@
                     <div class="section-kicker">Review Pelajar</div>
                     <h2>Apa kata mereka yang belajar di Universe Of Tech?</h2>
                 </div>
-                <p>Universe Of Tech telah membantu ribuan siswa dan mahasiswa membangun kebiasaan belajar harian yang konsisten dan seru.</p>
+                <p>Universe Of Tech telah membantu ribuan siswa dan mahasiswa membangun kebiasaan belajar harian yang
+                    konsisten dan seru.</p>
             </div>
 
             <div class="testimonials-grid reveal">
@@ -2380,9 +2536,10 @@
                         </div>
                         <span class="testi-rating">⭐⭐⭐⭐⭐</span>
                     </div>
-                    <p class="testi-text">"Belajar SQL di sini seru banget! Quiz-nya interaktif dan adaptif, ga ngebosenin kayak baca slide kuliah biasa. Berhasil dapet 25 hari streak!"</p>
+                    <p class="testi-text">"Belajar SQL di sini seru banget! Quiz-nya interaktif dan adaptif, ga
+                        ngebosenin kayak baca slide kuliah biasa. Berhasil dapet 25 hari streak!"</p>
                 </div>
-                
+
                 <div class="testimonial-card">
                     <div class="testi-header">
                         <span class="testi-avatar">👨‍💻</span>
@@ -2392,7 +2549,8 @@
                         </div>
                         <span class="testi-rating">⭐⭐⭐⭐⭐</span>
                     </div>
-                    <p class="testi-text">"Jalur belajarnya terarah. Diagnostik di awal bener-bener membantu saya buat nentuin dari mana saya harus mulai belajar dasar pemrograman."</p>
+                    <p class="testi-text">"Jalur belajarnya terarah. Diagnostik di awal bener-bener membantu saya buat
+                        nentuin dari mana saya harus mulai belajar dasar pemrograman."</p>
                 </div>
 
                 <div class="testimonial-card">
@@ -2404,7 +2562,8 @@
                         </div>
                         <span class="testi-rating">⭐⭐⭐⭐⭐</span>
                     </div>
-                    <p class="testi-text">"Latihan soal TKA-nya sangat membantu! Ringkasan materinya singkat jadi gampang dipahami pas lagi di jalan atau sambil rebahan."</p>
+                    <p class="testi-text">"Latihan soal TKA-nya sangat membantu! Ringkasan materinya singkat jadi
+                        gampang dipahami pas lagi di jalan atau sambil rebahan."</p>
                 </div>
             </div>
         </section>
@@ -2438,11 +2597,12 @@
                     </button>
                     <div class="faq-answer">
                         <div class="faq-answer-inner">
-                            <p>Ya, semua modul belajar dasar, quiz adaptif harian, dan tracking progres dasar bisa diakses 100% gratis tanpa biaya tersembunyi.</p>
+                            <p>Ya, semua modul belajar dasar, quiz adaptif harian, dan tracking progres dasar bisa
+                                diakses 100% gratis tanpa biaya tersembunyi.</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="faq-item">
                     <button class="faq-question">
                         <span>Bagaimana sistem daily streak dihitung?</span>
@@ -2450,7 +2610,10 @@
                     </button>
                     <div class="faq-answer">
                         <div class="faq-answer-inner">
-                            <p>Streak kamu bertambah 1 hari setiap kali kamu menyelesaikan minimal 1 quiz cepat atau modul materi dalam sehari. Jika dalam 24 jam kamu tidak melakukan aktivitas belajar, streak kamu akan hangus (kembali ke 0), kecuali jika kamu menggunakan fitur "Streak Freeze".</p>
+                            <p>Streak kamu bertambah 1 hari setiap kali kamu menyelesaikan minimal 1 quiz cepat atau
+                                modul materi dalam sehari. Jika dalam 24 jam kamu tidak melakukan aktivitas belajar,
+                                streak kamu akan hangus (kembali ke 0), kecuali jika kamu menggunakan fitur "Streak
+                                Freeze".</p>
                         </div>
                     </div>
                 </div>
@@ -2462,7 +2625,9 @@
                     </button>
                     <div class="faq-answer">
                         <div class="faq-answer-inner">
-                            <p>Tentu! Kami menyediakan sub-modul materi khusus TKA yang berisi kumpulan latihan soal penalaran umum, pengetahuan kuantitatif, literasi bahasa, dan pembahasan lengkap yang terupdate setiap minggunya.</p>
+                            <p>Tentu! Kami menyediakan sub-modul materi khusus TKA yang berisi kumpulan latihan soal
+                                penalaran umum, pengetahuan kuantitatif, literasi bahasa, dan pembahasan lengkap yang
+                                terupdate setiap minggunya.</p>
                         </div>
                     </div>
                 </div>
@@ -2474,7 +2639,9 @@
                     </button>
                     <div class="faq-answer">
                         <div class="faq-answer-inner">
-                            <p>Untuk saat ini, modul dan ringkasan bisa kamu simpan di Library akun kamu agar mudah dibaca di dalam browser. Fitur download PDF rangkuman belajar sedang kami kembangkan untuk rilis berikutnya.</p>
+                            <p>Untuk saat ini, modul dan ringkasan bisa kamu simpan di Library akun kamu agar mudah
+                                dibaca di dalam browser. Fitur download PDF rangkuman belajar sedang kami kembangkan
+                                untuk rilis berikutnya.</p>
                         </div>
                     </div>
                 </div>
@@ -2486,10 +2653,11 @@
                 <!-- Column 1: Brand -->
                 <div class="footer-col footer-brand">
                     <a href="#" class="brand">
-                        <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                        <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" loading="lazy" />
                         Universe Of Tech
                     </a>
-                    <p>Platform pembelajaran interaktif berbasis game harian yang bikin belajar menjadi adiktif, produktif, dan menyenangkan.</p>
+                    <p>Platform pembelajaran interaktif berbasis game harian yang bikin belajar menjadi adiktif,
+                        produktif, dan menyenangkan.</p>
                     <div class="language-select">
                         <span>🌐</span>
                         <select aria-label="Pilih Bahasa">
@@ -2660,7 +2828,7 @@
             function initTheme() {
                 const themeToggleBtn = document.getElementById("themeToggleBtn");
                 const savedTheme = localStorage.getItem("eduquest_theme") || "light";
-                
+
                 if (savedTheme === "dark") {
                     document.body.classList.add("dark-theme");
                     themeToggleBtn.textContent = "☀️";
@@ -2674,7 +2842,7 @@
                     const isDark = document.body.classList.contains("dark-theme");
                     localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
                     themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
-                    
+
                     // Add subtle click animation
                     themeToggleBtn.style.transform = "scale(0.9)";
                     setTimeout(() => themeToggleBtn.style.transform = "none", 150);
@@ -2702,17 +2870,17 @@
                         if (sessionData.correct && !localStorage.getItem("lastSyncedSessionDate")) {
                             let streakVal = parseInt(localStorage.getItem("eduquestStreak") || "12");
                             let xpVal = parseInt(localStorage.getItem("eduquestXP") || "8960");
-                            
+
                             xpVal += (sessionData.correct * 20);
-                            
+
                             // If score is good, increment streak
                             if (sessionData.score >= 70) {
                                 streakVal += 1;
                             }
-                            
+
                             // Calculate new level (approx 1000 XP per level)
                             let newLvl = Math.floor(xpVal / 700) + 1;
-                            
+
                             localStorage.setItem("eduquestXP", xpVal.toString());
                             localStorage.setItem("eduquestStreak", streakVal.toString());
                             localStorage.setItem("eduquestLevel", newLvl.toString());
@@ -2863,7 +3031,7 @@
                 if (screenEl && originalPhoneScreenHTML) {
                     screenEl.innerHTML = originalPhoneScreenHTML;
                 }
-                
+
                 // Clear active states on phone paths
                 document.querySelectorAll(".path-item").forEach(item => {
                     item.classList.remove("phone-btn-active");
@@ -2881,7 +3049,7 @@
                     btn.style.borderColor = "var(--green)";
                     feedback.textContent = "Hebat! Pilihanmu benar! 🎉";
                     feedback.style.color = "var(--green)";
-                    
+
                     // Boost User XP by 10 for interactive fun
                     boostXP(10);
                 } else {
@@ -2890,7 +3058,7 @@
                     feedback.textContent = "Hampir benar! Coba lagi ya.";
                     feedback.style.color = "#ff5ea8";
                 }
-                
+
                 setTimeout(() => {
                     resetPhoneScreen();
                 }, 2200);
@@ -2901,7 +3069,7 @@
                     btn.textContent = "Jeda Audio ⏸️";
                     btn.style.background = "linear-gradient(135deg, var(--orange), var(--orange))";
                     btn.style.boxShadow = "0 8px 20px rgba(255, 159, 67, 0.25)";
-                    
+
                     // Spin the disc
                     const disc = document.getElementById("audioDisc");
                     if (disc) {
@@ -2950,7 +3118,7 @@
                 badge.style.zIndex = "9999";
                 badge.style.animation = "floatBadge 1.2s ease-out forwards";
                 document.body.appendChild(badge);
-                
+
                 setTimeout(() => {
                     badge.remove();
                 }, 1200);
@@ -2984,7 +3152,7 @@
             function checkDemoQuiz(btn, isCorrect) {
                 const buttons = btn.parentElement.querySelectorAll(".demo-opt");
                 buttons.forEach(b => b.disabled = true);
-                
+
                 const feedback = document.getElementById("demoQuizFeedback");
 
                 if (isCorrect) {
@@ -2996,7 +3164,7 @@
                     btn.classList.add("wrong-clicked");
                     feedback.textContent = "Pilihan Salah. Coba pilih B!";
                     feedback.style.color = "#ff5ea8";
-                    
+
                     // Reset choices after 2 seconds
                     setTimeout(() => {
                         buttons.forEach(b => {
@@ -3010,10 +3178,10 @@
 
             function increaseStreakDemo(btn) {
                 if (btn.disabled) return;
-                
+
                 userStreak += 1;
                 localStorage.setItem("eduquestStreak", userStreak.toString());
-                
+
                 const demoStreakVal = document.getElementById("demoStreakVal");
                 if (demoStreakVal) {
                     demoStreakVal.textContent = `${userStreak} Hari Streak!`;
@@ -3024,13 +3192,13 @@
                         demoStreakVal.style.color = "";
                     }, 500);
                 }
-                
+
                 btn.textContent = "Streak Diklaim! 🔥";
                 btn.disabled = true;
                 btn.style.background = "#eef7f2";
                 btn.style.color = "var(--green-dark)";
                 btn.style.boxShadow = "none";
-                
+
                 boostXP(50);
                 syncDataToUI();
             }
@@ -3050,7 +3218,7 @@
                 const parent = btn.parentElement;
                 parent.querySelectorAll(".diag-pill").forEach(p => p.classList.remove("selected"));
                 btn.classList.add("selected");
-                
+
                 const val = btn.getAttribute("data-val");
                 currentDiagAnswers[stepNum] = val;
             }
@@ -3060,7 +3228,7 @@
                     alert("Silakan pilih salah satu opsi terlebih dahulu!");
                     return;
                 }
-                
+
                 document.getElementById(`diag-step-${currStep}`).classList.remove("active");
                 document.getElementById(`diag-step-${currStep + 1}`).classList.add("active");
             }
@@ -3201,7 +3369,7 @@
                 { user: "Rian", text: "Baru saja bergabung di Universe Of Tech! Selamat datang! 👋", badge: "👋" },
                 { user: "Budi", text: "Mencapai Level 15 dan naik ke Rank #4 minggu ini! 📈", badge: "📈" }
             ];
-            
+
             let tickerInterval = null;
 
             function startLiveTicker() {
