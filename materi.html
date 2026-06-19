@@ -2,6 +2,8 @@
 <html lang="id">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <script src="security-helper.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Universe Of Tech - Halaman Materi</title>
@@ -27,6 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="pro-experience.css">
     <style>
         :root {
             --green: #32d66b;
@@ -1520,83 +1523,6 @@
             background: linear-gradient(135deg, var(--neon-green) 0%, var(--neon-blue) 50%, var(--neon-purple) 100%);
         }
 
-        /* Zaki AI Widget styles */
-        #zakiAiBtn {
-            animation: pulseBtn 3s infinite alternate;
-        }
-
-        #zakiAiBtn:hover {
-            transform: scale(1.1) rotate(6deg);
-            box-shadow: 0 14px 35px rgba(23, 168, 77, 0.45);
-        }
-
-        #zakiAiBtn:active {
-            transform: scale(0.9);
-        }
-
-        #zakiAiPanel.show-panel {
-            display: flex !important;
-            animation: zakiPanelOpen 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes pulseBtn {
-            0% {
-                box-shadow: 0 10px 25px rgba(23, 168, 77, 0.3);
-            }
-
-            100% {
-                box-shadow: 0 10px 35px rgba(79, 140, 255, 0.5), 0 0 0 6px rgba(79, 140, 255, 0.1);
-            }
-        }
-
-        @keyframes zakiPanelOpen {
-            from {
-                opacity: 0;
-                transform: scale(0.85) translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .zaki-bubble {
-            max-width: 82%;
-            padding: 12px 16px;
-            border-radius: 20px;
-            font-size: 13.5px;
-            line-height: 1.5;
-            font-weight: 600;
-            animation: bubbleFade 0.3s ease forwards;
-        }
-
-        .zaki-bubble.ai {
-            background: var(--item-bg);
-            color: var(--dark);
-            border-top-left-radius: 4px;
-            border: 1px solid var(--border);
-            align-self: flex-start;
-        }
-
-        .zaki-bubble.user {
-            background: linear-gradient(135deg, var(--green), var(--green-dark));
-            color: white;
-            border-top-right-radius: 4px;
-            align-self: flex-end;
-        }
-
-        @keyframes bubbleFade {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
 
         /* 3D Flashcards styling */
         .flashcard-wrapper {
@@ -1773,20 +1699,7 @@
             25% { transform: translateX(-4px); }
             75% { transform: translateX(4px); }
         }
-        .zaki-code-container {
-            background: #091420;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 10px;
-            margin-top: 8px;
-            overflow-x: auto;
-            font-family: monospace;
-            font-size: 12px;
-            color: #a5d6ff;
-            text-align: left;
-        }
-
-        /* --- CYBER MESH GRID --- */
+/* --- CYBER MESH GRID --- */
         .grid-mesh {
             pointer-events: none;
             position: fixed;
@@ -2064,11 +1977,13 @@
         }
     </style>
     <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="materi-v2.css">
     <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body>
+<body data-page="materi">
     <div class="grid-mesh"></div>
     <canvas id="particleCanvas"></canvas>
     <div class="scroll-progress-container">
@@ -2098,7 +2013,7 @@
 
             <div class="nav-actions">
                 <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
-                <a class="btn btn-ghost" href="index.html">Masuk</a>
+                <a class="btn btn-ghost" href="login.html">Masuk</a>
                 <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
         </nav>
@@ -2175,7 +2090,7 @@
                     yang terstruktur. Tandai checklist belajar kamu, lalu lanjutkan ke quiz untuk menguji pemahaman.
                 </p>
                 <div class="hero-actions">
-                    <a class="btn btn-primary" href="#modul">Jelajahi Materi</a>
+                    <a class="btn btn-primary" href="#curriculumDashboard">Jelajahi Materi</a>
                     <a class="btn btn-blue" href="quiz.html">Latihan Quiz</a>
                 </div>
             </div>
@@ -2198,6 +2113,13 @@
                     </div>
                 </div>
             </aside>
+        </section>
+
+        <section class="curriculum-dashboard motion-ready" id="curriculumDashboard" aria-label="Dashboard kurikulum">
+            <div class="curriculum-empty">
+                <h3>Menyiapkan kurikulum...</h3>
+                <p>Data jalur, progres, dan rekomendasi sedang dimuat.</p>
+            </div>
         </section>
 
         <section class="section study-os reveal" id="learning-os">
@@ -2418,6 +2340,146 @@
                     <div class="module-footer"><span class="level">Pemula</span><a class="mini-link"
                             href="materi-basic.html?topik=git">Buka Materi</a></div>
                 </article>
+
+                <article class="module-card" data-topic="programming" data-level="Pemula-Menengah" data-duration="14 jam"
+                    data-project="Game arcade 2D sederhana" data-skills="Game loop, rendering 2D, physics, collision, state machine, audio, memory optimization"
+                    data-href="materi-basic.html?topik=gamedev">
+                    <div class="module-top">
+                        <div class="module-icon">GAME</div>
+                        <h3>Game Development</h3>
+                        <p>Pelajari engine game, rendering 2D/3D, physics, scripting, state machine, audio, dan optimasi performa game.</p>
+                        <div class="tag-list"><span class="tag">Game</span><span class="tag">Physics</span><span
+                                class="tag">Audio</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula-Menengah</span><a class="mini-link"
+                            href="materi-basic.html?topik=gamedev">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="programming" data-level="Menengah" data-duration="15 jam"
+                    data-project="Sistem monitoring suhu ruangan" data-skills="Hardware, sensor, firmware, MQTT, HTTP, WiFi, Cloud integration"
+                    data-href="materi-basic.html?topik=iot">
+                    <div class="module-top">
+                        <div class="module-icon">IOT</div>
+                        <h3>Internet of Things</h3>
+                        <p>Pahami mikrokontroler, sensor, aktuator, protokol komunikasi (MQTT, HTTP), firmware, dan integrasi cloud IoT.</p>
+                        <div class="tag-list"><span class="tag">Sensor</span><span class="tag">MQTT</span><span
+                                class="tag">Cloud</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah</span><a class="mini-link"
+                            href="materi-basic.html?topik=iot">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="analytics" data-level="Menengah-Lanjut" data-duration="16 jam"
+                    data-project="Analisis prediktif churn pelanggan" data-skills="Wrangling, cleaning, EDA, regresi linear, klasifikasi logistik, evaluation, storytelling"
+                    data-href="materi-basic.html?topik=datascience">
+                    <div class="module-top">
+                        <div class="module-icon">DS</div>
+                        <h3>Data Science & Wrangling</h3>
+                        <p>Kuasai statistik inferensial, data cleaning, analisis eksploratif (EDA), visualisasi data, dan pemodelan prediktif.</p>
+                        <div class="tag-list"><span class="tag">EDA</span><span class="tag">Regression</span><span
+                                class="tag">Stats</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah-Lanjut</span><a class="mini-link"
+                            href="materi-basic.html?topik=datascience">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="cyber" data-level="Menengah-Lanjut" data-duration="16 jam"
+                    data-project="Smart contract token ERC-20" data-skills="Kriptografi, consensus mechanism, Solidity, smart contract, Web3, dApp security"
+                    data-href="materi-basic.html?topik=blockchain">
+                    <div class="module-top">
+                        <div class="module-icon">BC</div>
+                        <h3>Blockchain & Smart Contracts</h3>
+                        <p>Pahami desentralisasi, kriptografi kunci publik, consensus mechanism, smart contracts, Web3, dan keamanan dApp.</p>
+                        <div class="tag-list"><span class="tag">Solidity</span><span class="tag">Web3</span><span
+                                class="tag">ERC-20</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah-Lanjut</span><a class="mini-link"
+                            href="materi-basic.html?topik=blockchain">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="cloud" data-level="Lanjut" data-duration="17 jam"
+                    data-project="Cetak biru e-commerce system" data-skills="Scalability, load balancer, caching, Redis, microservices, message queue, saga pattern"
+                    data-href="materi-basic.html?topik=sysdesign">
+                    <div class="module-top">
+                        <div class="module-icon">SYS</div>
+                        <h3>System Design & Architecture</h3>
+                        <p>Rancang sistem skala besar (scalability), load balancing, microservices, database replication, caching strategy, dan message queues.</p>
+                        <div class="tag-list"><span class="tag">Scaling</span><span class="tag">Redis</span><span
+                                class="tag">Microservices</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Lanjut</span><a class="mini-link"
+                            href="materi-basic.html?topik=sysdesign">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="analytics" data-level="Menengah-Lanjut" data-duration="15 jam"
+                    data-project="Pipeline ETL PostgreSQL ke Warehouse" data-skills="OLAP, dimensional modeling, Star Schema, ETL, data lake, BI dashboard"
+                    data-href="materi-basic.html?topik=dataware">
+                    <div class="module-top">
+                        <div class="module-icon">DW</div>
+                        <h3>Data Warehousing & ETL</h3>
+                        <p>Rancang data warehouse (Star/Snowflake schema), pipelines ETL, OLAP cube, data lake, dan tool visualisasi enterprise.</p>
+                        <div class="tag-list"><span class="tag">OLAP</span><span class="tag">ETL</span><span
+                                class="tag">BigQuery</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah-Lanjut</span><a class="mini-link"
+                            href="materi-basic.html?topik=dataware">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="cloud" data-level="Pemula-Menengah" data-duration="14 jam"
+                    data-project="Topology cabang aman + VPN" data-skills="OSI model, TCP/IP, routing, switching, DNS, firewall, VPN, Wireshark"
+                    data-href="materi-basic.html?topik=networks">
+                    <div class="module-top">
+                        <div class="module-icon">NET</div>
+                        <h3>Computer Networks & Security</h3>
+                        <p>Pelajari TCP/IP, routing, switching, DNS, load balancing, firewall, VPN, dan pemecahan masalah jaringan.</p>
+                        <div class="tag-list"><span class="tag">TCP/IP</span><span class="tag">DNS</span><span
+                                class="tag">VPN</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula-Menengah</span><a class="mini-link"
+                            href="materi-basic.html?topik=networks">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="cloud" data-level="Pemula-Menengah" data-duration="13 jam"
+                    data-project="Script backup Bash otomatis" data-skills="CLI, file system, permission, service, systemd, shell scripting, Bash, cron job"
+                    data-href="materi-basic.html?topik=linux">
+                    <div class="module-top">
+                        <div class="module-icon">LUX</div>
+                        <h3>Linux SysAdmin & Scripting</h3>
+                        <p>Kuasai file system, permission, process management, shell scripting (Bash), network config, dan pengamanan server Linux.</p>
+                        <div class="tag-list"><span class="tag">CLI</span><span class="tag">Bash</span><span
+                                class="tag">Cron</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula-Menengah</span><a class="mini-link"
+                            href="materi-basic.html?topik=linux">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="database" data-level="Menengah" data-duration="14 jam"
+                    data-project="Database catalog e-commerce MongoDB" data-skills="BSON, MongoDB, Redis, Cassandra, Neo4j, Cypher query"
+                    data-href="materi-basic.html?topik=nosql">
+                    <div class="module-top">
+                        <div class="module-icon">NOS</div>
+                        <h3>NoSQL Databases</h3>
+                        <p>Pelajari database dokumen (MongoDB), key-value (Redis), wide-column (Cassandra), graph (Neo4j), dan skenario penggunaannya.</p>
+                        <div class="tag-list"><span class="tag">Mongo</span><span class="tag">Redis</span><span
+                                class="tag">Graph</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Menengah</span><a class="mini-link"
+                            href="materi-basic.html?topik=nosql">Buka Materi</a></div>
+                </article>
+
+                <article class="module-card" data-topic="design" data-level="Pemula-Menengah" data-duration="12 jam"
+                    data-project="PRD MVP + Success Metrics" data-skills="Product lifecycle, agile, scrum Framework, RICE prioritization Framework, roadmap, product metrics"
+                    data-href="materi-basic.html?topik=product">
+                    <div class="module-top">
+                        <div class="module-icon">PM</div>
+                        <h3>Product Management in Tech</h3>
+                        <p>Kembangkan keahlian product lifecycle, agile/scrum, user research, roadmap, MVP scoping, product market fit, dan metrik produk.</p>
+                        <div class="tag-list"><span class="tag">Agile</span><span class="tag">Roadmap</span><span
+                                class="tag">Metrics</span></div>
+                    </div>
+                    <div class="module-footer"><span class="level">Pemula-Menengah</span><a class="mini-link"
+                            href="materi-basic.html?topik=product">Buka Materi</a></div>
+                </article>
             </div>
 
             <div class="module-detail-panel reveal" id="moduleDetailPanel">
@@ -2557,7 +2619,7 @@
             </div>
         </section>
 
-        <section class="section planner-layout reveal">
+        <section class="section planner-layout reveal" id="planner">
             <div class="planner-card">
                 <div>
                     <div class="section-kicker">Study Planner</div>
@@ -2988,82 +3050,15 @@
                     <a href="#">Kebijakan Cookie</a>
                 </div>
             </div>
-
-            <!-- Zaki AI Chatbot Widget -->
-            <div class="zaki-ai-widget"
-                                style="position:fixed; bottom:24px; right:24px; z-index:9999; font-family:'Inter', sans-serif;">
-                                <button id="zakiAiBtn"
-                                    style="width:64px; height:64px; border-radius:50%; border:none; background:linear-gradient(135deg, var(--green-dark), var(--blue)); color:white; font-size:28px; display:grid; place-items:center; cursor:pointer; box-shadow:0 10px 25px rgba(23, 168, 77, 0.3); transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); outline:none;"
-                                    aria-label="Tanya Zaki AI Mentor">
-                                    🤖
-                                    <span id="zakiNotification"
-                                        style="position:absolute; top:-2px; right:-2px; background:#ff4d6d; width:18px; height:18px; border-radius:50%; font-size:10px; font-weight:950; display:grid; place-items:center; border:2px solid var(--white);">1</span>
-                                </button>
-
-                                <div id="zakiAiPanel"
-                                    style="display:none; position:absolute; bottom:80px; right:0; width:360px; height:500px; border-radius:28px; border:1px solid var(--border); background:var(--card-bg); backdrop-filter:blur(24px); box-shadow:var(--shadow); flex-direction:column; overflow:hidden; transition:all 0.3s cubic-bezier(0.16, 1, 0.3, 1); transform-origin:bottom right; opacity:0; transform:scale(0.85);">
-                                    <div
-                                        style="padding:18px; background:linear-gradient(135deg, #172a42, #0b1523); color:white; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.06);">
-                                        <div style="display:flex; align-items:center; gap:10px;">
-                                            <div style="font-size:24px;">🤖</div>
-                                            <div>
-                                                <strong
-                                                    style="display:block; font-size:14px; letter-spacing:-0.02em;">Zaki
-                                                    AI Mentor</strong>
-                                                <span id="zakiStatus"
-                                                    style="font-size:10px; color:var(--green); font-weight:700;">●
-                                                    Online</span>
-                                            </div>
-                                        </div>
-                                        <div style="display:flex; align-items:center; gap:12px;">
-                                            <button id="closeZakiPanel"
-                                                style="background:transparent; border:none; color:white; cursor:pointer; font-size:18px; font-weight:bold;" aria-label="Tutup Panel Chat">✕</button>
-                                        </div>
-                                    </div>
-
-                                    <div id="zakiChatHistory"
-                                        style="flex:1; padding:16px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; scroll-behavior:smooth;">
-                                        <!-- Chat messages loaded dynamically -->
-                                    </div>
-
-                                    <div class="quick-chips-wrapper" style="padding: 6px 12px; background: rgba(255, 255, 255, 0.02); border-top: 1px solid var(--border); display: flex; gap: 6px; overflow-x: auto;">
-                                        <button class="quick-chip" data-chip="belajar">💡 Tips Belajar</button>
-                                        <button class="quick-chip" data-chip="sql">🔬 Tanya SQL</button>
-                                        <button class="quick-chip" data-chip="cyber">🛡️ Tanya Cyber</button>
-                                        <button class="quick-chip" data-chip="loop">💻 Tanya Loop</button>
-                                    </div>
-
-                                    <div
-                                        style="padding:12px; background:rgba(255,255,255,0.03); border-top:1px solid var(--border); display:flex; flex-direction:column; gap:8px;">
-                                        <div style="display:flex; align-items:center; gap:8px;">
-                                            <input id="zakiInput" type="text"
-                                                placeholder="Tanya tentang loop, database, cloud..."
-                                                style="flex:1; border:1px solid var(--border); border-radius:14px; padding:10px 14px; background:var(--white); color:var(--dark); outline:none; font-size:13px; font-weight:600;">
-                                            <button id="zakiMicBtn"
-                                                style="width:38px; height:38px; border-radius:12px; border:1px solid var(--border); background:var(--item-bg); color:var(--dark); cursor:pointer; display:grid; place-items:center; font-size:14px;"
-                                                title="Ketik dengan Suara (Mic)" aria-label="Ketik dengan Suara (Mic)">🎤</button>
-                                            <button id="zakiSendBtn"
-                                                style="width:38px; height:38px; border-radius:12px; border:none; background:linear-gradient(135deg, var(--green), var(--green-dark)); color:white; cursor:pointer; display:grid; place-items:center; font-size:14px;"
-                                                title="Kirim">🚀</button>
-                                        </div>
-                                        <div
-                                            style="display:flex; justify-content:space-between; align-items:center; font-size:10px; color:var(--muted); font-weight:700;">
-                                            <span>Bahasa: Indonesian AI Mentor</span>
-                                            <span id="zakiSpeechText"
-                                                style="color:var(--orange); font-style:italic; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
     </main>
 
+    <script src="curriculum-data.js"></script>
     <script src="app-data.js"></script>
     <script src="sound-engine.js"></script>
     <script src="rpg-engine.js"></script>
-    <script src="zaki-ai.js"></script>
     <script>
         // --- 1. SELECTORS & STATE ---
-        const filterButtons = document.querySelectorAll(".filter-btn");
+        const filterButtons = document.querySelectorAll("[data-filter]");
         const moduleCards = document.querySelectorAll(".module-card");
         const checkboxes = document.querySelectorAll("[data-check]");
         const progressText = document.getElementById("progressText");
@@ -3101,11 +3096,11 @@
         let glossaryFlashcardActive = false;
 
         const goalMap = {
-            frontend: ["web", "design", "programming", "git"],
-            backend: ["programming", "database", "cloud", "git", "cyber"],
-            data: ["analytics", "database", "programming", "ai"],
-            security: ["cyber", "web", "database", "git"],
-            ai: ["ai", "programming", "analytics", "cloud"]
+            frontend: ["web", "design", "programming", "git", "gamedev", "product"],
+            backend: ["programming", "database", "cloud", "git", "cyber", "iot", "blockchain", "sysdesign", "linux", "nosql"],
+            data: ["analytics", "database", "programming", "ai", "datascience", "dataware", "nosql", "product"],
+            security: ["cyber", "web", "database", "git", "blockchain", "sysdesign", "networks", "linux"],
+            ai: ["ai", "programming", "analytics", "cloud", "datascience"]
         };
 
         // --- Coder RPG & Sandbox State (Loaded dynamically from modular JS files) ---
@@ -3239,34 +3234,69 @@
             if (activeSandboxTab === "js") {
                 const consoleBox = document.getElementById("sandboxConsoleBox");
                 consoleBox.innerHTML = "";
-                
-                // Set up custom logger redirection
                 const logs = [];
-                const mockConsole = {
-                    log: (msg) => logs.push(msg)
-                };
-                
-                try {
-                    // Quick safe eval wrapper
-                    const runFn = new Function("console", code);
-                    runFn(mockConsole);
-                    
-                    if (logs.length === 0) {
-                        consoleBox.innerHTML = `<span style="color:var(--muted); font-style:italic;">Script berjalan sukses tanpa log console.</span>`;
-                    } else {
-                        consoleBox.innerHTML = logs.map(l => `<span>> ${l}</span>`).join("");
+                const workerSource = `
+                    self.fetch = undefined;
+                    self.XMLHttpRequest = undefined;
+                    self.WebSocket = undefined;
+                    self.importScripts = undefined;
+                    const formatValue = (value) => {
+                        if (typeof value === "string") return value;
+                        try { return JSON.stringify(value); } catch (error) { return String(value); }
+                    };
+                    self.console = {
+                        log: (...values) => self.postMessage({
+                            type: "log",
+                            value: values.map(formatValue).join(" ")
+                        })
+                    };
+                    try {
+                        ${code}
+                        self.postMessage({ type: "done" });
+                    } catch (error) {
+                        self.postMessage({ type: "error", value: error.message });
                     }
-                    statusText.textContent = "Eksekusi JS Selesai!";
-                    statusText.style.color = "var(--green-dark)";
-                    
-                    // Award XP and achievements
-                    addXp(30);
-                    unlockAchievement('sandbox_hacker');
-                } catch (e) {
-                    consoleBox.innerHTML = `<span style="color:#ff4d6d;">Error: ${e.message}</span>`;
-                    statusText.textContent = "Gagal menjalankan JS";
-                    statusText.style.color = "#ff4d6d";
-                }
+                `;
+                const workerUrl = URL.createObjectURL(new Blob([workerSource], { type: "text/javascript" }));
+                const worker = new Worker(workerUrl);
+                let finished = false;
+
+                const finishWorker = (type, message = "") => {
+                    if (finished) return;
+                    finished = true;
+                    worker.terminate();
+                    URL.revokeObjectURL(workerUrl);
+
+                    if (type === "done") {
+                        consoleBox.innerHTML = logs.length
+                            ? logs.map(log => `<span>&gt; ${escapeSandboxOutput(log)}</span>`).join("")
+                            : `<span style="color:var(--muted); font-style:italic;">Script berjalan sukses tanpa log console.</span>`;
+                        statusText.textContent = "Eksekusi JS Selesai!";
+                        statusText.style.color = "var(--green-dark)";
+                        addXp(30);
+                        unlockAchievement('sandbox_hacker');
+                    } else {
+                        consoleBox.innerHTML = `<span style="color:#ff4d6d;">Error: ${escapeSandboxOutput(message)}</span>`;
+                        statusText.textContent = "Gagal menjalankan JS";
+                        statusText.style.color = "#ff4d6d";
+                    }
+                };
+
+                worker.addEventListener("message", (event) => {
+                    if (event.data?.type === "log") {
+                        logs.push(event.data.value);
+                    } else if (event.data?.type === "done") {
+                        finishWorker("done");
+                    } else if (event.data?.type === "error") {
+                        finishWorker("error", event.data.value);
+                    }
+                });
+                worker.addEventListener("error", (event) => {
+                    finishWorker("error", event.message || "Kode tidak dapat dijalankan.");
+                });
+                setTimeout(() => {
+                    finishWorker("error", "Eksekusi dihentikan setelah 2 detik agar halaman tetap responsif.");
+                }, 2000);
             } else if (activeSandboxTab === "sql") {
                 executeSqlSimulator(code, false);
             } else if (activeSandboxTab === "xss") {
@@ -3274,6 +3304,15 @@
             } else if (activeSandboxTab === "sqli") {
                 executeSqliSimulator();
             }
+        }
+
+        function escapeSandboxOutput(value) {
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
         // --- JavaScript Step-by-Step Interpreter Sim ---
@@ -3469,10 +3508,20 @@
 
                 if (normalized.includes("WHERE")) {
                     // Extract comparison filters
-                    if (normalized.includes("NILAI >=") || normalized.includes("NILAI >")) {
-                        const score = Number(normalized.match(/NILAI\s*>=?\s*(\d+)/)[1]);
-                        matchedIds = virtualDatabase.filter(r => r.nilai >= score).map(r => r.id);
-                        explanation = `Mencocokkan database: ditemukan ${matchedIds.length} siswa dengan nilai >= ${score}.`;
+                    if (/\bNILAI\s*>=?\s*/.test(normalized)) {
+                        const scoreMatch = normalized.match(/\bNILAI\s*(>=|>)\s*(\d+)/);
+                        if (!scoreMatch) {
+                            feedbackText.innerHTML = `<span style="color:#ff4d6d; font-weight:800;">Syntax Error:</span> Nilai pembanding harus berupa angka, misalnya <code>WHERE nilai >= 75</code>.`;
+                            statusText.textContent = "Query SQL Gagal";
+                            statusText.style.color = "#ff4d6d";
+                            return;
+                        }
+                        const operator = scoreMatch[1];
+                        const score = Number(scoreMatch[2]);
+                        matchedIds = virtualDatabase
+                            .filter(row => operator === ">=" ? row.nilai >= score : row.nilai > score)
+                            .map(row => row.id);
+                        explanation = `Mencocokkan database: ditemukan ${matchedIds.length} siswa dengan nilai ${operator} ${score}.`;
                     } else if (normalized.includes("STATUS =") || normalized.includes("STATUS = 'REMEDIAL'")) {
                         const status = normalized.includes("REMEDIAL") ? "Remedial" : "Lulus";
                         matchedIds = virtualDatabase.filter(r => r.status === status).map(r => r.id);
@@ -3626,13 +3675,21 @@
             const password = document.getElementById("sqliPasswordInput").value;
             const queryBox = document.getElementById("sqliQueryBox");
             const isSafe = document.getElementById("sqliSafeToggle").checked;
+            const escapeHtml = (value) => String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+            const safeUsername = escapeHtml(username);
+            const safePassword = escapeHtml(password);
 
             if (isSafe) {
                 queryBox.innerHTML = `// Prepared Statement (Aman dari SQLi)
 <span style="color:#bd00ff;">const</span> stmt = db.prepare(<span style="color:var(--green);">"SELECT * FROM users WHERE user = ? AND pass = ?"</span>);
-stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'")}'</span>, <span style="color:var(--yellow);">'${password.replace(/'/g, "\\'")}'</span>]);`;
+stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span style="color:var(--yellow);">'${safePassword}'</span>]);`;
             } else {
-                queryBox.innerHTML = `SELECT * FROM users WHERE user = <span style="color: var(--yellow); font-weight: bold;">'${username}'</span> AND pass = <span style="color: var(--yellow); font-weight: bold;">'${password}'</span>;`;
+                queryBox.innerHTML = `SELECT * FROM users WHERE user = <span style="color: var(--yellow); font-weight: bold;">'${safeUsername}'</span> AND pass = <span style="color: var(--yellow); font-weight: bold;">'${safePassword}'</span>;`;
             }
         }
 
@@ -3783,11 +3840,14 @@ stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'"
         let planets = [];
         let dustParticles = [];
         let autoRotationSpeed = 0.0004;
+        let universeMapInitialized = false;
 
         function initUniverseMap() {
+            if (universeMapInitialized) return;
             universeMapCanvas = document.getElementById("universeMapCanvas");
             if (!universeMapCanvas) return;
             universeCtx = universeMapCanvas.getContext("2d");
+            universeMapInitialized = true;
 
             const mapData = [
                 { key: "programming", title: "Logic", mark: "PG", label: "Programming Basics", color: "#32d66b", desc: "Variabel & Control Flow" },
@@ -3885,12 +3945,9 @@ stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'"
                     const dist = Math.hypot(mouseX - p.screenX, mouseY - p.screenY);
                     if (dist < p.size + 4) {
                         playSound('click');
-                        const card = Array.from(moduleCards).find(c => c.dataset.topic === p.key);
-                        if (card) {
-                            card.scrollIntoView({ behavior: "smooth", block: "center" });
-                            activeModule = card;
-                            renderModuleDetail(card);
-                        }
+                        document.dispatchEvent(new CustomEvent("curriculum-open-track", {
+                            detail: { trackId: p.key }
+                        }));
                     }
                 });
             });
@@ -4227,7 +4284,7 @@ stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'"
             });
         }
 
-        // Chatbot Zaki AI widget initialization and methods handled globally by zaki-ai.js
+        // BUBUB assistant is loaded globally by bubub-ai.js
 
         // --- 7. CORE PAGE LOGIC (THEME, PROGRESS, REVEAL, LOOPS) ---
         document.addEventListener("DOMContentLoaded", () => {
@@ -4457,7 +4514,6 @@ stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'"
 
             // Init submodules
             initFlashcardEvents();
-            initZakiAI();
         });
 
         // --- THEME ---
@@ -4647,7 +4703,9 @@ stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'"
 
         function buildPlanner() {
             const goal = plannerFocus.value;
-            const hours = Number(weeklyHours.value || 8);
+            const parsedHours = Number(weeklyHours.value);
+            const hours = Math.min(30, Math.max(2, Number.isFinite(parsedHours) ? parsedHours : 8));
+            weeklyHours.value = hours;
             const topics = goalMap[goal] || goalMap.frontend;
             const perWeek = Math.max(2, Math.round(hours / 2));
             const projectHours = Math.max(1, hours - perWeek);
@@ -4782,6 +4840,7 @@ stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'"
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(link.href), 0);
         }
 
         // Expose functions globally for HTML inline click handlers
@@ -4841,6 +4900,8 @@ stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'"
 
         function writeProgress(progress) {
             localStorage.setItem(storageKey, JSON.stringify(progress));
+            // Trigger custom event so that the curriculum dashboard updates in real-time
+            window.dispatchEvent(new CustomEvent("curriculum-progress"));
         }
 
         function updateProgress(isUserInteraction = false) {
@@ -4945,6 +5006,11 @@ stmt.execute([<span style="color:var(--yellow);">'${username.replace(/'/g, "\\'"
             <button class="btn btn-primary" id="btnDismissLevelUp" style="width: 100%; font-weight: 900;">Lanjutkan Petualangan 🚀</button>
         </div>
     </div>
+    <script src="auth-helper.js"></script>
+    <script src="materi-dashboard.js"></script>
+    <script src="pro-experience.js"></script>
+    <script src="bubub-ai.js"></script>
 </body>
 
 </html>
+

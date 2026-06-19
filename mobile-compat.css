@@ -65,7 +65,7 @@ textarea {
 
 .toast,
 .live-ticker,
-.zaki-ai-widget,
+.bubub-ai-widget,
 #rpgFloatingHud {
     max-width: calc(100vw - 24px);
 }
@@ -137,10 +137,21 @@ textarea {
         --mobile-gutter: 12px;
         --mobile-radius: 20px;
         --mobile-card-padding: 16px;
+        --mobile-section-gap: 42px;
+    }
+
+    *,
+    *::before,
+    *::after {
+        min-width: 0;
+        box-sizing: border-box;
     }
 
     body {
         background-attachment: scroll;
+        font-size: 14px;
+        line-height: 1.55;
+        overscroll-behavior-y: contain;
     }
 
     .noise {
@@ -161,6 +172,38 @@ textarea {
         padding: 9px 10px !important;
         gap: 8px !important;
         border-radius: 18px !important;
+    }
+
+    .mobile-menu-drawer {
+        right: min(-86vw, -320px);
+        width: min(86vw, 320px);
+        height: 100vh;
+        height: 100dvh;
+        padding:
+            max(18px, env(safe-area-inset-top))
+            16px
+            max(18px, env(safe-area-inset-bottom));
+        gap: 14px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-menu-overlay.is-active .mobile-menu-drawer {
+        transform: translateX(min(-86vw, -320px));
+    }
+
+    .mobile-menu-title {
+        font-size: 17px;
+    }
+
+    .mobile-menu-links {
+        gap: 6px;
+    }
+
+    .mobile-menu-links a {
+        min-height: 42px;
+        padding: 10px 12px;
+        font-size: 13px;
     }
 
     .brand {
@@ -202,8 +245,18 @@ textarea {
     .arena,
     .workspace,
     .cta,
-    footer {
+    footer,
+    .app-shell,
+    .account-shell,
+    .focus-shell,
+    .library-shell,
+    .learning-shell,
+    .materi-shell,
+    .quiz-shell-wrap,
+    .reader-shell,
+    .session-shell {
         width: calc(100% - (var(--mobile-gutter) * 2)) !important;
+        max-width: 100% !important;
     }
 
     .hero {
@@ -212,12 +265,14 @@ textarea {
     }
 
     .section {
-        margin-top: 54px;
+        margin-top: var(--mobile-section-gap) !important;
+        padding-block: 0 !important;
     }
 
     .hero-copy,
     .hero-card,
     .setup-card,
+    .arena-setup-card,
     .quiz-shell,
     .question-area,
     .side-card,
@@ -225,10 +280,33 @@ textarea {
     .session-card,
     .content-card,
     .module-card,
-    .learning-flow-section,
     .search-filter-panel,
     .glassmorphic-quiz {
         padding: var(--mobile-card-padding) !important;
+        border-radius: var(--mobile-radius) !important;
+    }
+
+    .card,
+    .course-card,
+    .feature-card,
+    .resource-card,
+    .culture-card,
+    .metric-card,
+    .stat-card,
+    .content-card,
+    .module-card,
+    .side-card,
+    .result-card,
+    .profile-card,
+    .hub-panel,
+    .region-progress-panel,
+    .pro-benefit-card,
+    .panel,
+    .quiz-card,
+    .question-card,
+    .lesson-card,
+    .book-card {
+        padding: min(var(--mobile-card-padding), 16px) !important;
         border-radius: var(--mobile-radius) !important;
     }
 
@@ -245,6 +323,21 @@ textarea {
         letter-spacing: -0.045em !important;
     }
 
+    h1 {
+        font-size: clamp(28px, 9vw, 42px) !important;
+        line-height: 1.06 !important;
+    }
+
+    h2 {
+        font-size: clamp(22px, 7vw, 32px) !important;
+        line-height: 1.12 !important;
+    }
+
+    h3 {
+        font-size: clamp(17px, 5vw, 22px) !important;
+        line-height: 1.18 !important;
+    }
+
     .section-header h2,
     .cta h2 {
         font-size: clamp(26px, 8vw, 38px) !important;
@@ -253,9 +346,22 @@ textarea {
 
     .hero p,
     .hero-copy p,
-    .section-header p {
+    .section-header p,
+    p,
+    li {
         font-size: 14px !important;
-        line-height: 1.65 !important;
+        line-height: 1.58 !important;
+    }
+
+    small,
+    .mini-tag,
+    .badge,
+    .section-kicker,
+    .resource-meta,
+    .card-meta,
+    .stat-label {
+        font-size: 11px !important;
+        line-height: 1.25 !important;
     }
 
     .hero-actions,
@@ -267,11 +373,30 @@ textarea {
         gap: 8px !important;
     }
 
+    .hero-actions,
+    .cta-actions,
+    .inline-actions,
+    .panel-actions,
+    .quiz-actions,
+    .utility-actions,
+    .continue-actions,
+    .pro-note-actions,
+    .filter-row,
+    .toolbar,
+    .explorer-toolbar {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        max-width: 100%;
+    }
+
     .btn {
         min-height: 42px !important;
         padding: 10px 14px !important;
         border-radius: 13px !important;
         font-size: 13px !important;
+        line-height: 1.15 !important;
+        white-space: normal !important;
+        text-align: center !important;
     }
 
     .card-grid,
@@ -280,8 +405,29 @@ textarea {
     .metric-grid,
     .stats-row,
     .achievement-grid,
-    .result-grid {
+    .result-grid,
+    .culture-grid,
+    .topic-grid,
+    .module-grid,
+    .course-grid,
+    .library-grid,
+    .overview-grid,
+    .overview-extra-grid,
+    .profile-stat-grid,
+    .plan-grid,
+    .insight-grid,
+    .insight-stat-grid,
+    .preference-fields,
+    .preference-split,
+    .explorer-stats,
+    .explorer-dashboard-grid,
+    .region-progress-grid,
+    .pro-benefit-grid,
+    .quiz-mode-grid,
+    .answer-grid,
+    .options-grid {
         gap: 12px !important;
+        grid-template-columns: 1fr !important;
     }
 
     .card,
@@ -351,6 +497,43 @@ textarea {
         font-size: 13px;
     }
 
+    [class*="grid"],
+    [class*="layout"],
+    [class*="columns"],
+    [class*="split"],
+    [class*="dashboard"],
+    [class*="workspace"] {
+        max-width: 100%;
+    }
+
+    .app-rail,
+    .side-panel,
+    .reader-sidebar,
+    .lesson-sidebar,
+    .profile-sidebar,
+    .quiz-sidebar,
+    .question-sidebar,
+    .session-sidebar {
+        max-width: 100% !important;
+    }
+
+    .hero-visual,
+    .phone-stage,
+    .visual-panel,
+    .spin-wheel-section {
+        overflow: hidden !important;
+    }
+
+    .wheel,
+    .spin-wheel,
+    .wheel-container,
+    .avatar-ring,
+    .profile-orbit,
+    .hero-device {
+        max-width: min(100%, 300px) !important;
+        max-height: 300px !important;
+    }
+
     .table-wrap,
     .table-responsive,
     [class*="table-container"] {
@@ -365,6 +548,11 @@ textarea {
         --mobile-gutter: 10px;
         --mobile-card-padding: 14px;
         --mobile-radius: 18px;
+        --mobile-section-gap: 34px;
+    }
+
+    body {
+        font-size: 13px;
     }
 
     .brand {
@@ -378,6 +566,33 @@ textarea {
 
     .hero {
         margin-top: 22px !important;
+    }
+
+    h1,
+    .hero h1,
+    .hero-copy h1,
+    .wonder-page-hero h1,
+    .language-hero h1 {
+        font-size: clamp(25px, 8.6vw, 34px) !important;
+        line-height: 1.08 !important;
+    }
+
+    h2,
+    .section-header h2,
+    .cta h2 {
+        font-size: clamp(21px, 7vw, 28px) !important;
+    }
+
+    h3 {
+        font-size: clamp(16px, 5vw, 20px) !important;
+    }
+
+    .hero p,
+    .hero-copy p,
+    .section-header p,
+    p,
+    li {
+        font-size: 13px !important;
     }
 
     .hero-actions,
@@ -403,10 +618,66 @@ textarea {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
 
+    .metric-grid,
+    .stats-row,
+    .profile-stat-grid,
+    .explorer-stats,
+    .region-progress-grid,
+    .achievement-grid,
+    .badges-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
     .drawer-flashcard {
         min-height: 180px;
         padding: 18px;
         border-radius: 20px;
+    }
+}
+
+@media (max-width: 390px) {
+    :root {
+        --mobile-gutter: 8px;
+        --mobile-card-padding: 12px;
+        --mobile-radius: 16px;
+        --mobile-section-gap: 30px;
+    }
+
+    .navbar {
+        padding: 8px !important;
+        border-radius: 16px !important;
+    }
+
+    .brand-logo {
+        height: 32px !important;
+    }
+
+    .theme-toggle-btn,
+    .sound-toggle-btn,
+    .nav-actions button,
+    .nav-actions [role="button"],
+    .nav-hamburger {
+        width: 38px !important;
+        min-width: 38px !important;
+        height: 38px !important;
+        min-height: 38px !important;
+        border-radius: 12px !important;
+    }
+
+    .btn {
+        min-height: 40px !important;
+        padding: 9px 11px !important;
+        font-size: 12px !important;
+    }
+
+    .metric-grid,
+    .stats-row,
+    .profile-stat-grid,
+    .explorer-stats,
+    .region-progress-grid,
+    .achievement-grid,
+    .badges-grid {
+        grid-template-columns: 1fr !important;
     }
 }
 
@@ -431,4 +702,136 @@ textarea {
     html {
         scroll-behavior: auto;
     }
+}
+
+/* ============================================================
+   ADVANCED MOBILE UI ENHANCEMENTS (Android & iOS)
+   ============================================================ */
+
+/* 1. iOS Smooth Native Inertial Scrolling */
+.reading-desk-list,
+.chat-history,
+.mobile-menu-drawer,
+.kanban-board,
+.table-wrap,
+.table-responsive,
+.materi-sidebar,
+.reader-sidebar,
+.quiz-sidebar,
+.explorer-sidebar,
+.chips,
+.filter-chips,
+.category-bar,
+.bubub-ai-messages,
+.bubub-ai-chips,
+.dialog-body,
+.modal-body {
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* 2. Prevention of Zoom-on-focus on iOS (force minimum 16px font-size for input elements) */
+@media (max-width: 768px) {
+    input, 
+    select, 
+    textarea, 
+    .chat-input, 
+    .bubub-ai-input, 
+    .search-input {
+        font-size: 16px !important;
+    }
+}
+
+/* 3. Horizontal Scrolling Category Chips Bar (Alternative to wrapping layout on mobile) */
+@media (max-width: 768px) {
+    .chips, 
+    .filter-chips, 
+    .tab-buttons, 
+    .category-bar {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        gap: 8px !important;
+        padding: 4px 8px 12px 4px !important;
+        scrollbar-width: none !important; /* Firefox */
+        -webkit-overflow-scrolling: touch !important;
+    }
+    .chips::-webkit-scrollbar,
+    .filter-chips::-webkit-scrollbar,
+    .tab-buttons::-webkit-scrollbar,
+    .category-bar::-webkit-scrollbar {
+        display: none !important;
+    }
+    .tool-chip, 
+    .filter-chip, 
+    .tab-btn {
+        flex: 0 0 auto !important;
+    }
+}
+
+/* 4. Safe Area Insets Adjustments for Modern Notches and Home Bars */
+@supports (padding: max(0px)) {
+    @media (orientation: landscape) and (max-width: 932px) {
+        body {
+            padding-left: env(safe-area-inset-left) !important;
+            padding-right: env(safe-area-inset-right) !important;
+        }
+    }
+    
+    /* Bottom action bars and drawer safety margins */
+    .quiz-actions,
+    .session-actions,
+    .checkout-actions,
+    .reader-toolbar,
+    .materi-toolbar,
+    .bubub-ai-compose,
+    .pro-dock {
+        padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    }
+    
+    /* Dynamic margins for Bubub Widget with safe bottom margin */
+    .bubub-ai-widget {
+        bottom: max(20px, env(safe-area-inset-bottom)) !important;
+        right: max(20px, env(safe-area-inset-right)) !important;
+    }
+    
+    /* Menu Drawer notch safety */
+    .mobile-menu-drawer {
+        padding-top: max(24px, env(safe-area-inset-top)) !important;
+        padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
+        padding-left: max(24px, env(safe-area-inset-left)) !important;
+        padding-right: max(24px, env(safe-area-inset-right)) !important;
+    }
+}
+
+/* 5. Prevent Text Selection on Rapid Tap-Heavy Gameplay Elements */
+.btn,
+button,
+.nav-links a,
+.mobile-menu-links a,
+.tool-chip,
+.chat-suggest-chip,
+.bubub-ai-chip,
+.choice-card,
+.option-item,
+.option-card,
+.user-nav-badge,
+.dropdown-item,
+.action-button,
+.question-jump,
+[role="button"] {
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important; /* Disable native iOS copy menu callout */
+}
+
+/* 6. Active State Scale-Down Feedback (Native tactile feel) */
+.btn:active,
+.choice-card:active,
+.option-item:active,
+.action-button:active,
+.question-jump:active,
+.user-nav-badge:active {
+    transform: scale(0.96) !important;
+    transition: transform 0.08s ease !important;
 }

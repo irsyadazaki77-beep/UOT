@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <script src="security-helper.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Pembayaran - Universe Of Tech</title>
+    <meta name="description" content="Portal checkout aman paket langganan Akselerasi Pro Universe Of Tech.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="payment.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-page="payment">
+    <div class="noise"></div>
+
+    <main class="checkout-viewport">
+        <!-- Panel Kiri: Formulir Pembayaran (Stripe Style) -->
+        <section class="checkout-panel-left">
+            <div class="panel-content-wrapper">
+                <header class="checkout-header">
+                    <a href="index.html" class="checkout-brand">
+                        <img src="logo.png" alt="Universe Of Tech" class="brand-logo">
+                        <span>Universe Of Tech</span>
+                    </a>
+                </header>
+
+                <div class="checkout-step-container">
+                    <a href="index.html#pricing" class="back-link"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+                    <h2>Metode Pembayaran</h2>
+                </div>
+
+                <!-- Pemilihan Metode Pembayaran -->
+                <div class="payment-tabs-stripe">
+                    <button class="stripe-tab-btn active" data-method="card">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>Kartu</span>
+                    </button>
+                    <button class="stripe-tab-btn" data-method="qris">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <span>QRIS</span>
+                    </button>
+                    <button class="stripe-tab-btn" data-method="wallet">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span>E-Wallet</span>
+                    </button>
+                </div>
+
+                <div class="stripe-panels">
+                    <!-- Panel 1: Kartu Kredit/Debit -->
+                    <div class="stripe-panel active" id="panel-card">
+                        <form id="cardPaymentForm" class="stripe-form">
+                            <div class="form-row">
+                                <label class="full-width">
+                                    <span>Informasi Kartu</span>
+                                    <div class="card-input-container">
+                                        <input type="text" id="cardNumberInput" placeholder="Nomor kartu (16 digit)" maxlength="19" autocomplete="off" autocorrect="off" autocapitalize="none" required>
+                                        <span class="card-brand-icon" id="cardBrandIcon">
+                                            <i class="fa-solid fa-credit-card"></i>
+                                        </span>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-row split">
+                                <label>
+                                    <span>Kedaluwarsa (MM / YY)</span>
+                                    <input type="text" id="cardExpiryInput" placeholder="MM / YY" maxlength="5" autocomplete="off" required>
+                                </label>
+                                <label>
+                                    <span>CVC / CVV</span>
+                                    <input type="password" id="cardCvvInput" placeholder="CVC" maxlength="3" autocomplete="off" required>
+                                </label>
+                            </div>
+                            <div class="form-row">
+                                <label class="full-width">
+                                    <span>Nama Pemegang Kartu</span>
+                                    <input type="text" id="cardHolderInput" placeholder="Contoh: BUBUB LEARNER" maxlength="30" required>
+                                </label>
+                            </div>
+                            <div class="form-row">
+                                <label class="full-width">
+                                    <span>Negara atau Wilayah</span>
+                                    <select id="cardCountrySelect">
+                                        <option value="ID">Indonesia</option>
+                                        <option value="MY">Malaysia</option>
+                                        <option value="SG">Singapore</option>
+                                        <option value="US">United States</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="form-row">
+                                <label class="full-width">
+                                    <span>Kode Pos (ZIP Code)</span>
+                                    <input type="text" id="cardZipInput" placeholder="Contoh: 10110" maxlength="5" required>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Panel 2: QRIS -->
+                    <div class="stripe-panel" id="panel-qris">
+                        <div class="qris-box-stripe">
+                            <div class="qris-label">QRIS GPN</div>
+                            <div class="qris-qr-frame">
+                                <div class="qr-border-corners">
+                                    <div class="c top-l"></div>
+                                    <div class="c top-r"></div>
+                                    <div class="c bot-l"></div>
+                                    <div class="c bot-r"></div>
+                                    <i class="fa-solid fa-qrcode"></i>
+                                </div>
+                            </div>
+                            <div class="qris-timer-stripe">
+                                <span>Sisa waktu melakukan scan:</span>
+                                <strong id="qrisCountdown">05:00</strong>
+                            </div>
+                            <p class="helper-text">Buka aplikasi mobile banking (BCA, Mandiri, dll) atau e-wallet (GoPay, OVO, Dana) Anda lalu pindai kode QR di atas.</p>
+                        </div>
+                    </div>
+
+                    <!-- Panel 3: E-Wallet -->
+                    <div class="stripe-panel" id="panel-wallet">
+                        <div class="wallet-grid-stripe">
+                            <button type="button" class="wallet-stripe-btn" data-wallet="gopay">
+                                <div class="icon-avatar gopay"></div>
+                                <span>GoPay</span>
+                                <i class="fa-solid fa-circle-check checked-indicator"></i>
+                            </button>
+                            <button type="button" class="wallet-stripe-btn" data-wallet="ovo">
+                                <div class="icon-avatar ovo"></div>
+                                <span>OVO</span>
+                                <i class="fa-solid fa-circle-check checked-indicator"></i>
+                            </button>
+                            <button type="button" class="wallet-stripe-btn" data-wallet="dana">
+                                <div class="icon-avatar dana"></div>
+                                <span>DANA</span>
+                                <i class="fa-solid fa-circle-check checked-indicator"></i>
+                            </button>
+                            <button type="button" class="wallet-stripe-btn" data-wallet="linkaja">
+                                <div class="icon-avatar linkaja"></div>
+                                <span>LinkAja</span>
+                                <i class="fa-solid fa-circle-check checked-indicator"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stripe-checkout-action">
+                    <button type="button" class="stripe-pay-btn" id="payNowBtn">
+                        <span class="btn-text">Bayar Sekarang</span>
+                        <span class="btn-spinner" hidden><i class="fa-solid fa-circle-notch fa-spin"></i> Memverifikasi...</span>
+                    </button>
+                    <div class="secure-checkout-hint">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Enkripsi SSL 256-bit tepercaya. Ini adalah simulasi transaksi.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel Kanan: Ringkasan Pesanan (Stripe Style) -->
+        <section class="checkout-panel-right">
+            <div class="panel-content-wrapper">
+                <div class="order-header">
+                    <span>Berlangganan</span>
+                    <h2>Akselerasi Pro</h2>
+                    <div class="price-display">
+                        Rp 49.000 <span class="period">/ bulan</span>
+                    </div>
+                </div>
+
+                <div class="order-details-card">
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-badge">👑</div>
+                            <div>
+                                <strong>Universe Of Tech (Pro)</strong>
+                                <span id="sessionUsername">Pengguna Gratis</span>
+                            </div>
+                        </div>
+                        <span class="item-price">Rp 49.000</span>
+                    </div>
+
+                    <hr class="stripe-divider">
+
+                    <div class="stripe-bill-details">
+                        <div class="bill-row">
+                            <span>Subtotal</span>
+                            <span>Rp 49.000</span>
+                        </div>
+                        <div class="bill-row promo">
+                            <span>Diskon Aktivasi (Simulasi)</span>
+                            <span>-Rp 49.000</span>
+                        </div>
+                        <hr class="stripe-divider">
+                        <div class="bill-row total">
+                            <strong>Total Bayar</strong>
+                            <strong id="finalPriceDisplay">Rp 0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="checkout-footer">
+                    <div class="trust-icons">
+                        <span><i class="fa-solid fa-shield-halved"></i> SECURE CHECKOUT</span>
+                        <span><i class="fa-brands fa-stripe"></i> SECURED BY STRIPE</span>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Receipt Sukses Pembayaran -->
+    <div class="receipt-modal" id="successModal" aria-hidden="true">
+        <div class="receipt-card">
+            <div class="receipt-success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3>Pembayaran Berhasil</h3>
+            <p>Terima kasih atas transaksi Anda. Akun Akselerasi Pro Anda kini aktif.</p>
+
+            <div class="receipt-details">
+                <div class="receipt-row">
+                    <span>No. Transaksi</span>
+                    <strong id="receiptInvoiceNum">#UOT-20260619-7712</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Tanggal & Jam</span>
+                    <strong id="receiptDateTime">19 Juni 2026, 08:20</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Metode Bayar</span>
+                    <strong id="successPaymentMethod">Kartu Kredit</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Nominal Bayar</span>
+                    <strong>Rp 0</strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Status</span>
+                    <span class="badge-lunas">Lunas</span>
+                </div>
+            </div>
+
+            <button class="receipt-btn" id="redirectBackBtn">Masuk Ke Ruang Belajar <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <script src="sound-engine.js"></script>
+    <script src="auth-helper.js"></script>
+    <script src="payment.js"></script>
+</body>
+</html>

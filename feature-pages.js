@@ -252,7 +252,7 @@ function initTKAPage() {
         questionText.textContent = item.q;
         feedback.textContent = "Pilih jawaban untuk melihat pembahasan singkat.";
         answerGrid.innerHTML = item.answers.map((answer, index) => (
-            `<button class="answer-btn" data-answer="${index}">${answer}</button>`
+            `<button class="answer-choice answer-btn" data-answer="${index}">${answer}</button>`
         )).join("");
         answerGrid.querySelectorAll(".answer-btn").forEach(btn => {
             btn.addEventListener("click", () => {
@@ -309,42 +309,47 @@ function initTKAPage() {
 }
 
 function initTKALMSPage() {
-    const subjectList = document.getElementById("tkaLmsSubjects");
+    const isQuizPage = document.body.dataset.page === "tka-quiz";
+    const subjectList = document.getElementById("tkaLmsSubjects") || document.createElement("div");
     const difficultyFilters = document.querySelectorAll("[data-tka-difficulty]");
     const typeFilters = document.querySelectorAll("[data-tka-type]");
-    const searchInput = document.getElementById("tkaQuestionSearch");
-    const questionList = document.getElementById("tkaQuestionList");
-    const questionMeta = document.getElementById("tkaLmsQuestionMeta");
-    const questionTitle = document.getElementById("tkaLmsQuestionTitle");
-    const questionStimulus = document.getElementById("tkaLmsStimulus");
-    const answerGrid = document.getElementById("tkaLmsAnswers");
-    const explanation = document.getElementById("tkaLmsExplanation");
-    const submitButton = document.getElementById("tkaSubmitAnswer");
-    const nextButton = document.getElementById("tkaNextQuestion");
-    const reviewButton = document.getElementById("tkaMarkReview");
-    const resetButton = document.getElementById("tkaResetFilters");
-    const progressBar = document.getElementById("tkaLmsProgressBar");
+    const searchInput = document.getElementById("tkaQuestionSearch") || document.createElement("input");
+    const questionList = document.getElementById("tkaQuestionList") || document.createElement("div");
+    const questionMeta = document.getElementById("tkaLmsQuestionMeta") || document.createElement("div");
+    const questionTitle = document.getElementById("tkaLmsQuestionTitle") || document.createElement("div");
+    const questionStimulus = document.getElementById("tkaLmsStimulus") || document.createElement("div");
+    const answerGrid = document.getElementById("tkaLmsAnswers") || document.createElement("div");
+    const explanation = document.getElementById("tkaLmsExplanation") || document.createElement("div");
+    const submitButton = document.getElementById("tkaSubmitAnswer") || document.createElement("button");
+    const nextButton = document.getElementById("tkaNextQuestion") || document.createElement("button");
+    const reviewButton = document.getElementById("tkaMarkReview") || document.createElement("button");
+    const resetButton = document.getElementById("tkaResetFilters") || document.createElement("button");
+    const progressBar = document.getElementById("tkaLmsProgressBar") || document.createElement("div");
     const doneText = document.getElementById("tkaLmsDone");
     const accuracyText = document.getElementById("tkaLmsAccuracy");
     const streakText = document.getElementById("tkaLmsStreak");
     const weakText = document.getElementById("tkaLmsWeak");
     const sourceText = document.getElementById("tkaLmsSource");
     const modeFilters = document.querySelectorAll("[data-tka-mode]");
-    const sessionSizeSelect = document.getElementById("tkaSessionSize");
+    const sessionSizeSelect = document.getElementById("tkaSessionSize") || document.createElement("select");
     const timerDisplay = document.getElementById("tkaTimerDisplay");
-    const timerToggle = document.getElementById("tkaTimerToggle");
-    const timerReset = document.getElementById("tkaTimerReset");
+    const timerToggle = document.getElementById("tkaTimerToggle") || document.createElement("button");
+    const timerReset = document.getElementById("tkaTimerReset") || document.createElement("button");
     const reviewCountText = document.getElementById("tkaLmsReviewCount");
     const masteryText = document.getElementById("tkaLmsMastery");
     const sessionTargetText = document.getElementById("tkaLmsSessionTarget");
     const questionCounter = document.getElementById("tkaQuestionCounter");
     const questionStatus = document.getElementById("tkaQuestionStatus");
-    const prevButton = document.getElementById("tkaPrevQuestion");
-    const hintButton = document.getElementById("tkaShowHint");
-    const noteInput = document.getElementById("tkaQuestionNote");
-    const saveNoteButton = document.getElementById("tkaSaveNote");
-    const analyticsGrid = document.getElementById("tkaAnalyticsGrid");
-    const resetProgressButton = document.getElementById("tkaResetProgress");
+    const prevButton = document.getElementById("tkaPrevQuestion") || document.createElement("button");
+    const hintButton = document.getElementById("tkaShowHint") || document.createElement("button");
+    const noteInput = document.getElementById("tkaQuestionNote") || document.createElement("textarea");
+    const saveNoteButton = document.getElementById("tkaSaveNote") || document.createElement("button");
+    const analyticsGrid = document.getElementById("tkaAnalyticsGrid") || document.createElement("div");
+    const resetProgressButton = document.getElementById("tkaResetProgress") || document.createElement("button");
+    const launchButtons = [document.getElementById("tkaLaunchQuiz")].filter(Boolean);
+    const launchSummary = document.getElementById("tkaLaunchSummary");
+    const advancedToggle = document.getElementById("tkaAdvancedToggle");
+    const advancedPanel = document.getElementById("tkaAdvancedPanel");
 
     const subjects = [
         ["indonesia", "Bahasa Indonesia", "Wajib", "BI"],
@@ -690,7 +695,7 @@ function initTKALMSPage() {
             skill: "Gerak lurus",
             prompt: "Benda bergerak 60 meter dalam 12 detik. Kelajuan rata-ratanya adalah...",
             stimulus: "Kelajuan rata-rata = jarak / waktu.",
-            options: ["3 m/s", "4 m/s", "5 m/s", "6 m/s"],
+            options: ["3 m/s", "4 m/s^2", "5 m/s", "6 m/s^2"],
             correct: 2,
             explanation: "60 / 12 = 5 m/s."
         },
@@ -703,7 +708,7 @@ function initTKALMSPage() {
             skill: "Gaya",
             prompt: "Gaya 20 N bekerja pada benda bermassa 4 kg. Percepatan benda adalah...",
             stimulus: "Gunakan Hukum II Newton: F = m a.",
-            options: ["2 m/s2", "4 m/s2", "5 m/s2", "8 m/s2"],
+            options: ["2 m/s2", "4 m/s^22", "5 m/s2", "8 m/s^22"],
             correct: 2,
             explanation: "a = F/m = 20/4 = 5 m/s2."
         },
@@ -1461,7 +1466,26 @@ function initTKALMSPage() {
             correct: 0,
             explanation: "Rumus kepadatan penduduk adalah jumlah penduduk / luas wilayah."
         }
+        ,{ id: 'ind-new1', subject: 'indonesia', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Pemahaman Wacana', prompt: 'Manakah penulisan kata serapan yang paling tepat sesuai dengan KBBI?', stimulus: 'Penyerapan kosakata asing ke dalam bahasa Indonesia dilakukan untuk memperkaya perbendaharaan kata. Namun, tidak semua kata diserap secara utuh.', options: ['Standardisasi', 'Standarisasi', 'Jadual', 'Praktek'], correct: 0, explanation: 'Menurut KBBI, penulisan yang benar adalah standardisasi, bukan standarisasi.' }
+        ,{ id: 'ind-new2', subject: 'indonesia', difficulty: 'hots', type: 'multi', sourceKind: 'pola tka 2025', skill: 'Analisis Semantik', prompt: 'Pernyataan mana saja yang termasuk majas metafora?', stimulus: '', options: ['Dia adalah bintang kelas kami.', 'Waktu adalah uang.', 'Angin menari-nari di sela dedaunan.', 'Suaranya menggelegar membelah angkasa.'], correct: [0, 1], explanation: 'Metafora membandingkan dua hal secara langsung tanpa kata penghubung. Angin menari adalah personifikasi, menggelegar adalah hiperbola.' }
+        ,{ id: 'mat-new1', subject: 'matematika', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Geometri Analitik', prompt: 'Jarak titik pusat lingkaran x^2 + y^2 - 4x + 6y - 12 = 0 ke titik asal adalah...', stimulus: '', options: ['Akar 13', 'Akar 10', 'Akar 5', '5'], correct: 0, explanation: 'Pusat lingkaran adalah (2, -3). Jarak ke (0,0) = akar dari (2^2 + (-3)^2) = akar 13.' }
+        ,{ id: 'mat-new2', subject: 'matematika', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Peluang', prompt: 'Dua buah dadu dilempar bersamaan. Peluang munculnya jumlah mata dadu 7 adalah...', stimulus: '', options: ['1/6', '1/12', '1/8', '1/36'], correct: 0, explanation: 'Pasangan berjumlah 7: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1). Total ada 6 dari 36 kemungkinan, sehingga peluangnya 6/36 = 1/6.' }
+        ,{ id: 'ing-new1', subject: 'inggris', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Reading Comprehension', prompt: 'What is the primary purpose of the author in the passage?', stimulus: 'The rapid advancement of artificial intelligence has led to widespread debates. While some fear job displacement, others argue it will create new, highly-skilled opportunities.', options: ['To express fear about AI', 'To present varying perspectives on AI', 'To condemn technological advancement', 'To list future job opportunities'], correct: 1, explanation: 'The author mentions both the fear of job displacement and the hope for new opportunities, presenting a balanced view.' }
+        ,{ id: 'ing-new2', subject: 'inggris', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Vocabulary in Context', prompt: 'The word "ubiquitous" in the context most nearly means...', stimulus: 'Smartphones have become ubiquitous in modern society; it is rare to find someone without one.', options: ['Expensive', 'Rare', 'Ever-present', 'Complicated'], correct: 2, explanation: 'Ubiquitous means present, appearing, or found everywhere.' }
+        ,{ id: 'fis-new1', subject: 'fisika', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Dinamika', prompt: 'Sebuah balok bermassa 5 kg ditarik gaya 50 N membentuk sudut 37 derajat terhadap horizontal. Jika lantai licin, percepatannya adalah...', stimulus: '', options: ['8 m/s2', '10 m/s2', '6 m/s2', '4 m/s2'], correct: 0, explanation: 'Komponen gaya horizontal Fx = F cos 37 = 50 x 0,8 = 40 N. Percepatan a = Fx / m = 40 / 5 = 8 m/s2.' }
+        ,{ id: 'fis-new2', subject: 'fisika', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Termodinamika', prompt: 'Proses termodinamika di mana tidak ada kalor yang masuk atau keluar sistem disebut...', stimulus: '', options: ['Isotermal', 'Isobarik', 'Adiabatik', 'Isokhorik'], correct: 2, explanation: 'Proses adiabatik adalah proses termodinamika di mana tidak ada pertukaran kalor antara sistem dan lingkungannya (Q = 0).' }
+        ,{ id: 'kim-new1', subject: 'kimia', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Stoikiometri', prompt: 'Berapa mol H2O yang dihasilkan dari pembakaran sempurna 1 mol CH4?', stimulus: 'Reaksi: CH4 + 2O2 -> CO2 + 2H2O', options: ['1 mol', '2 mol', '3 mol', '4 mol'], correct: 1, explanation: 'Berdasarkan persamaan reaksi yang setara, koefisien H2O adalah 2, sehingga dihasilkan 2 mol H2O.' }
+        ,{ id: 'kim-new2', subject: 'kimia', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Ikatan Kimia', prompt: 'Bentuk geometri molekul SF6 adalah...', stimulus: '', options: ['Tetrahedral', 'Oktahedral', 'Trigonal Bipiramida', 'Linear'], correct: 1, explanation: 'SF6 memiliki 6 pasangan elektron ikatan dan 0 pasangan elektron bebas, sehingga bentuknya oktahedral.' }
+        ,{ id: 'bio-new1', subject: 'biologi', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Sel', prompt: 'Organel sel yang berfungsi sebagai tempat respirasi seluler dan penghasil energi adalah...', stimulus: '', options: ['Nukleus', 'Ribosom', 'Mitokondria', 'Badan Golgi'], correct: 2, explanation: 'Mitokondria adalah organel tempat terjadinya respirasi seluler untuk menghasilkan ATP (energi).' }
+        ,{ id: 'bio-new2', subject: 'biologi', difficulty: 'hots', type: 'multi', sourceKind: 'pola tka 2025', skill: 'Genetika', prompt: 'Manakah dari berikut ini yang merupakan penyimpangan semu hukum Mendel?', stimulus: '', options: ['Kriptomeri', 'Polimeri', 'Epistasis', 'Pautan Seks'], correct: [0, 1, 2], explanation: 'Penyimpangan semu hukum Mendel meliputi epistasis, kriptomeri, polimeri, komplementer, dan atavisme. Pautan seks bukan termasuk penyimpangan semu.' }
+        ,{ id: 'eko-new1', subject: 'ekonomi', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Mikroekonomi', prompt: 'Kurva permintaan bergeser ke kanan dapat disebabkan oleh...', stimulus: '', options: ['Penurunan pendapatan', 'Peningkatan selera konsumen', 'Kenaikan harga barang pengganti', 'Kenaikan harga barang itu sendiri'], correct: 1, explanation: 'Peningkatan selera konsumen terhadap suatu barang akan meningkatkan permintaan pada tingkat harga berapapun, menggeser kurva ke kanan.' }
+        ,{ id: 'eko-new2', subject: 'ekonomi', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Makroekonomi', prompt: 'Kebijakan moneter kontraktif yang dapat dilakukan oleh bank sentral adalah...', stimulus: '', options: ['Menurunkan suku bunga', 'Membeli surat berharga', 'Menaikkan giro wajib minimum', 'Menurunkan pajak'], correct: 2, explanation: 'Menaikkan giro wajib minimum (reserve requirement) mengurangi jumlah uang beredar, yang merupakan ciri kebijakan moneter kontraktif.' }
+        ,{ id: 'sos-new1', subject: 'sosiologi', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Interaksi Sosial', prompt: 'Suatu bentuk interaksi sosial yang ditandai dengan adanya persaingan untuk mencapai tujuan yang sama tanpa menggunakan ancaman fisik disebut...', stimulus: '', options: ['Kooperasi', 'Asimilasi', 'Kompetisi', 'Konflik'], correct: 2, explanation: 'Kompetisi (persaingan) adalah proses sosial bersaing mencapai keuntungan tanpa ancaman atau kekerasan.' }
+        ,{ id: 'sos-new2', subject: 'sosiologi', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Perubahan Sosial', prompt: 'Teori yang memandang perubahan sosial bergerak secara linear menuju masyarakat yang lebih kompleks disebut teori...', stimulus: '', options: ['Siklus', 'Evolusi', 'Konflik', 'Fungsional'], correct: 1, explanation: 'Teori evolusi (linear) menyatakan bahwa masyarakat berubah secara bertahap dan searah menuju tahap yang lebih kompleks/maju.' }
+        ,{ id: 'geo-new1', subject: 'geografi', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Atmosfer', prompt: 'Lapisan atmosfer tempat terjadinya fenomena cuaca seperti awan dan hujan adalah...', stimulus: '', options: ['Troposfer', 'Stratosfer', 'Mesosfer', 'Termosfer'], correct: 0, explanation: 'Fenomena cuaca dan iklim terjadi di lapisan troposfer, lapisan atmosfer terendah.' }
+        ,{ id: 'geo-new2', subject: 'geografi', difficulty: 'hots', type: 'multi', sourceKind: 'pola tka 2025', skill: 'SIG', prompt: 'Keunggulan Sistem Informasi Geografis (SIG) dibandingkan peta konvensional adalah...', stimulus: '', options: ['Pembaruan data lebih cepat', 'Biaya pengadaan awal sangat murah', 'Dapat melakukan analisis spasial kompleks', 'Penyimpanan data lebih efisien'], correct: [0, 2, 3], explanation: 'Keunggulan SIG meliputi kemudahan pembaruan, analisis spasial kompleks, dan efisiensi penyimpanan digital. Biaya awal hardware/software justru cenderung mahal.' }
     ];
+    questionBank.push(...(window.TKA_SUPPLEMENTAL_QUESTIONS || []));
 
     const progress = storage.get("tka_lms_progress", { answers: {}, streak: 0, elapsedSeconds: 0, timerRunning: false });
     progress.answers = progress.answers || {};
@@ -1484,27 +1508,58 @@ function initTKALMSPage() {
     let selectedAnswers = [];
     let lastRenderedQuestionId = "";
     let timerId = null;
+    let subjectMenuOpen = false;
+    let focusedSubjectIndex = 0;
+
+    if (!isQuizPage) {
+        window.addEventListener("scroll", () => {
+            if (!subjectMenuOpen) return;
+            subjectMenuOpen = false;
+            renderSubjects();
+        }, { passive: true });
+    }
 
     function getSubject(id) {
         return subjects.find(subject => subject.id === id) || subjects[0];
     }
 
-    function getFilteredQuestions() {
+    function questionMatchesMode(question) {
+        const saved = progress.answers[question.id];
+        return activeMode === "all"
+            || (activeMode === "unanswered" && !saved?.submitted)
+            || (activeMode === "wrong" && saved?.submitted && !saved.correct)
+            || (activeMode === "review" && saved?.review);
+    }
+
+    function getStrictFilteredQuestions() {
         const query = searchInput.value.trim().toLowerCase();
-        const filtered = questionBank.filter(question => {
-            const saved = progress.answers[question.id];
+        return questionBank.filter(question => {
             const matchSubject = question.subject === activeSubject;
             const matchDifficulty = activeDifficulty === "all" || question.difficulty === activeDifficulty;
             const matchType = activeType === "all" || question.type === activeType;
-            const matchMode = activeMode === "all"
-                || (activeMode === "unanswered" && !saved?.submitted)
-                || (activeMode === "wrong" && saved?.submitted && !saved.correct)
-                || (activeMode === "review" && saved?.review);
             const searchable = `${question.prompt} ${question.stimulus} ${question.skill} ${question.sourceKind}`.toLowerCase();
-            return matchSubject && matchDifficulty && matchType && matchMode && searchable.includes(query);
+            return matchSubject && matchDifficulty && matchType && questionMatchesMode(question) && searchable.includes(query);
         });
-        if (sessionSize === "all") return filtered;
-        return filtered.slice(0, Number(sessionSize || 10));
+    }
+
+    function getFilteredQuestions() {
+        const strictMatches = getStrictFilteredQuestions();
+        if (sessionSize === "all") return strictMatches;
+
+        const targetSize = Number(sessionSize || 10);
+        if (strictMatches.length === 0 || strictMatches.length >= targetSize || searchInput.value.trim()) {
+            return strictMatches.slice(0, targetSize);
+        }
+
+        // Keep advanced filters as the priority, then fill the requested session
+        // from the same subject and learning mode so a 20-question target stays 20.
+        const selectedIds = new Set(strictMatches.map(question => question.id));
+        const fillers = questionBank.filter(question =>
+            question.subject === activeSubject
+            && questionMatchesMode(question)
+            && !selectedIds.has(question.id)
+        );
+        return [...strictMatches, ...fillers].slice(0, targetSize);
     }
 
     function isCorrect(question, chosen) {
@@ -1550,27 +1605,122 @@ function initTKALMSPage() {
     }
 
     function renderSubjects() {
-        subjectList.innerHTML = subjects.map(subject => {
-            const total = questionBank.filter(question => question.subject === subject.id).length;
-            const stats = getSubjectAccuracy(subject.id);
-            return `
-                <button class="lms-subject ${subject.id === activeSubject ? "active" : ""}" data-tka-subject="${subject.id}">
-                    <span>${subject.mark}</span>
-                    <div>
-                        <strong>${subject.name}</strong>
-                        <small>${subject.group} - ${stats.done}/${total} selesai - ${stats.accuracy}%</small>
-                    </div>
-                </button>
-            `;
-        }).join("");
-        subjectList.querySelectorAll("[data-tka-subject]").forEach(button => {
-            button.addEventListener("click", () => {
-                activeSubject = button.dataset.tkaSubject;
-                selectedQuestionId = "";
-                updatePreferences();
-                renderAll();
-            });
+        if (isQuizPage || !subjectList.isConnected) return;
+        const active = getSubject(activeSubject);
+        const activeTotal = questionBank.filter(question => question.subject === active.id).length;
+        const activeStats = getSubjectAccuracy(active.id);
+        subjectList.innerHTML = `
+            <button class="lms-subject-trigger" id="tkaSubjectTrigger" type="button" role="combobox"
+                aria-haspopup="listbox" aria-expanded="${subjectMenuOpen}" aria-controls="tkaSubjectOptions">
+                <span class="lms-subject-mark">${active.mark}</span>
+                <span class="lms-subject-copy">
+                    <strong>${active.name}</strong>
+                    <small>${active.group} - ${activeStats.done}/${activeTotal} selesai - ${activeStats.accuracy}%</small>
+                </span>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="lms-subject-menu" id="tkaSubjectMenu" ${subjectMenuOpen ? "" : "hidden"}>
+                <input class="lms-subject-search" id="tkaSubjectSearch" type="search"
+                    placeholder="Cari mapel..." aria-label="Cari mapel" autocomplete="off">
+                <div class="lms-subject-options" id="tkaSubjectOptions" role="listbox" aria-label="Daftar mapel"></div>
+            </div>
+        `;
+
+        const trigger = document.getElementById("tkaSubjectTrigger");
+        const menu = document.getElementById("tkaSubjectMenu");
+        const subjectSearch = document.getElementById("tkaSubjectSearch");
+        const options = document.getElementById("tkaSubjectOptions");
+
+        function getVisibleSubjects() {
+            const query = subjectSearch.value.trim().toLowerCase();
+            return subjects.filter(subject => `${subject.name} ${subject.group} ${subject.mark}`.toLowerCase().includes(query));
+        }
+
+        function renderSubjectOptions() {
+            const visibleSubjects = getVisibleSubjects();
+            focusedSubjectIndex = Math.min(focusedSubjectIndex, Math.max(visibleSubjects.length - 1, 0));
+            options.innerHTML = visibleSubjects.map((subject, index) => {
+                const total = questionBank.filter(question => question.subject === subject.id).length;
+                const stats = getSubjectAccuracy(subject.id);
+                return `
+                    <button class="lms-subject-option ${index === focusedSubjectIndex ? "focused" : ""}"
+                        type="button" role="option" aria-selected="${subject.id === activeSubject}"
+                        data-tka-subject="${subject.id}">
+                        <span class="lms-subject-mark">${subject.mark}</span>
+                        <span class="lms-subject-copy">
+                            <strong>${subject.name}</strong>
+                            <small>${subject.group} - ${stats.done}/${total} selesai</small>
+                        </span>
+                        <small>${stats.accuracy}%</small>
+                    </button>
+                `;
+            }).join("") || `<div class="lms-subject-empty">Mapel tidak ditemukan.</div>`;
+            options.querySelector(".focused")?.scrollIntoView({ block: "nearest" });
+        }
+
+        function closeSubjectMenu({ focusTrigger = false } = {}) {
+            subjectMenuOpen = false;
+            menu.hidden = true;
+            trigger.setAttribute("aria-expanded", "false");
+            if (focusTrigger) trigger.focus();
+        }
+
+        function selectSubject(subjectId) {
+            activeSubject = subjectId;
+            selectedQuestionId = "";
+            subjectMenuOpen = false;
+            focusedSubjectIndex = Math.max(0, subjects.findIndex(subject => subject.id === subjectId));
+            updatePreferences();
+            renderAll();
+            document.getElementById("tkaSubjectTrigger")?.focus();
+        }
+
+        function openSubjectMenu() {
+            subjectMenuOpen = true;
+            menu.hidden = false;
+            trigger.setAttribute("aria-expanded", "true");
+            focusedSubjectIndex = Math.max(0, subjects.findIndex(subject => subject.id === activeSubject));
+            renderSubjectOptions();
+            subjectSearch.focus();
+        }
+
+        trigger.addEventListener("click", () => {
+            if (subjectMenuOpen) closeSubjectMenu();
+            else openSubjectMenu();
         });
+        trigger.addEventListener("keydown", event => {
+            if (["ArrowDown", "Enter", " "].includes(event.key)) {
+                event.preventDefault();
+                openSubjectMenu();
+            }
+        });
+        subjectSearch.addEventListener("input", () => {
+            focusedSubjectIndex = 0;
+            renderSubjectOptions();
+        });
+        subjectSearch.addEventListener("keydown", event => {
+            const visibleSubjects = getVisibleSubjects();
+            if (event.key === "Escape") {
+                event.preventDefault();
+                closeSubjectMenu({ focusTrigger: true });
+            } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+                event.preventDefault();
+                const direction = event.key === "ArrowDown" ? 1 : -1;
+                focusedSubjectIndex = (focusedSubjectIndex + direction + visibleSubjects.length) % Math.max(visibleSubjects.length, 1);
+                renderSubjectOptions();
+            } else if (event.key === "Enter" && visibleSubjects[focusedSubjectIndex]) {
+                event.preventDefault();
+                selectSubject(visibleSubjects[focusedSubjectIndex].id);
+            }
+        });
+        options.addEventListener("click", event => {
+            const option = event.target.closest("[data-tka-subject]");
+            if (option) selectSubject(option.dataset.tkaSubject);
+        });
+        subjectList.onfocusout = event => {
+            if (subjectMenuOpen && !subjectList.contains(event.relatedTarget)) closeSubjectMenu();
+        };
+        renderSubjectOptions();
     }
 
     function renderFilters() {
@@ -1586,24 +1736,52 @@ function initTKALMSPage() {
         sessionSizeSelect.value = sessionSize;
     }
 
+    function renderLaunchSummary() {
+        if (!launchSummary) return;
+        const subject = getSubject(activeSubject);
+        const questionCount = getFilteredQuestions().length;
+        const strictQuestionCount = getStrictFilteredQuestions().length;
+        const hasSessionFill = sessionSize !== "all"
+            && !searchInput.value.trim()
+            && strictQuestionCount > 0
+            && strictQuestionCount < questionCount;
+        const modeNames = {
+            all: "Semua soal",
+            unanswered: "Belum dijawab",
+            wrong: "Jawaban salah",
+            review: "Daftar review"
+        };
+        const difficultyName = activeDifficulty === "all" ? "Semua level" : labels[activeDifficulty];
+        const typeName = activeType === "all" ? "Semua tipe" : labels[activeType];
+        const sizeName = sessionSize === "all" ? "Marathon" : `${sessionSize} soal`;
+        launchSummary.innerHTML = `
+            <div class="lms-summary-item"><span>Mapel</span><strong>${subject.name}</strong></div>
+            <div class="lms-summary-item"><span>Sesi</span><strong>${modeNames[activeMode] || "Semua soal"} - ${sizeName}</strong></div>
+            <div class="lms-summary-item"><span>Tersedia</span><strong>${questionCount} soal</strong></div>
+            ${hasSessionFill ? `<div class="lms-summary-note">${strictQuestionCount} sesuai filter, ${questionCount - strictQuestionCount} soal pelengkap dari mapel yang sama.</div>` : ""}
+            ${questionCount === 0 ? `<div class="lms-summary-empty">Tidak ada soal yang cocok. Ubah filter lanjutan.</div>` : ""}
+        `;
+        launchButtons.forEach(button => {
+            button.disabled = questionCount === 0;
+            button.title = questionCount === 0
+                ? "Ubah filter karena belum ada soal yang cocok."
+                : "Mulai sesi di ruang quiz.";
+        });
+        if (advancedToggle) {
+            const hasAdvancedFilters = activeDifficulty !== "all" || activeType !== "all" || Boolean(searchInput.value.trim());
+            advancedToggle.classList.toggle("has-active-filter", hasAdvancedFilters);
+            advancedToggle.title = hasAdvancedFilters
+                ? `${difficultyName}, ${typeName}${searchInput.value.trim() ? ", pencarian aktif" : ""}`
+                : "Tampilkan pencarian, tingkat kesulitan, dan tipe soal.";
+        }
+    }
+
     function renderQuestionList() {
         const filtered = getFilteredQuestions();
         if (!filtered.some(question => question.id === selectedQuestionId)) {
             selectedQuestionId = filtered[0]?.id || "";
         }
-        questionList.innerHTML = filtered.map((question, index) => {
-            const answer = progress.answers[question.id];
-            const status = answer?.submitted ? (answer.correct ? "Benar" : "Review") : "Belum";
-            return `
-                <button class="lms-question-item ${question.id === selectedQuestionId ? "active" : ""}" data-tka-question="${question.id}">
-                    <span>${String(index + 1).padStart(2, "0")}</span>
-                    <div>
-                        <strong>${question.skill}</strong>
-                        <small>${labels[question.difficulty]} - ${labels[question.type]} - ${status}</small>
-                    </div>
-                </button>
-            `;
-        }).join("") || `<div class="empty-state">Tidak ada soal untuk filter ini. Ubah mapel, tingkat, atau kata kunci.</div>`;
+        questionList.innerHTML = filtered.map((question, index) => { const answer = progress.answers[question.id]; let stateClass = ""; if (answer?.submitted) stateClass = answer.correct ? "answered correct" : "wrong"; else if (answer?.review) stateClass = "review"; else if (answer?.selected !== undefined) stateClass = "answered"; const activeClass = question.id === selectedQuestionId ? "current" : ""; return `<button class="question-jump ${stateClass} ${activeClass}" data-tka-question="${question.id}">${index + 1}</button>`; }).join("") || `<div style="color:var(--text-muted); font-size:0.875rem;">Tidak ada soal.</div>`;
         questionList.querySelectorAll("[data-tka-question]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedQuestionId = button.dataset.tkaQuestion;
@@ -1621,13 +1799,13 @@ function initTKALMSPage() {
             .sort((a, b) => a.accuracy - b.accuracy)[0];
         const filtered = getFilteredQuestions();
         const filteredDone = filtered.filter(question => progress.answers[question.id]?.submitted).length;
-        doneText.textContent = `${stats.done}/${questionBank.length}`;
-        accuracyText.textContent = `${stats.accuracy}%`;
-        streakText.textContent = progress.streak || 0;
-        weakText.textContent = weakSubject ? weakSubject.name : "Belum ada";
-        reviewCountText.textContent = stats.review;
-        masteryText.textContent = `${Math.round((stats.correct / questionBank.length) * 100)}%`;
-        sessionTargetText.textContent = `${filteredDone}/${filtered.length || 0}`;
+        if (doneText) doneText.textContent = `${stats.done}/${questionBank.length}`;
+        if (accuracyText) accuracyText.textContent = `${stats.accuracy}%`;
+        if (streakText) streakText.textContent = progress.streak || 0;
+        if (weakText) weakText.textContent = weakSubject ? weakSubject.name : "Belum ada";
+        if (reviewCountText) reviewCountText.textContent = stats.review;
+        if (masteryText) masteryText.textContent = `${Math.round((stats.correct / questionBank.length) * 100)}%`;
+        if (sessionTargetText) sessionTargetText.textContent = `${filteredDone}/${filtered.length || 0}`;
         progressBar.style.width = `${Math.round((stats.done / questionBank.length) * 100)}%`;
     }
 
@@ -1654,6 +1832,91 @@ function initTKALMSPage() {
         }).join("");
     }
 
+    function renderReviewHistory() {
+        const historyContainer = document.getElementById("tkaHistoryContainer");
+        if (!historyContainer) return;
+        
+        const answeredIds = Object.keys(progress.answers).filter(id => progress.answers[id].submitted);
+        if (answeredIds.length === 0) {
+            historyContainer.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--muted); font-style: italic;">Belum ada riwayat latihan. Kerjakan beberapa soal terlebih dahulu!</div>`;
+            return;
+        }
+        
+        const recentAnswers = answeredIds.slice(-20).reverse();
+        
+        historyContainer.innerHTML = recentAnswers.map(id => {
+            const question = questionBank.find(q => q.id === id);
+            if(!question) return "";
+            const answer = progress.answers[id];
+            const isCorrect = answer.correct;
+            const tagClass = isCorrect ? 'tag-correct' : 'tag-wrong';
+            const tagText = isCorrect ? 'BENAR' : 'SALAH';
+            const shortPrompt = question.prompt.length > 55 ? question.prompt.substring(0, 55) + '...' : question.prompt;
+            
+            return `
+                <div class="history-row">
+                    <span class="history-tag ${tagClass}">${tagText}</span>
+                    <div class="history-preview" title="${question.prompt.replace(/"/g, '&quot;')}">${shortPrompt}</div>
+                    <span style="font-size: 12px; color: var(--muted);">${getSubject(question.subject).name}</span>
+                    <button class="btn btn-ghost" style="padding: 6px 12px; font-size: 12px; border-radius: 8px;" data-review-id="${id}">Baca Pembahasan</button>
+                </div>
+            `;
+        }).join("");
+
+        historyContainer.querySelectorAll('[data-review-id]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                openReviewModal(btn.dataset.reviewId);
+            });
+        });
+    }
+
+    function openReviewModal(questionId) {
+        const question = questionBank.find(q => q.id === questionId);
+        if(!question) return;
+        
+        const modalBody = document.getElementById("reviewModalBody");
+        const modalOverlay = document.getElementById("reviewModalOverlay");
+        if(!modalBody || !modalOverlay) return;
+
+        let optionsHtml = '';
+        if (question.type === "truefalse") {
+            optionsHtml = `<ul><li>Benar</li><li>Salah</li></ul>`;
+        } else {
+            optionsHtml = `<ul style="padding-left:20px; margin-top:8px;">${question.options.map(opt => `<li style="margin-bottom:4px;">${opt}</li>`).join('')}</ul>`;
+        }
+        
+        let correctAnswerText = "";
+        if (question.type === "truefalse") {
+            correctAnswerText = question.options[question.correct];
+        } else if (Array.isArray(question.correct)) {
+            correctAnswerText = question.correct.map(idx => question.options[idx]).join(", ");
+        } else {
+            correctAnswerText = question.options[question.correct];
+        }
+
+        modalBody.innerHTML = `
+            <div style="margin-bottom: 16px;">
+                <span class="mini-tag">${getSubject(question.subject).name} - ${question.difficulty}</span>
+                <span class="mini-tag" style="background:var(--surface-2); color:var(--text); margin-left:8px;">${question.skill}</span>
+            </div>
+            ${question.stimulus ? `<div class="stimulus-box" style="margin-bottom:16px;">${question.stimulus}</div>` : ''}
+            <h4 style="margin-bottom:12px; font-size: 1.1rem; font-weight: 600;">${question.prompt}</h4>
+            <div style="opacity:0.8; font-size: 0.95rem; margin-bottom: 24px;">${optionsHtml}</div>
+            
+            <div class="review-correct-answer">
+                <strong style="display:block; margin-bottom:8px;">Kunci Jawaban:</strong>
+                ${correctAnswerText}
+            </div>
+            
+            <div class="review-explanation">
+                <strong style="display:block; margin-bottom:8px;">Pembahasan:</strong>
+                ${question.explanation || "Pembahasan belum tersedia untuk soal ini."}
+            </div>
+        `;
+        
+        modalOverlay.classList.add("show");
+    }
+
     function formatTimer(seconds) {
         const minutes = Math.floor(seconds / 60).toString().padStart(2, "0");
         const remaining = Math.floor(seconds % 60).toString().padStart(2, "0");
@@ -1661,13 +1924,13 @@ function initTKALMSPage() {
     }
 
     function renderTimer() {
-        timerDisplay.textContent = formatTimer(progress.elapsedSeconds);
+        if (timerDisplay) timerDisplay.textContent = formatTimer(progress.elapsedSeconds);
         timerToggle.textContent = progress.timerRunning ? "Pause Timer" : "Mulai Timer";
     }
 
     function startTimerLoop() {
         clearInterval(timerId);
-        if (!progress.timerRunning) return;
+        if (!isQuizPage || !progress.timerRunning) return;
         timerId = setInterval(() => {
             progress.elapsedSeconds += 1;
             saveProgress();
@@ -1704,12 +1967,7 @@ function initTKALMSPage() {
             lastRenderedQuestionId = question.id;
         }
         const subject = getSubject(question.subject);
-        questionMeta.innerHTML = `
-            <span>${subject.name}</span>
-            <span>${labels[question.difficulty]}</span>
-            <span>${labels[question.type]}</span>
-            <span>${question.sourceKind}</span>
-        `;
+        questionMeta.innerHTML = `<span class="meta-tag">${subject.name}</span><span class="meta-tag difficulty-${question.difficulty}">${labels[question.difficulty]}</span><span class="meta-tag">${labels[question.type]}</span><span class="meta-tag">${question.sourceKind}</span>`;
         questionCounter.textContent = `Soal ${questionIndex + 1}/${filtered.length}`;
         questionStatus.textContent = saved?.submitted ? (saved.correct ? "Benar" : "Salah") : saved?.review ? "Review" : "Belum dijawab";
         questionTitle.textContent = question.prompt;
@@ -1721,15 +1979,14 @@ function initTKALMSPage() {
         answerGrid.innerHTML = question.options.map((option, index) => {
             const selected = selectedAnswers.includes(index);
             const correct = Array.isArray(question.correct) ? question.correct.includes(index) : question.correct === index;
-            const stateClass = saved?.submitted && correct ? "correct" : saved?.submitted && selected && !correct ? "wrong" : "";
-            return `<button class="answer-btn ${selected ? "selected" : ""} ${stateClass}" data-lms-answer="${index}" ${saved?.submitted ? "disabled" : ""}>${option}</button>`;
+            const stateClass = saved?.submitted && correct ? "is-correct correct" : saved?.submitted && selected && !correct ? "is-wrong wrong" : "";
+            return `<button class="answer-choice answer-btn ${selected ? "selected" : ""} ${stateClass}" data-lms-answer="${index}" ${saved?.submitted ? "disabled" : ""}>${option}</button>`;
         }).join("");
         explanation.innerHTML = saved?.submitted
             ? `<strong>${saved.correct ? "Jawaban benar." : "Perlu review."}</strong><p>${question.explanation}</p>`
             : `<p class="muted">${question.type === "multi" ? "Pilih semua jawaban yang benar, lalu tekan Submit." : "Pilih satu jawaban, lalu tekan Submit."}</p>`;
         submitButton.disabled = Boolean(saved?.submitted);
-        nextButton.disabled = false;
-        prevButton.disabled = false;
+        const isLast = questionIndex === filtered.length - 1; nextButton.textContent = isLast ? "Selesai Latihan" : "Soal Berikutnya"; if (isLast) nextButton.style.background = "linear-gradient(135deg, var(--danger), var(--purple))"; else nextButton.style.background = ""; nextButton.disabled = false; prevButton.disabled = false;
         hintButton.disabled = Boolean(saved?.submitted);
         reviewButton.disabled = false;
         reviewButton.textContent = saved?.review ? "Batal Review" : "Tandai Review";
@@ -1769,14 +2026,7 @@ function initTKALMSPage() {
         renderAll();
     }
 
-    function moveQuestion(direction = 1) {
-        const filtered = getFilteredQuestions();
-        if (!filtered.length) return;
-        const index = filtered.findIndex(question => question.id === selectedQuestionId);
-        selectedQuestionId = filtered[(index + direction + filtered.length) % filtered.length].id;
-        renderActiveQuestion();
-        renderQuestionList();
-    }
+    function moveQuestion(direction = 1) { const filtered = getFilteredQuestions(); if (!filtered.length) return; const index = filtered.findIndex(question => question.id === selectedQuestionId); if (direction === 1 && index === filtered.length - 1) { const unanswered = filtered.filter(q => !progress.answers[q.id]?.submitted).length; if (unanswered > 0) { if (!confirm(`Terdapat ${unanswered} soal yang belum dijawab atau disubmit.\n\nYakin ingin mengakhiri sesi latihan ini?`)) return; } else { if (!confirm("Hebat! Semua soal telah dijawab.\n\nAkhiri sesi dan kembali ke Dashboard?")) return; } window.location.href = "tka-lms.html#lms-dashboard"; return; } selectedQuestionId = filtered[(index + direction + filtered.length) % filtered.length].id; renderActiveQuestion(); renderQuestionList(); }
 
     function showHint() {
         const question = questionBank.find(item => item.id === selectedQuestionId);
@@ -1871,6 +2121,11 @@ function initTKALMSPage() {
             updatePreferences();
             renderAll();
         });
+        advancedToggle?.addEventListener("click", () => {
+            const isOpen = advancedToggle.getAttribute("aria-expanded") === "true";
+            advancedToggle.setAttribute("aria-expanded", String(!isOpen));
+            advancedPanel.hidden = isOpen;
+        });
         submitButton.addEventListener("click", submitAnswer);
         nextButton.addEventListener("click", () => moveQuestion(1));
         prevButton.addEventListener("click", () => moveQuestion(-1));
@@ -1891,21 +2146,41 @@ function initTKALMSPage() {
             renderTimer();
             startTimerLoop();
         });
+        launchButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                updatePreferences();
+                window.location.href = "tka-quiz.html";
+            });
+        });
     }
 
     function renderAll() {
         renderSubjects();
         renderFilters();
-        renderQuestionList();
-        renderActiveQuestion();
         renderMetrics();
         renderAnalytics();
+        renderReviewHistory();
         renderTimer();
+        renderLaunchSummary();
+        if (isQuizPage) {
+            renderQuestionList();
+            renderActiveQuestion();
+        }
     }
 
     searchInput.value = preferences.query || "";
     sessionSizeSelect.value = sessionSize;
     bindFilters();
+    
+    const reviewModalOverlay = document.getElementById("reviewModalOverlay");
+    const closeReviewModal = document.getElementById("closeReviewModal");
+    if (closeReviewModal && reviewModalOverlay) {
+        closeReviewModal.addEventListener("click", () => reviewModalOverlay.classList.remove("show"));
+        reviewModalOverlay.addEventListener("click", (e) => {
+            if(e.target === reviewModalOverlay) reviewModalOverlay.classList.remove("show");
+        });
+    }
+
     renderTimer();
     startTimerLoop();
     renderAll();
@@ -2730,7 +3005,7 @@ function initBahasaPage() {
         document.getElementById("languageQuizMeta").textContent = `${selected.label} - ${selected.region}`;
         quizQuestion.textContent = selected.quiz.q;
         answerGrid.classList.remove("answered");
-        answerGrid.innerHTML = answers.map(answer => `<button class="answer-btn">${answer}</button>`).join("");
+        answerGrid.innerHTML = answers.map(answer => `<button class="answer-choice answer-btn">${answer}</button>`).join("");
         answerGrid.querySelectorAll("button").forEach(btn => {
             btn.addEventListener("click", () => {
                 recordActivity();
@@ -2987,7 +3262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initTheme();
     const page = document.body.dataset.page;
     if (page === "snbt") initTKAPage();
-    if (page === "tka-lms") initTKALMSPage();
+    if (page === "tka-lms" || page === "tka-quiz") initTKALMSPage();
     if (page === "library") initLibraryPage();
     if (page === "bahasa") initBahasaPage();
 });

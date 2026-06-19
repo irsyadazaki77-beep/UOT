@@ -1,0 +1,689 @@
+/* ============================================================
+   STRIPE-STYLE CHECKOUT PORTAL STYLESHEET
+   ============================================================ */
+
+body[data-page="payment"] {
+    background: var(--white);
+    color: var(--dark);
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
+}
+
+/* Split-Viewport Layout */
+.checkout-viewport {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    min-height: 100vh;
+}
+
+.checkout-panel-left,
+.checkout-panel-right {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sisi Kiri: Formulir (Putih Bersih / Gelap Bersih) */
+.checkout-panel-left {
+    background: var(--white);
+    border-right: 1px solid var(--border);
+    align-items: flex-end;
+}
+
+/* Sisi Kanan: Summary (Kontras Lembut / Navy Gelap) */
+.checkout-panel-right {
+    background: var(--soft);
+    align-items: flex-start;
+}
+
+/* Wrapper Konten */
+.checkout-panel-left .panel-content-wrapper {
+    width: 100%;
+    max-width: 580px;
+    padding: 60px 48px;
+}
+
+.checkout-panel-right .panel-content-wrapper {
+    width: 100%;
+    max-width: 480px;
+    padding: 96px 48px 60px;
+    position: sticky;
+    top: 0;
+}
+
+/* Header & Brand */
+.checkout-header {
+    margin-bottom: 40px;
+}
+
+.checkout-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: -0.04em;
+    color: var(--dark);
+}
+
+.checkout-brand .brand-logo {
+    height: 48px;
+    width: auto;
+}
+
+/* Navigasi & Judul */
+.checkout-step-container {
+    margin-bottom: 24px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.back-link:hover {
+    color: var(--blue);
+    transform: translateX(-2px);
+}
+
+.checkout-step-container h2 {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--dark);
+}
+
+/* Tab Metode Pembayaran Stripe */
+.payment-tabs-stripe {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--item-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 5px;
+    gap: 4px;
+    margin-bottom: 28px;
+}
+
+.stripe-tab-btn {
+    border: 0;
+    background: transparent;
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.stripe-tab-btn:hover {
+    color: var(--dark);
+}
+
+.stripe-tab-btn.active {
+    background: var(--white);
+    color: var(--blue);
+    box-shadow: var(--shadow-soft);
+}
+
+/* Panel Transisi */
+.stripe-panels {
+    margin-bottom: 24px;
+}
+
+.stripe-panel {
+    display: none;
+    animation: panelIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stripe-panel.active {
+    display: grid;
+    gap: 20px;
+}
+
+/* Formulir Stripe */
+.stripe-form {
+    display: grid;
+    gap: 16px;
+}
+
+.form-row {
+    display: grid;
+    gap: 6px;
+}
+
+.form-row.split {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.stripe-form label {
+    display: grid;
+    gap: 6px;
+    color: var(--dark);
+    font-size: 12.5px;
+    font-weight: 800;
+}
+
+.stripe-form label span {
+    color: var(--dark);
+    font-weight: 800;
+}
+
+.stripe-form input,
+.stripe-form select {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--dark);
+    outline: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.stripe-form input:focus,
+.stripe-form select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3.5px rgba(79, 140, 255, 0.12);
+}
+
+.stripe-form input::placeholder {
+    color: var(--muted);
+    opacity: 0.6;
+}
+
+/* Input Brand Logo Wrapper */
+.card-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.card-brand-icon {
+    position: absolute;
+    right: 15px;
+    font-size: 20px;
+    color: var(--muted);
+    pointer-events: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.card-brand-icon.visa {
+    color: #1a1f71;
+    transform: scale(1.1);
+}
+
+.card-brand-icon.mastercard {
+    color: #eb001b;
+    transform: scale(1.1);
+}
+
+/* QRIS UI Panel */
+.qris-box-stripe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.qris-label {
+    font-weight: 900;
+    font-size: 22px;
+    color: #e02027;
+    letter-spacing: -0.02em;
+}
+
+.qris-qr-frame {
+    background: #fff;
+    padding: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+}
+
+.qr-border-corners {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 64px;
+    color: #112033;
+}
+
+.qr-border-corners .c {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 3px solid #112033;
+}
+
+.qr-border-corners .c.top-l { top: -2.5px; left: -2.5px; border-right: 0; border-bottom: 0; }
+.qr-border-corners .c.top-r { top: -2.5px; right: -2.5px; border-left: 0; border-bottom: 0; }
+.qr-border-corners .c.bot-l { bottom: -2.5px; left: -2.5px; border-right: 0; border-top: 0; }
+.qr-border-corners .c.bot-r { bottom: -2.5px; right: -2.5px; border-left: 0; border-top: 0; }
+
+.qris-timer-stripe {
+    display: grid;
+    gap: 4px;
+}
+
+.qris-timer-stripe span {
+    color: var(--muted);
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+.qris-timer-stripe strong {
+    font-size: 20px;
+    font-weight: 900;
+    color: #ef4444;
+}
+
+.helper-text {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    max-width: 320px;
+    font-weight: 500;
+}
+
+/* E-Wallet Grid Stripe */
+.wallet-grid-stripe {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.wallet-stripe-btn {
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    background: var(--white);
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.wallet-stripe-btn:hover {
+    border-color: var(--blue);
+}
+
+.wallet-stripe-btn.active {
+    border-color: var(--blue);
+    background: rgba(79, 140, 255, 0.04);
+}
+
+.wallet-stripe-btn .icon-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+
+.wallet-stripe-btn .icon-avatar.gopay { background-color: #00aed6; }
+.wallet-stripe-btn .icon-avatar.ovo { background-color: #4c2a86; }
+.wallet-stripe-btn .icon-avatar.dana { background-color: #108ee9; }
+.wallet-stripe-btn .icon-avatar.linkaja { background-color: #e02027; }
+
+.wallet-stripe-btn span {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.wallet-stripe-btn .checked-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 11px;
+    color: var(--blue);
+    opacity: 0;
+    transform: scale(0.6);
+    transition: all 0.2s ease;
+}
+
+.wallet-stripe-btn.active .checked-indicator {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Action button area */
+.stripe-checkout-action {
+    margin-top: 32px;
+}
+
+.stripe-pay-btn {
+    width: 100%;
+    padding: 15px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--blue);
+    color: #fff;
+    font-weight: 800;
+    font-size: 14.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.stripe-pay-btn:hover {
+    background-color: var(--purple);
+    box-shadow: 0 6px 16px rgba(127, 86, 217, 0.2);
+}
+
+.stripe-pay-btn:active {
+    transform: translateY(1px);
+}
+
+.secure-checkout-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Sisi Kanan: Order Summary styles */
+.order-header {
+    margin-bottom: 28px;
+}
+
+.order-header span {
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+}
+
+.order-header h2 {
+    font-size: 32px;
+    font-weight: 950;
+    letter-spacing: -0.03em;
+    margin: 4px 0 10px;
+}
+
+.price-display {
+    font-size: 38px;
+    font-weight: 950;
+    letter-spacing: -0.02em;
+}
+
+.price-display .period {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--muted);
+}
+
+.order-details-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
+    width: 100%;
+}
+
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.item-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(79, 140, 255, 0.08);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+}
+
+.item-info strong {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--dark);
+    display: block;
+}
+
+.item-info span {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    display: block;
+    margin-top: 2px;
+}
+
+.item-price {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.stripe-divider {
+    border: 0;
+    height: 1px;
+    background: var(--border);
+    margin: 18px 0;
+}
+
+.stripe-bill-details {
+    display: grid;
+    gap: 12px;
+}
+
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.bill-row span:first-child {
+    color: var(--muted);
+}
+
+.bill-row.promo span:last-child {
+    color: var(--green);
+}
+
+.bill-row.total {
+    font-size: 15.5px;
+    font-weight: 900;
+    color: var(--dark);
+}
+
+/* Footer & Trust icons */
+.checkout-footer {
+    margin-top: 40px;
+    width: 100%;
+}
+
+.trust-icons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    opacity: 0.85;
+}
+
+.trust-icons i {
+    font-size: 12px;
+}
+
+/* Success Receipt Modal */
+.receipt-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(5, 10, 20, 0.65);
+    backdrop-filter: blur(14px) saturate(140%);
+    display: none;
+    place-items: center;
+    padding: 20px;
+}
+
+.receipt-modal.open {
+    display: grid;
+    animation: modalBgFadeIn 0.35s ease forwards;
+}
+
+.receipt-card {
+    width: min(420px, 100%);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    padding: 36px 30px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transform: scale(0.92);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+}
+
+.receipt-modal.open .receipt-card {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.receipt-success-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(50, 214, 107, 0.1);
+    color: var(--green);
+    font-size: 22px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 6px 16px rgba(50, 214, 107, 0.15);
+}
+
+.receipt-card h3 {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+}
+
+.receipt-card p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+.receipt-details {
+    background: var(--item-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
+    display: grid;
+    gap: 14px;
+    margin-bottom: 28px;
+    text-align: left;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.receipt-row span {
+    color: var(--muted);
+}
+
+.receipt-row strong {
+    color: var(--dark);
+}
+
+.badge-lunas {
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(50, 214, 107, 0.1);
+    color: var(--green);
+    font-size: 10.5px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.receipt-btn {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--blue);
+    color: #fff;
+    font-weight: 800;
+    font-size: 13.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
+    transition: background-color 0.2s;
+}
+
+.receipt-btn:hover {
+    background-color: var(--purple);
+}
+
+/* Breakpoints & Adaptations */
+@media (max-width: 900px) {
+    .checkout-viewport {
+        grid-template-columns: 1fr;
+    }
+    .checkout-panel-left {
+        align-items: center;
+    }
+    .checkout-panel-right {
+        align-items: center;
+        border-top: 1px solid var(--border);
+        background: var(--white);
+    }
+    .checkout-panel-left .panel-content-wrapper {
+        padding: 40px 24px;
+    }
+    .checkout-panel-right .panel-content-wrapper {
+        padding: 40px 24px 60px;
+        position: static;
+    }
+}

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#08111f">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
     <title>Quiz Focus Room - Universe Of Tech</title>
     <meta name="description" content="Ruang pengerjaan quiz fullscreen Universe Of Tech.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="quiz-session.css">
     <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <main class="focus-room" id="focusRoom">
@@ -27,8 +30,13 @@
             </div>
 
             <div class="focus-header-actions">
-                <button class="icon-button" id="soundButton" type="button" aria-label="Nonaktifkan suara" aria-pressed="true">🔊</button>
-                <button class="icon-button" id="themeButton" type="button" aria-label="Aktifkan tema terang" aria-pressed="true">☀️</button>
+                <div class="focus-live-summary" aria-label="Ringkasan sesi aktif">
+                    <span id="headerAnswered">0 dijawab</span>
+                    <strong id="headerAccuracy">0%</strong>
+                </div>
+                <button class="icon-button" id="soundButton" type="button" aria-label="Nonaktifkan suara" aria-pressed="true">Suara</button>
+                <button class="icon-button" id="themeButton" type="button" aria-label="Aktifkan tema terang" aria-pressed="true">Tema</button>
+                <button class="icon-button" id="toolsButton" type="button" aria-label="Buka tools cepat" aria-expanded="false">Tools</button>
                 <button class="exit-button" id="exitButton" type="button">Keluar</button>
             </div>
         </header>
@@ -39,12 +47,25 @@
 
         <section class="focus-layout">
             <article class="question-stage" id="questionStage">
+                <div class="session-insight" id="sessionInsight" aria-label="Insight sesi">
+                    <span><strong id="insightAnswered">0</strong> Terjawab</span>
+                    <span><strong id="insightUnanswered">0</strong> Kosong</span>
+                    <span><strong id="insightFlagged">0</strong> Ragu</span>
+                    <span><strong id="insightAccuracy">0%</strong> Akurasi</span>
+                    <span><strong id="insightBestStreak">x0</strong> Best combo</span>
+                </div>
+
                 <div class="question-overline">
                     <span id="questionCounter">Soal 1/10</span>
-                    <span id="questionTopic">Programming · Normal</span>
+                    <span id="questionTopic">Programming - Normal</span>
                 </div>
 
                 <h1 id="questionText">Menyiapkan pertanyaan...</h1>
+                <div class="confidence-controls" id="confidenceControls" aria-label="Tandai keyakinan jawaban">
+                    <span>Confidence</span>
+                    <button type="button" data-confidence="sure" aria-pressed="false">Yakin</button>
+                    <button type="button" data-confidence="review" aria-pressed="false">Ragu</button>
+                </div>
                 <div class="answer-list" id="answerList" aria-label="Pilihan jawaban"></div>
                 <div class="answer-feedback" id="answerFeedback" role="status" aria-live="polite"></div>
             </article>
@@ -71,6 +92,7 @@
                     <span><i class="current"></i>Aktif</span>
                     <span><i class="answered"></i>Terjawab</span>
                     <span><i class="flagged"></i>Ragu</span>
+                    <span><i class="sure"></i>Yakin</span>
                 </div>
             </aside>
         </section>
@@ -95,6 +117,7 @@
                 <div class="result-score" id="resultScore">0%</div>
                 <h2 id="resultTitle">Hasil latihanmu sudah siap.</h2>
                 <p id="resultMessage"></p>
+                <div class="result-insight" id="resultInsight"></div>
                 <div class="result-stats">
                     <div><span>Benar</span><strong id="resultCorrect">0</strong></div>
                     <div><span>Salah/Kosong</span><strong id="resultWrong">0</strong></div>
@@ -109,12 +132,60 @@
             </div>
         </section>
 
+        <section class="command-palette" id="commandPalette" hidden>
+            <div class="command-panel" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+                <div class="command-head">
+                    <div>
+                        <span class="result-kicker">Quick tools</span>
+                        <h2 id="commandTitle">Aksi cepat</h2>
+                    </div>
+                    <button id="closeCommandPalette" type="button" aria-label="Tutup tools cepat">×</button>
+                </div>
+                <div class="command-grid">
+                    <button type="button" data-command="empty">Cari soal kosong</button>
+                    <button type="button" data-command="hint">Buka hint</button>
+                    <button type="button" data-command="flag">Toggle ragu</button>
+                    <button type="button" data-command="bookmark">Simpan soal</button>
+                    <button type="button" data-command="theme">Ganti tema</button>
+                    <button type="button" data-command="sound">Toggle suara</button>
+                </div>
+                <p class="command-hint">Shortcut: 1-4 pilih jawaban, H hint, F ragu, / tools, Esc tutup.</p>
+            </div>
+        </section>
+
+        <aside class="review-drawer" id="reviewDrawer" hidden aria-labelledby="reviewDrawerTitle">
+            <div class="review-drawer-panel">
+                <div class="review-drawer-head">
+                    <div>
+                        <span class="result-kicker">Review sesi</span>
+                        <h2 id="reviewDrawerTitle">Peta jawaban</h2>
+                    </div>
+                    <button id="closeReviewDrawer" type="button" aria-label="Tutup review">×</button>
+                </div>
+                <div class="review-summary" id="reviewSummary"></div>
+                <div class="review-list" id="reviewList"></div>
+            </div>
+        </aside>
+
         <div class="focus-toast" id="focusToast" role="status" aria-live="polite"></div>
+
+        <div class="confirm-overlay" id="confirmOverlay" hidden>
+            <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
+                <span class="result-kicker">Konfirmasi</span>
+                <h2 id="confirmTitle">Keluar dari sesi?</h2>
+                <p id="confirmMessage">Progres sementara akan tetap disimpan.</p>
+                <div class="result-actions">
+                    <button class="action-button secondary" id="confirmCancelButton" type="button">Lanjut Belajar</button>
+                    <button class="action-button primary" id="confirmAcceptButton" type="button">Keluar</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script src="app-data.js"></script>
     <script src="sound-engine.js"></script>
     <script src="rpg-engine.js"></script>
+    <script src="quiz-core.js"></script>
     <script src="quiz-session.js"></script>
 </body>
 </html>

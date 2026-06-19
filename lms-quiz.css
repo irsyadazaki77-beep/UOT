@@ -58,11 +58,23 @@ body.dark-theme .lms-tab-btn.active {
 
 .tab-content {
     display: none;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-content.active {
     display: block;
-    animation: fadeIn 0.4s ease;
+}
+
+.tab-content.active.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tab-content.fade-out {
+    opacity: 0;
+    transform: translateY(-12px);
 }
 
 /* --- Course Selection View --- */
@@ -95,23 +107,24 @@ body.dark-theme .lms-tab-btn.active {
 
 .lms-track-card {
     background: var(--card-bg);
-    border: 1px solid var(--border);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
     border-radius: 32px;
     padding: 30px;
     box-shadow: var(--shadow-soft);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s ease, border-color 0.35s ease;
     cursor: pointer;
     position: relative;
     overflow: hidden;
 }
 
 .lms-track-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-8px) scale(1.015);
     box-shadow: var(--shadow);
-    border-color: rgba(79, 140, 255, 0.4);
+    border-color: var(--track-color, var(--blue));
 }
 
 .lms-track-card::before {
@@ -143,6 +156,12 @@ body.dark-theme .lms-tab-btn.active {
 .lms-track-card.track-db .lms-track-badge { background: rgba(79, 140, 255, 0.1); color: var(--blue); }
 .lms-track-card.track-cyber { --track-color: var(--purple); }
 .lms-track-card.track-cyber .lms-track-badge { background: rgba(139, 92, 246, 0.1); color: var(--purple); }
+.lms-track-card.track-code { --track-color: #f59e0b; }
+.lms-track-card.track-code .lms-track-badge { background: rgba(245, 158, 11, 0.12); color: #b45309; }
+.lms-track-card.track-data { --track-color: #ec4899; }
+.lms-track-card.track-data .lms-track-badge { background: rgba(236, 72, 153, 0.11); color: #db2777; }
+.lms-track-card.track-fullstack { --track-color: #06b6d4; }
+.lms-track-card.track-fullstack .lms-track-badge { background: rgba(6, 182, 212, 0.11); color: #0891b2; }
 
 .lms-track-title-text {
     font-size: 22px;
@@ -188,11 +207,57 @@ body.dark-theme .lms-tab-btn.active {
     border: none;
     cursor: pointer;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .lms-track-card:hover .lms-track-btn {
     transform: scale(1.05);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.lms-track-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.lms-track-certificate-btn {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 8px 11px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    color: var(--muted);
+    background: var(--soft);
+    font: inherit;
+    font-size: 10px;
+    font-weight: 900;
+    cursor: not-allowed;
+}
+
+.lms-track-certificate-btn.is-ready {
+    border-color: rgba(180, 134, 28, 0.32);
+    color: #805d0e;
+    background: linear-gradient(135deg, #fff9df, #f7e9b7);
+    box-shadow: 0 8px 18px rgba(180, 134, 28, 0.13);
+    cursor: pointer;
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.lms-track-certificate-btn.is-ready:hover {
+    transform: translateY(-2px);
+    border-color: rgba(180, 134, 28, 0.55);
+    box-shadow: 0 12px 24px rgba(180, 134, 28, 0.2);
+}
+
+.lms-track-certificate-btn:focus-visible {
+    outline: 3px solid rgba(79, 140, 255, 0.24);
+    outline-offset: 2px;
 }
 
 /* --- Classroom Layout --- */
@@ -208,7 +273,8 @@ body.dark-theme .lms-tab-btn.active {
 /* --- Left Sidebar (Course Outline) --- */
 .lms-sidebar-outline {
     background: var(--card-bg);
-    border: 1px solid var(--border);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
     border-radius: 30px;
     padding: 24px;
     box-shadow: var(--shadow-soft);
@@ -305,6 +371,12 @@ body.dark-theme .lms-tab-btn.active {
 }
 
 .lms-syllabus-item {
+    width: 100%;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    border: 0;
+    background: transparent;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -314,22 +386,46 @@ body.dark-theme .lms-tab-btn.active {
     font-size: 13px;
     font-weight: 750;
     margin-bottom: 4px;
-    transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .lms-syllabus-item:hover {
-    background: rgba(79, 140, 255, 0.06);
+    background: rgba(79, 140, 255, 0.08);
     color: var(--blue);
+    transform: translateX(4px);
+}
+body.dark-theme .lms-syllabus-item:hover {
+    background: rgba(61, 219, 217, 0.1);
+    color: var(--cyan);
 }
 
 .lms-syllabus-item.active {
     background: linear-gradient(135deg, rgba(79, 140, 255, 0.12), rgba(139, 92, 246, 0.08));
     color: var(--blue);
     font-weight: 900;
+    box-shadow: 0 4px 10px rgba(79, 140, 255, 0.05);
+}
+body.dark-theme .lms-syllabus-item.active {
+    background: linear-gradient(135deg, rgba(61, 219, 217, 0.15), rgba(139, 92, 246, 0.1));
+    color: var(--cyan);
 }
 
 .lms-syllabus-item.completed .lms-item-check {
     color: var(--green);
+}
+
+.lms-syllabus-item.needs-retry {
+    background: rgba(249, 183, 77, 0.12);
+    color: #b96b08;
+}
+
+body.dark-theme .lms-syllabus-item.needs-retry {
+    background: rgba(249, 183, 77, 0.16);
+    color: #ffd280;
+}
+
+.lms-syllabus-item.needs-retry .lms-item-check {
+    color: #d9822b;
 }
 
 .lms-item-check {
@@ -351,10 +447,46 @@ body.dark-theme .lms-tab-btn.active {
     opacity: 0.7;
 }
 
+.lms-module-certificate-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(79, 140, 255, 0.08);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.lms-module-certificate-hint i {
+    color: var(--blue);
+}
+
+.lms-module-certificate-hint.warning {
+    background: rgba(249, 183, 77, 0.14);
+    color: #9c640c;
+}
+
+.lms-module-certificate-hint.warning i {
+    color: #d9822b;
+}
+
+.lms-module-certificate-hint.ready {
+    background: rgba(59, 178, 115, 0.12);
+    color: #146c43;
+}
+
+.lms-module-certificate-hint.ready i {
+    color: var(--green);
+}
+
 /* --- Classroom Main Pane --- */
 .lms-classroom-main {
     background: var(--card-bg);
-    border: 1px solid var(--border);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
     border-radius: 34px;
     padding: 32px;
     box-shadow: var(--shadow-soft);
@@ -594,9 +726,10 @@ body.dark-theme .lms-tab-btn.active {
 
 .lms-badge-cabinet {
     background: var(--card-bg);
-    border: 1px solid var(--border);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
     border-radius: 28px;
-    padding: 20px;
+    padding: 22px;
     box-shadow: var(--shadow-soft);
 }
 
@@ -605,6 +738,7 @@ body.dark-theme .lms-tab-btn.active {
     font-weight: 900;
     margin-bottom: 12px;
     letter-spacing: -0.02em;
+    color: var(--dark);
 }
 
 .lms-badge-grid {
@@ -615,7 +749,7 @@ body.dark-theme .lms-tab-btn.active {
 
 .lms-badge-slot {
     aspect-ratio: 1;
-    border-radius: 18px;
+    border-radius: 20px;
     background: var(--soft);
     border: 1px solid var(--border);
     display: flex;
@@ -624,16 +758,37 @@ body.dark-theme .lms-tab-btn.active {
     justify-content: center;
     position: relative;
     cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
+    color: inherit;
+    font: inherit;
+    transition: transform 0.28s cubic-bezier(0.25, 0.8, 0.25, 1.35), background-color 0.28s, border-color 0.28s, box-shadow 0.28s;
+}
+body.dark-theme .lms-badge-slot {
+    background: rgba(255, 255, 255, 0.02);
 }
 
-.lms-badge-slot:hover {
-    transform: scale(1.05);
+.lms-badge-slot:disabled {
+    cursor: default;
+}
+
+.lms-badge-slot:hover:not(:disabled) {
+    transform: scale(1.1) rotate(4deg);
+    box-shadow: var(--shadow-soft);
 }
 
 .lms-badge-slot.unlocked {
     background: linear-gradient(135deg, rgba(79, 140, 255, 0.08), rgba(50, 214, 107, 0.06));
-    border-color: rgba(79, 140, 255, 0.3);
+    border-color: rgba(79, 140, 255, 0.35);
+}
+body.dark-theme .lms-badge-slot.unlocked {
+    background: linear-gradient(135deg, rgba(61, 219, 217, 0.12), rgba(50, 214, 107, 0.08));
+}
+
+.lms-badge-slot.unlocked:hover {
+    box-shadow: 0 10px 20px rgba(50, 214, 107, 0.15);
+    border-color: var(--green);
+}
+body.dark-theme .lms-badge-slot.unlocked:hover {
+    box-shadow: 0 10px 20px rgba(50, 214, 107, 0.25);
 }
 
 .lms-badge-icon {
@@ -650,19 +805,19 @@ body.dark-theme .lms-tab-btn.active {
 
 .lms-badge-tooltip {
     position: absolute;
-    bottom: 110%;
+    bottom: 115%;
     left: 50%;
     transform: translateX(-50%) scale(0.9);
     background: var(--dark);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 10px;
+    color: var(--white);
+    padding: 8px 14px;
+    border-radius: 12px;
     font-size: 10px;
     font-weight: 800;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s, transform 0.2s;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: var(--shadow);
     z-index: 10;
 }
@@ -675,9 +830,10 @@ body.dark-theme .lms-tab-btn.active {
 /* Notebook widget */
 .lms-notes-widget {
     background: var(--card-bg);
-    border: 1px solid var(--border);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
     border-radius: 28px;
-    padding: 20px;
+    padding: 22px;
     box-shadow: var(--shadow-soft);
 }
 
@@ -692,6 +848,7 @@ body.dark-theme .lms-tab-btn.active {
     font-size: 16px;
     font-weight: 900;
     margin-bottom: 0;
+    color: var(--dark);
 }
 
 .lms-notes-save-indicator {
@@ -699,54 +856,70 @@ body.dark-theme .lms-tab-btn.active {
     font-weight: 800;
     color: var(--green-dark);
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s ease;
+}
+body.dark-theme .lms-notes-save-indicator {
+    color: var(--green);
 }
 
 .lms-notes-textarea {
     width: 100%;
     height: 120px;
-    border-radius: 14px;
+    border-radius: 16px;
     border: 1px solid var(--border);
     background: var(--soft);
-    padding: 12px;
+    padding: 14px;
     font-family: inherit;
     font-size: 13px;
     font-weight: 700;
     resize: none;
     outline: none;
     color: var(--dark);
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+body.dark-theme .lms-notes-textarea {
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .lms-notes-textarea:focus {
     border-color: var(--blue);
     background: var(--white);
+    box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.15);
+}
+body.dark-theme .lms-notes-textarea:focus {
+    background: rgba(17, 32, 51, 0.65);
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(61, 219, 217, 0.2);
 }
 
 /* --- Interactive AI Tutor Drawer --- */
 .lms-ai-tutor-container {
     margin-top: 18px;
-    background: var(--soft);
-    border: 1px solid var(--border);
+    background: var(--card-bg);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
     border-radius: 24px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
     max-height: 0;
     opacity: 0;
+    box-shadow: var(--shadow-soft);
 }
 
 .lms-ai-tutor-container.open {
-    max-height: 380px;
+    max-height: 400px;
     opacity: 1;
     margin-bottom: 12px;
 }
 
 .lms-ai-header {
-    background: linear-gradient(90deg, #1e293b, #0f172a);
+    background: linear-gradient(90deg, #102138, #07101c);
     color: white;
-    padding: 12px 18px;
+    padding: 14px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .lms-ai-title {
@@ -755,6 +928,8 @@ body.dark-theme .lms-tab-btn.active {
     display: flex;
     align-items: center;
     gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .lms-ai-close-btn {
@@ -763,7 +938,11 @@ body.dark-theme .lms-tab-btn.active {
     color: white;
     cursor: pointer;
     font-weight: 900;
-    font-size: 14px;
+    font-size: 15px;
+    transition: transform 0.2s ease;
+}
+.lms-ai-close-btn:hover {
+    transform: scale(1.1);
 }
 
 .lms-ai-chat-history {
@@ -773,7 +952,7 @@ body.dark-theme .lms-tab-btn.active {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.3);
 }
 .dark-theme .lms-ai-chat-history {
     background: rgba(13, 27, 44, 0.4);
@@ -912,67 +1091,75 @@ body.dark-theme .lms-tab-btn.active {
 
 /* Print Area (The Certificate itself) */
 .lms-cert-frame {
-    background: #fdfdfd;
+    background: radial-gradient(circle, #fdfbf7 0%, #faf6ec 100%);
     border: 18px double #d4af37; /* Double Gold border */
-    padding: 40px;
+    padding: 50px 40px;
     border-radius: 4px;
     text-align: center;
     position: relative;
     color: #1e293b;
-    box-shadow: inset 0 0 100px rgba(212, 175, 55, 0.1);
+    box-shadow: inset 0 0 100px rgba(212, 175, 55, 0.08), 0 15px 35px rgba(0,0,0,0.1);
     font-family: 'Inter', Georgia, serif;
 }
 
 .lms-cert-frame::before {
     content: "";
     position: absolute;
-    inset: 4px;
-    border: 1px solid rgba(212, 175, 55, 0.5);
+    inset: 6px;
+    border: 1px solid rgba(212, 175, 55, 0.45);
     pointer-events: none;
 }
 
 .lms-cert-kicker {
-    font-size: 13px;
+    font-family: 'Cinzel', 'Inter', sans-serif;
+    font-size: 14px;
     font-weight: 800;
     color: #d4af37;
-    letter-spacing: 0.3em;
+    letter-spacing: 0.35em;
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .lms-cert-header {
-    font-size: 38px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Cinzel', 'Inter', sans-serif;
+    font-size: 36px;
     font-weight: 900;
-    letter-spacing: -0.03em;
+    letter-spacing: 0.05em;
     color: #0f172a;
     margin-bottom: 24px;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
 }
 
 .lms-cert-text {
-    font-size: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
     color: #475569;
     font-weight: 500;
     margin-bottom: 18px;
 }
 
 .lms-cert-name {
-    font-size: 32px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 38px;
     font-weight: 800;
+    font-style: italic;
     color: #0f172a;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 2px solid rgba(212, 175, 55, 0.4);
     display: inline-block;
     padding-bottom: 4px;
-    margin-bottom: 20px;
-    min-width: 280px;
+    margin-bottom: 24px;
+    min-width: 320px;
     outline: none;
+    letter-spacing: 0.02em;
 }
 
 .lms-cert-course {
-    font-size: 20px;
-    font-weight: 900;
-    color: #1e3a8a;
-    margin-bottom: 30px;
+    font-family: 'Cinzel', 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #0d2c54;
+    margin-bottom: 32px;
 }
 
 .lms-cert-seal-row {
@@ -992,31 +1179,56 @@ body.dark-theme .lms-tab-btn.active {
 }
 
 .lms-cert-sig-line {
-    font-family: cursive, sans-serif;
-    font-size: 16px;
-    color: #1e3a8a;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: italic;
+    color: #0d2c54;
     margin-bottom: 6px;
 }
 
 .lms-cert-seal {
-    width: 72px;
-    height: 72px;
-    border-radius: 99px;
-    background: linear-gradient(135deg, #ffd700, #d4af37);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffe259 0%, #ffa751 100%);
+    border: 4px solid #fff;
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4), inset 0 0 12px rgba(255, 255, 255, 0.6);
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 16px rgba(212, 175, 55, 0.25);
-    border: 3px solid white;
-    position: relative;
+    z-index: 2;
 }
 
 .lms-cert-seal::after {
-    content: "CERTIFIED";
-    font-size: 8px;
-    font-weight: 900;
-    color: #1e3a8a;
-    letter-spacing: 1px;
+    content: "🏆";
+    font-size: 32px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.lms-cert-ribbon-l, .lms-cert-ribbon-r {
+    position: absolute;
+    width: 16px;
+    height: 44px;
+    top: 60px;
+    z-index: -1;
+}
+
+.lms-cert-ribbon-l {
+    background: #d4af37;
+    left: 18px;
+    transform: rotate(20deg);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%);
+    box-shadow: -2px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.lms-cert-ribbon-r {
+    background: #bfa030;
+    right: 18px;
+    transform: rotate(-20deg);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 85%, 0% 100%);
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .lms-cert-meta {
@@ -1133,4 +1345,79 @@ body.dark-theme .lms-tab-btn.active {
     .lms-cert-course {
         font-size: 15px;
     }
+
+    .lms-track-meta {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .lms-track-actions {
+        justify-content: stretch;
+    }
+
+    .lms-track-actions .lms-track-btn,
+    .lms-track-certificate-btn {
+        flex: 1 1 150px;
+        text-align: center;
+    }
+}
+
+/* --- Global Stats Bar (Clean layout override) --- */
+.lms-global-stats {
+    margin-bottom: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+    background: var(--card-bg);
+    backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    box-shadow: var(--shadow-soft);
+    padding: 8px;
+}
+
+.lms-stat-line {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px;
+    border-right: 1px solid var(--border);
+}
+
+.lms-stat-line:last-child {
+    border-right: none;
+}
+
+.lms-stat-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.lms-stat-value {
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.lms-stat-value.green { color: var(--green-dark); }
+body.dark-theme .lms-stat-value.green { color: var(--green); }
+.lms-stat-value.blue { color: var(--blue); }
+.lms-stat-value.purple { color: var(--purple); }
+
+/* --- Question Card Smooth Switching Animation --- */
+#questionCard, #lmsQuestionCard {
+    transition: opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1), transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.question-fade-out {
+    opacity: 0;
+    transform: translateY(-12px);
+}
+
+.question-fade-in {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: none !important;
 }

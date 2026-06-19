@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     const data = window.WonderfulData;
     const core = window.WonderfulCore;
 
@@ -397,10 +397,12 @@
             prog.starred.splice(idx, 1);
             addXp(-2);
             core.showToast("Bintang dihapus.");
+            if (window.playSound) window.playSound('click');
         } else {
             prog.starred.push(key);
             addXp(3);
             core.showToast("Kata ditambahkan ke favorit ⭐");
+            if (window.playSound) window.playSound('success');
         }
         saveCardProgress(prog);
         updateSidebarList();
@@ -421,10 +423,12 @@
             prog.mastered.splice(idx, 1);
             addXp(-5);
             core.showToast("Ditandai belum dikuasai.");
+            if (window.playSound) window.playSound('click');
         } else {
             prog.mastered.push(key);
             addXp(10);
             core.showToast("Hebat! Kata dikuasai ✅");
+            if (window.playSound) window.playSound('success');
         }
         saveCardProgress(prog);
         updateSidebarList();
@@ -483,6 +487,7 @@
             
             // Perayaan Naik Level!
             triggerConfettiBurst();
+            if (window.playSound) window.playSound('fanfare');
             setTimeout(triggerConfettiBurst, 500);
             core.showToast(`🎉 NAIK LEVEL! Anda sekarang level ${userLevel}!`);
         }
@@ -805,7 +810,7 @@
         el.masterCard.classList.toggle("active", isMastered);
     }
 
-    // Efek Hover Glow mousemove listener
+    // Efek Hover Glow mousemove listener & 3D Tilt
     document.querySelectorAll(".flashcard-face").forEach(face => {
         face.addEventListener('mousemove', (e) => {
             const rect = face.getBoundingClientRect();
@@ -816,17 +821,40 @@
         });
     });
 
+    if (el.flashcardCard) {
+        el.flashcardCard.addEventListener("mousemove", (e) => {
+            const rect = el.flashcardCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((centerY - y) / centerY) * 12; // Max 12 deg tilt
+            const rotateY = ((x - centerX) / centerX) * 12;
+            
+            // If flipped, rotate back face 180 degrees + tilt
+            const tiltStr = `rotateX(${rotateX}deg) rotateY(${isFlipped ? 180 - rotateY : rotateY}deg)`;
+            el.flashcardCard.style.transform = tiltStr;
+        });
+
+        el.flashcardCard.addEventListener("mouseleave", () => {
+            el.flashcardCard.style.transform = isFlipped ? "rotateY(180deg)" : "rotateX(0) rotateY(0)";
+        });
+    }
+
     // Balik Flashcard
     el.flashcardCard.addEventListener("click", (e) => {
         // Jangan balik kartu jika menekan tombol audio
         if (e.target.closest(".audio-visual-trigger")) return;
         
         isFlipped = !isFlipped;
+        if (window.playSound) window.playSound('click');
         el.flashcardCard.classList.toggle("flipped", isFlipped);
+        el.flashcardCard.style.transform = isFlipped ? "rotateY(180deg)" : "rotateX(0) rotateY(0)";
     });
 
     // Navigasi Flashcard
     el.prevCard.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         if (currentCardIndex > 0) {
             currentCardIndex--;
         } else {
@@ -834,10 +862,12 @@
         }
         isFlipped = false;
         el.flashcardCard.classList.remove("flipped");
+        el.flashcardCard.style.transform = "rotateX(0) rotateY(0)";
         renderFlashcard();
     });
 
     el.nextCard.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         const progress = core.getProgress();
         progress.reviewed += 1;
         core.saveProgress(progress);
@@ -845,33 +875,39 @@
         currentCardIndex++;
         isFlipped = false;
         el.flashcardCard.classList.remove("flipped");
+        el.flashcardCard.style.transform = "rotateX(0) rotateY(0)";
         renderFlashcard();
     });
 
     // Favorit / Mastery Kata Aktif
     el.starCard.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         const card = activePlace.cards[currentCardIndex % activePlace.cards.length];
         toggleCardStarred(activePlace.id, card[0]);
     });
 
     el.masterCard.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         const card = activePlace.cards[currentCardIndex % activePlace.cards.length];
         toggleCardMastered(activePlace.id, card[0]);
     });
 
     // Putar Suara Flashcard
     el.listenFront.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         const card = activePlace.cards[currentCardIndex % activePlace.cards.length];
         speakText(card[0], el.frontWave);
     });
 
     el.listenBack.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         const card = activePlace.cards[currentCardIndex % activePlace.cards.length];
         speakText(`Artinya: ${card[1]}`, el.backWave);
     });
 
     // Autoplay Logika
     el.autoplayToggle.addEventListener("change", (e) => {
+        if (window.playSound) window.playSound('click');
         if (e.target.checked) {
             startAutoplay();
         } else {
@@ -1014,10 +1050,16 @@
         el.quizFeedback.textContent = qType === 2 ? "Klik opsi yang cocok dengan pengucapan audio." : "Pilih jawaban yang paling tepat!";
         el.quizFeedback.className = "quiz-feedback-box";
         
-        el.quizOptionsContainer.innerHTML = options.map(opt => {
-            // Khusus tipe audio kuis, tambahkan ikon speaker kecil jika ingin memutar ulang lafal di tiap opsi
+        const alphabet = ["A", "B", "C", "D"];
+        el.quizOptionsContainer.innerHTML = options.map((opt, idx) => {
+            const letter = alphabet[idx] || "";
             const suffix = (qType === 2) ? ` <i class="fa-solid fa-volume-high"></i>` : ``;
-            return `<button class="answer-btn" data-val="${opt}">${opt}${suffix}</button>`;
+            return `
+                <button class="answer-btn" data-val="${opt}">
+                    <span class="option-badge">${letter}</span>
+                    <span class="option-text">${opt}${suffix}</span>
+                </button>
+            `;
         }).join("");
 
         // Beralih event listener
@@ -1050,10 +1092,12 @@
             el.quizFeedback.className = "quiz-feedback-box correct";
             quizScore++;
             addXp(5);
+            if (window.playSound) window.playSound('success');
         } else {
             selectedBtn.classList.add("wrong");
             el.quizFeedback.textContent = `Jawaban salah. Arti yang tepat adalah: "${correctText}"`;
             el.quizFeedback.className = "quiz-feedback-box wrong";
+            if (window.playSound) window.playSound('laser');
         }
 
         // Tampilkan tombol navigasi selanjutnya
@@ -1128,9 +1172,11 @@
             el.writingFeedback.textContent = "Jawaban Tepat Sekali! +8 XP 🔥";
             el.writingFeedback.className = "writing-feedback correct";
             addXp(8);
+            if (window.playSound) window.playSound('success');
         } else {
             el.writingFeedback.textContent = `Kurang tepat. Jawaban benar: "${writingCurrentCard[1]}"`;
             el.writingFeedback.className = "writing-feedback wrong";
+            if (window.playSound) window.playSound('laser');
         }
 
         el.writingFeedback.style.display = "block";
@@ -1145,6 +1191,7 @@
     });
 
     el.writingHintBtn.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         if (!writingCurrentCard) return;
         const answer = writingCurrentCard[1];
         const hintLetter = answer.charAt(0);
@@ -1152,6 +1199,7 @@
     });
 
     el.writingNextBtn.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         loadWritingCard();
     });
 
@@ -1190,6 +1238,7 @@
             el.speakingStatusText.textContent = "Mendengarkan... Silakan Bicara";
             el.speakingFeedback.textContent = "Ucapkan kata di atas sekarang!";
             el.speakingFeedback.className = "speaking-feedback listening";
+            drawSpeakingWave();
         };
 
         speechRecognitionObj.onresult = (event) => {
@@ -1201,6 +1250,7 @@
             console.error("Speech Recognition Error:", event.error);
             el.speakingFeedback.textContent = "Tidak dapat mendengar jelas. Coba ulangi kembali.";
             el.speakingFeedback.className = "speaking-feedback wrong";
+            if (window.playSound) window.playSound('laser');
             stopSpeechRecording();
         };
 
@@ -1222,6 +1272,7 @@
     }
 
     el.speakingMicBtn.addEventListener("click", () => {
+        if (window.playSound) window.playSound('click');
         if (!speechRecognitionObj) {
             core.showToast("Maaf, penangkap ucapan suara tidak didukung di browser Anda saat ini. Gunakan Chrome/Edge.");
             return;
@@ -1242,6 +1293,9 @@
         isSpeakingActive = false;
         el.speakingMicBtn.classList.remove("listening");
         el.speakingStatusText.textContent = "Klik ikon mikrofon untuk berbicara";
+        const canvas = document.getElementById("speakingWaveCanvas");
+        if (canvas) canvas.style.display = "none";
+        if (speakingWaveAnimationId) cancelAnimationFrame(speakingWaveAnimationId);
     }
 
     function handleSpeechResult(rawTranscript) {
@@ -1264,10 +1318,12 @@
             el.speakingFeedback.className = "speaking-feedback success";
             addXp(15);
             triggerConfettiBurst();
+            if (window.playSound) window.playSound('success');
             el.speakingNextBtn.style.display = "block";
         } else {
             el.speakingFeedback.textContent = `Pelafalan kurang mirip. Silakan dicoba lagi!`;
             el.speakingFeedback.className = "speaking-feedback wrong";
+            if (window.playSound) window.playSound('laser');
         }
     }
 
@@ -1339,7 +1395,7 @@
 
     function handleMatchClick(card) {
         if (isMatchProcessing || card.classList.contains("matched") || card.classList.contains("selected")) return;
-
+        if (window.playSound) window.playSound('click');
         card.classList.add("selected");
 
         if (!firstSelectedMatchCard) {
@@ -1364,6 +1420,7 @@
             // Animasi Benar
             firstSelectedMatchCard.classList.add("correct-flash");
             secondSelectedMatchCard.classList.add("correct-flash");
+            if (window.playSound) window.playSound('success');
 
             setTimeout(() => {
                 firstSelectedMatchCard.classList.add("matched");
@@ -1389,6 +1446,7 @@
             // Animasi Salah
             firstSelectedMatchCard.classList.add("wrong-flash");
             secondSelectedMatchCard.classList.add("wrong-flash");
+            if (window.playSound) window.playSound('laser');
 
             setTimeout(() => {
                 firstSelectedMatchCard.classList.remove("selected", "wrong-flash");
@@ -1428,6 +1486,7 @@
         }, 1000);
     }
 
+    // End Match Game
     function endMatchGame(isWin) {
         if (matchTimerInterval) clearInterval(matchTimerInterval);
         
@@ -1445,11 +1504,13 @@
         if (isWin) {
             el.matchGameMessage.textContent = `Luar Biasa! Semua kartu terjodohkan dengan sisa waktu ${matchTimeLeft} detik! Bonus +${matchTimeLeft * 2} XP!`;
             addXp(matchTimeLeft * 2); // Bonus XP waktu
+            if (window.playSound) window.playSound('fanfare');
             
             // Tandai Daily Quest Jodohkan Selesai
             updateQuestProgress("match_win", 1);
         } else {
             el.matchGameMessage.textContent = "Waktu habis! Kembangkan terus penguasaan kosakata daerah Anda.";
+            if (window.playSound) window.playSound('alarm');
         }
     }
 
@@ -1572,6 +1633,7 @@
     function setupTabs() {
         el.tabButtons.forEach(btn => {
             btn.addEventListener("click", () => {
+                if (window.playSound) window.playSound('click');
                 el.tabButtons.forEach(b => {
                     b.classList.remove("active");
                     b.setAttribute("aria-selected", "false");
@@ -1603,6 +1665,281 @@
         });
     }
 
+    // ==========================================================================
+    // Focus Music Player & Voice Wave Canvas Visualizers (Web Audio API)
+    // ==========================================================================
+    let isMusicPlaying = false;
+    let musicVolume = 0.5;
+    let musicTrack = "gamelan";
+    let musicSchedulerInterval = null;
+    let musicWaveCanvasCtx = null;
+    let musicWaveAnimationId = null;
+    let musicNotesHistory = new Array(20).fill(0);
+
+    function initFocusMusicPlayer() {
+        const playBtn = document.getElementById("musicPlayBtn");
+        const trackSelect = document.getElementById("musicTrackSelect");
+        const volumeSlider = document.getElementById("musicVolumeSlider");
+        
+        if (!playBtn) return;
+        
+        musicVolume = (volumeSlider ? volumeSlider.value : 50) / 100;
+        
+        playBtn.addEventListener("click", () => {
+            if (window.initAudioContext) {
+                window.initAudioContext();
+            }
+            
+            isMusicPlaying = !isMusicPlaying;
+            if (isMusicPlaying) {
+                playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                playBtn.classList.add("playing");
+                startMusicScheduler();
+                if (window.playSound) window.playSound('click');
+            } else {
+                playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                playBtn.classList.remove("playing");
+                stopMusicScheduler();
+                if (window.playSound) window.playSound('click');
+            }
+        });
+        
+        if (trackSelect) {
+            trackSelect.addEventListener("change", (e) => {
+                musicTrack = e.target.value;
+                if (window.playSound) window.playSound('click');
+                if (isMusicPlaying) {
+                    playFocusNote();
+                }
+            });
+        }
+        
+        if (volumeSlider) {
+            volumeSlider.addEventListener("input", (e) => {
+                musicVolume = e.target.value / 100;
+            });
+        }
+        
+        drawMusicVisualizer();
+    }
+
+    function playFocusNote() {
+        if (!isMusicPlaying || !window.audioCtx) return;
+        
+        const now = window.audioCtx.currentTime;
+        const osc = window.audioCtx.createOscillator();
+        const gain = window.audioCtx.createGain();
+        
+        const scales = {
+            gamelan: [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50],
+            suling: [293.66, 329.63, 392.00, 440.00, 523.25, 587.33],
+            sasando: [329.63, 392.00, 523.25, 659.25, 783.99, 987.77],
+            tifa: [60, 70, 80, 90]
+        };
+        
+        const scale = scales[musicTrack] || scales.gamelan;
+        const freq = scale[Math.floor(Math.random() * scale.length)];
+        
+        osc.connect(gain);
+        gain.connect(window.audioCtx.destination);
+        
+        if (musicTrack === 'gamelan') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(musicVolume * 0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+            
+            const oscH = window.audioCtx.createOscillator();
+            const gainH = window.audioCtx.createGain();
+            oscH.connect(gainH);
+            gainH.connect(window.audioCtx.destination);
+            oscH.type = 'sine';
+            oscH.frequency.setValueAtTime(freq * 2, now);
+            gainH.gain.setValueAtTime(musicVolume * 0.04, now);
+            gainH.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+            
+            osc.start(now);
+            osc.stop(now + 1.3);
+            oscH.start(now);
+            oscH.stop(now + 0.7);
+            
+            musicNotesHistory.push(1.0);
+            musicNotesHistory.shift();
+        } else if (musicTrack === 'suling') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            
+            const lfo = window.audioCtx.createOscillator();
+            const lfoGain = window.audioCtx.createGain();
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.frequency);
+            lfo.frequency.value = 5.5;
+            lfoGain.gain.value = 6;
+            
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(musicVolume * 0.08, now + 0.2);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.8);
+            
+            lfo.start(now);
+            osc.start(now);
+            lfo.stop(now + 1.9);
+            osc.stop(now + 1.9);
+            
+            musicNotesHistory.push(0.8);
+            musicNotesHistory.shift();
+        } else if (musicTrack === 'sasando') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(musicVolume * 0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+            
+            const osc2 = window.audioCtx.createOscillator();
+            const gain2 = window.audioCtx.createGain();
+            osc2.connect(gain2);
+            gain2.connect(window.audioCtx.destination);
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(freq, now);
+            gain2.gain.setValueAtTime(musicVolume * 0.05, now);
+            gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+            
+            osc.start(now);
+            osc.stop(now + 1.0);
+            osc2.start(now);
+            osc2.stop(now + 0.5);
+            
+            musicNotesHistory.push(0.9);
+            musicNotesHistory.shift();
+        } else if (musicTrack === 'tifa') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now);
+            osc.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+            gain.gain.setValueAtTime(musicVolume * 0.18, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+            
+            osc.start(now);
+            osc.stop(now + 0.7);
+            
+            musicNotesHistory.push(1.2);
+            musicNotesHistory.shift();
+        }
+    }
+
+    function startMusicScheduler() {
+        if (musicSchedulerInterval) clearTimeout(musicSchedulerInterval);
+        
+        const scheduleNext = () => {
+            playFocusNote();
+            const nextDelay = 1200 + Math.random() * 800;
+            musicSchedulerInterval = setTimeout(scheduleNext, nextDelay);
+        };
+        scheduleNext();
+    }
+
+    function stopMusicScheduler() {
+        if (musicSchedulerInterval) {
+            clearTimeout(musicSchedulerInterval);
+            musicSchedulerInterval = null;
+        }
+    }
+
+    function drawMusicVisualizer() {
+        if (!musicWaveCanvasCtx) {
+            const canvas = document.getElementById("musicWaveCanvas");
+            if (canvas) musicWaveCanvasCtx = canvas.getContext("2d");
+        }
+        if (!musicWaveCanvasCtx) return;
+        
+        const canvas = musicWaveCanvasCtx.canvas;
+        const ctx = musicWaveCanvasCtx;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < musicNotesHistory.length; i++) {
+            musicNotesHistory[i] *= 0.95;
+        }
+        
+        const barWidth = canvas.width / musicNotesHistory.length;
+        const maxBarHeight = canvas.height - 4;
+        
+        ctx.fillStyle = "rgba(102, 112, 133, 0.2)";
+        if (isMusicPlaying) {
+            const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            grad.addColorStop(0, "#10b981");
+            grad.addColorStop(1, "#4f8cff");
+            ctx.fillStyle = grad;
+        }
+        
+        for (let i = 0; i < musicNotesHistory.length; i++) {
+            const val = musicNotesHistory[i];
+            const barHeight = val * maxBarHeight;
+            const x = i * barWidth;
+            const y = canvas.height - barHeight;
+            
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(x + 2, y, barWidth - 4, barHeight, 4);
+            } else {
+                ctx.fillRect(x + 2, y, barWidth - 4, barHeight);
+            }
+            ctx.fill();
+        }
+        
+        musicWaveAnimationId = requestAnimationFrame(drawMusicVisualizer);
+    }
+
+    // Speaking Voice Wave visualizer
+    let speakingWaveCanvasCtx = null;
+    let speakingWaveAnimationId = null;
+    let speakingWavePhase = 0;
+
+    function drawSpeakingWave() {
+        if (!speakingWaveCanvasCtx) {
+            const canvas = document.getElementById("speakingWaveCanvas");
+            if (canvas) speakingWaveCanvasCtx = canvas.getContext("2d");
+        }
+        if (!speakingWaveCanvasCtx) return;
+        
+        const canvas = speakingWaveCanvasCtx.canvas;
+        const ctx = speakingWaveCanvasCtx;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        if (!isSpeakingActive) {
+            canvas.style.display = "none";
+            if (speakingWaveAnimationId) cancelAnimationFrame(speakingWaveAnimationId);
+            return;
+        }
+        
+        canvas.style.display = "block";
+        speakingWavePhase += 0.15;
+        
+        const width = canvas.width;
+        const height = canvas.height;
+        const midY = height / 2;
+        
+        const waves = [
+            { amplitude: 15, frequency: 0.03, phase: speakingWavePhase, color: "rgba(50, 214, 107, 0.4)" },
+            { amplitude: 10, frequency: 0.05, phase: -speakingWavePhase * 1.3, color: "rgba(79, 140, 255, 0.3)" },
+            { amplitude: 6, frequency: 0.08, phase: speakingWavePhase * 0.7, color: "rgba(255, 159, 67, 0.5)" }
+        ];
+        
+        waves.forEach(w => {
+            ctx.beginPath();
+            ctx.strokeStyle = w.color;
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = w.color;
+            ctx.shadowBlur = 8;
+            
+            for (let x = 0; x < width; x++) {
+                const envelope = Math.sin((x / width) * Math.PI);
+                const y = midY + Math.sin(x * w.frequency + w.phase) * w.amplitude * envelope;
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        });
+        
+        speakingWaveAnimationId = requestAnimationFrame(drawSpeakingWave);
+    }
+
     // Inisialisasi DOMContentLoaded
     document.addEventListener("DOMContentLoaded", () => {
         core.initTheme();
@@ -1623,5 +1960,8 @@
         setupTabs();
         initSessionTimer();
         syncGlobalStreak();
+        
+        // Initialize music player
+        initFocusMusicPlayer();
     });
 })();

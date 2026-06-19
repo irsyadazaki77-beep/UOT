@@ -2,24 +2,26 @@
 <html lang="id">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Quiz Budaya - Wonderful Indonesia</title>
+    <title>Menu Quiz Budaya - Wonderful Indonesia</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="feature-pages.css">
     <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="culture-quiz-lms.css">
     <link rel="stylesheet" href="mobile-compat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body data-page="wonder-quiz">
+<body data-page="wonder-quiz-menu">
     <div class="noise"></div>
     <div class="orb one"></div>
     <div class="orb two"></div>
 
-    <main class="page">
+    <main class="page culture-quiz-page">
         <nav class="navbar">
             <a href="index.html" class="brand">
                 <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
@@ -36,49 +38,155 @@
             </div>
             <div class="nav-actions">
                 <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">&#127769;</button>
-                <a class="btn btn-ghost" data-place-link="daerah-detail.html" href="daerah-detail.html">Detail</a>
-                <a class="btn btn-primary" data-place-link="latihan-bahasa.html" href="latihan-bahasa.html">Latihan</a>
+                <a class="btn btn-ghost" href="bahasa-daerah.html">Katalog</a>
+                <a class="btn btn-primary" href="quiz-budaya-lms.html">Mulai</a>
             </div>
         </nav>
 
-        <section class="section wonder-page-hero compact">
-            <div>
-                <span class="mini-tag" id="placeRegion">Region</span>
-                <h1>Quiz <span id="placeTitle">Daerah</span></h1>
-                <p id="placeSummary">Uji pemahaman budaya lokal setelah membaca detail dan latihan flashcard.</p>
+        <section class="section culture-quiz-hero">
+            <div class="culture-quiz-copy">
+                <span class="mini-tag">Wonderful Indonesia Quiz</span>
+                <h1>Quiz budaya ringkas.</h1>
+                <p>Pilih mode, mulai latihan, dan simpan progress budaya dalam satu LMS.</p>
+                <div class="culture-journey-flow" aria-label="Alur quiz budaya">
+                    <span><b>1</b> Fokus</span>
+                    <span><b>2</b> Mode</span>
+                    <span><b>3</b> LMS</span>
+                </div>
+                <div class="culture-insight-strip" id="quizInsightStrip">
+                    <span><strong>0</strong> daerah</span>
+                    <span><strong>0</strong> bank soal</span>
+                    <span><strong>0</strong> riwayat</span>
+                </div>
+                <div class="culture-hero-actions">
+                    <a class="btn btn-primary" id="smartStartLink" href="quiz-budaya-lms.html?mode=mix&region=Semua&amount=10">Mulai cepat</a>
+                    <a class="btn btn-ghost" href="#rancang-sesi">Atur</a>
+                    <a class="btn btn-ghost" href="bahasa-daerah.html">Katalog</a>
+                </div>
             </div>
-            <aside class="wonder-fact-card" id="quizProgressSummary">
-                <strong>0% akurasi</strong>
-                <span>0/0 jawaban benar</span>
+            <aside class="culture-score-card" id="quizSummaryCard">
+                <span>Progress budaya</span>
+                <div class="culture-score-ring" aria-hidden="true"></div>
+                <div class="culture-score-value">
+                    <strong>0%</strong>
+                    <p>Belum ada sesi quiz budaya yang tersimpan.</p>
+                </div>
+                <div class="culture-score-metrics" aria-label="Ringkasan latihan budaya">
+                    <div>
+                        <small>Akurasi</small>
+                        <b id="cultureAccuracyMetric">0%</b>
+                    </div>
+                    <div>
+                        <small>Latihan</small>
+                        <b id="culturePracticeMetric">0/0</b>
+                    </div>
+                </div>
+                <div class="culture-next-card">
+                    <small>Rekomendasi berikutnya</small>
+                    <strong id="cultureNextSession">Campuran Budaya</strong>
+                    <a id="scoreCardStartLink" href="quiz-budaya-lms.html?mode=mix&region=Semua&amount=10">Mulai sekarang</a>
+                </div>
             </aside>
         </section>
 
-        <section class="section quiz-finale-section" id="quiz-budaya">
+        <section class="section culture-quiz-control" id="rancang-sesi">
             <div class="section-header">
                 <div>
-                    <div class="section-kicker">Quiz Budaya</div>
-                    <h2 id="languageQuizQuestion">Pertanyaan akan muncul di sini.</h2>
+                    <div class="section-kicker">Quiz Setup</div>
+                    <h2>Atur sesi.</h2>
                 </div>
-                <p id="placeFact">Fakta cepat daerah.</p>
+                <p>Pilih region, mode, dan jumlah soal. Setelah itu langsung masuk ruang LMS.</p>
             </div>
-            <div class="quiz-box">
-                <div class="quiz-meta-row">
-                    <span class="mini-tag" id="placeMark">BD</span>
-                    <button class="btn btn-ghost" id="nextCultureQuiz">Quiz Region Berikutnya</button>
+
+            <div class="culture-step-flow" aria-label="Langkah membuat sesi quiz">
+                <div>
+                    <span>1</span>
+                    <strong>Pilih fokus</strong>
+                    <small>Tentukan region atau gunakan semua daerah.</small>
                 </div>
-                <div class="answer-grid" id="languageAnswers"></div>
+                <div>
+                    <span>2</span>
+                    <strong>Atur mode</strong>
+                    <small>Pilih campuran, bahasa, tradisi, atau challenge.</small>
+                </div>
+                <div>
+                    <span>3</span>
+                    <strong>Mulai LMS</strong>
+                    <small>Masuk ke ruang quiz dengan progress dan pembahasan.</small>
+                </div>
             </div>
+
+            <div class="culture-control-panel">
+                <label>
+                    <span>Region</span>
+                    <select id="quizRegionSelect"></select>
+                </label>
+                <label>
+                    <span>Mode</span>
+                    <select id="quizModeSelect">
+                        <option value="mix">Campuran Budaya</option>
+                        <option value="region">Mastery Region</option>
+                        <option value="language">Bahasa Daerah</option>
+                        <option value="heritage">Warisan & Tradisi</option>
+                        <option value="challenge">Challenge Cepat</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Jumlah soal</span>
+                    <select id="quizAmountSelect">
+                        <option value="5">5 soal</option>
+                        <option value="10" selected>10 soal</option>
+                        <option value="15">15 soal</option>
+                        <option value="20">20 soal</option>
+                    </select>
+                </label>
+                <a class="btn btn-primary culture-start-btn" id="customStartLink" href="quiz-budaya-lms.html">Mulai sesi LMS</a>
+            </div>
+            <div class="culture-session-preview" id="sessionPreview"></div>
+        </section>
+
+        <section class="section culture-mode-section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Paket Quiz</div>
+                    <h2>Shortcut mode.</h2>
+                </div>
+                <p>Pilih salah satu paket jika ingin langsung mulai tanpa mengubah setup.</p>
+            </div>
+            <div class="culture-mode-grid" id="quizModeCards"></div>
+        </section>
+
+        <section class="section culture-region-section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Quiz Per Region</div>
+                    <h2>Naikkan penguasaan per wilayah.</h2>
+                </div>
+                <p>Setiap region berisi kumpulan daerah, bahasa, tradisi, destinasi, dan kuliner khas.</p>
+            </div>
+            <div class="culture-region-quiz-grid" id="regionQuizGrid"></div>
+        </section>
+
+        <section class="section culture-history-section">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Riwayat</div>
+                    <h2>Sesi terakhir.</h2>
+                </div>
+                <p>Skor tersimpan lokal di browser supaya kamu bisa lanjut memantau perkembangan.</p>
+            </div>
+            <div class="culture-history-list" id="quizHistoryList"></div>
         </section>
 
         <footer>
-            <span>© 2026 Universe Of Tech. Quiz Wonderful Indonesia.</span>
+            <span>&copy; 2026 Universe Of Tech. Quiz Wonderful Indonesia.</span>
             <span><a href="bahasa-daerah.html">Kembali ke katalog</a></span>
         </footer>
     </main>
     <div class="toast" id="toast"></div>
     <script src="wonderful-data.js"></script>
     <script src="wonderful-core.js"></script>
-    <script src="wonderful-pages.js"></script>
+    <script src="culture-quiz-lms.js"></script>
 </body>
 
 </html>

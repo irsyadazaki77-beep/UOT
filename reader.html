@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Membaca Buku - Universe Of Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Reset override to support immersive reader themes */
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Ambient Orbs */
+        .ambient-orb {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .orb-blue {
+            background: var(--blue);
+            top: -50px;
+            right: 10%;
+        }
+        .orb-green {
+            background: var(--green);
+            bottom: -50px;
+            left: 10%;
+        }
+
+        /* Immersive Layout */
+        .reader-layout {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Fixed Header */
+        .reader-header {
+            height: 70px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            z-index: 10;
+            flex-shrink: 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .header-center {
+            text-align: center;
+            max-width: 40%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .header-center h1 {
+            font-size: 16px;
+            font-weight: 850;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .header-center span {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Controls styling */
+        .setting-btn {
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--dark);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .setting-btn:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-soft);
+        }
+        .setting-btn:active {
+            transform: translateY(0);
+        }
+        
+        .theme-select-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border);
+            padding: 4px 8px;
+            border-radius: 99px;
+            background: var(--white);
+        }
+        .theme-select-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.25s, border-color 0.25s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+        }
+        .theme-select-btn:hover {
+            transform: scale(1.15);
+        }
+        .theme-select-btn.active {
+            border-color: var(--blue);
+            transform: scale(1.08);
+        }
+        .theme-select-btn.theme-light { background: #ffffff; }
+        .theme-select-btn.theme-sepia { background: #f4ecd8; }
+        .theme-select-btn.theme-dark { background: #1e293b; }
+
+        /* Main reader section */
+        .reader-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Sidebar: Table of Contents */
+        .reader-sidebar {
+            width: 300px;
+            border-right: 1px solid var(--border);
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            z-index: 5;
+            transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease;
+            flex-shrink: 0;
+        }
+        .reader-sidebar.collapsed {
+            margin-left: -300px;
+        }
+        .sidebar-title {
+            font-size: 11px;
+            font-weight: 900;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .chapter-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chapter-item {
+            padding: 12px 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 750;
+            color: var(--muted);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1.4;
+            border: 1px solid transparent;
+        }
+        .chapter-item:hover {
+            background: rgba(102, 112, 133, 0.06);
+            color: var(--dark);
+        }
+        .chapter-item.active {
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            color: white !important;
+            border-color: transparent;
+            box-shadow: 0 6px 16px rgba(50, 214, 107, 0.25);
+        }
+
+        /* Reading view area */
+        .reader-main-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+        .reading-sheet-container {
+            flex: 1;
+            padding: 48px 24px;
+            display: flex;
+            justify-content: center;
+        }
+        .reading-sheet {
+            width: 100%;
+            max-width: 740px;
+            line-height: 1.85;
+            font-family: 'Inter', Georgia, serif;
+            letter-spacing: -0.01em;
+            transition: font-size 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+        /* Fade in content transition */
+        .reading-sheet.fade-out {
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .reading-sheet.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Typography sizing classes */
+        .font-size-small {
+            font-size: 15px;
+        }
+        .font-size-medium {
+            font-size: 18px;
+        }
+        .font-size-large {
+            font-size: 22px;
+        }
+
+        /* Book content element overrides */
+        .reading-sheet h2 {
+            font-size: 2.2em;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+            line-height: 1.25;
+            color: var(--dark);
+        }
+        .reading-sheet p {
+            margin-bottom: 24px;
+            color: inherit;
+        }
+        .reading-sheet ul, .reading-sheet ol {
+            margin-bottom: 24px;
+            padding-left: 24px;
+        }
+        .reading-sheet li {
+            margin-bottom: 8px;
+        }
+        .reading-sheet code {
+            font-family: SFMono-Regular, Consolas, Monaco, monospace;
+            background: rgba(102, 112, 133, 0.08);
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        .reading-sheet pre {
+            background: rgba(102, 112, 133, 0.05);
+            border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 24px 0;
+            line-height: 1.5;
+        }
+        .reading-sheet pre code {
+            background: transparent;
+            padding: 0;
+            font-size: 0.85em;
+        }
+
+        /* Bottom Pagination */
+        .reader-footer {
+            height: 80px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(20px);
+            z-index: 10;
+            flex-shrink: 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .footer-center {
+            text-align: center;
+        }
+        .footer-progress-percent {
+            font-weight: 850;
+            font-size: 13.5px;
+            color: var(--blue);
+            display: block;
+        }
+        .footer-progress-pages {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        /* ==========================================================================
+           READING THEMES OVERRIDES
+           ========================================================================== */
+        
+        /* Sepia Theme */
+        body.read-theme-sepia {
+            background-color: #f4ecd8 !important;
+            color: #43301e !important;
+        }
+        body.read-theme-sepia .ambient-orb {
+            opacity: 0.05;
+        }
+        body.read-theme-sepia .reader-header,
+        body.read-theme-sepia .reader-footer {
+            background-color: rgba(237, 226, 201, 0.9) !important;
+            border-color: rgba(92, 68, 44, 0.12) !important;
+        }
+        body.read-theme-sepia .reader-sidebar {
+            background-color: rgba(228, 215, 184, 0.9) !important;
+            border-color: rgba(92, 68, 44, 0.12) !important;
+        }
+        body.read-theme-sepia .setting-btn,
+        body.read-theme-sepia .theme-select-row {
+            background-color: #f4ecd8 !important;
+            color: #43301e !important;
+            border-color: rgba(92, 68, 44, 0.18) !important;
+        }
+        body.read-theme-sepia .setting-btn:hover {
+            border-color: var(--blue) !important;
+            color: var(--blue) !important;
+        }
+        body.read-theme-sepia .chapter-item:not(.active) {
+            color: #6d553d !important;
+        }
+        body.read-theme-sepia .chapter-item:hover:not(.active) {
+            background-color: rgba(92, 68, 44, 0.07) !important;
+            color: #43301e !important;
+        }
+        body.read-theme-sepia .reading-sheet h2 {
+            color: #2e2013 !important;
+        }
+        body.read-theme-sepia .reading-sheet code {
+            background: rgba(92, 68, 44, 0.08);
+        }
+        body.read-theme-sepia .reading-sheet pre {
+            background: rgba(92, 68, 44, 0.04);
+            border-color: rgba(92, 68, 44, 0.15);
+        }
+
+        /* Dark Theme */
+        body.read-theme-dark {
+            background-color: #0f172a !important;
+            color: #e2e8f0 !important;
+        }
+        body.read-theme-dark .ambient-orb {
+            opacity: 0.1;
+        }
+        body.read-theme-dark .reader-header,
+        body.read-theme-dark .reader-footer {
+            background-color: rgba(30, 41, 59, 0.9) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        body.read-theme-dark .reader-sidebar {
+            background-color: rgba(15, 23, 42, 0.95) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+        }
+        body.read-theme-dark .setting-btn,
+        body.read-theme-dark .theme-select-row {
+            background-color: #1e293b !important;
+            color: #cbd5e1 !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        body.read-theme-dark .setting-btn:hover {
+            border-color: var(--blue) !important;
+            color: var(--blue) !important;
+        }
+        body.read-theme-dark .chapter-item:not(.active) {
+            color: #94a3b8 !important;
+        }
+        body.read-theme-dark .chapter-item:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.04) !important;
+            color: #f1f5f9 !important;
+        }
+        body.read-theme-dark .reading-sheet h2 {
+            color: #ffffff !important;
+        }
+        body.read-theme-dark .reading-sheet code {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        body.read-theme-dark .reading-sheet pre {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Notes Sidebar */
+        .reader-notes-sidebar {
+            width: 320px;
+            padding: 24px;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            z-index: 5;
+            flex-shrink: 0;
+            background: var(--card-bg);
+            backdrop-filter: blur(30px);
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background-color 0.3s ease;
+        }
+        .reader-notes-sidebar.collapsed {
+            width: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            border-left: 0px solid transparent !important;
+            overflow: hidden;
+        }
+        body.read-theme-sepia #readerNoteArea {
+            background-color: #f4ecd8 !important;
+            color: #43301e !important;
+            border-color: rgba(92, 68, 44, 0.18) !important;
+        }
+        body.read-theme-dark #readerNoteArea {
+            background-color: #1e293b !important;
+            color: #cbd5e1 !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        .setting-btn.active {
+            border-color: var(--blue) !important;
+            color: white !important;
+            background-color: var(--blue) !important;
+        }
+
+        /* Fullscreen hidden controls trigger */
+        @media (max-width: 768px) {
+            .reader-sidebar {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                box-shadow: 20px 0 50px rgba(0,0,0,0.15);
+            }
+            .reader-sidebar.collapsed {
+                margin-left: -320px;
+            }
+            .reader-notes-sidebar {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                box-shadow: -20px 0 50px rgba(0,0,0,0.15);
+            }
+            .reader-notes-sidebar.collapsed {
+                margin-right: -340px;
+            }
+            .reader-header {
+                padding: 0 16px;
+            }
+            .header-center {
+                display: none; /* Hide center book title in mobile to fit controls */
+            }
+            .reader-footer {
+                padding: 0 16px;
+            }
+            .setting-btn span {
+                display: none; /* Hide texts on buttons for mobile */
+            }
+        }
+    </style>
+</head>
+
+<body class="read-theme-light">
+    <!-- Ambient Backdrop Effects -->
+    <div class="ambient-orb orb-blue" id="orbBlue"></div>
+    <div class="ambient-orb orb-green" id="orbGreen"></div>
+
+    <div class="reader-layout">
+        <!-- IMMERSIVE HEADER -->
+        <header class="reader-header">
+            <div class="header-left">
+                <button class="setting-btn" id="backToLibrary" title="Kembali ke Perpustakaan">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Kembali</span>
+                </button>
+                <button class="setting-btn" id="toggleSidebar" title="Tampilkan/Sembunyikan Daftar Isi">
+                    <i class="fa-solid fa-bars"></i>
+                    <span>Daftar Isi</span>
+                </button>
+            </div>
+
+            <div class="header-center">
+                <span id="headerCategory">Category</span>
+                <h1 id="headerBookTitle">Loading Book...</h1>
+            </div>
+
+            <div class="header-right">
+                <!-- Notes Toggle Button -->
+                <button class="setting-btn" id="toggleNotes" title="Tulis Catatan Belajar">
+                    <i class="fa-solid fa-note-sticky"></i>
+                    <span>Catatan</span>
+                </button>
+                
+                <!-- Size Controls -->
+                <button class="setting-btn" id="readerFontDec" title="Perkecil Font">Aa-</button>
+                <button class="setting-btn" id="readerFontInc" title="Perbesar Font">Aa+</button>
+                
+                <!-- Separator -->
+                <div style="width: 1px; height: 20px; background: var(--border); opacity: 0.5;"></div>
+
+                <!-- Theme Controls -->
+                <div class="theme-select-row">
+                    <button class="theme-select-btn theme-light active" data-read-theme="light" title="Tema Terang"></button>
+                    <button class="theme-select-btn theme-sepia" data-read-theme="sepia" title="Tema Sepia"></button>
+                    <button class="theme-select-btn theme-dark" data-read-theme="dark" title="Tema Gelap"></button>
+                </div>
+
+                <!-- Fullscreen Toggle -->
+                <button class="setting-btn" id="fullscreenToggle" title="Mode Layar Penuh">
+                    <i class="fa-solid fa-expand"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- IMMERSIVE BODY -->
+        <div class="reader-body">
+            <!-- Table of Contents Sidebar -->
+            <aside class="reader-sidebar" id="readerSidebar">
+                <span class="sidebar-title">Daftar Isi Bab</span>
+                <nav class="chapter-list" id="sidebarChapterList">
+                    <!-- Populated dynamically by JS -->
+                </nav>
+            </aside>
+
+            <!-- Focus reading page sheet -->
+            <main class="reader-main-content" id="readerMainContent">
+                <div class="reading-sheet-container">
+                    <article class="reading-sheet font-size-medium" id="readingSheet">
+                        <!-- Book Content dynamically rendered here -->
+                    </article>
+                </div>
+
+                <!-- BOTTOM PAGINATION -->
+                <footer class="reader-footer">
+                    <button class="setting-btn" id="btnPrevChapter">
+                        <i class="fa-solid fa-chevron-left"></i> Bab Sebelumnya
+                    </button>
+                    
+                    <div class="footer-center">
+                        <span class="footer-progress-percent" id="footerProgressPercent">Progress: 0%</span>
+                        <span class="footer-progress-pages" id="footerProgressPages">Bab X dari Y</span>
+                    </div>
+
+                    <button class="setting-btn" id="btnNextChapter" style="background: var(--blue); color: white; border-color: transparent;">
+                        Bab Berikutnya <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </footer>
+            </main>
+            
+            <!-- Notes Sidebar Panel -->
+            <aside class="reader-notes-sidebar collapsed" id="readerNotesSidebar">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="sidebar-title" style="margin-bottom: 0;">Catatan Belajar</span>
+                    <span id="readerAutosaveStatus" style="font-size: 10px; font-weight: 700; color: var(--muted); display: inline-flex; align-items: center; gap: 4px; transition: opacity 0.3s ease; opacity: 0;"></span>
+                </div>
+                <textarea id="readerNoteArea" style="flex: 1; min-height: 200px; border: 1px solid var(--border); background: var(--white); color: var(--dark); border-radius: 16px; padding: 14px; outline: none; font-size: 13.5px; resize: none; line-height: 1.6; font-family: inherit;" placeholder="Tuliskan catatan atau rangkuman bab di sini... (Tersimpan otomatis)"></textarea>
+            </aside>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast"></div>
+
+    <!-- SCRIPT DEPS -->
+    <script src="auth-helper.js"></script>
+    <script src="sound-engine.js"></script>
+    <script src="book-data.js"></script>
+    <script>
+        // Immersive Focus E-Book Reader Logic
+        (function() {
+            // Helpers
+            const storage = {
+                get(key, fallback) {
+                    try {
+                        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+                    } catch {
+                        return fallback;
+                    }
+                },
+                set(key, value) {
+                    localStorage.setItem(key, JSON.stringify(value));
+                }
+            };
+
+            function showToast(message) {
+                const toast = document.getElementById("toast");
+                if (!toast) return;
+                toast.textContent = message;
+                toast.classList.add("show");
+                clearTimeout(showToast.timer);
+                showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+            }
+
+            // Get URL params
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get("book");
+
+            if (!bookId || typeof BOOKS === "undefined") {
+                alert("Buku tidak valid atau database tidak termuat.");
+                window.location.href = "library.html";
+                return;
+            }
+
+            // State
+            const activeBook = BOOKS.find(b => b.id === bookId);
+            if (!activeBook) {
+                alert("Buku tidak ditemukan di perpustakaan.");
+                window.location.href = "library.html";
+                return;
+            }
+
+            // Load saved settings
+            let bookmarks = storage.get("library_bookmarks", {});
+            let activeChapterIndex = bookmarks[bookId] !== undefined ? bookmarks[bookId] : 0;
+            
+            // Check bounds
+            if (activeChapterIndex < 0 || activeChapterIndex >= activeBook.chapters.length) {
+                activeChapterIndex = 0;
+            }
+
+            let readerFontSize = storage.get("library_reader_font_size", "medium"); // small, medium, large
+            let readerTheme = storage.get("library_reader_theme", "light"); // light, sepia, dark
+
+            // DOM elements
+            const el = {
+                backToLibrary: document.getElementById("backToLibrary"),
+                toggleSidebar: document.getElementById("toggleSidebar"),
+                headerCategory: document.getElementById("headerCategory"),
+                headerBookTitle: document.getElementById("headerBookTitle"),
+                readerSidebar: document.getElementById("readerSidebar"),
+                sidebarChapterList: document.getElementById("sidebarChapterList"),
+                readingSheet: document.getElementById("readingSheet"),
+                readerMainContent: document.getElementById("readerMainContent"),
+                
+                readerFontDec: document.getElementById("readerFontDec"),
+                readerFontInc: document.getElementById("readerFontInc"),
+                fullscreenToggle: document.getElementById("fullscreenToggle"),
+                
+                btnPrevChapter: document.getElementById("btnPrevChapter"),
+                btnNextChapter: document.getElementById("btnNextChapter"),
+                footerProgressPercent: document.getElementById("footerProgressPercent"),
+                footerProgressPages: document.getElementById("footerProgressPages"),
+                
+                toggleNotes: document.getElementById("toggleNotes"),
+                readerNotesSidebar: document.getElementById("readerNotesSidebar"),
+                readerAutosaveStatus: document.getElementById("readerAutosaveStatus"),
+                readerNoteArea: document.getElementById("readerNoteArea")
+            };
+
+            // Audio Synthetic feedback helper
+            function playSoundFx(type) {
+                if (window.playSound) {
+                    window.playSound(type);
+                }
+            }
+
+            // Page Renderers
+            function applyFontSize() {
+                el.readingSheet.className = `reading-sheet font-size-${readerFontSize}`;
+                storage.set("library_reader_font_size", readerFontSize);
+            }
+
+            function applyReadingTheme() {
+                // Apply theme to body
+                document.body.className = `read-theme-${readerTheme}`;
+                
+                // Toggle active states on theme buttons
+                document.querySelectorAll("[data-read-theme]").forEach(btn => {
+                    btn.classList.toggle("active", btn.dataset.readTheme === readerTheme);
+                });
+                
+                storage.set("library_reader_theme", readerTheme);
+            }
+
+            function renderSidebarChapters() {
+                el.sidebarChapterList.innerHTML = activeBook.chapters.map((ch, idx) => {
+                    const isActive = idx === activeChapterIndex;
+                    return `
+                        <div class="chapter-item ${isActive ? 'active' : ''}" data-idx="${idx}">
+                            ${ch.title}
+                        </div>
+                    `;
+                }).join("");
+
+                // Add click listeners to sidebar items
+                el.sidebarChapterList.querySelectorAll(".chapter-item").forEach(item => {
+                    item.addEventListener("click", () => {
+                        const targetIdx = parseInt(item.dataset.idx);
+                        if (targetIdx === activeChapterIndex) return;
+                        changeChapter(targetIdx);
+                    });
+                });
+            }
+
+            function loadChapterContent() {
+                const chapter = activeBook.chapters[activeChapterIndex];
+                if (!chapter) return;
+
+                // Animate fade-out first
+                el.readingSheet.classList.add("fade-out");
+                el.readingSheet.classList.remove("fade-in");
+
+                setTimeout(() => {
+                    el.readingSheet.innerHTML = chapter.content;
+                    
+                    // Reset scroll to top of main area
+                    el.readerMainContent.scrollTop = 0;
+
+                    // Animate fade-in
+                    el.readingSheet.classList.remove("fade-out");
+                    el.readingSheet.classList.add("fade-in");
+                }, 150);
+
+                // Progress Update
+                const progressPercent = Math.round(((activeChapterIndex + 1) / activeBook.chapters.length) * 100);
+                el.footerProgressPercent.textContent = `Progress: ${progressPercent}% dibaca`;
+                el.footerProgressPages.textContent = `Bab ${activeChapterIndex + 1} dari ${activeBook.chapters.length}`;
+
+                // Prev button status
+                el.btnPrevChapter.disabled = activeChapterIndex === 0;
+                
+                // Next button visual
+                if (activeChapterIndex === activeBook.chapters.length - 1) {
+                    el.btnNextChapter.innerHTML = 'Selesai Membaca <i class="fa-solid fa-check" style="margin-left:4px;"></i>';
+                    el.btnNextChapter.style.background = "linear-gradient(135deg, var(--green), var(--blue))";
+                } else {
+                    el.btnNextChapter.innerHTML = 'Bab Berikutnya <i class="fa-solid fa-chevron-right" style="margin-left:4px;"></i>';
+                    el.btnNextChapter.style.background = "var(--blue)";
+                }
+            }
+
+            function changeChapter(idx) {
+                activeChapterIndex = idx;
+                
+                // Save progress bookmark
+                bookmarks[bookId] = activeChapterIndex;
+                storage.set("library_bookmarks", bookmarks);
+
+                renderSidebarChapters();
+                loadChapterContent();
+                playSoundFx("click");
+            }
+
+            // Fullscreen trigger helper
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.warn(`Error attempting to enable full-screen mode: ${err.message}`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+
+            // Init listeners
+            function initListeners() {
+                // Back to library
+                el.backToLibrary.addEventListener("click", () => {
+                    playSoundFx("click");
+                    window.location.href = "library.html";
+                });
+
+                // Toggle Sidebar (Collapsible)
+                el.toggleSidebar.addEventListener("click", () => {
+                    playSoundFx("click");
+                    el.readerSidebar.classList.toggle("collapsed");
+                });
+
+                // Font modifier size buttons
+                el.readerFontDec.addEventListener("click", () => {
+                    if (readerFontSize === "large") readerFontSize = "medium";
+                    else if (readerFontSize === "medium") readerFontSize = "small";
+                    applyFontSize();
+                    playSoundFx("click");
+                });
+
+                el.readerFontInc.addEventListener("click", () => {
+                    if (readerFontSize === "small") readerFontSize = "medium";
+                    else if (readerFontSize === "medium") readerFontSize = "large";
+                    applyFontSize();
+                    playSoundFx("click");
+                });
+
+                // Theme choices selectors
+                document.querySelectorAll("[data-read-theme]").forEach(btn => {
+                    btn.addEventListener("click", () => {
+                        readerTheme = btn.dataset.readTheme;
+                        applyReadingTheme();
+                        playSoundFx("click");
+                    });
+                });
+
+                // Fullscreen toggle button
+                el.fullscreenToggle.addEventListener("click", () => {
+                    toggleFullscreen();
+                    playSoundFx("click");
+                });
+
+                // Navigation buttons
+                el.btnPrevChapter.addEventListener("click", () => {
+                    if (activeChapterIndex > 0) {
+                        changeChapter(activeChapterIndex - 1);
+                    }
+                });
+
+                el.btnNextChapter.addEventListener("click", () => {
+                    if (activeChapterIndex < activeBook.chapters.length - 1) {
+                        changeChapter(activeChapterIndex + 1);
+                    } else {
+                        // Book read fully finished
+                        showToast("Hebat! Anda telah menyelesaikan seluruh bab buku ini. 🎉");
+                        playSoundFx("success");
+                        setTimeout(() => {
+                            window.location.href = "library.html";
+                        }, 1800);
+                    }
+                });
+
+                // Listening to keyboard controls (Arrow keys & Esc/F)
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "ArrowRight" && activeChapterIndex < activeBook.chapters.length - 1) {
+                        changeChapter(activeChapterIndex + 1);
+                    } else if (e.key === "ArrowLeft" && activeChapterIndex > 0) {
+                        changeChapter(activeChapterIndex - 1);
+                    }
+                });
+
+                // Sync fullscreen icons
+                document.addEventListener("fullscreenchange", () => {
+                    const icon = el.fullscreenToggle.querySelector("i");
+                    if (document.fullscreenElement) {
+                        icon.className = "fa-solid fa-compress";
+                    } else {
+                        icon.className = "fa-solid fa-expand";
+                    }
+                });
+
+                // Toggle Notes Sidebar
+                if (el.toggleNotes && el.readerNotesSidebar) {
+                    el.toggleNotes.addEventListener("click", () => {
+                        playSoundFx("click");
+                        el.readerNotesSidebar.classList.toggle("collapsed");
+                        el.toggleNotes.classList.toggle("active");
+                    });
+                }
+            }
+
+            // Notes handling
+            let noteSaveTimeout = null;
+
+            function loadBookNote() {
+                if (!el.readerNoteArea) return;
+                const noteKey = `library_note_${bookId}`;
+                el.readerNoteArea.value = storage.get(noteKey, "");
+            }
+
+            function saveBookNote(isAuto = false) {
+                if (!el.readerNoteArea) return;
+                const noteKey = `library_note_${bookId}`;
+                const content = el.readerNoteArea.value;
+                storage.set(noteKey, content);
+
+                if (isAuto) {
+                    showAutosaveStatus("saved");
+                } else {
+                    showToast("Catatan tersimpan! 📝");
+                    playSoundFx("success");
+                }
+            }
+
+            // Sync with stats dashboard
+            function updateDashboardStats() {
+                // Done on main library page
+            }
+
+            function showAutosaveStatus(state) {
+                if (!el.readerAutosaveStatus) return;
+                el.readerAutosaveStatus.style.opacity = "1";
+                if (state === "saving") {
+                    el.readerAutosaveStatus.innerHTML = `<i class="fa-solid fa-spinner fa-spin" style="color: var(--blue);"></i>`;
+                } else if (state === "saved") {
+                    el.readerAutosaveStatus.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--green);"></i>`;
+                    setTimeout(() => {
+                        if (el.readerAutosaveStatus && el.readerAutosaveStatus.innerHTML.includes("circle-check")) {
+                            el.readerAutosaveStatus.style.opacity = "0";
+                        }
+                    }, 1500);
+                }
+            }
+
+            function initStudyNotes() {
+                if (!el.readerNoteArea) return;
+                
+                loadBookNote();
+
+                el.readerNoteArea.addEventListener("input", () => {
+                    showAutosaveStatus("saving");
+                    clearTimeout(noteSaveTimeout);
+                    noteSaveTimeout = setTimeout(() => {
+                        saveBookNote(true);
+                    }, 600);
+                });
+            }
+
+            // Load Initialization
+            function init() {
+                // Set metadata in Header
+                el.headerBookTitle.textContent = activeBook.title;
+                el.headerCategory.textContent = activeBook.categoryLabel;
+
+                // Apply persisted sizes/themes
+                applyFontSize();
+                applyReadingTheme();
+
+                // Setup Chapters Content
+                renderSidebarChapters();
+                loadChapterContent();
+
+                // Setup Notes
+                initStudyNotes();
+
+                // Listeners
+                initListeners();
+
+                // Welcome sound
+                setTimeout(() => {
+                    playSoundFx("cyber");
+                }, 500);
+            }
+
+            // Run
+            init();
+        })();
+    </script>
+</body>
+
+</html>

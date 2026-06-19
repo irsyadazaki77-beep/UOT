@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     const data = window.WonderfulData;
     const core = window.WonderfulCore;
 
@@ -19,16 +19,73 @@
 
         let searchQuery = "";
         let statusFilter = "all";
+        let searchDebounce = null;
+        let lastDrawerTrigger = null;
+
+        function syncBodyLock() {
+            const locked = document.body.classList.contains("drawer-open")
+                || document.body.classList.contains("command-open")
+                || document.body.classList.contains("paywall-open");
+            document.body.style.overflow = locked ? "hidden" : "";
+            document.querySelector("main.page")?.setAttribute("aria-hidden", locked ? "true" : "false");
+        }
+
+        function renderWithFilteringState(delay = 0) {
+            document.body.classList.add("is-filtering");
+            window.clearTimeout(searchDebounce);
+            searchDebounce = window.setTimeout(() => {
+                render();
+                window.requestAnimationFrame(() => document.body.classList.remove("is-filtering"));
+            }, delay);
+        }
+
+        function pulseMapFocus() {
+            document.body.classList.add("map-focused");
+            window.setTimeout(() => document.body.classList.remove("map-focused"), 1200);
+        }
 
         const searchInput = document.getElementById("cultureSearch");
         const clearSearchBtn = document.getElementById("clearSearch");
+        const statusFilters = document.getElementById("statusFilters");
+        let resetFiltersBtn = document.getElementById("resetCultureFilters");
+        if (!resetFiltersBtn && statusFilters) {
+            resetFiltersBtn = document.createElement("button");
+            resetFiltersBtn.type = "button";
+            resetFiltersBtn.id = "resetCultureFilters";
+            resetFiltersBtn.className = "filter-opt-btn reset-filter-btn";
+            resetFiltersBtn.hidden = true;
+            resetFiltersBtn.innerHTML = '<i class="fa-solid fa-rotate-left"></i> Reset';
+            statusFilters.appendChild(resetFiltersBtn);
+        }
+
+        function updateResetFilterButton() {
+            if (!resetFiltersBtn) return;
+            const isDefault = selectedRegion === "Semua" && statusFilter === "all" && !searchQuery;
+            resetFiltersBtn.hidden = isDefault;
+            resetFiltersBtn.setAttribute("aria-hidden", String(isDefault));
+        }
+
+        function resetCatalogFilters() {
+            selectedRegion = "Semua";
+            statusFilter = "all";
+            searchQuery = "";
+            core.storage.set("wonder_region", selectedRegion);
+            if (searchInput) searchInput.value = "";
+            if (clearSearchBtn) clearSearchBtn.style.display = "none";
+            statusFilters?.querySelectorAll("button[data-filter]").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.filter === "all");
+            });
+            renderWithFilteringState();
+        }
+
+        resetFiltersBtn?.addEventListener("click", resetCatalogFilters);
         if (searchInput) {
             searchInput.addEventListener("input", (e) => {
                 searchQuery = e.target.value.toLowerCase().trim();
                 if (clearSearchBtn) {
                     clearSearchBtn.style.display = searchQuery ? "block" : "none";
                 }
-                render();
+                renderWithFilteringState(140);
             });
         }
         if (clearSearchBtn) {
@@ -36,18 +93,18 @@
                 searchInput.value = "";
                 searchQuery = "";
                 clearSearchBtn.style.display = "none";
-                render();
+                renderWithFilteringState();
             });
         }
 
-        const statusFilters = document.getElementById("statusFilters");
         if (statusFilters) {
             statusFilters.querySelectorAll("button").forEach(btn => {
+                if (!btn.dataset.filter) return;
                 btn.addEventListener("click", () => {
                     statusFilters.querySelectorAll("button").forEach(b => b.classList.remove("active"));
                     btn.classList.add("active");
                     statusFilter = btn.dataset.filter;
-                    render();
+                    renderWithFilteringState();
                 });
             });
         }
@@ -92,6 +149,13 @@
             const progress = core.getProgress();
             const streakCount = document.getElementById("streakCount");
             if (streakCount) streakCount.textContent = progress.streak || 0;
+            let proEntitled = false;
+            try {
+                const session = JSON.parse(localStorage.getItem("eduquestUserSession") || "null");
+                proEntitled = Boolean(session?.isLoggedIn) && localStorage.getItem("eduquestSubscription") === "pro";
+            } catch {
+                proEntitled = false;
+            }
 
             const achievements = core.checkAchievements(progress);
             const badges = {
@@ -105,7 +169,7 @@
             for (const key in badges) {
                 const el = badges[key];
                 if (el) {
-                    const active = achievements[key];
+                    const active = achievements[key] || proEntitled;
                     el.classList.toggle("unlocked", active);
                     el.classList.toggle("locked", !active);
                 }
@@ -122,6 +186,7 @@
         let drawerShowingMeaning = false;
 
         function openDrawer(placeId) {
+            lastDrawerTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
             drawerPlace = data.getPlaceById(placeId);
             core.markExplored(placeId);
             core.renderMetricSummary();
@@ -168,13 +233,23 @@
 
             drawer.classList.add("active");
             drawerOverlay.classList.add("active");
+            drawer.setAttribute("aria-hidden", "false");
+            document.body.classList.add("drawer-open");
+            syncBodyLock();
+            window.setTimeout(() => drawerClose?.focus(), 30);
         }
+        window.openDrawer = openDrawer;
 
         function closeDrawer() {
             drawer.classList.remove("active");
             drawerOverlay.classList.remove("active");
+            drawer.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("drawer-open");
+            syncBodyLock();
             render();
             core.renderMetricSummary();
+            lastDrawerTrigger?.focus?.();
+            lastDrawerTrigger = null;
         }
 
         if (drawerClose) drawerClose.addEventListener("click", closeDrawer);
@@ -410,13 +485,30 @@
                 });
             }
             if (resultTitle) resultTitle.textContent = `${visible.length} kartu budaya`;
-            if (resultMeta) resultMeta.textContent = selectedRegion === "Semua" ? "Semua region Indonesia" : `Region aktif: ${selectedRegion}`;
+            if (resultMeta) {
+                const parts = [
+                    selectedRegion === "Semua" ? "Semua region Indonesia" : `Region aktif: ${selectedRegion}`,
+                    statusFilter !== "all" ? `Filter: ${statusFilter === "favorites" ? "Favorit" : statusFilter === "mastered" ? "Dikuasai" : "Belum dibuka"}` : "",
+                    searchQuery ? `Pencarian: "${searchQuery}"` : ""
+                ].filter(Boolean);
+                resultMeta.textContent = parts.join(" - ");
+            }
+            updateResetFilterButton();
 
             if (cultureGrid) {
-                cultureGrid.innerHTML = visible.map((place, index) => {
-                    const cardHtml = core.renderCultureCard(place);
-                    return cardHtml.replace('class="culture-card-link', `style="--stagger-delay: ${index}" class="culture-card-link`);
-                }).join("");
+                cultureGrid.innerHTML = visible.length
+                    ? visible.map((place, index) => {
+                        const cardHtml = core.renderCultureCard(place);
+                        return cardHtml.replace('class="culture-card-link', `style="--stagger-delay: ${index}" class="culture-card-link`);
+                    }).join("")
+                    : `<div class="culture-empty-state" role="status">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <strong>Tidak ada kartu yang cocok.</strong>
+                        <p>Coba ganti kata kunci, pilih region lain, atau reset filter untuk melihat semua daerah.</p>
+                        <button type="button" class="btn btn-primary" id="emptyResetFilters">Reset filter</button>
+                    </div>`;
+
+                cultureGrid.querySelector("#emptyResetFilters")?.addEventListener("click", resetCatalogFilters);
 
                 cultureGrid.querySelectorAll(".culture-card-main, .culture-card-actions a").forEach(el => {
                     el.addEventListener("click", (e) => {
@@ -424,7 +516,7 @@
                         const placeId = url.searchParams.get("id");
                         if (el.getAttribute("href").startsWith("daerah-detail.html")) {
                             e.preventDefault();
-                            openDrawer(placeId);
+                            window.openDrawer(placeId);
                         }
                     });
                 });
@@ -434,13 +526,33 @@
         }
 
         document.querySelectorAll(".map-region").forEach(regionEl => {
-            regionEl.addEventListener("click", () => selectRegion(regionEl.dataset.region));
+            regionEl.addEventListener("click", () => {
+                pulseMapFocus();
+                selectRegion(regionEl.dataset.region);
+            });
             regionEl.addEventListener("keydown", event => {
                 if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
+                    pulseMapFocus();
                     selectRegion(regionEl.dataset.region);
                 }
             });
+        });
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape" && drawer?.classList.contains("active")) closeDrawer();
+            if (event.key !== "Tab" || !drawer?.classList.contains("active")) return;
+            const focusable = Array.from(drawer.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+                .filter(element => element.offsetParent !== null);
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
         });
         render();
     }

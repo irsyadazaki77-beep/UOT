@@ -179,11 +179,11 @@ function updateRpgHud() {
     const achListEl = document.getElementById("rpgAchievementsList");
     if (achListEl && typeof achievementsList !== 'undefined') {
         achListEl.innerHTML = achievementsList.map(a => `
-            <div style="display:flex; align-items:center; gap:10px; padding:8px; border-radius:12px; background:${a.unlocked ? 'rgba(50, 214, 107, 0.08)' : 'rgba(0,0,0,0.03)'}; border:1px solid ${a.unlocked ? 'rgba(50, 214, 107, 0.2)' : 'var(--border)'}; opacity:${a.unlocked ? 1 : 0.5};">
-                <span style="font-size:20px;">${a.unlocked ? a.icon : '🔒'}</span>
-                <div style="flex:1; text-align:left;">
-                    <strong style="display:block; font-size:11px; color:var(--dark);">${a.title}</strong>
-                    <span style="display:block; font-size:9.5px; color:var(--muted); font-weight:600;">${a.desc}</span>
+            <div class="rpg-ach-item ${a.unlocked ? 'unlocked' : 'locked'}">
+                <span class="rpg-ach-icon">${a.unlocked ? a.icon : '🔒'}</span>
+                <div class="rpg-ach-info">
+                    <strong class="rpg-ach-title">${a.title}</strong>
+                    <span class="rpg-ach-desc">${a.desc}</span>
                 </div>
             </div>
         `).join("");

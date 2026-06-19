@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Latihan Bahasa - Wonderful Indonesia</title>
@@ -85,8 +86,8 @@
                         <p id="activePlaceSummary">Ringkasan kebudayaan daerah aktif.</p>
                     </div>
                     <div class="latihan-dash-actions">
-                        <button class="btn btn-ghost" id="activePlaceFavorite">♡ Favorit</button>
-                        <button class="btn btn-ghost" id="activePlaceMastered">🗹 Dikuasai</button>
+                        <button class="btn btn-ghost" id="activePlaceFavorite">? Favorit</button>
+                        <button class="btn btn-ghost" id="activePlaceMastered">?? Dikuasai</button>
                         <a class="btn btn-primary" id="activePlaceQuizLink" href="#">Uji Kuis</a>
                     </div>
                 </header>
@@ -130,6 +131,30 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Ambient Focus Player -->
+                    <div class="latihan-hud-music-card">
+                        <div class="music-card-title"><i class="fa-solid fa-music"></i> AMBIENT BELAJAR</div>
+                        <div class="music-player-layout">
+                            <div class="music-controls-row">
+                                <button class="music-play-btn" id="musicPlayBtn" type="button" aria-label="Putar Musik Ambient">
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+                                <select id="musicTrackSelect" class="music-track-select" aria-label="Pilih Instrumen Musik">
+                                    <option value="gamelan">Saron Meditasi (Jawa)</option>
+                                    <option value="suling">Suling Fajar (Sunda)</option>
+                                    <option value="sasando">Sasando Senja (Bali)</option>
+                                    <option value="tifa">Tifa Ritmis (Papua)</option>
+                                </select>
+                            </div>
+                            <div class="music-volume-row">
+                                <i class="fa-solid fa-volume-low"></i>
+                                <input type="range" id="musicVolumeSlider" min="0" max="100" value="50" class="music-volume-slider" aria-label="Volume Musik">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </div>
+                            <canvas id="musicWaveCanvas" width="220" height="24"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Panel Statistik Sesi Latihan -->
@@ -166,6 +191,7 @@
 
                 <!-- Tab Pemilih Mode Belajar -->
                 <div class="latihan-tabs-bar" role="tablist">
+                    <div class="latihan-tab-indicator" id="tabIndicator"></div>
                     <button class="latihan-tab-btn active" data-mode="flashcard" role="tab" aria-selected="true"><i class="fa-solid fa-layer-group"></i> Flashcard</button>
                     <button class="latihan-tab-btn" data-mode="quiz" role="tab" aria-selected="false"><i class="fa-solid fa-list-check"></i> Pilihan Ganda</button>
                     <button class="latihan-tab-btn" data-mode="writing" role="tab" aria-selected="false"><i class="fa-solid fa-pen-clip"></i> Ketik Jawaban</button>
@@ -209,7 +235,7 @@
                                     
                                     <!-- Trivia Budaya Box -->
                                     <div class="card-trivia-box">
-                                        <span>💡 INFO BUDAYA</span>
+                                        <span>?? INFO BUDAYA</span>
                                         <p id="cardBackTrivia">Fakta menarik tentang istilah ini.</p>
                                     </div>
 
@@ -289,7 +315,7 @@
                             Masukkan jawaban Anda untuk memulai pemeriksaan.
                         </div>
                         <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                            <button class="btn btn-ghost" id="writingHintBtn">💡 Petunjuk</button>
+                            <button class="btn btn-ghost" id="writingHintBtn">?? Petunjuk</button>
                             <button class="btn btn-blue" id="writingNextBtn" style="display: none;">Berikutnya <i class="fa-solid fa-chevron-right"></i></button>
                         </div>
                     </div>
@@ -307,10 +333,11 @@
                         
                         <div class="speaking-mic-wrapper">
                             <button class="speaking-mic-btn" id="speakingMicBtn" aria-label="Mulai Merekam">
-                                <span class="mic-icon">🎙️</span>
+                                <span class="mic-icon">🎤</span>
                                 <div class="mic-pulse-ring" id="micPulseRing"></div>
                             </button>
                             <span class="speaking-status-text" id="speakingStatusText">Klik ikon mikrofon untuk berbicara</span>
+                            <canvas id="speakingWaveCanvas" width="300" height="60" style="display:none; margin-top: 10px; border-radius: 12px;"></canvas>
                         </div>
 
                         <div class="speaking-transcript-box" id="speakingTranscriptBox" style="display: none;">
@@ -352,7 +379,7 @@
 
                         <!-- Papan Akhir Game Over -->
                         <div class="match-game-over" id="matchGameOver" style="display: none;">
-                            <h4>🎮 Pencocokan Selesai!</h4>
+                            <h4>?? Pencocokan Selesai!</h4>
                             <div class="match-score-summary">
                                 <div class="match-score-pill">
                                     <strong id="matchFinalScore">0</strong>
@@ -386,7 +413,7 @@
                     <div class="vocab-search-row">
                         <div class="vocab-search-input-wrap">
                             <input type="text" class="search-input" id="vocabSearch" placeholder="Cari kata daerah atau arti..." autocomplete="off" />
-                            <button class="vocab-search-clear" id="vocabSearchClear">×</button>
+                            <button class="vocab-search-clear" id="vocabSearchClear">�</button>
                         </div>
                     </div>
 
@@ -400,7 +427,7 @@
 
         <!-- FOOTER HALAMAN -->
         <footer>
-            <span>© 2026 Universe Of Tech. Latihan Wonderful Indonesia.</span>
+            <span>� 2026 Universe Of Tech. Latihan Wonderful Indonesia.</span>
             <span><a id="footerDetailLink" href="daerah-detail.html">Kembali ke detail daerah</a></span>
         </footer>
     </main>
@@ -410,7 +437,44 @@
     <!-- DATA & LOGIKA DASAR -->
     <script src="wonderful-data.js"></script>
     <script src="wonderful-core.js"></script>
+    <script src="sound-engine.js"></script>
     <script src="latihan-bahasa.js"></script>
+    <!-- MASSIVE UPDATE LOGIC INJECTION -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tab Glide Indicator
+            const tabs = document.querySelectorAll('.latihan-tab-btn');
+            const indicator = document.getElementById('tabIndicator');
+            
+            function updateIndicator(tab) {
+                if(!indicator || !tab) return;
+                indicator.style.width = tab.offsetWidth + 'px';
+                indicator.style.left = tab.offsetLeft + 'px';
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    updateIndicator(tab);
+                    const panels = document.querySelectorAll('.latihan-workspace-panel');
+                    panels.forEach(p => {
+                        p.classList.remove('fade-in');
+                        if (p.id === 'view-' + tab.dataset.mode) {
+                            requestAnimationFrame(() => p.classList.add('fade-in'));
+                        }
+                    });
+                });
+            });
+
+            setTimeout(() => {
+                const activeTab = document.querySelector('.latihan-tab-btn.active');
+                if(activeTab) updateIndicator(activeTab);
+            }, 300);
+        });
+    </script>
 </body>
 
 </html>
+
+
+
+

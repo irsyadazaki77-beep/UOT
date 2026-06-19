@@ -6,6 +6,7 @@
     const LAST_KEY = "eduquestLastSession";
     const BEST_KEY = "eduquestBestScore";
     const BOOKMARK_KEY = "eduquestBookmarks";
+    const core = window.QuizNation;
 
     const state = {
         payload: null,
@@ -14,6 +15,7 @@
         selected: [],
         visited: [],
         flagged: [],
+        confidence: [],
         correct: 0,
         wrong: 0,
         streak: 0,
@@ -27,29 +29,22 @@
         usedHint: false,
         usedFifty: false,
         bookmarks: [],
-        exiting: false
+        exiting: false,
+        reviewOpen: false,
+        lastRenderedIndex: -1
     };
 
     const els = {};
     let toastTimer = null;
+    let confirmResolver = null;
+    let confirmTrigger = null;
 
     function readJson(storage, key, fallback) {
-        try {
-            const raw = storage.getItem(key);
-            return raw ? JSON.parse(raw) : fallback;
-        } catch (error) {
-            return fallback;
-        }
+        return core?.storage.read(storage, key, fallback) ?? fallback;
     }
 
     function writeJson(storage, key, value) {
-        try {
-            storage.setItem(key, JSON.stringify(value));
-            return true;
-        } catch (error) {
-            console.warn(`Gagal menyimpan ${key}:`, error);
-            return false;
-        }
+        return core?.storage.write(storage, key, value) ?? false;
     }
 
     function formatTime(seconds) {
@@ -68,21 +63,26 @@
 
     function cacheElements() {
         [
-            "sessionCategory", "sessionDifficulty", "sessionMode", "soundButton", "themeButton", "exitButton",
+            "sessionCategory", "sessionDifficulty", "sessionMode", "soundButton", "themeButton", "toolsButton", "exitButton",
+            "headerAnswered", "headerAccuracy", "sessionInsight", "insightAnswered", "insightUnanswered", "insightFlagged",
+            "insightAccuracy", "insightBestStreak", "confidenceControls",
             "focusProgress", "progressBar", "questionCounter", "questionTopic", "questionText", "answerList",
             "answerFeedback", "focusSidebar", "timerCard", "timerValue", "correctStat", "wrongStat",
             "flaggedStat", "streakStat", "questionNavigator", "closeNavigator", "navigatorButton", "hintButton",
             "fiftyButton", "bookmarkButton", "flagButton", "skipButton", "nextButton", "resultOverlay",
             "resultScore", "resultTitle", "resultMessage", "resultCorrect", "resultWrong", "resultStreak",
-            "resultXp", "reviewResultButton", "retrySessionButton", "resultBackLink", "focusToast"
+            "resultXp", "resultInsight", "reviewResultButton", "retrySessionButton", "resultBackLink", "focusToast",
+            "commandPalette", "closeCommandPalette", "reviewDrawer", "closeReviewDrawer", "reviewSummary", "reviewList",
+            "confirmOverlay", "confirmTitle", "confirmMessage", "confirmCancelButton", "confirmAcceptButton", "questionStage"
         ].forEach((id) => {
             els[id.replace("focusToast", "toast")] = document.getElementById(id);
         });
     }
 
     function restoreSession() {
-        const payload = readJson(sessionStorage, SESSION_KEY, null);
-        if (!payload?.questions?.length) return false;
+        const result = core?.sessions.read();
+        if (!result?.ok) return false;
+        const payload = result.value;
         state.payload = payload;
         state.questions = payload.questions;
         state.timeLeft = Number(payload.timeLimit) || payload.questions.length * 90;
@@ -90,35 +90,63 @@
         state.selected = Array(state.questions.length).fill(null);
         state.visited = Array(state.questions.length).fill(false);
         state.flagged = Array(state.questions.length).fill(false);
-        state.bookmarks = readJson(localStorage, BOOKMARK_KEY, []);
+        state.confidence = Array(state.questions.length).fill(null);
+        state.bookmarks = core.sanitize.bookmarks(readJson(localStorage, BOOKMARK_KEY, []));
 
         const saved = readJson(sessionStorage, ACTIVE_KEY, null);
-        if (saved && saved.createdAt === payload.createdAt && saved.running) {
-            state.current = Math.min(saved.current || 0, state.questions.length - 1);
-            state.selected = saved.selected || state.selected;
-            state.visited = saved.visited || state.visited;
-            state.flagged = saved.flagged || state.flagged;
-            state.correct = saved.correct || 0;
-            state.wrong = saved.wrong || 0;
-            state.streak = saved.streak || 0;
-            state.bestStreak = saved.bestStreak || 0;
-            state.helpUsed = saved.helpUsed || 0;
-            state.cheatWarnings = saved.cheatWarnings || 0;
-            state.timeLeft = Math.max(0, saved.timeLeft ?? state.timeLeft);
-            state.initialTime = saved.initialTime || state.initialTime;
+        if (saved && saved.sessionId === payload.sessionId && saved.running) {
+            const length = state.questions.length;
+            state.current = Math.min(Math.max(0, Number(saved.current) || 0), length - 1);
+            state.selected = Array.isArray(saved.selected) && saved.selected.length === length
+                ? saved.selected.map((answer, index) => normalizeSavedAnswer(answer, state.questions[index]))
+                : state.selected;
+            state.visited = Array.isArray(saved.visited) && saved.visited.length === length ? saved.visited.map(Boolean) : state.visited;
+            state.flagged = Array.isArray(saved.flagged) && saved.flagged.length === length ? saved.flagged.map(Boolean) : state.flagged;
+            state.confidence = Array.isArray(saved.confidence) && saved.confidence.length === length
+                ? saved.confidence.map(value => value === "sure" || value === "review" ? value : null)
+                : state.confidence;
+            state.correct = state.selected.filter((answer) => answer?.isCorrect).length;
+            state.wrong = state.selected.filter((answer) => answer && !answer.isCorrect).length;
+            state.streak = Math.min(length, Math.max(0, Number(saved.streak) || 0));
+            state.bestStreak = Math.min(length, Math.max(0, Number(saved.bestStreak) || 0));
+            state.helpUsed = Math.min(length * 2, Math.max(0, Number(saved.helpUsed) || 0));
+            state.cheatWarnings = Math.max(0, Number(saved.cheatWarnings) || 0);
+            state.timeLeft = Math.min(state.initialTime, Math.max(0, Number(saved.timeLeft) || 0));
+            state.initialTime = Math.max(30, Number(saved.initialTime) || state.initialTime);
         }
         return true;
+    }
+
+    function normalizeSavedAnswer(answer, question) {
+        if (!answer || typeof answer !== "object" || !question) return null;
+        const selectedIndex = question.shuffledAnswers.findIndex((item) => item.text === answer.selectedText);
+        if (selectedIndex < 0) return null;
+        const selectedAnswer = question.shuffledAnswers[selectedIndex];
+        const correctAnswer = question.shuffledAnswers[question.shuffledCorrect];
+        return {
+            id: question.id,
+            question: question.question,
+            category: question.category,
+            difficulty: question.difficulty,
+            selectedText: selectedAnswer.text,
+            correctText: correctAnswer.text,
+            explanation: question.explanation,
+            hint: question.hint,
+            isCorrect: selectedIndex === question.shuffledCorrect
+        };
     }
 
     function saveActiveState() {
         if (!state.payload) return;
         writeJson(sessionStorage, ACTIVE_KEY, {
+            sessionId: state.payload.sessionId,
             createdAt: state.payload.createdAt,
             running: state.running,
             current: state.current,
             selected: state.selected,
             visited: state.visited,
             flagged: state.flagged,
+            confidence: state.confidence,
             correct: state.correct,
             wrong: state.wrong,
             streak: state.streak,
@@ -146,9 +174,44 @@
         return -1;
     }
 
-    function renderQuestion() {
-        const question = state.questions[state.current];
-        if (!question) return;
+    function getSessionStats() {
+        const total = Math.max(1, state.questions.length);
+        const answered = state.selected.filter(Boolean).length;
+        const correct = state.selected.filter(answer => answer?.isCorrect).length;
+        const flagged = state.flagged.filter(Boolean).length;
+        const accuracy = answered ? Math.round((correct / answered) * 100) : 0;
+        return {
+            total,
+            answered,
+            unanswered: total - answered,
+            flagged,
+            accuracy,
+            bestStreak: state.bestStreak
+        };
+    }
+
+    function renderSessionInsight() {
+        const stats = getSessionStats();
+        if (els.headerAnswered) els.headerAnswered.textContent = `${stats.answered}/${stats.total} dijawab`;
+        if (els.headerAccuracy) els.headerAccuracy.textContent = `${stats.accuracy}%`;
+        if (els.insightAnswered) els.insightAnswered.textContent = stats.answered;
+        if (els.insightUnanswered) els.insightUnanswered.textContent = stats.unanswered;
+        if (els.insightFlagged) els.insightFlagged.textContent = stats.flagged;
+        if (els.insightAccuracy) els.insightAccuracy.textContent = `${stats.accuracy}%`;
+        if (els.insightBestStreak) els.insightBestStreak.textContent = `x${stats.bestStreak}`;
+    }
+
+    function renderConfidenceControls() {
+        if (!els.confidenceControls) return;
+        const currentConfidence = state.confidence[state.current];
+        els.confidenceControls.querySelectorAll("[data-confidence]").forEach(button => {
+            const active = button.dataset.confidence === currentConfidence;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+        });
+    }
+
+    function updateQuestionDOM(question) {
         state.visited[state.current] = true;
         state.usedHint = false;
         state.usedFifty = false;
@@ -159,16 +222,21 @@
             ? `${state.payload.lms.moduleTitle} · ${state.payload.config.difficultyLabel}`
             : `${state.payload.config.categoryLabel} · ${state.payload.config.difficultyLabel}`;
         els.questionText.textContent = question.question;
-        els.answerList.innerHTML = "";
+        els.answerList.replaceChildren();
         els.answerFeedback.classList.remove("show");
-        els.answerFeedback.innerHTML = "";
+        els.answerFeedback.replaceChildren();
 
         question.shuffledAnswers.forEach((answer, index) => {
             const button = document.createElement("button");
             button.type = "button";
             button.className = "answer-choice";
             button.dataset.index = String(index);
-            button.innerHTML = `<span class="answer-key">${String.fromCharCode(65 + index)}</span><span>${answer.text}</span>`;
+            const key = document.createElement("span");
+            const label = document.createElement("span");
+            key.className = "answer-key";
+            key.textContent = String.fromCharCode(65 + index);
+            label.textContent = answer.text;
+            button.append(key, label);
             button.setAttribute("aria-label", `Pilihan ${String.fromCharCode(65 + index)}: ${answer.text}`);
             button.addEventListener("click", () => chooseAnswer(index));
             if (saved) {
@@ -180,7 +248,7 @@
         });
 
         if (saved) {
-            els.answerFeedback.innerHTML = `<strong>${saved.isCorrect ? "Benar." : "Belum tepat."}</strong> ${saved.explanation}`;
+            core.dom.setContent(els.answerFeedback, saved.isCorrect ? "Benar." : "Belum tepat.", saved.explanation);
             els.answerFeedback.classList.add("show");
         }
 
@@ -193,10 +261,40 @@
         els.skipButton.disabled = !hasUnanswered();
         els.nextButton.textContent = !hasUnanswered() ? "Selesaikan" : state.current === state.questions.length - 1 ? "Cari Soal Kosong" : "Berikutnya";
 
+        renderConfidenceControls();
+        renderSessionInsight();
         updateProgress();
         renderNavigator();
         renderStats();
         saveActiveState();
+    }
+
+    let isQuestionTransitioning = false;
+    function renderQuestion() {
+        const question = state.questions[state.current];
+        if (!question) return;
+
+        // Trigger animation if transitioning to a different question index
+        if (state.lastRenderedIndex !== -1 && state.lastRenderedIndex !== state.current && els.questionStage && !isQuestionTransitioning) {
+            isQuestionTransitioning = true;
+            els.questionStage.classList.add("question-fade-out");
+            setTimeout(() => {
+                updateQuestionDOM(question);
+                state.lastRenderedIndex = state.current;
+                els.questionStage.classList.remove("question-fade-out");
+                els.questionStage.classList.add("question-fade-in");
+                // force reflow
+                els.questionStage.offsetHeight;
+                requestAnimationFrame(() => {
+                    els.questionStage.classList.remove("question-fade-in");
+                    isQuestionTransitioning = false;
+                });
+            }, 150);
+            return;
+        }
+
+        updateQuestionDOM(question);
+        state.lastRenderedIndex = state.current;
     }
 
     function chooseAnswer(index) {
@@ -245,7 +343,7 @@
     }
 
     function renderNavigator() {
-        els.questionNavigator.innerHTML = "";
+        els.questionNavigator.replaceChildren();
         state.questions.forEach((question, index) => {
             const button = document.createElement("button");
             button.type = "button";
@@ -258,6 +356,8 @@
                 if (!state.selected[index].isCorrect) button.classList.add("wrong");
             }
             if (state.flagged[index]) button.classList.add("flagged");
+            if (state.confidence[index] === "sure") button.classList.add("sure");
+            if (state.confidence[index] === "review") button.classList.add("review-confidence");
             button.addEventListener("click", () => {
                 state.current = index;
                 renderQuestion();
@@ -272,7 +372,7 @@
         state.usedHint = true;
         state.helpUsed += 1;
         els.hintButton.disabled = true;
-        els.answerFeedback.innerHTML = `<strong>Hint:</strong> ${state.questions[state.current].hint}`;
+        core.dom.setContent(els.answerFeedback, "Hint:", state.questions[state.current].hint);
         els.answerFeedback.classList.add("show");
         saveActiveState();
     }
@@ -312,9 +412,109 @@
         showToast("Soal disimpan.");
     }
 
+    function setConfidence(value) {
+        state.confidence[state.current] = state.confidence[state.current] === value ? null : value;
+        if (value === "review" && state.confidence[state.current] === "review") {
+            state.flagged[state.current] = true;
+        }
+        renderConfidenceControls();
+        renderNavigator();
+        renderSessionInsight();
+        saveActiveState();
+    }
+
     function toggleFlag() {
         state.flagged[state.current] = !state.flagged[state.current];
+        if (state.flagged[state.current] && !state.confidence[state.current]) {
+            state.confidence[state.current] = "review";
+        }
         renderQuestion();
+    }
+
+    function openCommandPalette() {
+        if (!els.commandPalette) return;
+        els.commandPalette.hidden = false;
+        els.toolsButton?.setAttribute("aria-expanded", "true");
+        document.body.classList.add("dialog-open");
+    }
+
+    function closeCommandPalette() {
+        if (!els.commandPalette || els.commandPalette.hidden) return;
+        els.commandPalette.hidden = true;
+        els.toolsButton?.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("dialog-open");
+        els.toolsButton?.focus?.();
+    }
+
+    function runCommand(command) {
+        closeCommandPalette();
+        if (command === "empty") {
+            const next = findNextUnanswered();
+            if (next === -1) {
+                showToast("Semua soal sudah dijawab.");
+                return;
+            }
+            state.current = next;
+            renderQuestion();
+        } else if (command === "hint") {
+            showHint();
+        } else if (command === "flag") {
+            toggleFlag();
+        } else if (command === "bookmark") {
+            bookmarkQuestion();
+        } else if (command === "theme") {
+            toggleTheme();
+        } else if (command === "sound") {
+            toggleSound();
+        }
+    }
+
+    function renderReviewDrawer() {
+        if (!els.reviewList || !els.reviewSummary) return;
+        const stats = getSessionStats();
+        els.reviewSummary.innerHTML = `
+            <span><strong>${stats.answered}</strong> Terjawab</span>
+            <span><strong>${stats.unanswered}</strong> Kosong</span>
+            <span><strong>${state.wrong}</strong> Salah</span>
+            <span><strong>${state.helpUsed}</strong> Bantuan</span>
+        `;
+        els.reviewList.replaceChildren();
+        state.questions.forEach((question, index) => {
+            const answer = state.selected[index];
+            const item = document.createElement("button");
+            item.type = "button";
+            item.className = "review-answer-item";
+            item.classList.add(answer ? answer.isCorrect ? "correct" : "wrong" : "empty");
+            item.innerHTML = `
+                <span class="review-answer-number">${index + 1}</span>
+                <span class="review-answer-copy">
+                    <strong>${answer ? answer.isCorrect ? "Benar" : "Belum tepat" : "Kosong"}</strong>
+                    <small>${question.question}</small>
+                </span>
+                <span class="review-answer-meta">${state.confidence[index] === "sure" ? "Yakin" : state.flagged[index] ? "Ragu" : question.difficulty}</span>
+            `;
+            item.addEventListener("click", () => {
+                state.current = index;
+                renderQuestion();
+                closeReviewDrawer();
+            });
+            els.reviewList.appendChild(item);
+        });
+    }
+
+    function openReviewDrawer() {
+        if (!els.reviewDrawer) return;
+        renderReviewDrawer();
+        els.reviewDrawer.hidden = false;
+        state.reviewOpen = true;
+        document.body.classList.add("dialog-open");
+    }
+
+    function closeReviewDrawer() {
+        if (!els.reviewDrawer || els.reviewDrawer.hidden) return;
+        els.reviewDrawer.hidden = true;
+        state.reviewOpen = false;
+        document.body.classList.remove("dialog-open");
     }
 
     function skipQuestion() {
@@ -363,14 +563,14 @@
         finishQuizWithStatus(false);
     }
 
-    function finishQuizWithStatus(cheatFailed) {
+    function finishQuizWithStatus() {
         if (!state.running) return;
         window.clearInterval(state.timerId);
         state.running = false;
         const total = state.questions.length;
         const unanswered = total - state.selected.filter(Boolean).length;
         const missed = state.wrong + unanswered;
-        const score = cheatFailed ? 0 : Math.round((state.correct / total) * 100);
+        const score = Math.round((state.correct / total) * 100);
         const isLms = state.payload.source === "lms";
         const passThreshold = state.payload.lms?.passThreshold || 80;
         const isPassed = score >= passThreshold;
@@ -381,8 +581,9 @@
         const session = {
             date: new Date().toISOString(),
             score,
-            correct: cheatFailed ? 0 : state.correct,
-            wrong: cheatFailed ? total : missed,
+            sessionId: state.payload.sessionId,
+            correct: state.correct,
+            wrong: missed,
             answeredWrong: state.wrong,
             unanswered,
             total,
@@ -394,67 +595,87 @@
             timeLeft: state.timeLeft,
             initialTime: state.initialTime,
             flagged: state.flagged.filter(Boolean).length,
+            confidence: state.confidence,
+            focusWarnings: state.cheatWarnings,
             answers: state.selected.filter(Boolean)
         };
 
+        const firstCompletion = core.rewards.markAwarded(state.payload.sessionId);
         if (isLms) {
             saveLmsResult(score);
-        } else {
-            writeJson(localStorage, LAST_KEY, session);
-            localStorage.setItem(BEST_KEY, String(Math.max(score, Number(localStorage.getItem(BEST_KEY) || 0))));
         }
-
-        try {
+        if (firstCompletion) {
             if (!isLms) {
-                const currentXp = Number(localStorage.getItem("eduquestXP") || 8960) + xp;
-                const currentStreak = Number(localStorage.getItem("eduquestStreak") || 12) + (score >= 70 ? 1 : 0);
-                localStorage.setItem("eduquestXP", String(currentXp));
-                localStorage.setItem("eduquestStreak", String(currentStreak));
-                localStorage.setItem("eduquestLevel", String(Math.floor(currentXp / 700) + 1));
-                localStorage.setItem("lastSyncedSessionDate", session.date);
+                writeJson(localStorage, LAST_KEY, session);
+                const best = Math.max(score, Number(localStorage.getItem(BEST_KEY) || 0));
+                localStorage.setItem(BEST_KEY, String(Math.min(100, Math.max(0, best))));
             }
-            if (xp > 0 && typeof loadRPG === "function" && typeof addXp === "function") {
-                loadRPG();
-                addXp(xp);
+
+            try {
+                if (!isLms) {
+                    const currentXp = Math.max(0, Number(localStorage.getItem("eduquestXP") || 8960)) + xp;
+                    const currentStreak = Math.max(0, Number(localStorage.getItem("eduquestStreak") || 12)) + (score >= 70 ? 1 : 0);
+                    localStorage.setItem("eduquestXP", String(currentXp));
+                    localStorage.setItem("eduquestStreak", String(currentStreak));
+                    localStorage.setItem("eduquestLevel", String(Math.floor(currentXp / 700) + 1));
+                    localStorage.setItem("lastSyncedSessionDate", session.date);
+                }
+                if (xp > 0 && typeof loadRPG === "function" && typeof addXp === "function") {
+                    loadRPG();
+                    addXp(xp);
+                }
+            } catch (error) {
+                console.warn("Sinkronisasi XP gagal:", error);
             }
-        } catch (error) {
-            console.warn("Sinkronisasi XP gagal:", error);
         }
 
-        sessionStorage.removeItem(ACTIVE_KEY);
+        core.storage.remove(sessionStorage, ACTIVE_KEY);
         els.progressBar.style.width = "100%";
         els.focusProgress.setAttribute("aria-valuenow", "100");
         els.resultScore.textContent = `${score}%`;
         els.resultTitle.textContent = isLms
-            ? cheatFailed
-                ? "Ujian dihentikan karena batas peringatan tercapai."
-                : isPassed ? "Selamat, langkah LMS ini berhasil diselesaikan." : "Belum mencapai batas kelulusan LMS."
+            ? isPassed ? "Selamat, langkah LMS ini berhasil diselesaikan." : "Belum mencapai batas kelulusan LMS."
             : score >= 75 ? "Kerja bagus, ritmemu sudah kuat." : "Sesi selesai, peta belajarmu makin jelas.";
         els.resultMessage.textContent = isLms
-            ? cheatFailed
-                ? "Mode Tantangan mendeteksi perpindahan tab sebanyak tiga kali. Skor sesi ditetapkan menjadi 0%."
-                : isPassed
-                    ? `Kamu meraih ${score}% dan melewati batas kelulusan ${passThreshold}%. Progres modul sudah diperbarui.`
-                    : `Skor ${score}%. Kamu memerlukan minimal ${passThreshold}% untuk menandai langkah ini selesai.`
+            ? isPassed
+                ? `Kamu meraih ${score}% dan melewati batas kelulusan ${passThreshold}%. Progres modul sudah diperbarui.`
+                : `Skor ${score}%. Kamu memerlukan minimal ${passThreshold}% untuk menandai langkah ini selesai.`
             : buildSummary(score);
-        els.resultCorrect.textContent = cheatFailed ? 0 : state.correct;
-        els.resultWrong.textContent = cheatFailed ? total : missed;
+        renderResultInsight();
+        els.resultCorrect.textContent = state.correct;
+        els.resultWrong.textContent = missed;
         els.resultStreak.textContent = state.bestStreak;
-        els.resultXp.textContent = `+${xp}`;
+        els.resultXp.textContent = firstCompletion ? `+${xp}` : "Tersimpan";
         configureResultActions(isLms);
+        renderReviewDrawer();
         els.resultOverlay.hidden = false;
     }
 
+    function renderResultInsight() {
+        const grouped = {};
+        state.selected.filter(Boolean).forEach((answer) => {
+            const key = answer.category || "all";
+            grouped[key] ||= { correct: 0, total: 0 };
+            grouped[key].total += 1;
+            if (answer.isCorrect) grouped[key].correct += 1;
+        });
+        const weakest = Object.entries(grouped)
+            .map(([category, data]) => ({ category, accuracy: Math.round((data.correct / data.total) * 100) }))
+            .sort((a, b) => a.accuracy - b.accuracy)[0];
+        const stats = getSessionStats();
+        const message = weakest
+            ? `Fokus berikutnya: ulangi kategori ${weakest.category} (${weakest.accuracy}%). Kosong: ${stats.unanswered}, bantuan dipakai: ${state.helpUsed}, focus warning: ${state.cheatWarnings}.`
+            : `Jawab beberapa soal untuk membuka rekomendasi belajar adaptif. Kosong: ${stats.unanswered}, bantuan dipakai: ${state.helpUsed}.`;
+        els.resultInsight.textContent = message;
+    }
+
     function saveLmsResult(score) {
-        const progress = readJson(localStorage, "eduquestLmsProgress", {
+        const progress = core.sanitize.lmsProgress(readJson(localStorage, "eduquestLmsProgress", {
             completedLectures: [],
             quizScores: {},
             unlockedBadges: [],
             userName: "Developer Indonesia"
-        });
-        progress.completedLectures = progress.completedLectures || [];
-        progress.quizScores = progress.quizScores || {};
-        progress.unlockedBadges = progress.unlockedBadges || [];
+        }));
         const lms = state.payload.lms;
         const scoreKey = `${lms.trackId}_${lms.moduleId}_${lms.quizType}`;
         progress.quizScores[scoreKey] = Math.max(score, Number(progress.quizScores[scoreKey] || 0));
@@ -464,18 +685,18 @@
     function getLmsReturnUrl() {
         const lms = state.payload.lms;
         if (!lms) return "quiz.html";
-        return `quiz.html?lmsReturn=1&track=${encodeURIComponent(lms.trackId)}&module=${lms.moduleIndex}&step=${encodeURIComponent(lms.quizType)}`;
+        return `learning-path.html?lmsReturn=1&track=${encodeURIComponent(lms.trackId)}&module=${lms.moduleIndex}&step=${encodeURIComponent(lms.quizType)}`;
     }
 
     function configureResultActions(isLms) {
         if (!isLms) {
-            els.reviewResultButton.textContent = "Lihat Review";
+            els.reviewResultButton.textContent = "Review Jawaban";
             els.resultBackLink.href = "quiz.html";
             els.resultBackLink.textContent = "Kembali";
             return;
         }
         const returnUrl = getLmsReturnUrl();
-        els.reviewResultButton.textContent = "Kembali ke Modul";
+        els.reviewResultButton.textContent = "Review Jawaban";
         els.resultBackLink.href = returnUrl;
         els.resultBackLink.textContent = "Jalur Belajar";
     }
@@ -488,8 +709,12 @@
         els.focusSidebar.classList.remove("open");
     }
 
-    function confirmExit() {
-        if (!state.running || window.confirm("Keluar dari Focus Room? Progres sesi saat ini tetap disimpan sementara.")) {
+    async function confirmExit() {
+        if (!state.running || await requestConfirmation({
+            title: "Keluar dari Focus Room?",
+            message: "Progres sesi saat ini akan tetap disimpan sementara agar dapat dilanjutkan.",
+            acceptLabel: "Simpan & Keluar"
+        })) {
             state.exiting = true;
             saveActiveState();
             window.location.href = state.payload.source === "lms" ? getLmsReturnUrl() : "quiz.html";
@@ -497,25 +722,46 @@
     }
 
     function handleChallengeVisibility() {
-        if (state.exiting || !state.running || state.payload.source !== "lms" || state.payload.lms?.quizType !== "challenge") return;
+        if (state.exiting || !state.running || state.payload.source !== "lms" || state.payload.config?.mode !== "challenge") return;
         if (document.visibilityState !== "hidden") return;
         state.cheatWarnings += 1;
         saveActiveState();
         playSound("alarm");
-        if (state.cheatWarnings >= 3) {
-            window.setTimeout(() => finishQuizWithStatus(true), 0);
-            return;
-        }
         window.setTimeout(() => {
-            window.alert(`Peringatan ujian ${state.cheatWarnings}/3: perpindahan tab terdeteksi. Pada peringatan ketiga, ujian otomatis dihentikan.`);
+            showToast(`Pengingat fokus ${state.cheatWarnings}: sesi tetap berjalan dan perpindahan tab dicatat.`);
         }, 0);
+    }
+
+    function requestConfirmation({ title, message, acceptLabel }) {
+        if (!els.confirmOverlay) return Promise.resolve(false);
+        if (confirmResolver) confirmResolver(false);
+        confirmTrigger = document.activeElement;
+        els.confirmTitle.textContent = title;
+        els.confirmMessage.textContent = message;
+        els.confirmAcceptButton.textContent = acceptLabel;
+        els.confirmOverlay.hidden = false;
+        document.body.classList.add("dialog-open");
+        window.setTimeout(() => els.confirmCancelButton.focus(), 0);
+        return new Promise((resolve) => {
+            confirmResolver = resolve;
+        });
+    }
+
+    function closeConfirmation(accepted) {
+        if (!confirmResolver) return;
+        const resolve = confirmResolver;
+        confirmResolver = null;
+        els.confirmOverlay.hidden = true;
+        document.body.classList.remove("dialog-open");
+        confirmTrigger?.focus?.();
+        resolve(accepted);
     }
 
     function initTheme() {
         const saved = localStorage.getItem("eduquest_theme") || "dark";
         const light = saved === "light";
         document.body.classList.toggle("light-session", light);
-        els.themeButton.textContent = light ? "🌙" : "☀️";
+        els.themeButton.textContent = light ? "Gelap" : "Terang";
         els.themeButton.setAttribute("aria-pressed", String(!light));
         els.themeButton.setAttribute("aria-label", light ? "Aktifkan tema gelap" : "Aktifkan tema terang");
     }
@@ -528,7 +774,7 @@
 
     function initSound() {
         soundEnabled = localStorage.getItem("eduquest_sound") !== "off";
-        els.soundButton.textContent = soundEnabled ? "🔊" : "🔇";
+        els.soundButton.textContent = soundEnabled ? "Suara On" : "Suara Off";
         els.soundButton.setAttribute("aria-pressed", String(soundEnabled));
         els.soundButton.setAttribute("aria-label", soundEnabled ? "Nonaktifkan suara" : "Aktifkan suara");
     }
@@ -548,6 +794,17 @@
         });
         els.soundButton.addEventListener("click", toggleSound);
         els.themeButton.addEventListener("click", toggleTheme);
+        els.toolsButton?.addEventListener("click", openCommandPalette);
+        els.closeCommandPalette?.addEventListener("click", closeCommandPalette);
+        els.commandPalette?.addEventListener("click", (event) => {
+            if (event.target === els.commandPalette) closeCommandPalette();
+            const commandButton = event.target.closest("[data-command]");
+            if (commandButton) runCommand(commandButton.dataset.command);
+        });
+        els.confidenceControls?.addEventListener("click", (event) => {
+            const button = event.target.closest("[data-confidence]");
+            if (button) setConfidence(button.dataset.confidence);
+        });
         els.hintButton.addEventListener("click", showHint);
         els.fiftyButton.addEventListener("click", useFifty);
         els.bookmarkButton.addEventListener("click", bookmarkQuestion);
@@ -556,20 +813,54 @@
         els.nextButton.addEventListener("click", nextQuestion);
         els.navigatorButton.addEventListener("click", openNavigator);
         els.closeNavigator.addEventListener("click", closeNavigator);
+        els.confirmCancelButton.addEventListener("click", () => closeConfirmation(false));
+        els.confirmAcceptButton.addEventListener("click", () => closeConfirmation(true));
+        els.confirmOverlay.addEventListener("click", (event) => {
+            if (event.target === els.confirmOverlay) closeConfirmation(false);
+        });
+        els.closeReviewDrawer?.addEventListener("click", closeReviewDrawer);
+        els.reviewDrawer?.addEventListener("click", (event) => {
+            if (event.target === els.reviewDrawer) closeReviewDrawer();
+        });
         els.retrySessionButton.addEventListener("click", () => {
-            sessionStorage.removeItem(ACTIVE_KEY);
+            core.storage.remove(sessionStorage, ACTIVE_KEY);
             window.location.reload();
         });
-        els.reviewResultButton.addEventListener("click", () => {
-            if (state.payload.source === "lms") {
-                window.location.href = getLmsReturnUrl();
-            } else {
-                sessionStorage.setItem("quizActiveTab", "quick-arena");
-                window.location.href = "quiz.html?review=1#review";
-            }
-        });
+        els.reviewResultButton.addEventListener("click", openReviewDrawer);
 
         document.addEventListener("keydown", (event) => {
+            if (!els.confirmOverlay.hidden) {
+                if (event.key === "Escape") {
+                    event.preventDefault();
+                    closeConfirmation(false);
+                } else if (event.key === "Tab") {
+                    const focusables = [els.confirmCancelButton, els.confirmAcceptButton];
+                    const current = focusables.indexOf(document.activeElement);
+                    const next = event.shiftKey
+                        ? (current - 1 + focusables.length) % focusables.length
+                        : (current + 1) % focusables.length;
+                    event.preventDefault();
+                    focusables[next].focus();
+                }
+                return;
+            }
+            if (event.key === "Escape") {
+                if (els.commandPalette && !els.commandPalette.hidden) {
+                    event.preventDefault();
+                    closeCommandPalette();
+                    return;
+                }
+                if (els.reviewDrawer && !els.reviewDrawer.hidden) {
+                    event.preventDefault();
+                    closeReviewDrawer();
+                    return;
+                }
+            }
+            if (event.key === "/" && !event.altKey && !event.ctrlKey && !event.metaKey) {
+                event.preventDefault();
+                openCommandPalette();
+                return;
+            }
             if (!state.running || event.altKey || event.ctrlKey || event.metaKey) return;
             if (/^[1-4]$/.test(event.key)) {
                 const option = els.answerList.querySelector(`[data-index="${Number(event.key) - 1}"]:not(:disabled):not(.hidden-choice)`);
@@ -590,7 +881,16 @@
     function init() {
         cacheElements();
         if (!restoreSession()) {
-            window.location.replace("quiz.html");
+            document.getElementById("focusRoom").innerHTML = `
+                <section class="session-empty-state">
+                    <img src="logo.png" alt="" aria-hidden="true">
+                    <span class="result-kicker">Session expired</span>
+                    <h1>Sesi quiz belum tersedia.</h1>
+                    <p>Kamu akan diarahkan kembali ke katalog quiz untuk memulai sesi baru.</p>
+                    <a class="action-button primary" href="quiz.html">Kembali ke Quiz</a>
+                </section>
+            `;
+            window.setTimeout(() => window.location.replace("quiz.html"), 1800);
             return;
         }
         initTheme();

@@ -1,6 +1,148 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    Latihan Bahasa - Premium Stylesheet
    ========================================================================== */
+
+:root {
+    /* HSL Palettes - Light Mode (Clean, Premium, vibrant) */
+    --green: hsl(142, 69%, 52%);          /* Vibrant Emerald */
+    --green-dark: #0f8543;
+    --green-glow: rgba(16, 185, 129, 0.15);
+    
+    --blue: hsl(226, 100%, 65%);          /* Royal Blue / Indigo hint */
+    --blue-glow: rgba(79, 140, 255, 0.15);
+    
+    --yellow: hsl(45, 100%, 60%);         /* Premium Amber */
+    --orange: hsl(28, 100%, 58%);         /* Vibrant Orange */
+    --orange-glow: rgba(255, 159, 67, 0.15);
+    
+    --purple: hsl(262, 83%, 64%);         /* Violet */
+    --purple-glow: rgba(139, 92, 246, 0.15);
+    
+    --dark: #0f172a;                      /* Slate 900 */
+    --muted: #64748b;                     /* Slate 500 */
+    --soft: #f8fafc;                      /* Slate 50 */
+    --white: #ffffff;
+    --border: rgba(226, 232, 240, 0.8);   /* Translucent Slate 200 */
+    
+    --shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.08), 0 0 1px rgba(15, 23, 42, 0.04);
+    --shadow-soft: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
+    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.12);
+
+    /* Theme specific gradients & backgrounds */
+    --bg-page: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.06), transparent 35%),
+        radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.05), transparent 35%),
+        linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    --navbar-bg: rgba(255, 255, 255, 0.75);
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --badge-bg: rgba(255, 255, 255, 0.85);
+    --item-bg: #f1f5f9;
+    --dark-phone-bg: #0f172a;
+    
+    --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+}
+
+body.dark-theme {
+    --dark: #f8fafc;                      /* Slate 50 */
+    --muted: #94a3b8;                     /* Slate 400 */
+    --soft: #090e1a;                      /* Ultra Dark Blue */
+    --white: #0f172a;                     /* Slate 900 */
+    --border: rgba(30, 41, 59, 0.7);      /* Translucent Slate 800 */
+    
+    --shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.3);
+    --shadow-soft: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.2);
+
+    --bg-page: radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.12), transparent 40%),
+        radial-gradient(circle at 100% 0%, rgba(16, 185, 129, 0.08), transparent 40%),
+        linear-gradient(180deg, #090d16 0%, #05070c 100%);
+    --navbar-bg: rgba(15, 23, 42, 0.75);
+    --card-bg: rgba(15, 23, 42, 0.65);
+    --badge-bg: rgba(30, 41, 59, 0.6);
+    --item-bg: #1e293b;                   /* Slate 800 */
+    --dark-phone-bg: #050914;
+    
+    --glass-border: 1px solid rgba(255, 255, 255, 0.05);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Scrollbar override for webkit browsers */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 5px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--blue);
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+/* Floating Glow Orbs Override for Latihan Bahasa */
+.orb {
+    position: fixed;
+    width: 450px;
+    height: 450px;
+    border-radius: 999px;
+    pointer-events: none;
+    filter: blur(80px);
+    z-index: 0;
+    opacity: 0.65;
+    mix-blend-mode: plus-lighter;
+}
+
+body.dark-theme .orb {
+    opacity: 0.45;
+}
+
+.orb.one {
+    top: -150px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, rgba(139, 92, 246, 0.1) 70%, transparent 100%);
+    animation: floatOrbComplexOne 24s ease-in-out infinite;
+}
+
+.orb.two {
+    bottom: -150px;
+    left: -150px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.35) 0%, rgba(59, 130, 246, 0.1) 70%, transparent 100%);
+    animation: floatOrbComplexTwo 28s ease-in-out infinite;
+}
+
+@keyframes floatOrbComplexOne {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    33% {
+        transform: translate(50px, 80px) scale(1.1) rotate(120deg);
+    }
+    66% {
+        transform: translate(-30px, 40px) scale(0.9) rotate(240deg);
+    }
+    100% {
+        transform: translate(0, 0) scale(1) rotate(360deg);
+    }
+}
+
+@keyframes floatOrbComplexTwo {
+    0% {
+        transform: translate(0, 0) scale(1.1) rotate(360deg);
+    }
+    50% {
+        transform: translate(-40px, -60px) scale(0.9) rotate(180deg);
+    }
+    100% {
+        transform: translate(0, 0) scale(1.1) rotate(0deg);
+    }
+}
+
 
 /* Layout & Grid Utama */
 .latihan-container {
@@ -221,8 +363,14 @@
    ========================================================================== */
 .latihan-hud-container {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 18px;
+}
+
+@media (max-width: 1100px) {
+    .latihan-hud-container {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 @media (max-width: 768px) {
@@ -581,15 +729,26 @@ body.dark-theme .flashcard-3d-card:hover .flashcard-face {
 }
 
 .flashcard-face.face-front {
-    background: linear-gradient(135deg, var(--green), var(--blue));
+    background: linear-gradient(135deg, var(--green) 0%, var(--blue) 50%, var(--purple) 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 8s ease infinite;
     color: white;
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.25);
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .flashcard-face.face-back {
-    background: var(--white);
+    background: var(--card-bg);
     border: 1px solid var(--border);
     color: var(--dark);
     transform: rotateY(180deg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
 }
 
 .flashcard-face small {
@@ -641,15 +800,17 @@ body.dark-theme .flashcard-3d-card:hover .flashcard-face {
 
 /* Trivia Budaya Box */
 .card-trivia-box {
-    margin-top: 16px;
+    margin-top: 18px;
     background: var(--soft);
-    border: 1px dashed var(--border);
-    border-radius: 16px;
-    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: 14px;
+    padding: 14px 18px;
     text-align: left;
     width: 100%;
     max-width: 90%;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
 }
 
 .card-trivia-box span {
@@ -657,17 +818,19 @@ body.dark-theme .flashcard-3d-card:hover .flashcard-face {
     font-weight: 900;
     color: var(--blue);
     letter-spacing: 0.08em;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     margin-bottom: 4px;
 }
 
 .card-trivia-box p {
     font-size: 12px;
     font-weight: 600;
-    line-height: 1.45;
+    line-height: 1.5;
     color: var(--muted);
     max-width: 100%;
-    opacity: 1;
+    opacity: 0.95;
 }
 
 /* Audio Wave Visualizer */
@@ -844,12 +1007,83 @@ body.dark-theme .flashcard-3d-card:hover .flashcard-face {
 }
 
 .quiz-grid-options .answer-btn {
-    padding: 16px 20px;
-    font-size: 15px;
-    border-radius: 18px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 750;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--dark);
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+body.dark-theme .quiz-grid-options .answer-btn {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.quiz-grid-options .answer-btn:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.01);
+    border-color: var(--blue);
+    box-shadow: 0 8px 24px var(--blue-glow);
+}
+
+.quiz-grid-options .answer-btn:disabled {
+    cursor: not-allowed;
+}
+
+.option-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--soft);
+    color: var(--muted);
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+body.dark-theme .option-badge {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.quiz-grid-options .answer-btn:hover:not(:disabled) .option-badge {
+    background: var(--blue);
+    color: white;
+}
+
+.quiz-grid-options .answer-btn.correct {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border-color: var(--green) !important;
+    color: var(--green-dark) !important;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15) !important;
+}
+
+.quiz-grid-options .answer-btn.correct .option-badge {
+    background: var(--green) !important;
+    color: white !important;
+}
+
+.quiz-grid-options .answer-btn.wrong {
+    background: rgba(239, 68, 68, 0.08) !important;
+    border-color: #ff4d6d !important;
+    color: #ff4d6d !important;
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15) !important;
+}
+
+.quiz-grid-options .answer-btn.wrong .option-badge {
+    background: #ff4d6d !important;
+    color: white !important;
 }
 
 .quiz-feedback-box {
@@ -1011,48 +1245,51 @@ body.dark-theme .flashcard-3d-card:hover .flashcard-face {
 }
 
 .speaking-mic-btn {
-    width: 90px;
-    height: 90px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
-    border: 0;
-    background: linear-gradient(135deg, #ff4d6d, var(--orange));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, hsl(354, 100%, 65%), var(--orange));
     color: white;
-    font-size: 32px;
+    font-size: 34px;
     cursor: pointer;
     display: grid;
     place-items: center;
-    box-shadow: 0 10px 30px rgba(255, 77, 109, 0.35);
+    box-shadow: 0 12px 32px rgba(255, 77, 109, 0.3);
     position: relative;
     outline: none;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .speaking-mic-btn:hover {
-    transform: scale(1.08);
+    transform: scale(1.06);
+    box-shadow: 0 16px 40px rgba(255, 77, 109, 0.45);
 }
 
 .speaking-mic-btn:active {
-    transform: scale(0.96);
+    transform: scale(0.95);
 }
 
 .speaking-mic-btn.listening {
-    background: linear-gradient(135deg, var(--green), var(--green-dark));
-    box-shadow: 0 10px 30px rgba(50, 214, 107, 0.35);
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.35);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Pulsing radar ring */
 .mic-pulse-ring {
     position: absolute;
-    inset: -12px;
+    inset: -8px;
     border-radius: 50%;
-    border: 4px solid var(--orange);
+    border: 2px solid var(--orange);
     opacity: 0;
     pointer-events: none;
+    transition: all 0.3s ease;
 }
 
 .speaking-mic-btn.listening .mic-pulse-ring {
     border-color: var(--green);
-    animation: micRadarPulse 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+    animation: micRadarPulse 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
 }
 
 @keyframes micRadarPulse {
@@ -1375,18 +1612,23 @@ body.dark-theme .flashcard-3d-card:hover .flashcard-face {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--item-bg);
+    background: var(--white);
     border: 1px solid var(--border);
     border-radius: 20px;
-    padding: 16px;
+    padding: 16px 20px;
     gap: 12px;
-    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark-theme .vocab-card-item {
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .vocab-card-item:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-soft);
-    border-color: rgba(79, 140, 255, 0.2);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(79, 140, 255, 0.12);
+    border-color: rgba(79, 140, 255, 0.3);
 }
 
 .vocab-card-body {
@@ -1518,3 +1760,308 @@ body.dark-theme .flashcard-3d-card:hover .flashcard-face {
     font-weight: 600;
     color: var(--muted);
 }
+
+
+/* ==========================================================================
+   MASSIVE UPDATE: Hyper-Modern Glassmorphism & UI Enhancements
+   ========================================================================== */
+
+/* Dark Mode Variables & Theming */
+body.dark-theme {
+    color: #f1f5f9;
+}
+
+/* Hyper Glassmorphism on Panels */
+.latihan-sidebar, .latihan-dash-header, .latihan-hud-level-card, .latihan-hud-quests-card, .latihan-hud-music-card, .latihan-stat-card, .latihan-workspace-panel, .latihan-tabs-bar, .latihan-vocab-panel, .wonder-page-hero.compact {
+    backdrop-filter: blur(30px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+}
+
+body.dark-theme .latihan-sidebar, body.dark-theme .latihan-dash-header, body.dark-theme .latihan-hud-level-card, body.dark-theme .latihan-hud-quests-card, body.dark-theme .latihan-hud-music-card, body.dark-theme .latihan-stat-card, body.dark-theme .latihan-workspace-panel, body.dark-theme .latihan-tabs-bar, body.dark-theme .latihan-vocab-panel, body.dark-theme .wonder-page-hero.compact {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+/* Typography Enhancements */
+body[data-page="wonder-latihan-custom"] {
+    font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    letter-spacing: -0.015em;
+}
+h1, h2, h3, h4, strong {
+    letter-spacing: -0.03em !important;
+}
+
+/* Sidebar Regions Hover Elevation */
+.region-nav-item {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+.region-nav-item:hover {
+    transform: translateX(8px) scale(1.02) !important;
+    box-shadow: 0 12px 24px rgba(79, 140, 255, 0.15) !important;
+    border-color: rgba(79, 140, 255, 0.6) !important;
+}
+.region-nav-item.active {
+    box-shadow: 0 12px 24px rgba(50, 214, 107, 0.25) !important;
+    transform: translateX(4px) !important;
+    background: linear-gradient(135deg, rgba(50, 214, 107, 0.15), rgba(79, 140, 255, 0.1)) !important;
+}
+
+/* Dashboard Pulse Animation (XP Gained) */
+@keyframes xpPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(50,214,107,0); }
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(50,214,107,0.6); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(50,214,107,0); }
+}
+.xp-gained-anim {
+    animation: xpPulse 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* Smooth Tab Indicator Slider */
+.latihan-tabs-bar {
+    position: relative;
+    z-index: 1;
+}
+.latihan-tab-indicator {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 0;
+    width: 0;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    border-radius: 14px;
+    z-index: -1;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 15px rgba(50, 214, 107, 0.3);
+}
+.latihan-tab-btn.active {
+    background: transparent !important;
+    box-shadow: none !important;
+    color: white !important;
+}
+
+/* Fade Transitions for Panels */
+.latihan-workspace-panel {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.latihan-workspace-panel.fade-out {
+    opacity: 0;
+    transform: translateY(10px);
+}
+.latihan-workspace-panel.fade-in {
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: none !important;
+}
+.latihan-workspace-panel.active.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Match Game Card Enhancements */
+@keyframes shakeWrong {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px) rotate(-2deg); }
+    40%, 80% { transform: translateX(6px) rotate(2deg); }
+}
+.match-item-card.wrong-flash {
+    animation: shakeWrong 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+    background: rgba(255, 77, 109, 0.1) !important;
+    border-color: #ff4d6d !important;
+    color: #ff4d6d !important;
+    box-shadow: 0 8px 24px rgba(255, 77, 109, 0.15) !important;
+}
+.match-item-card.matched {
+    transform: scale(0.95) !important;
+    opacity: 0.7;
+    background: linear-gradient(135deg, var(--green), var(--green-dark)) !important;
+    color: white !important;
+    border-color: transparent !important;
+    box-shadow: 0 0 20px rgba(50, 214, 107, 0.4) !important;
+}
+
+/* Button Hover Gloss */
+.btn-primary, .btn-blue {
+    position: relative;
+    overflow: hidden;
+}
+.btn-primary::after, .btn-blue::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-20deg);
+    transition: 0s;
+}
+.btn-primary:hover::after, .btn-blue:hover::after {
+    left: 150%;
+    transition: 0.6s ease-in-out;
+}
+
+/* Kamus Daerah Table List Enhancements */
+.vocab-interactive-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    padding-top: 10px;
+}
+
+
+/* ==========================================================================
+   LATIHAN BAHASA: NEW PREMIUM FEATURE STYLES
+   ========================================================================== */
+
+/* Ambient Focus Music Card */
+.latihan-hud-music-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.latihan-hud-music-card .music-card-title {
+    font-size: 12px;
+    font-weight: 900;
+    color: var(--blue);
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.music-player-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.music-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.music-play-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 0;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 4px 10px rgba(50, 214, 107, 0.2);
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    outline: none;
+}
+
+.music-play-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(50, 214, 107, 0.3);
+}
+
+.music-play-btn.playing {
+    background: linear-gradient(135deg, #ff4d6d, var(--orange));
+    box-shadow: 0 4px 10px rgba(255, 77, 109, 0.2);
+}
+
+.music-track-select {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 750;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--dark);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.music-track-select:focus {
+    border-color: var(--blue);
+}
+
+body.dark-theme .music-track-select {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.music-volume-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.music-volume-slider {
+    flex: 1;
+    accent-color: var(--blue);
+    height: 4px;
+    cursor: pointer;
+}
+
+#musicWaveCanvas {
+    width: 100%;
+    height: 24px;
+    background: rgba(102, 112, 133, 0.04);
+    border-radius: 8px;
+    display: block;
+}
+
+/* Speaking Wave Visualizer */
+#speakingWaveCanvas {
+    width: 100%;
+    max-width: 300px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: block;
+}
+
+body.dark-theme #speakingWaveCanvas {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Keyframe Animations for Match Game & UI Polish */
+@keyframes correctPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); box-shadow: 0 0 22px rgba(50, 214, 107, 0.7); }
+    100% { transform: scale(1); }
+}
+
+@keyframes wrongShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px) rotate(-1.5deg); }
+    40%, 80% { transform: translateX(8px) rotate(1.5deg); }
+}
+
+.match-item-card.correct-flash {
+    animation: correctPop 0.35s ease-out both !important;
+}
+
+.match-item-card.wrong-flash {
+    animation: wrongShake 0.35s ease-out both !important;
+}
+
+/* 3D tilt smoothness */
+#flashcardCard {
+    transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+}
+
+#flashcardCard.flipped {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+

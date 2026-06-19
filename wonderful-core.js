@@ -29,6 +29,10 @@
         const themeToggleBtn = document.getElementById("themeToggleBtn");
         const savedTheme = localStorage.getItem("eduquest_theme") || "light";
         document.body.classList.toggle("dark-theme", savedTheme === "dark");
+        
+        // Enable iOS CSS active state touch feedback
+        document.addEventListener("touchstart", () => {}, { passive: true });
+
         if (!themeToggleBtn) return;
         themeToggleBtn.innerHTML = savedTheme === "dark" ? "&#9728;" : "&#127769;";
         themeToggleBtn.addEventListener("click", () => {
@@ -157,7 +161,12 @@
                     <div>
                         <strong>${place.label}</strong>
                         <p>${place.summary}</p>
-                        <small>${place.region} - ${place.destination[0]} - ${mastered.has(place.id) ? "Dikuasai" : explored.has(place.id) ? "Sudah dijelajahi" : "Belum dibuka"}</small>
+                        <div class="culture-card-facts" aria-label="Ringkasan budaya ${place.label}">
+                            <span><i class="fa-solid fa-location-dot"></i> ${place.region}</span>
+                            <span><i class="fa-solid fa-language"></i> ${place.cards?.[0]?.[0] || "Frasa lokal"}</span>
+                            <span><i class="fa-solid fa-utensils"></i> ${place.food?.[0] || "Kuliner utama"}</span>
+                        </div>
+                        <small>${place.destination[0]} - ${mastered.has(place.id) ? "Dikuasai" : explored.has(place.id) ? "Sudah dijelajahi" : "Belum dibuka"}</small>
                     </div>
                 </a>
                 <div class="culture-card-actions">

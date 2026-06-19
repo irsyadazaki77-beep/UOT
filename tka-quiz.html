@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#08111f">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <title>TKA Focus Room - Universe Of Tech</title>
+    <meta name="description" content="Ruang pengerjaan quiz fullscreen Universe Of Tech.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="quiz-session.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body data-page="tka-quiz">
+    <main class="focus-room" id="focusRoom">
+        <header class="focus-header">
+            <a class="focus-brand" href="tka-lms.html" id="exitLink" aria-label="Keluar ke halaman dashboard">
+                <img src="logo.png" alt="" aria-hidden="true">
+                <span>TKA Focus Room</span>
+            </a>
+
+            <div class="focus-session-meta" aria-label="Informasi sesi">
+                <span id="tkaHeaderSubject">Mode Latihan</span>
+                <span id="tkaHeaderMode">Fokus Penuh</span>
+            </div>
+
+            <div class="focus-header-actions">
+                <button class="icon-button" id="themeToggleBtn" type="button" aria-label="Aktifkan tema terang" aria-pressed="true">Tema</button>
+                <a class="exit-button" href="tka-lms.html">Keluar</a>
+            </div>
+        </header>
+
+        <div class="focus-progress" id="focusProgress" role="progressbar" aria-label="Progres quiz">
+            <span id="tkaLmsProgressBar" style="width: 0%;"></span>
+        </div>
+
+        <section class="focus-layout">
+            <article class="question-stage" id="questionStage">
+                <div class="question-overline">
+                    <span id="tkaQuestionCounter">Soal 0/0</span>
+                    <span id="tkaLmsQuestionMeta">Pilih soal</span>
+                </div>
+
+                <h1 id="tkaLmsQuestionTitle">Pilih soal untuk mulai latihan.</h1>
+                <p class="lms-stimulus" id="tkaLmsStimulus">Silakan gunakan navigasi di sebelah kanan atau atur mapel dari dashboard.</p>
+                <div class="answer-list" id="tkaLmsAnswers" aria-label="Pilihan jawaban"></div>
+                <div class="answer-feedback" id="tkaLmsExplanation" role="status" aria-live="polite">
+                    <p class="muted">Pembahasan akan muncul setelah kamu submit jawaban.</p>
+                </div>
+
+                <div class="lms-note-box">
+                    <label for="tkaQuestionNote">Catatan Konsep (Disimpan di Browser)</label>
+                    <textarea id="tkaQuestionNote" placeholder="Tulis alasan salah, rumus, kata kunci, atau strategi pengerjaan..."></textarea>
+                    <button class="action-button secondary" id="tkaSaveNote" type="button">Simpan Catatan</button>
+                </div>
+            </article>
+
+            <aside class="focus-sidebar" id="focusSidebar">
+                <div class="timer-card" id="timerCard">
+                    <span>Sisa waktu</span>
+                    <strong id="tkaTimerDisplay">00:00</strong>
+                    <div class="timer-actions">
+                        <button class="action-button secondary" id="tkaTimerToggle" type="button">Mulai</button>
+                        <button class="action-button subtle" id="tkaTimerReset" type="button">Reset</button>
+                    </div>
+                </div>
+
+                <div class="session-stats">
+                    <div><span>Sumber Pola</span><strong id="tkaLmsSource">TKA</strong></div>
+                    <div><span>Status</span><strong id="tkaQuestionStatus">Belum dijawab</strong></div>
+                </div>
+
+                <div class="question-nav-head">
+                    <strong>Navigator soal</strong>
+                </div>
+                <div class="question-navigator" id="tkaQuestionList" ></div>
+            </aside>
+        </section>
+
+        <footer class="focus-actions">
+            <div class="assist-actions">
+                <button class="action-button subtle" id="tkaPrevQuestion" type="button">Sebelumnya</button>
+                <button class="action-button subtle" id="tkaShowHint" type="button">Hint</button>
+                <button class="action-button subtle" id="tkaMarkReview" type="button">Tandai Review</button>
+            </div>
+            <div class="primary-actions">
+                <button class="action-button secondary" id="tkaSubmitAnswer" type="button">Submit</button>
+                <button class="action-button primary" id="tkaNextQuestion" type="button">Soal Berikutnya</button>
+            </div>
+        </footer>
+
+    </main>
+    <div class="focus-toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="tka-question-supplement.js"></script>
+    <script src="feature-pages.js"></script>
+    <script>
+        const prefs = JSON.parse(localStorage.getItem("tka_lms_preferences"));
+        if (prefs) {
+            const subjectEl = document.getElementById("tkaHeaderSubject");
+            const modeEl = document.getElementById("tkaHeaderMode");
+            if (subjectEl) subjectEl.textContent = prefs.subject === "all" ? "Semua Mapel" : prefs.subject.charAt(0).toUpperCase() + prefs.subject.slice(1);
+            if (modeEl) modeEl.textContent = prefs.mode === "all" ? "Latihan Campuran" : prefs.mode === "review" ? "Mode Review" : prefs.mode === "unanswered" ? "Soal Baru" : "Fokus";
+        }
+        
+        // Add subtle animation when question changes
+        const observer = new MutationObserver(() => {
+            const stage = document.getElementById('questionStage');
+            if (stage) {
+                stage.style.animation = 'none';
+                stage.offsetHeight; /* trigger reflow */
+                stage.style.animation = 'slideFadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both';
+            }
+        });
+        const titleEl = document.getElementById('tkaLmsQuestionTitle');
+        if (titleEl) observer.observe(titleEl, { childList: true, characterData: true, subtree: true });
+
+        // Sync dark/light mode class correctly with quiz-session.css
+        const syncTheme = () => {
+            const hasDark = document.body.classList.contains('dark-theme');
+            if (hasDark) {
+                document.body.classList.remove('light-session');
+            } else {
+                document.body.classList.add('light-session');
+            }
+        };
+        const themeObserver = new MutationObserver((mutations) => {
+            mutations.forEach((m) => {
+                if (m.attributeName === 'class') {
+                    const hasDark = document.body.classList.contains('dark-theme');
+                    const hasLight = document.body.classList.contains('light-session');
+                    if (hasDark && hasLight) document.body.classList.remove('light-session');
+                    else if (!hasDark && !hasLight) document.body.classList.add('light-session');
+                }
+            });
+        });
+        themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        setTimeout(syncTheme, 10);
+    </script>
+</body>
+</html>
+

@@ -2,6 +2,8 @@
 <html lang="id">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <script src="security-helper.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Wonderful Indonesia - Universe Of Tech</title>
@@ -11,7 +13,9 @@
     <link rel="stylesheet" href="feature-pages.css">
     <link rel="stylesheet" href="nav-polish.css">
     <link rel="stylesheet" href="bahasa-daerah-polish.css">
+    <link rel="stylesheet" href="bahasa-daerah-updates.css?v=20260618-bubub-hero2">
     <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -37,7 +41,7 @@
             </div>
             <div class="nav-actions">
                 <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">&#127769;</button>
-                <a class="btn btn-ghost" href="index.html">Masuk</a>
+                <a class="btn btn-ghost" href="login.html">Masuk</a>
                 <a class="btn btn-primary" id="practiceNavLink" href="latihan-bahasa.html">Latihan</a>
             </div>
         </nav>
@@ -45,115 +49,78 @@
         <section class="hero language-hero">
             <div class="hero-copy">
                 <div class="badge">Jelajah budaya lokal Indonesia</div>
-                <h1>Flashcard, frasa, dan quiz <span class="gradient-text">Wonderful Indonesia</span>.</h1>
-                <p>Ikuti alur belajar yang rapi: pilih region, buka detail budaya, latihan flashcard, lalu selesaikan quiz.</p>
+                <h1>Jelajah <span class="gradient-text">bahasa dan budaya daerah</span> Indonesia.</h1>
+                <p>Mulai dari peta, pilih satu daerah, buka kartu budaya, lalu lanjut latihan atau quiz.</p>
+                <div class="subscription-demo subscription-status" aria-label="Status benefit Wonderful Indonesia">
+                    <span id="wonderfulPlanStatus">Basic Access</span>
+                    <a href="profile.html#subscription" id="wonderfulPlanAction">Lihat Pro</a>
+                </div>
+                
+                <!-- RPG Level & Kasta Card -->
+                <div class="kasta-level-card compact-kasta-card">
+                    <div class="kasta-header">
+                        <div class="kasta-info">
+                            <span class="kasta-kicker">Kasta Budaya Kamu</span>
+                            <h3 id="kastaLevelName">Rakyat Jelata 🌾</h3>
+                        </div>
+                        <div class="kasta-badge">Level <span id="kastaLevelNumber">1</span></div>
+                    </div>
+                    <div class="kasta-xp-bar">
+                        <div class="kasta-xp-fill" id="kastaXPBarFill" style="width: 0%;"></div>
+                    </div>
+                    <div class="kasta-footer">
+                        <span id="kastaXPText">0 / 100 XP untuk naik tingkat</span>
+                    </div>
+                </div>
+
                 <div class="hero-actions">
-                    <a class="btn btn-primary" href="#alur-belajar">Mulai dari sini</a>
-                    <a class="btn btn-blue" href="#jelajah-region">Pilih Region</a>
+                    <a class="btn btn-primary" href="#jelajah-region">Pilih region</a>
+                    <a class="btn btn-blue" href="latihan-bahasa.html">Latihan flashcard</a>
                 </div>
             </div>
-            <aside class="language-phone-wrap">
-                <div class="language-phone-glow"></div>
-                <div class="language-phone">
-                    <div class="language-screen">
-                        <div class="screen-topline">
-                            <div class="screen-profile">
-                                <span>BD</span>
-                                <strong>Wonderful Indonesia</strong>
-                            </div>
-                            <span class="screen-pill" id="explorerBadge">Explorer</span>
+            <aside class="language-phone-wrap culture-hero-wrap" aria-label="Ringkasan jelajah budaya">
+                <div class="culture-hero-glow"></div>
+                <div class="culture-hero-panel">
+                    <div class="culture-panel-topline bubub-panel-copy">
+                        <div>
+                            <span class="culture-panel-kicker">BUBUB siap bantu</span>
+                            <h2 id="phoneRegionTitle">Jelajah bareng BUBUB</h2>
+                            <p id="phoneRegionText">Pilih region dulu, nanti BUBUB bantu arahkan kartu budaya, latihan, dan quiz yang pas.</p>
                         </div>
-                        <div class="language-lesson-card">
-                            <span>Eksplorasi Hari Ini</span>
-                            <h3 id="phoneRegionTitle">23 daerah</h3>
-                            <p id="phoneRegionText">Bahasa, budaya, destinasi, kuliner, dan quiz singkat.</p>
-                            <div class="language-progress-track"><div></div></div>
+                        <span class="screen-pill" id="explorerBadge">Explorer</span>
+                    </div>
+
+                    <div class="bubub-mascot-stage" aria-hidden="true">
+                        <span class="bubub-orbit orbit-one"></span>
+                        <span class="bubub-orbit orbit-two"></span>
+                        <img class="bubub-hero-mascot" src="bubub-mascot.png" alt="">
+                        <span class="bubub-spark spark-one"></span>
+                        <span class="bubub-spark spark-two"></span>
+                        <span class="bubub-spark spark-three"></span>
+                    </div>
+
+                    <div class="culture-route-mini" aria-label="Alur cepat belajar budaya">
+                        <div class="culture-route-step active">
+                            <span>1</span>
+                            <div><strong>Pilih region</strong><small>Peta dan chip cepat</small></div>
                         </div>
-                        <div class="language-path">
-                            <div class="language-path-item active">
-                                <span>1</span>
-                                <div><strong>Pilih region</strong><small>Peta dan kartu daerah</small></div>
-                            </div>
-                            <div class="language-path-item">
-                                <span>2</span>
-                                <div><strong>Lihat detail</strong><small>Budaya dan konteks daerah</small></div>
-                            </div>
-                            <div class="language-path-item">
-                                <span>3</span>
-                                <div><strong>Latihan & quiz</strong><small>Flashcard dan badge lokal</small></div>
-                            </div>
+                        <div class="culture-route-step">
+                            <span>2</span>
+                            <div><strong>Buka kartu</strong><small>Bahasa, kuliner, tradisi</small></div>
                         </div>
-                        <div class="metric-grid language-metrics">
-                            <div class="metric-card"><strong id="languageReviewed">0</strong><span>Jelajah</span></div>
-                            <div class="metric-card"><strong id="languageCorrect">0%</strong><span>Akurasi</span></div>
-                            <div class="metric-card"><strong id="languageTotal">23</strong><span>Daerah</span></div>
+                        <div class="culture-route-step">
+                            <span>3</span>
+                            <div><strong>Latihan/quiz</strong><small>Flashcard dan progress</small></div>
                         </div>
+                    </div>
+
+                    <div class="culture-hero-metrics">
+                        <div><strong id="languageReviewed">0</strong><span>Jelajah</span></div>
+                        <div><strong id="languageCorrect">0%</strong><span>Akurasi</span></div>
+                        <div><strong id="languageTotal">23</strong><span>Daerah</span></div>
                     </div>
                 </div>
             </aside>
-        </section>
-
-        <section class="section learning-flow-section" id="alur-belajar">
-            <div class="section-header">
-                <div>
-                    <div class="section-kicker">Mulai dari sini</div>
-                    <h2>Alur belajar yang tidak bikin nyasar.</h2>
-                </div>
-                <p>Tiga langkah utama ini menjadi urutan default halaman. Mulai dari region, lanjut latihan kartu, lalu tutup dengan quiz.</p>
-            </div>
-            <div class="learning-flow-grid" id="learningFlow" aria-label="Navigasi alur belajar">
-                <a class="learning-flow-card active" href="#jelajah-region" data-flow-step="jelajah-region">
-                    <span>01</span>
-                    <div><strong>Pilih region</strong><small>Peta, chip region, dan kartu daerah.</small></div>
-                </a>
-                <a class="learning-flow-card" href="latihan-bahasa.html" data-flow-step="latihan">
-                    <span>02</span>
-                    <div><strong>Latihan kartu</strong><small>Flashcard, suara, favorit, dan dikuasai.</small></div>
-                </a>
-                <a class="learning-flow-card" href="quiz-budaya.html" data-flow-step="quiz-budaya">
-                    <span>03</span>
-                    <div><strong>Quiz & progress</strong><small>Uji pemahaman dan pantau badge.</small></div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Achievements & Badges Section -->
-        <section class="section achievements-section">
-            <div class="achievements-card">
-                <div class="achievements-header" id="achievementsHeader">
-                    <div class="header-left">
-                        <span class="mini-tag">Lencana Budaya</span>
-                        <h3>Pencapaian Nusantara</h3>
-                        <p>Jelajahi kebudayaan daerah untuk membuka lencana khusus.</p>
-                    </div>
-                    <div class="streak-badge">
-                        <span class="streak-icon">🔥</span>
-                        <strong id="streakCount">0</strong> Hari Beruntun
-                    </div>
-                </div>
-                <div class="badges-grid">
-                    <div class="badge-item locked" id="badge-explorer" data-tooltip="Jelajahi minimal 5 daerah di Indonesia">
-                        <div class="badge-icon">🗺️</div>
-                        <strong>Penjelajah Mula</strong>
-                    </div>
-                    <div class="badge-item locked" id="badge-master" data-tooltip="Tandai minimal 5 daerah sebagai Dikuasai">
-                        <div class="badge-icon">👑</div>
-                        <strong>Penguasa Bahasa</strong>
-                    </div>
-                    <div class="badge-item locked" id="badge-culinary" data-tooltip="Buka daerah Jawa, Sunda, Minang, dan Madura">
-                        <div class="badge-icon">🍛</div>
-                        <strong>Pecinta Kuliner</strong>
-                    </div>
-                    <div class="badge-item locked" id="badge-quizmaster" data-tooltip="Selesaikan 5 kuis dengan akurasi 100%">
-                        <div class="badge-icon">🎯</div>
-                        <strong>Pakar Budaya</strong>
-                    </div>
-                    <div class="badge-item locked" id="badge-preserver" data-tooltip="Tambahkan minimal 5 daerah ke Favorit">
-                        <div class="badge-icon">💖</div>
-                        <strong>Penjaga Warisan</strong>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <section class="section" id="jelajah-region">
@@ -169,6 +136,11 @@
                     <span class="mini-tag">Peta Interaktif</span>
                     <h3>Klik pulau untuk mulai jelajah.</h3>
                     <p>Peta ini dibuat stylized agar ringan dan cepat, dengan region yang langsung tersambung ke kartu budaya di bawahnya. Area Papua kini membuka fokus Papua Raya.</p>
+                    
+                    <!-- Treasure Hunt Panel -->
+                    <div id="treasureHuntPanel" style="margin-top: 24px;">
+                        <!-- Filled by JS -->
+                    </div>
                 </div>
                 <div class="indonesia-map-shell" aria-label="Peta Indonesia interaktif">
                     <!-- Tooltip melayang -->
@@ -241,8 +213,6 @@
     <path d="M665.5,194.5 L665.3,195.4 L659.9,194.7 L660.0,193.7 L662.1,191.7 L664.4,191.8 L664.5,193.3 Z M663.3,170.3 L662.2,170.0 L661.3,167.9 L663.3,168.7 Z M603.4,85.0 L606.7,85.0 L605.8,85.6 L603.1,85.7 Z M600.0,78.7 L601.0,77.8 L600.5,79.6 L598.8,79.4 L597.9,78.1 L599.1,76.6 L600.4,77.6 Z M651.5,182.3 L655.1,179.8 L657.5,179.0 L661.2,178.4 L664.1,178.6 L666.3,181.4 L668.5,182.0 L667.1,184.6 L666.9,186.1 L665.3,187.7 L665.4,189.5 L663.0,191.2 L661.6,191.5 L660.7,192.9 L658.1,194.8 L655.6,195.4 L653.8,194.9 L648.5,194.6 L645.1,195.4 L645.1,194.8 L647.1,189.7 L647.8,189.2 L649.4,185.6 Z M622.0,91.1 L613.0,88.2 L609.2,87.9 L608.2,86.9 L609.1,86.5 L615.8,87.2 L620.5,87.1 L623.8,88.1 L628.8,88.0 L631.2,88.5 L631.6,89.3 L629.3,89.5 L628.0,90.4 L624.9,90.8 L623.0,90.3 Z M607.1,72.9 L607.6,71.8 L610.4,72.3 L611.6,72.1 L613.3,73.0 L614.4,72.1 L618.0,74.7 L620.2,77.7 L621.8,77.5 L623.1,78.0 L621.9,79.5 L619.5,80.3 L617.0,79.5 L615.6,79.9 L614.3,78.7 L613.4,75.0 L612.7,74.1 L611.5,75.3 L608.6,73.3 Z M596.9,106.7 L597.5,108.6 L598.6,108.9 L599.9,107.6 L599.4,111.4 L600.5,113.0 L601.8,112.9 L602.2,114.3 L607.6,115.1 L609.9,114.7 L612.5,111.7 L614.5,110.5 L614.2,110.0 L616.8,108.5 L617.5,105.1 L619.2,103.4 L622.3,101.5 L624.3,96.0 L630.0,96.3 L634.2,94.0 L637.5,93.2 L637.0,91.2 L635.3,90.3 L635.9,88.6 L639.2,87.3 L642.1,85.3 L646.3,83.3 L648.4,83.3 L650.9,85.2 L655.6,86.6 L660.7,87.7 L663.0,89.8 L668.1,91.1 L671.0,92.8 L680.8,96.6 L685.7,95.7 L686.5,96.9 L688.5,97.7 L689.4,96.8 L693.1,97.3 L695.4,98.3 L694.7,100.1 L699.3,99.8 L699.5,110.6 L700.0,139.7 L700.0,161.9 L699.6,164.3 L698.0,166.4 L697.8,167.9 L698.9,170.6 L699.9,171.2 L699.0,207.8 L697.1,206.8 L693.3,202.7 L691.6,199.8 L687.5,196.0 L683.9,193.2 L683.0,191.5 L684.2,189.9 L682.3,190.9 L677.4,191.1 L675.5,191.9 L672.9,192.2 L671.7,191.7 L670.8,190.1 L668.6,191.0 L665.7,193.6 L664.5,191.0 L665.9,190.1 L665.8,187.6 L667.1,186.6 L667.4,184.8 L668.8,181.7 L666.6,180.8 L665.5,178.4 L662.3,175.6 L665.8,175.8 L667.4,176.5 L669.9,176.5 L666.8,175.2 L663.5,174.4 L660.4,171.6 L660.6,170.7 L663.2,170.8 L666.3,170.0 L669.4,172.1 L667.4,170.1 L664.5,169.4 L662.1,167.5 L662.7,166.5 L658.7,162.8 L657.5,160.0 L657.1,157.7 L655.6,154.4 L657.3,153.9 L654.6,153.4 L653.7,152.6 L657.1,151.0 L654.9,151.1 L652.3,151.9 L652.4,146.9 L650.9,147.7 L649.8,146.4 L649.9,145.4 L648.3,146.0 L646.4,143.7 L644.3,143.1 L642.4,141.7 L641.5,141.8 L639.5,139.3 L638.5,140.4 L634.2,139.0 L634.1,138.3 L632.1,139.2 L624.5,135.3 L623.1,135.3 L619.4,133.9 L618.3,132.9 L614.4,132.5 L609.7,131.6 L606.5,132.2 L602.2,130.0 L600.8,129.0 L606.8,121.0 L590.7,115.8 L590.6,114.3 L591.8,112.4 L593.6,110.6 L593.5,109.8 Z" />
 </g>
 
-
-
 <g class="map-dots" aria-hidden="true">
     <circle cx="85" cy="118" r="3" />
     <circle cx="215" cy="203" r="3" />
@@ -263,6 +233,7 @@
                     </svg>
                 </div>
             </div>
+
             <div class="search-filter-panel">
                 <div class="search-bar-wrap">
                     <span class="search-icon">🔍</span>
@@ -286,6 +257,235 @@
             </div>
             <div class="culture-grid" id="cultureGrid"></div>
         </section>
+
+        <div class="pro-compact-zone" id="pro-ringkas" aria-labelledby="proCompactTitle">
+            <div class="section-header pro-compact-header">
+                <div>
+                    <div class="section-kicker"><i class="fa-solid fa-crown"></i> Setelah jelajah utama</div>
+                    <h2 id="proCompactTitle">Progres personal dan benefit Pro.</h2>
+                </div>
+                <p>Area ini tetap tersedia, tapi tidak lagi menghalangi langkah pertama user baru.</p>
+            </div>
+            <section class="section explorer-hub pro-entitlement" id="pusat-eksplorasi" aria-labelledby="explorerHubTitle" data-pro-feature="Pusat Eksplorasi Personal">
+            <div class="pro-lock-layer" aria-hidden="true">
+                <div class="pro-lock-card">
+                    <span><i class="fa-solid fa-crown"></i> Khusus Pro</span>
+                    <h3>Pusat eksplorasi personal terkunci.</h3>
+                    <p>Upgrade untuk membuka rekomendasi adaptif, target mingguan, misi harian, dan analitik region.</p>
+                    <a class="btn btn-primary" href="profile.html#subscription">Lihat Benefit Pro</a>
+                </div>
+            </div>
+            <div class="explorer-hub-head">
+                <div>
+                    <span class="section-kicker">Pusat Eksplorasi</span>
+                    <h2 id="explorerHubTitle">Lanjutkan perjalanan budaya kamu.</h2>
+                    <p id="explorerGreeting">Ringkasan progres dan rekomendasi belajar akan muncul di sini.</p>
+                </div>
+                <div class="explorer-toolbar" role="toolbar" aria-label="Alat bantu eksplorasi">
+                    <button type="button" class="hub-tool" id="randomCultureBtn"><i class="fa-solid fa-shuffle"></i> Acak daerah</button>
+                    <button type="button" class="hub-tool" id="focusSearchBtn"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+                    <button type="button" class="hub-tool" id="densityToggleBtn" aria-pressed="false"><i class="fa-solid fa-table-cells"></i> Tampilan ringkas</button>
+                    <button type="button" class="hub-tool" id="motionToggleBtn" aria-pressed="false"><i class="fa-solid fa-person-walking"></i> Kurangi gerak</button>
+                </div>
+            </div>
+
+            <div class="explorer-stats" aria-label="Ringkasan progres budaya">
+                <article class="explorer-stat">
+                    <span class="stat-icon green"><i class="fa-solid fa-map-location-dot"></i></span>
+                    <div><strong id="hubExplored">0</strong><small>Daerah dijelajahi</small></div>
+                </article>
+                <article class="explorer-stat">
+                    <span class="stat-icon blue"><i class="fa-solid fa-graduation-cap"></i></span>
+                    <div><strong id="hubMastered">0</strong><small>Daerah dikuasai</small></div>
+                </article>
+                <article class="explorer-stat">
+                    <span class="stat-icon pink"><i class="fa-solid fa-heart"></i></span>
+                    <div><strong id="hubFavorites">0</strong><small>Koleksi favorit</small></div>
+                </article>
+                <article class="explorer-stat">
+                    <span class="stat-icon gold"><i class="fa-solid fa-bullseye"></i></span>
+                    <div><strong id="hubAccuracy">0%</strong><small>Akurasi latihan</small></div>
+                </article>
+            </div>
+
+            <div class="explorer-dashboard-grid">
+                <article class="hub-panel continue-panel">
+                    <span class="mini-tag">Rekomendasi Personal</span>
+                    <div class="continue-region-mark" id="continueMark">ID</div>
+                    <div>
+                        <h3 id="continueTitle">Mulai eksplorasi pertama</h3>
+                        <p id="continueText">Pilih satu daerah dan kenali bahasa, kuliner, tradisi, serta destinasinya.</p>
+                    </div>
+                    <div class="continue-actions">
+                        <a class="btn btn-primary" id="continueDetailLink" href="#jelajah-region">Buka rekomendasi</a>
+                        <a class="btn btn-ghost" id="continuePracticeLink" href="latihan-bahasa.html">Latihan langsung</a>
+                    </div>
+                </article>
+
+                <article class="hub-panel goal-panel">
+                    <div class="panel-title-row">
+                        <div><span class="mini-tag">Target Mingguan</span><h3>Jaga ritme belajar.</h3></div>
+                        <strong id="weeklyGoalLabel">0/5</strong>
+                    </div>
+                    <div class="goal-track"><span id="weeklyGoalBar"></span></div>
+                    <label for="weeklyGoalInput">Target daerah</label>
+                    <div class="goal-control">
+                        <input id="weeklyGoalInput" type="range" min="1" max="15" value="5" />
+                        <output id="weeklyGoalOutput" for="weeklyGoalInput">5 daerah</output>
+                    </div>
+                    <p id="weeklyGoalMessage">Selesaikan satu daerah hari ini untuk memulai.</p>
+                </article>
+
+                <article class="hub-panel daily-panel">
+                    <div class="panel-title-row">
+                        <div><span class="mini-tag">Misi Hari Ini</span><h3 id="dailyMissionTitle">Kenali satu sapaan lokal.</h3></div>
+                        <span class="mission-date" id="dailyMissionDate"></span>
+                    </div>
+                    <p id="dailyMissionText">Buka kartu rekomendasi, pelajari satu frasa, lalu tandai sebagai sudah dijelajahi.</p>
+                    <div class="daily-phrase" id="dailyPhrase">
+                        <span>Frasa hari ini</span>
+                        <strong id="dailyPhraseLocal">Matur nuwun</strong>
+                        <small id="dailyPhraseMeaning">Terima kasih</small>
+                    </div>
+                    <button type="button" class="btn btn-blue" id="copyDailyPhrase"><i class="fa-regular fa-copy"></i> Salin frasa</button>
+                </article>
+            </div>
+
+            <div class="region-progress-panel">
+                <div class="panel-title-row">
+                    <div><span class="mini-tag">Cakupan Nusantara</span><h3>Progres per region.</h3></div>
+                    <span id="regionCoverageLabel">0% Indonesia dijelajahi</span>
+                </div>
+                <div class="region-progress-grid" id="regionProgressGrid"></div>
+            </div>
+        </section>
+
+            <section class="section pro-benefits-section" id="benefit-pro" aria-labelledby="proBenefitTitle">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker"><i class="fa-solid fa-crown"></i> Wonderful Indonesia Pro</div>
+                    <h2 id="proBenefitTitle">Benefit Pro saat kamu butuh arahan ekstra.</h2>
+                </div>
+                <p>Untuk akun Basic, jadikan bagian ini sebagai teaser singkat setelah peta dan kartu budaya.</p>
+            </div>
+
+            <div class="pro-benefit-grid">
+                <article class="pro-benefit-card" data-pro-action="smart-review">
+                    <span class="pro-benefit-icon"><i class="fa-solid fa-brain"></i></span>
+                    <div><small>Adaptive Learning</small><h3>Smart Review Queue</h3><p>Susun daerah yang perlu diulang berdasarkan status eksplorasi dan penguasaan.</p></div>
+                    <button type="button" class="btn btn-ghost pro-action-btn">Buka antrean</button>
+                </article>
+                <article class="pro-benefit-card" data-pro-action="itinerary">
+                    <span class="pro-benefit-icon"><i class="fa-solid fa-route"></i></span>
+                    <div><small>Culture Planner</small><h3>Rute Belajar 7 Hari</h3><p>Buat perjalanan belajar lintas region yang seimbang secara otomatis.</p></div>
+                    <button type="button" class="btn btn-ghost pro-action-btn">Buat rute</button>
+                </article>
+                <article class="pro-benefit-card" data-pro-action="notes">
+                    <span class="pro-benefit-icon"><i class="fa-solid fa-note-sticky"></i></span>
+                    <div><small>Private Notes</small><h3>Catatan Budaya</h3><p>Simpan insight pribadi untuk daerah yang sedang kamu pelajari.</p></div>
+                    <button type="button" class="btn btn-ghost pro-action-btn">Tulis catatan</button>
+                </article>
+                <article class="pro-benefit-card" data-pro-action="export-plan">
+                    <span class="pro-benefit-icon"><i class="fa-solid fa-file-arrow-down"></i></span>
+                    <div><small>Study Export</small><h3>Ekspor Rencana</h3><p>Unduh ringkasan progres dan rencana budaya dalam format teks.</p></div>
+                    <button type="button" class="btn btn-ghost pro-action-btn">Ekspor sekarang</button>
+                </article>
+                <article class="pro-benefit-card" data-pro-action="focus-mode">
+                    <span class="pro-benefit-icon"><i class="fa-solid fa-expand"></i></span>
+                    <div><small>Deep Focus</small><h3>Mode Fokus Budaya</h3><p>Redupkan distraksi dan prioritaskan peta serta kartu pembelajaran.</p></div>
+                    <button type="button" class="btn btn-ghost pro-action-btn">Aktifkan fokus</button>
+                </article>
+                <article class="pro-benefit-card pro-benefit-highlight">
+                    <span class="pro-benefit-icon"><i class="fa-solid fa-bolt"></i></span>
+                    <div><small>XP Accelerator</small><h3>Double XP & Golden Wheel</h3><p>Dapatkan pengali 2x XP dari roda budaya dan aktivitas premium.</p></div>
+                    <span class="pro-live-status" id="proXpStatus">Terkunci</span>
+                </article>
+            </div>
+
+            <div class="pro-workspace" id="proWorkspace" aria-live="polite">
+                <div class="pro-workspace-empty">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <strong>Pilih salah satu benefit Pro.</strong>
+                    <span>Hasil planner, antrean review, atau catatan akan tampil di sini.</span>
+                </div>
+            </div>
+        </section>
+        </div>
+
+        <details class="section bonus-collapsible" id="bonus-pencapaian">
+            <summary class="bonus-summary">
+                <span class="section-kicker"><i class="fa-solid fa-gift"></i> Bonus & Pencapaian</span>
+                <strong>Roda harian, lencana, dan museum pusaka</strong>
+                <small>Buka panel ini setelah memilih region untuk mengambil tantangan tambahan.</small>
+                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </summary>
+            <div class="bonus-collapsible-body">
+                <!-- Spin Wheel Section -->
+            <section class="section spin-wheel-section">
+                <div class="wheel-copy">
+                    <span class="mini-tag daily-challenge-tag">Tantangan Harian</span>
+                    <h3>Roda Keberuntungan Budaya</h3>
+                    <p>Putar roda sekali sehari untuk mendapatkan bonus XP dan tantangan belajar daerah hari ini! Uji keberuntungan Anda.</p>
+                    <button class="btn btn-primary" id="spinWheelBtn">Putar Roda</button>
+                </div>
+                <div class="wheel-container-wrapper">
+                    <div class="wheel-pointer"></div>
+                    <canvas id="wheelCanvas" width="280" height="280"></canvas>
+                </div>
+            </section>
+
+                <!-- Achievements & Badges Section -->
+        <section class="section achievements-section">
+            <div class="achievements-card">
+                <div class="achievements-header" id="achievementsHeader">
+                    <div class="header-left">
+                        <span class="mini-tag">Lencana Budaya</span>
+                        <h3>Pencapaian Nusantara</h3>
+                        <p>Jelajahi kebudayaan daerah untuk membuka lencana khusus.</p>
+                    </div>
+                    <div class="streak-badge">
+                        <span class="streak-icon">🔥</span>
+                        <strong id="streakCount">0</strong> Hari Beruntun
+                    </div>
+                </div>
+                <div class="badges-grid">
+                    <div class="badge-item locked" id="badge-explorer" data-tooltip="Jelajahi minimal 5 daerah di Indonesia">
+                        <div class="badge-icon">🗺️</div>
+                        <strong>Penjelajah Mula</strong>
+                    </div>
+                    <div class="badge-item locked" id="badge-master" data-tooltip="Tandai minimal 5 daerah sebagai Dikuasai">
+                        <div class="badge-icon">👑</div>
+                        <strong>Penguasa Bahasa</strong>
+                    </div>
+                    <div class="badge-item locked" id="badge-culinary" data-tooltip="Buka daerah Jawa, Sunda, Minang, dan Madura">
+                        <div class="badge-icon">🍛</div>
+                        <strong>Pecinta Kuliner</strong>
+                    </div>
+                    <div class="badge-item locked" id="badge-quizmaster" data-tooltip="Selesaikan 5 kuis dengan akurasi 100%">
+                        <div class="badge-icon">🎯</div>
+                        <strong>Pakar Budaya</strong>
+                    </div>
+                    <div class="badge-item locked" id="badge-preserver" data-tooltip="Tambahkan minimal 5 daerah ke Favorit">
+                        <div class="badge-icon">💖</div>
+                        <strong>Penjaga Warisan</strong>
+                    </div>
+                </div>
+
+                <!-- Museum Pusaka Grid -->
+                <div class="museum-header">
+                    <div class="header-left">
+                        <span class="mini-tag museum-tag">Koleksi Pusaka</span>
+                        <h3>Museum Pusaka Nusantara</h3>
+                        <p>Kumpulkan benda-benda adat pusaka dengan memecahkan teka-teki berburu pusaka di peta.</p>
+                    </div>
+                </div>
+                <div class="museum-grid" id="museumPusakaGrid">
+                    <!-- Dynamic Grid Filled by JS -->
+                </div>
+            </div>
+        </section>
+            </div>
+        </details>
 
         <footer>
             <span>Â© 2026 Universe Of Tech. Ruang belajar Wonderful Indonesia.</span>
@@ -321,6 +521,7 @@
                 <button class="drawer-tab-btn active" data-tab="info">Budaya</button>
                 <button class="drawer-tab-btn" data-tab="flashcard">Flashcard</button>
                 <button class="drawer-tab-btn" data-tab="quiz">Kuis Cepat</button>
+                <button class="drawer-tab-btn" data-tab="instrument">Alat Musik</button>
             </div>
 
             <!-- Tab Content: Info -->
@@ -388,15 +589,57 @@
                 </div>
             </div>
 
+            <!-- Tab Content: Instrument -->
+            <div class="drawer-tab-content" id="tab-instrument">
+                <div id="scaleSelectorContainer"></div>
+                <!-- Filled dynamically by wonderful-games.js -->
+            </div>
+
             <div class="drawer-footer">
                 <a href="#" id="drawerFullDetailLink" class="btn btn-ghost">Lihat Halaman Detail Lengkap ↗</a>
             </div>
         </div>
     </div>
 
+    <div class="page-progress" aria-hidden="true"><span id="pageProgressBar"></span></div>
+    <button type="button" class="back-to-top" id="backToTop" aria-label="Kembali ke atas"><i class="fa-solid fa-arrow-up"></i></button>
+    <button type="button" class="command-trigger" id="commandTrigger" aria-label="Buka navigasi cepat"><span>Ctrl</span><span>K</span></button>
+    <div class="command-palette" id="commandPalette" aria-hidden="true">
+        <div class="command-dialog" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+            <div class="command-head">
+                <div><small>Navigasi cepat</small><h3 id="commandTitle">Mau ke mana?</h3></div>
+                <button type="button" id="commandClose" aria-label="Tutup navigasi cepat">&times;</button>
+            </div>
+            <input type="search" id="commandSearch" placeholder="Ketik: peta, latihan, badge, quiz..." autocomplete="off" />
+            <div class="command-results" id="commandResults"></div>
+        </div>
+    </div>
+    <div class="pro-paywall" id="proPaywall" aria-hidden="true">
+        <div class="pro-paywall-dialog" role="dialog" aria-modal="true" aria-labelledby="proPaywallTitle">
+            <button type="button" class="pro-paywall-close" id="proPaywallClose" aria-label="Tutup">&times;</button>
+            <span class="pro-paywall-crown"><i class="fa-solid fa-crown"></i></span>
+            <small>Wonderful Indonesia Pro</small>
+            <h2 id="proPaywallTitle">Benefit ini khusus member Pro.</h2>
+            <p id="proPaywallText">Aktifkan paket Pro untuk menggunakan fitur premium ini.</p>
+            <ul>
+                <li><i class="fa-solid fa-check"></i> Rekomendasi dan review adaptif</li>
+                <li><i class="fa-solid fa-check"></i> Rute belajar serta catatan pribadi</li>
+                <li><i class="fa-solid fa-check"></i> Radar pusaka, instrumen penuh, dan 2x XP</li>
+            </ul>
+            <div>
+                <a class="btn btn-primary" href="profile.html#subscription">Lihat Paket Pro</a>
+                <button type="button" class="btn btn-ghost" id="proPaywallLater">Nanti saja</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth-helper.js"></script>
+    <script src="sound-engine.js"></script>
     <script src="wonderful-data.js"></script>
     <script src="wonderful-core.js"></script>
-    <script src="wonderful-pages.js"></script>
+    <script src="wonderful-pages.js?v=20260615-pro"></script>
+    <script src="wonderful-games.js?v=20260615-pro"></script>
+    <script src="bahasa-daerah-updates.js?v=20260618-compact"></script>
     <script>
         // Event delegation yang dioptimalkan dengan requestAnimationFrame untuk efek hover glow mulus
         (function() {
@@ -422,8 +665,7 @@
             });
         })();
     </script>
+    <script src="bubub-ai.js"></script>
 </body>
 
 </html>
-
-

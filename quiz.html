@@ -2,6 +2,8 @@
 <html lang="id">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <script src="security-helper.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0d1b2c" />
@@ -26,51 +28,69 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="pro-experience.css">
     <style>
         :root {
-            --green: #32d66b;
-            --green-dark: #17a84d;
-            --blue: #4f8cff;
-            --yellow: #ffd166;
-            --orange: #ff9f43;
-            --purple: #8b5cf6;
-            --pink: #ff5ea8;
-            --cyan: #3ddbd9;
+            /* HSL Color System */
+            --green-hsl: 142, 72%, 48%;
+            --green: hsl(var(--green-hsl));
+            --green-dark: hsl(142, 76%, 36%);
+            --blue-hsl: 217, 91%, 56%;
+            --blue: hsl(var(--blue-hsl));
+            --blue-dark: hsl(217, 85%, 45%);
+            --yellow-hsl: 42, 100%, 62%;
+            --yellow: hsl(var(--yellow-hsl));
+            --orange-hsl: 28, 91%, 54%;
+            --orange: hsl(var(--orange-hsl));
+            --purple-hsl: 262, 83%, 62%;
+            --purple: hsl(var(--purple-hsl));
+            --pink-hsl: 329, 86%, 58%;
+            --pink: hsl(var(--pink-hsl));
+            --cyan-hsl: 180, 70%, 50%;
+            --cyan: hsl(var(--cyan-hsl));
+            --danger-hsl: 0, 84%, 60%;
+            --danger: hsl(var(--danger-hsl));
+
             --dark: #112033;
             --navy: #0d1b2c;
             --muted: #667085;
             --soft: #f4f8fb;
             --white: #ffffff;
             --border: #e5edf5;
-            --danger: #ef4444;
-            --shadow: 0 24px 60px rgba(17, 32, 51, 0.14);
-            --shadow-soft: 0 14px 35px rgba(17, 32, 51, 0.09);
+            --shadow: 0 24px 60px rgba(17, 32, 51, 0.08), 0 8px 16px rgba(17, 32, 51, 0.03);
+            --shadow-soft: 0 12px 30px rgba(17, 32, 51, 0.04);
+            --glow-green: 0 0 20px rgba(50, 214, 107, 0.25);
+            --glow-blue: 0 0 20px rgba(79, 140, 255, 0.25);
 
             /* Theme specific variables */
-            --bg-page: radial-gradient(circle at 9% 8%, rgba(50, 214, 107, 0.2), transparent 28%),
-                radial-gradient(circle at 88% 12%, rgba(79, 140, 255, 0.2), transparent 30%),
-                radial-gradient(circle at 45% 92%, rgba(255, 209, 102, 0.18), transparent 30%),
+            --bg-page: radial-gradient(circle at 9% 8%, rgba(50, 214, 107, 0.12), transparent 28%),
+                radial-gradient(circle at 88% 12%, rgba(79, 140, 255, 0.14), transparent 30%),
+                radial-gradient(circle at 45% 92%, rgba(255, 209, 102, 0.1), transparent 30%),
                 linear-gradient(180deg, #fbfdff 0%, #eef7f2 100%);
-            --navbar-bg: rgba(255, 255, 255, 0.86);
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --navbar-bg: rgba(255, 255, 255, 0.72);
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.6);
         }
 
         body.dark-theme {
             --dark: #f4f8fb;
             --muted: #98a2b3;
-            --soft: #0b1523;
-            --white: #112033;
-            --border: #1e2f47;
-            --shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
-            --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.3);
+            --soft: #0c1827;
+            --white: #112239;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.35), 0 0 1px 1px rgba(255, 255, 255, 0.03);
+            --shadow-soft: 0 14px 35px rgba(0, 0, 0, 0.2);
+            --glow-green: 0 0 25px rgba(50, 214, 107, 0.35);
+            --glow-blue: 0 0 25px rgba(79, 140, 255, 0.3);
 
-            --bg-page: radial-gradient(circle at top left, rgba(50, 214, 107, 0.15), transparent 30%),
-                       radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.12), transparent 28%),
-                       linear-gradient(180deg, #0d1726 0%, #080f1a 100%);
-            --navbar-bg: rgba(17, 32, 51, 0.85);
-            --card-bg: rgba(17, 32, 51, 0.75);
+            --bg-page: radial-gradient(circle at top left, rgba(50, 214, 107, 0.10), transparent 30%),
+                       radial-gradient(circle at 80% 10%, rgba(79, 140, 255, 0.08), transparent 28%),
+                       linear-gradient(180deg, #09111e 0%, #050a12 100%);
+            --navbar-bg: rgba(13, 27, 44, 0.65);
+            --card-bg: rgba(17, 32, 51, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.05);
         }
 
         * {
@@ -97,13 +117,13 @@
             inset: 0;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.22;
+            opacity: 0.18;
             background-image:
-                linear-gradient(rgba(79, 140, 255, 0.12) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(50, 214, 107, 0.11) 1px, transparent 1px);
+                linear-gradient(rgba(79, 140, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(50, 214, 107, 0.07) 1px, transparent 1px);
             background-size: 52px 52px;
             mask-image: linear-gradient(180deg, #000 0%, transparent 80%);
-            animation: gridDrift 18s linear infinite;
+            animation: gridDrift 24s linear infinite;
         }
 
         body::after {
@@ -112,14 +132,14 @@
             inset: 0;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.18;
+            opacity: 0.14;
             background:
-                radial-gradient(circle at 18% 32%, rgba(61, 219, 217, 0.32) 0 2px, transparent 3px),
-                radial-gradient(circle at 72% 22%, rgba(255, 209, 102, 0.35) 0 2px, transparent 3px),
-                radial-gradient(circle at 86% 68%, rgba(139, 92, 246, 0.3) 0 2px, transparent 3px),
-                radial-gradient(circle at 32% 78%, rgba(50, 214, 107, 0.28) 0 2px, transparent 3px);
+                radial-gradient(circle at 18% 32%, rgba(61, 219, 217, 0.25) 0 2px, transparent 3px),
+                radial-gradient(circle at 72% 22%, rgba(255, 209, 102, 0.28) 0 2px, transparent 3px),
+                radial-gradient(circle at 86% 68%, rgba(139, 92, 246, 0.22) 0 2px, transparent 3px),
+                radial-gradient(circle at 32% 78%, rgba(50, 214, 107, 0.2) 0 2px, transparent 3px);
             background-size: 260px 260px;
-            animation: starfield 16s linear infinite;
+            animation: starfield 20s linear infinite;
         }
 
         a {
@@ -438,6 +458,39 @@
 
         .hero-actions {
             margin-top: 32px;
+            align-items: center;
+        }
+
+        .hero-highlights {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .hero-stat-chip {
+            padding: 14px 16px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+        }
+
+        .hero-stat-chip strong,
+        .hero-stat-chip span {
+            display: block;
+        }
+
+        .hero-stat-chip strong {
+            font-size: 24px;
+            letter-spacing: -0.05em;
+        }
+
+        .hero-stat-chip span {
+            margin-top: 4px;
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 12px;
+            font-weight: 750;
         }
 
         .status-panel {
@@ -447,6 +500,7 @@
 
         .metric-card,
         .setup-card,
+        .arena-setup-card,
         .quiz-shell,
         .side-card,
         .result-card,
@@ -563,6 +617,11 @@
             overflow: hidden;
             position: relative;
             isolation: isolate;
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s ease;
         }
 
         .quiz-shell::before {
@@ -570,35 +629,37 @@
             position: absolute;
             inset: 0;
             z-index: -1;
-            background: conic-gradient(from 180deg, rgba(50, 214, 107, 0.32), rgba(79, 140, 255, 0.18), rgba(139, 92, 246, 0.22), rgba(50, 214, 107, 0.32));
+            background: conic-gradient(from 180deg, rgba(50, 214, 107, 0.28), rgba(79, 140, 255, 0.18), rgba(139, 92, 246, 0.2), rgba(50, 214, 107, 0.28));
             opacity: 0;
-            filter: blur(18px);
-            animation: borderOrbit 7s linear infinite;
-            transition: opacity 0.25s ease;
+            filter: blur(22px);
+            animation: borderOrbit 8s linear infinite;
+            transition: opacity 0.35s ease;
         }
 
         .quiz-shell.combo-active {
-            box-shadow: 0 22px 64px rgba(50, 214, 107, 0.22);
+            border-color: var(--green);
+            box-shadow: var(--glow-green), var(--shadow);
         }
 
         .quiz-shell.combo-active::before {
-            opacity: 0.55;
+            opacity: 0.65;
         }
 
         .quiz-shell.answer-burst {
-            animation: shellBump 0.34s ease both;
+            animation: shellBump 0.38s cubic-bezier(0.25, 0.8, 0.25, 1.2) both;
         }
 
         .quiz-top {
-            padding: 24px;
+            padding: 26px 30px;
             background:
-                linear-gradient(135deg, #0d1b2c, #132d4a),
-                radial-gradient(circle at 90% 10%, rgba(50, 214, 107, 0.36), transparent 26%);
+                linear-gradient(135deg, #0b1523, #12253f),
+                radial-gradient(circle at 90% 10%, rgba(50, 214, 107, 0.25), transparent 28%);
             color: white;
             display: grid;
-            gap: 18px;
+            gap: 20px;
             position: relative;
             overflow: hidden;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .quiz-top::after {
@@ -606,19 +667,19 @@
             position: absolute;
             inset: auto -18% -72px 48%;
             height: 150px;
-            background: linear-gradient(135deg, rgba(50, 214, 107, 0.2), rgba(255, 209, 102, 0.22));
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.15), rgba(255, 209, 102, 0.15));
             border-radius: 36px;
             transform: rotate(-8deg);
-            animation: scanRibbon 5.5s ease-in-out infinite alternate;
+            animation: scanRibbon 6s ease-in-out infinite alternate;
         }
 
         .quiz-top::before {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.08) 45%, transparent 62%);
+            background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.05) 45%, transparent 62%);
             transform: translateX(-100%);
-            animation: panelSweep 5s ease-in-out infinite;
+            animation: panelSweep 6s ease-in-out infinite;
         }
 
         .quiz-meta {
@@ -640,35 +701,41 @@
 
         .pill {
             border-radius: 999px;
-            padding: 9px 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: rgba(255, 255, 255, 0.86);
-            font-size: 12px;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 11px;
             font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .timer {
-            min-width: 116px;
+            min-width: 120px;
             text-align: center;
-            padding: 12px 14px;
-            border-radius: 18px;
+            padding: 10px 16px;
+            border-radius: 16px;
             background: var(--white);
-            color: var(--dark);
+            color: var(--navy);
             font-weight: 900;
-            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+            font-size: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            letter-spacing: 0.02em;
+            transition: all 0.3s ease;
         }
 
         .timer.is-time-warning {
             color: white;
             background: linear-gradient(135deg, var(--danger), var(--orange));
-            animation: pulse 0.85s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+            animation: pulse 0.75s ease-in-out infinite alternate;
         }
 
         .progress-track {
-            height: 12px;
+            height: 10px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.12);
             overflow: hidden;
             position: relative;
             z-index: 1;
@@ -677,11 +744,12 @@
         .progress-fill {
             width: 0%;
             height: 100%;
-            background: linear-gradient(135deg, var(--green), var(--yellow));
+            background: linear-gradient(90deg, var(--green), var(--yellow));
             border-radius: inherit;
-            transition: width 0.35s ease;
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 10px rgba(50, 214, 107, 0.3);
         }
 
         .progress-fill::after,
@@ -689,9 +757,9 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.52), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             transform: translateX(-100%);
-            animation: barShine 1.8s linear infinite;
+            animation: barShine 2s linear infinite;
         }
 
         .combo-meter {
@@ -699,9 +767,11 @@
             grid-template-columns: minmax(0, 1fr) auto;
             gap: 12px;
             align-items: center;
-            color: rgba(255, 255, 255, 0.84);
-            font-size: 12px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 11px;
             font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             position: relative;
             z-index: 1;
         }
@@ -709,7 +779,7 @@
         .combo-track {
             height: 8px;
             border-radius: 99px;
-            background: rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.1);
             overflow: hidden;
         }
 
@@ -717,77 +787,84 @@
             width: 0%;
             height: 100%;
             border-radius: inherit;
-            background: linear-gradient(135deg, var(--cyan), var(--green));
-            transition: width 0.25s ease;
+            background: linear-gradient(90deg, var(--cyan), var(--green));
+            transition: width 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 0 8px rgba(61, 219, 217, 0.4);
         }
 
         .question-area {
-            padding: 28px;
+            padding: 32px;
             min-height: 480px;
         }
 
         .question-card {
-            animation: questionIn 0.38s cubic-bezier(0.2, 0.9, 0.25, 1.2) both;
+            animation: questionIn 0.42s cubic-bezier(0.25, 0.8, 0.25, 1.1) both;
             transform-origin: top left;
         }
 
         .question-label {
             color: var(--green-dark);
             font-weight: 900;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 14px;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+        }
+        body.dark-theme .question-label {
+            color: var(--green);
         }
 
         .question-title {
-            font-size: clamp(24px, 4vw, 38px);
-            line-height: 1.1;
-            letter-spacing: -0.05em;
-            margin-bottom: 22px;
+            font-size: clamp(22px, 3.5vw, 32px);
+            line-height: 1.2;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+            font-weight: 900;
+            color: var(--dark);
         }
 
         .answer-grid {
             display: grid;
-            gap: 12px;
+            gap: 14px;
         }
 
         .answer-option {
             width: 100%;
-            min-height: 66px;
-            padding: 16px;
+            min-height: 68px;
+            padding: 16px 20px;
             border: 1px solid var(--border);
-            border-radius: 22px;
+            border-radius: 20px;
             background: var(--soft);
             color: var(--dark);
             cursor: pointer;
             display: grid;
-            grid-template-columns: 42px minmax(0, 1fr);
-            gap: 14px;
+            grid-template-columns: 36px minmax(0, 1fr);
+            gap: 16px;
             align-items: center;
             text-align: left;
-            font-weight: 850;
+            font-weight: 800;
             overflow: hidden;
             position: relative;
-            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+            outline: none;
         }
 
         .answer-option::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at var(--mx, 18%) var(--my, 50%), rgba(79, 140, 255, 0.12), transparent 34%);
+            background: radial-gradient(circle at var(--mx, 18%) var(--my, 50%), rgba(79, 140, 255, 0.08), transparent 40%);
             opacity: 0;
-            transition: opacity 0.22s ease;
+            transition: opacity 0.3s ease;
         }
 
-        .answer-option:hover {
-            transform: translateY(-2px);
-            border-color: rgba(79, 140, 255, 0.42);
+        .answer-option:hover:not([disabled]) {
+            transform: translateY(-3px) scale(1.01);
+            border-color: rgba(79, 140, 255, 0.45);
             background: var(--white);
-            box-shadow: 0 14px 30px rgba(17, 32, 51, 0.08);
+            box-shadow: 0 10px 24px rgba(17, 32, 51, 0.06);
         }
 
         .answer-option:hover::after {
@@ -796,7 +873,7 @@
 
         .answer-option[disabled] {
             cursor: not-allowed;
-            transform: none;
+            opacity: 0.75;
         }
 
         .answer-option.hidden-choice {
@@ -804,48 +881,99 @@
         }
 
         .answer-option.is-correct {
-            border-color: rgba(23, 168, 77, 0.7);
-            background: rgba(50, 214, 107, 0.14);
+            border-color: var(--green) !important;
+            background: rgba(50, 214, 107, 0.1) !important;
+            color: var(--green-dark) !important;
+            box-shadow: 0 6px 20px rgba(50, 214, 107, 0.15) !important;
             animation: correctGlow 0.64s ease both;
+        }
+        body.dark-theme .answer-option.is-correct {
+            color: var(--green) !important;
+            background: rgba(50, 214, 107, 0.15) !important;
+            box-shadow: 0 6px 20px rgba(50, 214, 107, 0.25) !important;
         }
 
         .answer-option.is-wrong {
-            border-color: rgba(239, 68, 68, 0.6);
-            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--danger) !important;
+            background: rgba(239, 68, 68, 0.08) !important;
+            color: var(--danger) !important;
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.12) !important;
             animation: wrongWobble 0.42s ease both;
+        }
+        body.dark-theme .answer-option.is-wrong {
+            background: rgba(239, 68, 68, 0.14) !important;
         }
 
         .answer-key {
-            width: 42px;
-            height: 42px;
-            border-radius: 16px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
             display: grid;
             place-items: center;
             background: var(--white);
             color: var(--blue);
             font-weight: 900;
-            box-shadow: 0 8px 22px rgba(17, 32, 51, 0.08);
+            font-size: 13px;
+            box-shadow: 0 4px 10px rgba(17, 32, 51, 0.05);
+            border: 1px solid var(--border);
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        body.dark-theme .answer-key {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: var(--cyan);
+        }
+        .answer-option:hover:not([disabled]) .answer-key {
+            transform: scale(1.1);
+            background: var(--blue);
+            color: white;
+            border-color: var(--blue);
+            box-shadow: 0 4px 10px rgba(79, 140, 255, 0.25);
+        }
+        body.dark-theme .answer-option:hover:not([disabled]) .answer-key {
+            background: var(--cyan);
+            color: var(--navy);
+            border-color: var(--cyan);
+            box-shadow: 0 4px 10px rgba(61, 219, 217, 0.3);
+        }
+        .answer-option.is-correct .answer-key {
+            background: var(--green) !important;
+            color: white !important;
+            border-color: var(--green) !important;
+            box-shadow: 0 4px 10px rgba(50, 214, 107, 0.3) !important;
+        }
+        .answer-option.is-wrong .answer-key {
+            background: var(--danger) !important;
+            color: white !important;
+            border-color: var(--danger) !important;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3) !important;
         }
 
         .feedback {
             display: none;
-            margin-top: 18px;
-            padding: 18px;
+            margin-top: 20px;
+            padding: 20px 24px;
             border-radius: 22px;
             background: var(--soft);
             border: 1px solid var(--border);
             color: var(--muted);
-            line-height: 1.65;
+            line-height: 1.7;
             font-weight: 750;
+            font-size: 14.5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.01);
+        }
+        body.dark-theme .feedback {
+            background: rgba(255, 255, 255, 0.02);
         }
 
         .feedback.show {
             display: block;
-            animation: slideUp 0.25s ease both;
+            animation: slideUp 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) both;
         }
 
         .feedback strong {
             color: var(--dark);
+            font-weight: 900;
         }
 
         .quiz-actions {
@@ -868,6 +996,23 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+        }
+
+        .keyboard-hint {
+            margin-top: 16px;
+            padding: 13px 16px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(79, 140, 255, 0.08), rgba(61, 219, 217, 0.08));
+            border: 1px solid rgba(79, 140, 255, 0.16);
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        body.dark-theme .keyboard-hint {
+            background: linear-gradient(135deg, rgba(79, 140, 255, 0.12), rgba(61, 219, 217, 0.08));
+            border-color: rgba(79, 140, 255, 0.22);
         }
 
         .side-stack {
@@ -1524,10 +1669,32 @@
             .navbar {
                 width: min(100% - 24px, 1180px);
                 border-radius: 22px;
+                padding: 14px;
+                gap: 14px;
+                flex-wrap: wrap;
             }
 
             .nav-links {
                 display: none;
+            }
+
+            .brand {
+                font-size: 20px;
+                gap: 10px;
+            }
+
+            .brand-logo {
+                height: 52px;
+            }
+
+            .nav-actions {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .nav-actions .btn {
+                flex: 1 1 160px;
             }
 
             .hero,
@@ -1547,12 +1714,18 @@
                 border-radius: 32px;
             }
 
+            .hero-highlights,
+            .setup-summary {
+                grid-template-columns: 1fr;
+            }
+
             .status-panel,
             .result-grid {
                 grid-template-columns: 1fr;
             }
 
             .setup-card,
+            .arena-setup-card,
             .question-area,
             .quiz-top,
             .side-card,
@@ -1562,7 +1735,8 @@
             }
 
             .quiz-shell,
-            .setup-card {
+            .setup-card,
+            .arena-setup-card {
                 border-radius: 28px;
             }
 
@@ -1592,6 +1766,15 @@
             .panel-actions .btn {
                 width: 100%;
             }
+
+            .focus-room-note {
+                grid-template-columns: 1fr;
+            }
+
+            .focus-room-note span {
+                width: 38px;
+                height: 38px;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1608,15 +1791,552 @@
                 display: none;
             }
         }
+
+        /* --- RPG STATUS BADGE & PROFIL PANEL --- */
+        :root {
+            --item-bg: #f4f8fb;
+        }
+        body.dark-theme {
+            --item-bg: #172a42;
+        }
+        /* --- RPG STATUS BADGE & PROFIL PANEL --- */
+        #rpgFloatingHud {
+            position: fixed;
+            top: 100px;
+            right: 24px;
+            z-index: 99;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .rpg-status-badge {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 10px 18px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-soft);
+            font-weight: 800;
+            font-size: 13px;
+            color: var(--green-dark);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .rpg-status-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            border-color: var(--green);
+            background: rgba(50, 214, 107, 0.15);
+        }
+        body.dark-theme .rpg-status-badge {
+            color: var(--green);
+            background: rgba(17, 32, 51, 0.65);
+        }
+        body.dark-theme .rpg-status-badge:hover {
+            background: rgba(50, 214, 107, 0.15);
+            box-shadow: var(--glow-green);
+        }
+        .rpg-status-badge span {
+            display: inline-flex;
+            align-items: center;
+        }
+        .rpg-status-badge #rpgXpProgress {
+            box-shadow: 0 0 8px var(--green);
+        }
+
+        .rpg-profil-panel {
+            display: none;
+            position: fixed;
+            top: 160px;
+            right: 24px;
+            width: 330px;
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            z-index: 100;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .rpg-profil-panel.show {
+            display: block !important;
+            animation: panelFadeIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes panelFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* --- RPG ACHIEVEMENTS --- */
+        .rpg-ach-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            transition: all 0.25s ease;
+        }
+        .rpg-ach-item.unlocked {
+            background: rgba(50, 214, 107, 0.06);
+            border-color: rgba(50, 214, 107, 0.25);
+            opacity: 1;
+        }
+        body.dark-theme .rpg-ach-item.unlocked {
+            background: rgba(50, 214, 107, 0.1);
+        }
+        .rpg-ach-item.locked {
+            background: rgba(0, 0, 0, 0.02);
+            opacity: 0.5;
+        }
+        body.dark-theme .rpg-ach-item.locked {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .rpg-ach-icon {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .rpg-ach-info {
+            flex: 1;
+            text-align: left;
+        }
+        .rpg-ach-title {
+            display: block;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+        .rpg-ach-desc {
+            display: block;
+            font-size: 10px;
+            color: var(--muted);
+            font-weight: 600;
+            margin-top: 1px;
+        }
+
+        /* --- RPG AVATAR SHOP --- */
+        .rpg-shop-container {
+            margin-top: 16px;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+        }
+        .rpg-shop-title {
+            font-size: 12px;
+            font-weight: 900;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            letter-spacing: 0.05em;
+        }
+        .rpg-shop-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .rpg-shop-item {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--soft);
+            padding: 10px 6px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .rpg-shop-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--blue);
+            background: var(--white);
+            box-shadow: 0 6px 14px rgba(79, 140, 255, 0.15);
+        }
+        body.dark-theme .rpg-shop-item {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        body.dark-theme .rpg-shop-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 6px 14px rgba(79, 140, 255, 0.25);
+        }
+        .rpg-shop-item.purchased {
+            border-color: var(--green);
+            background: rgba(50, 214, 107, 0.05);
+        }
+        body.dark-theme .rpg-shop-item.purchased {
+            background: rgba(50, 214, 107, 0.08);
+        }
+        .rpg-shop-item.locked {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .rpg-shop-item.locked:hover {
+            transform: none;
+            border-color: var(--border);
+            box-shadow: none;
+            background: var(--soft);
+        }
+        body.dark-theme .rpg-shop-item.locked:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .rpg-shop-item .item-avatar {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 4px;
+            transition: transform 0.2s ease;
+        }
+        .rpg-shop-item:hover .item-avatar {
+            transform: scale(1.15);
+        }
+        .rpg-shop-item .item-cost {
+            font-size: 9px;
+            font-weight: 900;
+            color: var(--muted);
+            display: block;
+            letter-spacing: -0.02em;
+        }
+        .rpg-shop-item.purchased .item-cost {
+            color: var(--green-dark);
+        }
+        body.dark-theme .rpg-shop-item.purchased .item-cost {
+            color: var(--green);
+        }
+
+        /* --- CUSTOM OPTION CARD SELECTORS --- */
+        .arena-setup-card {
+            border-radius: 32px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-soft);
+            animation: slideUp 0.48s ease both;
+        }
+        .setup-fields {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 22px;
+        }
+        .setup-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: flex-start;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+        }
+        
+        .custom-options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .custom-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 11px 18px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            user-select: none;
+            box-shadow: 0 4px 6px rgba(17, 32, 51, 0.02);
+            color: var(--dark);
+        }
+        .custom-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--blue);
+            box-shadow: 0 8px 16px rgba(79, 140, 255, 0.12);
+        }
+        body.dark-theme .custom-card {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        body.dark-theme .custom-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--cyan);
+            box-shadow: 0 8px 16px rgba(61, 219, 217, 0.15);
+        }
+        .custom-card.active {
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.12), rgba(79, 140, 255, 0.06));
+            border-color: var(--green);
+            color: var(--green-dark);
+            box-shadow: 0 8px 20px rgba(50, 214, 107, 0.16);
+        }
+        body.dark-theme .custom-card.active {
+            color: var(--green);
+            border-color: var(--green);
+            background: linear-gradient(135deg, rgba(50, 214, 107, 0.16), rgba(79, 140, 255, 0.08));
+            box-shadow: 0 8px 20px rgba(50, 214, 107, 0.25);
+        }
+
+        .setup-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .summary-chip {
+            padding: 18px 20px;
+            border-radius: 22px;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(20px);
+        }
+
+        .summary-chip span,
+        .summary-chip strong,
+        .summary-chip small {
+            display: block;
+        }
+
+        .summary-chip span {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 850;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .summary-chip strong {
+            margin-top: 10px;
+            color: var(--dark);
+            font-size: 21px;
+            line-height: 1.25;
+            letter-spacing: -0.04em;
+        }
+
+        .summary-chip small {
+            margin-top: 6px;
+            color: var(--muted);
+            line-height: 1.55;
+            font-weight: 700;
+        }
+
+        .focus-room-note {
+            margin-top: 18px;
+            padding: 20px 22px;
+            border-radius: 24px;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 14px;
+            align-items: start;
+            background: linear-gradient(135deg, rgba(13, 27, 44, 0.96), rgba(20, 39, 66, 0.95));
+            color: white;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .focus-room-note span {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--yellow);
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .focus-room-note strong {
+            display: block;
+            font-size: 16px;
+            letter-spacing: -0.03em;
+        }
+
+        .focus-room-note p {
+            margin-top: 6px;
+            color: rgba(255, 255, 255, 0.72);
+            line-height: 1.6;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        /* --- DAILY QUESTS DASHBOARD --- */
+        .quiz-setup-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.2fr);
+            gap: 24px;
+            align-items: start;
+        }
+        @media (max-width: 1060px) {
+            .quiz-setup-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .quests-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-soft);
+            border-radius: 32px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: slideUp 0.52s ease both;
+        }
+        .quests-card h3 {
+            font-size: 22px;
+            letter-spacing: -0.04em;
+            font-weight: 900;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+        .quests-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.45;
+            margin-bottom: 8px;
+        }
+        .quests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .quest-item {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 16px;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--soft);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            transition: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        body.dark-theme .quest-item {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .quest-item:hover {
+            transform: translateY(-3px);
+            background: var(--white);
+            border-color: var(--blue);
+            box-shadow: var(--shadow-soft);
+        }
+        body.dark-theme .quest-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--cyan);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .quest-checkbox {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--muted);
+            display: grid;
+            place-items: center;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+        .quest-check {
+            display: none;
+            font-size: 12px;
+        }
+        .quest-content {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            text-align: left;
+        }
+        .quest-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: var(--dark);
+            transition: opacity 0.25s ease, color 0.25s ease;
+        }
+        .quest-desc {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 600;
+            line-height: 1.35;
+        }
+        .quest-reward {
+            font-size: 11px;
+            font-weight: 900;
+            color: var(--blue);
+            background: rgba(79, 140, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        body.dark-theme .quest-reward {
+            background: rgba(79, 140, 255, 0.15);
+            color: var(--cyan);
+        }
+        .quest-item.completed {
+            border-color: rgba(50, 214, 107, 0.4);
+            background: rgba(50, 214, 107, 0.04);
+        }
+        body.dark-theme .quest-item.completed {
+            background: rgba(50, 214, 107, 0.08);
+            border-color: rgba(50, 214, 107, 0.5);
+        }
+        .quest-item.completed .quest-checkbox {
+            border-color: var(--green);
+            background: var(--green);
+            transform: scale(1.08);
+            box-shadow: 0 0 10px rgba(50, 214, 107, 0.4);
+        }
+        .quest-item.completed .quest-check {
+            display: block;
+            animation: mapPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        .quest-item.completed .quest-title {
+            text-decoration: line-through;
+            opacity: 0.5;
+            color: var(--muted);
+        }
+        .quest-item.completed .quest-desc {
+            opacity: 0.6;
+        }
+        .quest-item.completed .quest-reward {
+            background: rgba(50, 214, 107, 0.1);
+            color: var(--green-dark);
+        }
+        body.dark-theme .quest-item.completed .quest-reward {
+            background: rgba(50, 214, 107, 0.15);
+            color: var(--green);
+        }
     </style>
     <link rel="stylesheet" href="nav-polish.css">
     <link rel="stylesheet" href="lms-quiz.css">
     <link rel="stylesheet" href="quiz-modern.css">
     <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body>
+<body data-page="quiz">
     <a class="skip-link" href="#quizMainContent">Lewati ke konten utama</a>
     <div class="arena-glow" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
@@ -1642,10 +2362,70 @@
             <div class="nav-actions">
                 <button class="sound-toggle-btn" id="soundToggleBtn" type="button" aria-label="Nonaktifkan suara" aria-pressed="true" title="Suara">🔊</button>
                 <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Aktifkan tema gelap" aria-pressed="false" title="Tema tampilan">🌙</button>
-                <a class="btn btn-ghost" href="index.html">Masuk</a>
+                <a class="btn btn-ghost" href="login.html">Masuk</a>
                 <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
         </nav>
+
+        <!-- Floating RPG HUD Widget -->
+        <div id="rpgFloatingHud">
+            <!-- RPG Status Badge -->
+            <div class="rpg-status-badge" id="rpgStatusBadge" title="Klik untuk info detail profil Coder RPG">
+                <span>Level <span id="rpgLevelValue">1</span></span>
+                <div style="width: 50px; height: 6px; background: rgba(0,0,0,0.15); border-radius: 99px; overflow: hidden; position: relative;">
+                    <div id="rpgXpProgress" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--green), var(--blue)); transition: width 0.3s ease;"></div>
+                </div>
+                <span id="rpgLevelTitle" style="opacity: 0.85; font-size: 10px; font-weight: 700;">Script Kiddie</span>
+            </div>
+        </div>
+
+        <!-- RPG Profil details popover -->
+        <div id="rpgProfilPanel" class="rpg-profil-panel">
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+                <div style="font-size: 36px; background: rgba(50, 214, 107, 0.12); width: 60px; height: 60px; border-radius: 18px; display: grid; place-items: center;" id="rpgAvatar">👨‍💻</div>
+                <div style="flex: 1;">
+                    <h4 style="font-size: 16px; font-weight: 800; color: var(--dark);" id="rpgNameText">Coder Recruit</h4>
+                    <span id="rpgPanelTitle" class="mini-pill" style="font-size: 11px; margin-top: 4px; display: inline-block;">Script Kiddie</span>
+                </div>
+            </div>
+            <div style="margin-bottom: 16px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: var(--dark); margin-bottom: 6px;">
+                    <span>XP: <span id="rpgCurrentXp">0</span> / <span id="rpgNextLevelXp">100</span></span>
+                    <span id="rpgPercentValue">0%</span>
+                </div>
+                <div class="meter" style="height: 12px; background: rgba(0,0,0,0.1);"><span id="rpgPanelXpBar" style="--value: 0%; display: block; height: 100%; border-radius: inherit; background: linear-gradient(135deg, var(--green), var(--blue)); transition: width 0.3s ease;"></span></div>
+            </div>
+            <div style="border-top: 1px solid var(--border); padding-top: 12px; margin-bottom: 12px;">
+                <h5 style="font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; margin-bottom: 8px;">Pencapaian (Achievements)</h5>
+                <div id="rpgAchievementsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 120px; overflow-y: auto; padding-right: 4px;">
+                    <!-- Achievements loaded dynamically -->
+                </div>
+            </div>
+            <div class="rpg-shop-container">
+                <h5 class="rpg-shop-title">
+                    <span>Avatar Shop (XP Store)</span>
+                    <span id="rpgTotalXpText" style="font-size: 10px; text-transform: none; color: var(--blue); font-weight: 800;">Poin: 0 XP</span>
+                </h5>
+                <div class="rpg-shop-grid">
+                    <div class="rpg-shop-item" data-shop-avatar="🔮" data-shop-cost="150" title="Beli Avatar Cyber Wizard (150 XP)">
+                        <span class="item-avatar">🔮</span>
+                        <span class="item-cost">150 XP</span>
+                    </div>
+                    <div class="rpg-shop-item" data-shop-avatar="🚀" data-shop-cost="250" title="Beli Avatar Cosmic Dev (250 XP)">
+                        <span class="item-avatar">🚀</span>
+                        <span class="item-cost">250 XP</span>
+                    </div>
+                    <div class="rpg-shop-item" data-shop-avatar="🧙‍♂️" data-shop-cost="400" title="Beli Avatar AI Overlord (400 XP)">
+                        <span class="item-avatar">🧙‍♂️</span>
+                        <span class="item-cost">400 XP</span>
+                    </div>
+                    <div class="rpg-shop-item" data-shop-avatar="👑" data-shop-cost="600" title="Beli Avatar Tech Emperor (600 XP)">
+                        <span class="item-avatar">👑</span>
+                        <span class="item-cost">600 XP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <header class="quiz-page-intro">
             <div>
@@ -1654,8 +2434,8 @@
                 <p>Pilih jalur LMS untuk belajar bertahap atau masuk ke arena untuk menguji pemahaman dalam sesi singkat.</p>
             </div>
             <div class="quiz-intro-points" aria-label="Keunggulan halaman quiz">
-                <span><strong>120</strong> soal aktif</span>
-                <span><strong>3</strong> learning path</span>
+                <span><strong>180</strong> soal aktif</span>
+                <span><strong>6</strong> learning path</span>
                 <span><strong>Auto</strong> simpan progres</span>
             </div>
         </header>
@@ -1666,6 +2446,31 @@
                 <button class="lms-tab-btn" id="quickArenaTab" data-tab="quick-arena" role="tab" aria-controls="quick-arena-tab" aria-selected="false" tabindex="-1">🎮 Quick Quiz Arena <small>Latihan 5-30 soal</small></button>
             </div>
         </div>
+
+        <section class="learning-pulse" aria-labelledby="learningPulseTitle">
+            <div class="learning-pulse-copy">
+                <span class="section-kicker">Learning pulse</span>
+                <h2 id="learningPulseTitle">Satu pandangan untuk langkah belajarmu berikutnya.</h2>
+                <p>Ringkasan ini diperbarui dari sesi lokalmu dan tetap tersedia tanpa akun.</p>
+            </div>
+            <div class="learning-pulse-grid">
+                <article class="pulse-card pulse-score">
+                    <span>Skor terbaik</span>
+                    <strong id="pulseBestScore">0%</strong>
+                    <small>Target berikutnya: naik 5%</small>
+                </article>
+                <article class="pulse-card pulse-focus">
+                    <span>Fokus latihan</span>
+                    <strong id="pulseWeakTopic">Mulai sesi</strong>
+                    <small id="pulseWeakNote">Rekomendasi muncul setelah quiz.</small>
+                </article>
+                <article class="pulse-card pulse-saved">
+                    <span>Soal tersimpan</span>
+                    <strong id="pulseSavedCount">0</strong>
+                    <small>Siap diulang kapan saja</small>
+                </article>
+            </div>
+        </section>
 
         <div class="tab-content active" id="lms-classroom-tab" role="tabpanel" aria-labelledby="lmsClassroomTab" tabindex="0">
             <!-- LMS classroom content is injected dynamically -->
@@ -1681,6 +2486,20 @@
                         Pilih materi, atur level, kejar streak, pakai bantuan saat buntu, lalu baca analisis performa
                         yang langsung menunjuk area tech yang perlu kamu latih berikutnya.
                     </p>
+                    <div class="hero-highlights" aria-label="Sorotan sesi quiz">
+                        <div class="hero-stat-chip">
+                            <strong>Focus Room</strong>
+                            <span>Sesi penuh layar tanpa distraksi.</span>
+                        </div>
+                        <div class="hero-stat-chip">
+                            <strong>Adaptive</strong>
+                            <span>Mode latihan, exam, sprint, dan review.</span>
+                        </div>
+                        <div class="hero-stat-chip">
+                            <strong>Insight</strong>
+                            <span>Performa kategori dan rekomendasi otomatis.</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="hero-actions">
                     <a class="btn btn-primary" href="#arena">Mulai Quiz</a>
@@ -1715,51 +2534,138 @@
                 </div>
                 <p id="modeDescription">Practice memberi waktu longgar, hint, dan bantuan 50:50.</p>
             </div>
-            <div class="setup-card">
-                <div class="field">
-                    <label for="category">Materi</label>
-                    <select id="category">
-                        <option value="all">Semua Materi</option>
-                        <option value="programming">Programming</option>
-                        <option value="database">Database & SQL</option>
-                        <option value="design">UI/UX Design</option>
-                        <option value="analytics">Business Analytics</option>
-                        <option value="web">Web Development</option>
-                        <option value="cyber">Cyber & Data Literacy</option>
-                    </select>
+            <div class="quiz-setup-grid">
+                <div class="arena-setup-card">
+                    <div class="setup-fields">
+                        <div class="field" data-target="category">
+                            <label>Materi</label>
+                            <select id="category" style="display: none;">
+                                <option value="all">Semua Materi</option>
+                                <option value="programming">Programming</option>
+                                <option value="database">Database & SQL</option>
+                                <option value="design">UI/UX Design</option>
+                                <option value="analytics">Business Analytics</option>
+                                <option value="web">Web Development</option>
+                                <option value="cyber">Cyber & Data Literacy</option>
+                            </select>
+                            <div class="custom-options-grid">
+                                <div class="custom-card active" data-value="all">🌐 Semua</div>
+                                <div class="custom-card" data-value="programming">💻 Programming</div>
+                                <div class="custom-card" data-value="database">🗄️ Database</div>
+                                <div class="custom-card" data-value="design">🎨 UI/UX Design</div>
+                                <div class="custom-card" data-value="analytics">📊 Analytics</div>
+                                <div class="custom-card" data-value="web">🌐 Web Dev</div>
+                                <div class="custom-card" data-value="cyber">🛡️ Cyber Sec</div>
+                            </div>
+                        </div>
+                        <div class="field" data-target="difficulty">
+                            <label>Level</label>
+                            <select id="difficulty" style="display: none;">
+                                <option value="all">Campuran</option>
+                                <option value="easy">Pemanasan</option>
+                                <option value="medium">Normal</option>
+                                <option value="hard">Challenge</option>
+                            </select>
+                            <div class="custom-options-grid">
+                                <div class="custom-card active" data-value="all">🌀 Campuran</div>
+                                <div class="custom-card" data-value="easy">🌱 Pemanasan</div>
+                                <div class="custom-card" data-value="medium">⚡ Normal</div>
+                                <div class="custom-card" data-value="hard">🔥 Challenge</div>
+                            </div>
+                        </div>
+                        <div class="field" data-target="amount">
+                            <label>Jumlah Soal</label>
+                            <select id="amount" style="display: none;">
+                                <option value="5">5 soal</option>
+                                <option value="10" selected>10 soal</option>
+                                <option value="15">15 soal</option>
+                                <option value="20">20 soal</option>
+                                <option value="30">30 soal</option>
+                            </select>
+                            <div class="custom-options-grid">
+                                <div class="custom-card" data-value="5">5 Soal</div>
+                                <div class="custom-card active" data-value="10">10 Soal</div>
+                                <div class="custom-card" data-value="15">15 Soal</div>
+                                <div class="custom-card" data-value="20">20 Soal</div>
+                                <div class="custom-card" data-value="30">30 Soal</div>
+                            </div>
+                        </div>
+                        <div class="field" data-target="mode">
+                            <label>Mode</label>
+                            <select id="mode" style="display: none;">
+                                <option value="practice">Practice</option>
+                                <option value="exam">Exam Timer</option>
+                                <option value="sprint">Sprint</option>
+                                <option value="review">Review Mode</option>
+                            </select>
+                            <div class="custom-options-grid">
+                                <div class="custom-card active" data-value="practice">📋 Practice</div>
+                                <div class="custom-card" data-value="exam">⏱️ Exam</div>
+                                <div class="custom-card" data-value="sprint">⚡ Sprint</div>
+                                <div class="custom-card" data-value="review">🔍 Review</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="setup-actions">
+                        <button class="btn btn-primary" id="startBtn" type="button">Mulai Sesi Arena 🎮</button>
+                        <button class="btn btn-danger" id="resetBtn" type="button">Reset Data</button>
+                    </div>
                 </div>
-                <div class="field">
-                    <label for="difficulty">Level</label>
-                    <select id="difficulty">
-                        <option value="all">Campuran</option>
-                        <option value="easy">Pemanasan</option>
-                        <option value="medium">Normal</option>
-                        <option value="hard">Challenge</option>
-                    </select>
+
+                <div class="quests-card" id="questsCard">
+                    <h3>Misi Harian Coder 🎯</h3>
+                    <p class="quests-subtitle">Selesaikan tantangan hari ini untuk mendapatkan bonus XP ekstra!</p>
+                    <div class="quests-list">
+                        <div class="quest-item" id="quest-quick-drill">
+                            <div class="quest-checkbox">
+                                <i class="fa-solid fa-check quest-check"></i>
+                            </div>
+                            <div class="quest-content">
+                                <span class="quest-title">Quick Drill</span>
+                                <span class="quest-desc">Skor kuis ≥80% di Quick Arena</span>
+                            </div>
+                            <div class="quest-reward">+50 XP</div>
+                        </div>
+                        <div class="quest-item" id="quest-combo-master">
+                            <div class="quest-checkbox">
+                                <i class="fa-solid fa-check quest-check"></i>
+                            </div>
+                            <div class="quest-content">
+                                <span class="quest-title">Combo Master</span>
+                                <span class="quest-desc">Dapatkan streak combo ≥5x</span>
+                            </div>
+                            <div class="quest-reward">+80 XP</div>
+                        </div>
+                        <div class="quest-item" id="quest-hard-challenge">
+                            <div class="quest-checkbox">
+                                <i class="fa-solid fa-check quest-check"></i>
+                            </div>
+                            <div class="quest-content">
+                                <span class="quest-title">Hard Challenge</span>
+                                <span class="quest-desc">Selesaikan kuis Hard dengan skor ≥70%</span>
+                            </div>
+                            <div class="quest-reward">+100 XP</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="field">
-                    <label for="amount">Jumlah Soal</label>
-                    <select id="amount">
-                        <option value="5">5 soal</option>
-                        <option value="10" selected>10 soal</option>
-                        <option value="15">15 soal</option>
-                        <option value="20">20 soal</option>
-                        <option value="30">30 soal</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label for="mode">Mode</label>
-                    <select id="mode">
-                        <option value="practice">Practice</option>
-                        <option value="exam">Exam Timer</option>
-                        <option value="sprint">Sprint</option>
-                        <option value="review">Review Mode</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary" id="startBtn" type="button">Mulai Sesi</button>
-                <button class="btn btn-danger" id="resetBtn" type="button">Reset Data</button>
             </div>
-            <div class="setup-summary" id="setupSummary" aria-live="polite"></div>
+            <div class="setup-summary" id="setupSummary" aria-live="polite">
+                <article class="summary-chip">
+                    <span>Format</span>
+                    <strong>Practice ringan</strong>
+                    <small>Mulai dari 10 soal campuran dengan bantuan aktif.</small>
+                </article>
+                <article class="summary-chip">
+                    <span>Tempo</span>
+                    <strong>Kurang lebih 15 menit</strong>
+                    <small>Estimasi menyesuaikan jumlah soal dan mode yang kamu pilih.</small>
+                </article>
+                <article class="summary-chip">
+                    <span>Target</span>
+                    <strong>Bangun streak dulu</strong>
+                    <small>Cocok untuk pemanasan sebelum masuk ke mode exam atau sprint.</small>
+                </article>
+            </div>
             <div class="focus-room-note">
                 <span aria-hidden="true">↗</span>
                 <div>
@@ -1912,137 +2818,25 @@
     </div>
 </main>
 
+    <div class="quiz-dialog-overlay" id="quizDialogOverlay" hidden>
+        <div class="quiz-dialog" role="dialog" aria-modal="true" aria-labelledby="quizDialogTitle" aria-describedby="quizDialogMessage">
+            <span class="section-kicker">Konfirmasi</span>
+            <h2 id="quizDialogTitle">Reset data Quick Quiz?</h2>
+            <p id="quizDialogMessage">Skor terbaik, sesi terakhir, dan soal tersimpan akan dihapus.</p>
+            <div class="panel-actions">
+                <button class="btn btn-ghost" id="quizDialogCancel" type="button">Batal</button>
+                <button class="btn btn-danger" id="quizDialogAccept" type="button">Reset Data</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app-data.js"></script>
     <script src="sound-engine.js"></script>
     <script src="rpg-engine.js"></script>
+    <script src="quiz-core.js"></script>
+    <script src="quiz-question-bank.js"></script>
     <script>
-        const questionBank = [
-            { id: "programming-1", category: "programming", difficulty: "easy", question: "Apa fungsi variabel dalam program?", answers: ["Menyimpan nilai yang bisa digunakan ulang", "Menghapus error otomatis", "Mengubah desain database", "Menjalankan internet"], correct: 0, hint: "Bayangkan kotak bernama yang berisi data.", explanation: "Variabel dipakai untuk menyimpan nilai, lalu nilai itu dapat dibaca atau diubah selama program berjalan." },
-            { id: "programming-2", category: "programming", difficulty: "easy", question: "Apa arti tipe data boolean?", answers: ["Nilai benar atau salah", "Daftar gambar", "Koneksi server", "Ukuran layar"], correct: 0, hint: "Biasanya bernilai true atau false.", explanation: "Boolean digunakan untuk kondisi logika seperti valid atau tidak valid, aktif atau tidak aktif." },
-            { id: "programming-3", category: "programming", difficulty: "easy", question: "Mengapa komentar kode sebaiknya dipakai seperlunya?", answers: ["Agar menjelaskan bagian yang tidak langsung jelas tanpa membuat kode bising", "Agar semua baris kode menjadi hijau", "Agar program selalu lebih cepat", "Agar tidak perlu testing"], correct: 0, hint: "Komentar bagus membantu pembaca, bukan mengganti kode yang jelas.", explanation: "Komentar paling berguna untuk menjelaskan alasan atau konteks, bukan mengulang hal yang sudah jelas dari kode." },
-            { id: "programming-4", category: "programming", difficulty: "easy", question: "Apa tujuan dasar conditional statement seperti if?", answers: ["Menjalankan kode tertentu hanya saat kondisi terpenuhi", "Menyimpan file gambar", "Membuat database baru", "Menghapus semua bug"], correct: 0, hint: "Pikirkan percabangan keputusan.", explanation: "Conditional statement membuat program dapat memilih alur berdasarkan kondisi tertentu." },
-            { id: "programming-5", category: "programming", difficulty: "medium", question: "Kapan loop paling tepat digunakan?", answers: ["Saat perlu mengulang instruksi dengan pola tertentu", "Saat ingin membuat warna tombol", "Saat membuat nama file", "Saat menutup browser"], correct: 0, hint: "Cari kebutuhan yang terjadi berkali-kali.", explanation: "Loop membantu menjalankan blok kode berulang kali sampai kondisi tertentu terpenuhi." },
-            { id: "programming-6", category: "programming", difficulty: "medium", question: "Apa manfaat memecah kode menjadi function kecil?", answers: ["Kode lebih mudah diuji, dibaca, dan digunakan ulang", "Kode selalu lebih cepat tanpa pengecualian", "Program tidak perlu data", "Semua bug langsung hilang"], correct: 0, hint: "Pikirkan maintainability.", explanation: "Function kecil membuat tanggung jawab kode lebih jelas sehingga mudah diuji, dirawat, dan dipakai ulang." },
-            { id: "programming-7", category: "programming", difficulty: "medium", question: "Apa yang biasanya dilakukan proses debugging?", answers: ["Menemukan penyebab error dan memperbaiki perilaku program", "Mengubah semua teks menjadi kapital", "Menghapus dokumentasi", "Membuat logo aplikasi"], correct: 0, hint: "Debugging mencari akar masalah.", explanation: "Debugging bukan hanya menebak perbaikan, tetapi melacak data, alur, dan kondisi yang membuat program gagal." },
-            { id: "programming-8", category: "programming", difficulty: "hard", question: "Mengapa asynchronous programming penting pada aplikasi modern?", answers: ["Agar operasi lambat seperti network tidak memblokir alur utama", "Agar semua kode berjalan tanpa urutan", "Agar database tidak dibutuhkan", "Agar CSS bisa dihapus"], correct: 0, hint: "Network request bisa lama.", explanation: "Async membantu aplikasi tetap responsif saat menunggu operasi I/O seperti fetch API, file, atau database." },
-            { id: "programming-9", category: "programming", difficulty: "hard", question: "Apa risiko utama global state yang tidak terkendali?", answers: ["Perubahan dari banyak tempat sulit dilacak dan memicu bug tersembunyi", "Semua variabel menjadi lebih aman", "UI otomatis responsif", "Testing menjadi tidak perlu"], correct: 0, hint: "Semakin banyak tempat bisa mengubah state, semakin sulit dilacak.", explanation: "Global state perlu dibatasi atau dikelola jelas agar perubahan data tidak menimbulkan efek samping yang sulit diprediksi." },
-            { id: "programming-10", category: "programming", difficulty: "hard", question: "Apa prinsip utama clean code?", answers: ["Kode mudah dipahami, bernama jelas, dan punya tanggung jawab terarah", "Kode harus selalu paling pendek", "Kode harus tanpa function", "Kode harus menyembunyikan semua maksudnya"], correct: 0, hint: "Pembaca kode adalah target utama.", explanation: "Clean code memprioritaskan kejelasan, struktur, nama yang bermakna, dan desain yang mudah dirawat." },
-            { id: "programming-11", category: "programming", difficulty: "easy", question: "Apa output dari ekspresi 5 + '5' dalam JavaScript?", answers: ["'55'", "'10'", "Error", "NaN"], correct: 0, hint: "JavaScript akan melakukan konversi tipe data otomatis (coercion).", explanation: "Operator + pada string dan number akan mengakibatkan number dikoersi menjadi string, lalu digabungkan (concatenated)." },
-            { id: "programming-12", category: "programming", difficulty: "easy", question: "Di bawah ini yang merupakan struktur data dengan prinsip FIFO (First In First Out) adalah?", answers: ["Queue (Antrean)", "Stack (Tumpukan)", "Array", "Tree"], correct: 0, hint: "Seperti antrean bioskop.", explanation: "Queue (antrean) memproses data yang pertama kali masuk terlebih dahulu, sedangkan Stack menggunakan prinsip LIFO (Last In First Out)." },
-            { id: "programming-13", category: "programming", difficulty: "medium", question: "Apa perbedaan utama antara compiler dan interpreter?", answers: ["Compiler menerjemahkan seluruh kode sekaligus, Interpreter menerjemahkan baris demi baris", "Compiler hanya untuk bahasa C, sedangkan interpreter hanya untuk Python", "Compiler tidak menghasilkan file output, interpreter menghasilkan file exe", "Interpreter membuat program berjalan jauh lebih cepat daripada compiler"], correct: 0, hint: "Pikirkan waktu penerjemahan kode.", explanation: "Compiler menerjemahkan seluruh source code menjadi machine code sebelum dijalankan, sedangkan interpreter menerjemahkan dan mengeksekusi instruksi baris demi baris saat program berjalan." },
-            { id: "programming-14", category: "programming", difficulty: "medium", question: "Dalam paradigma Object-Oriented Programming (OOP), apa yang dimaksud dengan Inheritance?", answers: ["Kemampuan suatu class untuk mewarisi sifat dan metode dari class lain", "Kemampuan menyembunyikan detail implementasi internal", "Kemampuan membuat objek tanpa class", "Kemampuan mengubah tipe data variabel secara dinamis"], correct: 0, hint: "Konsep pewarisan dalam keluarga.", explanation: "Inheritance (pewarisan) memungkinkan sebuah subclass mewarisi attribute and method dari superclass, mendukung reusability kode." },
-            { id: "programming-15", category: "programming", difficulty: "medium", question: "Apakah fungsi dari Git dalam pengembangan perangkat lunak?", answers: ["Melacak perubahan pada kode sumber dan memfasilitasi kolaborasi tim", "Mengompilasi kode program menjadi aplikasi", "Menyimpan data user secara online", "Memperbaiki bug secara otomatis menggunakan AI"], correct: 0, hint: "Berhubungan dengan version control.", explanation: "Git adalah distributed version control system yang mencatat riwayat perubahan file kode dan membantu developer bekerja bersama pada project yang sama." },
-            { id: "programming-16", category: "programming", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Time Complexity' dalam analisis algoritma?", answers: ["Representasi jumlah waktu atau langkah yang dibutuhkan algoritma untuk berjalan seiring bertambahnya ukuran input", "Lama waktu yang dibutuhkan developer untuk menulis kode program", "Waktu yang diperlukan CPU untuk melakukan restart", "Kecepatan internet saat mengunduh dependency library"], correct: 0, hint: "Pikirkan performa kode terhadap ukuran data (N).", explanation: "Time complexity (biasanya diukur dengan Big O notation) mengukur bagaimana jumlah operasi/waktu eksekusi suatu algoritma bertumbuh seiring bertambahnya ukuran input data." },
-            { id: "programming-17", category: "programming", difficulty: "hard", question: "Manakah penjelasan terbaik mengenai rekursi (recursion) dalam pemrograman?", answers: ["Sebuah fungsi yang memanggil dirinya sendiri sampai mencapai base case", "Sebuah loop yang berjalan tanpa henti (infinite loop)", "Metode untuk mengamankan data rahasia user", "Cara untuk menggabungkan dua file database"], correct: 0, hint: "Memanggil diri sendiri.", explanation: "Rekursi adalah teknik pemrograman di mana sebuah fungsi memanggil dirinya sendiri untuk memecahkan sub-masalah yang lebih kecil, dengan base case sebagai batas berhenti." },
-            { id: "programming-18", category: "programming", difficulty: "easy", question: "Mana yang merupakan contoh nama variabel yang valid menurut konvensi camelCase?", answers: ["totalHargaBarang", "total-harga-barang", "TotalHargaBarang", "total_harga_barang"], correct: 0, hint: "Kata pertama huruf kecil, kata berikutnya berawalan huruf besar.", explanation: "Konvensi camelCase diawali dengan huruf kecil, dan huruf pertama kata berikutnya ditulis dengan huruf besar tanpa spasi atau karakter khusus." },
-            { id: "programming-19", category: "programming", difficulty: "medium", question: "Dalam OOP, apa arti dari Polymorphism?", answers: ["Satu antarmuka atau metode yang dapat memiliki banyak bentuk tindakan yang berbeda", "Kemampuan membuat objek menjadi tidak dapat diubah (immutable)", "Proses enkripsi data sebelum disimpan", "Membagi program menjadi beberapa server"], correct: 0, hint: "Poly berarti banyak, morph berarti bentuk.", explanation: "Polymorphism memungkinkan objek dari kelas-kelas berbeda merespons pesan atau metode yang sama dengan cara yang sesuai dengan spesifik kelas masing-masing." },
-            { id: "programming-20", category: "programming", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Memory Leak'?", answers: ["Kondisi di mana memori yang dialokasikan tidak dibebaskan kembali meskipun sudah tidak digunakan", "Kerusakan fisik pada modul RAM di komputer", "Pencurian data memori oleh hacker pihak ketiga", "Proses pembersihan cache browser secara otomatis"], correct: 0, hint: "Memori terbuang sia-sia dan terus berkurang.", explanation: "Memory leak terjadi saat program mengalokasikan memori dinamis di RAM tetapi gagal membebaskannya (deallocation) setelah selesai digunakan, yang lama-kelamaan dapat menghabiskan memori sistem." },
-
-            { id: "database-1", category: "database", difficulty: "easy", question: "Apa fungsi utama primary key dalam tabel database?", answers: ["Mengidentifikasi setiap baris secara unik", "Menghapus tabel", "Mengubah warna kolom", "Membuat animasi data"], correct: 0, hint: "Satu baris, satu identitas.", explanation: "Primary key memastikan setiap record memiliki identitas unik agar mudah direferensikan." },
-            { id: "database-2", category: "database", difficulty: "easy", question: "Apa itu record dalam database relasional?", answers: ["Satu baris data dalam tabel", "Satu warna tombol", "Satu folder gambar", "Satu jenis animasi"], correct: 0, hint: "Tabel punya kolom dan baris.", explanation: "Record adalah satu baris yang berisi nilai untuk kolom-kolom dalam sebuah tabel." },
-            { id: "database-3", category: "database", difficulty: "easy", question: "Perintah SQL SELECT digunakan untuk apa?", answers: ["Mengambil data dari tabel", "Menghapus aplikasi", "Mengubah ukuran layar", "Membuat ikon"], correct: 0, hint: "SELECT berkaitan dengan membaca data.", explanation: "SELECT digunakan untuk membaca data dari satu atau lebih tabel sesuai kolom dan filter yang dibutuhkan." },
-            { id: "database-4", category: "database", difficulty: "easy", question: "Apa fungsi klausa WHERE dalam SQL?", answers: ["Menyaring baris berdasarkan kondisi", "Membuat tabel selalu kosong", "Mengganti nama database", "Mengurutkan warna UI"], correct: 0, hint: "WHERE adalah filter.", explanation: "WHERE membatasi hasil query hanya pada baris yang memenuhi kondisi tertentu." },
-            { id: "database-5", category: "database", difficulty: "medium", question: "JOIN dalam SQL digunakan untuk apa?", answers: ["Menggabungkan data dari beberapa tabel yang saling berelasi", "Mengompres gambar", "Mengubah font", "Mengunci laptop"], correct: 0, hint: "Relasi antar tabel adalah kata kuncinya.", explanation: "JOIN menghubungkan tabel berdasarkan kolom terkait sehingga data bisa dibaca dalam satu hasil query." },
-            { id: "database-6", category: "database", difficulty: "medium", question: "Apa tujuan normalisasi database?", answers: ["Mengurangi duplikasi dan menjaga konsistensi data", "Membuat semua tabel menjadi satu kolom", "Menghapus kebutuhan query", "Membuat UI lebih berwarna"], correct: 0, hint: "Normalisasi menata struktur data.", explanation: "Normalisasi memecah data ke struktur yang lebih tepat agar redundansi turun dan update lebih aman." },
-            { id: "database-7", category: "database", difficulty: "medium", question: "Apa manfaat transaction dalam database?", answers: ["Menjaga beberapa operasi berhasil semua atau batal semua", "Membuat query selalu cepat", "Mengubah SQL menjadi HTML", "Menghapus kebutuhan backup"], correct: 0, hint: "Pikirkan atomicity.", explanation: "Transaction menjaga integritas data saat beberapa operasi harus dianggap sebagai satu kesatuan." },
-            { id: "database-8", category: "database", difficulty: "hard", question: "Mengapa index database perlu dipakai dengan bijak?", answers: ["Index mempercepat baca, tetapi bisa menambah beban tulis dan storage", "Index selalu membuat semua query sempurna", "Index mengganti kebutuhan primary key", "Index hanya untuk desain UI"], correct: 0, hint: "Ada tradeoff antara read dan write.", explanation: "Index dapat mempercepat pencarian, tetapi terlalu banyak index memperlambat insert/update dan memakai ruang tambahan." },
-            { id: "database-9", category: "database", difficulty: "hard", question: "Apa penyebab umum query menjadi lambat pada tabel besar?", answers: ["Filter tidak memanfaatkan index dan membaca terlalu banyak baris", "Nama tabel terlalu pendek", "Terlalu banyak komentar CSS", "Tombol submit berwarna biru"], correct: 0, hint: "Perhatikan jumlah baris yang discan.", explanation: "Query lambat sering terjadi karena full scan, join tidak efisien, atau index yang tidak cocok dengan pola filter." },
-            { id: "database-10", category: "database", difficulty: "hard", question: "Apa risiko menyimpan data turunan tanpa strategi sinkronisasi?", answers: ["Nilainya bisa tidak konsisten dengan sumber data utama", "Database menjadi tidak bisa dibaca", "Semua query gagal otomatis", "Primary key berubah menjadi string"], correct: 0, hint: "Data yang sama di dua tempat harus dijaga.", explanation: "Denormalisasi bisa berguna untuk performa, tetapi perlu strategi agar data turunan tetap selaras." },
-            { id: "database-11", category: "database", difficulty: "easy", question: "Apakah kegunaan utama dari SQL FOREIGN KEY?", answers: ["Menghubungkan baris di satu tabel dengan baris di tabel lainnya", "Membuat tabel baru secara otomatis", "Mengubah tipe data kolom menjadi string", "Menghapus database cadangan"], correct: 0, hint: "Berhubungan dengan relasi antar tabel.", explanation: "Foreign Key adalah kolom yang merujuk ke Primary Key di tabel lain, menjaga integritas referensial antara kedua tabel tersebut." },
-            { id: "database-12", category: "database", difficulty: "easy", question: "Apakah kepanjangan dari SQL?", answers: ["Structured Query Language", "Simple Queue List", "System Query Locator", "Sequential Query Log"], correct: 0, hint: "Bahasa terstruktur untuk database.", explanation: "SQL singkatan dari Structured Query Language, bahasa standar untuk memanipulasi dan mengambil data dari database relasional." },
-            { id: "database-13", category: "database", difficulty: "medium", question: "Manakah di bawah ini yang merupakan ciri utama database NoSQL (non-relasional) dibanding SQL?", answers: ["Skema data fleksibel atau tanpa skema tetap, mendukung skalabilitas horizontal", "Hanya bisa dijalankan di sistem operasi Linux", "Tidak mendukung penyimpanan data teks", "Selalu menggunakan tabel dengan baris dan kolom yang kaku"], correct: 0, hint: "Pikirkan format dokumen atau key-value yang fleksibel.", explanation: "NoSQL didesain untuk menangani data tidak terstruktur atau semi-terstruktur dengan skema fleksibel dan biasanya lebih mudah diskalakan secara horizontal (menambah server)." },
-            { id: "database-14", category: "database", difficulty: "medium", question: "Apakah fungsi dari klausa GROUP BY dalam query SQL?", answers: ["Mengelompokkan baris yang memiliki nilai sama ke dalam baris ringkasan", "Mengurutkan data dari nilai terbesar ke terkecil", "Membatasi jumlah data yang ditampilkan di layar", "Menggabungkan dua tabel tanpa relasi"], correct: 0, hint: "Sering digunakan bersama fungsi agregasi seperti COUNT, SUM, atau AVG.", explanation: "GROUP BY digunakan bersama fungsi agregasi untuk mengelompokkan baris data berdasarkan satu atau beberapa kolom untuk menghasilkan ringkasan data." },
-            { id: "database-15", category: "database", difficulty: "medium", question: "Apakah yang dimaksud dengan 'Database Transaction'?", answers: ["Satu unit kerja logis yang berisi satu atau beberapa operasi SQL yang harus sukses semua atau gagal semua", "Proses transfer data database antar perusahaan", "Biaya sewa layanan cloud database per bulan", "Proses ekspor data ke format file Excel"], correct: 0, hint: "Pikirkan konsep 'All or Nothing'.", explanation: "Transaction mengelompokkan beberapa operasi database sehingga jika salah satu gagal, seluruh perubahan dibatalkan (rollback) untuk menjaga konsistensi data." },
-            { id: "database-16", category: "database", difficulty: "hard", question: "Apakah kepanjangan dari ACID dalam prinsip database relasional?", answers: ["Atomicity, Consistency, Isolation, Durability", "Access, Control, Index, Data", "Accuracy, Cloud, Integration, Delivery", "Authentication, Cipher, Integrity, Decentralization"], correct: 0, hint: "Menjamin transaksi database yang andal.", explanation: "ACID adalah standar transaksi database: Atomicity (semua atau tidak sama sekali), Consistency (validitas data), Isolation (transaksi tidak saling mengganggu), dan Durability (data permanen setelah commit)." },
-            { id: "database-17", category: "database", difficulty: "hard", question: "Dalam indexing database relasional, manakah struktur data yang paling umum digunakan?", answers: ["B-Tree atau B+ Tree", "Stack", "Queue", "Linked List"], correct: 0, hint: "Struktur pohon yang seimbang untuk pencarian cepat.", explanation: "B-Tree/B+ Tree digunakan karena mempertahankan data terurut dan memungkinkan pencarian, akses berurutan, penyisipan, dan penghapusan dalam waktu logaritmik." },
-            { id: "database-18", category: "database", difficulty: "easy", question: "Klausa SQL ORDER BY digunakan untuk apa?", answers: ["Mengurutkan hasil query berdasarkan kolom tertentu secara ascending atau descending", "Membatasi baris data yang diambil", "Menghitung jumlah baris data", "Menghapus data duplikat"], correct: 0, hint: "Berkaitan dengan urutan alfabet atau angka.", explanation: "ORDER BY digunakan untuk mengurutkan hasil query, baik secara terkecil-terbesar (ASC) maupun terbesar-terkecil (DESC)." },
-            { id: "database-19", category: "database", difficulty: "medium", question: "Manakah database berikut yang termasuk kategori NoSQL Document-Oriented?", answers: ["MongoDB", "MySQL", "PostgreSQL", "SQLite"], correct: 0, hint: "Menggunakan format JSON/BSON untuk menyimpan data.", explanation: "MongoDB menyimpan data dalam dokumen fleksibel mirip JSON, menjadikannya salah satu database NoSQL Document-Oriented terpopuler." },
-            { id: "database-20", category: "database", difficulty: "hard", question: "Apa tujuan dari replikasi database (Database Replication)?", answers: ["Menyalin data ke server database lain untuk redundansi, high availability, dan pembagian beban baca", "Menghapus duplikasi data di satu tabel", "Mengubah database relasional menjadi NoSQL", "Meningkatkan kecepatan query write dengan membagi satu baris data"], correct: 0, hint: "Pikirkan backup aktif dan pembagian beban kerja.", explanation: "Replikasi database menyalin data secara real-time ke satu atau lebih server replika untuk memastikan jika server utama mati, aplikasi tetap bisa berjalan (failover)." },
-
-            { id: "design-1", category: "design", difficulty: "easy", question: "Apa tujuan utama wireframe?", answers: ["Menyusun struktur dan alur layar sebelum desain visual detail", "Menghitung pajak aplikasi", "Membuat database production", "Menghapus semua teks"], correct: 0, hint: "Ini tahap rangka awal.", explanation: "Wireframe membantu tim melihat struktur, hirarki, dan alur sebelum masuk ke visual final." },
-            { id: "design-2", category: "design", difficulty: "easy", question: "Apa arti visual hierarchy dalam UI?", answers: ["Pengaturan elemen agar pengguna tahu mana yang paling penting", "Daftar warna acak", "Teknik backup database", "Cara mematikan animasi"], correct: 0, hint: "Hierarchy membantu perhatian pengguna.", explanation: "Visual hierarchy memakai ukuran, warna, jarak, dan kontras untuk mengarahkan perhatian." },
-            { id: "design-3", category: "design", difficulty: "easy", question: "Mengapa tombol utama biasanya dibuat lebih menonjol?", answers: ["Agar aksi prioritas mudah ditemukan", "Agar semua elemen sama penting", "Agar halaman lebih berat", "Agar teks hilang"], correct: 0, hint: "Primary action perlu jelas.", explanation: "Tombol utama menuntun pengguna ke aksi paling penting dalam konteks layar tersebut." },
-            { id: "design-4", category: "design", difficulty: "easy", question: "Apa fungsi spacing dalam layout?", answers: ["Memberi jarak agar informasi mudah dipindai dan tidak terasa sesak", "Mengganti semua ikon", "Membuat server cepat", "Menyimpan password"], correct: 0, hint: "Ruang kosong juga bagian desain.", explanation: "Spacing membantu pengelompokan, keterbacaan, dan ritme visual dalam antarmuka itu." },
-            { id: "design-5", category: "design", difficulty: "medium", question: "Apa manfaat usability testing?", answers: ["Menemukan masalah penggunaan dari perilaku pengguna nyata", "Membuat logo otomatis", "Mengganti server", "Memperbesar semua tombol tanpa alasan"], correct: 0, hint: "Uji dengan manusia, bukan asumsi saja.", explanation: "Usability testing memperlihatkan titik bingung, hambatan, dan kebutuhan pengguna saat memakai produk." },
-            { id: "design-6", category: "design", difficulty: "medium", question: "Mengapa aksesibilitas penting dalam produk digital?", answers: ["Agar lebih banyak orang bisa memakai produk dengan nyaman", "Agar warna selalu hitam putih", "Agar aplikasi hanya bisa dibuka admin", "Agar tidak perlu desain responsif"], correct: 0, hint: "Tidak semua pengguna memakai perangkat dengan cara yang sama.", explanation: "Aksesibilitas mempertimbangkan kontras, keyboard, screen reader, ukuran teks, dan kebutuhan pengguna yang beragam." },
-            { id: "design-7", category: "design", difficulty: "medium", question: "Apa contoh microcopy yang baik?", answers: ["Teks singkat yang menjelaskan aksi atau status dengan jelas", "Paragraf panjang di semua tombol", "Nama variabel database", "Kode CSS untuk shadow"], correct: 0, hint: "Microcopy membantu pengguna memahami apa yang terjadi.", explanation: "Microcopy seperti label tombol, pesan error, dan helper text harus ringkas, jelas, dan sesuai konteks." },
-            { id: "design-8", category: "design", difficulty: "hard", question: "Design system yang baik biasanya membantu apa?", answers: ["Konsistensi UI, kecepatan produksi, dan kualitas kolaborasi", "Menghapus kebutuhan riset", "Membuat semua halaman identik total", "Mengganti semua developer"], correct: 0, hint: "Komponen dan aturan yang bisa dipakai bersama.", explanation: "Design system menyediakan komponen, token, dan pedoman agar desain lebih konsisten dan tim lebih efisien." },
-            { id: "design-9", category: "design", difficulty: "hard", question: "Mengapa kontras warna harus diuji, bukan hanya dilihat sekilas?", answers: ["Persepsi warna berbeda dan standar aksesibilitas butuh rasio yang cukup", "Karena semua warna pasti gagal", "Karena kontras hanya untuk gambar", "Karena browser tidak mendukung warna"], correct: 0, hint: "Kontras memengaruhi keterbacaan.", explanation: "Uji kontras membantu memastikan teks dapat dibaca oleh pengguna dengan kondisi visual dan perangkat yang berbeda." },
-            { id: "design-10", category: "design", difficulty: "hard", question: "Apa risiko membuat UI terlalu dekoratif pada tool produktivitas?", answers: ["Workflow inti bisa lambat dipindai dan aksi penting tenggelam", "Semua pengguna pasti lebih cepat", "Data menjadi lebih akurat", "Backend otomatis aman"], correct: 0, hint: "Tool kerja butuh kejelasan dan efisiensi.", explanation: "Dekorasi yang berlebihan dapat mengganggu pemindaian, prioritas aksi, dan fokus pengguna." },
-            { id: "design-11", category: "design", difficulty: "easy", question: "Apakah kegunaan utama dari Figma dalam alur kerja UI/UX?", answers: ["Membuat desain antarmuka, komponen interaktif, dan kolaborasi tim secara real-time", "Menulis kode backend Node.js", "Menguji performa database SQL", "Membuat server host lokal"], correct: 0, hint: "Tool desain berbasis web terpopuler saat ini.", explanation: "Figma adalah aplikasi desain grafis vektor dan prototyping yang berfokus pada kolaborasi real-time untuk tim UI/UX." },
-            { id: "design-12", category: "design", difficulty: "easy", question: "Apakah warna merah dalam desain UI paling sering digunakan untuk melambangkan?", answers: ["Aksi berbahaya, error, atau pembatalan (destructive action)", "Status sukses atau penyelesaian tugas", "Warna latar belakang default mode malam", "Tombol navigasi menu utama"], correct: 0, hint: "Pikirkan sinyal bahaya atau peringatan.", explanation: "Merah secara psikologis menarik perhatian kuat dan sering digunakan untuk error, peringatan, atau tombol hapus permanen." },
-            { id: "design-13", category: "design", difficulty: "medium", question: "Apakah yang dimaksud dengan 'Color Contrast Ratio' dalam standar aksesibilitas web?", answers: ["Perbandingan tingkat kecerahan antara teks dan latar belakangnya agar mudah dibaca", "Jumlah kombinasi warna yang digunakan dalam satu halaman", "Kecepatan transisi warna saat tombol di-hover", "Proses kalibrasi warna monitor desainer"], correct: 0, hint: "Membantu pengguna dengan gangguan penglihatan membaca teks Anda.", explanation: "Rasio kontras warna membandingkan luminansi teks dengan latar belakangnya. WCAG menetapkan kontras minimum (misal 4.5:1 untuk teks normal) untuk aksesibilitas yang baik." },
-            { id: "design-14", category: "design", difficulty: "medium", question: "Apakah perbedaan utama antara UI (User Interface) dan UX (User Experience)?", answers: ["UI berfokus pada keindahan visual antarmuka, sedangkan UX berfokus pada kenyamanan dan kemudahan pengguna saat memakai aplikasi", "UI adalah coding frontend, UX adalah coding backend", "UI hanya untuk website desktop, UX hanya untuk aplikasi mobile", "UI dikerjakan oleh manajer produk, UX dikerjakan oleh developer"], correct: 0, hint: "Pikirkan aspek 'estetika' vs 'pengalaman/perasaan'.", explanation: "UI mengurusi tata letak, warna, tipografi, dan aset visual (tampilan). UX mengurusi riset pengguna, alur navigasi, struktur informasi, dan kemudahan interaksi (rasa)." },
-            { id: "design-15", category: "design", difficulty: "medium", question: "Apakah fungsi dari 'Grid System' dalam desain layout UI?", answers: ["Membantu menyusun elemen visual agar rapi, konsisten, sejajar, dan proporsional", "Membuat grid database untuk menyimpan gambar", "Mempercepat waktu loading asset gambar", "Mengenkripsi file desain sebelum dikirim"], correct: 0, hint: "Struktur garis bantu vertikal dan horizontal.", explanation: "Grid system (seperti 8px grid atau 12-column grid) digunakan untuk menyelaraskan elemen desain secara konsisten di berbagai ukuran layar." },
-            { id: "design-16", category: "design", difficulty: "hard", question: "Apakah yang dimaksud dengan prinsip 'Fitts's Law' dalam UX Design?", answers: ["Waktu untuk menjangkau target tergantung pada ukuran target dan jarak ke target tersebut", "Semakin banyak pilihan yang diberikan, semakin lama pengguna mengambil keputusan", "Desain harus selalu menggunakan warna pastel", "Website harus dimuat kurang dari 3 detik"], correct: 0, hint: "Tombol yang besar dan dekat lebih mudah diklik.", explanation: "Hukum Fitts menyatakan bahwa target yang berukuran besar dan diletakkan di tempat yang mudah dijangkau (seperti pojok layar atau dekat kursor) akan lebih cepat dan mudah diklik oleh pengguna." },
-            { id: "design-17", category: "design", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Heuristic Evaluation'?", answers: ["Metode pemeriksaan kegunaan (usability) sistem berdasarkan aturan desain praktis (heuristics)", "Proses analisis performa server menggunakan algoritma machine learning", "Pengujian kecepatan loading halaman web secara berkala", "Uji coba keamanan server dari serangan siber"], correct: 0, hint: "Mengevaluasi dengan 10 standar emas Usability milik Jakob Nielsen.", explanation: "Evaluasi heuristik adalah metode audit UX di mana ahli mengevaluasi antarmuka produk digital terhadap prinsip-prinsip kegunaan yang sudah diakui umum (seperti 10 Usability Heuristics Jakob Nielsen)." },
-            { id: "design-18", category: "design", difficulty: "easy", question: "Apakah kepanjangan dari SVG dalam tipe file aset desain?", answers: ["Scalable Vector Graphics", "Standard Visual Grid", "Simple Vector Template", "System Visual Graphic"], correct: 0, hint: "Gambar vektor yang tidak pecah saat diperbesar.", explanation: "SVG (Scalable Vector Graphics) adalah format file gambar berbasis XML yang dapat diskalakan tanpa kehilangan resolusi atau kualitas visualnya." },
-            { id: "design-19", category: "design", difficulty: "medium", question: "Manakah di bawah ini yang menggambarkan prinsip 'Hick's Law'?", answers: ["Waktu yang dibutuhkan untuk mengambil keputusan meningkat seiring bertambahnya jumlah dan kompleksitas pilihan", "Pengguna menghaisu sebagian besar waktu mereka di situs lain", "Elemen yang diletakkan berdekatan dianggap memiliki fungsi serupa", "Desain harus selalu menyembunyikan detail teknis"], correct: 0, hint: "Terlalu banyak pilihan menu membuat pengguna bingung dan lambat memilih.", explanation: "Hukum Hick menyatakan bahwa semakin banyak pilihan yang disajikan kepada pengguna, semakin lama waktu yang mereka butuhkan untuk berinteraksi dan membuat keputusan." },
-            { id: "design-20", category: "design", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Design Tokens'?", answers: ["Variabel visual terkecil (seperti warna, font, spacing) yang disimpan dalam format netral (JSON) untuk menjaga konsistensi di berbagai platform", "Mata uang kripto khusus untuk membayar desainer grafis", "Kunci keamanan untuk membuka file proyek Figma", "Kode promo diskon untuk membeli aset desain premium"], correct: 0, hint: "Menghubungkan variabel desain dengan kode developer secara otomatis.", explanation: "Design Tokens adalah unit keputusan desain atomik (seperti nilai HSL warna atau unit rem ukuran font) yang diekspor sebagai JSON/YAML agar bisa digunakan langsung oleh tim frontend (Web, iOS, Android) untuk menjaga konsistensi desain sistem." },
-
-            { id: "analytics-1", category: "analytics", difficulty: "easy", question: "Apa itu KPI?", answers: ["Ukuran penting untuk menilai pencapaian tujuan", "Nama bahasa pemrograman", "Format gambar", "Jenis tombol navigasi"], correct: 0, hint: "KPI berhubungan dengan target.", explanation: "KPI adalah metrik utama yang dipakai untuk mengevaluasi performa terhadap tujuan tertentu." },
-            { id: "analytics-2", category: "analytics", difficulty: "easy", question: "Apa fungsi dashboard analitik?", answers: ["Meringkas metrik penting agar mudah dipantau", "Menulis kode otomatis", "Menghapus database", "Mengganti UI menjadi gelap"], correct: 0, hint: "Dashboard membantu melihat status.", explanation: "Dashboard menyatukan metrik penting agar tim bisa memantau kondisi dan perubahan dengan cepat." },
-            { id: "analytics-3", category: "analytics", difficulty: "easy", question: "Apa arti conversion rate?", answers: ["Persentase pengguna yang menyelesaikan aksi target", "Jumlah warna dalam halaman", "Ukuran file gambar", "Durasi animasi tombol"], correct: 0, hint: "Conversion berkaitan dengan aksi target.", explanation: "Conversion rate mengukur proporsi pengguna yang melakukan aksi penting seperti daftar, beli, atau menyelesaikan kuis." },
-            { id: "analytics-4", category: "analytics", difficulty: "easy", question: "Apa itu data segmentasi?", answers: ["Membagi data ke kelompok bermakna untuk analisis lebih jelas", "Menghapus semua data kecil", "Mengubah data menjadi gambar", "Menyimpan data tanpa kategori"], correct: 0, hint: "Segmentasi memecah audiens atau data.", explanation: "Segmentasi membantu menemukan pola yang mungkin tertutup jika semua data digabung." },
-            { id: "analytics-5", category: "analytics", difficulty: "medium", question: "Mengapa funnel analysis berguna?", answers: ["Melihat titik pengguna banyak berhenti dalam sebuah alur", "Menghapus data duplikat otomatis", "Membuat password", "Mengubah warna chart"], correct: 0, hint: "Perhatikan perjalanan pengguna dari awal sampai akhir.", explanation: "Funnel analysis menunjukkan tahap mana yang kehilangan banyak pengguna sehingga tim tahu prioritas perbaikan." },
-            { id: "analytics-6", category: "analytics", difficulty: "medium", question: "Apa tujuan A/B testing?", answers: ["Membandingkan dua varian untuk melihat mana yang lebih efektif", "Membuat dua database identik", "Menghapus kebutuhan data", "Mengganti bahasa coding"], correct: 0, hint: "A dan B adalah dua versi.", explanation: "A/B testing membantu mengambil keputusan berbasis data dengan membandingkan performa dua varian." },
-            { id: "analytics-7", category: "analytics", difficulty: "medium", question: "Mengapa data outlier perlu diperiksa?", answers: ["Outlier bisa menunjukkan error, kasus ekstrem, atau insight penting", "Outlier selalu harus dihapus", "Outlier hanya muncul di gambar", "Outlier membuat chart tidak bisa dibuka"], correct: 0, hint: "Nilai ekstrem punya cerita.", explanation: "Outlier tidak otomatis salah. Ia perlu diperiksa karena bisa berasal dari error atau fenomena penting." },
-            { id: "analytics-8", category: "analytics", difficulty: "hard", question: "Apa risiko mengambil keputusan hanya dari rata-rata?", answers: ["Rata-rata bisa menyembunyikan outlier dan perbedaan antar segmen", "Rata-rata selalu salah", "Rata-rata hanya untuk UI", "Data tidak bisa dihitung"], correct: 0, hint: "Segmentasi sering membuka cerita yang tertutup.", explanation: "Rata-rata berguna, tetapi dapat menutup variasi penting. Segmentasi, distribusi, dan outlier perlu ikut dilihat." },
-            { id: "analytics-9", category: "analytics", difficulty: "hard", question: "Mengapa korelasi tidak otomatis berarti sebab-akibat?", answers: ["Dua metrik bisa bergerak bersama karena faktor lain", "Korelasi selalu palsu", "Sebab-akibat hanya ada di CSS", "Data angka tidak bisa dibandingkan"], correct: 0, hint: "Ada kemungkinan variabel ketiga.", explanation: "Korelasi menunjukkan hubungan, tetapi eksperimen atau analisis lebih lanjut dibutuhkan untuk menyimpulkan kausalitas." },
-            { id: "analytics-10", category: "analytics", difficulty: "hard", question: "Apa masalah umum vanity metric?", answers: ["Terlihat bagus tetapi tidak selalu terkait keputusan atau tujuan bisnis", "Tidak bisa divisualisasikan", "Selalu lebih akurat dari KPI", "Hanya berlaku untuk database"], correct: 0, hint: "Metrik cantik belum tentu actionable.", explanation: "Vanity metric bisa membuat performa tampak bagus tanpa memberi arah tindakan yang berarti." },
-            { id: "analytics-11", category: "analytics", difficulty: "easy", question: "Apakah kepanjangan dari CAC dalam analisis bisnis?", answers: ["Customer Acquisition Cost", "Customer Active Count", "Click Action Rate", "Company Asset Cost"], correct: 0, hint: "Biaya untuk mendapatkan pelanggan baru.", explanation: "CAC mengukur total biaya pemasaran dan penjualan yang dikeluarkan untuk meyakinkan satu pelanggan baru agar membeli produk Anda." },
-            { id: "analytics-12", category: "analytics", difficulty: "easy", question: "Dalam visualisasi data, kapankah pie chart paling tepat digunakan?", answers: ["Untuk membandingkan bagian-bagian kecil yang membentuk satu kesatuan penuh (persentase total)", "Untuk melacak tren data dari waktu ke waktu", "Untuk menunjukkan hubungan korelasi antara dua variabel angka", "Untuk memvisualisasikan data geografi"], correct: 0, hint: "Menunjukkan proporsi bagian dari 100%.", explanation: "Pie chart terbaik untuk menampilkan komposisi statis dari bagian-bagian kecil yang secara kumulatif membentuk 100%." },
-            { id: "analytics-13", category: "analytics", difficulty: "medium", question: "Apakah yang dimaksud dengan 'Churn Rate'?", answers: ["Persentase pelanggan yang berhenti berlangganan atau berhenti menggunakan produk dalam jangka waktu tertentu", "Jumlah rata-rata klik yang didapatkan oleh sebuah iklan banner", "Kecepatan loading database saat memproses data transaksi", "Jumlah keuntungan bersih yang didapatkan per hari"], correct: 0, hint: "Berkaitan dengan pelanggan yang pergi/hilang.", explanation: "Churn rate mengukur tingkat kehilangan pelanggan, metrik krusial bagi bisnis berbasis langganan (SaaS) untuk mengukur kepuasan pelanggan." },
-            { id: "analytics-14", category: "analytics", difficulty: "medium", question: "Apakah perbedaan utama antara korelasi (correlation) dan kausalitas (causality)?", answers: ["Korelasi menunjukkan hubungan statistik antara dua variabel, sedangkan kausalitas membuktikan bahwa perubahan satu variabel menyebabkan perubahan pada variabel lain", "Korelasi hanya untuk data kualitatif, kausalitas hanya untuk data kuantitatif", "Korelasi selalu benar, kausalitas hanya hipotesis", "Korelasi dikerjakan oleh data analyst, kausalitas dikerjakan oleh developer"], correct: 0, hint: "Ingat pepatah 'Correlation does not imply causation'.", explanation: "Korelasi berarti dua variabel bergerak bersama secara statistik, namun belum tentu salah satunya menyebabkan yang lain terjadi (bisa jadi ada faktor luar/variabel ketiga)." },
-            { id: "analytics-15", category: "analytics", difficulty: "medium", question: "Apakah kegunaan utama dari scatter plot dalam analisis data?", answers: ["Melihat pola sebaran dan hubungan korelasi antara dua variabel numerik", "Menampilkan struktur hierarki manajemen perusahaan", "Mengurutkan data kategori dari yang tertinggi", "Menghitung rata-rata nilai matematika"], correct: 0, hint: "Menggunakan koordinat kartesius untuk memplot titik-titik data.", explanation: "Scatter plot menempatkan titik-titik data berdasarkan nilai X dan Y untuk melihat apakah ada hubungan (positif, negatif, atau acak) di antara kedua variabel tersebut." },
-            { id: "analytics-16", category: "analytics", difficulty: "hard", question: "Apakah yang dimaksud dengan 'LTV' (Lifetime Value) pelanggan dan mengapa ia penting dibandingkan CAC?", answers: ["Perkiraan total pendapatan yang akan dihasilkan pelanggan selama hubungan bisnis mereka dengan perusahaan; LTV harus lebih tinggi dari CAC agar bisnis profitabel", "Durasi waktu pelanggan membuka aplikasi web; LTV tinggi berarti server lambat", "Jumlah aset komputer yang dipinjamkan ke pelanggan", "Biaya hukum untuk menyelesaikan komplain dari pelanggan"], correct: 0, hint: "Hubungan nilai jangka panjang vs biaya akuisisi.", explanation: "LTV mengukur kontribusi keuangan jangka panjang seorang pelanggan. Rasio LTV:CAC yang sehat (biasanya 3:1) menunjukkan model bisnis berkelanjutan dan menguntungkan." },
-            { id: "analytics-17", category: "analytics", difficulty: "hard", question: "Dalam statistika, apakah yang dimaksud dengan 'P-value'?", answers: ["Probabilitas mendapatkan hasil ekstrem yang diamati jika hipotesis nol (H0) benar; digunakan untuk menentukan signifikansi statistik", "Jumlah data outlier yang ditemukan dalam sampel", "Nilai rata-rata dari seluruh populasi data", "Persentase data yang hilang akibat error teknis"], correct: 0, hint: "Nilai batas signifikansi yang biasanya dibandingkan dengan alpha (0.05).", explanation: "P-value mengukur kekuatan bukti melawan hipotesis nol. P-value < 0.05 biasanya dianggap signifikan secara statistik, menolak hipotesis nol untuk mendapat dukungan hipotesis alternatif." },
-            { id: "analytics-18", category: "analytics", difficulty: "easy", question: "Apakah kepanjangan dari SQL dalam data analytics?", answers: ["Structured Query Language", "System Query Link", "Simple Quantized Layout", "Standardized Queue Logic"], correct: 0, hint: "Bahasa standar untuk berinteraksi dengan database data.", explanation: "SQL digunakan analis data untuk mengambil, memfilter, dan mengagregasi data dari database relasional sebelum dianalisis." },
-            { id: "analytics-19", category: "analytics", difficulty: "medium", question: "Manakah definisi yang tepat untuk 'Cohort Analysis'?", answers: ["Analisis perilaku sekelompok pengguna yang berbagi karakteristik atau pengalaman yang sama dalam rentang waktu tertentu", "Proses pembersihan data dari nilai kosong menggunakan algoritma python", "Metode untuk mengamankan hak akses database", "Penghitungan laba bersih sebelum dipotong pajak"], correct: 0, hint: "Mengelompokkan pengguna berdasarkan bulan pendaftaran mereka.", explanation: "Cohort Analysis membagi pengguna ke dalam kelompok (kohort) berdasarkan tanggal aktivitas awal mereka untuk melihat bagaimana retensi atau perilaku mereka berubah seiring waktu." },
-            { id: "analytics-20", category: "analytics", difficulty: "hard", question: "Apakah yang dimaksud dengan 'Predictive Analytics'?", answers: ["Penggunaan data historis, algoritma statistik, dan teknik machine learning untuk memprediksi hasil di masa depan", "Laporan ringkasan tentang penjualan perusahaan di bulan lalu", "Sistem pendeteksi virus komputer yang berjalan di server", "Proses mengarsipkan data lama yang sudah tidak aktif ke cold storage"], correct: 0, hint: "Berfokus pada peramalan masa depan (forecasting).", explanation: "Predictive analytics melampaui analisis data deskriptif (apa yang terjadi) untuk memprediksi tren dan perilaku masa depan berdasarkan pola data historis." },
-
-            { id: "web-1", category: "web", difficulty: "easy", question: "Apa fungsi HTML dalam halaman web?", answers: ["Menyusun struktur konten halaman", "Mengatur query database", "Menjalankan server fisik", "Mengenkripsi password"], correct: 0, hint: "HTML adalah kerangka konten.", explanation: "HTML mendefinisikan struktur seperti heading, paragraf, link, form, dan elemen halaman." },
-            { id: "web-2", category: "web", difficulty: "easy", question: "Apa fungsi CSS?", answers: ["Mengatur tampilan visual seperti layout, warna, dan spacing", "Menyimpan data permanen", "Mengirim email otomatis", "Membuat primary key"], correct: 0, hint: "CSS bicara soal gaya visual.", explanation: "CSS mengontrol presentasi halaman web, termasuk responsif, animasi, dan komponen visual." },
-            { id: "web-3", category: "web", difficulty: "easy", question: "Apa fungsi JavaScript di browser?", answers: ["Membuat halaman interaktif dan merespons aksi pengguna", "Mengganti semua file menjadi gambar", "Mencetak database", "Menghapus kebutuhan HTML"], correct: 0, hint: "Interaksi adalah kata kuncinya.", explanation: "JavaScript memungkinkan validasi form, update UI, fetch data, dan logika interaktif di browser." },
-            { id: "web-4", category: "web", difficulty: "easy", question: "Apa arti responsive design?", answers: ["Tampilan menyesuaikan ukuran layar dan perangkat", "Server merespons lebih cepat", "Semua tombol berkedip", "Website hanya untuk desktop"], correct: 0, hint: "Pikirkan mobile dan desktop.", explanation: "Responsive design membuat layout tetap nyaman di berbagai ukuran layar." },
-            { id: "web-5", category: "web", difficulty: "medium", question: "Apa kegunaan fetch API?", answers: ["Mengambil atau mengirim data melalui request HTTP", "Menggambar ikon SVG otomatis", "Mengubah font Google", "Membuat file zip"], correct: 0, hint: "Fetch berkaitan dengan network request.", explanation: "Fetch API digunakan untuk berkomunikasi dengan server, biasanya mengambil JSON atau mengirim data." },
-            { id: "web-6", category: "web", difficulty: "medium", question: "Mengapa semantic HTML penting?", answers: ["Membantu aksesibilitas, SEO, dan struktur dokumen yang jelas", "Agar CSS tidak perlu ditulis", "Agar semua gambar hilang", "Agar database otomatis terhubung"], correct: 0, hint: "Makna elemen penting.", explanation: "Semantic HTML seperti nav, main, section, dan button memberi makna yang dapat dipahami browser dan assistive tech." },
-            { id: "web-7", category: "web", difficulty: "medium", question: "Apa penyebab umum layout shift?", answers: ["Ukuran elemen seperti gambar tidak disiapkan sebelum konten dimuat", "Terlalu banyak primary key", "Nama class terlalu panjang", "Semua link memakai href"], correct: 0, hint: "Layout berubah setelah loading.", explanation: "Layout shift terjadi ketika elemen berubah posisi setelah konten lain dimuat, misalnya gambar tanpa dimensi tetap." },
-            { id: "web-8", category: "web", difficulty: "hard", question: "Mengapa event delegation berguna?", answers: ["Satu listener parent bisa menangani banyak child dinamis", "Semua event jadi lebih lambat", "CSS otomatis dibuat", "HTML tidak perlu struktur"], correct: 0, hint: "Parent bisa mendengar klik child.", explanation: "Event delegation memanfaatkan bubbling untuk menangani elemen dinamis tanpa memasang listener satu per satu." },
-            { id: "web-9", category: "web", difficulty: "hard", question: "Apa risiko menyimpan token sensitif di localStorage?", answers: ["Token rentan dicuri jika terjadi XSS", "Token otomatis terenkripsi kuat", "Token tidak bisa dibaca JavaScript", "Browser menolak semua localStorage"], correct: 0, hint: "localStorage bisa dibaca JavaScript.", explanation: "Jika aplikasi terkena XSS, script berbahaya dapat membaca localStorage dan mengambil token sensitif." },
-            { id: "web-10", category: "web", difficulty: "hard", question: "Apa fungsi lazy loading pada aset web?", answers: ["Menunda pemuatan aset sampai benar-benar dibutuhkan", "Memuat semua aset dua kali", "Menghapus gambar dari DOM", "Membuat CSS tidak berlaku"], correct: 0, hint: "Tidak semua aset harus dimuat di awal.", explanation: "Lazy loading dapat mempercepat load awal dengan menunda gambar atau modul yang belum terlihat." },
-            { id: "web-11", category: "web", difficulty: "easy", question: "Apakah fungsi utama dari protokol HTTPS dibanding HTTP biasa?", answers: ["Mengamankan komunikasi data dengan enkripsi SSL/TLS agar tidak bisa diintip pihak luar", "Mempercepat loading website dengan kompresi gambar", "Membuat desain website menjadi responsif otomatis", "Mencegah website mati saat diakses banyak pengunjung"], correct: 0, hint: "Pikirkan keamanan enkripsi data sensitif.", explanation: "HTTPS (Hypertext Transfer Protocol Secure) mengenkripsi seluruh pertukaran data antara browser dan server untuk melindunginya dari intersepsi (eavesdropping)." },
-            { id: "web-12", category: "web", difficulty: "easy", question: "Manakah tag HTML yang digunakan untuk membuat link ke halaman lain?", answers: ["<a>", "<link>", "<href>", "<button>"], correct: 0, hint: "Singkatan dari 'anchor'.", explanation: "Tag <a> (anchor) digunakan bersama atribut href untuk membuat hyperlink ke halaman web atau file lain." },
-            { id: "web-13", category: "web", difficulty: "medium", question: "Apakah kegunaan utama dari CSS Flexbox?", answers: ["Menyusun tata letak elemen secara satu dimensi (baris atau kolom) agar responsif dan mudah sejajar", "Menghubungkan frontend dengan database relasional", "Mengatur fungsi interaktif seperti pop-up login", "Membuat animasi 3D yang berat di web"], correct: 0, hint: "Solusi layout satu dimensi yang fleksibel.", explanation: "Flexbox (Flexible Box Layout) memudahkan perataan, distribusi ruang, dan penyusunan elemen di dalam container, bahkan saat ukurannya dinamis." },
-            { id: "web-14", category: "web", difficulty: "medium", question: "Apakah perbedaan utama antara Cookies, LocalStorage, dan SessionStorage di browser?", answers: ["Cookies dikirim ke server pada setiap request, LocalStorage bertahan selamanya, sedangkan SessionStorage hilang saat tab ditutup", "LocalStorage dikirim ke server, Cookies hanya disimpan di browser lokal", "SessionStorage bertahan selamanya, LocalStorage hilang saat browser ditutup", "Ketiganya memiliki kapasitas penyimpanan yang sama persis yaitu 100 GB"], correct: 0, hint: "Pikirkan masa aktif penyimpanan dan komunikasi dengan server.", explanation: "Cookies digunakan untuk autentikasi dan dikirim ke server. LocalStorage menyimpan data secara permanen di browser (kapasitas ~5-10MB). SessionStorage hanya menyimpan data selama sesi tab aktif." },
-            { id: "web-15", category: "web", difficulty: "medium", question: "Apakah kepanjangan dari API dalam konteks web development?", answers: ["Application Programming Interface", "Active Performance Indicator", "Automated Program Integration", "Advanced Protocol Internet"], correct: 0, hint: "Jembatan komunikasi antar aplikasi.", explanation: "API adalah sekumpulan definisi dan protokol yang memungkinkan satu aplikasi perangkat lunak berinteraksi dan berbagi data dengan aplikasi lainnya." },
-            { id: "web-16", category: "web", difficulty: "hard", question: "Apakah yang dimaksud dengan CORS (Cross-Origin Resource Sharing)?", answers: ["Mekanisme keamanan browser untuk membatasi request resource dari origin yang berbeda dari origin situs saat ini", "Proses mengompres file CSS dan JS menjadi ukuran yang sangat kecil", "Sistem distribusi beban server web menggunakan CDN global", "Algoritma enkripsi password yang aman di server backend"], correct: 0, hint: "Browser memblokir fetch API dari domain lain jika header CORS tidak disiapkan.", explanation: "CORS adalah kebijakan keamanan browser (Same-Origin Policy) yang mencegah script berbahaya membaca resource sensitif dari origin (domain/protokol/port) lain kecuali server tujuan mengizinkannya secara eksplisit lewat header HTTP." },
-            { id: "web-17", category: "web", difficulty: "hard", question: "Dalam optimasi performa web, apakah yang dimaksud dengan metrik 'LCP' (Largest Contentful Paint)?", answers: ["Waktu yang dibutuhkan browser untuk merender elemen visual terbesar (seperti gambar banner atau teks utama) di layar", "Kecepatan server merespons koneksi internet pertama kali", "Jumlah total bytes file javascript yang diunduh oleh halaman", "Durasi waktu yang diperlukan pengguna untuk berpindah halaman"], correct: 0, hint: "Salah satu metrik Core Web Vitals penting dari Google.", explanation: "LCP mengukur waktu rendering konten utama halaman web. LCP yang baik adalah kurang dari 2.5 detik untuk memberikan pengalaman pengguna yang responsif." },
-            { id: "web-18", category: "web", difficulty: "easy", question: "Apakah fungsi dari tag HTML <meta charset='UTF-8'>?", answers: ["Menentukan encoding karakter dokumen agar browser menampilkan teks bahasa dunia dengan benar", "Mengatur warna latar belakang halaman web menjadi transparan", "Menyisipkan file stylesheet eksternal", "Menghubungkan halaman web dengan library JavaScript jQuery"], correct: 0, hint: "Berhubungan dengan encoding teks.", explanation: "UTF-8 mendukung hampir semua karakter tulisan dunia, memastikan browser menampilkan simbol dan alfabet khusus secara akurat." },
-            { id: "web-19", category: "web", difficulty: "medium", question: "Manakah status kode HTTP yang menunjukkan bahwa resource tidak ditemukan di server?", answers: ["404 Not Found", "500 Internal Server Error", "200 OK", "302 Found (Redirect)"], correct: 0, hint: "Sangat populer saat halaman web rusak atau hilang.", explanation: "Status 404 adalah kode respons standar HTTP yang menunjukkan bahwa server tidak dapat menemukan berkas yang diminta oleh pengguna." },
-            { id: "web-20", category: "web", difficulty: "hard", question: "Apakah perbedaan utama antara Single Page Application (SPA) dan Multi Page Application (MPA)?", answers: ["SPA memuat satu dokumen HTML awal dan memperbarui konten secara dinamis tanpa reload halaman, sedangkan MPA memuat dokumen HTML baru dari server setiap kali pindah halaman", "SPA ditulis dengan Python, MPA ditulis dengan PHP", "SPA hanya mendukung perangkat mobile, MPA mendukung semua perangkat", "SPA tidak bisa memiliki link eksternal, MPA bisa"], correct: 0, hint: "Pikirkan perilaku reload halaman browser saat pindah menu.", explanation: "SPA (seperti aplikasi React/Vue) menawarkan transisi yang lebih mulus dan cepat karena hanya meminta data (JSON) dari server, bukan dokumen HTML utuh seperti MPA tradisional." },
-
-            { id: "cyber-1", category: "cyber", difficulty: "easy", question: "Apa ciri password yang lebih aman?", answers: ["Panjang, unik, dan sulit ditebak", "Sama untuk semua akun", "Berisi nama sendiri saja", "Disimpan di komentar publik"], correct: 0, hint: "Panjang dan unik lebih penting.", explanation: "Password kuat sebaiknya panjang, unik per layanan, dan dikelola dengan password manager bila memungkinkan." },
-            { id: "cyber-2", category: "cyber", difficulty: "easy", question: "Apa itu phishing?", answers: ["Upaya menipu pengguna agar memberikan data sensitif", "Teknik mempercepat CSS", "Jenis database relasional", "Metode desain ikon"], correct: 0, hint: "Biasanya lewat pesan palsu.", explanation: "Phishing memancing korban lewat email, chat, atau halaman palsu agar memberikan password, OTP, atau data penting." },
-            { id: "cyber-3", category: "cyber", difficulty: "easy", question: "Mengapa update software penting?", answers: ["Sering membawa perbaikan keamanan dan bug", "Agar semua data hilang", "Agar password menjadi pendek", "Agar layar selalu gelap"], correct: 0, hint: "Patch keamanan sering datang lewat update.", explanation: "Update software dapat menutup celah keamanan yang sudah diketahui dan meningkatkan stabilitas." },
-            { id: "cyber-4", category: "cyber", difficulty: "easy", question: "Apa tujuan two-factor authentication?", answers: ["Menambah lapisan verifikasi selain password", "Menghapus akun lama", "Membuat UI lebih ramai", "Mengganti username"], correct: 0, hint: "Password bukan satu-satunya bukti.", explanation: "2FA mengurangi risiko akun diambil alih meski password bocor." },
-            { id: "cyber-5", category: "cyber", difficulty: "medium", question: "Apa prinsip least privilege?", answers: ["Memberi akses minimum yang dibutuhkan untuk tugas", "Memberi akses admin ke semua orang", "Menghapus semua role", "Membuka database publik"], correct: 0, hint: "Akses secukupnya.", explanation: "Least privilege membatasi dampak kesalahan atau kebocoran dengan memberi izin sesuai kebutuhan saja." },
-            { id: "cyber-6", category: "cyber", difficulty: "medium", question: "Mengapa backup perlu diuji restore-nya?", answers: ["Backup belum terbukti berguna sampai bisa dipulihkan", "Agar file backup lebih besar", "Agar password berubah", "Agar query lebih lambat"], correct: 0, hint: "Backup yang tidak bisa dipulihkan tidak banyak membantu.", explanation: "Uji restore memastikan data benar-benar dapat dikembalikan saat insiden terjadi." },
-            { id: "cyber-7", category: "cyber", difficulty: "medium", question: "Apa itu data minimization?", answers: ["Mengumpulkan data secukupnya sesuai kebutuhan", "Menghapus semua data penting", "Menyimpan data tanpa izin", "Membuat data tidak bisa dicari"], correct: 0, hint: "Ambil yang perlu saja.", explanation: "Data minimization mengurangi risiko privasi dan keamanan dengan tidak mengumpulkan data berlebihan." },
-            { id: "cyber-8", category: "cyber", difficulty: "hard", question: "Apa risiko XSS pada aplikasi web?", answers: ["Script berbahaya dapat berjalan di browser pengguna", "Server selalu mati total", "CSS tidak bisa dimuat", "Database otomatis terenkripsi"], correct: 0, hint: "XSS menyisipkan script.", explanation: "XSS memungkinkan penyerang menjalankan script di konteks situs, mencuri data, atau memanipulasi halaman." },
-            { id: "cyber-9", category: "cyber", difficulty: "hard", question: "Mengapa input user harus divalidasi di server juga?", answers: ["Validasi client bisa dilewati atau dimanipulasi", "Server tidak bisa membaca input", "Browser selalu benar", "CSS bisa mengganti database"], correct: 0, hint: "Client bukan sumber kepercayaan.", explanation: "Validasi server wajib karena request bisa dibuat langsung tanpa mengikuti aturan UI di browser." },
-            { id: "cyber-10", category: "cyber", difficulty: "hard", question: "Apa manfaat audit log pada sistem penting?", answers: ["Mencatat aktivitas agar insiden dan perubahan bisa ditelusuri", "Menghapus error otomatis", "Mengganti backup", "Membuat semua user admin"], correct: 0, hint: "Log membantu investigasi.", explanation: "Audit log memberi jejak aktivitas penting sehingga tim dapat meninjau perubahan, akses, dan potensi insiden." },
-            { id: "cyber-11", category: "cyber", difficulty: "easy", question: "Apakah yang dimaksud dengan VPN (Virtual Private Network)?", answers: ["Layanan yang mengenkripsi lalu lintas internet Anda dan menyembunyikan identitas online Anda dengan merutekannya melalui server aman", "Aplikasi untuk mempercepat koneksi Wi-Fi secara gratis", "Antivirus untuk membersihkan file sampah di komputer", "Database khusus untuk menyimpan password akun media sosial"], correct: 0, hint: "Membuat terowongan enkripsi privat di internet publik.", explanation: "VPN mengamankan koneksi internet Anda dengan mengenkripsi data Anda dan menyembunyikan alamat IP asli Anda untuk menjaga privasi." },
-            { id: "cyber-12", category: "cyber", difficulty: "easy", question: "Apakah kepanjangan dari MFA dalam keamanan siber?", answers: ["Multi-Factor Authentication", "Malicious File Analyzer", "Mobile Firewall Access", "Main Frame Auditor"], correct: 0, hint: "Membutuhkan lebih dari sekadar password untuk masuk.", explanation: "MFA adalah metode verifikasi identitas yang mengharuskan pengguna memberikan dua atau lebih faktor verifikasi untuk mendapatkan akses ke akun." },
-            { id: "cyber-13", category: "cyber", difficulty: "medium", question: "Apakah yang dimaksud dengan serangan Ransomware?", answers: ["Malware yang mengenkripsi file korban dan menuntut pembayaran tebusan untuk kunci dekripsi", "Serangan yang membuat server web mati akibat dibanjiri trafik palsu", "Teknik mencuri informasi kartu kredit lewat form login palsu", "Penyusupan ke ruang server fisik untuk mencuri komputer"], correct: 0, hint: "Ransom berarti tebusan.", explanation: "Ransomware adalah jenis perangkat perusak (malware) berbahaya yang menyandera data komputer dengan enkripsi kuat, lalu memeras korban untuk membayar uang tebusan." },
-            { id: "cyber-14", category: "cyber", difficulty: "medium", question: "Apakah perbedaan utama antara enkripsi simetris (symmetric encryption) dan enkripsi asimetris (asymmetric encryption)?", answers: ["Enkripsi simetris menggunakan satu kunci untuk enkripsi dan dekripsi, sedangkan asimetris menggunakan sepasang kunci (kunci publik dan kunci privat)", "Enkripsi simetris hanya untuk teks pendek, asimetris untuk file besar", "Enkripsi simetris tidak aman, asimetris sangat aman", "Enkripsi simetris diproses oleh hardware, asimetris oleh software"], correct: 0, hint: "Jumlah kunci rahasia yang digunakan.", explanation: "Enkripsi simetris lebih cepat tetapi membutuhkan transfer kunci aman. Enkripsi asimetris menyelesaikan masalah distribusi kunci dengan menggunakan Public Key untuk enkripsi dan Private Key untuk dekripsi." },
-            { id: "cyber-15", category: "cyber", difficulty: "medium", question: "Apakah yang dimaksud dengan 'Social Engineering' dalam keamanan informasi?", answers: ["Teknik manipulasi psikologis untuk membohongi orang agar membocorkan informasi rahasia atau melakukan tindakan tertentu", "Pekerjaan membangun jaringan server yang ramah lingkungan", "Cara membuat postingan media sosial yang cepat viral", "Proses audit hubungan interpersonal di dalam kantor"], correct: 0, hint: "Meretas manusia, bukan meretas sistem komputer langsung.", explanation: "Social engineering menargetkan kerentanan manusia (seperti rasa percaya, takut, atau tergesa-gesa) untuk menipu mereka agar memberikan data login, OTP, atau uang." },
-            { id: "cyber-16", category: "cyber", difficulty: "hard", question: "Apakah yang dimaksud dengan serangan 'Man-in-the-Middle' (MitM)?", answers: ["Penyerang secara diam-diam mencegat dan mengubah komunikasi antara dua pihak yang percaya mereka terhubung langsung satu sama lain", "Serangan fisik dengan merusak kabel internet bawah laut", "Proses membagi tugas server backend secara adil", "Hacker yang menyamar menjadi staf IT internal perusahaan"], correct: 0, hint: "Pikirkan penyadap di antara pengirim dan penerima.", explanation: "Serangan MitM sering terjadi pada jaringan Wi-Fi publik yang tidak aman, di mana penyerang berada di tengah lalu lintas komunikasi untuk mencuri data sensitif seperti password atau data kartu kredit." },
-            { id: "cyber-17", category: "cyber", difficulty: "hard", question: "Manakah deskripsi terbaik untuk prinsip keamanan 'Zero Trust'?", answers: ["Jangan pernah percaya, selalu verifikasi; setiap permintaan akses harus diautentikasi, diotorisasi, dan dienkripsi sebelum diizinkan", "Sistem keamanan yang tidak membutuhkan password sama sekali", "Database yang tidak memiliki aturan hak akses user", "Kepercayaan penuh pada firewall perimeter untuk mengamankan jaringan internal"], correct: 0, hint: "Mengasumsikan jaringan internal sudah disusupi.", explanation: "Model Zero Trust meniadakan anggapan bahwa segala sesuatu di dalam jaringan internal aman. Ia mewajibkan verifikasi ketat untuk setiap perangkat dan pengguna, di mana pun lokasinya." },
-            { id: "cyber-18", category: "cyber", difficulty: "easy", question: "Di bawah ini, manakah yang merupakan contoh malware?", answers: ["Virus, Trojan, Worm, dan Spyware", "Windows Defender, Avast, dan Kaspersky", "Chrome, Firefox, dan Safari", "MySQL, MongoDB, dan Oracle"], correct: 0, hint: "Perangkat lunak berbahaya.", explanation: "Malware (malicious software) adalah istilah umum untuk program berbahaya yang dirancang untuk merusak, mengganggu, atau menyusup ke sistem komputer tanpa izin." },
-            { id: "cyber-19", category: "cyber", difficulty: "medium", question: "Apakah kegunaan utama dari Firewall dalam sistem jaringan?", answers: ["Memantau dan menyaring lalu lintas jaringan masuk dan keluar berdasarkan aturan keamanan yang ditentukan", "Menghapus virus dan malware yang sudah masuk ke harddisk", "Mempercepat transfer file antar komputer di kantor", "Mengubah IP address komputer menjadi IP address server otomatis"], correct: 0, hint: "Pikirkan pos penjaga gerbang masuk jaringan.", explanation: "Firewall bertindak sebagai penghalang antara jaringan internal tepercaya dan jaringan eksternal yang tidak tepercaya (seperti internet) untuk memblokir akses ilegal." },
-            { id: "cyber-20", category: "cyber", difficulty: "hard", question: "Apakah yang dimaksud dengan serangan SQL Injection (SQLi) dan bagaimana cara terbaik untuk mencegahnya?", answers: ["Penyisipan kode SQL berbahaya ke input form untuk memanipulasi query database; dicegah dengan Prepared Statements (Parameterized Queries)", "Memasukkan terlalu banyak data ke tabel database; dicegah dengan normalisasi tabel", "Serangan menghapus file backup database; dicegah dengan enkripsi harddisk", "Mengganti password database secara paksa; dicegah dengan two-factor authentication"], correct: 0, hint: "Memisahkan data dari instruksi SQL menggunakan parameterized query.", explanation: "SQLi terjadi saat input pengguna langsung digabungkan ke string SQL. Prepared Statements memisahkan kode SQL dari input data sehingga database memperlakukan input murni sebagai data, bukan perintah yang bisa dieksekusi." }
-        ];
+        const questionBank = window.questionBank || [];
 
         const labels = {
             all: "Semua Materi",
@@ -2086,7 +2880,8 @@
             initialTime: 0,
             timerId: null,
             running: false,
-            mode: "practice"
+            mode: "practice",
+            lastRenderedIndex: -1
         };
 
         const els = {
@@ -2145,7 +2940,9 @@
             retryBtn: document.getElementById("retryBtn"),
             reviewBtn: document.getElementById("reviewBtn"),
             reviewList: document.getElementById("reviewList"),
-            confettiLayer: document.getElementById("confettiLayer")
+            confettiLayer: document.getElementById("confettiLayer"),
+            modeDescription: document.getElementById("modeDescription"),
+            setupSummary: document.getElementById("setupSummary")
         };
 
         function shuffle(items) {
@@ -2213,6 +3010,64 @@
             return `${minutes}:${rest}`;
         }
 
+        function getModeUXCopy(mode) {
+            const config = {
+                practice: {
+                    description: "Practice memberi waktu longgar, hint, dan bantuan 50:50 untuk sesi belajar santai.",
+                    target: "Bangun streak dulu",
+                    note: "Cocok untuk pemanasan dan review konsep sebelum masuk ke mode intens."
+                },
+                exam: {
+                    description: "Exam Timer cocok untuk simulasi serius dengan ritme stabil dan tekanan waktu yang lebih realistis.",
+                    target: "Uji kesiapan",
+                    note: "Pas dipakai setelah kamu sudah konsisten benar di mode Practice."
+                },
+                sprint: {
+                    description: "Sprint menekan tempo agar kamu cepat mengambil keputusan tanpa terlalu lama berpikir.",
+                    target: "Latih refleks",
+                    note: "Bagus untuk melatih fokus singkat sebelum lanjut ke sesi belajar berikutnya."
+                },
+                review: {
+                    description: "Review Mode membuka kembali sesi terakhir supaya kamu bisa fokus ke pembahasan dan pola salah.",
+                    target: "Bedah kesalahan",
+                    note: "Gunakan setelah sesi selesai untuk mempercepat perbaikan di kategori terlemah."
+                }
+            };
+
+            return config[mode] || config.practice;
+        }
+
+        function updateSetupSummary() {
+            if (!els.setupSummary || !els.modeDescription) return;
+
+            const amount = Number(els.amount.value);
+            const mode = els.mode.value;
+            const modeCopy = getModeUXCopy(mode);
+            const estimatedMinutes = Math.max(1, Math.round(getTimeLimit() / 60));
+            const categoryLabel = labels[els.category.value];
+            const difficultyLabel = labels[els.difficulty.value];
+            const intensity = mode === "sprint" ? "cepat" : mode === "exam" ? "serius" : mode === "review" ? "reflektif" : "stabil";
+
+            els.modeDescription.textContent = modeCopy.description;
+            els.setupSummary.innerHTML = `
+                <article class="summary-chip">
+                    <span>Format</span>
+                    <strong>${labels[mode]} - ${amount} soal</strong>
+                    <small>${categoryLabel} dengan level ${difficultyLabel.toLowerCase()}.</small>
+                </article>
+                <article class="summary-chip">
+                    <span>Tempo</span>
+                    <strong>Sekitar ${estimatedMinutes} menit</strong>
+                    <small>Ritme ${intensity} dengan timer ${formatTime(getTimeLimit())}.</small>
+                </article>
+                <article class="summary-chip">
+                    <span>Target</span>
+                    <strong>${modeCopy.target}</strong>
+                    <small>${modeCopy.note}</small>
+                </article>
+            `;
+        }
+
         function pickQuestions() {
             const category = els.category.value;
             const difficulty = els.difficulty.value;
@@ -2238,6 +3093,7 @@
 
             state.activeQuestions = pickQuestions();
             state.current = 0;
+            state.lastRenderedIndex = -1;
             state.correct = 0;
             state.wrong = 0;
             state.streak = 0;
@@ -2292,24 +3148,23 @@
                 return;
             }
 
-            const payload = {
-                version: 1,
-                createdAt: new Date().toISOString(),
+            const payload = window.QuizNation.sessions.create({
                 config: {
                     category: els.category.value,
                     difficulty: els.difficulty.value,
                     amount: questions.length,
                     mode: els.mode.value,
-                    categoryLabel: labels[els.category.value],
-                    difficultyLabel: labels[els.difficulty.value],
-                    modeLabel: labels[els.mode.value]
+                    categoryLabel: els.category.selectedOptions[0]?.textContent || "Semua Materi",
+                    difficultyLabel: els.difficulty.selectedOptions[0]?.textContent || "Campuran",
+                    modeLabel: els.mode.selectedOptions[0]?.textContent || "Practice"
                 },
                 timeLimit: getTimeLimit(),
                 questions
-            };
+            });
 
             try {
-                sessionStorage.setItem("eduquestQuizSession", JSON.stringify(payload));
+                window.QuizNation.storage.write(sessionStorage, "eduquestQuizSession", payload);
+                window.QuizNation.storage.remove(sessionStorage, "eduquestQuizActiveState");
                 window.location.href = "quiz-session.html";
             } catch (error) {
                 console.error("Gagal menyiapkan sesi fullscreen:", error);
@@ -2368,10 +3223,7 @@
             state.timeLeft -= 1;
         }
 
-        function renderQuestion() {
-            const item = state.activeQuestions[state.current];
-            if (!item) return;
-
+        function updateQuestionDOM(item) {
             const savedAnswer = state.selected[state.current];
             state.answered = Boolean(savedAnswer);
             state.visited[state.current] = true;
@@ -2424,6 +3276,34 @@
             updateComboMeter();
             renderQuestionMap();
             renderStats();
+        }
+
+        let isQuestionTransitioning = false;
+        function renderQuestion() {
+            const item = state.activeQuestions[state.current];
+            if (!item) return;
+
+            // Trigger animation if transitioning to a different question index
+            if (state.lastRenderedIndex !== -1 && state.lastRenderedIndex !== state.current && els.questionCard && !isQuestionTransitioning) {
+                isQuestionTransitioning = true;
+                els.questionCard.classList.add("question-fade-out");
+                setTimeout(() => {
+                    updateQuestionDOM(item);
+                    state.lastRenderedIndex = state.current;
+                    els.questionCard.classList.remove("question-fade-out");
+                    els.questionCard.classList.add("question-fade-in");
+                    // force reflow
+                    els.questionCard.offsetHeight;
+                    requestAnimationFrame(() => {
+                        els.questionCard.classList.remove("question-fade-in");
+                        isQuestionTransitioning = false;
+                    });
+                }, 150);
+                return;
+            }
+
+            updateQuestionDOM(item);
+            state.lastRenderedIndex = state.current;
         }
 
         function chooseAnswer(index) {
@@ -2650,6 +3530,7 @@
                 // Sync with global RPG engine
                 loadRPG();
                 addXp(state.correct * 20);
+                checkDailyQuestsCompletion(score, state.bestStreak, els.difficulty.value);
             } catch (e) {
                 console.error("Gagal menyimpan integrasi stats:", e);
             }
@@ -2936,13 +3817,27 @@
             }
         }
 
-        els.startBtn.addEventListener("click", () => {
-            if (state.running && !window.confirm("Sesi masih berjalan. Mulai sesi baru dan tinggalkan progres saat ini?")) return;
+        els.startBtn.addEventListener("click", async () => {
+            if (state.running && typeof window.requestQuizConfirmation === "function") {
+                const accepted = await window.requestQuizConfirmation({
+                    title: "Mulai sesi baru?",
+                    message: "Sesi lama akan ditinggalkan dan diganti dengan konfigurasi yang baru.",
+                    acceptLabel: "Mulai Sesi"
+                });
+                if (!accepted) return;
+            }
             playSound('click');
             launchFullscreenQuiz();
         });
-        els.resetBtn.addEventListener("click", () => {
-            if (!window.confirm("Reset skor terbaik, sesi terakhir, dan soal tersimpan di Quick Quiz?")) return;
+        els.resetBtn.addEventListener("click", async () => {
+            const accepted = typeof window.requestQuizConfirmation === "function"
+                ? await window.requestQuizConfirmation({
+                    title: "Reset data Quick Quiz?",
+                    message: "Skor terbaik, sesi terakhir, dan soal tersimpan akan dihapus. Progres LMS tidak terpengaruh.",
+                    acceptLabel: "Reset Data"
+                })
+                : false;
+            if (!accepted) return;
             playSound('click');
             resetProgress();
         });
@@ -2972,7 +3867,7 @@
         });
         els.retryBtn.addEventListener("click", () => {
             playSound('click');
-            startQuiz();
+            launchFullscreenQuiz();
         });
         els.reviewBtn.addEventListener("click", () => {
             playSound('click');
@@ -3037,9 +3932,218 @@
         renderQuestionMap();
         window.questionBank = questionBank;
         updateSidebarVisibility();
+
+        // --- CUSTOM OPTION CARD SELECTORS ---
+        function initCustomOptionCards() {
+            document.querySelectorAll('.setup-fields .field').forEach(field => {
+                const selectId = field.getAttribute('data-target');
+                const selectEl = document.getElementById(selectId);
+                if (!selectEl) return;
+                
+                const cards = field.querySelectorAll('.custom-card');
+                
+                // Sync on load
+                const val = selectEl.value;
+                cards.forEach(card => {
+                    if (card.getAttribute('data-value') === val) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+
+                cards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        playSound('click');
+                        cards.forEach(c => c.classList.remove('active'));
+                        card.classList.add('active');
+                        selectEl.value = card.getAttribute('data-value');
+                        selectEl.dispatchEvent(new Event('change'));
+                        updateSetupSummary();
+                    });
+                });
+            });
+        }
+        initCustomOptionCards();
+
+        [els.category, els.difficulty, els.amount, els.mode].forEach((selectEl) => {
+            selectEl?.addEventListener("change", updateSetupSummary);
+        });
+        updateSetupSummary();
+
+        // --- RPG PROFILE CLICK TOGGLE ---
+        const statusBadge = document.getElementById("rpgStatusBadge");
+        const profilPanel = document.getElementById("rpgProfilPanel");
+        if (statusBadge && profilPanel) {
+            statusBadge.addEventListener("click", (e) => {
+                e.stopPropagation();
+                playSound('click');
+                profilPanel.classList.toggle("show");
+            });
+            
+            // Hide popover if clicking outside
+            document.addEventListener("click", (e) => {
+                if (!profilPanel.contains(e.target) && e.target !== statusBadge) {
+                    profilPanel.classList.remove("show");
+                }
+            });
+        }
+
+        // --- DISMISS LEVEL UP MODAL ---
+        const btnDismissLevelUp = document.getElementById("btnDismissLevelUp");
+        const levelUpModal = document.getElementById("levelUpModal");
+        const levelUpCard = document.getElementById("levelUpCard");
+        if (btnDismissLevelUp && levelUpModal && levelUpCard) {
+            btnDismissLevelUp.addEventListener("click", () => {
+                playSound('click');
+                levelUpCard.classList.remove("show");
+                setTimeout(() => {
+                    levelUpModal.style.display = "none";
+                }, 400);
+            });
+        }
+
+        // --- DAILY QUESTS SYSTEM ---
+        function getTodayString() {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        function loadDailyQuests() {
+            const today = getTodayString();
+            const storageKey = `eduquest_quests_${today}`;
+            let quests = null;
+            
+            try {
+                quests = JSON.parse(localStorage.getItem(storageKey));
+            } catch(e) {}
+            
+            if (!quests) {
+                quests = {
+                    quickDrill: { completed: false },
+                    comboMaster: { completed: false },
+                    hardChallenge: { completed: false }
+                };
+                
+                // Clean up older keys
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('eduquest_quests_') && key !== storageKey) {
+                        localStorage.removeItem(key);
+                        i--; // adjust index after removal
+                    }
+                }
+                
+                localStorage.setItem(storageKey, JSON.stringify(quests));
+            }
+            
+            return quests;
+        }
+        
+        function saveDailyQuests(quests) {
+            const today = getTodayString();
+            const storageKey = `eduquest_quests_${today}`;
+            localStorage.setItem(storageKey, JSON.stringify(quests));
+        }
+        
+        function updateQuestsUI() {
+            const quests = loadDailyQuests();
+            
+            const qItems = {
+                quickDrill: document.getElementById('quest-quick-drill'),
+                comboMaster: document.getElementById('quest-combo-master'),
+                hardChallenge: document.getElementById('quest-hard-challenge')
+            };
+            
+            Object.keys(qItems).forEach(key => {
+                const el = qItems[key];
+                if (!el) return;
+                
+                if (quests[key].completed) {
+                    el.classList.add('completed');
+                } else {
+                    el.classList.remove('completed');
+                }
+            });
+        }
+        
+        function checkDailyQuestsCompletion(score, bestStreak, difficulty) {
+            const quests = loadDailyQuests();
+            let updated = false;
+            let earnedXp = 0;
+            const messages = [];
+    
+            // 1. Quick Drill: score >= 80%
+            if (!quests.quickDrill.completed && score >= 80) {
+                quests.quickDrill.completed = true;
+                earnedXp += 50;
+                messages.push("Misi Harian 'Quick Drill' selesai! (+50 XP)");
+                updated = true;
+            }
+    
+            // 2. Combo Master: streak >= 5
+            if (!quests.comboMaster.completed && bestStreak >= 5) {
+                quests.comboMaster.completed = true;
+                earnedXp += 80;
+                messages.push("Misi Harian 'Combo Master' selesai! (+80 XP)");
+                updated = true;
+            }
+    
+            // 3. Hard Challenge: difficulty === 'hard' && score >= 70
+            if (!quests.hardChallenge.completed && difficulty === 'hard' && score >= 70) {
+                quests.hardChallenge.completed = true;
+                earnedXp += 100;
+                messages.push("Misi Harian 'Hard Challenge' selesai! (+100 XP)");
+                updated = true;
+            }
+    
+            if (updated) {
+                saveDailyQuests(quests);
+                updateQuestsUI();
+                
+                if (earnedXp > 0) {
+                    // Award XP and show visual cue!
+                    addXp(earnedXp);
+                    launchConfetti(25);
+                    
+                    messages.forEach((msg, idx) => {
+                        setTimeout(() => {
+                            if (typeof window.showQuizToast === "function") {
+                                window.showQuizToast(msg, "success");
+                            }
+                        }, idx * 1500);
+                    });
+                }
+            }
+        }
+
+        // Initialize quests UI
+        updateQuestsUI();
     </script>
+    <script src="auth-helper.js"></script>
     <script src="lms-quiz.js"></script>
     <script src="quiz-modern.js"></script>
+    <script src="pro-experience.js"></script>
+
+    <!-- Level Up Modal overlay -->
+    <div id="levelUpModal" style="display: none; position: fixed; inset: 0; z-index: 10001; background: rgba(11, 21, 35, 0.85); backdrop-filter: blur(8px); place-items: center; padding: 20px;">
+        <div class="reveal-card" id="levelUpCard" style="width: min(100%, 420px); background: linear-gradient(180deg, #172a42 0%, #0d1726 100%); border: 2px solid var(--green); border-radius: 36px; padding: 36px; text-align: center; color: white; box-shadow: 0 0 40px rgba(50, 214, 107, 0.4); transform: scale(0.9); opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div style="font-size: 72px; margin-bottom: 16px; animation: bounce 1s infinite alternate;">🏆</div>
+            <h2 style="font-size: 32px; font-weight: 950; letter-spacing: -0.05em; background: linear-gradient(90deg, #32d66b, #4f8cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;">LEVEL UP!</h2>
+            <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 24px; font-weight: 600;">Kamu baru saja naik ke level koding berikutnya, mantap coy!</p>
+            <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 18px; margin-bottom: 28px;">
+                <span style="font-size: 12px; color: var(--green); font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em;">Title Baru</span>
+                <h3 id="levelUpNewTitle" style="font-size: 24px; font-weight: 900; margin-top: 4px; color: white;">Syntax Squire</h3>
+                <span style="font-size: 14px; color: var(--muted); font-weight: 700; display: block; margin-top: 8px;" id="levelUpLevelText">Level 2 Coder</span>
+            </div>
+            <button class="btn btn-primary" id="btnDismissLevelUp" style="width: 100%; font-weight: 900;">Lanjutkan Petualangan 🚀</button>
+        </div>
+    </div>
+    <script src="bubub-ai.js"></script>
 </body>
 
 </html>
+
