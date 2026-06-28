@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="security-helper.js"></script>
+    <script src="js/security-helper.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#0d1b2c">
@@ -11,12 +11,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="quiz-modern.css">
-    <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
+    <link rel="stylesheet" href="css/nav-polish.css">
+    <link rel="stylesheet" href="css/quiz-modern.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/coursera-home.css">
 </head>
 
 <body>
@@ -26,26 +27,134 @@
     <div class="quiz-toast" id="quizToast" role="status" aria-live="polite" aria-atomic="true"></div>
 
     <main class="page" id="loginMainContent">
-        <nav class="navbar" aria-label="Navigasi utama">
-            <a href="index.html" class="brand">
-                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo">
-                Universe Of Tech
-            </a>
+                        <nav class="navbar">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand">
+                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    Universe Of Tech
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
+                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="explore-mega-menu" id="exploreMegaMenu">
+                        <!-- Column 1: Kategori Belajar -->
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="materi-basic.html" class="mega-item-link">
+                                        <div class="mega-icon-box">💻</div>
+                                        <span>Dasar Pemrograman</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🧠</div>
+                                        <span>Struktur Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🌐</div>
+                                        <span>Web Development</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="snbt.html" class="mega-item-link">
+                                        <div class="mega-icon-box">📈</div>
+                                        <span>Persiapan UTBK SNBT</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tka-lms.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏛</div>
+                                        <span>LMS TKA</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="bahasa-daerah.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <span>Wonderful Indonesia</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 2: Fitur & Dashboard -->
+                        <div class="mega-col">
+                            <h4>Fitur & Dashboard</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="learning-path.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🗺</div>
+                                        <span>Roadmap Belajar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="leaderboard.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏆</div>
+                                        <span>Leaderboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="achievements.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏅</div>
+                                        <span>Pencapaian</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="profile.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👤</div>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="payment.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👑</div>
+                                        <span>Upgrade Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 3: Spotlight -->
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header">
+                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
+                                </div>
+                                <h5>Dasar SQL & Database Relasional</h5>
+                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
+                                <a href="materi.html" class="btn-spotlight">
+                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Suggestions Popover -->
+                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
+            </div>
 
             <div class="nav-links">
                 <a href="index.html">Beranda</a>
                 <a href="materi.html">Materi</a>
                 <a href="quiz.html">Quiz</a>
-                <a href="snbt.html">TKA</a>
-                <a href="tka-lms.html">LMS TKA</a>
                 <a href="library.html">Library</a>
-                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
             </div>
 
             <div class="nav-actions">
-                <button class="sound-toggle-btn" id="soundToggleBtn" type="button" aria-label="Nonaktifkan suara" aria-pressed="true" title="Suara">🔊</button>
-                <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Aktifkan tema gelap" aria-pressed="false" title="Tema tampilan">🌙</button>
-                <a class="btn btn-ghost active" href="login.html">Masuk</a>
+                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <a class="btn btn-ghost" href="login.html">Masuk</a>
                 <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
         </nav>
@@ -91,7 +200,7 @@
             <div class="login-card" id="loginCard">
                 <div class="login-card-top">
                     <a class="login-mobile-brand" href="index.html">
-                        <img src="logo.png" alt="" aria-hidden="true">
+                        <img src="assets/logo.png" alt="" aria-hidden="true">
                         <span>Universe Of Tech</span>
                     </a>
                     <span class="secure-session"><i class="fa-solid fa-shield-halved"></i> Sesi aman</span>
@@ -223,12 +332,13 @@
         <footer class="login-footer">&copy; 2026 Universe Of Tech. Hak Cipta Dilindungi.</footer>
     </main>
 
-    <script src="app-data.js"></script>
-    <script src="sound-engine.js"></script>
-    <script src="rpg-engine.js"></script>
-    <script src="auth-helper.js"></script>
-    <script src="login.js"></script>
-    <script src="bubub-ai.js"></script>
+    <script src="js/app-data.js"></script>
+    <script src="js/sound-engine.js"></script>
+    <script src="js/rpg-engine.js"></script>
+    <script src="js/auth-helper.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/bubub-ai.js"></script>
+    <script src="js/coursera-home.js"></script>
 </body>
 </html>
 

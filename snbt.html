@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -10,13 +10,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="feature-pages.css">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="tka-info.css">
-    <link rel="stylesheet" href="pro-experience.css">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
+    <link rel="stylesheet" href="css/feature-pages.css">
+    <link rel="stylesheet" href="css/nav-polish.css">
+    <link rel="stylesheet" href="css/tka-info.css">
+    <link rel="stylesheet" href="css/pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/coursera-home.css">
 </head>
 
 <body data-page="snbt">
@@ -26,569 +27,1110 @@
 
     <main class="page">
         <!-- Navbar -->
-        <nav class="navbar">
-            <a href="index.html" class="brand">
-                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
-                Universe Of Tech
-            </a>
+                                                <nav class="navbar">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand">
+                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    Universe Of Tech
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
+                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="explore-mega-menu" id="exploreMegaMenu">
+                        <!-- Column 1: Kategori Belajar -->
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="materi-basic.html" class="mega-item-link">
+                                        <div class="mega-icon-box">💻</div>
+                                        <span>Dasar Pemrograman</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🧠</div>
+                                        <span>Struktur Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🌐</div>
+                                        <span>Web Development</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="snbt.html" class="mega-item-link">
+                                        <div class="mega-icon-box">📈</div>
+                                        <span>Persiapan UTBK SNBT</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tka-lms.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏛</div>
+                                        <span>LMS TKA</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="bahasa-daerah.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <span>Wonderful Indonesia</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 2: Fitur & Dashboard -->
+                        <div class="mega-col">
+                            <h4>Fitur & Dashboard</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="learning-path.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🗺</div>
+                                        <span>Roadmap Belajar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="leaderboard.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏆</div>
+                                        <span>Leaderboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="achievements.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏅</div>
+                                        <span>Pencapaian</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="profile.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👤</div>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="payment.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👑</div>
+                                        <span>Upgrade Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 3: Spotlight -->
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header">
+                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
+                                </div>
+                                <h5>Dasar SQL & Database Relasional</h5>
+                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
+                                <a href="materi.html" class="btn-spotlight">
+                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Suggestions Popover -->
+                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
+            </div>
+
             <div class="nav-links">
                 <a href="index.html">Beranda</a>
                 <a href="materi.html">Materi</a>
                 <a href="quiz.html">Quiz</a>
-                <a href="snbt.html" class="active">TKA</a>
-                <a href="tka-lms.html">LMS TKA</a>
                 <a href="library.html">Library</a>
-                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
             </div>
+
             <div class="nav-actions">
+                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
                 <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
                 <a class="btn btn-ghost" href="login.html">Masuk</a>
-                <a class="btn btn-primary" href="tka-lms.html">LMS TKA</a>
+                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
         </nav>
 
-        <!-- Hero Section -->
-        <section class="hero">
-            <div>
-                <div class="badge">Mode TKA SMA/SMK 2026</div>
-                <h1>Portal Informasi & Latihan <span class="gradient-text">Tes Kemampuan Akademik</span> (TKA).</h1>
-                <p>Temukan informasi detail seputar subtes TKA Saintek & Soshum, kisi-kisi silabus resmi, simulasi penilaian IRT, rencana belajar personal, serta mini tryout interaktif.</p>
-                <div class="hero-actions">
-                    <a class="btn btn-primary" href="#tka-info-hub">Jelajahi Info TKA</a>
-                    <a class="btn btn-blue" href="#tryout">Latihan Cepat</a>
+        <!-- Hero & HUD Layout Grid -->
+        <div class="hero-layout-grid">
+            <!-- Hero Section -->
+            <section class="hero" style="width: 100%; margin: 0;">
+                <div>
+                    <div class="badge">Mode TKA SMA/SMK 2026</div>
+                    <h1>Portal Informasi & Latihan <span class="gradient-text">Tes Kemampuan Akademik</span> (TKA).</h1>
+                    <p>Temukan informasi detail seputar subtes TKA Saintek & Soshum, kisi-kisi silabus resmi, simulasi penilaian IRT, rencana belajar personal, serta mini tryout interaktif.</p>
+                    <div class="hero-actions">
+                        <a class="btn btn-primary" href="#tka-info-hub" id="exploreTkaBtn">Jelajahi Info TKA</a>
+                        <a class="btn btn-blue" href="#tryout" id="practiceTkaBtn">Latihan Cepat</a>
+                    </div>
+                </div>
+                <aside class="hero-panel" style="width: 100%; max-width: 100%; box-sizing: border-box;">
+                    <div class="panel-top">
+                        <div>
+                            <div class="section-kicker">Dashboard</div>
+                            <h2 class="panel-title">Kesiapan TKA kamu</h2>
+                        </div>
+                        <div class="progress-ring" id="snbtRing"><span id="snbtRingText">0%</span></div>
+                    </div>
+                    <div class="metric-grid">
+                        <div class="metric-card"><strong id="snbtDone">0</strong><span>Soal dikerjakan</span></div>
+                        <div class="metric-card"><strong id="snbtAccuracy">0%</strong><span>Akurasi</span></div>
+                        <div class="metric-card"><strong id="snbtLevel">Fondasi</strong><span>Level kesiapan</span></div>
+                    </div>
+                </aside>
+            </section>
+
+            <!-- Pomodoro Timer Widget -->
+            <div class="pomodoro-widget" id="tkaPomodoroWidget">
+                <div class="section-kicker">Study Session</div>
+                <h3 style="font-size: 18px; font-weight: 900; margin: 0 0 6px 0;">Fokus Pomodoro</h3>
+                <p class="muted" style="font-size: 12.5px; margin: 0;">Latih ketahanan fokus belajar TKA Anda.</p>
+                <div class="pomodoro-timer-display">
+                    <svg class="pomodoro-svg" viewBox="0 0 140 140">
+                        <circle class="pomodoro-circle-bg" cx="70" cy="70" r="64"></circle>
+                        <circle class="pomodoro-circle-fill" id="pomodoroCircleFill" cx="70" cy="70" r="64" stroke-dasharray="402" stroke-dashoffset="0"></circle>
+                    </svg>
+                    <span class="pomodoro-time-text" id="pomodoroTime">25:00</span>
+                    <span class="pomodoro-status-text" id="pomodoroStatus">FOKUS</span>
+                </div>
+                <div class="pomodoro-controls">
+                    <button class="pomodoro-btn start-pause" id="pomodoroStartBtn"><i class="fa-solid fa-play"></i> Mulai</button>
+                    <button class="pomodoro-btn reset" id="pomodoroResetBtn"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
                 </div>
             </div>
-            <aside class="hero-panel">
-                <div class="panel-top">
+        </div>
+
+        <!-- Main Dashboard Navigation Tabs -->
+        <div class="tka-main-tabs-nav" role="tablist" aria-label="Menu Dashboard TKA">
+            <button class="tka-main-tab-btn active" data-tab="tab-syllabus" role="tab" aria-selected="true" aria-controls="panel-syllabus">
+                <i class="fa-solid fa-graduation-cap"></i> Panduan & Silabus
+            </button>
+            <button class="tka-main-tab-btn" data-tab="tab-planner" role="tab" aria-selected="false" aria-controls="panel-planner">
+                <i class="fa-solid fa-calendar-days"></i> Planner & Jurnal Belajar
+            </button>
+            <button class="tka-main-tab-btn" data-tab="tab-practice" role="tab" aria-selected="false" aria-controls="panel-practice">
+                <i class="fa-solid fa-flask"></i> Arena Latihan & IRT
+            </button>
+        </div>
+
+        <!-- ==========================================
+             TAB 1: PANDUAN & SILABUS PANEL
+             ========================================== -->
+        <div class="tka-main-tab-panel" id="panel-syllabus">
+            <!-- Section: TKA Info Hub -->
+            <section class="section" id="tka-info-hub">
+                <div class="section-header">
                     <div>
-                        <div class="section-kicker">Dashboard</div>
-                        <h2 class="panel-title">Kesiapan TKA kamu</h2>
+                        <div class="section-kicker">TKA Dashboard Info</div>
+                        <h2>Pusat Panduan & Teknis TKA</h2>
                     </div>
-                    <div class="progress-ring" id="snbtRing"><span id="snbtRingText">0%</span></div>
-                </div>
-                <div class="metric-grid">
-                    <div class="metric-card"><strong id="snbtDone">0</strong><span>Soal dikerjakan</span></div>
-                    <div class="metric-card"><strong id="snbtAccuracy">0%</strong><span>Akurasi</span></div>
-                    <div class="metric-card"><strong id="snbtLevel">Fondasi</strong><span>Level kesiapan</span></div>
-                </div>
-            </aside>
-        </section>
-
-        <!-- Section: TKA Info Hub -->
-        <section class="section" id="tka-info-hub">
-            <div class="section-header">
-                <div>
-                    <div class="section-kicker">TKA Dashboard Info</div>
-                    <h2>Pusat Panduan & Teknis TKA</h2>
-                </div>
-                <p>Pelajari format, pembobotan, dan strategi menghadapi Tes Kemampuan Akademik (TKA) untuk seleksi Mandiri PTN.</p>
-            </div>
-            
-            <div class="tka-info-container">
-                <div class="tka-tabs-header">
-                    <button class="tka-tab-btn active" data-target="tka-overview">
-                        <i class="fa-solid fa-circle-info"></i> Apa itu TKA?
-                    </button>
-                    <button class="tka-tab-btn" data-target="tka-categories">
-                        <i class="fa-solid fa-graduation-cap"></i> Kelompok Ujian
-                    </button>
-                    <button class="tka-tab-btn" data-target="tka-scoring">
-                        <i class="fa-solid fa-chart-line"></i> Penilaian IRT
-                    </button>
-                    <button class="tka-tab-btn" data-target="tka-strategy">
-                        <i class="fa-solid fa-list-check"></i> Strategi Belajar
-                    </button>
+                    <p>Pelajari format, pembobotan, dan strategi menghadapi Tes Kemampuan Akademik (TKA) untuk seleksi Mandiri PTN.</p>
                 </div>
                 
-                <!-- Tab 1: Overview -->
-                <div class="tka-tab-content" id="tka-overview">
-                    <h3>Mengenal Tes Kemampuan Akademik (TKA)</h3>
-                    <p>Tes Kemampuan Akademik (TKA) adalah ujian terstandar yang dirancang untuk mengukur tingkat pemahaman konsep materi (Content Knowledge) siswa terhadap mata pelajaran sekolah yang bersifat esensial dan kognitif tingkat tinggi (HOTS - Higher Order Thinking Skills).</p>
+                <div class="tka-info-container">
+                    <div class="tka-tabs-header">
+                        <button class="tka-tab-btn active" data-target="tka-overview">
+                            <i class="fa-solid fa-circle-info"></i> Apa itu TKA?
+                        </button>
+                        <button class="tka-tab-btn" data-target="tka-categories">
+                            <i class="fa-solid fa-graduation-cap"></i> Kelompok Ujian
+                        </button>
+                        <button class="tka-tab-btn" data-target="tka-scoring">
+                            <i class="fa-solid fa-chart-line"></i> Penilaian IRT
+                        </button>
+                        <button class="tka-tab-btn" data-target="tka-strategy">
+                            <i class="fa-solid fa-list-check"></i> Strategi Belajar
+                        </button>
+                    </div>
                     
-                    <div class="tka-info-grid">
-                        <div class="tka-info-card">
-                            <div class="tka-info-card-header">
-                                <div class="tka-info-card-icon">📚</div>
-                                <h4>Mengapa Masih Diperlukan?</h4>
+                    <!-- Tab 1: Overview -->
+                    <div class="tka-tab-content" id="tka-overview">
+                        <h3>Mengenal Tes Kemampuan Akademik (TKA)</h3>
+                        <p>Tes Kemampuan Akademik (TKA) adalah ujian terstandar yang dirancang untuk mengukur tingkat pemahaman konsep materi (Content Knowledge) siswa terhadap mata pelajaran sekolah yang bersifat esensial dan kognitif tingkat tinggi (HOTS - Higher Order Thinking Skills).</p>
+                        
+                        <div class="tka-info-grid">
+                            <div class="tka-info-card">
+                                <div class="tka-info-card-header">
+                                    <div class="tka-info-card-icon">📚</div>
+                                    <h4>Mengapa Masih Diperlukan?</h4>
+                                </div>
+                                <p>Meskipun jalur UTBK-SNBT nasional kini berfokus pada TPS (Tes Potensi Skolastik) dan Literasi, sebagian besar <strong>Ujian Mandiri PTN Terbaik</strong> (seperti SIMAK UI, UTUL UGM, UM UNDIP, Ujian Mandiri UNAIR) masih mewajibkan TKA sebagai syarat kelulusan utama untuk menguji kesiapan akademik spesifik program studi.</p>
                             </div>
-                            <p>Meskipun jalur UTBK-SNBT nasional kini berfokus pada TPS (Tes Potensi Skolastik) dan Literasi, sebagian besar <strong>Ujian Mandiri PTN Terbaik</strong> (seperti SIMAK UI, UTUL UGM, UM UNDIP, Ujian Mandiri UNAIR) masih mewajibkan TKA sebagai syarat kelulusan utama untuk menguji kesiapan akademik spesifik program studi.</p>
-                        </div>
-                        <div class="tka-info-card">
-                            <div class="tka-info-card-header">
-                                <div class="tka-info-card-icon">⚖️</div>
-                                <h4>Perbedaan TKA vs TPS</h4>
+                            <div class="tka-info-card">
+                                <div class="tka-info-card-header">
+                                    <div class="tka-info-card-icon">⚖️</div>
+                                    <h4>Perbedaan TKA vs TPS</h4>
+                                </div>
+                                <p><strong>TPS</strong> mengukur kemampuan logika umum, penalaran induktif-deduktif, kuantitatif dasar, dan bahasa secara umum tanpa memandang jurusan sekolah. Sedangkan <strong>TKA</strong> menuntut penguasaan mendalam materi kurikulum sekolah seperti Fisika, Sosiologi, Kimia, atau Ekonomi secara analitis dan terapan.</p>
                             </div>
-                            <p><strong>TPS</strong> mengukur kemampuan logika umum, penalaran induktif-deduktif, kuantitatif dasar, dan bahasa secara umum tanpa memandang jurusan sekolah. Sedangkan <strong>TKA</strong> menuntut penguasaan mendalam materi kurikulum sekolah seperti Fisika, Sosiologi, Kimia, atau Ekonomi secara analitis dan terapan.</p>
                         </div>
                     </div>
+                    
+                    <!-- Tab 2: Categories -->
+                    <div class="tka-tab-content hidden" id="tka-categories" style="display: none;">
+                        <h3>Kelompok Ujian & Mata Pelajaran TKA</h3>
+                        <p>Materi TKA dibagi menjadi dua rumpun besar yang disesuaikan dengan jenis program studi perguruan tinggi yang ditargetkan.</p>
+                        
+                        <div class="tka-info-grid">
+                            <div class="tka-info-card">
+                                <div class="tka-info-card-header" style="border-bottom: 2px solid var(--blue); padding-bottom: 8px;">
+                                    <div class="tka-info-card-icon" style="background: linear-gradient(135deg, var(--blue), var(--green));">🔬</div>
+                                    <h4>1. TKA Saintek (Sains & Teknologi)</h4>
+                                </div>
+                                <p style="margin-top: 10px; margin-bottom: 8px;">Dikhususkan untuk pendaftar rumpun Teknik, Kedokteran, MIPA, Pertanian, dan Kesehatan.</p>
+                                <ul style="padding-left: 18px; font-size: 13.5px; color: var(--muted); line-height: 1.6;">
+                                    <li><strong>Matematika IPA</strong>: Menekankan pada aljabar, kalkulus, trigonometri analitis, dan dimensi tiga.</li>
+                                    <li><strong>Fisika</strong>: Fokus pada mekanika, kelistrikan, termodinamika, dan fisika modern.</li>
+                                    <li><strong>Kimia</strong>: Stoikiometri, larutan asam-basa, kesetimbangan, dan kimia organik dasar.</li>
+                                    <li><strong>Biologi</strong>: Sel molekuler, genetika, homeostasis manusia, ekologi, dan evolusi.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="tka-info-card">
+                                <div class="tka-info-card-header" style="border-bottom: 2px solid var(--purple); padding-bottom: 8px;">
+                                    <div class="tka-info-card-icon" style="background: linear-gradient(135deg, var(--purple), var(--orange));">⚖️</div>
+                                    <h4>2. TKA Soshum (Sosial & Humaniora)</h4>
+                                </div>
+                                <p style="margin-top: 10px; margin-bottom: 8px;">Dikhususkan untuk pendaftar Ekonomi, Hukum, Ilmu Sosial & Politik, Sastra, dan Psikologi.</p>
+                                <ul style="padding-left: 18px; font-size: 13.5px; color: var(--muted); line-height: 1.6;">
+                                    <li><strong>Sejarah</strong>: Sejarah nasional dari masa Hindu-Buddha hingga Reformasi, serta sejarah dunia.</li>
+                                    <li><strong>Geografi</strong>: Konsep geografi fisik (litosfer, atmosfer, hidrosfer) dan SIG/Penginderaan Jauh.</li>
+                                    <li><strong>Sosiologi</strong>: Interaksi sosial, stratifikasi, penyimpangan, konflik sosial, dan metode riset.</li>
+                                    <li><strong>Ekonomi</strong>: Mekanisme pasar, pendapatan nasional, fiskal-moneter, dan akuntansi dasar.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab 3: Scoring -->
+                    <div class="tka-tab-content hidden" id="tka-scoring" style="display: none;">
+                        <h3>Sistem Penilaian IRT (Item Response Theory)</h3>
+                        <p>Ujian TKA menggunakan metode penilaian modern berbasis <strong>IRT</strong> (sama dengan UTBK), di mana bobot setiap soal tidaklah sama melainkan dinilai berdasarkan tingkat kesulitan soal yang dijawab benar oleh peserta lain.</p>
+                        
+                        <div class="irt-flow">
+                            <div class="irt-step">
+                                <div class="irt-step-num">01</div>
+                                <div class="irt-step-content">
+                                    <h5>Penilaian Jawaban Mentah</h5>
+                                    <p>Setiap jawaban benar diberi nilai +1, salah diberi nilai 0 (tidak ada nilai minus). Seluruh data jawaban dikumpulkan.</p>
+                                </div>
+                            </div>
+                            <div class="irt-step">
+                                <div class="irt-step-num">02</div>
+                                <div class="irt-step-content">
+                                    <h5>Analisis Tingkat Kesulitan Soal</h5>
+                                    <p>Sistem membandingkan tingkat kesulitan soal. Soal yang dijawab benar oleh sedikit peserta diklasifikasikan sebagai <strong>soal sulit</strong>, sedangkan soal yang dijawab benar oleh banyak peserta dikategorikan <strong>soal mudah</strong>.</p>
+                                </div>
+                            </div>
+                            <div class="irt-step">
+                                <div class="irt-step-num">03</div>
+                                <div class="irt-step-content">
+                                    <h5>Pembobotan Nilai Akhir</h5>
+                                    <p>Menjawab benar soal yang tergolong "sulit" akan memberikan bobot nilai jauh lebih tinggi dibandingkan jika Anda menjawab benar soal yang berkategori "mudah". Skor akhir disesuaikan dengan kurva terstandardisasi (kisaran 300 - 900).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab 4: Strategy -->
+                    <div class="tka-tab-content hidden" id="tka-strategy" style="display: none;">
+                        <h3>Panduan Strategi Belajar Sukses TKA</h3>
+                        <p>Mengingat luasnya cakupan mata pelajaran TKA, strategi belajar yang taktis dan terjadwal mutlak diperlukan agar skor Anda kompetitif.</p>
+                        
+                        <div class="tka-info-grid">
+                            <div class="tka-info-card">
+                                <div class="tka-info-card-header">
+                                    <div class="tka-info-card-icon">⚡</div>
+                                    <h4>Kuasai Konsep Utama (Core Concept)</h4>
+                                </div>
+                                <p>Soal TKA bertipe HOTS tidak bisa dijawab hanya dengan menghafal rumus praktis. Anda harus memahami asal-usul rumus atau konsep dasar sosial agar bisa menerapkannya pada variasi soal cerita yang rumit.</p>
+                            </div>
+                            <div class="tka-info-card">
+                                <div class="tka-info-card-header">
+                                    <div class="tka-info-card-icon">🎯</div>
+                                    <h4>Strategi "Isi Semua Soal"</h4>
+                                </div>
+                                <p>Karena IRT tidak memberlakukan sanksi nilai minus untuk kesalahan, buat target pengerjaan dan pastikan tidak ada nomor soal yang dikosongkan. Jika kehabisan waktu, buat tebakan logis (eliminasi opsi yang pasti salah terlebih dahulu).</p>
+                            </div>
+                            <div class="tka-info-card">
+                                <div class="tka-info-card-header">
+                                    <div class="tka-info-card-icon">🔄</div>
+                                    <h4>Review Kesalahan Terjadwal</h4>
+                                </div>
+                                <p>Belajar dari kesalahan jauh lebih berharga daripada sekadar mengerjakan ratusan soal tanpa dievaluasi. Buatlah buku/catatan khusus yang berisi kesalahan pengerjaan latihan Anda, lalu uji kembali diri Anda 48 jam kemudian.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Syllabus Explorer -->
+            <section class="section" id="tka-syllabus">
+                <div class="section-header">
+                    <div>
+                        <div class="section-kicker">Kisi-kisi Silabus</div>
+                        <h2>Eksplorasi Materi Pokok TKA</h2>
+                    </div>
+                    <p>Pilih kategori rumpun, lalu klik pada mata pelajaran untuk melihat materi utama serta checklist penguasaan konsep Anda.</p>
                 </div>
                 
-                <!-- Tab 2: Categories -->
-                <div class="tka-tab-content hidden" id="tka-categories" style="display: none;">
-                    <h3>Kelompok Ujian & Mata Pelajaran TKA</h3>
-                    <p>Materi TKA dibagi menjadi dua rumpun besar yang disesuaikan dengan jenis program studi perguruan tinggi yang ditargetkan.</p>
-                    
-                    <div class="tka-info-grid">
-                        <div class="tka-info-card">
-                            <div class="tka-info-card-header" style="border-bottom: 2px solid var(--blue); padding-bottom: 8px;">
-                                <div class="tka-info-card-icon" style="background: linear-gradient(135deg, var(--blue), var(--green));">🔬</div>
-                                <h4>1. TKA Saintek (Sains & Teknologi)</h4>
+                <div class="tka-syllabus-container" style="grid-template-columns: 1fr;">
+                    <!-- Sub-tabs for Saintek vs Soshum -->
+                    <div class="syllabus-tabs-header">
+                        <button class="syllabus-tab-btn active" data-subject-tab="saintek-list"><i class="fa-solid fa-microscope"></i> Rumpun Saintek</button>
+                        <button class="syllabus-tab-btn" data-subject-tab="soshum-list"><i class="fa-solid fa-scale-balanced"></i> Rumpun Soshum</button>
+                    </div>
+
+                    <!-- Rumpun Saintek list -->
+                    <div class="syllabus-sub-column" id="saintek-list">
+                        <div class="tka-accordion">
+                            <!-- Matematika IPA -->
+                            <div class="tka-accordion-item">
+                                <button class="tka-accordion-header">
+                                    <div class="tka-accordion-title-wrap">
+                                        <span class="tka-subject-icon">📐</span>
+                                        <span>Matematika IPA</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
+                                </button>
+                                <div class="tka-accordion-body">
+                                    <div class="tka-accordion-inner">
+                                        <div class="subject-progress-container">
+                                            <div class="subject-progress-meta">
+                                                <span>Topik Dikuasai</span>
+                                                <span class="subject-progress-pct" id="pct-matematika-ipa">0%</span>
+                                            </div>
+                                            <div class="subject-progress-bar-track">
+                                                <div class="subject-progress-bar-fill" id="fill-matematika-ipa"></div>
+                                            </div>
+                                        </div>
+                                        <ul class="tka-syllabus-list">
+                                            <li data-concept="polinomial">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="matematika-ipa" data-index="0" aria-label="Selesai belajar Polinomial & Suku Banyak">
+                                                    <span>Polinomial & Suku Banyak</span>
+                                                </div>
+                                                <span class="mini-tag">Aljabar</span>
+                                            </li>
+                                            <li data-concept="kalkulus">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="matematika-ipa" data-index="1" aria-label="Selesai belajar Limit, Turunan & Integral">
+                                                    <span>Limit, Turunan & Integral</span>
+                                                </div>
+                                                <span class="mini-tag hots">HOTS</span>
+                                            </li>
+                                            <li data-concept="trigonometri">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="matematika-ipa" data-index="2" aria-label="Selesai belajar Trigonometri Analitis">
+                                                    <span>Trigonometri Analitis</span>
+                                                </div>
+                                                <span class="mini-tag">Esensial</span>
+                                            </li>
+                                            <li data-concept="vektor">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="matematika-ipa" data-index="3" aria-label="Selesai belajar Vektor & Dimensi Tiga">
+                                                    <span>Vektor & Dimensi Tiga</span>
+                                                </div>
+                                                <span class="mini-tag">Geometri</span>
+                                            </li>
+                                            <li data-concept="kuadrat">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="matematika-ipa" data-index="4" aria-label="Selesai belajar Fungsi Kuadrat & Matriks">
+                                                    <span>Fungsi Kuadrat & Matriks</span>
+                                                </div>
+                                                <span class="mini-tag">Dasar</span>
+                                            </li>
+                                        </ul>
+                                        <div class="tka-topic-focus">
+                                            <strong>Fokus HOTS:</strong> Penerapan kalkulus (turunan/integral) untuk mencari laju perubahan ekstrim dan luas/volume benda putar dalam aplikasi teknik.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <p style="margin-top: 10px; margin-bottom: 8px;">Dikhususkan untuk pendaftar rumpun Teknik, Kedokteran, MIPA, Pertanian, dan Kesehatan.</p>
-                            <ul style="padding-left: 18px; font-size: 13.5px; color: var(--muted); line-height: 1.6;">
-                                <li><strong>Matematika IPA</strong>: Menekankan pada aljabar, kalkulus, trigonometri analitis, dan dimensi tiga.</li>
-                                <li><strong>Fisika</strong>: Fokus pada mekanika, kelistrikan, termodinamika, dan fisika modern.</li>
-                                <li><strong>Kimia</strong>: Stoikiometri, larutan asam-basa, kesetimbangan, dan kimia organik dasar.</li>
-                                <li><strong>Biologi</strong>: Sel molekuler, genetika, homeostasis manusia, ekologi, dan evolusi.</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="tka-info-card">
-                            <div class="tka-info-card-header" style="border-bottom: 2px solid var(--purple); padding-bottom: 8px;">
-                                <div class="tka-info-card-icon" style="background: linear-gradient(135deg, var(--purple), var(--orange));">⚖️</div>
-                                <h4>2. TKA Soshum (Sosial & Humaniora)</h4>
+                            
+                            <!-- Fisika -->
+                            <div class="tka-accordion-item">
+                                <button class="tka-accordion-header">
+                                    <div class="tka-accordion-title-wrap">
+                                        <span class="tka-subject-icon">⚡</span>
+                                        <span>Fisika</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
+                                </button>
+                                <div class="tka-accordion-body">
+                                    <div class="tka-accordion-inner">
+                                        <div class="subject-progress-container">
+                                            <div class="subject-progress-meta">
+                                                <span>Topik Dikuasai</span>
+                                                <span class="subject-progress-pct" id="pct-fisika">0%</span>
+                                            </div>
+                                            <div class="subject-progress-bar-track">
+                                                <div class="subject-progress-bar-fill" id="fill-fisika"></div>
+                                            </div>
+                                        </div>
+                                        <ul class="tka-syllabus-list">
+                                            <li data-concept="kinematika">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="fisika" data-index="0" aria-label="Selesai belajar Kinematika & Dinamika Partikel">
+                                                    <span>Kinematika & Dinamika Partikel</span>
+                                                </div>
+                                                <span class="mini-tag">Mekanika</span>
+                                            </li>
+                                            <li data-concept="termodinamika">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="fisika" data-index="1" aria-label="Selesai belajar Termodinamika & Gas Ideal">
+                                                    <span>Termodinamika & Gas Ideal</span>
+                                                </div>
+                                                <span class="mini-tag">Termal</span>
+                                            </li>
+                                            <li data-concept="gelombang">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="fisika" data-index="2" aria-label="Selesai belajar Gelombang Bunyi & Optik">
+                                                    <span>Gelombang Bunyi & Optik</span>
+                                                </div>
+                                                <span class="mini-tag">Gelombang</span>
+                                            </li>
+                                            <li data-concept="listrik">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="fisika" data-index="3" aria-label="Selesai belajar Listrik Statis, Dinamis & Magnet">
+                                                    <span>Listrik Statis, Dinamis & Magnet</span>
+                                                </div>
+                                                <span class="mini-tag hots">HOTS</span>
+                                            </li>
+                                            <li data-concept="modern">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="fisika" data-index="4" aria-label="Selesai belajar Fisika Modern & Radioaktivitas">
+                                                    <span>Fisika Modern & Radioaktivitas</span>
+                                                </div>
+                                                <span class="mini-tag">Modern</span>
+                                            </li>
+                                        </ul>
+                                        <div class="tka-topic-focus">
+                                            <strong>Fokus HOTS:</strong> Analisis hukum kekekalan energi mekanik pada lintasan melingkar serta penerapan hukum Kirchhoff pada rangkaian bercabang majemuk.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <p style="margin-top: 10px; margin-bottom: 8px;">Dikhususkan untuk pendaftar Ekonomi, Hukum, Ilmu Sosial & Politik, Sastra, dan Psikologi.</p>
-                            <ul style="padding-left: 18px; font-size: 13.5px; color: var(--muted); line-height: 1.6;">
-                                <li><strong>Sejarah</strong>: Sejarah nasional dari masa Hindu-Buddha hingga Reformasi, serta sejarah dunia.</li>
-                                <li><strong>Geografi</strong>: Konsep geografi fisik (litosfer, atmosfer, hidrosfer) dan SIG/Penginderaan Jauh.</li>
-                                <li><strong>Sosiologi</strong>: Interaksi sosial, stratifikasi, penyimpangan, konflik sosial, dan metode riset.</li>
-                                <li><strong>Ekonomi</strong>: Mekanisme pasar, pendapatan nasional, fiskal-moneter, dan akuntansi dasar.</li>
-                            </ul>
+                            
+                            <!-- Kimia -->
+                            <div class="tka-accordion-item">
+                                <button class="tka-accordion-header">
+                                    <div class="tka-accordion-title-wrap">
+                                        <span class="tka-subject-icon">🧪</span>
+                                        <span>Kimia</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
+                                </button>
+                                <div class="tka-accordion-body">
+                                    <div class="tka-accordion-inner">
+                                        <div class="subject-progress-container">
+                                            <div class="subject-progress-meta">
+                                                <span>Topik Dikuasai</span>
+                                                <span class="subject-progress-pct" id="pct-kimia">0%</span>
+                                            </div>
+                                            <div class="subject-progress-bar-track">
+                                                <div class="subject-progress-bar-fill" id="fill-kimia"></div>
+                                            </div>
+                                        </div>
+                                        <ul class="tka-syllabus-list">
+                                            <li data-concept="stoikiometri">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="kimia" data-index="0" aria-label="Selesai belajar Stoikiometri & Rumus Empiris">
+                                                    <span>Stoikiometri & Rumus Empiris</span>
+                                                </div>
+                                                <span class="mini-tag">Perhitungan</span>
+                                            </li>
+                                            <li data-concept="ikatan">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="kimia" data-index="1" aria-label="Selesai belajar Ikatan Kimia & Gaya Antarmolekul">
+                                                    <span>Ikatan Kimia & Gaya Antarmolekul</span>
+                                                </div>
+                                                <span class="mini-tag">Struktur</span>
+                                            </li>
+                                            <li data-concept="kesetimbangan">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="kimia" data-index="2" aria-label="Selesai belajar Kesetimbangan & Laju Reaksi">
+                                                    <span>Kesetimbangan & Laju Reaksi</span>
+                                                </div>
+                                                <span class="mini-tag">Kinetika</span>
+                                            </li>
+                                            <li data-concept="asam-basa">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="kimia" data-index="3" aria-label="Selesai belajar Larutan Asam Basa, Buffer & pH">
+                                                    <span>Larutan Asam Basa, Buffer & pH</span>
+                                                </div>
+                                                <span class="mini-tag hots">HOTS</span>
+                                            </li>
+                                            <li data-concept="organik">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="kimia" data-index="4" aria-label="Selesai belajar Kimia Organik & Benzena">
+                                                    <span>Kimia Organik & Benzena</span>
+                                                </div>
+                                                <span class="mini-tag">Karbon</span>
+                                            </li>
+                                        </ul>
+                                        <div class="tka-topic-focus">
+                                            <strong>Fokus HOTS:</strong> Perhitungan pH larutan penyangga (buffer) saat ditambahkan sedikit asam/basa kuat, serta sifat koligatif larutan elektrolit.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Biologi -->
+                            <div class="tka-accordion-item">
+                                <button class="tka-accordion-header">
+                                    <div class="tka-accordion-title-wrap">
+                                        <span class="tka-subject-icon">🧬</span>
+                                        <span>Biologi</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
+                                </button>
+                                <div class="tka-accordion-body">
+                                    <div class="tka-accordion-inner">
+                                        <div class="subject-progress-container">
+                                            <div class="subject-progress-meta">
+                                                <span>Topik Dikuasai</span>
+                                                <span class="subject-progress-pct" id="pct-biologi">0%</span>
+                                            </div>
+                                            <div class="subject-progress-bar-track">
+                                                <div class="subject-progress-bar-fill" id="fill-biologi"></div>
+                                            </div>
+                                        </div>
+                                        <ul class="tka-syllabus-list">
+                                            <li data-concept="sel">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="biologi" data-index="0" aria-label="Selesai belajar Biologi Sel & Organel">
+                                                    <span>Biologi Sel & Organel</span>
+                                                </div>
+                                                <span class="mini-tag">Mikro</span>
+                                            </li>
+                                            <li data-concept="metabolisme">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="biologi" data-index="1" aria-label="Selesai belajar Katabolisme & Anabolisme Sel">
+                                                    <span>Katabolisme & Anabolisme Sel</span>
+                                                </div>
+                                                <span class="mini-tag">Biokimia</span>
+                                            </li>
+                                            <li data-concept="genetika">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="biologi" data-index="2" aria-label="Selesai belajar Genetika & Sintesis Protein">
+                                                    <span>Genetika & Sintesis Protein</span>
+                                                </div>
+                                                <span class="mini-tag hots">HOTS</span>
+                                            </li>
+                                            <li data-concept="anatomi">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="biologi" data-index="3" aria-label="Selesai belajar Anatomi & Fisiologi Manusia">
+                                                    <span>Anatomi & Fisiologi Manusia</span>
+                                                </div>
+                                                <span class="mini-tag">Fisiologi</span>
+                                            </li>
+                                            <li data-concept="evolusi">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="biologi" data-index="4" aria-label="Selesai belajar Ekologi, Lingkungan & Evolusi">
+                                                    <span>Ekologi, Lingkungan & Evolusi</span>
+                                                </div>
+                                                <span class="mini-tag">Sistem</span>
+                                            </li>
+                                        </ul>
+                                        <div class="tka-topic-focus">
+                                            <strong>Fokus HOTS:</strong> Analisis hereditas persilangan dihibrid/penyimpangan semu hukum Mendel serta mekanisme transpor zat pada membran sel.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Rumpun Soshum list -->
+                    <div class="syllabus-sub-column hidden" id="soshum-list" style="display: none;">
+                        <div class="tka-accordion">
+                            <!-- Sejarah -->
+                            <div class="tka-accordion-item">
+                                <button class="tka-accordion-header">
+                                    <div class="tka-accordion-title-wrap">
+                                        <span class="tka-subject-icon">📜</span>
+                                        <span>Sejarah</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
+                                </button>
+                                <div class="tka-accordion-body">
+                                    <div class="tka-accordion-inner">
+                                        <div class="subject-progress-container">
+                                            <div class="subject-progress-meta">
+                                                <span>Topik Dikuasai</span>
+                                                <span class="subject-progress-pct" id="pct-sejarah">0%</span>
+                                            </div>
+                                            <div class="subject-progress-bar-track">
+                                                <div class="subject-progress-bar-fill" id="fill-sejarah"></div>
+                                            </div>
+                                        </div>
+                                        <ul class="tka-syllabus-list">
+                                            <li data-concept="kerajaan">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sejarah" data-index="0" aria-label="Selesai belajar Kerajaan Hindu-Buddha & Islam">
+                                                    <span>Kerajaan Hindu-Buddha & Islam</span>
+                                                </div>
+                                                <span class="mini-tag">Kuno</span>
+                                            </li>
+                                            <li data-concept="kolonial">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sejarah" data-index="1" aria-label="Selesai belajar Kolonialisme & Pergerakan Nasional">
+                                                    <span>Kolonialisme & Pergerakan Nasional</span>
+                                                </div>
+                                                <span class="mini-tag">Kolonial</span>
+                                            </li>
+                                            <li data-concept="orde">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sejarah" data-index="2" aria-label="Selesai belajar Orde Lama, Orde Baru & Reformasi">
+                                                    <span>Orde Lama, Orde Baru & Reformasi</span>
+                                                </div>
+                                                <span class="mini-tag">Nasional</span>
+                                            </li>
+                                            <li data-concept="perang">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sejarah" data-index="3" aria-label="Selesai belajar Perang Dunia I & II serta Blok Dunia">
+                                                    <span>Perang Dunia I & II serta Blok Dunia</span>
+                                                </div>
+                                                <span class="mini-tag hots">HOTS</span>
+                                            </li>
+                                            <li data-concept="organisasi">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sejarah" data-index="4" aria-label="Selesai belajar Organisasi Regional & Internasional">
+                                                    <span>Organisasi Regional & Internasional</span>
+                                                </div>
+                                                <span class="mini-tag">Dunia</span>
+                                            </li>
+                                        </ul>
+                                        <div class="tka-topic-focus">
+                                            <strong>Fokus HOTS:</strong> Korelasi antara krisis ekonomi global Depresi Besar (1929) dengan runtuhnya pemerintah kolonial Hindia Belanda di Indonesia.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Geografi -->
+                            <div class="tka-accordion-item">
+                                <button class="tka-accordion-header">
+                                    <div class="tka-accordion-title-wrap">
+                                        <span class="tka-subject-icon">🌍</span>
+                                        <span>Geografi</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
+                                </button>
+                                <div class="tka-accordion-body">
+                                    <div class="tka-accordion-inner">
+                                        <div class="subject-progress-container">
+                                            <div class="subject-progress-meta">
+                                                <span>Topik Dikuasai</span>
+                                                <span class="subject-progress-pct" id="pct-geografi">0%</span>
+                                            </div>
+                                            <div class="subject-progress-bar-track">
+                                                <div class="subject-progress-bar-fill" id="fill-geografi"></div>
+                                            </div>
+                                        </div>
+                                        <ul class="tka-syllabus-list">
+                                            <li data-concept="litosfer">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="geografi" data-index="0" aria-label="Selesai belajar Litosfer, Atmosfer & Hidrosfer">
+                                                    <span>Litosfer, Atmosfer & Hidrosfer</span>
+                                                </div>
+                                                <span class="mini-tag">Fisik</span>
+                                            </li>
+                                            <li data-concept="kartografi">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="geografi" data-index="1" aria-label="Selesai belajar Kartografi & Interpretasi Peta">
+                                                    <span>Kartografi & Interpretasi Peta</span>
+                                                </div>
+                                                <span class="mini-tag">Pemetaan</span>
+                                            </li>
+                                            <li data-concept="sig">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="geografi" data-index="2" aria-label="Selesai belajar Penginderaan Jauh & Sistem Informasi Geografis (SIG)">
+                                                    <span>Penginderaan Jauh & Sistem Informasi Geografis (SIG)</span>
+                                                </div>
+                                                <span class="mini-tag hots">HOTS</span>
+                                            </li>
+                                            <li data-concept="keruangan">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="geografi" data-index="3" aria-label="Selesai belajar Pola Keruangan Desa & Kota">
+                                                    <span>Pola Keruangan Desa & Kota</span>
+                                                </div>
+                                                <span class="mini-tag">Keruangan</span>
+                                            </li>
+                                            <li data-concept="bencana">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="geografi" data-index="4" aria-label="Selesai belajar Mitigasi Bencana & Geografi Regional">
+                                                    <span>Mitigasi Bencana & Geografi Regional</span>
+                                                </div>
+                                                <span class="mini-tag">Bencana</span>
+                                            </li>
+                                        </ul>
+                                        <div class="tka-topic-focus">
+                                            <strong>Fokus HOTS:</strong> Menganalisis tingkat bahaya erosi dan sedimentasi di wilayah Daerah Aliran Sungai (DAS) menggunakan pemetaan berlapis (SIG).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Sosiologi -->
+                            <div class="tka-accordion-item">
+                                <button class="tka-accordion-header">
+                                    <div class="tka-accordion-title-wrap">
+                                        <span class="tka-subject-icon">👥</span>
+                                        <span>Sosiologi</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
+                                </button>
+                                <div class="tka-accordion-body">
+                                    <div class="tka-accordion-inner">
+                                        <div class="subject-progress-container">
+                                            <div class="subject-progress-meta">
+                                                <span>Topik Dikuasai</span>
+                                                <span class="subject-progress-pct" id="pct-sosiologi">0%</span>
+                                            </div>
+                                            <div class="subject-progress-bar-track">
+                                                <div class="subject-progress-bar-fill" id="fill-sosiologi"></div>
+                                            </div>
+                                        </div>
+                                        <ul class="tka-syllabus-list">
+                                            <li data-concept="interaksi">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sosiologi" data-index="0" aria-label="Selesai belajar Interaksi Sosial & Nilai-Norma">
+                                                    <span>Interaksi Sosial & Nilai-Norma</span>
+                                                </div>
+                                                <span class="mini-tag">Sosial</span>
+                                            </li>
+                                            <li data-concept="sosialisasi">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sosiologi" data-index="1" aria-label="Selesai belajar Sosialisasi & Penyimpangan Sosial">
+                                                    <span>Sosialisasi & Penyimpangan Sosial</span>
+                                                </div>
+                                                <span class="mini-tag">Perilaku</span>
+                                            </li>
+                                            <li data-concept="struktur">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sosiologi" data-index="2" aria-label="Selesai belajar Struktur, Stratifikasi & Mobilitas">
+                                                    <span>Struktur, Stratifikasi & Mobilitas</span>
+                                                </div>
+                                                <span class="mini-tag">Struktur</span>
+                                            </li>
+                                            <li data-concept="konflik">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sosiologi" data-index="3" aria-label="Selesai belajar Konflik, Kekerasan & Integrasi">
+                                                    <span>Konflik, Kekerasan & Integrasi</span>
+                                                </div>
+                                                <span class="mini-tag hots">HOTS</span>
+                                            </li>
+                                            <li data-concept="riset">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="sosiologi" data-index="4" aria-label="Selesai belajar Metode Penelitian Sosial Kualitatif/Kuantitatif">
+                                                    <span>Metode Penelitian Sosial Kualitatif/Kuantitatif</span>
+                                                </div>
+                                                <span class="mini-tag">Metodologi</span>
+                                            </li>
+                                        </ul>
+                                        <div class="tka-topic-focus">
+                                            <strong>Fokus HOTS:</strong> Menganalisis konflik agraria menggunakan teori dialektika kelas Karl Marx serta validitas instrumen penelitian lapangan.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Ekonomi -->
+                            <div class="tka-accordion-item">
+                                <button class="tka-accordion-header">
+                                    <div class="tka-accordion-title-wrap">
+                                        <span class="tka-subject-icon">📈</span>
+                                        <span>Ekonomi</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
+                                </button>
+                                <div class="tka-accordion-body">
+                                    <div class="tka-accordion-inner">
+                                        <div class="subject-progress-container">
+                                            <div class="subject-progress-meta">
+                                                <span>Topik Dikuasai</span>
+                                                <span class="subject-progress-pct" id="pct-ekonomi">0%</span>
+                                            </div>
+                                            <div class="subject-progress-bar-track">
+                                                <div class="subject-progress-bar-fill" id="fill-ekonomi"></div>
+                                            </div>
+                                        </div>
+                                        <ul class="tka-syllabus-list">
+                                            <li data-concept="pasar">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="ekonomi" data-index="0" aria-label="Selesai belajar Mekanisme Pasar (Ekuilibirium)">
+                                                    <span>Mekanisme Pasar (Ekuilibirium)</span>
+                                                </div>
+                                                <span class="mini-tag">Mikro</span>
+                                            </li>
+                                            <li data-concept="perilaku">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="ekonomi" data-index="1" aria-label="Selesai belajar Perilaku Produsen & Konsumen">
+                                                    <span>Perilaku Produsen & Konsumen</span>
+                                                </div>
+                                                <span class="mini-tag">Produsen</span>
+                                            </li>
+                                            <li data-concept="nasional">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="ekonomi" data-index="2" aria-label="Selesai belajar Pendapatan Nasional & Inflasi">
+                                                    <span>Pendapatan Nasional & Inflasi</span>
+                                                </div>
+                                                <span class="mini-tag">Makro</span>
+                                            </li>
+                                            <li data-concept="fiskal">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="ekonomi" data-index="3" aria-label="Selesai belajar Kebijakan Fiskal, Moneter & Perbankan">
+                                                    <span>Kebijakan Fiskal, Moneter & Perbankan</span>
+                                                </div>
+                                                <span class="mini-tag hots">HOTS</span>
+                                            </li>
+                                            <li data-concept="akuntansi">
+                                                <div class="syllabus-text-group">
+                                                    <input type="checkbox" class="syllabus-checkbox" data-subject="ekonomi" data-index="4" aria-label="Selesai belajar Siklus Akuntansi Jasa & Dagang">
+                                                    <span>Siklus Akuntansi Jasa & Dagang</span>
+                                                </div>
+                                                <span class="mini-tag">Akuntansi</span>
+                                            </li>
+                                        </ul>
+                                        <div class="tka-topic-focus">
+                                            <strong>Fokus HOTS:</strong> Perhitungan elastisitas permintaan dan penawaran serta pencatatan jurnal penyesuaian akuntansi dagang (HPP & ikhtisar L/R).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Diagnosis & Checklist -->
+            <section class="section workspace">
+                <div class="result-panel">
+                    <div class="section-kicker">Diagnosis</div>
+                    <h2>Rekomendasi sesi berikutnya</h2>
+                    <div class="diagnostic-card" id="tkaDiagnostic"></div>
+                </div>
+                <div class="result-panel">
+                    <div class="section-kicker">Checklist</div>
+                    <h2>Siap simulasi penuh</h2>
+                    <div class="tka-checklist">
+                        <label><input type="checkbox" data-tka-check="wajib"> 3 mapel wajib sudah latihan minimal 2 set</label>
+                        <label><input type="checkbox" data-tka-check="pilihan"> 2 mapel pilihan sudah dipilih sesuai target prodi</label>
+                        <label><input type="checkbox" data-tka-check="waktu"> Sudah mencoba latihan dengan batas waktu</label>
+                        <label><input type="checkbox" data-tka-check="review"> Punya catatan salah dan konsep yang harus diulang</label>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==========================================
+             TAB 2: PLANNER & ROADMAP PANEL
+             ========================================== -->
+        <div class="tka-main-tab-panel hidden" id="panel-planner" style="display: none;">
+            <!-- Section: Planner -->
+            <section class="section workspace" id="planner" style="margin-top: 0;">
+                <div class="toolbox">
+                    <div class="section-kicker">Planner</div>
+                    <h2>Susun rencana TKA.</h2>
+                    <div class="field">
+                        <label for="targetScore">Target skor</label>
+                        <input id="targetScore" type="number" min="400" max="850" value="680">
+                    </div>
+                    <div class="field">
+                        <label for="studyWeeks">Sisa waktu belajar</label>
+                        <input id="studyWeeks" type="number" min="2" max="24" value="6">
+                    </div>
+                    <div class="field">
+                        <label for="targetPtn">Target Universitas (PTN)</label>
+                        <input id="targetPtn" type="text" placeholder="Contoh: Universitas Indonesia" value="Universitas Indonesia">
+                    </div>
+                    <div class="field">
+                        <label for="targetProdi">Target Program Studi (Prodi)</label>
+                        <input id="targetProdi" type="text" placeholder="Contoh: Teknik Informatika" value="Teknik Informatika">
+                    </div>
+                    <div class="field">
+                        <label for="focusArea">Fokus terlemah</label>
+                        <select id="focusArea">
+                            <option>Matematika wajib</option>
+                            <option>Bahasa Indonesia</option>
+                            <option>Bahasa Inggris</option>
+                            <option>Mapel pilihan 1</option>
+                            <option>Mapel pilihan 2</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="firstElective">Mapel pilihan 1</label>
+                        <select id="firstElective">
+                            <option>Fisika</option>
+                            <option>Kimia</option>
+                            <option>Biologi</option>
+                            <option>Ekonomi</option>
+                            <option>Sosiologi</option>
+                            <option>Geografi</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="secondElective">Mapel pilihan 2</label>
+                        <select id="secondElective">
+                            <option>Kimia</option>
+                            <option>Fisika</option>
+                            <option>Biologi</option>
+                            <option>Ekonomi</option>
+                            <option>Sosiologi</option>
+                            <option>Geografi</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" id="buildTKAPlan" style="width: 100%;">Perbarui Rencana</button>
+                    <button class="btn btn-ghost" id="printTkaPlanBtn" style="width: 100%; margin-top: 8px; border-color: var(--border);"><i class="fa-solid fa-print"></i> Simpan / Cetak PDF</button>
+                </div>
+                <div class="result-panel">
+                    <div class="section-kicker">Roadmap</div>
+                    <h2>Jalur mingguan</h2>
+                    <div class="plan-list" id="snbtPlanList"></div>
+                    
+                    <!-- Calendar schedule section -->
+                    <div class="planner-schedule-card">
+                        <div class="section-kicker">Jadwal Harian</div>
+                        <h3 style="font-size: 16px; font-weight: 800; margin: 0 0 4px 0;">Kalender Studi Mingguan</h3>
+                        <p class="muted" style="font-size: 12px; margin: 0 0 12px 0;">Klik hari belajar untuk mengatur pembagian mata pelajaran.</p>
+                        <div class="planner-schedule-grid" id="studyScheduleGrid">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==========================================
+             TAB 3: ARENA LATIHAN & IRT PANEL
+             ========================================== -->
+        <div class="tka-main-tab-panel hidden" id="panel-practice" style="display: none;">
+            <!-- Section: Tryout -->
+            <section class="section" id="tryout" style="margin-top: 0;">
+                <div class="section-header">
+                    <div>
+                        <div class="section-kicker">Simulasi Mini</div>
+                        <h2>Bank soal TKA interaktif.</h2>
+                    </div>
+                    <div class="chips">
+                        <button class="tool-chip active" data-snbt-subject="indonesia">B. Indonesia</button>
+                        <button class="tool-chip" data-snbt-subject="matematika">Matematika</button>
+                        <button class="tool-chip" data-snbt-subject="inggris">B. Inggris</button>
+                        <button class="tool-chip" data-snbt-subject="pilihan">Mapel Pilihan</button>
+                    </div>
+                </div>
+                <div class="quiz-box">
+                    <div class="tryout-timer-row">
+                        <div class="tryout-timer-badge" id="tryoutTimerBadge"><i class="fa-solid fa-clock"></i> 90s</div>
+                        <button class="bookmark-toggle-btn" id="bookmarkQuestionBtn" title="Bookmark Soal"><i class="fa-regular fa-bookmark"></i></button>
+                    </div>
+                    <div class="quiz-meta" id="snbtQuestionMeta"></div>
+                    <h3 id="snbtQuestion">Pertanyaan akan muncul di sini.</h3>
+                    <div class="answer-grid" id="snbtAnswers"></div>
+                    <div class="mistakes-diary-box" id="mistakesDiaryBox" style="display: none;">
+                        <label for="mistakesDiaryNotes">Buku Catatan Salah / Evaluasi</label>
+                        <textarea class="mistakes-diary-textarea" id="mistakesDiaryNotes" placeholder="Tulis catatan di sini..."></textarea>
+                        <button class="mistakes-save-btn" id="saveMistakeNoteBtn">Simpan Catatan</button>
+                    </div>
+                    <div class="tryout-btn-row">
+                        <p class="muted" id="snbtFeedback" style="margin: 0; max-width: 70%;">Pilih jawaban untuk melihat pembahasan singkat.</p>
+                        <button class="btn btn-blue" id="nextTKAQuestion" type="button">Soal Berikutnya</button>
+                    </div>
+                </div>
+
+                <!-- Bookmarked Questions Panel -->
+                <div class="bookmarks-panel" id="tkaBookmarksPanel" style="display: none;">
+                    <div class="section-kicker">Review Khusus</div>
+                    <h3 style="font-size: 16px; font-weight: 800; margin: 0 0 4px 0;"><i class="fa-solid fa-bookmark" style="color: var(--orange);"></i> Soal yang Ditandai</h3>
+                    <p class="muted" style="font-size: 12.5px; margin-bottom: 12px;">Pelajari kembali soal-soal tersulit yang Anda simpan sebelumnya.</p>
+                    <div class="bookmarks-list" id="tkaBookmarksList"></div>
+                </div>
+
+                <!-- Accuracy statistics visual bar chart representation -->
+                <div class="accuracy-chart-container" id="tkaAccuracyChartContainer">
+                    <div class="section-kicker">Visual Analitik</div>
+                    <h3 style="font-size: 16px; font-weight: 800; margin: 0 0 4px 0;">Performa Akurasi Per Sub-tes</h3>
+                    <p class="muted" style="font-size: 12.5px; margin: 0;">Rangkuman grafik jawaban benar Anda berdasarkan sub-tes.</p>
+                    <div class="accuracy-chart-bars" id="tkaAccuracyChartBars">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: IRT Simulator -->
+            <section class="section" id="tka-irt-simulator">
+                <div class="section-header">
+                    <div>
+                        <div class="section-kicker">Alat Simulasi</div>
+                        <h2>Simulator Perhitungan Skor IRT</h2>
+                    </div>
+                    <p>Gunakan simulator ini untuk mengestimasi kisaran nilai akhir TKA Anda berdasarkan jumlah jawaban benar dan bobot kesulitan soal.</p>
                 </div>
                 
-                <!-- Tab 3: Scoring -->
-                <div class="tka-tab-content hidden" id="tka-scoring" style="display: none;">
-                    <h3>Sistem Penilaian IRT (Item Response Theory)</h3>
-                    <p>Ujian TKA menggunakan metode penilaian modern berbasis <strong>IRT</strong> (sama dengan UTBK), di mana bobot setiap soal tidaklah sama melainkan dinilai berdasarkan tingkat kesulitan soal yang dijawab benar oleh peserta lain.</p>
-                    
-                    <div class="irt-flow">
-                        <div class="irt-step">
-                            <div class="irt-step-num">01</div>
-                            <div class="irt-step-content">
-                                <h5>Penilaian Jawaban Mentah</h5>
-                                <p>Setiap jawaban benar diberi nilai +1, salah diberi nilai 0 (tidak ada nilai minus). Seluruh data jawaban dikumpulkan.</p>
+                <div class="result-panel">
+                    <div class="irt-simulator-card">
+                        <div class="irt-simulator-inputs">
+                            <div class="irt-sim-slider-container">
+                                <label style="font-weight: 800; font-size: 14px; color: var(--muted);">Jumlah Jawaban Benar (Dari 20 Soal)</label>
+                                <div class="irt-sim-slider-wrap">
+                                    <input type="range" min="0" max="20" value="10" class="irt-sim-slider" id="irtCorrectRange">
+                                    <span class="irt-sim-slider-value" id="irtCorrectVal">10</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="irt-step">
-                            <div class="irt-step-num">02</div>
-                            <div class="irt-step-content">
-                                <h5>Analisis Tingkat Kesulitan Soal</h5>
-                                <p>Sistem membandingkan tingkat kesulitan soal. Soal yang dijawab benar oleh sedikit peserta diklasifikasikan sebagai <strong>soal sulit</strong>, sedangkan soal yang dijawab benar oleh banyak peserta dikategorikan <strong>soal mudah</strong>.</p>
+                            
+                            <div class="field" style="margin-top: 10px;">
+                                <label for="irtPtnCluster">Kluster PTN Target</label>
+                                <select id="irtPtnCluster" style="width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-bg); color: var(--dark); font-family: inherit; font-weight: bold; cursor: pointer;">
+                                    <option value="1">Kluster 1: Top Tier (UI, UGM, ITB, UNAIR, ITS, UNS, UNDIP)</option>
+                                    <option value="2" selected>Kluster 2: Mid-High (UB, UNPAD, UNNES, UNSYIAH, Udayana)</option>
+                                    <option value="3">Kluster 3: Mid / Regional PTN</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="irt-step">
-                            <div class="irt-step-num">03</div>
-                            <div class="irt-step-content">
-                                <h5>Pembobotan Nilai Akhir</h5>
-                                <p>Menjawab benar soal yang tergolong "sulit" akan memberikan bobot nilai jauh lebih tinggi dibandingkan jika Anda menjawab benar soal yang berkategori "mudah". Skor akhir disesuaikan dengan kurva terstandardisasi (kisaran 300 - 900).</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Tab 4: Strategy -->
-                <div class="tka-tab-content hidden" id="tka-strategy" style="display: none;">
-                    <h3>Panduan Strategi Belajar Sukses TKA</h3>
-                    <p>Mengingat luasnya cakupan mata pelajaran TKA, strategi belajar yang taktis dan terjadwal mutlak diperlukan agar skor Anda kompetitif.</p>
-                    
-                    <div class="tka-info-grid">
-                        <div class="tka-info-card">
-                            <div class="tka-info-card-header">
-                                <div class="tka-info-card-icon">⚡</div>
-                                <h4>Kuasai Konsep Utama (Core Concept)</h4>
-                            </div>
-                            <p>Soal TKA bertipe HOTS tidak bisa dijawab hanya dengan menghafal rumus praktis. Anda harus memahami asal-usul rumus atau konsep dasar sosial agar bisa menerapkannya pada variasi soal cerita yang rumit.</p>
-                        </div>
-                        <div class="tka-info-card">
-                            <div class="tka-info-card-header">
-                                <div class="tka-info-card-icon">🎯</div>
-                                <h4>Strategi "Isi Semua Soal"</h4>
-                            </div>
-                            <p>Karena IRT tidak memberlakukan sanksi nilai minus untuk kesalahan, buat target pengerjaan dan pastikan tidak ada nomor soal yang dikosongkan. Jika kehabisan waktu, buat tebakan logis (eliminasi opsi yang pasti salah terlebih dahulu).</p>
-                        </div>
-                        <div class="tka-info-card">
-                            <div class="tka-info-card-header">
-                                <div class="tka-info-card-icon">🔄</div>
-                                <h4>Review Kesalahan Terjadwal</h4>
-                            </div>
-                            <p>Belajar dari kesalahan jauh lebih berharga daripada sekadar mengerjakan ratusan soal tanpa dievaluasi. Buatlah buku/catatan khusus yang berisi kesalahan pengerjaan latihan Anda, lalu uji kembali diri Anda 48 jam kemudian.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Section: Syllabus Explorer -->
-        <section class="section" id="tka-syllabus">
-            <div class="section-header">
-                <div>
-                    <div class="section-kicker">Kisi-kisi Silabus</div>
-                    <h2>Eksplorasi Materi Pokok TKA</h2>
-                </div>
-                <p>Klik pada mata pelajaran untuk melihat materi utama yang paling sering diujikan dalam TKA Saintek & Soshum.</p>
-            </div>
-            
-            <div class="tka-syllabus-container">
-                <!-- Rumpun Saintek -->
-                <div class="tka-syllabus-column saintek">
-                    <h3>🔬 Saintek <span>MIPA & Teknik</span></h3>
-                    
-                    <div class="tka-accordion">
-                        <!-- Matematika IPA -->
-                        <div class="tka-accordion-item">
-                            <button class="tka-accordion-header">
-                                <div class="tka-accordion-title-wrap">
-                                    <span class="tka-subject-icon">📐</span>
-                                    <span>Matematika IPA</span>
-                                </div>
-                                <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
-                            </button>
-                            <div class="tka-accordion-body">
-                                <div class="tka-accordion-inner">
-                                    <ul class="tka-syllabus-list">
-                                        <li>Polinomial & Suku Banyak</li>
-                                        <li>Limit, Turunan & Integral</li>
-                                        <li>Trigonometri Analitis</li>
-                                        <li>Vektor & Dimensi Tiga</li>
-                                        <li>Fungsi Kuadrat & Matriks</li>
-                                    </ul>
-                                    <div class="tka-topic-focus">
-                                        <strong>Fokus HOTS:</strong> Penerapan kalkulus (turunan/integral) untuk mencari laju perubahan ekstrim dan luas/volume benda putar dalam aplikasi teknik.
-                                    </div>
+                            <div class="field" style="margin-top: 10px;">
+                                <label>Profil Kesulitan Soal Benar</label>
+                                <p style="font-size: 12.5px; color: var(--muted); margin-top: -4px; margin-bottom: 12px;">Soal yang Anda jawab benar didominasi oleh kelompok mana?</p>
+                                <div class="irt-sim-option-grid">
+                                    <button type="button" class="irt-sim-option-btn" data-difficulty="mudah">Didominasi Mudah (Bobot Rendah)</button>
+                                    <button type="button" class="irt-sim-option-btn active" data-difficulty="sedang">Rata-rata/Seimbang (Bobot Sedang)</button>
+                                    <button type="button" class="irt-sim-option-btn" data-difficulty="sulit">Didominasi Sulit (Bobot Tinggi)</button>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Fisika -->
-                        <div class="tka-accordion-item">
-                            <button class="tka-accordion-header">
-                                <div class="tka-accordion-title-wrap">
-                                    <span class="tka-subject-icon">⚡</span>
-                                    <span>Fisika</span>
-                                </div>
-                                <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
-                            </button>
-                            <div class="tka-accordion-body">
-                                <div class="tka-accordion-inner">
-                                    <ul class="tka-syllabus-list">
-                                        <li>Kinematika & Dinamika Partikel</li>
-                                        <li>Termodinamika & Gas Ideal</li>
-                                        <li>Gelombang Bunyi & Optik</li>
-                                        <li>Listrik Statis, Dinamis & Magnet</li>
-                                        <li>Fisika Modern & Radioaktivitas</li>
-                                    </ul>
-                                    <div class="tka-topic-focus">
-                                        <strong>Fokus HOTS:</strong> Analisis hukum kekekalan energi mekanik pada lintasan melingkar serta penerapan hukum Kirchhoff pada rangkaian bercabang majemuk.
-                                    </div>
-                                </div>
+                        <div class="irt-simulator-result">
+                            <div class="irt-sim-score-ring" id="irtScoreRing">
+                                <span class="irt-sim-score-val" id="irtScoreVal">600</span>
+                                <span class="irt-sim-score-lbl">Skor IRT</span>
                             </div>
-                        </div>
-                        
-                        <!-- Kimia -->
-                        <div class="tka-accordion-item">
-                            <button class="tka-accordion-header">
-                                <div class="tka-accordion-title-wrap">
-                                    <span class="tka-subject-icon">🧪</span>
-                                    <span>Kimia</span>
-                                </div>
-                                <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
-                            </button>
-                            <div class="tka-accordion-body">
-                                <div class="tka-accordion-inner">
-                                    <ul class="tka-syllabus-list">
-                                        <li>Stoikiometri & Rumus Empiris</li>
-                                        <li>Ikatan Kimia & Gaya Antarmolekul</li>
-                                        <li>Kesetimbangan & Laju Reaksi</li>
-                                        <li>Larutan Asam Basa, Buffer & pH</li>
-                                        <li>Kimia Organik & Benzena</li>
-                                    </ul>
-                                    <div class="tka-topic-focus">
-                                        <strong>Fokus HOTS:</strong> Perhitungan pH larutan penyangga (buffer) saat ditambahkan sedikit asam/basa kuat, serta sifat koligatif larutan elektrolit.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Biologi -->
-                        <div class="tka-accordion-item">
-                            <button class="tka-accordion-header">
-                                <div class="tka-accordion-title-wrap">
-                                    <span class="tka-subject-icon">🧬</span>
-                                    <span>Biologi</span>
-                                </div>
-                                <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
-                            </button>
-                            <div class="tka-accordion-body">
-                                <div class="tka-accordion-inner">
-                                    <ul class="tka-syllabus-list">
-                                        <li>Biologi Sel & Organel</li>
-                                        <li>Katabolisme & Anabolisme Sel</li>
-                                        <li>Genetika & Sintesis Protein</li>
-                                        <li>Anatomi & Fisiologi Manusia</li>
-                                        <li>Ekologi, Lingkungan & Evolusi</li>
-                                    </ul>
-                                    <div class="tka-topic-focus">
-                                        <strong>Fokus HOTS:</strong> Analisis hereditas persilangan dihibrid/penyimpangan semu hukum Mendel serta mekanisme transpor zat pada membran sel.
-                                    </div>
-                                </div>
+                            <h4 class="irt-sim-verdict" id="irtVerdict">Cukup Aman & Stabil</h4>
+                            <p class="irt-sim-desc" id="irtDesc">Peluang baik pada program studi rumpun Saintek/Soshum menengah ke atas di PTN Kluster 2 atau prodi umum PTN Kluster 1.</p>
+                            
+                            <!-- Recommended majors output table -->
+                            <div class="irt-recom-panel" style="width: 100%; border-top: 1px solid var(--border); margin-top: 20px; padding-top: 14px;">
+                                <h5 style="margin: 0 0 6px 0; font-size: 12px; font-weight: 850; color: var(--muted); text-transform: uppercase;">Analisis Rekomendasi Prodi</h5>
+                                <div id="irtRecommendationsList"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Rumpun Soshum -->
-                <div class="tka-syllabus-column soshum">
-                    <h3>⚖️ Soshum <span>Sosial & Humaniora</span></h3>
-                    
-                    <div class="tka-accordion">
-                        <!-- Sejarah -->
-                        <div class="tka-accordion-item">
-                            <button class="tka-accordion-header">
-                                <div class="tka-accordion-title-wrap">
-                                    <span class="tka-subject-icon">📜</span>
-                                    <span>Sejarah</span>
-                                </div>
-                                <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
-                            </button>
-                            <div class="tka-accordion-body">
-                                <div class="tka-accordion-inner">
-                                    <ul class="tka-syllabus-list">
-                                        <li>Kerajaan Hindu-Buddha & Islam</li>
-                                        <li>Kolonialisme & Pergerakan Nasional</li>
-                                        <li>Orde Lama, Orde Baru & Reformasi</li>
-                                        <li>Perang Dunia I & II serta Blok Dunia</li>
-                                        <li>Organisasi Regional & Internasional</li>
-                                    </ul>
-                                    <div class="tka-topic-focus">
-                                        <strong>Fokus HOTS:</strong> Korelasi antara krisis ekonomi global Depresi Besar (1929) dengan runtuhnya pemerintah kolonial Hindia Belanda di Indonesia.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Geografi -->
-                        <div class="tka-accordion-item">
-                            <button class="tka-accordion-header">
-                                <div class="tka-accordion-title-wrap">
-                                    <span class="tka-subject-icon">🌍</span>
-                                    <span>Geografi</span>
-                                </div>
-                                <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
-                            </button>
-                            <div class="tka-accordion-body">
-                                <div class="tka-accordion-inner">
-                                    <ul class="tka-syllabus-list">
-                                        <li>Litosfer, Atmosfer & Hidrosfer</li>
-                                        <li>Kartografi & Interpretasi Peta</li>
-                                        <li>Penginderaan Jauh & Sistem Informasi Geografis (SIG)</li>
-                                        <li>Pola Keruangan Desa & Kota</li>
-                                        <li>Mitigasi Bencana & Geografi Regional</li>
-                                    </ul>
-                                    <div class="tka-topic-focus">
-                                        <strong>Fokus HOTS:</strong> Menganalisis tingkat bahaya erosi dan sedimentasi di wilayah Daerah Aliran Sungai (DAS) menggunakan pemetaan berlapis (SIG).
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Sosiologi -->
-                        <div class="tka-accordion-item">
-                            <button class="tka-accordion-header">
-                                <div class="tka-accordion-title-wrap">
-                                    <span class="tka-subject-icon">👥</span>
-                                    <span>Sosiologi</span>
-                                </div>
-                                <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
-                            </button>
-                            <div class="tka-accordion-body">
-                                <div class="tka-accordion-inner">
-                                    <ul class="tka-syllabus-list">
-                                        <li>Interaksi Sosial & Nilai-Norma</li>
-                                        <li>Sosialisasi & Penyimpangan Sosial</li>
-                                        <li>Struktur, Stratifikasi & Mobilitas</li>
-                                        <li>Konflik, Kekerasan & Integrasi</li>
-                                        <li>Metode Penelitian Sosial Kualitatif/Kuantitatif</li>
-                                    </ul>
-                                    <div class="tka-topic-focus">
-                                        <strong>Fokus HOTS:</strong> Menganalisis konflik agraria menggunakan teori dialektika kelas Karl Marx serta validitas instrumen penelitian lapangan.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Ekonomi -->
-                        <div class="tka-accordion-item">
-                            <button class="tka-accordion-header">
-                                <div class="tka-accordion-title-wrap">
-                                    <span class="tka-subject-icon">📈</span>
-                                    <span>Ekonomi</span>
-                                </div>
-                                <i class="fa-solid fa-chevron-down tka-accordion-arrow"></i>
-                            </button>
-                            <div class="tka-accordion-body">
-                                <div class="tka-accordion-inner">
-                                    <ul class="tka-syllabus-list">
-                                        <li>Mekanisme Pasar (Ekuilibirium)</li>
-                                        <li>Perilaku Produsen & Konsumen</li>
-                                        <li>Pendapatan Nasional & Inflasi</li>
-                                        <li>Kebijakan Fiskal, Moneter & Perbankan</li>
-                                        <li>Siklus Akuntansi Jasa & Dagang</li>
-                                    </ul>
-                                    <div class="tka-topic-focus">
-                                        <strong>Fokus HOTS:</strong> Perhitungan elastisitas permintaan dan penawaran serta pencatatan jurnal penyesuaian akuntansi dagang (HPP & ikhtisar L/R).
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
-        <!-- Section: IRT Simulator -->
-        <section class="section" id="tka-irt-simulator">
-            <div class="section-header">
-                <div>
-                    <div class="section-kicker">Alat Simulasi</div>
-                    <h2>Simulator Perhitungan Skor IRT</h2>
-                </div>
-                <p>Gunakan simulator ini untuk mengestimasi kisaran nilai akhir TKA Anda berdasarkan jumlah jawaban benar dan bobot kesulitan soal.</p>
-            </div>
-            
-            <div class="result-panel">
-                <div class="irt-simulator-card">
-                    <div class="irt-simulator-inputs">
-                        <div class="irt-sim-slider-container">
-                            <label style="font-weight: 800; font-size: 14px; color: var(--muted);">Jumlah Jawaban Benar (Dari 20 Soal)</label>
-                            <div class="irt-sim-slider-wrap">
-                                <input type="range" min="0" max="20" value="10" class="irt-sim-slider" id="irtCorrectRange">
-                                <span class="irt-sim-slider-value" id="irtCorrectVal">10</span>
-                            </div>
-                        </div>
-                        
-                        <div class="field" style="margin-top: 10px;">
-                            <label>Profil Kesulitan Soal Benar</label>
-                            <p style="font-size: 12.5px; color: var(--muted); margin-top: -4px; margin-bottom: 12px;">Soal yang Anda jawab benar didominasi oleh kelompok mana?</p>
-                            <div class="irt-sim-option-grid">
-                                <button type="button" class="irt-sim-option-btn" data-difficulty="mudah">Didominasi Mudah (Bobot Rendah)</button>
-                                <button type="button" class="irt-sim-option-btn active" data-difficulty="sedang">Rata-rata/Seimbang (Bobot Sedang)</button>
-                                <button type="button" class="irt-sim-option-btn" data-difficulty="sulit">Didominasi Sulit (Bobot Tinggi)</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="irt-simulator-result">
-                        <div class="irt-sim-score-ring" id="irtScoreRing">
-                            <span class="irt-sim-score-val" id="irtScoreVal">600</span>
-                            <span class="irt-sim-score-lbl">Skor IRT</span>
-                        </div>
-                        <h4 class="irt-sim-verdict" id="irtVerdict">Cukup Aman & Stabil</h4>
-                        <p class="irt-sim-desc" id="irtDesc">Peluang baik pada program studi rumpun Saintek/Soshum menengah ke atas di PTN Kluster 2 atau prodi umum PTN Kluster 1.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Planner -->
-        <section class="section workspace" id="planner">
-            <div class="toolbox">
-                <div class="section-kicker">Planner</div>
-                <h2>Susun rencana TKA.</h2>
-                <div class="field">
-                    <label for="targetScore">Target skor</label>
-                    <input id="targetScore" type="number" min="400" max="850" value="680">
-                </div>
-                <div class="field">
-                    <label for="studyWeeks">Sisa waktu belajar</label>
-                    <input id="studyWeeks" type="number" min="2" max="24" value="6">
-                </div>
-                <div class="field">
-                    <label for="focusArea">Fokus terlemah</label>
-                    <select id="focusArea">
-                        <option>Matematika wajib</option>
-                        <option>Bahasa Indonesia</option>
-                        <option>Bahasa Inggris</option>
-                        <option>Mapel pilihan 1</option>
-                        <option>Mapel pilihan 2</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label for="firstElective">Mapel pilihan 1</label>
-                    <select id="firstElective">
-                        <option>Fisika</option>
-                        <option>Kimia</option>
-                        <option>Biologi</option>
-                        <option>Ekonomi</option>
-                        <option>Sosiologi</option>
-                        <option>Geografi</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label for="secondElective">Mapel pilihan 2</label>
-                    <select id="secondElective">
-                        <option>Kimia</option>
-                        <option>Fisika</option>
-                        <option>Biologi</option>
-                        <option>Ekonomi</option>
-                        <option>Sosiologi</option>
-                        <option>Geografi</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary" id="buildTKAPlan">Perbarui Rencana</button>
-            </div>
-            <div class="result-panel">
-                <div class="section-kicker">Roadmap</div>
-                <h2>Jalur mingguan</h2>
-                <div class="plan-list" id="snbtPlanList"></div>
-            </div>
-        </section>
-
-        <!-- Section: Tryout -->
-        <section class="section" id="tryout">
-            <div class="section-header">
-                <div>
-                    <div class="section-kicker">Simulasi Mini</div>
-                    <h2>Bank soal TKA interaktif.</h2>
-                </div>
-                <div class="chips">
-                    <button class="tool-chip active" data-snbt-subject="indonesia">B. Indonesia</button>
-                    <button class="tool-chip" data-snbt-subject="matematika">Matematika</button>
-                    <button class="tool-chip" data-snbt-subject="inggris">B. Inggris</button>
-                    <button class="tool-chip" data-snbt-subject="pilihan">Mapel Pilihan</button>
-                </div>
-            </div>
-            <div class="quiz-box">
-                <div class="quiz-meta" id="snbtQuestionMeta"></div>
-                <h3 id="snbtQuestion">Pertanyaan akan muncul di sini.</h3>
-                <div class="answer-grid" id="snbtAnswers"></div>
-                <div class="quiz-actions">
-                    <p class="muted" id="snbtFeedback">Pilih jawaban untuk melihat pembahasan singkat.</p>
-                    <button class="btn btn-blue" id="nextTKAQuestion" type="button">Soal Berikutnya</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section: Diagnosis & Checklist -->
-        <section class="section workspace">
-            <div class="result-panel">
-                <div class="section-kicker">Diagnosis</div>
-                <h2>Rekomendasi sesi berikutnya</h2>
-                <div class="diagnostic-card" id="tkaDiagnostic"></div>
-            </div>
-            <div class="result-panel">
-                <div class="section-kicker">Checklist</div>
-                <h2>Siap simulasi penuh</h2>
-                <div class="tka-checklist">
-                    <label><input type="checkbox" data-tka-check="wajib"> 3 mapel wajib sudah latihan minimal 2 set</label>
-                    <label><input type="checkbox" data-tka-check="pilihan"> 2 mapel pilihan sudah dipilih sesuai target prodi</label>
-                    <label><input type="checkbox" data-tka-check="waktu"> Sudah mencoba latihan dengan batas waktu</label>
-                    <label><input type="checkbox" data-tka-check="review"> Punya catatan salah dan konsep yang harus diulang</label>
-                </div>
-            </div>
-        </section>
+        <!-- Global Reset progress utility button -->
+        <div style="display: flex; justify-content: center; margin: 30px auto; width: min(1180px, calc(100% - 40px));">
+            <button class="btn btn-ghost" id="resetAllTkaProgressBtn" type="button" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2); font-weight: 800; border-radius: 16px;"><i class="fa-solid fa-trash-can"></i> Reset Semua Progres Belajar TKA</button>
+        </div>
 
         <!-- Footer -->
         <footer>
@@ -596,13 +1138,75 @@
             <span>Progress disimpan lokal di browser kamu.</span>
         </footer>
     </main>
+
+    <!-- Formula Sheet slide-out Drawer -->
+    <div class="formula-drawer" id="formulaDrawer" aria-hidden="true">
+        <div class="formula-drawer-header">
+            <h3><i class="fa-solid fa-book-bookmark" style="color: var(--blue);"></i> Formula Sheet Drawer</h3>
+            <button class="formula-drawer-close" id="formulaDrawerClose" aria-label="Tutup Formula Sheet">×</button>
+        </div>
+        <div class="formula-drawer-content">
+            <div class="formula-subject-block matematika">
+                <h4>Matematika IPA</h4>
+                <div class="formula-item">
+                    <span>Turunan Aljabar:</span>
+                    <code>f(x) = ax^n &rArr; f'(x) = anx^(n-1)</code>
+                </div>
+                <div class="formula-item">
+                    <span>Integral Tentu:</span>
+                    <code>&int; x^n dx = [1/(n+1)]x^(n+1) + C</code>
+                </div>
+            </div>
+            <div class="formula-subject-block fisika">
+                <h4>Fisika</h4>
+                <div class="formula-item">
+                    <span>Hukum II Newton:</span>
+                    <code>&Sigma;F = m * a</code>
+                </div>
+                <div class="formula-item">
+                    <span>Energi Kinetik & Potensial:</span>
+                    <code>Ek = 1/2 m v^2 | Ep = m g h</code>
+                </div>
+            </div>
+            <div class="formula-subject-block kimia">
+                <h4>Kimia</h4>
+                <div class="formula-item">
+                    <span>Perhitungan Mol:</span>
+                    <code>Mol = gram / Mr | Mol = M * V (Liter)</code>
+                </div>
+                <div class="formula-item">
+                    <span>Derajat Keasaman (pH):</span>
+                    <code>pH = -log [H+] | pOH = -log [OH-]</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Formula Toggle Button -->
+    <button class="formula-toggle-btn" id="formulaToggleBtn" type="button" title="Buka Formula Sheet" aria-label="Formula Sheet"><i class="fa-solid fa-book-bookmark"></i></button>
+
+    <!-- Concept Modal Popup -->
+    <div class="concept-modal" id="conceptModal" aria-hidden="true" role="dialog">
+        <div class="concept-modal-box">
+            <button class="concept-modal-close" id="conceptModalClose" aria-label="Tutup Detail">×</button>
+            <div class="concept-modal-header">
+                <h3 id="conceptTitle">Judul Konsep</h3>
+            </div>
+            <div class="concept-modal-content" id="conceptContent">
+                Memuat penjelasan konsep...
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
-    <script src="auth-helper.js"></script>
-    <script src="feature-pages.js"></script>
-    <script src="tka-info.js"></script>
-    <script src="pro-experience.js"></script>
-    <script src="bubub-ai.js"></script>
+    <script src="js/auth-helper.js"></script>
+    <script src="js/pro-learning-engine.js"></script>
+    <script src="js/feature-pages.js"></script>
+    <script src="js/tka-info.js"></script>
+    <script src="js/pro-experience.js?v=20260621-clean"></script>
+    <script src="js/bubub-ai.js"></script>
+    <script src="js/coursera-home.js"></script>
 </body>
 
 </html>

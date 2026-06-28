@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -12,10 +12,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="lms-quiz.css">
-    <link rel="stylesheet" href="learning-path.css">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
+    <link rel="stylesheet" href="css/lms-quiz.css">
+    <link rel="stylesheet" href="css/learning-path.css">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/bubub-ai.css">
 </head>
 
 <body data-page="learning-path">
@@ -29,7 +29,7 @@
     <main class="page" id="learningPathMain">
         <nav class="learning-navbar" aria-label="Navigasi ruang belajar">
             <a href="index.html" class="learning-brand">
-                <img src="logo.png" alt="Universe Of Tech">
+                <img src="assets/logo.png" alt="Universe Of Tech">
                 <span>Universe Of Tech</span>
             </a>
             <div class="learning-nav-links">
@@ -70,10 +70,10 @@
 
     <div class="learning-toast" id="quizToast" role="status" aria-live="polite"></div>
 
-    <script src="app-data.js"></script>
-    <script src="sound-engine.js"></script>
-    <script src="quiz-core.js"></script>
-    <script src="quiz-question-bank.js"></script>
+    <script src="js/app-data.js"></script>
+    <script src="js/sound-engine.js"></script>
+    <script src="js/quiz-core.js"></script>
+    <script src="js/quiz-question-bank.js"></script>
     <script>
         // Theme initialization & toggle
         (function() {
@@ -129,9 +129,9 @@
             return window.confirm(options?.message || "Lanjutkan tindakan ini?");
         };
     </script>
-    <script src="auth-helper.js"></script>
-    <script src="lms-quiz.js"></script>
-    <script src="bubub-ai.js"></script>
+    <script src="js/auth-helper.js"></script>
+    <script src="js/lms-quiz.js"></script>
+    <script src="js/bubub-ai.js"></script>
 </body>
 
 </html>

@@ -8,6 +8,7 @@ body.pro-user {
     --pro-shadow: 0 24px 64px rgba(8, 11, 17, 0.3);
     --pro-glow: 0 0 25px rgba(216, 184, 104, 0.25);
     transition: background 0.5s ease, color 0.5s ease;
+    overflow-x: clip;
 }
 
 /* Premium Pro Gold Theme Override */
@@ -943,4 +944,195 @@ body.dark-theme .pro-inline-card .pro-inline-meta span {
         animation: none !important;
         transition-duration: 0.01ms !important;
     }
+}
+
+/* ============================================================
+   PRO UI CLEANUP
+   Keep premium state visible without restructuring every navbar
+   or competing with the learning content and BUBUB assistant.
+   ============================================================ */
+body.pro-user .navbar.pro-navbar {
+    display: flex !important;
+    grid-template-columns: none !important;
+    width: min(1180px, calc(100% - 40px)) !important;
+    min-height: 68px;
+    gap: 12px !important;
+    padding: 10px 16px !important;
+    border-radius: 22px !important;
+    box-shadow: 0 14px 38px rgba(20, 27, 39, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+body.pro-user .navbar.pro-navbar .brand {
+    order: 1 !important;
+    flex: 0 1 auto;
+    max-width: 280px;
+}
+
+body.pro-user .navbar.pro-navbar .brand-logo {
+    height: 44px !important;
+}
+
+body.pro-user .navbar.pro-navbar .nav-links {
+    order: 2 !important;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    justify-content: center !important;
+    overflow: visible !important;
+}
+
+body.pro-user .navbar.pro-navbar .nav-actions {
+    order: 3 !important;
+    flex: 0 0 auto;
+    margin-left: 0 !important;
+}
+
+.pro-nav-badge,
+.pro-nav-chip {
+    min-width: auto !important;
+    min-height: 34px !important;
+    height: 34px;
+    padding: 0 11px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid rgba(180, 139, 48, 0.26) !important;
+    border-radius: 11px !important;
+    background: rgba(216, 184, 104, 0.1) !important;
+    color: #8a6419 !important;
+    box-shadow: none !important;
+    animation: none !important;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+body.dark-theme .pro-nav-badge,
+body.dark-theme .pro-nav-chip,
+body.pro-gold-theme .pro-nav-badge,
+body.pro-gold-theme .pro-nav-chip {
+    color: var(--pro-gold-bright) !important;
+    background: rgba(216, 184, 104, 0.1) !important;
+    border-color: var(--pro-line) !important;
+}
+
+.pro-nav-badge::before { display: none !important; }
+.pro-nav-badge i,
+.pro-nav-chip i { color: currentColor !important; filter: none !important; animation: none !important; }
+.pro-nav-badge strong,
+.pro-nav-chip strong { color: currentColor !important; font-size: 10px; letter-spacing: .08em; }
+
+/* A quieter premium module that follows the page theme. */
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-spotlight {
+    padding: 24px;
+    border-color: rgba(180, 139, 48, 0.2);
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at 96% 0%, rgba(216, 184, 104, 0.13), transparent 28%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.9));
+    color: var(--dark);
+    box-shadow: 0 18px 48px rgba(30, 41, 59, 0.09);
+}
+
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-spotlight::before {
+    opacity: .12;
+    background-image: linear-gradient(rgba(30, 41, 59, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(30, 41, 59, .08) 1px, transparent 1px);
+}
+
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-spotlight-label,
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-spotlight-score strong { color: #8a6419; }
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-spotlight h2,
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-card strong { color: var(--dark); }
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-spotlight p,
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-card span,
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-spotlight-score span { color: var(--muted); }
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-card,
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-spotlight-score {
+    border-color: rgba(30, 41, 59, .09);
+    background: rgba(255, 255, 255, .72);
+    box-shadow: none;
+}
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-card i {
+    color: #8a6419;
+    background: rgba(216, 184, 104, .12);
+}
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-link {
+    border-color: rgba(30, 41, 59, .1);
+    background: rgba(255, 255, 255, .74);
+    color: var(--dark);
+}
+body.pro-user:not(.dark-theme):not(.pro-gold-theme) .pro-link small { color: var(--muted); }
+
+/* The two assistants now occupy separate corners. */
+.pro-dock {
+    left: 20px !important;
+    right: auto !important;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    width: min(320px, calc(100vw - 28px));
+    z-index: 900;
+}
+
+.pro-dock-toggle {
+    margin-left: 0;
+    margin-right: auto;
+    min-width: 0;
+    height: 42px;
+    border-radius: 13px;
+    box-shadow: 0 14px 34px rgba(8, 11, 17, .22);
+}
+
+.pro-dock-panel {
+    left: 0;
+    right: auto;
+    max-height: min(650px, calc(100vh - 100px));
+    overflow-y: auto;
+    transform-origin: bottom left;
+    box-shadow: 0 22px 60px rgba(8, 11, 17, .34);
+}
+
+@media (min-width: 721px) and (max-width: 1180px) {
+    body.pro-user .navbar.pro-navbar {
+        display: flex !important;
+        grid-template-columns: none !important;
+    }
+    body.pro-user .navbar.pro-navbar .brand,
+    body.pro-user .navbar.pro-navbar .nav-links,
+    body.pro-user .navbar.pro-navbar .nav-actions { grid-column: auto !important; grid-row: auto !important; }
+}
+
+@media (max-width: 1024px) {
+    body.pro-user .navbar.pro-navbar .nav-links { display: none !important; }
+    body.pro-user .navbar.pro-navbar .nav-actions { margin-left: auto !important; }
+}
+
+@media (max-width: 720px) {
+    body.pro-user .navbar.pro-navbar {
+        display: flex !important;
+        width: calc(100% - 20px) !important;
+        min-height: 58px;
+        padding: 7px 9px !important;
+        gap: 6px !important;
+        border-radius: 17px !important;
+    }
+    body.pro-user .navbar.pro-navbar .brand {
+        flex: 1 1 auto;
+        max-width: none;
+        font-size: 16px !important;
+    }
+    body.pro-user .navbar.pro-navbar .brand-logo { height: 38px !important; }
+    body.pro-user .navbar.pro-navbar .pro-nav-badge,
+    body.pro-user .navbar.pro-navbar .pro-nav-chip { display: none !important; }
+    body.pro-user .navbar.pro-navbar .nav-actions { gap: 4px !important; }
+    .pro-dock {
+        left: 10px !important;
+        right: auto !important;
+        bottom: max(10px, env(safe-area-inset-bottom));
+        width: min(300px, calc(100vw - 20px));
+    }
+    .pro-dock-panel { padding: 16px; border-radius: 18px; }
+}
+
+@media (max-width: 430px) {
+    body.pro-user .navbar.pro-navbar .brand { font-size: 0 !important; }
 }

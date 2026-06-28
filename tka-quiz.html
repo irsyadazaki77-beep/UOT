@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -11,8 +11,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="quiz-session.css">
-    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="css/quiz-session.css">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/tka-quiz-polish.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
@@ -20,7 +21,7 @@
     <main class="focus-room" id="focusRoom">
         <header class="focus-header">
             <a class="focus-brand" href="tka-lms.html" id="exitLink" aria-label="Keluar ke halaman dashboard">
-                <img src="logo.png" alt="" aria-hidden="true">
+                <img src="assets/logo.png" alt="" aria-hidden="true">
                 <span>TKA Focus Room</span>
             </a>
 
@@ -30,7 +31,9 @@
             </div>
 
             <div class="focus-header-actions">
-                <button class="icon-button" id="themeToggleBtn" type="button" aria-label="Aktifkan tema terang" aria-pressed="true">Tema</button>
+                <button class="icon-button" id="tkaReadableToggle" type="button" aria-label="Ubah ukuran teks">Aa</button>
+                <button class="icon-button" id="tkaFullscreenToggle" type="button" aria-label="Aktifkan layar penuh"><i class="fa-solid fa-expand" aria-hidden="true"></i></button>
+                <button class="icon-button" id="themeToggleBtn" type="button" aria-label="Ganti tema" aria-pressed="true">Tema</button>
                 <a class="exit-button" href="tka-lms.html">Keluar</a>
             </div>
         </header>
@@ -44,6 +47,13 @@
                 <div class="question-overline">
                     <span id="tkaQuestionCounter">Soal 0/0</span>
                     <span id="tkaLmsQuestionMeta">Pilih soal</span>
+                </div>
+
+                <div class="quiz-session-strip" aria-label="Ringkasan sesi">
+                    <span><strong id="tkaSessionAnswered">0</strong> dijawab</span>
+                    <span><strong id="tkaSessionAccuracy">0%</strong> akurasi</span>
+                    <span><strong id="tkaSessionReview">0</strong> review</span>
+                    <button id="tkaShortcutHelp" type="button" aria-label="Tampilkan bantuan pintasan keyboard"><i class="fa-regular fa-keyboard" aria-hidden="true"></i> Pintasan</button>
                 </div>
 
                 <h1 id="tkaLmsQuestionTitle">Pilih soal untuk mulai latihan.</h1>
@@ -64,10 +74,6 @@
                 <div class="timer-card" id="timerCard">
                     <span>Sisa waktu</span>
                     <strong id="tkaTimerDisplay">00:00</strong>
-                    <div class="timer-actions">
-                        <button class="action-button secondary" id="tkaTimerToggle" type="button">Mulai</button>
-                        <button class="action-button subtle" id="tkaTimerReset" type="button">Reset</button>
-                    </div>
                 </div>
 
                 <div class="session-stats">
@@ -77,6 +83,7 @@
 
                 <div class="question-nav-head">
                     <strong>Navigator soal</strong>
+                    <button class="sidebar-collapse" id="tkaSidebarToggle" type="button" aria-expanded="true">Tutup</button>
                 </div>
                 <div class="question-navigator" id="tkaQuestionList" ></div>
             </aside>
@@ -89,6 +96,7 @@
                 <button class="action-button subtle" id="tkaMarkReview" type="button">Tandai Review</button>
             </div>
             <div class="primary-actions">
+                <button class="action-button subtle" id="tkaClearAnswer" type="button">Hapus Pilihan</button>
                 <button class="action-button secondary" id="tkaSubmitAnswer" type="button">Submit</button>
                 <button class="action-button primary" id="tkaNextQuestion" type="button">Soal Berikutnya</button>
             </div>
@@ -96,14 +104,28 @@
 
     </main>
     <div class="focus-toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="tka-question-supplement.js"></script>
-    <script src="feature-pages.js"></script>
+    <dialog class="quiz-dialog" id="tkaShortcutDialog" aria-labelledby="shortcutTitle">
+        <div class="dialog-head"><h2 id="shortcutTitle">Pintasan Keyboard</h2><button type="button" data-close-dialog aria-label="Tutup">&times;</button></div>
+        <div class="shortcut-grid"><kbd>A–F</kbd><span>Pilih jawaban</span><kbd>Enter</kbd><span>Submit jawaban</span><kbd>← / →</kbd><span>Soal sebelumnya / berikutnya</span><kbd>H</kbd><span>Tampilkan hint</span><kbd>R</kbd><span>Tandai review</span></div>
+    </dialog>
+    <dialog class="quiz-dialog result-dialog" id="tkaResultDialog" aria-labelledby="resultTitle">
+        <div class="dialog-head"><h2 id="resultTitle">Ringkasan Latihan</h2><button type="button" data-close-dialog aria-label="Tutup">&times;</button></div>
+        <div id="tkaResultContent"></div>
+        <div class="dialog-actions"><button class="action-button secondary" type="button" data-close-dialog>Kembali ke soal</button><a class="action-button primary" href="tka-lms.html#lms-dashboard">Selesai</a></div>
+    </dialog>
+    <script src="js/tka-question-supplement.js"></script>
+    <script src="js/feature-pages.js"></script>
     <script>
-        const prefs = JSON.parse(localStorage.getItem("tka_lms_preferences"));
+        let prefs = null;
+        try {
+            prefs = JSON.parse(localStorage.getItem("tka_lms_preferences"));
+        } catch (error) {
+            localStorage.removeItem("tka_lms_preferences");
+        }
         if (prefs) {
             const subjectEl = document.getElementById("tkaHeaderSubject");
             const modeEl = document.getElementById("tkaHeaderMode");
-            if (subjectEl) subjectEl.textContent = prefs.subject === "all" ? "Semua Mapel" : prefs.subject.charAt(0).toUpperCase() + prefs.subject.slice(1);
+            if (subjectEl && typeof prefs.subject === "string") subjectEl.textContent = prefs.subject === "all" ? "Semua Mapel" : prefs.subject.charAt(0).toUpperCase() + prefs.subject.slice(1);
             if (modeEl) modeEl.textContent = prefs.mode === "all" ? "Latihan Campuran" : prefs.mode === "review" ? "Mode Review" : prefs.mode === "unanswered" ? "Soal Baru" : "Fokus";
         }
         

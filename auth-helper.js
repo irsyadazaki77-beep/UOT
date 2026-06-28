@@ -206,6 +206,20 @@
                     body.dark-theme .user-nav-badge,
                     body.dark-theme .dropdown-item { color: var(--dark, #f8fafc); }
                     body.dark-theme .user-dropdown { background: var(--white, #0f172a); }
+                    .nav-dropdown-trigger.active {
+                        color: white !important;
+                        background: linear-gradient(135deg, var(--green, #10b981), var(--blue, #6366f1)) !important;
+                        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25) !important;
+                    }
+                    .nav-dropdown-menu a.active {
+                        background: rgba(99, 102, 241, 0.12) !important;
+                        color: var(--blue, #6366f1) !important;
+                        font-weight: 800 !important;
+                    }
+                    body.dark-theme .nav-dropdown-menu a.active {
+                        background: rgba(99, 102, 241, 0.2) !important;
+                        color: hsl(226, 100%, 75%) !important;
+                    }
                     @media (max-width: 720px) {
                         .user-name { display: none; }
                         .subscription-badge { display: none !important; }
@@ -239,55 +253,128 @@
             const navLinks = document.querySelector(".nav-links");
             if (!navLinks) return;
 
-            const links = Array.from(navLinks.querySelectorAll("a"));
-            if (links.length === 0) return;
+            const isNewNavbar = !!(document.getElementById("btnExplore") || document.getElementById("navSearchInput"));
+            let links = [];
 
-            const coreHrefs = ["index.html", "materi.html", "quiz.html"];
-            const coreLinks = [];
-            const extraLinks = [];
+            if (!isNewNavbar) {
+                // Legacy restructuring code
+                const newMenus = [
+                    { href: "learning-path.html", text: "Roadmap Belajar" },
+                    { href: "leaderboard.html", text: "Leaderboard" },
+                    { href: "profile.html", text: "Profil Saya" },
+                    { href: "payment.html", text: "Upgrade Pro" },
+                    { href: "achievements.html", text: "Pencapaian" }
+                ];
 
-            links.forEach(link => {
-                const href = link.getAttribute("href") || "";
-                const text = link.textContent.trim();
-                if (coreHrefs.some(ch => href.includes(ch)) || text === "Beranda" || text === "Materi" || text === "Quiz") {
-                    coreLinks.push(link);
-                } else {
-                    extraLinks.push(link);
+                const currentLinks = Array.from(navLinks.querySelectorAll("a"));
+                const currentHrefs = currentLinks.map(a => a.getAttribute("href") || "");
+
+                newMenus.forEach(item => {
+                    const exists = currentHrefs.some(href => href.includes(item.href));
+                    if (!exists) {
+                        const newLink = document.createElement("a");
+                        newLink.href = item.href;
+                        newLink.textContent = item.text;
+                        const pagePath = window.location.pathname;
+                        if (pagePath.includes(item.href)) {
+                            newLink.className = "active";
+                        }
+                        navLinks.appendChild(newLink);
+                    }
+                });
+
+                // Re-read links including the newly injected ones
+                const allLinks = Array.from(navLinks.querySelectorAll("a"));
+                if (allLinks.length === 0) return;
+
+                const coreHrefs = ["index.html", "materi.html", "quiz.html"];
+                const coreLinks = [];
+                const extraLinks = [];
+
+                allLinks.forEach(link => {
+                    const href = link.getAttribute("href") || "";
+                    const text = link.textContent.trim();
+                    if (coreHrefs.some(ch => href.includes(ch)) || text === "Beranda" || text === "Materi" || text === "Quiz") {
+                        coreLinks.push(link);
+                    } else {
+                        extraLinks.push(link);
+                    }
+                });
+
+                navLinks.innerHTML = "";
+                coreLinks.forEach(link => navLinks.appendChild(link));
+
+                if (extraLinks.length > 0) {
+                    const dropdown = document.createElement("div");
+                    dropdown.className = "nav-dropdown";
+                    
+                    const trigger = document.createElement("button");
+                    trigger.type = "button";
+                    trigger.className = "nav-dropdown-trigger";
+                    trigger.innerHTML = `Lainnya <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left: 2px;"></i>`;
+                    
+                    const menu = document.createElement("div");
+                    menu.className = "nav-dropdown-menu";
+                    
+                    let hasActiveExtra = false;
+                    extraLinks.forEach(link => {
+                        const cloned = link.cloneNode(true);
+                        const href = link.getAttribute("href") || "";
+                        if (link.classList.contains("active") || window.location.pathname.includes(href)) {
+                            cloned.classList.add("active");
+                            hasActiveExtra = true;
+                        } else {
+                            cloned.classList.remove("active");
+                        }
+                        menu.appendChild(cloned);
+                    });
+
+                    if (hasActiveExtra) {
+                        trigger.classList.add("active");
+                    }
+                    
+                    dropdown.appendChild(trigger);
+                    dropdown.appendChild(menu);
+                    navLinks.appendChild(dropdown);
+
+                    trigger.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        dropdown.classList.toggle("active");
+                    });
+
+                    document.addEventListener("click", () => {
+                        dropdown.classList.remove("active");
+                    });
                 }
-            });
 
-            navLinks.innerHTML = "";
-            coreLinks.forEach(link => navLinks.appendChild(link));
-
-            if (extraLinks.length > 0) {
-                const dropdown = document.createElement("div");
-                dropdown.className = "nav-dropdown";
+                // For legacy layout, the drawer gets all links in the rebuilt navLinks
+                links = Array.from(navLinks.querySelectorAll("a"));
+            } else {
+                // FOR NEW NAVBAR: build links list including core links AND explore mega menu links
+                links = Array.from(navLinks.querySelectorAll("a"));
                 
-                const trigger = document.createElement("button");
-                trigger.type = "button";
-                trigger.className = "nav-dropdown-trigger";
-                trigger.innerHTML = `Lainnya <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left: 2px;"></i>`;
-                
-                const menu = document.createElement("div");
-                menu.className = "nav-dropdown-menu";
-                
-                extraLinks.forEach(link => {
-                    const cloned = link.cloneNode(true);
-                    cloned.classList.remove("active");
-                    menu.appendChild(cloned);
-                });
-                
-                dropdown.appendChild(trigger);
-                dropdown.appendChild(menu);
-                navLinks.appendChild(dropdown);
-
-                trigger.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    dropdown.classList.toggle("active");
-                });
-
-                document.addEventListener("click", () => {
-                    dropdown.classList.remove("active");
+                // Add mega menu items as links to the mobile drawer
+                const megaLinks = Array.from(document.querySelectorAll(".explore-mega-menu .mega-item-link"));
+                megaLinks.forEach(ml => {
+                    const linkEl = document.createElement("a");
+                    linkEl.href = ml.getAttribute("href");
+                    
+                    // Extract text and icon
+                    const span = ml.querySelector("span");
+                    const iconBox = ml.querySelector(".mega-icon-box");
+                    const iconText = iconBox ? iconBox.textContent : "";
+                    const text = span ? span.textContent : ml.textContent;
+                    
+                    linkEl.innerHTML = `<span style="margin-right: 8px;">${iconText}</span> ${text}`;
+                    
+                    // If current pathname matches, mark as active
+                    const path = window.location.pathname;
+                    const page = path.split("/").pop() || "index.html";
+                    if (linkEl.getAttribute("href") === page) {
+                        linkEl.className = "active";
+                    }
+                    
+                    links.push(linkEl);
                 });
             }
 

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="security-helper.js"></script>
+    <script src="js/security-helper.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Universe Of Tech - Belajar Jadi Seru</title>
@@ -13,7 +13,7 @@
     <meta property="og:title" content="Universe Of Tech - Belajar Jadi Seru" />
     <meta property="og:description"
         content="Kembangkan skill teknologi Anda dengan quest interaktif harian, leaderboard mingguan, dan asisten mentor AI." />
-    <meta property="og:image" content="logo.png" />
+    <meta property="og:image" content="assets/logo.png" />
     <meta property="og:type" content="website" />
     <script type="application/ld+json">
     {
@@ -28,7 +28,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="pro-experience.css">
+    <link rel="stylesheet" href="css/pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="css/coursera-home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         :root {
             /* HSL Palettes - Light Mode (Educational, Warm, Premium) */
@@ -518,27 +520,7 @@
             z-index: 2;
         }
 
-        .navbar {
-            width: min(1180px, calc(100% - 40px));
-            margin: 24px auto 0;
-            padding: 14px 18px;
-            background: var(--navbar-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-soft);
-            border-radius: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 16px;
-            z-index: 10;
-            transition: box-shadow 0.3s ease;
-        }
 
-        body.dark-theme .navbar {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 1px 1px rgba(255, 255, 255, 0.05);
-        }
 
         .brand {
             display: flex;
@@ -881,6 +863,291 @@
         @keyframes ringOrbit {
             from { transform: rotateX(68deg) rotateZ(-18deg); }
             to { transform: rotateX(68deg) rotateZ(342deg); }
+        }
+
+        footer {
+            width: min(1180px, calc(100% - 40px));
+            margin: 100px auto 40px;
+            padding: 60px 40px 40px;
+            color: var(--muted);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 36px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+            display: grid;
+            gap: 45px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue), var(--green), transparent);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(4, 1fr);
+            gap: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .footer-brand .brand {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--dark);
+            letter-spacing: -0.04em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-brand p {
+            font-size: 13.5px;
+            line-height: 1.65;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 13.5px;
+        }
+
+        .footer-links a {
+            position: relative;
+            width: fit-content;
+            transition: all 0.25s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--blue);
+            transform: translateX(4px);
+        }
+
+        .footer-links a::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--blue), var(--green));
+            transition: width 0.25s ease;
+        }
+
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .social-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: var(--item-bg);
+            border: 1px solid var(--border);
+            color: var(--dark);
+            display: grid;
+            place-items: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 16px rgba(67, 97, 238, 0.25);
+        }
+
+        .language-select {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--item-bg);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 12px;
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 700;
+            width: fit-content;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.25s ease;
+        }
+
+        .language-select:hover {
+            border-color: var(--blue);
+            background: var(--white);
+        }
+
+        .language-select select {
+            background: transparent;
+            border: 0;
+            color: inherit;
+            font-weight: inherit;
+            cursor: pointer;
+            outline: none;
+            padding-right: 4px;
+        }
+
+        .app-stores {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .store-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #111827;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            max-width: 170px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-align: left;
+        }
+
+        .dark-theme .store-badge {
+            background: #060a14;
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .store-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: #1f2937;
+        }
+
+        .store-badge span {
+            display: block;
+        }
+
+        .store-badge .store-sub {
+            display: block;
+            font-size: 8px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            letter-spacing: 0.06em;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .store-badge .store-title {
+            display: block;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-size: 13.5px;
+            font-weight: 600;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-legal-links a {
+            transition: color 0.25s ease;
+        }
+
+        .footer-legal-links a:hover {
+            color: var(--blue);
+        }
+
+        /* Prevent overflow and make layout wrap beautifully */
+        @media (max-width: 1160px) {
+            .footer-grid {
+                grid-template-columns: 1.5fr 1.2fr 1.2fr;
+                gap: 24px;
+            }
+        }
+        @media (max-width: 900px) {
+            footer {
+                padding: 45px 30px 30px;
+                gap: 30px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+            }
+            .footer-brand {
+                grid-column: span 2;
+            }
+        }
+        @media (max-width: 600px) {
+            footer {
+                padding: 35px 20px 20px;
+                margin: 60px auto 20px;
+                gap: 24px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .footer-brand {
+                grid-column: span 1;
+            }
         }
 
         .visual-chip {
@@ -1675,189 +1942,6 @@
             box-shadow: 0 16px 30px rgba(17, 32, 51, 0.16);
         }
 
-        /* Multi-column Footer Styling */
-        footer {
-            width: min(1180px, calc(100% - 40px));
-            margin: 80px auto 30px;
-            padding: 60px 0 30px;
-            color: var(--muted);
-            border-top: 1px solid var(--border);
-            display: grid;
-            gap: 40px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.5fr repeat(4, 1fr);
-            gap: 30px;
-        }
-
-        .footer-col {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .footer-brand {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .footer-brand .brand {
-            font-size: 24px;
-            font-weight: 905;
-            color: var(--dark);
-            letter-spacing: -0.04em;
-        }
-
-        .footer-brand p {
-            font-size: 13.5px;
-            line-height: 1.6;
-            color: var(--muted);
-            font-weight: 550;
-        }
-
-        .footer-col h4 {
-            font-size: 14px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--dark);
-        }
-
-        .footer-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .footer-links a {
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--green-dark);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .social-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 12px;
-            background: var(--item-bg);
-            border: 1px solid var(--border);
-            color: var(--dark);
-            display: grid;
-            place-items: center;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-
-        .social-btn:hover {
-            transform: translateY(-2px);
-            background: var(--green);
-            color: white;
-            border-color: transparent;
-        }
-
-        .language-select {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--item-bg);
-            border: 1px solid var(--border);
-            padding: 8px 14px;
-            border-radius: 12px;
-            color: var(--dark);
-            font-size: 13px;
-            font-weight: 700;
-            width: fit-content;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
-        .language-select select {
-            background: transparent;
-            border: 0;
-            color: inherit;
-            font-weight: inherit;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .store-badge {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #111827;
-            color: white;
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            width: 160px;
-            cursor: pointer;
-            transition: transform 0.25s ease;
-            text-align: left;
-        }
-
-        .dark-theme .store-badge {
-            background: #0d1117;
-            border-color: rgba(255, 255, 255, 0.08);
-        }
-
-        .store-badge:hover {
-            transform: translateY(-2px);
-        }
-
-        .store-badge span {
-            display: block;
-        }
-
-        .store-badge .store-sub {
-            display: block;
-            font-size: 9px;
-            text-transform: uppercase;
-            opacity: 0.65;
-            letter-spacing: 0.05em;
-        }
-
-        .store-badge .store-title {
-            display: block;
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-            font-size: 13px;
-            font-weight: 600;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .footer-legal-links {
-            display: flex;
-            gap: 18px;
-        }
-
-        .footer-legal-links a:hover {
-            color: var(--green-dark);
-        }
-
         @media (max-width: 980px) {
 
             .hero,
@@ -1894,10 +1978,6 @@
         }
 
         @media (max-width: 720px) {
-            .navbar {
-                width: min(100% - 24px, 1180px);
-                border-radius: 22px;
-            }
 
             .nav-links {
                 display: none;
@@ -2018,11 +2098,6 @@
         }
 
         /* Dark Mode adjustments for elements */
-        .navbar {
-            background: var(--navbar-bg);
-            border: 1px solid var(--border);
-        }
-
         .badge {
             background: var(--badge-bg);
             border: 1px solid var(--border);
@@ -2451,6 +2526,7 @@
             margin-top: 15px;
         }
 
+        .diag-badge,
         .diag-result-badge {
             display: inline-block;
             padding: 8px 16px;
@@ -2462,6 +2538,7 @@
             margin-bottom: 15px;
         }
 
+        .dark-theme .diag-badge,
         .dark-theme .diag-result-badge {
             background: rgba(50, 214, 107, 0.15);
         }
@@ -2730,50 +2807,7 @@
             text-align: center;
         }
 
-        .partner-title {
-            font-size: 11px;
-            font-weight: 900;
-            color: var(--muted);
-            letter-spacing: 0.15em;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
 
-        .partner-ticker-wrapper {
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            padding: 18px 0;
-            background: rgba(255, 255, 255, 0.4);
-            border-top: 1px dashed var(--border);
-            border-bottom: 1px dashed var(--border);
-            backdrop-filter: blur(5px);
-        }
-
-        body.dark-theme .partner-ticker-wrapper {
-            background: rgba(17, 32, 51, 0.4);
-        }
-
-        .partner-ticker {
-            display: inline-flex;
-            gap: 50px;
-            animation: tickerInfiniteScroll 25s linear infinite;
-        }
-
-        .partner-logo {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0.85;
-        }
-
-        @keyframes tickerInfiniteScroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
 
         /* Tentang Kami (About Us) */
         .about-container {
@@ -3063,7 +3097,7 @@
         }
 
         .pricing-price {
-            font-size: 38px;
+            font-size: clamp(24px, 4vw, 38px);
             font-weight: 950;
             letter-spacing: -0.04em;
             color: var(--dark);
@@ -3556,10 +3590,376 @@
             animation: fadeIn 0.4s ease;
         }
     </style>
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ============================================================
+           MEGA ANIMATION PACK v2 — Smooth & Micro-interaction System
+           ============================================================ */
+
+        /* --- Staggered Reveal for Grid Children --- */
+        .stagger-reveal > * {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .stagger-reveal.revealed > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.06s; }
+        .stagger-reveal.revealed > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.13s; }
+        .stagger-reveal.revealed > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.20s; }
+        .stagger-reveal.revealed > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.27s; }
+        .stagger-reveal.revealed > *:nth-child(5) { opacity:1; transform:none; transition-delay:0.34s; }
+        .stagger-reveal.revealed > *:nth-child(6) { opacity:1; transform:none; transition-delay:0.41s; }
+
+        /* --- Ripple Effect on Buttons --- */
+        .btn { position: relative; overflow: hidden; }
+        .ripple-circle {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0) translate(-50%, -50%);
+            transform-origin: center;
+            animation: rippleAnim 0.65s linear forwards;
+            background: rgba(255,255,255,0.35);
+            pointer-events: none;
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(6) translate(-50%, -50%); opacity: 0; }
+        }
+
+        /* --- Section Kicker Animated Underline --- */
+        .section-kicker {
+            position: relative;
+            display: inline-block;
+        }
+        .section-kicker::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 100%;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--green), var(--blue));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+        }
+        .reveal.revealed .section-kicker::after { transform: scaleX(1); }
+
+        /* --- Shimmer on hover for cards --- */
+        .feat-card::after,
+        .course-card::after,
+        .testimonial-card::after,
+        .pricing-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%);
+            transform: skewX(-15deg);
+            pointer-events: none;
+            transition: left 0s;
+            z-index: 5;
+        }
+        .feat-card:hover::after,
+        .course-card:hover::after,
+        .testimonial-card:hover::after,
+        .pricing-card:hover::after {
+            left: 160%;
+            transition: left 0.75s ease;
+        }
+
+        /* --- Progress Bar Shimmer --- */
+        .mini-progress span {
+            position: relative;
+            overflow: hidden;
+        }
+        .mini-progress span::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+            animation: progressShimmer 2.5s ease-in-out infinite;
+        }
+        @keyframes progressShimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        /* --- Hero Badge Pulse Glow --- */
+        .badge { animation: badgePulse 3s ease-in-out infinite; }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(12,166,120,0); }
+            50% { box-shadow: 0 0 0 7px rgba(12,166,120,0.07); }
+        }
+
+        /* --- Streak Flame Pulse --- */
+        .streak-flame {
+            display: inline-block;
+            animation: flamePulse 1.5s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        @keyframes flamePulse {
+            0%,100% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 8px rgba(255,160,0,0.4)); }
+            50% { transform: scale(1.12) rotate(3deg); filter: drop-shadow(0 0 22px rgba(255,80,0,0.65)); }
+        }
+
+        /* --- Animated Outcome Numbers --- */
+        .outcome-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 36px;
+            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+        }
+        .outcome-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(67,97,238,0.04), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .outcome-card:hover { transform: translateY(-8px); box-shadow: var(--shadow), var(--shadow-glow); }
+        .outcome-card:hover::before { opacity: 1; }
+        .outcome-number {
+            font-size: clamp(44px,6vw,68px);
+            font-weight: 950;
+            letter-spacing: -0.05em;
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+        }
+        .outcome-label { display:block; font-size:16px; font-weight:850; letter-spacing:-0.02em; color:var(--dark); margin:8px 0 6px; }
+        .outcome-desc { font-size:13px; color:var(--muted); line-height:1.55; font-weight:500; }
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .outcomes-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 50px;
+            backdrop-filter: blur(24px);
+        }
+        @media (max-width: 720px) { .outcomes-container { padding: 28px 20px; } }
+
+        /* --- Cursor Sparkle --- */
+        .cursor-spark {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 99998;
+            animation: sparkFade 0.6s ease-out forwards;
+        }
+        @keyframes sparkFade {
+            0% { transform: scale(1) translate(-50%,-50%); opacity: 1; }
+            100% { transform: scale(0) translate(-50%,-50%); opacity: 0; }
+        }
+
+        /* --- Theme Toggle Spin --- */
+        .theme-toggle-btn.spinning {
+            animation: spinToggle 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes spinToggle {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* --- Back to Top Button --- */
+        #backToTop {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
+            z-index: 998;
+            color: var(--dark);
+        }
+        #backToTop.visible { opacity:1; transform: translateY(0); }
+        #backToTop:hover { transform: translateY(-5px); border-color: var(--blue); box-shadow: var(--shadow), 0 0 14px rgba(67,97,238,0.2); }
+
+        /* --- Loading Emoji Bounce --- */
+        .loading-emoji { display:inline-block; animation: loadingBounce 0.8s ease-in-out infinite; }
+        @keyframes loadingBounce {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* --- Subscription Badge Shine --- */
+        .subscription-badge { position:relative; overflow:hidden; }
+        .subscription-badge.pro::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent, rgba(255,255,255,0.35), transparent);
+            animation: badgeShine 2.5s ease-in-out infinite;
+            border-radius: inherit;
+        }
+        @keyframes badgeShine {
+            0%,100% { transform: translateX(-150%); }
+            50% { transform: translateX(150%); }
+        }
+
+        /* --- Gradient Text Glow --- */
+        .gradient-text {
+            animation: gradientShift 6s ease-in-out infinite, textGlow 3s ease-in-out infinite;
+        }
+        @keyframes textGlow {
+            0%,100% { filter: drop-shadow(0 0 0px transparent); }
+            50% { filter: drop-shadow(0 0 10px rgba(12,166,120,0.35)); }
+        }
+
+        /* --- Path Item Icon Pop on Hover --- */
+        .path-item:hover .path-icon {
+            animation: iconPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes iconPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.22) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        /* --- Showcase Tab Active Slide --- */
+        .showcase-tab { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease; }
+        .showcase-tab.active { transform: translateX(6px); }
+
+        /* --- Program Card Hover Effect --- */
+        .program-card { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease; position:relative; overflow:hidden; }
+        .program-card::after {
+            content:'';
+            position:absolute;
+            top:0; left:-100%;
+            width:55%;
+            height:100%;
+            background: linear-gradient(105deg, transparent, rgba(255,255,255,0.12), transparent);
+            transform: skewX(-15deg);
+            pointer-events:none;
+            transition: left 0s;
+        }
+        .program-card:hover::after { left:160%; transition: left 0.75s ease; }
+        .program-card:hover { transform: translateY(-8px) scale(1.018); }
+
+        /* --- Partner Card Hover --- */
+        .partner-card { transition: transform 0.32s cubic-bezier(0.16,1,0.3,1), box-shadow 0.32s ease; }
+        .partner-card:hover { transform: translateY(-6px) scale(1.04); }
+
+        /* --- FAQ Open State Enhancement --- */
+        .faq-item.open { box-shadow: 0 8px 24px rgba(99,102,241,0.08); border-color: rgba(99,102,241,0.25) !important; }
+
+        /* --- Testimonial Avatar Wiggle --- */
+        .testimonial-card:hover .testi-avatar { animation: wiggle 0.5s ease; display:inline-block; }
+        @keyframes wiggle {
+            0%,100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+        }
+
+        /* --- Stat Card Hover Color --- */
+        .stat-card:hover strong { color: var(--blue); transition: color 0.3s ease; }
+
+        /* --- Stat Card XP Bar --- */
+        .stat-card .stat-glow-bar {
+            height: 3px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--green), var(--blue));
+            width: 0%;
+            margin-top: 10px;
+            transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+        }
+        .stat-card:hover .stat-glow-bar { width: 100%; }
+
+        /* --- Demo Option Hover Ripple --- */
+        .demo-opt, .diag-pill { position:relative; overflow:hidden; }
+        .demo-opt::before, .diag-pill::before {
+            content:'';
+            position:absolute;
+            top:50%; left:50%;
+            width:0; height:0;
+            background: rgba(255,255,255,0.08);
+            border-radius:50%;
+            transform: translate(-50%,-50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+        .demo-opt:hover::before, .diag-pill:hover::before { width:200%; height:200%; }
+
+        /* --- Visual Chip Enhanced Hover --- */
+        .visual-chip { transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), box-shadow 0.45s ease !important; }
+        .visual-chip:hover { transform: translate3d(10px,-18px,48px) scale(1.06) !important; box-shadow: 0 16px 32px rgba(67,97,238,0.18) !important; }
+
+        /* --- Phone Glow on Wrap Hover --- */
+        .phone-wrap { transition: filter 0.4s ease; }
+        .phone-glow { transition: transform 0.5s ease, opacity 0.5s ease; }
+        .phone-wrap:hover .phone-glow { transform: scale(1.18); opacity: 0.75; }
+
+        /* --- Featured Icon Hover Glow --- */
+        .feat-card:hover .feat-icon { box-shadow: 0 8px 24px rgba(99,102,241,0.2); }
+
+        /* --- Scroll Progress Glowing Head --- */
+        .scroll-progress-bar { position:relative; }
+        .scroll-progress-bar::after {
+            content:'';
+            position:absolute;
+            right:0; top:50%;
+            transform:translateY(-50%);
+            width:10px; height:10px;
+            border-radius:50%;
+            background:var(--green);
+            box-shadow: 0 0 8px var(--green), 0 0 18px rgba(50,214,107,0.5);
+            transition: opacity 0.3s ease;
+        }
+
+        /* --- Hero Actions Button Stagger --- */
+        .hero-copy .badge { animation: heroCopyIn 0.6s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+        .hero-copy h1 { animation: heroCopyIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+        .hero-copy > p { animation: heroCopyIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.32s both; }
+        .hero-actions { animation: heroCopyIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.44s both; }
+        .stats-row { animation: heroCopyIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.56s both; }
+
+        /* --- Live Ticker Border Accent --- */
+        .live-ticker { border-left: 3px solid var(--green); }
+
+        /* --- Floating Card hover enhancement --- */
+        .floating-card:hover { box-shadow: 0 24px 44px rgba(17,24,39,0.14), 0 0 22px rgba(67,97,238,0.12); }
+
+        /* --- Course Card Progress Glow on hover --- */
+        .course-card:hover .mini-progress span { box-shadow: 0 0 10px rgba(12,166,120,0.5); }
+
+        /* === Reduce Motion Fallback === */
+        @media (prefers-reduced-motion: reduce) {
+            .badge, .streak-flame, .cursor-spark, .mini-progress span::after,
+            .subscription-badge.pro::after, .loading-emoji, .gradient-text,
+            .section-kicker::after, .scroll-progress-bar::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/nav-polish.css">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/bubub-ai.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body data-page="index">
     <div class="scroll-progress-container">
@@ -3593,20 +3993,128 @@
     <div class="noise"></div>
 
     <main class="page">
-        <nav class="navbar">
-            <a href="index.html" class="brand">
-                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
-                Universe Of Tech
-            </a>
+                                        <nav class="navbar">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand">
+                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    Universe Of Tech
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
+                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="explore-mega-menu" id="exploreMegaMenu">
+                        <!-- Column 1: Kategori Belajar -->
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="materi-basic.html" class="mega-item-link">
+                                        <div class="mega-icon-box">💻</div>
+                                        <span>Dasar Pemrograman</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🧠</div>
+                                        <span>Struktur Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🌐</div>
+                                        <span>Web Development</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="snbt.html" class="mega-item-link">
+                                        <div class="mega-icon-box">📈</div>
+                                        <span>Persiapan UTBK SNBT</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tka-lms.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏛</div>
+                                        <span>LMS TKA</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="bahasa-daerah.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <span>Wonderful Indonesia</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 2: Fitur & Dashboard -->
+                        <div class="mega-col">
+                            <h4>Fitur & Dashboard</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="learning-path.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🗺</div>
+                                        <span>Roadmap Belajar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="leaderboard.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏆</div>
+                                        <span>Leaderboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="achievements.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏅</div>
+                                        <span>Pencapaian</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="profile.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👤</div>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="payment.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👑</div>
+                                        <span>Upgrade Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 3: Spotlight -->
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header">
+                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
+                                </div>
+                                <h5>Dasar SQL & Database Relasional</h5>
+                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
+                                <a href="materi.html" class="btn-spotlight">
+                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Suggestions Popover -->
+                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
+            </div>
 
             <div class="nav-links">
-                <a href="index.html" class="active">Beranda</a>
+                <a href="index.html">Beranda</a>
                 <a href="materi.html">Materi</a>
                 <a href="quiz.html">Quiz</a>
-                <a href="snbt.html">TKA</a>
-                <a href="tka-lms.html">LMS TKA</a>
                 <a href="library.html">Library</a>
-                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
             </div>
 
             <div class="nav-actions">
@@ -3712,26 +4220,72 @@
             </svg>
         </div>
 
-        <!-- Seksi Partner Ticker -->
+        <!-- Seksi Partner Grid -->
         <section class="partner-ticker-section">
-            <div class="partner-title">Dipercaya oleh Siswa & Komunitas dari</div>
-            <div class="partner-ticker-wrapper">
-                <div class="partner-ticker">
-                    <div class="partner-logo">🏫 SMA Negeri 3 Jakarta</div>
-                    <div class="partner-logo">🎓 Universitas Indonesia</div>
-                    <div class="partner-logo">⚡ ITB Bandung</div>
-                    <div class="partner-logo">🏛️ Universitas Gadjah Mada</div>
-                    <div class="partner-logo">🚀 TechCorp Indonesia</div>
-                    <div class="partner-logo">💻 SMAN 1 Bandung</div>
-                    <div class="partner-logo">🧠 Binus University</div>
-                    <!-- Duplicate for loop -->
-                    <div class="partner-logo">🏫 SMA Negeri 3 Jakarta</div>
-                    <div class="partner-logo">🎓 Universitas Indonesia</div>
-                    <div class="partner-logo">⚡ ITB Bandung</div>
-                    <div class="partner-logo">🏛️ Universitas Gadjah Mada</div>
-                    <div class="partner-logo">🚀 TechCorp Indonesia</div>
-                    <div class="partner-logo">💻 SMAN 1 Bandung</div>
-                    <div class="partner-logo">🧠 Binus University</div>
+            <div class="partner-logos-title">Bekerja Sama Dengan Institusi Terkemuka</div>
+            <div class="partners-grid">
+                <div class="partner-card" title="SMA Negeri 3 Jakarta">🏫 SMAN 3 Jakarta</div>
+                <div class="partner-card" title="Universitas Indonesia">🎓 Univ. Indonesia</div>
+                <div class="partner-card" title="Institut Teknologi Bandung">⚡ ITB Bandung</div>
+                <div class="partner-card" title="Universitas Gadjah Mada">🏛️ UGM Yogyakarta</div>
+                <div class="partner-card" title="TechCorp Indonesia">🚀 TechCorp Indo</div>
+                <div class="partner-card" title="Binus University">🧠 Binus Univ</div>
+            </div>
+        </section>
+
+        <!-- Seksi Program Pembelajaran (Learning Programs) -->
+        <section class="section reveal">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Program Pembelajaran Terstruktur</div>
+                    <h2>Pilih cara belajar terbaik untukmu.</h2>
+                </div>
+                <p>Mulai dari proyek praktis berdurasi 2 jam hingga jalur spesialisasi mendalam.</p>
+            </div>
+            
+            <div class="programs-grid">
+                <!-- Card 1: Guided Project -->
+                <div class="program-card blue">
+                    <span class="program-type-badge">Guided Project</span>
+                    <h3>Pembuatan Portofolio Web Responsif</h3>
+                    <p>Pelajari langsung HTML5, CSS Grid, dan Flexbox dengan menyelesaikan satu halaman web interaktif dari awal.</p>
+                    <div class="program-meta">
+                        <span><i class="fa-regular fa-clock"></i> 2 Jam</span>
+                        <a href="materi.html" class="program-link">Mulai Proyek <i class="fa-solid fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Micro-Course -->
+                <div class="program-card green">
+                    <span class="program-type-badge">Kursus Singkat</span>
+                    <h3>Logika Pemrograman Dasar (Javascript)</h3>
+                    <p>Pahami fondasi logika coding: variabel, condition loop, dan manipulasi data dasar menggunakan bahasa Javascript.</p>
+                    <div class="program-meta">
+                        <span><i class="fa-regular fa-clock"></i> 5 Hari</span>
+                        <a href="materi-basic.html" class="program-link">Mulai Gratis <i class="fa-solid fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 3: Specialization -->
+                <div class="program-card orange">
+                    <span class="program-type-badge">Spesialisasi Pro</span>
+                    <h3>Fullstack Web Development</h3>
+                    <p>Jalur karir lengkap dari dasar HTML/CSS, JavaScript DOM, database query SQL, hingga deployment server local.</p>
+                    <div class="program-meta">
+                        <span><i class="fa-regular fa-clock"></i> 3 Bulan</span>
+                        <a href="materi.html" class="program-link">Eksplor Jalur <i class="fa-solid fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Card 4: Prep Course -->
+                <div class="program-card purple">
+                    <span class="program-type-badge">Ujian Akhir</span>
+                    <h3>Persiapan Ujian SNBT UTBK</h3>
+                    <p>Rangkaian try-out adaptif, review bank kesalahan, materi TPS/TKA terlengkap untuk masuk ke universitas impian.</p>
+                    <div class="program-meta">
+                        <span><i class="fa-regular fa-clock"></i> Fleksibel</span>
+                        <a href="snbt.html" class="program-link">Coba Tryout <i class="fa-solid fa-chevron-right"></i></a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -3893,6 +4447,39 @@
             </div>
         </section>
 
+        <!-- Seksi Learner Outcomes (Career Benefits) -->
+        <section id="outcomes-section" class="section reveal">
+            <div class="outcomes-container">
+                <div class="section-header" style="margin-bottom: 0;">
+                    <div>
+                        <div class="section-kicker">Hasil Nyata Pengguna</div>
+                        <h2>Investasi ilmu untuk masa depan karir Anda.</h2>
+                    </div>
+                    <p>Universe Of Tech membantu siswa dan profesional meningkatkan keahlian koding secara konsisten setiap hari.</p>
+                </div>
+                
+                <div class="outcomes-grid">
+                    <div class="outcome-card">
+                        <div class="outcome-number" id="outcome-ptn">0%</div>
+                        <strong class="outcome-label">Lolos Ujian PTN</strong>
+                        <p class="outcome-desc">Siswa yang mengambil jalur persiapan SNBT berhasil lolos ke universitas pilihan pertama.</p>
+                    </div>
+                    
+                    <div class="outcome-card">
+                        <div class="outcome-number" id="outcome-kerja">0%</div>
+                        <strong class="outcome-label">Siap Kerja Magang</strong>
+                        <p class="outcome-desc">Lulusan modul Spesialisasi menyatakan siap membuat project professional mandiri.</p>
+                    </div>
+                    
+                    <div class="outcome-card">
+                        <div class="outcome-number" id="outcome-cert">0K+</div>
+                        <strong class="outcome-label">Sertifikat LinkedIn</strong>
+                        <p class="outcome-desc">Telah mengunggah E-Sertifikat kelulusan modul koding untuk mempercantik profil profesional.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Wave Divider: Showcase → Curriculum -->
         <div class="wave-divider flip" aria-hidden="true">
             <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -3962,6 +4549,113 @@
             </div>
         </section>
 
+        <!-- Seksi Jalur Karir Populer (Career Pathways) -->
+        <section class="section reveal">
+            <div class="section-header">
+                <div>
+                    <div class="section-kicker">Eksplorasi Karir Masa Depan</div>
+                    <h2>Mulai perjalanan karir Anda di bidang teknologi.</h2>
+                </div>
+                <p>Temukan posisi pekerjaan teknologi yang paling diminati, keahlian utama, dan perkiraan gaji awal.</p>
+            </div>
+
+            <div class="career-pathways-container">
+                <!-- Tabs Menu -->
+                <div class="career-tabs">
+                    <button class="career-tab-btn active" data-role="frontend">Frontend Developer</button>
+                    <button class="career-tab-btn" data-role="uiux">UI/UX Designer</button>
+                    <button class="career-tab-btn" data-role="data">Data Analyst</button>
+                </div>
+
+                <!-- Tab 1: Frontend Developer -->
+                <div class="career-tab-content active" id="path-frontend">
+                    <div class="career-info">
+                        <h3>Frontend Web Developer</h3>
+                        <p>Merancang, membangun, dan memelihara bagian antarmuka pengguna (user interface) dari website. Menghubungkan visual desain dengan logic pemrograman agar interaktif dan responsif di berbagai perangkat.</p>
+                        <strong style="color: var(--dark); font-size: 14.5px;">Keahlian Utama yang Dibutuhkan:</strong>
+                        <div class="career-skills-tags">
+                            <span class="skill-tag">HTML5 & CSS3</span>
+                            <span class="skill-tag">Javascript ES6</span>
+                            <span class="skill-tag">Flexbox & CSS Grid</span>
+                            <span class="skill-tag">API Integration</span>
+                            <span class="skill-tag">DOM Manipulation</span>
+                        </div>
+                    </div>
+                    <div class="career-stats-box">
+                        <div class="career-stat-item">
+                            <span>Rata-Rata Gaji Awal (Indo)</span>
+                            <strong>Rp 7.500.000 - Rp 14.000.000 <span>/ bulan</span></strong>
+                        </div>
+                        <div class="career-stat-item">
+                            <span>Rekomendasi Modul Pertama</span>
+                            <div class="career-rec-course">
+                                <div class="career-course-icon">🌐</div>
+                                <p>Web Development & Dasar HTML/CSS/JS</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: UI/UX Designer -->
+                <div class="career-tab-content" id="path-uiux">
+                    <div class="career-info">
+                        <h3>UI/UX Product Designer</h3>
+                        <p>Melakukan riset perilaku pengguna, merancang struktur navigasi (wireframe), membuat prototype visual interaktif, dan mendesain antarmuka produk digital (mobile app/website) agar indah dan intuitif.</p>
+                        <strong style="color: var(--dark); font-size: 14.5px;">Keahlian Utama yang Dibutuhkan:</strong>
+                        <div class="career-skills-tags">
+                            <span class="skill-tag">Wireframing</span>
+                            <span class="skill-tag">Figma Prototype</span>
+                            <span class="skill-tag">Usability Testing</span>
+                            <span class="skill-tag">Color Theory</span>
+                            <span class="skill-tag">User Journey Map</span>
+                        </div>
+                    </div>
+                    <div class="career-stats-box">
+                        <div class="career-stat-item">
+                            <span>Rata-Rata Gaji Awal (Indo)</span>
+                            <strong>Rp 6.800.000 - Rp 12.500.000 <span>/ bulan</span></strong>
+                        </div>
+                        <div class="career-stat-item">
+                            <span>Rekomendasi Modul Pertama</span>
+                            <div class="career-rec-course">
+                                <div class="career-course-icon">🎨</div>
+                                <p>Prinsip Dasar UI/UX & Wireframing Figma</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Data Analyst -->
+                <div class="career-tab-content" id="path-data">
+                    <div class="career-info">
+                        <h3>Data Analyst</h3>
+                        <p>Mengumpulkan, membersihkan, menganalisis, dan memvisualisasikan data mentah untuk menghasilkan insight bisnis yang berguna bagi pengambilan keputusan strategis perusahaan.</p>
+                        <strong style="color: var(--dark); font-size: 14.5px;">Keahlian Utama yang Dibutuhkan:</strong>
+                        <div class="career-skills-tags">
+                            <span class="skill-tag">SQL Database Query</span>
+                            <span class="skill-tag">Microsoft Excel</span>
+                            <span class="skill-tag">Python (Pandas)</span>
+                            <span class="skill-tag">Data Visualisation</span>
+                            <span class="skill-tag">Statistika Bisnis</span>
+                        </div>
+                    </div>
+                    <div class="career-stats-box">
+                        <div class="career-stat-item">
+                            <span>Rata-Rata Gaji Awal (Indo)</span>
+                            <strong>Rp 7.000.000 - Rp 13.000.000 <span>/ bulan</span></strong>
+                        </div>
+                        <div class="career-stat-item">
+                            <span>Rekomendasi Modul Pertama</span>
+                            <div class="career-rec-course">
+                                <div class="career-course-icon">📊</div>
+                                <p>Dasar Query Database Relasional SQL</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Seksi Tes Diagnostik (Diagnostic Test) -->
         <section id="diagnostik" class="section reveal">
             <div class="section-header">
@@ -3972,90 +4666,88 @@
                 <p>Jawab 3 pertanyaan, lalu dapatkan rekomendasi jalur belajar.</p>
             </div>
 
-            <div class="diag-layout">
-                <div class="diag-panel">
-                    <div class="diag-card" id="diagCard">
-                        <!-- Step 1 -->
-                        <div class="diag-step active" id="diag-step-1">
-                            <span class="diag-number">1 / 3</span>
-                            <h3>Pilih topik teknologi yang paling ingin kamu kuasai:</h3>
-                            <div class="diag-options">
-                                <button class="diag-pill" data-val="coding" onclick="selectDiagOption(1, this)">💻 Pemrograman & Logika</button>
-                                <button class="diag-pill" data-val="design" onclick="selectDiagOption(1, this)">🎨 Desain UI/UX & Produk</button>
-                                <button class="diag-pill" data-val="tka" onclick="selectDiagOption(1, this)">📈 Persiapan Ujian TKA SNBT</button>
-                            </div>
-                            <div class="diag-actions">
-                                <button class="btn btn-primary" onclick="nextDiagStep(1)">Lanjut ➔</button>
-                            </div>
+            <div class="diagnostic-container">
+                <div class="diagnostic-card" id="diagCard">
+                    <!-- Step 1 -->
+                    <div class="diag-step active" id="diag-step-1">
+                        <span class="diag-number">1 / 3</span>
+                        <h3>Pilih topik teknologi yang paling ingin kamu kuasai:</h3>
+                        <div class="diag-options">
+                            <button class="diag-pill" data-val="coding" onclick="selectDiagOption(1, this)">💻 Pemrograman & Logika</button>
+                            <button class="diag-pill" data-val="design" onclick="selectDiagOption(1, this)">🎨 Desain UI/UX & Produk</button>
+                            <button class="diag-pill" data-val="tka" onclick="selectDiagOption(1, this)">📈 Persiapan Ujian TKA SNBT</button>
                         </div>
-                        <!-- Step 2 -->
-                        <div class="diag-step" id="diag-step-2">
-                            <span class="diag-number">2 / 3</span>
-                            <h3>Berapa banyak waktu yang bisa kamu sediakan per hari?</h3>
-                            <div class="diag-options">
-                                <button class="diag-pill" data-val="15" onclick="selectDiagOption(2, this)">⚡ 15 Menit/hari (Santai)</button>
-                                <button class="diag-pill" data-val="30" onclick="selectDiagOption(2, this)">🚀 30 Menit/hari (Konsisten)</button>
-                                <button class="diag-pill" data-val="60" onclick="selectDiagOption(2, this)">🔥 1 Jam+/hari (Intensif)</button>
-                            </div>
-                            <div class="diag-actions">
-                                <button class="btn btn-ghost" onclick="prevDiagStep(2)">➔ Kembali</button>
-                                <button class="btn btn-primary" onclick="nextDiagStep(2)">Lanjut ➔</button>
-                            </div>
+                        <div class="diag-actions">
+                            <button class="btn btn-primary" onclick="nextDiagStep(1)">Lanjut ➔</button>
                         </div>
-                        <!-- Step 3 -->
-                        <div class="diag-step" id="diag-step-3">
-                            <span class="diag-number">3 / 3</span>
-                            <h3>Apa tingkat pengalaman belajarmu saat ini?</h3>
-                            <div class="diag-options">
-                                <button class="diag-pill" data-val="newbie" onclick="selectDiagOption(3, this)">🥚 Pemula Sekali (Belum pernah koding)</button>
-                                <button class="diag-pill" data-val="intermediate" onclick="selectDiagOption(3, this)">🐣 Pernah Belajar (Paham dasar-dasar)</button>
-                                <button class="diag-pill" data-val="pro" onclick="selectDiagOption(3, this)">🦅 Mahir (Ingin mempertajam skill)</button>
-                            </div>
-                            <div class="diag-actions">
-                                <button class="btn btn-ghost" onclick="prevDiagStep(3)">➔ Kembali</button>
-                                <button class="btn btn-primary" onclick="nextDiagStep(3)">Lihat Hasil Jalurku ➔</button>
-                            </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="diag-step" id="diag-step-2">
+                        <span class="diag-number">2 / 3</span>
+                        <h3>Berapa banyak waktu yang bisa kamu sediakan per hari?</h3>
+                        <div class="diag-options">
+                            <button class="diag-pill" data-val="15" onclick="selectDiagOption(2, this)">⚡ 15 Menit/hari (Santai)</button>
+                            <button class="diag-pill" data-val="30" onclick="selectDiagOption(2, this)">🚀 30 Menit/hari (Konsisten)</button>
+                            <button class="diag-pill" data-val="60" onclick="selectDiagOption(2, this)">🔥 1 Jam+/hari (Intensif)</button>
                         </div>
-                        <!-- Loading State -->
-                        <div class="diag-step" id="diag-step-loading">
-                            <div class="diag-loader"></div>
-                            <h3>Menganalisis profil belajarmu...</h3>
-                            <p>Algoritma sedang meramu kurikulum terbaik berdasarkan jawabanmu.</p>
+                        <div class="diag-actions">
+                            <button class="btn btn-ghost" onclick="prevDiagStep(2)">➔ Kembali</button>
+                            <button class="btn btn-primary" onclick="nextDiagStep(2)">Lanjut ➔</button>
                         </div>
-                        <!-- Result State -->
-                        <div class="diag-step" id="diag-step-result">
-                            <span class="diag-badge">Rekomendasi Jalur Terbuat! 🎉</span>
-                            <h3 id="diag-result-title">Dasar Pemrograman Kilat</h3>
-                            <p id="diag-result-desc">Jalur belajar intensif 15 hari untuk menguasai pondasi dasar koding.</p>
-                            
-                            <div class="diag-roadmap">
-                                <div class="diag-road-item">
-                                    <span class="road-icon">📘</span>
-                                    <div>
-                                        <strong id="diag-road-title-1">Hari 1-5: Pondasi Dasar</strong>
-                                        <p id="diag-road-1">Memahami variabel, tipe data, dan logika dasar.</p>
-                                    </div>
-                                </div>
-                                <div class="diag-road-item">
-                                    <span class="road-icon">⚡</span>
-                                    <div>
-                                        <strong id="diag-road-title-2">Hari 6-10: Quiz & Latihan</strong>
-                                        <p id="diag-road-2">Penyelesaian quiz adaptif harian dan coding puzzle.</p>
-                                    </div>
-                                </div>
-                                <div class="diag-road-item">
-                                    <span class="road-icon">🏆</span>
-                                    <div>
-                                        <strong id="diag-road-title-3">Hari 11-15: Proyek Mini & Ujian</strong>
-                                        <p id="diag-road-3">Membuat mini project dan klaim sertifikat Universe Of Tech.</p>
-                                    </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="diag-step" id="diag-step-3">
+                        <span class="diag-number">3 / 3</span>
+                        <h3>Apa tingkat pengalaman belajarmu saat ini?</h3>
+                        <div class="diag-options">
+                            <button class="diag-pill" data-val="newbie" onclick="selectDiagOption(3, this)">🥚 Pemula Sekali (Belum pernah koding)</button>
+                            <button class="diag-pill" data-val="intermediate" onclick="selectDiagOption(3, this)">🐣 Pernah Belajar (Paham dasar-dasar)</button>
+                            <button class="diag-pill" data-val="pro" onclick="selectDiagOption(3, this)">🦅 Mahir (Ingin mempertajam skill)</button>
+                        </div>
+                        <div class="diag-actions">
+                            <button class="btn btn-ghost" onclick="prevDiagStep(3)">➔ Kembali</button>
+                            <button class="btn btn-primary" onclick="nextDiagStep(3)">Lihat Hasil Jalurku ➔</button>
+                        </div>
+                    </div>
+                    <!-- Loading State -->
+                    <div class="diag-step" id="diag-step-loading">
+                        <div class="diag-loader"></div>
+                        <h3>Menganalisis profil belajarmu...</h3>
+                        <p>Algoritma sedang meramu kurikulum terbaik berdasarkan jawabanmu.</p>
+                    </div>
+                    <!-- Result State -->
+                    <div class="diag-step" id="diag-step-result">
+                        <span class="diag-badge">Rekomendasi Jalur Terbuat! 🎉</span>
+                        <h3 id="diag-result-title">Dasar Pemrograman Kilat</h3>
+                        <p id="diag-result-desc">Jalur belajar intensif 15 hari untuk menguasai pondasi dasar koding.</p>
+                        
+                        <div class="diag-roadmap">
+                            <div class="diag-road-item">
+                                <span class="road-icon">📘</span>
+                                <div>
+                                    <strong id="diag-road-title-1">Hari 1-5: Pondasi Dasar</strong>
+                                    <p id="diag-road-1">Memahami variabel, tipe data, dan logika dasar.</p>
                                 </div>
                             </div>
+                            <div class="diag-road-item">
+                                <span class="road-icon">⚡</span>
+                                <div>
+                                    <strong id="diag-road-title-2">Hari 6-10: Quiz & Latihan</strong>
+                                    <p id="diag-road-2">Penyelesaian quiz adaptif harian dan coding puzzle.</p>
+                                </div>
+                            </div>
+                            <div class="diag-road-item">
+                                <span class="road-icon">🏆</span>
+                                <div>
+                                    <strong id="diag-road-title-3">Hari 11-15: Proyek Mini & Ujian</strong>
+                                    <p id="diag-road-3">Membuat mini project dan klaim sertifikat Universe Of Tech.</p>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="diag-actions" style="margin-top: 25px;">
-                                <button class="btn btn-ghost" onclick="resetDiag()">Coba Lagi ↺</button>
-                                <a id="diag-start-btn" class="btn btn-primary" href="materi.html">Mulai Belajar Jalur Ini 🚀</a>
-                            </div>
+                        <div class="diag-actions" style="margin-top: 25px;">
+                            <button class="btn btn-ghost" onclick="resetDiag()">Coba Lagi ↺</button>
+                            <a id="diag-start-btn" class="btn btn-primary" href="materi.html">Mulai Belajar Jalur Ini 🚀</a>
                         </div>
                     </div>
                 </div>
@@ -4157,10 +4849,11 @@
                     </div>
                     <ul class="pricing-features">
                         <li>Semua modul advanced & proyek terapan</li>
-                        <li>Nyawa tak terbatas untuk kuis harian</li>
-                        <li>AI Mentor Tutor 24/7 tanpa batas</li>
-                        <li>Simulasi penuh ujian TKA & TPS premium</li>
-                        <li>E-Sertifikat resmi kelulusan modul</li>
+                        <li>Diagnosis kelemahan & latihan adaptif</li>
+                        <li>Smart Review dengan bank kesalahan</li>
+                        <li>Rencana personal & simulasi ujian</li>
+                        <li>Mentor BUBUB kontekstual di perangkat</li>
+                        <li>Backup progres & sertifikat kompetensi</li>
                     </ul>
                     <a href="payment.html" class="btn btn-primary" id="pricing-btn-pro" style="width: 100%; justify-content: center; margin-top: auto;">Langganan Pro</a>
                 </div>
@@ -4191,7 +4884,7 @@
                 <div class="about-visual">
                     <div class="about-orb"></div>
                     <div class="about-card">
-                        <img src="logo.png" alt="Universe Of Tech Logo" class="about-logo" />
+                        <img src="assets/logo.png" alt="Universe Of Tech Logo" class="about-logo" />
                         <strong>Universe Of Tech 🚀</strong>
                         <span>Empowering tomorrow's coders, today.</span>
                     </div>
@@ -4331,7 +5024,7 @@
             </div>
 
             <div class="contact-container">
-                <div class="contact-info">
+                <div class="contact-info-card">
                     <h3>Mari Berkolaborasi! ✉️</h3>
                     <p>Ada ide atau saran? Kirim pesan, kami baca.</p>
                     
@@ -4367,8 +5060,8 @@
                             <input type="text" id="contactName" required placeholder="Nama kamu...">
                         </div>
                         <div class="form-group">
-                            <label for="contactEmail">Email</label>
-                            <input type="email" id="contactEmail" required placeholder="email@domain.com">
+                            <label for="contactEmail">Alamat Email</label>
+                            <input type="email" id="contactEmail" required placeholder="Email kamu...">
                         </div>
                         <div class="form-group">
                             <label for="contactMessage">Pesan</label>
@@ -4406,7 +5099,7 @@
                 <!-- Column 1: Brand -->
                 <div class="footer-col footer-brand">
                     <a href="#" class="brand">
-                        <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" loading="lazy" />
+                        <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" loading="lazy" />
                         Universe Of Tech
                     </a>
                     <p>Platform pembelajaran teknologi interaktif berbasis gamifikasi harian yang membuat belajar koding menjadi adiktif dan menyenangkan.</p>
@@ -4459,14 +5152,14 @@
                     <h4>Dapatkan Aplikasi</h4>
                     <div class="app-stores">
                         <button class="store-badge" aria-label="Unduh di App Store">
-                            <span style="font-size: 20px;">🍎</span>
+                            <span style="font-size: 24px; display: flex; align-items: center;"><i class="fa-brands fa-apple"></i></span>
                             <div style="text-align: left;">
                                 <span class="store-sub">Download on the</span>
                                 <span class="store-title">App Store</span>
                             </div>
                         </button>
                         <button class="store-badge" aria-label="Unduh di Google Play">
-                            <span style="font-size: 20px;">🤖</span>
+                            <span style="font-size: 20px; display: flex; align-items: center;"><i class="fa-brands fa-google-play"></i></span>
                             <div>
                                 <span class="store-sub">GET IT ON</span>
                                 <span class="store-title">Google Play</span>
@@ -4474,10 +5167,10 @@
                         </button>
                     </div>
                     <div class="social-links">
-                        <button class="social-btn" aria-label="Instagram">📸</button>
-                        <button class="social-btn" aria-label="Twitter">🐦</button>
-                        <button class="social-btn" aria-label="TikTok">🎵</button>
-                        <button class="social-btn" aria-label="LinkedIn">💼</button>
+                        <button class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></button>
+                        <button class="social-btn" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></button>
+                        <button class="social-btn" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></button>
+                        <button class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></button>
                     </div>
                 </div>
             </div>
@@ -4492,6 +5185,7 @@
                 </div>
             </div>
         </footer>
+
         <!-- FITUR BARU: Live Activity Feed Ticker -->
         <div class="live-ticker" id="liveTicker">
             <div class="ticker-badge" id="tickerBadge">🔥</div>
@@ -4530,6 +5224,7 @@
                 try { initScrollProgress(); } catch(e) { console.warn("initScrollProgress:", e); }
                 try { initPointerOrb(); } catch(e) { console.warn("initPointerOrb:", e); }
                 try { checkSubscriptionStatus(); } catch(e) { console.warn("checkSubscriptionStatus:", e); }
+                try { initSubModalAction(); } catch(e) { console.warn("initSubModalAction:", e); }
 
                 // Always run scroll reveal last — most critical for visibility
                 try {
@@ -4983,8 +5678,31 @@
                     return;
                 }
 
-                document.getElementById(`diag-step-${currStep}`).classList.remove("active");
-                document.getElementById(`diag-step-${currStep + 1}`).classList.add("active");
+                if (currStep === 3) {
+                    // Transition to loading
+                    document.getElementById("diag-step-3").classList.remove("active");
+                    const loadingStep = document.getElementById("diag-step-loading");
+                    if (loadingStep) {
+                        loadingStep.classList.add("active");
+                    }
+
+                    // Calculate results
+                    calculateDiagResult();
+
+                    // Transition to results after delay
+                    setTimeout(() => {
+                        if (loadingStep) {
+                            loadingStep.classList.remove("active");
+                        }
+                        const resultStep = document.getElementById("diag-step-result");
+                        if (resultStep) {
+                            resultStep.classList.add("active");
+                        }
+                    }, 1500);
+                } else {
+                    document.getElementById(`diag-step-${currStep}`).classList.remove("active");
+                    document.getElementById(`diag-step-${currStep + 1}`).classList.add("active");
+                }
             }
 
             function prevDiagStep(currStep) {
@@ -4993,20 +5711,12 @@
             }
 
             function calculateDiagResult() {
-                if (!currentDiagAnswers[3]) {
-                    alert("Silakan pilih salah satu opsi terlebih dahulu!");
-                    return;
-                }
-
-                document.getElementById("diag-step-3").classList.remove("active");
-                document.getElementById("diag-step-result").classList.add("active");
-
                 const interest = currentDiagAnswers[1];
                 const time = currentDiagAnswers[2];
                 const level = currentDiagAnswers[3];
 
-                const badgeEl = document.getElementById("diag-res-badge");
-                const descEl = document.getElementById("diag-res-desc");
+                const badgeEl = document.getElementById("diag-result-title");
+                const descEl = document.getElementById("diag-result-desc");
                 const road1 = document.getElementById("diag-road-1");
                 const road2 = document.getElementById("diag-road-2");
                 const road3 = document.getElementById("diag-road-3");
@@ -5023,20 +5733,13 @@
                 let r3Text = "";
                 let linkTarget = "materi.html";
 
-                if (interest === "programming") {
+                if (interest === "coding") {
                     badgeText = "💻 Jalur Dasar Pemrograman";
                     descText = `Sangat cocok untuk pemula. Jalur ini kami rancang khusus untuk mempelajari konsep problem solving logika menggunakan Javascript selama ${level === "newbie" ? "15" : "10"} hari, berkomitmen ${time} menit sehari.`;
                     r1Text = "Memahami Variabel, Operator Aritmatika, dan Kondisi Dasar (if-else).";
                     r2Text = "Mempelajari Perulangan (Loops) dan Array untuk menyusun list data.";
                     r3Text = "Membuat Function terstruktur dan menyelesaikan tantangan logika dasar.";
                     linkTarget = "materi-basic.html";
-                } else if (interest === "database") {
-                    badgeText = "🗄️ Jalur Database & SQL";
-                    descText = `Jalur kurikulum untuk memahami manajemen data. Kurikulum 12 hari untuk mempelajari query SQL interaktif, berkomitmen ${time} menit sehari.`;
-                    r1Text = "Memahami Konsep RDBMS, Relasi Tabel, dan membuat skema dasar.";
-                    r2Text = "Menulis Query Data Manipulation (SELECT, INSERT, UPDATE, JOIN).";
-                    r3Text = "Optimasi Query database dan merancang skema relasi complex.";
-                    linkTarget = "materi.html";
                 } else if (interest === "design") {
                     badgeText = "🎨 Jalur UI/UX Design";
                     descText = `Jalur untuk merancang tampilan visual dan riset pengguna. Kurikulum 10 hari, berkomitmen ${time} menit harian.`;
@@ -5044,13 +5747,13 @@
                     r2Text = "Membuat Wireframe & Prototype menggunakan Figma secara kolaboratif.";
                     r3Text = "Melakukan Usability Testing langsung ke pengguna fiktif.";
                     linkTarget = "materi.html";
-                } else if (interest === "analytics") {
-                    badgeText = "📊 Jalur Business Analytics";
-                    descText = `Jalur pemahaman bisnis berbasis data statistik. Kurikulum 14 hari, berkomitmen ${time} menit harian.`;
-                    r1Text = "Memahami metrik KPI, conversion rate, dan dasar funneling.";
-                    r2Text = "Mengolah data menggunakan Excel spreadsheet dan Visualisasi Grafis.";
-                    r3Text = "Mengekstrak business insight dari laporan dashboard data.";
-                    linkTarget = "materi.html";
+                } else if (interest === "tka") {
+                    badgeText = "📈 Jalur Persiapan TKA SNBT";
+                    descText = `Jalur khusus persiapan ujian seleksi nasional masuk PTN. Kurikulum terstruktur untuk menguasai materi ujian secara efektif dalam ${level === "newbie" ? "30" : "20"} hari, berkomitmen ${time} menit harian.`;
+                    r1Text = "Membedah konsep dasar materi ujian, rumus penting, dan pola soal.";
+                    r2Text = "Latihan soal adaptif dengan pembahasan mendalam dan tips cepat.";
+                    r3Text = "Simulasi ujian try-out berkala dengan analisis skor dan kelemahan.";
+                    linkTarget = "snbt.html";
                 }
 
                 // Adjust Day count based on Level
@@ -5067,15 +5770,15 @@
                     day3 = "Hari 6-8";
                 }
 
-                badgeEl.textContent = badgeText;
-                descEl.textContent = descText;
-                roadTitle1.textContent = `${day1}: Fondasi Topik`;
-                roadTitle2.textContent = `${day2}: Uji Skill & Quiz`;
-                roadTitle3.textContent = `${day3}: Final Project & Badge`;
-                road1.textContent = r1Text;
-                road2.textContent = r2Text;
-                road3.textContent = r3Text;
-                startBtn.href = linkTarget;
+                if (badgeEl) badgeEl.textContent = badgeText;
+                if (descEl) descEl.textContent = descText;
+                if (roadTitle1) roadTitle1.textContent = `${day1}: Fondasi Topik`;
+                if (roadTitle2) roadTitle2.textContent = `${day2}: Uji Skill & Quiz`;
+                if (roadTitle3) roadTitle3.textContent = `${day3}: Final Project & Badge`;
+                if (road1) road1.textContent = r1Text;
+                if (road2) road2.textContent = r2Text;
+                if (road3) road3.textContent = r3Text;
+                if (startBtn) startBtn.href = linkTarget;
             }
 
             function resetDiag() {
@@ -5311,10 +6014,6 @@
                 const btnPro = document.getElementById("pricing-btn-pro");
                 const cardBasic = document.getElementById("pricing-card-basic");
                 const cardPro = document.getElementById("pricing-card-pro");
-                const cardUsername = document.getElementById("sub-card-username");
-                const actionBtn = document.getElementById("subModalActionBtn");
-                const modalTitle = document.getElementById("subModalTitle");
-                const modalDesc = document.getElementById("subModalDesc");
                 
                 const currentSub = localStorage.getItem("eduquestSubscription") || "free";
 
@@ -5335,23 +6034,30 @@
                     if (btnPro) {
                         btnPro.textContent = "Kelola Pro (Aktif) 👑";
                         btnPro.className = "btn btn-primary";
+                        btnPro.href = "pro-hub.html";
                     }
-                    if (cardPro) {
-                        cardPro.style.boxShadow = "0 0 30px rgba(99, 102, 241, 0.25)";
-                        cardPro.style.borderColor = "var(--blue)";
+                    // Update sub modal texts if it exists
+                    const subModalTitle = document.getElementById("subModalTitle");
+                    const subModalDesc = document.getElementById("subModalDesc");
+                    const subModalPrice = document.getElementById("subModalPrice");
+                    const subModalActionBtn = document.getElementById("subModalActionBtn");
+                    const subCardUsername = document.getElementById("sub-card-username");
+
+                    if (subModalTitle) subModalTitle.textContent = "Kelola Langganan Pro";
+                    if (subModalDesc) subModalDesc.textContent = "Kamu memiliki akses penuh ke fitur premium. Kamu bisa membatalkan langganan kapan saja.";
+                    if (subModalPrice) subModalPrice.innerHTML = 'Aktif <span style="font-size: 14px; font-weight: bold; color: var(--muted);">/ member</span>';
+                    if (subModalActionBtn) {
+                        subModalActionBtn.textContent = "Batalkan Langganan Pro 📉";
+                        subModalActionBtn.className = "btn btn-ghost";
+                        subModalActionBtn.style.background = "#fff1f4";
+                        subModalActionBtn.style.color = "#ff4d6d";
+                        subModalActionBtn.style.borderColor = "#ffccd5";
+                        subModalActionBtn.href = "#";
                     }
-                    if (cardBasic) {
-                        cardBasic.style.boxShadow = "none";
-                        cardBasic.style.borderColor = "var(--border)";
+                    if (subCardUsername) {
+                        const session = JSON.parse(localStorage.getItem("eduquestUserSession") || "{}");
+                        subCardUsername.textContent = (session.username || "PENGGUNA PRO").toUpperCase();
                     }
-                    // Update Modal Data
-                    if (cardUsername) cardUsername.textContent = "MEMBER PRO 👑";
-                    if (actionBtn) {
-                        actionBtn.textContent = "Batalkan Langganan Pro (Simulasi)";
-                        actionBtn.style.background = "#ff5ea8";
-                    }
-                    if (modalTitle) modalTitle.textContent = "Kelola Langganan Pro";
-                    if (modalDesc) modalDesc.textContent = "Anda saat ini memiliki akses penuh ke fitur premium. Ingin menonaktifkan status Pro?";
                 } else {
                     // Update Navbar Badge
                     if (badge) {
@@ -5360,43 +6066,62 @@
                     }
                     // Update Pricing Cards UI
                     if (btnBasic) {
-                        btnBasic.textContent = "Aktif (Basic)";
-                        btnBasic.setAttribute("disabled", "true");
-                        btnBasic.style.opacity = "0.6";
-                        btnBasic.style.cursor = "not-allowed";
-                        btnBasic.className = "btn btn-ghost disabled";
+                        btnBasic.textContent = "Mulai Belajar (Basic)";
+                        btnBasic.className = "btn btn-ghost";
                     }
                     if (btnPro) {
                         btnPro.textContent = "Langganan Pro";
                         btnPro.className = "btn btn-primary";
+                        btnPro.href = "payment.html";
                     }
-                    if (cardPro) {
-                        cardPro.style.boxShadow = "none";
-                        cardPro.style.borderColor = "var(--border)";
+                    // Reset sub modal texts
+                    const subModalTitle = document.getElementById("subModalTitle");
+                    const subModalDesc = document.getElementById("subModalDesc");
+                    const subModalPrice = document.getElementById("subModalPrice");
+                    const subModalActionBtn = document.getElementById("subModalActionBtn");
+                    const subCardUsername = document.getElementById("sub-card-username");
+
+                    if (subModalTitle) subModalTitle.textContent = "Tingkatkan Ke Akselerasi Pro";
+                    if (subModalDesc) subModalDesc.textContent = "Dapatkan akses penuh tanpa batas ke semua simulasi TKA/TPS, AI Tutor, dan E-Sertifikat resmi.";
+                    if (subModalPrice) subModalPrice.innerHTML = 'Rp 0 <span style="font-size: 14px; font-weight: bold; color: var(--muted);">/ bulan</span>';
+                    if (subModalActionBtn) {
+                        subModalActionBtn.textContent = "Mulai Pembayaran Pro";
+                        subModalActionBtn.className = "btn btn-primary";
+                        subModalActionBtn.style.background = "";
+                        subModalActionBtn.style.color = "white";
+                        subModalActionBtn.href = "payment.html";
                     }
-                    if (cardBasic) {
-                        cardBasic.style.boxShadow = "0 0 20px rgba(50, 214, 107, 0.1)";
+                    if (subCardUsername) {
+                        subCardUsername.textContent = "PENGGUNA GRATIS";
                     }
-                    // Update Modal Data
-                    if (cardUsername) cardUsername.textContent = "PENGGUNA GRATIS";
-                    if (actionBtn) {
-                        actionBtn.textContent = "Aktifkan Premium Pro (Simulasi)";
-                        actionBtn.style.background = "";
-                    }
-                    if (modalTitle) modalTitle.textContent = "Tingkatkan Ke Akselerasi Pro";
-                    if (modalDesc) modalDesc.textContent = "Dapatkan akses penuh tanpa batas ke semua simulasi TKA/TPS, AI Tutor, dan E-Sertifikat resmi.";
                 }
+            }
+
+            function toggleSubscriptionStatus() {
+                const currentSub = localStorage.getItem("eduquestSubscription") || "free";
+                if (currentSub === "pro") {
+                    activateFreeTier();
+                } else {
+                    localStorage.setItem("eduquestSubscription", "pro");
+                    if (typeof showFloatingText === "function") {
+                        showFloatingText("Selamat! Akun Pro Anda Telah Aktif! 👑🎉");
+                    }
+                    checkSubscriptionStatus();
+                    if (typeof playSound === "function") {
+                        playSound("success");
+                    }
+                }
+                closeSubscriptionModal();
             }
 
             function activateFreeTier() {
                 localStorage.setItem("eduquestSubscription", "free");
-                checkSubscriptionStatus();
-                
-                if (typeof playSound === "function") {
-                    playSound("success");
-                }
                 if (typeof showFloatingText === "function") {
-                    showFloatingText("Akun Anda diturunkan ke status Basic. 🟢");
+                    showFloatingText("Langganan Pro berhasil dibatalkan. 📉");
+                }
+                checkSubscriptionStatus();
+                if (typeof playSound === "function") {
+                    playSound("click");
                 }
             }
 
@@ -5420,35 +6145,27 @@
                 }
             }
 
-            function toggleSubscriptionStatus() {
-                const currentSub = localStorage.getItem("eduquestSubscription") || "free";
-                const modal = document.getElementById("subscriptionModal");
-                
-                if (currentSub === "pro") {
-                    // Downgrade
-                    localStorage.setItem("eduquestSubscription", "free");
-                    if (typeof showFloatingText === "function") {
-                        showFloatingText("Langganan Pro berhasil dibatalkan. 📉");
-                    }
-                } else {
-                    // Upgrade
-                    localStorage.setItem("eduquestSubscription", "pro");
-                    if (typeof showFloatingText === "function") {
-                        showFloatingText("Selamat! Akun Pro Anda Telah Aktif! 👑🎉");
-                    }
+            function initSubModalAction() {
+                const subModalActionBtn = document.getElementById("subModalActionBtn");
+                if (subModalActionBtn) {
+                    subModalActionBtn.addEventListener("click", (e) => {
+                        const currentSub = localStorage.getItem("eduquestSubscription") || "free";
+                        if (currentSub === "pro") {
+                            e.preventDefault();
+                            activateFreeTier();
+                            closeSubscriptionModal();
+                        }
+                    });
                 }
-
-                checkSubscriptionStatus();
-                if (typeof playSound === "function") {
-                    playSound("success");
-                }
-                
-                if (modal) {
-                    modal.classList.remove("active");
+                // Also add event listener to badge
+                const badge = document.getElementById("navSubscriptionBadge");
+                if (badge) {
+                    badge.addEventListener("click", () => {
+                        openSubscriptionModal();
+                    });
+                    badge.style.cursor = "pointer";
                 }
             }
-
-            // ===================================================================
             // INTERACTIVE PARTICLE NETWORK SYSTEM
             // ===================================================================
             (function initParticleNetwork() {
@@ -5603,9 +6320,8 @@
             })();
 
         </script>
-        <script src="sound-engine.js"></script>
-        <script src="auth-helper.js"></script>
-        <script src="pro-experience.js"></script>
+        <script src="js/sound-engine.js"></script>
+        <script src="js/auth-helper.js"></script>
 
         <!-- Modal Simulasi Checkout Premium (Pro) -->
         <div id="subscriptionModal" class="sub-modal">
@@ -5645,7 +6361,15 @@
             </div>
         </div>
     </main>
-    <script src="bubub-ai.js"></script>
+
+    <!-- Back To Top Button -->
+    <button id="backToTop" title="Kembali ke Atas" aria-label="Kembali ke Atas">↑</button>
+
+    <script src="js/pro-learning-engine.js"></script>
+    <script src="js/bubub-ai.js"></script>
+    <script src="js/coursera-home.js"></script>
+    <script src="js/pro-experience.js?v=20260621-clean"></script>
+    <script src="js/animation-pack.js"></script>
 </body>
 
 </html>

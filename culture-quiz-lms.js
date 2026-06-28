@@ -806,10 +806,19 @@
 
         function chooseAnswer(value) {
             const item = questions[current];
+            const isCorrect = value === item.correct;
             answers[current] = {
                 answer: value,
-                correct: value === item.correct
+                correct: isCorrect
             };
+            if (window.QuizNationPro) {
+                window.QuizNationPro.recordAttempt({
+                    questionId: item.id || `${item.placeId}-${item.type}-${current}`,
+                    question: item.prompt, topic: item.region || item.placeLabel, difficulty: "medium",
+                    source: "quiz-budaya", selected: value, correctAnswer: item.correct, isCorrect,
+                    explanation: item.explanation, answers: item.answers
+                });
+            }
             core.showToast(value === item.correct ? "Jawaban benar." : `Jawaban tepat: ${item.correct}`);
             renderQuestion();
             finishIfDone();

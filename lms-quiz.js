@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    Universe Of Tech - LMS Quiz Engine (lms-quiz.js)
    ========================================================================== */
 
@@ -783,6 +783,302 @@ HAVING AVG(harga) > 50000;</code></pre>
                 }
             }
         ]
+    },
+    {
+        id: "cloud-devops",
+        title: "Cloud Engineering & DevOps Path",
+        badge: "Cloud Specialist",
+        description: "Pelajari komputasi awan, infrastruktur sebagai kode (IaC), pipeline CI/CD otomatis, containerization dengan Docker & Kubernetes, hingga pemantauan sistem.",
+        color: "#a855f7",
+        badgeIcon: "☁️",
+        badgeName: "Cloud Architect",
+        badgeDesc: "Menyelesaikan Jalur Cloud Engineering & DevOps",
+        modules: [
+            {
+                id: "cloud-foundations",
+                title: "Cloud Computing Foundations",
+                lecture: {
+                    title: "Konsep Dasar Virtualisasi dan Layanan Awan (IaaS, PaaS, SaaS)",
+                    category: "Cloud Engineering",
+                    readTime: "6 menit baca",
+                    content: `
+                        <p>Komputasi awan menggeser paradigma pengelolaan infrastruktur dari server fisik lokal (on-premise) ke pusat data global terkelola.</p>
+                        <h3>Model Layanan Cloud:</h3>
+                        <ul>
+                            <li><strong>IaaS (Infrastructure as a Service)</strong>: Menyediakan resource komputasi mentah seperti VM, storage, dan jaringan. Contoh: AWS EC2, GCP Compute Engine.</li>
+                            <li><strong>PaaS (Platform as a Service)</strong>: Menyediakan platform siap pakai untuk mendeploy aplikasi tanpa pusing memikirkan OS atau runtime. Contoh: Heroku, AWS Elastic Beanstalk.</li>
+                            <li><strong>SaaS (Software as a Service)</strong>: Layanan aplikasi siap pakai untuk pengguna akhir. Contoh: Google Workspace, Microsoft 365.</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "programming",
+                    difficulty: "easy",
+                    limit: 5,
+                    title: "Kuis Fondasi Cloud"
+                }
+            },
+            {
+                id: "cicd-automation",
+                title: "CI/CD & Containerization",
+                lecture: {
+                    title: "Membuat Pipeline Otomatis dan Containerization dengan Docker",
+                    category: "DevOps",
+                    readTime: "7 menit baca",
+                    content: `
+                        <p>DevOps bertujuan mempercepat siklus perilisan software secara andal melalui otomatisasi pipeline dan standardisasi runtime.</p>
+                        <h3>Prinsip Utama:</h3>
+                        <ul>
+                            <li><strong>Docker (Containers)</strong>: Membungkus aplikasi beserta seluruh dependensinya agar berjalan konsisten di semua environment.</li>
+                            <li><strong>CI (Continuous Integration)</strong>: Pengujian dan build otomatis setiap kali ada perubahan kode di repositori Git.</li>
+                            <li><strong>CD (Continuous Deployment)</strong>: Pengiriman kode yang lolos pengujian secara otomatis langsung ke server produksi.</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "cyber",
+                    difficulty: "medium",
+                    limit: 5,
+                    title: "Kuis CI/CD & Docker"
+                }
+            }
+        ]
+    },
+    {
+        id: "ai-ml",
+        title: "AI & Machine Learning Explorer Path",
+        badge: "AI Explorer",
+        description: "Masuki dunia kecerdasan buatan, pemrosesan bahasa alami (NLP), pembelajaran mendalam (Deep Learning), hingga pemanfaatan model bahasa besar (LLM).",
+        color: "#e11d48",
+        badgeIcon: "🧠",
+        badgeName: "AI Engineer",
+        badgeDesc: "Menyelesaikan Jalur AI & Machine Learning Explorer",
+        modules: [
+            {
+                id: "ai-introduction",
+                title: "Introduction to Artificial Intelligence",
+                lecture: {
+                    title: "Memahami Perbedaan AI, Machine Learning, dan Deep Learning",
+                    category: "Artificial Intelligence",
+                    readTime: "5 menit baca",
+                    content: `
+                        <p>Kecerdasan Buatan (AI) adalah payung besar untuk semua teknologi yang membuat mesin mampu meniru kecerdasan manusia.</p>
+                        <h3>Hirarki AI:</h3>
+                        <ul>
+                            <li><strong>AI</strong>: Sistem yang mampu meniru perilaku cerdas manusia.</li>
+                            <li><strong>Machine Learning</strong>: Sub-bidang AI yang fokus pada algoritma untuk mempelajari pola dari data tanpa diprogram secara eksplisit.</li>
+                            <li><strong>Deep Learning</strong>: Sub-bidang ML menggunakan jaringan saraf tiruan (neural networks) berlapis untuk memproses data kompleks seperti citra dan suara.</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "analytics",
+                    difficulty: "easy",
+                    limit: 5,
+                    title: "Kuis Pengenalan AI"
+                }
+            },
+            {
+                id: "llm-prompting",
+                title: "LLM & Prompt Engineering",
+                lecture: {
+                    title: "Memanfaatkan Model Bahasa Besar (LLM) dan Seni Prompting",
+                    category: "Generative AI",
+                    readTime: "6 menit baca",
+                    content: `
+                        <p>Model Bahasa Besar (LLM) seperti GPT dilatih menggunakan miliaran dokumen teks untuk memprediksi kata berikutnya dalam konteks percakapan.</p>
+                        <h3>Seni Prompt Engineering:</h3>
+                        <ul>
+                            <li><strong>Role Assignment</strong>: Memberi peran spesifik pada model (misal: 'Bertindaklah sebagai Senior QA').</li>
+                            <li><strong>Clear Context</strong>: Memberikan batasan ruang lingkup informasi yang jelas.</li>
+                            <li><strong>Few-shot Prompting</strong>: Memberikan contoh input-output yang diinginkan sebelum meminta hasil akhir.</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "programming",
+                    difficulty: "medium",
+                    limit: 5,
+                    title: "Kuis LLM & Prompting"
+                }
+            }
+        ]
+    },
+    {
+        id: "mobile-dev",
+        title: "Mobile App Developer Path",
+        badge: "Mobile Specialist",
+        description: "Bangun aplikasi mobile native maupun cross-platform untuk iOS dan Android menggunakan framework modern seperti Flutter, React Native, hingga optimasi layout mobile.",
+        color: "#f97316",
+        badgeIcon: "📱",
+        badgeName: "Mobile Crafter",
+        badgeDesc: "Menyelesaikan Jalur Mobile App Developer",
+        modules: [
+            {
+                id: "mobile-architecture",
+                title: "Mobile Architecture & Frameworks",
+                lecture: {
+                    title: "Memilih Flutter vs React Native untuk Proyek Mobile",
+                    category: "Mobile Development",
+                    readTime: "6 menit baca",
+                    content: `
+                        <p>Pengembangan aplikasi mobile modern didominasi oleh solusi cross-platform yang menghemat waktu pengembangan untuk dua platform (Android & iOS) sekaligus.</p>
+                        <h3>Perbandingan Framework:</h3>
+                        <ul>
+                            <li><strong>Flutter</strong>: Menggunakan bahasa Dart, merender komponen UI secara native menggunakan engine visualnya sendiri (Skia/Impeller). Sangat konsisten.</li>
+                            <li><strong>React Native</strong>: Menggunakan JavaScript & React, menjembatani kode ke komponen antarmuka asli bawaan OS. Cocok untuk tim web developer.</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "web",
+                    difficulty: "medium",
+                    limit: 5,
+                    title: "Kuis Pilihan Framework Mobile"
+                }
+            },
+            {
+                id: "mobile-ux-performance",
+                title: "Mobile UX & Performance",
+                lecture: {
+                    title: "Optimasi Render Thread dan Hukum Responsivitas Mobile",
+                    category: "Mobile UX",
+                    readTime: "6 menit baca",
+                    content: `
+                        <p>Pengguna aplikasi mobile sangat sensitif terhadap frame drop dan waktu loading. Optimasi performa mutlak diperlukan.</p>
+                        <h3>Praktik Terbaik:</h3>
+                        <ul>
+                            <li><strong>Image Caching</strong>: Jangan mengunduh gambar berulang kali dari server. Simpan di penyimpanan lokal perangkat.</li>
+                            <li><strong>Lazy Rendering</strong>: Hanya render elemen daftar (list item) yang terlihat di layar untuk menghemat memori.</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "design",
+                    difficulty: "hard",
+                    limit: 5,
+                    title: "Kuis Performa Mobile"
+                }
+            }
+        ]
+    },
+    {
+        id: "game-dev",
+        title: "Game Development Foundation Path",
+        badge: "Game Builder",
+        description: "Pelajari matematika game, loop utama (game loop), pemrograman fisika 2D/3D, dan logika game engine populer seperti Unity, Unreal, maupun Godot.",
+        color: "#14b8a6",
+        badgeIcon: "🎮",
+        badgeName: "Game Architect",
+        badgeDesc: "Menyelesaikan Jalur Game Development Foundation",
+        modules: [
+            {
+                id: "game-loop",
+                title: "The Game Loop & Delta Time",
+                lecture: {
+                    title: "Arsitektur Game Loop dan Sinkronisasi Frame Rate",
+                    category: "Game Development",
+                    readTime: "5 menit baca",
+                    content: `
+                        <p>Tidak seperti aplikasi web yang pasif menunggu interaksi pengguna, game berjalan aktif terus-menerus melalui struktur yang disebut <strong>Game Loop</strong>.</p>
+                        <h3>Tahapan Game Loop:</h3>
+                        <ol>
+                            <li><strong>Process Input</strong>: Membaca input dari keyboard, mouse, atau gamepad.</li>
+                            <li><strong>Update State</strong>: Menggerakkan objek, mendeteksi tabrakan, dan memperbarui skor.</li>
+                            <li><strong>Render Frame</strong>: Menggambar visual terbaru ke layar monitor.</li>
+                        </ol>
+                    `
+                },
+                quiz: {
+                    category: "programming",
+                    difficulty: "easy",
+                    limit: 5,
+                    title: "Kuis Game Loop"
+                }
+            },
+            {
+                id: "game-design-systems",
+                title: "Game Mechanics & Systems",
+                lecture: {
+                    title: "Merancang Mekanika Game yang Menarik (Game Feel)",
+                    category: "Game Design",
+                    readTime: "6 menit baca",
+                    content: `
+                        <p>Game design fokus pada bagaimana membuat interaksi terasa menyenangkan, responsif, dan memberikan umpan balik (feedback) instan yang memuaskan.</p>
+                        <h3>Konsep Utama:</h3>
+                        <ul>
+                            <li><strong>Game Juice</strong>: Efek visual dan audio kecil (seperti guncangan layar, partikel debu) yang membuat aksi biasa terasa berdampak besar.</li>
+                            <li><strong>Core Loop</strong>: Aktivitas utama yang diulangi terus-menerus oleh pemain (misal: lompat, kumpulkan koin, tingkatkan karakter).</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "design",
+                    difficulty: "medium",
+                    limit: 5,
+                    title: "Kuis Mekanika Game"
+                }
+            }
+        ]
+    },
+    {
+        id: "product-pm",
+        title: "Product Management & Agile Specialist Path",
+        badge: "Agile Specialist",
+        description: "Kuasai siklus hidup produk, penyusunan backlog, metodologi Scrum & Kanban, riset pasar, hingga metrik retensi dan akuisisi produk.",
+        color: "#0ea5e9",
+        badgeIcon: "🎯",
+        badgeName: "Product Leader",
+        badgeDesc: "Menyelesaikan Jalur Product Management & Agile",
+        modules: [
+            {
+                id: "product-lifecycle",
+                title: "Product Strategy & Lifecycle",
+                lecture: {
+                    title: "Merumuskan MVP (Minimum Viable Product) dan Product-Market Fit",
+                    category: "Product Management",
+                    readTime: "6 menit baca",
+                    content: `
+                        <p>Product Management menjembatani aspek bisnis, teknologi, dan desain antarmuka untuk menciptakan produk yang sukses.</p>
+                        <h3>Konsep Utama:</h3>
+                        <ul>
+                            <li><strong>MVP</strong>: Versi paling sederhana dari produk yang memiliki fitur cukup untuk memuaskan pelanggan awal dan mengumpulkan feedback valid.</li>
+                            <li><strong>Product-Market Fit</strong>: Kondisi di mana produk Anda berhasil menyelesaikan masalah nyata di pasar yang cukup besar.</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "analytics",
+                    difficulty: "easy",
+                    limit: 5,
+                    title: "Kuis Siklus Hidup Produk"
+                }
+            },
+            {
+                id: "agile-scrum",
+                title: "Agile Frameworks (Scrum & Kanban)",
+                lecture: {
+                    title: "Mengelola Sprint dan Aktivitas Scrum Secara Efektif",
+                    category: "Agile Metodologi",
+                    readTime: "6 menit baca",
+                    content: `
+                        <p>Agile adalah pendekatan manajemen proyek berbasis iterasi konstan untuk beradaptasi dengan perubahan kebutuhan pasar dengan cepat.</p>
+                        <h3>Scrum Ceremonies:</h3>
+                        <ul>
+                            <li><strong>Sprint Planning</strong>: Menentukan apa yang akan diselesaikan dalam siklus 2-4 minggu ke depan.</li>
+                            <li><strong>Daily Standup</strong>: Pertemuan singkat 15 menit harian untuk membahas progres dan hambatan.</li>
+                            <li><strong>Sprint Review & Retrospective</strong>: Evaluasi hasil kerja di akhir siklus sprint.</li>
+                        </ul>
+                    `
+                },
+                quiz: {
+                    category: "design",
+                    difficulty: "medium",
+                    limit: 5,
+                    title: "Kuis Agile Scrum"
+                }
+            }
+        ]
     }
 ];
 
@@ -837,6 +1133,33 @@ function loadLmsProgress() {
     const session = JSON.parse(localStorage.getItem("eduquestUserSession") || "null");
     if (session && session.username && (!lmsState.progress.userName || lmsState.progress.userName === "Developer Indonesia")) {
         lmsState.progress.userName = session.username;
+    }
+
+    // DEVELOPER BYPASS: If logged in as developer, automatically fill ALL progress to 100%!
+    if (session && session.isDeveloper) {
+        lmsState.progress.completedLectures = [];
+        lmsState.progress.quizScores = {};
+        lmsState.progress.unlockedBadges = [];
+        
+        lmsTracks.forEach(track => {
+            if (!lmsState.progress.unlockedBadges.includes(track.id)) {
+                lmsState.progress.unlockedBadges.push(track.id);
+            }
+            track.modules.forEach(mod => {
+                // Mark all lessons completed
+                lmsState.progress.completedLectures.push(`${track.id}_${mod.id}`);
+                lmsState.progress.completedLectures.push(`${track.id}_${mod.id}_lesson-core`);
+                lmsState.progress.completedLectures.push(`${track.id}_${mod.id}_lesson-lab`);
+                
+                // Mark all quizzes completed with 100 score
+                lmsState.progress.quizScores[`${track.id}_${mod.id}_practice`] = 100;
+                lmsState.progress.quizScores[`${track.id}_${mod.id}_review`] = 100;
+                lmsState.progress.quizScores[`${track.id}_${mod.id}_challenge`] = 100;
+                lmsState.progress.quizScores[`${track.id}_${mod.id}_mastery`] = 100;
+            });
+        });
+        lmsState.progress.userName = "Developer";
+        window.QuizNation?.storage.write(localStorage, LMS_STORAGE_KEY, lmsState.progress);
     }
 }
 
@@ -1049,11 +1372,11 @@ function openRequestedTrack() {
 }
 
 function getTrackClass(trackId) {
-    if (trackId === "web-dev") return "track-web";
+    if (trackId === "web-dev" || trackId === "mobile-dev") return "track-web";
     if (trackId === "database-sql") return "track-db";
-    if (trackId === "cyber-ui") return "track-cyber";
-    if (trackId === "programming-algorithm") return "track-code";
-    if (trackId === "data-analytics") return "track-data";
+    if (trackId === "cyber-ui" || trackId === "cloud-devops") return "track-cyber";
+    if (trackId === "programming-algorithm" || trackId === "game-dev") return "track-code";
+    if (trackId === "data-analytics" || trackId === "ai-ml") return "track-data";
     return "track-fullstack";
 }
 
@@ -1949,8 +2272,7 @@ function showLmsQuestion() {
                 // Apply temp selection visual before submission
                 const tempSelected = lmsState.quiz.tempSelection;
                 if (tempSelected === idx) {
-                    opt.style.borderColor = "var(--blue)";
-                    opt.style.background = "var(--white)";
+                    opt.classList.add("is-temp-selected");
                 }
             }
 
@@ -2030,6 +2352,15 @@ function submitLmsAnswer() {
         correctText: correctAns.text,
         isCorrect: isCorrect
     };
+
+    if (window.QuizNationPro) {
+        window.QuizNationPro.recordAttempt({
+            questionId: q.id, question: q.question, topic: lmsState.currentTrackId,
+            difficulty: q.difficulty, source: "coding-lms", selected: chosenAns.text,
+            correctAnswer: correctAns.text, isCorrect, hintUsed: q.usedHint,
+            explanation: q.explanation, answers: q.shuffledAnswers.map(answer => answer.text)
+        });
+    }
 
     lmsState.quiz.tempSelection = undefined;
 
@@ -2302,79 +2633,145 @@ function showCertificate(trackId) {
     modal.innerHTML = `
         <div class="lms-modal-content">
             <div class="lms-modal-header">
-                <h3 class="lms-modal-title">Graduation Credentials</h3>
+                <h3 class="lms-modal-title">Graduation Credentials & Academic Transcript</h3>
                 <button class="lms-modal-close" id="lmsCertificateClose" type="button" aria-label="Tutup sertifikat">×</button>
             </div>
             <div class="lms-modal-body">
-                <div class="lms-cert-input-row">
+                <div class="lms-cert-input-row" style="margin-bottom: 20px;">
                     <label for="lmsCertStudentName">Nama Lengkap Penerima:</label>
                     <input type="text" id="lmsCertStudentName" maxlength="80" placeholder="Ketik nama Anda di sini...">
                 </div>
 
-                <div class="lms-cert-frame" id="printableCertArea">
-                    <img src="logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
-                    <div class="lms-cert-corner top-left"></div>
-                    <div class="lms-cert-corner top-right"></div>
-                    <div class="lms-cert-corner bottom-left"></div>
-                    <div class="lms-cert-corner bottom-right"></div>
+                <div class="lms-cert-wrapper" id="printableCertArea">
+                    <!-- Page 1: Main Certificate -->
+                    <div class="lms-cert-page page-1 lms-cert-frame">
+                        <img src="assets/logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
+                        <div class="lms-cert-corner top-left"></div>
+                        <div class="lms-cert-corner top-right"></div>
+                        <div class="lms-cert-corner bottom-left"></div>
+                        <div class="lms-cert-corner bottom-right"></div>
 
-                    <div class="lms-cert-brand">
-                        <img src="logo.png" alt="Universe Of Tech" class="lms-cert-logo">
-                        <div>
-                            <div class="lms-cert-kicker">Universe Of Tech Academy</div>
-                            <div class="lms-cert-credential">Verified Digital Credential</div>
+                        <div class="lms-cert-brand">
+                            <img src="assets/logo.png" alt="Universe Of Tech" class="lms-cert-logo">
+                            <div>
+                                <div class="lms-cert-kicker">Universe Of Tech Academy</div>
+                                <div class="lms-cert-credential">Verified Digital Credential</div>
+                            </div>
+                        </div>
+
+                        <div class="lms-cert-title-block">
+                            <span class="lms-cert-overline">Certificate</span>
+                            <h1 class="lms-cert-header">Certificate of Completion</h1>
+                            <p class="lms-cert-subheader">Diberikan sebagai pengakuan resmi atas penyelesaian program pembelajaran.</p>
+                        </div>
+
+                        <p class="lms-cert-text">Dengan bangga diberikan kepada</p>
+                        
+                        <div class="lms-cert-name" id="lmsCertDisplayName"></div>
+                        
+                        <p class="lms-cert-text">telah berhasil menyelesaikan dan memenuhi standar kelulusan pada</p>
+                        <div class="lms-cert-course" id="lmsCertCourse"></div>
+                        
+                        <div class="lms-cert-details">
+                            <div class="lms-cert-detail-card">
+                                <span>Issued by</span>
+                                <strong>Universe Of Tech Academy</strong>
+                            </div>
+                            <div class="lms-cert-detail-card">
+                                <span>Credential Type</span>
+                                <strong>Completion Award</strong>
+                            </div>
+                        </div>
+
+                        <div class="lms-cert-seal-row">
+                            <div class="lms-cert-sig">
+                                <span>Authorized by</span>
+                                <div class="lms-cert-sig-line">BUBUB</div>
+                                <small>CEO & AI Instructor</small>
+                            </div>
+                            <div class="lms-cert-seal">
+                                <span>UOT</span>
+                                <small>Verified</small>
+                            </div>
+                            <div class="lms-cert-sig">
+                                <span>Completion Date</span>
+                                <div class="lms-cert-sig-line" id="lmsCertDate"></div>
+                                <small>Tanggal Kelulusan</small>
+                            </div>
+                        </div>
+                        
+                        <div class="lms-cert-meta">
+                            <span id="lmsCertVerification"></span>
                         </div>
                     </div>
 
-                    <div class="lms-cert-title-block">
-                        <span class="lms-cert-overline">Certificate</span>
-                        <h1 class="lms-cert-header">Certificate of Completion</h1>
-                        <p class="lms-cert-subheader">Diberikan sebagai pengakuan resmi atas penyelesaian program pembelajaran.</p>
-                    </div>
+                    <!-- Page 2: Academic Transcript -->
+                    <div class="lms-cert-page page-2 lms-cert-frame lms-cert-transcript">
+                        <img src="assets/logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
+                        <div class="lms-cert-corner top-left"></div>
+                        <div class="lms-cert-corner top-right"></div>
+                        <div class="lms-cert-corner bottom-left"></div>
+                        <div class="lms-cert-corner bottom-right"></div>
 
-                    <p class="lms-cert-text">Dengan bangga diberikan kepada</p>
-                    
-                    <div class="lms-cert-name" id="lmsCertDisplayName"></div>
-                    
-                    <p class="lms-cert-text">telah berhasil menyelesaikan dan memenuhi standar kelulusan pada</p>
-                    <div class="lms-cert-course" id="lmsCertCourse"></div>
-                    
-                    <div class="lms-cert-details">
-                        <div class="lms-cert-detail-card">
-                            <span>Issued by</span>
-                            <strong>Universe Of Tech Academy</strong>
+                        <div class="lms-cert-brand">
+                            <img src="assets/logo.png" alt="Universe Of Tech" class="lms-cert-logo">
+                            <div>
+                                <div class="lms-cert-kicker">Universe Of Tech Academy</div>
+                                <div class="lms-cert-credential">Academic Transcript Report</div>
+                            </div>
                         </div>
-                        <div class="lms-cert-detail-card">
-                            <span>Credential Type</span>
-                            <strong>Completion Award</strong>
-                        </div>
-                    </div>
 
-                    <div class="lms-cert-seal-row">
-                        <div class="lms-cert-sig">
-                            <span>Authorized by</span>
-                            <div class="lms-cert-sig-line">BUBUB</div>
-                            <small>CEO & AI Instructor</small>
+                        <div class="lms-cert-title-block" style="margin-top: 10px;">
+                            <span class="lms-cert-overline">Official Record</span>
+                            <h1 class="lms-cert-header" style="font-size: 26px !important; margin: 4px 0 !important;">Laporan Capaian Belajar</h1>
+                            <p class="lms-cert-subheader">Daftar pencapaian milestone dan rekapitulasi nilai kuis pada jalur ini.</p>
                         </div>
-                        <div class="lms-cert-seal">
-                            <span>UOT</span>
-                            <small>Verified</small>
+
+                        <div class="lms-transcript-info" style="display: flex; justify-content: space-between; margin: 10px 0 15px; font-size: 11px; font-weight: 800; border-bottom: 1px solid rgba(13, 27, 44, 0.1); padding-bottom: 8px; color: var(--dark); font-family: 'Space Grotesk', sans-serif;">
+                            <div>NAMA SISWA: <span id="lmsTranscriptStudentName" style="color: #b58a3d; text-transform: uppercase;"></span></div>
+                            <div>PROGRAM JALUR: <span id="lmsTranscriptCourseName" style="color: #064b63; text-transform: uppercase;"></span></div>
                         </div>
-                        <div class="lms-cert-sig">
-                            <span>Completion Date</span>
-                            <div class="lms-cert-sig-line" id="lmsCertDate"></div>
-                            <small>Tanggal Kelulusan</small>
+
+                        <table class="lms-transcript-table" style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                            <thead>
+                                <tr>
+                                    <th style="background: #0d1b2c; color: white; font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 12px; text-align: left;">Kategori</th>
+                                    <th style="background: #0d1b2c; color: white; font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 12px; text-align: left;">Nama Modul / Ujian</th>
+                                    <th style="background: #0d1b2c; color: white; font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 12px; text-align: left;">Nilai Kuis</th>
+                                    <th style="background: #0d1b2c; color: white; font-weight: 800; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 12px; text-align: left;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lmsTranscriptTableBody">
+                                <!-- Generated Dynamically -->
+                            </tbody>
+                        </table>
+
+                        <div class="lms-cert-seal-row" style="margin-top: auto;">
+                            <div class="lms-cert-sig">
+                                <span>Registrar office</span>
+                                <div class="lms-cert-sig-line" style="font-size: 18px !important;">System Auditor</div>
+                                <small>Academic Registrar</small>
+                            </div>
+                            <div class="lms-cert-seal" style="transform: scale(0.8);">
+                                <span>UOT</span>
+                                <small>Verified</small>
+                            </div>
+                            <div class="lms-cert-sig">
+                                <span>Verification Date</span>
+                                <div class="lms-cert-sig-line" id="lmsTranscriptDate" style="font-size: 18px !important;"></div>
+                                <small>Tanggal Verifikasi</small>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="lms-cert-meta">
-                        <span id="lmsCertVerification"></span>
+                        
+                        <div class="lms-cert-meta">
+                            <span id="lmsTranscriptVerification"></span>
+                        </div>
                     </div>
                 </div>
 
                 <div class="panel-actions" style="margin-top: 20px; justify-content: flex-end;">
                     <button class="btn btn-ghost" id="lmsCertificateCancel" type="button">Tutup</button>
-                    <button class="btn btn-blue" id="lmsCertificateDownload" type="button"><i class="fa-solid fa-download"></i> Download Sertifikat</button>
+                    <button class="btn btn-blue" id="lmsCertificateDownload" type="button"><i class="fa-solid fa-download"></i> Download PDF Sertifikat</button>
                     <button class="btn btn-primary" id="lmsCertificatePrint" type="button"><i class="fa-solid fa-print"></i> Cetak / Simpan ke PDF</button>
                 </div>
             </div>
@@ -2384,10 +2781,38 @@ function showCertificate(trackId) {
     const nameInput = document.getElementById("lmsCertStudentName");
     nameInput.value = lmsState.progress.userName;
     document.getElementById("lmsCertDisplayName").textContent = lmsState.progress.userName;
+    document.getElementById("lmsTranscriptStudentName").textContent = lmsState.progress.userName;
     document.getElementById("lmsCertCourse").textContent = track.title;
-    document.getElementById("lmsCertDate").textContent = new Date().toLocaleDateString("id-ID");
-    document.getElementById("lmsCertVerification").textContent =
-        `Verification ID: UOT-${trackId.toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)} - Verified Academic Honor`;
+    document.getElementById("lmsTranscriptCourseName").textContent = track.title;
+    
+    const formattedDate = new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" });
+    document.getElementById("lmsCertDate").textContent = formattedDate;
+    document.getElementById("lmsTranscriptDate").textContent = formattedDate;
+    
+    const randomHash = Math.floor(100000 + Math.random() * 900000);
+    const verificationText = `Verification ID: UOT-${trackId.toUpperCase()}-${randomHash} - Verified Academic Honor`;
+    document.getElementById("lmsCertVerification").textContent = verificationText;
+    document.getElementById("lmsTranscriptVerification").textContent = verificationText;
+
+    // Populate Transcript Table dynamically
+    const tableBody = document.getElementById("lmsTranscriptTableBody");
+    if (tableBody) {
+        tableBody.innerHTML = track.modules.map((m, idx) => {
+            const avgInfo = getModuleQuizAverage(trackId, m);
+            const isPassed = avgInfo.average >= 80;
+            const statusLabel = isPassed ? "LULUS" : "REMEDIAL";
+            const statusClass = isPassed ? "pass" : "fail";
+            return `
+                <tr style="${idx % 2 === 1 ? 'background: rgba(173, 133, 56, 0.04);' : ''}">
+                    <td style="padding: 10px 12px; border-bottom: 1px solid rgba(13, 27, 44, 0.08); font-size: 11px; font-weight: 700; color: var(--muted);">Milestone ${idx + 1}</td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid rgba(13, 27, 44, 0.08); font-size: 11px; font-weight: 800; color: var(--dark);">${m.title}</td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid rgba(13, 27, 44, 0.08); font-size: 11px; font-weight: 800; color: var(--dark);">${avgInfo.average}%</td>
+                    <td style="padding: 10px 12px; border-bottom: 1px solid rgba(13, 27, 44, 0.08); font-size: 10px;"><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                </tr>
+            `;
+        }).join("");
+    }
+
     nameInput.addEventListener("input", () => updateCertificateName(nameInput.value));
     document.getElementById("lmsCertificateClose").addEventListener("click", closeCertificateModal);
     document.getElementById("lmsCertificateCancel").addEventListener("click", closeCertificateModal);
@@ -2407,6 +2832,8 @@ function updateCertificateName(name) {
 
     const display = document.getElementById("lmsCertDisplayName");
     if (display) display.textContent = cleanName;
+    const displayTranscript = document.getElementById("lmsTranscriptStudentName");
+    if (displayTranscript) displayTranscript.textContent = cleanName;
 }
 
 function printCertificate() {
@@ -2494,11 +2921,11 @@ function loadCertificateLogoJpeg() {
             }
         };
         image.onerror = () => resolve(null);
-        image.src = "logo.png";
+        image.src = "assets/logo.png";
     });
 }
 
-async function buildCertificatePdf({ studentName, title, subtitle, verificationId, dateText }) {
+async function buildCertificatePdf({ studentName, title, subtitle, verificationId, dateText, trackId, moduleIndex }) {
     const pageWidth = 842;
     const centerX = pageWidth / 2;
     const text = (value, y, size, font = "F1", color = "0.08 0.13 0.22", textCenter = centerX) => {
@@ -2521,7 +2948,8 @@ async function buildCertificatePdf({ studentName, title, subtitle, verificationI
         "220 0 0 220 311 196 cm /Logo Do",
         "Q"
     ] : [];
-    const content = [
+
+    const content1 = [
         "q",
         "0.987 0.976 0.944 rg 0 0 842 595 re f",
         "0.054 0.102 0.188 rg 0 565 842 30 re f",
@@ -2565,19 +2993,142 @@ async function buildCertificatePdf({ studentName, title, subtitle, verificationI
         "Q"
     ].join("\n");
 
-    const contentBytes = asciiBytes(content);
+    const modulesData = [];
+    if (trackId) {
+        const track = lmsTracks.find(t => t.id === trackId);
+        if (track) {
+            if (moduleIndex !== undefined && moduleIndex !== null) {
+                const mod = track.modules[moduleIndex];
+                const quizSteps = mod ? getModuleQuizzes(mod) : [];
+                quizSteps.forEach(step => {
+                    const score = getQuizScore(trackId, mod.id, step.id);
+                    modulesData.push({
+                        label: step.title,
+                        name: `${step.sessionTitle || step.title}`,
+                        score: `${score}%`,
+                        status: score >= (step.passThreshold || 80) ? "LULUS" : "BELUM LULUS"
+                    });
+                });
+            } else {
+                track.modules.forEach((m, idx) => {
+                    const avgInfo = getModuleQuizAverage(trackId, m);
+                    modulesData.push({
+                        label: `Milestone ${idx + 1}`,
+                        name: m.title,
+                        score: `${avgInfo.average}%`,
+                        status: avgInfo.average >= 80 ? "LULUS" : "REMEDIAL"
+                    });
+                });
+            }
+        }
+    }
+
+    const content2Lines = [
+        "q",
+        "0.987 0.976 0.944 rg 0 0 842 595 re f",
+        "0.054 0.102 0.188 rg 0 565 842 30 re f",
+        "0.045 0.098 0.175 RG 2.2 w 30 30 782 535 re S",
+        "0.694 0.537 0.247 RG 1.2 w 43 43 756 509 re S",
+        "0.031 0.698 0.769 RG 3 w 58 525 m 58 502 l S",
+        "0.486 0.839 0.251 RG 3 w 784 525 m 784 502 l S",
+        "0.031 0.698 0.769 RG 3 w 58 70 m 58 93 l S",
+        "0.486 0.839 0.251 RG 3 w 784 70 m 784 93 l S",
+        ...logoPaint,
+        leftText("UNIVERSE OF TECH ACADEMY", 156, 526, 13, "F3", "0.054 0.102 0.188"),
+        leftText("VERIFIED DIGITAL CREDENTIAL", 156, 506, 8, "F3", "0.45 0.36 0.20"),
+        "0.031 0.698 0.769 RG 1.5 w 562 520 m 745 520 l S",
+        
+        text("ACADEMIC TRANSCRIPT", 446, 15, "F3", "0.45 0.36 0.20"),
+        text("Laporan Capaian Belajar", 407, 24, "F3", "0.054 0.102 0.188"),
+        text("Rincian hasil kuis dan pencapaian kompetensi pada milestone.", 385, 10, "F1", "0.35 0.40 0.49"),
+        
+        leftText(`Nama Siswa: ${studentName}`, 74, 345, 11, "F3", "0.08 0.13 0.22"),
+        leftText(`Jalur / Program: ${title}`, 74, 328, 11, "F3", "0.08 0.13 0.22"),
+        leftText(`Verification ID: ${verificationId}`, 74, 311, 9, "F1", "0.35 0.40 0.49"),
+        
+        "0.054 0.102 0.188 rg 74 275 694 22 re f",
+        leftText("KATEGORI / STEP", 84, 281, 9, "F3", "1 1 1"),
+        leftText("TOPIK / NAMA MODUL", 220, 281, 9, "F3", "1 1 1"),
+        leftText("SKOR KUIS", 540, 281, 9, "F3", "1 1 1"),
+        leftText("STATUS", 660, 281, 9, "F3", "1 1 1")
+    ];
+
+    modulesData.forEach((row, idx) => {
+        const yPos = 245 - (idx * 32);
+        if (idx % 2 === 1) {
+            content2Lines.push(`0.94 0.95 0.97 rg 74 ${yPos - 6} 694 26 re f`);
+        }
+        content2Lines.push(`0.85 0.88 0.92 RG 0.5 w 74 ${yPos - 6} m 768 ${yPos - 6} l S`);
+        
+        content2Lines.push(leftText(row.label, 84, yPos, 9, "F1", "0.25 0.30 0.39"));
+        content2Lines.push(leftText(row.name, 220, yPos, 9, "F3", "0.08 0.13 0.22"));
+        content2Lines.push(leftText(row.score, 540, yPos, 9, "F3", "0.08 0.13 0.22"));
+        
+        const isPassed = row.status.includes("LULUS");
+        const statusColor = isPassed ? "0.02 0.58 0.33" : "0.85 0.15 0.15";
+        content2Lines.push(leftText(row.status, 660, yPos, 9, "F3", statusColor));
+    });
+
+    content2Lines.push(...[
+        "0.58 0.63 0.70 RG 1 w 92 110 m 274 110 l S",
+        text("System Auditor", 88, 11, "F2", "0.054 0.102 0.188", 183),
+        text("Universe Of Tech Registrar", 74, 8, "F1", "0.35 0.40 0.49", 183),
+        
+        "0.04 0.67 0.78 rg 391 76 60 60 re f",
+        text("UOT", 102, 16, "F3", "1 1 1", 421),
+        text("VERIFIED", 89, 6, "F3", "1 1 1", 421),
+        
+        "0.58 0.63 0.70 RG 1 w 568 110 m 750 110 l S",
+        text(dateText, 88, 11, "F2", "0.054 0.102 0.188", 659),
+        text("Tanggal Verifikasi", 74, 8, "F1", "0.35 0.40 0.49", 659),
+        
+        "0.054 0.102 0.188 rg 0 0 842 20 re f",
+        text(verificationId, 38, 7.5, "F1", "0.48 0.52 0.60"),
+        "Q"
+    ]);
+
+    const content2 = content2Lines.join("\n");
+
+    const contentBytes1 = asciiBytes(content1);
+    const contentBytes2 = asciiBytes(content2);
+    
     const fontResource = "/Font << /F1 6 0 R /F2 7 0 R /F3 8 0 R >>";
     const imageResource = logo ? " /XObject << /Logo 9 0 R >> /ExtGState << /GS1 10 0 R >>" : "";
+    
+    const pagesId = 2;
+    const page1Id = 3;
+    const contents1Id = 4;
+    const f1Id = 6;
+    const f2Id = 7;
+    const f3Id = 8;
+    
+    let logoId = 0;
+    let gs1Id = 0;
+    if (logo) {
+        logoId = 9;
+        gs1Id = 10;
+    }
+    
+    const page2Id = logo ? 11 : 9;
+    const contents2Id = logo ? 12 : 10;
+    
+    const page1Object = asciiBytes(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 842 595] /Resources << ${fontResource}${imageResource} >> /Contents ${contents1Id} 0 R >>`);
+    const page1ContentsObject = concatBytes([asciiBytes(`<< /Length ${contentBytes1.length} >>\nstream\n`), contentBytes1, asciiBytes("\nendstream")]);
+    
+    const page2Object = asciiBytes(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 842 595] /Resources << ${fontResource}${imageResource} >> /Contents ${contents2Id} 0 R >>`);
+    const page2ContentsObject = concatBytes([asciiBytes(`<< /Length ${contentBytes2.length} >>\nstream\n`), contentBytes2, asciiBytes("\nendstream")]);
+    
     const objects = [
-        asciiBytes("<< /Type /Catalog /Pages 2 0 R >>"),
-        asciiBytes("<< /Type /Pages /Kids [3 0 R] /Count 1 >>"),
-        asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << ${fontResource}${imageResource} >> /Contents 4 0 R >>`),
-        concatBytes([asciiBytes(`<< /Length ${contentBytes.length} >>\nstream\n`), contentBytes, asciiBytes("\nendstream")]),
+        asciiBytes(`<< /Type /Catalog /Pages ${pagesId} 0 R >>`),
+        asciiBytes(`<< /Type /Pages /Kids [${page1Id} 0 R ${page2Id} 0 R] /Count 2 >>`),
+        page1Object,
+        page1ContentsObject,
         asciiBytes("<< /Producer (Universe Of Tech Academy) /Title (Certificate of Completion) >>"),
         asciiBytes("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"),
         asciiBytes("<< /Type /Font /Subtype /Type1 /BaseFont /Times-BoldItalic >>"),
         asciiBytes("<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>")
     ];
+    
     if (logo) {
         objects.push(concatBytes([
             asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${logo.width} /Height ${logo.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${logo.bytes.length} >>\nstream\n`),
@@ -2586,13 +3137,17 @@ async function buildCertificatePdf({ studentName, title, subtitle, verificationI
         ]));
         objects.push(asciiBytes("<< /Type /ExtGState /ca 0.08 /CA 0.08 >>"));
     }
-
+    
+    objects.push(page2Object);
+    objects.push(page2ContentsObject);
+    
     const chunks = [asciiBytes("%PDF-1.4\n")];
     const offsets = [0];
     objects.forEach((object, index) => {
         offsets.push(chunks.reduce((sum, chunk) => sum + chunk.length, 0));
         chunks.push(asciiBytes(`${index + 1} 0 obj\n`), object, asciiBytes("\nendobj\n"));
     });
+    
     const xrefOffset = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
     let trailer = `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
     offsets.slice(1).forEach(offset => {
@@ -2800,6 +3355,12 @@ window.downloadCertificate = downloadCertificate;
 window.downloadModuleCertificate = downloadModuleCertificate;
 window.updateCertificateName = updateCertificateName;
 window.showCertificate = showCertificate;
+window.calculateTrackProgress = calculateTrackProgress;
+window.isTrackCertificateEligible = isTrackCertificateEligible;
+window.getTrackRetryModules = getTrackRetryModules;
+window.lmsTracks = lmsTracks;
+window.lmsState = lmsState;
+
 
 // Initialize on Script load
 if (document.readyState === "loading") {

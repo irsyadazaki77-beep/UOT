@@ -18,12 +18,15 @@ function initTheme() {
     document.body.classList.toggle("dark-theme", savedTheme === "dark");
     if (!themeToggleBtn) return;
 
-    themeToggleBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+    themeToggleBtn.innerHTML = savedTheme === "dark" ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>' : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+    themeToggleBtn.setAttribute("aria-label", savedTheme === "dark" ? "Aktifkan tema terang" : "Aktifkan tema gelap");
     themeToggleBtn.addEventListener("click", () => {
         document.body.classList.toggle("dark-theme");
         const isDark = document.body.classList.contains("dark-theme");
         localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
-        themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+        themeToggleBtn.innerHTML = isDark ? '<i class="fa-solid fa-sun" aria-hidden="true"></i>' : '<i class="fa-solid fa-moon" aria-hidden="true"></i>';
+        themeToggleBtn.setAttribute("aria-label", isDark ? "Aktifkan tema terang" : "Aktifkan tema gelap");
+        themeToggleBtn.setAttribute("aria-pressed", String(isDark));
         themeToggleBtn.style.transform = "scale(0.9)";
         setTimeout(() => themeToggleBtn.style.transform = "none", 150);
     });
@@ -181,12 +184,16 @@ function initTKAPage() {
     };
 
     function updateStats() {
-        const accuracy = Math.round((stats.correct / Math.max(stats.done, 1)) * 100);
-        document.getElementById("snbtDone").textContent = stats.done;
+        const done = Number(stats.done) || 0;
+        const correct = Number(stats.correct) || 0;
+        const accuracy = done > 0 ? Math.round((correct / done) * 100) : 0;
+        document.getElementById("snbtDone").textContent = done;
         document.getElementById("snbtAccuracy").textContent = `${accuracy}%`;
         document.getElementById("snbtLevel").textContent = accuracy >= 80 ? "Siap" : accuracy >= 60 ? "Stabil" : accuracy >= 40 ? "Naik" : "Fondasi";
         ring.style.setProperty("--progress", `${Math.min(accuracy, 100)}%`);
         ringText.textContent = `${accuracy}%`;
+        stats.done = done;
+        stats.correct = correct;
         storage.set("snbt_stats", stats);
         renderDiagnostic(accuracy);
     }
@@ -218,7 +225,9 @@ function initTKAPage() {
     function renderDiagnostic(accuracy) {
         if (!diagnostic) return;
         const subjectRows = Object.entries(stats.bySubject || {}).map(([subject, data]) => {
-            const subjectAccuracy = Math.round((data.correct / Math.max(data.done, 1)) * 100);
+            const sDone = Number(data.done) || 0;
+            const sCorrect = Number(data.correct) || 0;
+            const subjectAccuracy = sDone > 0 ? Math.round((sCorrect / sDone) * 100) : 0;
             const label = {
                 indonesia: "Bahasa Indonesia",
                 matematika: "Matematika",
@@ -350,6 +359,13 @@ function initTKALMSPage() {
     const launchSummary = document.getElementById("tkaLaunchSummary");
     const advancedToggle = document.getElementById("tkaAdvancedToggle");
     const advancedPanel = document.getElementById("tkaAdvancedPanel");
+    const clearAnswerButton = document.getElementById("tkaClearAnswer") || document.createElement("button");
+    const timerDuration = document.getElementById("tkaTimerDuration");
+    const sessionAnswered = document.getElementById("tkaSessionAnswered");
+    const sessionAccuracy = document.getElementById("tkaSessionAccuracy");
+    const sessionReview = document.getElementById("tkaSessionReview");
+    const resultDialog = document.getElementById("tkaResultDialog");
+    const resultContent = document.getElementById("tkaResultContent");
 
     const subjects = [
         ["indonesia", "Bahasa Indonesia", "Wajib", "BI"],
@@ -372,6 +388,63 @@ function initTKALMSPage() {
         multi: "Pilihan kompleks",
         truefalse: "Benar/Salah"
     };
+
+    function calculateIRTScore(answers) {
+        const items = [];
+        for (const qId in answers) {
+            const ans = answers[qId];
+            if (ans && ans.submitted) {
+                const question = questionBank.find(q => q.id === qId);
+                if (question) {
+                    let b = 0.0;
+                    let a = 1.0;
+                    if (question.difficulty === "dasar") {
+                        b = -1.2;
+                        a = 0.8;
+                    } else if (question.difficulty === "sedang") {
+                        b = 0.0;
+                        a = 1.1;
+                    } else if (question.difficulty === "hots") {
+                        b = 1.3;
+                        a = 1.6;
+                    } else if (question.difficulty === "prediksi") {
+                        b = 0.8;
+                        a = 1.3;
+                    }
+                    items.push({
+                        correct: ans.correct ? 1 : 0,
+                        a: a,
+                        b: b
+                    });
+                }
+            }
+        }
+
+        if (items.length === 0) return 300;
+
+        let maxLogPost = -Infinity;
+        let bestTheta = 0.0;
+
+        for (let theta = -3.0; theta <= 3.0; theta += 0.02) {
+            let logPost = -0.5 * theta * theta;
+            for (const item of items) {
+                const p = 1.0 / (1.0 + Math.exp(-item.a * (theta - item.b)));
+                const epsilon = 1e-9;
+                if (item.correct === 1) {
+                    logPost += Math.log(p + epsilon);
+                } else {
+                    logPost += Math.log(1.0 - p + epsilon);
+                }
+            }
+            if (logPost > maxLogPost) {
+                maxLogPost = logPost;
+                bestTheta = theta;
+            }
+        }
+
+        let score = Math.round(500 + 130 * bestTheta);
+        return Math.max(300, Math.min(900, score));
+    }
 
     const questionBank = [
         {
@@ -1487,10 +1560,20 @@ function initTKALMSPage() {
     ];
     questionBank.push(...(window.TKA_SUPPLEMENTAL_QUESTIONS || []));
 
+    // Apply detailed expanded explanations if available
+    questionBank.forEach(q => {
+        if (window.TKA_EXPANDED_EXPLANATIONS && window.TKA_EXPANDED_EXPLANATIONS[q.id]) {
+            q.explanation = window.TKA_EXPANDED_EXPLANATIONS[q.id];
+        }
+    });
+
     const progress = storage.get("tka_lms_progress", { answers: {}, streak: 0, elapsedSeconds: 0, timerRunning: false });
     progress.answers = progress.answers || {};
     progress.elapsedSeconds = Number(progress.elapsedSeconds || 0);
     progress.timerRunning = Boolean(progress.timerRunning);
+    progress.quizDuration = Number(progress.quizDuration || 1800);
+    progress.quizRemaining = Number.isFinite(Number(progress.quizRemaining)) ? Number(progress.quizRemaining) : progress.quizDuration;
+    if (isQuizPage && progress.quizRemaining > 0) progress.timerRunning = true;
     const preferences = storage.get("tka_lms_preferences", {
         subject: "indonesia",
         difficulty: "all",
@@ -1590,13 +1673,15 @@ function initTKALMSPage() {
     }
 
     function updatePreferences() {
+        const targetInputLMS = document.getElementById("tkaTargetScoreLMS");
         storage.set("tka_lms_preferences", {
             subject: activeSubject,
             difficulty: activeDifficulty,
             type: activeType,
             mode: activeMode,
             sessionSize,
-            query: searchInput.value
+            query: searchInput.value,
+            targetScore: targetInputLMS ? parseInt(targetInputLMS.value) : (preferences.targetScore || 700)
         });
     }
 
@@ -1781,7 +1866,7 @@ function initTKALMSPage() {
         if (!filtered.some(question => question.id === selectedQuestionId)) {
             selectedQuestionId = filtered[0]?.id || "";
         }
-        questionList.innerHTML = filtered.map((question, index) => { const answer = progress.answers[question.id]; let stateClass = ""; if (answer?.submitted) stateClass = answer.correct ? "answered correct" : "wrong"; else if (answer?.review) stateClass = "review"; else if (answer?.selected !== undefined) stateClass = "answered"; const activeClass = question.id === selectedQuestionId ? "current" : ""; return `<button class="question-jump ${stateClass} ${activeClass}" data-tka-question="${question.id}">${index + 1}</button>`; }).join("") || `<div style="color:var(--text-muted); font-size:0.875rem;">Tidak ada soal.</div>`;
+        questionList.innerHTML = filtered.map((question, index) => { const answer = progress.answers[question.id]; let stateClass = ""; if (answer?.submitted) stateClass = answer.correct ? "answered correct" : "wrong"; else if (answer?.review) stateClass = "review"; else if (answer?.chosen?.length) stateClass = "draft"; const activeClass = question.id === selectedQuestionId ? "current" : ""; const stateLabel = answer?.submitted ? (answer.correct ? "benar" : "salah") : answer?.review ? "ditandai review" : answer?.chosen?.length ? "jawaban tersimpan" : "belum dijawab"; return `<button type="button" class="question-jump ${stateClass} ${activeClass}" data-tka-question="${question.id}" aria-label="Soal ${index + 1}, ${stateLabel}" title="Soal ${index + 1} · ${stateLabel}">${index + 1}</button>`; }).join("") || `<div style="color:var(--text-muted); font-size:0.875rem;">Tidak ada soal.</div>`;
         questionList.querySelectorAll("[data-tka-question]").forEach(button => {
             button.addEventListener("click", () => {
                 selectedQuestionId = button.dataset.tkaQuestion;
@@ -1806,7 +1891,35 @@ function initTKALMSPage() {
         if (reviewCountText) reviewCountText.textContent = stats.review;
         if (masteryText) masteryText.textContent = `${Math.round((stats.correct / questionBank.length) * 100)}%`;
         if (sessionTargetText) sessionTargetText.textContent = `${filteredDone}/${filtered.length || 0}`;
-        progressBar.style.width = `${Math.round((stats.done / questionBank.length) * 100)}%`;
+        const sessionProgress = isQuizPage
+            ? Math.round((filteredDone / Math.max(filtered.length, 1)) * 100)
+            : Math.round((stats.done / questionBank.length) * 100);
+        progressBar.style.width = `${sessionProgress}%`;
+        progressBar.parentElement?.setAttribute("aria-valuemin", "0");
+        progressBar.parentElement?.setAttribute("aria-valuemax", "100");
+        progressBar.parentElement?.setAttribute("aria-valuenow", String(sessionProgress));
+        if (sessionAnswered) sessionAnswered.textContent = String(filteredDone);
+        const filteredCorrect = filtered.filter(question => progress.answers[question.id]?.submitted && progress.answers[question.id]?.correct).length;
+        const filteredReview = filtered.filter(question => progress.answers[question.id]?.review).length;
+        if (sessionAccuracy) sessionAccuracy.textContent = `${Math.round((filteredCorrect / Math.max(filteredDone, 1)) * 100)}%`;
+        if (sessionReview) sessionReview.textContent = String(filteredReview);
+
+        // Update Estimated TKA Score
+        const scoreText = document.getElementById("tkaLmsEstimatedScore");
+        if (scoreText) {
+            if (stats.done < 5) {
+                scoreText.textContent = "Belum Terukur";
+                if (scoreText.nextElementSibling) {
+                    scoreText.nextElementSibling.textContent = `Kerjakan ${5 - stats.done} soal lagi untuk mengaktifkan estimasi`;
+                }
+            } else {
+                const estimatedScore = calculateIRTScore(progress.answers);
+                scoreText.textContent = estimatedScore;
+                if (scoreText.nextElementSibling) {
+                    scoreText.nextElementSibling.textContent = `Dihitung menggunakan model IRT 2-Parameter (2PL) resmi`;
+                }
+            }
+        }
     }
 
     function renderAnalytics() {
@@ -1823,7 +1936,6 @@ function initTKALMSPage() {
                 <article class="lms-analytics-card">
                     <div class="resource-meta"><span>${subject.group}</span><span>${tone}</span></div>
                     <h3>${subject.name}</h3>
-                    <div class="lms-analytics-row"><span>Selesai</span><strong>${done}/${total}</strong></div>
                     <div class="lms-analytics-row"><span>Akurasi</span><strong>${accuracy}%</strong></div>
                     <div class="lms-analytics-row"><span>Review</span><strong>${review}</strong></div>
                     <div class="lms-progress-track"><div style="width:${completion}%"></div></div>
@@ -1842,7 +1954,44 @@ function initTKALMSPage() {
             return;
         }
         
-        const recentAnswers = answeredIds.slice(-20).reverse();
+        // Extract history filters & query
+        const hSearch = document.getElementById("tkaHistorySearch");
+        const query = hSearch ? hSearch.value.trim().toLowerCase() : "";
+        
+        const filterButtons = document.querySelectorAll("[data-history-filter]");
+        let activeHFilter = "all";
+        filterButtons.forEach(btn => {
+            if (btn.classList.contains("active")) {
+                activeHFilter = btn.dataset.historyFilter;
+            }
+        });
+        
+        let filteredIds = answeredIds.filter(id => {
+            const question = questionBank.find(q => q.id === id);
+            if (!question) return false;
+            
+            const ans = progress.answers[id];
+            
+            // Filter by correct/wrong
+            if (activeHFilter === "correct" && !ans.correct) return false;
+            if (activeHFilter === "wrong" && ans.correct) return false;
+            
+            // Search filter
+            if (query) {
+                const subjectObj = getSubject(question.subject);
+                const searchContent = `${question.prompt} ${question.stimulus || ""} ${question.skill || ""} ${subjectObj ? subjectObj.name : ""}`.toLowerCase();
+                if (!searchContent.includes(query)) return false;
+            }
+            
+            return true;
+        });
+        
+        if (filteredIds.length === 0) {
+            historyContainer.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--muted); font-style: italic; font-size: 14px;">Tidak ada riwayat yang cocok dengan filter/pencarian.</div>`;
+            return;
+        }
+        
+        const recentAnswers = filteredIds.slice(-20).reverse();
         
         historyContainer.innerHTML = recentAnswers.map(id => {
             const question = questionBank.find(q => q.id === id);
@@ -1852,12 +2001,13 @@ function initTKALMSPage() {
             const tagClass = isCorrect ? 'tag-correct' : 'tag-wrong';
             const tagText = isCorrect ? 'BENAR' : 'SALAH';
             const shortPrompt = question.prompt.length > 55 ? question.prompt.substring(0, 55) + '...' : question.prompt;
+            const subjectObj = getSubject(question.subject);
             
             return `
                 <div class="history-row">
                     <span class="history-tag ${tagClass}">${tagText}</span>
                     <div class="history-preview" title="${question.prompt.replace(/"/g, '&quot;')}">${shortPrompt}</div>
-                    <span style="font-size: 12px; color: var(--muted);">${getSubject(question.subject).name}</span>
+                    <span style="font-size: 12px; color: var(--muted); font-weight: 600;">${subjectObj ? subjectObj.name : ""}</span>
                     <button class="btn btn-ghost" style="padding: 6px 12px; font-size: 12px; border-radius: 8px;" data-review-id="${id}">Baca Pembahasan</button>
                 </div>
             `;
@@ -1872,7 +2022,6 @@ function initTKALMSPage() {
 
     function openReviewModal(questionId) {
         const question = questionBank.find(q => q.id === questionId);
-        if(!question) return;
         
         const modalBody = document.getElementById("reviewModalBody");
         const modalOverlay = document.getElementById("reviewModalOverlay");
@@ -1924,8 +2073,11 @@ function initTKALMSPage() {
     }
 
     function renderTimer() {
-        if (timerDisplay) timerDisplay.textContent = formatTimer(progress.elapsedSeconds);
-        timerToggle.textContent = progress.timerRunning ? "Pause Timer" : "Mulai Timer";
+        const seconds = isQuizPage ? progress.quizRemaining : progress.elapsedSeconds;
+        if (timerDisplay) timerDisplay.textContent = formatTimer(seconds);
+        timerToggle.textContent = progress.timerRunning ? "Pause" : "Mulai";
+        timerDisplay?.closest(".timer-card")?.classList.toggle("is-urgent", isQuizPage && seconds <= 300);
+        if (timerDuration && timerDuration.value !== String(progress.quizDuration)) timerDuration.value = String(progress.quizDuration);
     }
 
     function startTimerLoop() {
@@ -1933,6 +2085,15 @@ function initTKALMSPage() {
         if (!isQuizPage || !progress.timerRunning) return;
         timerId = setInterval(() => {
             progress.elapsedSeconds += 1;
+            if (isQuizPage) {
+                progress.quizRemaining = Math.max(0, progress.quizRemaining - 1);
+                if (progress.quizRemaining === 0) {
+                    progress.timerRunning = false;
+                    clearInterval(timerId);
+                    showToast("Waktu habis. Sesi dijeda.");
+                    showResultSummary();
+                }
+            }
             saveProgress();
             renderTimer();
         }, 1000);
@@ -1959,6 +2120,7 @@ function initTKALMSPage() {
             prevButton.disabled = true;
             hintButton.disabled = true;
             reviewButton.disabled = true;
+            clearAnswerButton.disabled = true;
             return;
         }
         const saved = progress.answers[question.id];
@@ -1980,12 +2142,13 @@ function initTKALMSPage() {
             const selected = selectedAnswers.includes(index);
             const correct = Array.isArray(question.correct) ? question.correct.includes(index) : question.correct === index;
             const stateClass = saved?.submitted && correct ? "is-correct correct" : saved?.submitted && selected && !correct ? "is-wrong wrong" : "";
-            return `<button class="answer-choice answer-btn ${selected ? "selected" : ""} ${stateClass}" data-lms-answer="${index}" ${saved?.submitted ? "disabled" : ""}>${option}</button>`;
+            return `<button type="button" class="answer-choice answer-btn ${selected ? "selected" : ""} ${stateClass}" data-lms-answer="${index}" aria-pressed="${selected}" ${saved?.submitted ? "disabled" : ""}>${option}</button>`;
         }).join("");
         explanation.innerHTML = saved?.submitted
             ? `<strong>${saved.correct ? "Jawaban benar." : "Perlu review."}</strong><p>${question.explanation}</p>`
             : `<p class="muted">${question.type === "multi" ? "Pilih semua jawaban yang benar, lalu tekan Submit." : "Pilih satu jawaban, lalu tekan Submit."}</p>`;
-        submitButton.disabled = Boolean(saved?.submitted);
+        submitButton.disabled = Boolean(saved?.submitted) || selectedAnswers.length === 0;
+        clearAnswerButton.disabled = Boolean(saved?.submitted) || selectedAnswers.length === 0;
         const isLast = questionIndex === filtered.length - 1; nextButton.textContent = isLast ? "Selesai Latihan" : "Soal Berikutnya"; if (isLast) nextButton.style.background = "linear-gradient(135deg, var(--danger), var(--purple))"; else nextButton.style.background = ""; nextButton.disabled = false; prevButton.disabled = false;
         hintButton.disabled = Boolean(saved?.submitted);
         reviewButton.disabled = false;
@@ -2000,7 +2163,13 @@ function initTKALMSPage() {
                 } else {
                     selectedAnswers = [index];
                 }
+                progress.answers[question.id] = {
+                    ...(progress.answers[question.id] || {}),
+                    chosen: [...selectedAnswers], submitted: false, correct: false, updatedAt: Date.now()
+                };
+                saveProgress();
                 renderActiveQuestion();
+                renderQuestionList();
             });
         });
     }
@@ -2012,6 +2181,17 @@ function initTKALMSPage() {
             return;
         }
         const correct = isCorrect(question, selectedAnswers);
+        if (window.QuizNationPro) {
+            const correctIndexes = Array.isArray(question.correct) ? question.correct : [question.correct];
+            window.QuizNationPro.recordAttempt({
+                questionId: question.id, question: question.prompt, topic: question.subject || question.skill,
+                difficulty: question.difficulty, source: "tka-lms",
+                selected: selectedAnswers.map(index => question.options[index]).join(", "),
+                correctAnswer: correctIndexes.map(index => question.options[index]).join(", "), correct,
+                isCorrect: correct, durationMs: Number(progress.elapsedSeconds || 0) * 1000,
+                explanation: question.explanation, answers: question.options
+            });
+        }
         progress.answers[question.id] = {
             chosen: [...selectedAnswers],
             submitted: true,
@@ -2026,7 +2206,18 @@ function initTKALMSPage() {
         renderAll();
     }
 
-    function moveQuestion(direction = 1) { const filtered = getFilteredQuestions(); if (!filtered.length) return; const index = filtered.findIndex(question => question.id === selectedQuestionId); if (direction === 1 && index === filtered.length - 1) { const unanswered = filtered.filter(q => !progress.answers[q.id]?.submitted).length; if (unanswered > 0) { if (!confirm(`Terdapat ${unanswered} soal yang belum dijawab atau disubmit.\n\nYakin ingin mengakhiri sesi latihan ini?`)) return; } else { if (!confirm("Hebat! Semua soal telah dijawab.\n\nAkhiri sesi dan kembali ke Dashboard?")) return; } window.location.href = "tka-lms.html#lms-dashboard"; return; } selectedQuestionId = filtered[(index + direction + filtered.length) % filtered.length].id; renderActiveQuestion(); renderQuestionList(); }
+    function showResultSummary() {
+        if (!resultDialog || !resultContent) return;
+        const filtered = getFilteredQuestions();
+        const answered = filtered.filter(q => progress.answers[q.id]?.submitted);
+        const correct = answered.filter(q => progress.answers[q.id]?.correct).length;
+        const review = filtered.filter(q => progress.answers[q.id]?.review).length;
+        const accuracy = Math.round((correct / Math.max(answered.length, 1)) * 100);
+        resultContent.innerHTML = `<div class="result-score"><strong>${accuracy}%</strong><span>Akurasi sesi</span></div><div class="result-stats"><span><b>${answered.length}</b>Dijawab</span><span><b>${correct}</b>Benar</span><span><b>${review}</b>Review</span><span><b>${formatTimer(progress.elapsedSeconds)}</b>Durasi</span></div>`;
+        if (!resultDialog.open) resultDialog.showModal();
+    }
+
+    function moveQuestion(direction = 1) { const filtered = getFilteredQuestions(); if (!filtered.length) return; const index = filtered.findIndex(question => question.id === selectedQuestionId); if (direction === 1 && index === filtered.length - 1) { showResultSummary(); return; } selectedQuestionId = filtered[(index + direction + filtered.length) % filtered.length].id; renderActiveQuestion(); renderQuestionList(); }
 
     function showHint() {
         const question = questionBank.find(item => item.id === selectedQuestionId);
@@ -2064,6 +2255,7 @@ function initTKALMSPage() {
         progress.answers = {};
         progress.streak = 0;
         progress.elapsedSeconds = 0;
+        progress.quizRemaining = progress.quizDuration;
         progress.timerRunning = false;
         selectedQuestionId = "";
         selectedAnswers = [];
@@ -2141,10 +2333,26 @@ function initTKALMSPage() {
         });
         timerReset.addEventListener("click", () => {
             progress.elapsedSeconds = 0;
+            progress.quizRemaining = progress.quizDuration;
             progress.timerRunning = false;
             saveProgress();
             renderTimer();
             startTimerLoop();
+        });
+        timerDuration?.addEventListener("change", () => {
+            progress.quizDuration = Number(timerDuration.value);
+            progress.quizRemaining = progress.quizDuration;
+            progress.timerRunning = false;
+            saveProgress(); renderTimer(); startTimerLoop();
+            showToast(`Timer diatur ${Math.round(progress.quizDuration / 60)} menit.`);
+        });
+        clearAnswerButton.addEventListener("click", () => {
+            const question = questionBank.find(item => item.id === selectedQuestionId);
+            if (!question || progress.answers[question.id]?.submitted) return;
+            selectedAnswers = [];
+            const current = progress.answers[question.id] || {};
+            progress.answers[question.id] = { ...current, chosen: [], submitted: false, updatedAt: Date.now() };
+            saveProgress(); renderActiveQuestion(); renderQuestionList();
         });
         launchButtons.forEach(button => {
             button.addEventListener("click", () => {
@@ -2152,6 +2360,311 @@ function initTKALMSPage() {
                 window.location.href = "tka-quiz.html";
             });
         });
+
+        // Advanced History Filters
+        const historyFilterButtons = document.querySelectorAll("[data-history-filter]");
+        historyFilterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                historyFilterButtons.forEach(item => item.classList.remove("active"));
+                button.classList.add("active");
+                renderReviewHistory();
+            });
+        });
+        
+        const historySearchInput = document.getElementById("tkaHistorySearch");
+        if (historySearchInput) {
+            historySearchInput.addEventListener("input", () => {
+                renderReviewHistory();
+            });
+        }
+
+        // Click on weak subject row to start training it
+        const weakRow = document.getElementById("tkaLmsWeakRow");
+        if (weakRow) {
+            weakRow.addEventListener("click", () => {
+                const weakTextEl = document.getElementById("tkaLmsWeak");
+                const weakName = weakTextEl ? weakTextEl.textContent.trim() : "";
+                if (weakName && weakName !== "Belum ada") {
+                    const foundSubj = subjects.find(s => s.name.toLowerCase() === weakName.toLowerCase());
+                    if (foundSubj) {
+                        activeSubject = foundSubj.id;
+                        selectedQuestionId = "";
+                        updatePreferences();
+                        renderAll();
+                        showToast(`Melatih mapel terlemah: ${foundSubj.name}`);
+                        
+                        // Switch to setup tab
+                        const setupTabBtn = document.querySelector('[data-target="tab-setup"]');
+                        if (setupTabBtn) {
+                            setupTabBtn.click();
+                        }
+                        
+                        document.getElementById("lms-workspace")?.scrollIntoView({ behavior: "smooth" });
+                    }
+                }
+            });
+        }
+
+        // Recommendation Buttons bindings
+        const btnErrors = document.querySelector("#recRepeatErrors button");
+        if (btnErrors) {
+            btnErrors.addEventListener("click", () => {
+                const wrongQuestions = questionBank.filter(q => progress.answers[q.id]?.submitted && !progress.answers[q.id].correct);
+                if (wrongQuestions.length > 0) {
+                    activeMode = "wrong";
+                    sessionSize = "5";
+                    activeDifficulty = "all";
+                    activeType = "all";
+                    searchInput.value = "";
+                    updatePreferences();
+                    window.location.href = "tka-quiz.html";
+                }
+            });
+        }
+
+        const btnWeak = document.querySelector("#recWeakestDrill button");
+        if (btnWeak) {
+            btnWeak.addEventListener("click", () => {
+                const weakSubjectObj = subjects
+                    .map(subject => ({ ...subject, ...getSubjectAccuracy(subject.id) }))
+                    .filter(subject => subject.done > 0)
+                    .sort((a, b) => a.accuracy - b.accuracy)[0];
+                if (weakSubjectObj) {
+                    activeSubject = weakSubjectObj.id;
+                    activeMode = "all";
+                    sessionSize = "5";
+                    activeDifficulty = "all";
+                    activeType = "all";
+                    searchInput.value = "";
+                    updatePreferences();
+                    window.location.href = "tka-quiz.html";
+                }
+            });
+        }
+
+        const btnHots = document.querySelector("#recHotsChallenge button");
+        if (btnHots) {
+            btnHots.addEventListener("click", () => {
+                const hotsQuestions = questionBank.filter(q => q.subject === activeSubject && q.difficulty === "hots");
+                if (hotsQuestions.length > 0) {
+                    activeDifficulty = "hots";
+                    activeMode = "all";
+                    sessionSize = "5";
+                    activeType = "all";
+                    searchInput.value = "";
+                    updatePreferences();
+                    window.location.href = "tka-quiz.html";
+                }
+            });
+        }
+
+        // Bind Target Score input
+        const targetInputLMS = document.getElementById("tkaTargetScoreLMS");
+        if (targetInputLMS) {
+            targetInputLMS.value = preferences.targetScore || 700;
+            targetInputLMS.addEventListener("input", () => {
+                let val = parseInt(targetInputLMS.value);
+                if (isNaN(val)) val = 700;
+                if (val < 400) val = 400;
+                if (val > 900) val = 900;
+                
+                updatePreferences();
+                renderStrategy();
+            });
+            targetInputLMS.addEventListener("change", () => {
+                let val = parseInt(targetInputLMS.value);
+                if (isNaN(val) || val < 400) val = 400;
+                if (val > 900) val = 900;
+                targetInputLMS.value = val;
+                updatePreferences();
+                renderStrategy();
+            });
+        }
+    }
+
+    function renderRecommendations() {
+        if (isQuizPage) return;
+        
+        // 1. Repeat Errors
+        const wrongQuestions = questionBank.filter(q => progress.answers[q.id]?.submitted && !progress.answers[q.id].correct);
+        const btnErrors = document.querySelector("#recRepeatErrors button");
+        const cardErrors = document.getElementById("recRepeatErrors");
+        if (btnErrors && cardErrors) {
+            if (wrongQuestions.length === 0) {
+                btnErrors.disabled = true;
+                btnErrors.textContent = "Tidak Tersedia";
+                cardErrors.style.opacity = "0.5";
+            } else {
+                btnErrors.disabled = false;
+                btnErrors.textContent = `Mulai (${Math.min(wrongQuestions.length, 5)} soal)`;
+                cardErrors.style.opacity = "1";
+            }
+        }
+
+        // 2. Weakest Drill
+        const weakSubjectObj = subjects
+            .map(subject => ({ ...subject, ...getSubjectAccuracy(subject.id) }))
+            .filter(subject => subject.done > 0)
+            .sort((a, b) => a.accuracy - b.accuracy)[0];
+        const btnWeak = document.querySelector("#recWeakestDrill button");
+        const cardWeak = document.getElementById("recWeakestDrill");
+        if (btnWeak && cardWeak) {
+            if (!weakSubjectObj) {
+                btnWeak.disabled = true;
+                btnWeak.textContent = "Belum Ada Data";
+                cardWeak.style.opacity = "0.5";
+            } else {
+                btnWeak.disabled = false;
+                btnWeak.textContent = `Mulai (${weakSubjectObj.name})`;
+                cardWeak.style.opacity = "1";
+            }
+        }
+        
+        // 3. HOTS Challenge
+        const hotsQuestions = questionBank.filter(q => q.subject === activeSubject && q.difficulty === "hots");
+        const btnHots = document.querySelector("#recHotsChallenge button");
+        const cardHots = document.getElementById("recHotsChallenge");
+        if (btnHots && cardHots) {
+            if (hotsQuestions.length === 0) {
+                btnHots.disabled = true;
+                btnHots.textContent = "Tidak Tersedia";
+                cardHots.style.opacity = "0.5";
+            } else {
+                btnHots.disabled = false;
+                btnHots.textContent = `Mulai (5 Soal HOTS)`;
+                cardHots.style.opacity = "1";
+            }
+        }
+    }
+
+    function renderStrategy() {
+        if (isQuizPage) return;
+        const targetInputLMS = document.getElementById("tkaTargetScoreLMS");
+        if (!targetInputLMS) return;
+        
+        const targetVal = parseInt(targetInputLMS.value) || 700;
+        const stats = getAnswerStats();
+        
+        const projStatusText = document.getElementById("tkaProjectionStatusText");
+        const gapText = document.getElementById("tkaScoreGapText");
+        const actionsList = document.getElementById("tkaStrategyActionsList");
+        
+        if (!projStatusText || !gapText || !actionsList) return;
+        
+        if (stats.done < 5) {
+            projStatusText.textContent = "Belum Terukur";
+            projStatusText.style.color = "var(--muted)";
+            gapText.textContent = "Kerjakan minimal 5 soal untuk menganalisis gap skor.";
+            actionsList.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted);">
+                    <i class="fa-solid fa-lock" style="font-size: 16px; color: var(--muted);"></i>
+                    <span>Selesaikan minimal 5 soal di mapel apa pun untuk membuka rencana strategi aksi.</span>
+                </div>
+            `;
+            return;
+        }
+        
+        // Calculate estimated score
+        const estimatedScore = calculateIRTScore(progress.answers);
+        
+        projStatusText.textContent = `${estimatedScore} Poin`;
+        
+        const gap = targetVal - estimatedScore;
+        if (gap <= 0) {
+            projStatusText.style.color = "var(--green)";
+            gapText.textContent = `Hebat! Estimasi skor kamu saat ini telah melampaui target (${Math.abs(gap)} poin di atas target).`;
+        } else {
+            projStatusText.style.color = gap > 100 ? "var(--danger)" : "var(--blue)";
+            gapText.textContent = `Kurang ${gap} poin lagi untuk mencapai target ${targetVal}.`;
+        }
+        
+        // Dynamic Recommendations list
+        const actions = [];
+        
+        // 1. Weakest subject action
+        const weakSubject = subjects
+            .map(subject => ({ ...subject, ...getSubjectAccuracy(subject.id) }))
+            .filter(subject => subject.done > 0)
+            .sort((a, b) => a.accuracy - b.accuracy)[0];
+            
+        if (weakSubject && weakSubject.accuracy < 70) {
+            actions.push({
+                icon: "fa-triangle-exclamation",
+                color: "var(--danger)",
+                title: `Tingkatkan akurasi ${weakSubject.name}`,
+                desc: `Akurasi saat ini ${weakSubject.accuracy}%. Lakukan drill minimal 5 soal dari materi ini untuk menaikkan proyeksi nilai.`
+            });
+        }
+        
+        // 2. Completion action
+        const totalDone = stats.done;
+        const totalQuestions = questionBank.length;
+        const coverageRate = Math.round((totalDone / totalQuestions) * 100);
+        if (coverageRate < 30) {
+            actions.push({
+                icon: "fa-database",
+                color: "var(--blue)",
+                title: "Perluas cakupan materi latihan",
+                desc: `Kamu baru mengerjakan ${coverageRate}% dari bank soal TKA. Selesaikan minimal 15 soal lagi untuk menstabilkan estimasi nilai.`
+            });
+        }
+        
+        // 3. HOTS challenge recommendation
+        const answeredHots = questionBank.filter(q => q.difficulty === "hots" && progress.answers[q.id]?.submitted);
+        const correctHots = answeredHots.filter(q => progress.answers[q.id]?.correct);
+        const hotsAccuracy = answeredHots.length ? Math.round((correctHots.length / answeredHots.length) * 100) : 0;
+        
+        if (answeredHots.length === 0) {
+            actions.push({
+                icon: "fa-fire",
+                color: "var(--purple)",
+                title: "Coba Tantangan HOTS pertama kamu",
+                desc: "Uji logika analisis tinggi dengan menyelesaikan sesi khusus HOTS."
+            });
+        } else if (hotsAccuracy < 60) {
+            actions.push({
+                icon: "fa-fire",
+                color: "var(--purple)",
+                title: "Perbaiki akurasi soal analisis tinggi (HOTS)",
+                desc: `Akurasi HOTS kamu saat ini ${hotsAccuracy}%. Pelajari kembali pembahasan di Riwayat & Review.`
+            });
+        }
+        
+        // 4. General advice based on gap
+        if (gap > 0) {
+            if (stats.accuracy < 75) {
+                actions.push({
+                    icon: "fa-bullseye",
+                    color: "var(--yellow)",
+                    title: "Fokus pada ketelitian (Akurasi)",
+                    desc: "Akurasi belajar saat ini masih di bawah 75%. Kurangi kecepatan pengerjaan dan pastikan membaca stimulus soal secara teliti sebelum submit."
+                });
+            } else {
+                actions.push({
+                    icon: "fa-bolt",
+                    color: "var(--green)",
+                    title: "Tingkatkan intensitas latihan",
+                    desc: "Akurasi kamu sudah sangat baik! Terus selesaikan soal baru untuk menambahkan bobot progres belajar ke estimasi skor."
+                });
+            }
+        } else {
+            actions.push({
+                icon: "fa-crown",
+                color: "var(--green)",
+                title: "Pertahankan keunggulan",
+                desc: "Rutinlah melakukan review berkala terhadap soal-soal salah agar kemampuanmu tetap prima menjelang ujian resmi."
+            });
+        }
+        
+        actionsList.innerHTML = actions.map(act => `
+            <div style="display: grid; grid-template-columns: 24px 1fr; gap: 12px; font-size: 14px; line-height: 1.4;">
+                <div style="color: ${act.color}; text-align: center; margin-top: 2px;"><i class="fa-solid ${act.icon}"></i></div>
+                <div>
+                    <strong style="display: block; color: var(--text);">${act.title}</strong>
+                    <span style="color: var(--muted); font-size: 12.5px; display: block; margin-top: 2px;">${act.desc}</span>
+                </div>
+            </div>
+        `).join("");
     }
 
     function renderAll() {
@@ -2162,6 +2675,8 @@ function initTKALMSPage() {
         renderReviewHistory();
         renderTimer();
         renderLaunchSummary();
+        renderRecommendations();
+        renderStrategy();
         if (isQuizPage) {
             renderQuestionList();
             renderActiveQuestion();
@@ -2171,6 +2686,56 @@ function initTKALMSPage() {
     searchInput.value = preferences.query || "";
     sessionSizeSelect.value = sessionSize;
     bindFilters();
+
+    if (isQuizPage) {
+        const shortcutDialog = document.getElementById("tkaShortcutDialog");
+        document.getElementById("tkaShortcutHelp")?.addEventListener("click", () => shortcutDialog?.showModal());
+        document.querySelectorAll("[data-close-dialog]").forEach(button => button.addEventListener("click", () => button.closest("dialog")?.close()));
+        document.querySelectorAll("dialog").forEach(dialog => dialog.addEventListener("click", event => {
+            if (event.target === dialog) dialog.close();
+        }));
+        document.getElementById("tkaFullscreenToggle")?.addEventListener("click", async () => {
+            try {
+                if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+                else await document.exitFullscreen();
+            } catch { showToast("Mode layar penuh tidak tersedia."); }
+        });
+        const readableButton = document.getElementById("tkaReadableToggle");
+        readableButton?.addEventListener("click", () => {
+            const active = document.body.classList.toggle("readable-mode");
+            readableButton.setAttribute("aria-pressed", String(active));
+            showToast(active ? "Teks diperbesar." : "Ukuran teks normal.");
+        });
+        const sidebarButton = document.getElementById("tkaSidebarToggle");
+        sidebarButton?.addEventListener("click", () => {
+            const collapsed = document.body.classList.toggle("sidebar-collapsed");
+            sidebarButton.setAttribute("aria-expanded", String(!collapsed));
+            sidebarButton.textContent = collapsed ? "Buka" : "Tutup";
+        });
+        document.addEventListener("keydown", event => {
+            if (event.ctrlKey || event.metaKey || event.altKey || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || "") || document.querySelector("dialog[open]")) return;
+            const question = questionBank.find(item => item.id === selectedQuestionId);
+            const key = event.key.toLowerCase();
+            const answerIndex = "abcdef".indexOf(key);
+            if (answerIndex >= 0 && answerIndex < (question?.options.length || 0)) {
+                answerGrid.querySelector(`[data-lms-answer="${answerIndex}"]`)?.click(); event.preventDefault();
+            } else if (event.key === "Enter" && !submitButton.disabled) { submitButton.click(); event.preventDefault(); }
+            else if (event.key === "ArrowRight") { moveQuestion(1); event.preventDefault(); }
+            else if (event.key === "ArrowLeft") { moveQuestion(-1); event.preventDefault(); }
+            else if (key === "h") { hintButton.click(); event.preventDefault(); }
+            else if (key === "r") { reviewButton.click(); event.preventDefault(); }
+        });
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden && progress.timerRunning) {
+                progress.timerRunning = false; saveProgress(); renderTimer(); startTimerLoop();
+                showToast("Timer dijeda saat halaman tidak aktif.");
+            }
+        });
+        document.querySelectorAll('a[href^="tka-lms.html"]').forEach(link => link.addEventListener("click", event => {
+            const hasDraft = getFilteredQuestions().some(question => progress.answers[question.id]?.chosen?.length && !progress.answers[question.id]?.submitted);
+            if (hasDraft && !confirm("Ada pilihan yang belum disubmit. Tetap keluar dari Focus Room?")) event.preventDefault();
+        }));
+    }
     
     const reviewModalOverlay = document.getElementById("reviewModalOverlay");
     const closeReviewModal = document.getElementById("closeReviewModal");

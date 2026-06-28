@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="feature-pages.css">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="css/feature-pages.css">
+    <link rel="stylesheet" href="css/nav-polish.css">
+    <link rel="stylesheet" href="css/mobile-compat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Base Reset override to support immersive reader themes */
@@ -503,6 +503,190 @@
                 display: none; /* Hide texts on buttons for mobile */
             }
         }
+
+        /* Text Highlighter (Stabilo) Mode */
+        .reading-sheet p.highlighted {
+            background-color: rgba(253, 224, 71, 0.4) !important;
+            border-radius: 6px;
+            padding: 4px 8px;
+            box-shadow: 0 2px 8px rgba(253, 224, 71, 0.15);
+        }
+        body.read-theme-sepia .reading-sheet p.highlighted {
+            background-color: rgba(217, 119, 6, 0.25) !important;
+            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.1);
+        }
+        body.read-theme-dark .reading-sheet p.highlighted {
+            background-color: rgba(234, 179, 8, 0.25) !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(234, 179, 8, 0.1);
+        }
+
+        .highlighter-active .reading-sheet p {
+            cursor: crosshair;
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23eab308'><path d='M16 2l6 6L9 21H3v-6L16 2z'/></svg>") 2 22, pointer;
+            transition: all 0.2s ease;
+            border-left: 2px dashed transparent;
+            padding-left: 8px;
+        }
+        .highlighter-active .reading-sheet p:hover {
+            border-left-color: var(--blue);
+            background-color: rgba(79, 140, 255, 0.05);
+            border-radius: 0 6px 6px 0;
+        }
+
+        /* Interactive Mini-Quiz Style */
+        .mini-quiz-card {
+            margin-top: 48px;
+            padding: 28px;
+            border-radius: 20px;
+            border: 1px dashed var(--border);
+            background: var(--surface-2);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+        body.read-theme-sepia .mini-quiz-card {
+            background: rgba(92, 68, 44, 0.04);
+            border-color: rgba(92, 68, 44, 0.15);
+        }
+        body.read-theme-dark .mini-quiz-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+        
+        .quiz-option-btn {
+            box-sizing: border-box;
+            text-align: left;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 14.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        body.read-theme-sepia .quiz-option-btn {
+            background: #f4ecd8;
+            border-color: rgba(92, 68, 44, 0.15);
+            color: #43301e;
+        }
+        body.read-theme-dark .quiz-option-btn {
+            background: #1e293b;
+            border-color: rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+        }
+
+        .quiz-option-btn:hover:not(:disabled) {
+            border-color: var(--blue);
+            background: rgba(79, 140, 255, 0.05);
+            transform: translateX(4px);
+        }
+        body.read-theme-sepia .quiz-option-btn:hover:not(:disabled) {
+            background: rgba(92, 68, 44, 0.07);
+        }
+        body.read-theme-dark .quiz-option-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .quiz-option-btn.correct {
+            background-color: rgba(50, 214, 107, 0.15) !important;
+            border-color: var(--green) !important;
+            color: var(--green) !important;
+        }
+        .quiz-option-btn.wrong {
+            background-color: rgba(255, 79, 79, 0.15) !important;
+            border-color: var(--danger) !important;
+            color: var(--danger) !important;
+        }
+        .quiz-option-btn:disabled {
+            cursor: default;
+        }
+
+        /* Zen Mode style */
+        body.zen-active .reader-header,
+        body.zen-active .reader-sidebar,
+        body.zen-active .reader-notes-sidebar,
+        body.zen-active #summaryDrawer,
+        body.zen-active .reader-footer {
+            display: none !important;
+        }
+        body.zen-active .reader-main-content {
+            padding: 0 !important;
+            margin: 0 !important;
+            height: 100vh !important;
+        }
+        body.zen-active .reading-sheet-container {
+            padding: 64px 24px !important;
+        }
+
+        /* Search highlights */
+        mark.search-highlight {
+            background-color: rgba(249, 115, 22, 0.4) !important;
+            color: inherit;
+            border-radius: 4px;
+            padding: 2px 4px;
+            transition: all 0.2s ease;
+        }
+        mark.search-highlight.active-match {
+            background-color: var(--blue) !important;
+            color: white !important;
+            box-shadow: 0 0 10px rgba(79, 140, 255, 0.4);
+        }
+
+        /* Control Groups / Segmented Toolbars */
+        .control-group {
+            display: inline-flex;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--white);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .control-group .setting-btn {
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            border-right: 1px solid var(--border);
+            background: transparent;
+            padding: 8px 14px;
+        }
+        .control-group .setting-btn:last-child {
+            border-right: none;
+        }
+        .control-group .setting-btn:hover {
+            background: rgba(79, 140, 255, 0.05);
+            transform: none;
+        }
+        
+        /* Theme overrides for control groups */
+        body.read-theme-sepia .control-group {
+            background-color: #f4ecd8 !important;
+            border-color: rgba(92, 68, 44, 0.18) !important;
+        }
+        body.read-theme-sepia .control-group .setting-btn {
+            color: #43301e !important;
+            border-right-color: rgba(92, 68, 44, 0.18) !important;
+        }
+        body.read-theme-sepia .control-group .setting-btn:hover {
+            background: rgba(92, 68, 44, 0.07) !important;
+        }
+        body.read-theme-dark .control-group {
+            background-color: #1e293b !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        body.read-theme-dark .control-group .setting-btn {
+            color: #cbd5e1 !important;
+            border-right-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        body.read-theme-dark .control-group .setting-btn:hover {
+            background: rgba(255, 255, 255, 0.04) !important;
+        }
     </style>
 </head>
 
@@ -531,32 +715,58 @@
             </div>
 
             <div class="header-right">
-                <!-- Notes Toggle Button -->
-                <button class="setting-btn" id="toggleNotes" title="Tulis Catatan Belajar">
-                    <i class="fa-solid fa-note-sticky"></i>
-                    <span>Catatan</span>
-                </button>
-                
-                <!-- Size Controls -->
-                <button class="setting-btn" id="readerFontDec" title="Perkecil Font">Aa-</button>
-                <button class="setting-btn" id="readerFontInc" title="Perbesar Font">Aa+</button>
-                
-                <!-- Separator -->
-                <div style="width: 1px; height: 20px; background: var(--border); opacity: 0.5;"></div>
+                <!-- Group 1: Alat Baca / Utilities -->
+                <div class="control-group">
+                    <button class="setting-btn" id="ttsToggle" title="Dengarkan Audio (Text-to-Speech)">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <span>Dengar</span>
+                    </button>
+                    <button class="setting-btn" id="highlighterToggle" title="Mode Stabilo Teks">
+                        <i class="fa-solid fa-highlighter"></i>
+                        <span>Stabilo</span>
+                    </button>
+                    <button class="setting-btn" id="searchToggle" title="Cari Kata Kunci">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Cari</span>
+                    </button>
+                    <button class="setting-btn" id="summaryToggle" title="Rangkuman Bab (Cheat Sheet)">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Rangkuman</span>
+                    </button>
+                    <button class="setting-btn" id="zenToggle" title="Mode Fokus (Zen Mode)">
+                        <i class="fa-solid fa-eye-slash"></i>
+                        <span>Fokus</span>
+                    </button>
+                </div>
 
-                <!-- Theme Controls -->
+                <!-- Group 2: Font Controls -->
+                <div class="control-group">
+                    <button class="setting-btn" id="readerFontDec" title="Perkecil Font" style="font-size: 11px; font-weight: 800;">Aa-</button>
+                    <button class="setting-btn" id="readerFontInc" title="Perbesar Font" style="font-size: 14px; font-weight: 800;">Aa+</button>
+                </div>
+
+                <!-- Theme Controls Row -->
                 <div class="theme-select-row">
                     <button class="theme-select-btn theme-light active" data-read-theme="light" title="Tema Terang"></button>
                     <button class="theme-select-btn theme-sepia" data-read-theme="sepia" title="Tema Sepia"></button>
                     <button class="theme-select-btn theme-dark" data-read-theme="dark" title="Tema Gelap"></button>
                 </div>
 
-                <!-- Fullscreen Toggle -->
-                <button class="setting-btn" id="fullscreenToggle" title="Mode Layar Penuh">
-                    <i class="fa-solid fa-expand"></i>
-                </button>
+                <!-- Group 3: Notes & Fullscreen -->
+                <div class="control-group">
+                    <button class="setting-btn" id="toggleNotes" title="Tulis Catatan Belajar">
+                        <i class="fa-solid fa-note-sticky"></i>
+                        <span>Catatan</span>
+                    </button>
+                    <button class="setting-btn" id="fullscreenToggle" title="Mode Layar Penuh">
+                        <i class="fa-solid fa-expand"></i>
+                    </button>
+                </div>
             </div>
         </header>
+
+        <!-- Scroll Progress Bar -->
+        <div id="scrollProgressBar" style="position: absolute; top: 70px; left: 0; width: 0%; height: 3px; background: linear-gradient(90deg, var(--green), var(--blue)); z-index: 100; transition: width 0.1s ease;"></div>
 
         <!-- IMMERSIVE BODY -->
         <div class="reader-body">
@@ -583,8 +793,10 @@
                     </button>
                     
                     <div class="footer-center">
-                        <span class="footer-progress-percent" id="footerProgressPercent">Progress: 0%</span>
+                        <span class="footer-progress-percent" id="footerProgressPercent">Progress: 0% dibaca</span>
                         <span class="footer-progress-pages" id="footerProgressPages">Bab X dari Y</span>
+                        <!-- Sisa Waktu Baca -->
+                        <span id="readerTimeRemainingBadge" style="font-size: 11.5px; font-weight: 800; color: var(--muted); margin-top: 4px; display: block;">⏱️ Sisa 0 menit</span>
                     </div>
 
                     <button class="setting-btn" id="btnNextChapter" style="background: var(--blue); color: white; border-color: transparent;">
@@ -601,6 +813,36 @@
                 </div>
                 <textarea id="readerNoteArea" style="flex: 1; min-height: 200px; border: 1px solid var(--border); background: var(--white); color: var(--dark); border-radius: 16px; padding: 14px; outline: none; font-size: 13.5px; resize: none; line-height: 1.6; font-family: inherit;" placeholder="Tuliskan catatan atau rangkuman bab di sini... (Tersimpan otomatis)"></textarea>
             </aside>
+
+            <!-- Summary Drawer Panel -->
+            <aside class="reader-notes-sidebar collapsed" id="summaryDrawer">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span class="sidebar-title" style="margin-bottom: 0;"><i class="fa-solid fa-list-check" style="margin-right: 6px;"></i> Rangkuman Bab</span>
+                    <button class="setting-btn" id="btnCloseSummary" style="padding: 6px 10px; border-radius: 8px; border-color: transparent; background: transparent;"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="summaryContent" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding-top: 10px;">
+                    <!-- Populated dynamically -->
+                </div>
+            </aside>
+
+            <!-- Floating Search Bar Container -->
+            <div id="searchBarContainer" style="display: none; position: fixed; top: 85px; right: 24px; z-index: 99; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; padding: 10px 16px; align-items: center; gap: 10px; box-shadow: var(--shadow-soft);">
+                <i class="fa-solid fa-magnifying-glass" style="color: var(--muted); font-size: 14px;"></i>
+                <input type="text" id="searchInput" placeholder="Cari kata kunci..." style="border: none; background: transparent; outline: none; font-size: 13.5px; width: 160px; color: var(--text);" />
+                <span id="searchResultCount" style="font-size: 11px; font-weight: 800; color: var(--muted); min-width: 40px; text-align: center;">0/0</span>
+                <button class="setting-btn" id="btnPrevSearch" style="padding: 6px 10px; border-radius: 8px;" title="Sebelumnya"><i class="fa-solid fa-chevron-up"></i></button>
+                <button class="setting-btn" id="btnNextSearch" style="padding: 6px 10px; border-radius: 8px;" title="Berikutnya"><i class="fa-solid fa-chevron-down"></i></button>
+                <button class="setting-btn" id="btnCloseSearch" style="padding: 6px 10px; border-radius: 8px; border-color: transparent; background: transparent;" title="Tutup"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Paragraph Action Popover -->
+            <div id="paragraphActionPopover" style="display: none; position: absolute; z-index: 1000; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 6px; box-shadow: var(--shadow-soft); backdrop-filter: blur(20px); gap: 4px;">
+                <button class="setting-btn" id="popoverBtnHighlight" style="font-size: 11px; padding: 6px 10px; border-radius: 8px; border-color: transparent;"><i class="fa-solid fa-highlighter" style="color: #eab308; margin-right: 4px;"></i> Stabilo</button>
+                <button class="setting-btn" id="popoverBtnPin" style="font-size: 11px; padding: 6px 10px; border-radius: 8px; border-color: transparent;"><i class="fa-solid fa-thumbtack" style="color: var(--blue); margin-right: 4px;"></i> Sematkan</button>
+            </div>
+
+            <!-- Float Zen Mode exit button -->
+            <button class="setting-btn" id="zenExitFloat" style="display: none; position: fixed; top: 20px; right: 20px; z-index: 10000; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border-color: var(--border);"><i class="fa-solid fa-eye" style="margin-right:6px;"></i> Keluar Fokus</button>
         </div>
     </div>
 
@@ -608,9 +850,9 @@
     <div class="toast" id="toast"></div>
 
     <!-- SCRIPT DEPS -->
-    <script src="auth-helper.js"></script>
-    <script src="sound-engine.js"></script>
-    <script src="book-data.js"></script>
+    <script src="js/auth-helper.js"></script>
+    <script src="js/sound-engine.js"></script>
+    <script src="js/book-data.js"></script>
     <script>
         // Immersive Focus E-Book Reader Logic
         (function() {
@@ -666,6 +908,14 @@
 
             let readerFontSize = storage.get("library_reader_font_size", "medium"); // small, medium, large
             let readerTheme = storage.get("library_reader_theme", "light"); // light, sepia, dark
+            let highlighterActive = false;
+            let isPlayingTTS = false;
+            let ttsUtterance = null;
+
+            // 5 new updates state variables
+            let searchMatches = [];
+            let activeMatchIndex = -1;
+            let isZenMode = false;
 
             // DOM elements
             const el = {
@@ -690,7 +940,12 @@
                 toggleNotes: document.getElementById("toggleNotes"),
                 readerNotesSidebar: document.getElementById("readerNotesSidebar"),
                 readerAutosaveStatus: document.getElementById("readerAutosaveStatus"),
-                readerNoteArea: document.getElementById("readerNoteArea")
+                readerNoteArea: document.getElementById("readerNoteArea"),
+                ttsToggle: document.getElementById("ttsToggle"),
+                highlighterToggle: document.getElementById("highlighterToggle"),
+                searchToggle: document.getElementById("searchToggle"),
+                summaryToggle: document.getElementById("summaryToggle"),
+                zenToggle: document.getElementById("zenToggle")
             };
 
             // Audio Synthetic feedback helper
@@ -738,6 +993,435 @@
                 });
             }
 
+            function getChapterHighlights() {
+                const key = `library_highlights_${bookId}_${activeChapterIndex}`;
+                return storage.get(key, []);
+            }
+
+            function saveChapterHighlights(highlights) {
+                const key = `library_highlights_${bookId}_${activeChapterIndex}`;
+                storage.set(key, highlights);
+            }
+
+            function applyChapterHighlights() {
+                const currentHighlights = getChapterHighlights();
+                const paragraphs = el.readingSheet.querySelectorAll("p");
+                paragraphs.forEach((p, idx) => {
+                    if (p.closest(".mini-quiz-card")) return;
+                    
+                    p.dataset.paraIdx = idx;
+                    if (currentHighlights.includes(idx)) {
+                        p.classList.add("highlighted");
+                    }
+                    p.addEventListener("click", (e) => {
+                        if (!highlighterActive) return;
+                        
+                        const popover = document.getElementById("paragraphActionPopover");
+                        if (popover) {
+                            popover.style.display = "flex";
+                            popover.style.left = `${e.pageX}px`;
+                            popover.style.top = `${e.pageY - 50}px`;
+                            
+                            document.getElementById("popoverBtnHighlight").onclick = (ev) => {
+                                ev.stopPropagation();
+                                p.classList.toggle("highlighted");
+                                const isHighlighted = p.classList.contains("highlighted");
+                                let highlights = getChapterHighlights();
+                                if (isHighlighted) {
+                                    if (!highlights.includes(idx)) highlights.push(idx);
+                                } else {
+                                    highlights = highlights.filter(i => i !== idx);
+                                }
+                                saveChapterHighlights(highlights);
+                                playSoundFx("click");
+                                popover.style.display = "none";
+                            };
+                            
+                            document.getElementById("popoverBtnPin").onclick = (ev) => {
+                                ev.stopPropagation();
+                                pinQuoteToNotes(p.textContent.trim());
+                                popover.style.display = "none";
+                            };
+                            
+                            e.stopPropagation();
+                        }
+                    });
+                });
+            }
+
+            // 1. Scroll Progress Bar & Sisa Waktu Baca
+            function updateScrollProgress() {
+                const contentArea = el.readerMainContent;
+                if (!contentArea) return;
+                const scrollHeight = contentArea.scrollHeight - contentArea.clientHeight;
+                if (scrollHeight <= 0) {
+                    const progressBar = document.getElementById("scrollProgressBar");
+                    if (progressBar) progressBar.style.width = "0%";
+                    const timeBadge = document.getElementById("readerTimeRemainingBadge");
+                    if (timeBadge) timeBadge.textContent = `⏱️ Sisa 0 menit`;
+                    return;
+                }
+                const scrollTop = contentArea.scrollTop;
+                const scrollPercent = (scrollTop / scrollHeight) * 100;
+                
+                const progressBar = document.getElementById("scrollProgressBar");
+                if (progressBar) {
+                    progressBar.style.width = `${scrollPercent}%`;
+                }
+
+                const textToRead = getCleanReadingText();
+                const totalWords = textToRead.split(/\s+/).length;
+                const percentRemaining = (100 - scrollPercent) / 100;
+                const wordsRemaining = Math.ceil(totalWords * percentRemaining);
+                const minutesRemaining = Math.max(0, Math.ceil(wordsRemaining / 200));
+
+                const timeBadge = document.getElementById("readerTimeRemainingBadge");
+                if (timeBadge) {
+                    timeBadge.textContent = `⏱️ Sisa ${minutesRemaining} menit`;
+                }
+            }
+
+            // 2. In-Page Keyword Search
+            function highlightSearchQuery(query) {
+                removeSearchHighlights();
+
+                if (!query || query.trim().length < 2) {
+                    updateSearchResultCount(0, 0);
+                    return;
+                }
+
+                const cleanQuery = query.trim();
+                const regex = new RegExp(`(${escapeRegExp(cleanQuery)})`, "gi");
+                
+                searchMatches = [];
+                activeMatchIndex = -1;
+                
+                const walk = (node) => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        if (node.parentNode && node.parentNode.closest(".mini-quiz-card")) return;
+                        if (node.parentNode && node.parentNode.closest("script")) return;
+                        if (node.parentNode && node.parentNode.closest("style")) return;
+                        
+                        const val = node.nodeValue;
+                        if (val.match(regex)) {
+                            const span = document.createElement("span");
+                            span.innerHTML = val.replace(regex, `<mark class="search-highlight">$1</mark>`);
+                            node.parentNode.replaceChild(span, node);
+                            
+                            span.querySelectorAll("mark").forEach(mark => {
+                                searchMatches.push(mark);
+                            });
+                        }
+                    } else {
+                        if (node.nodeName === "MARK" || node.nodeName === "SCRIPT" || node.nodeName === "STYLE" || node.id === "searchBarContainer") return;
+                        const children = Array.from(node.childNodes);
+                        children.forEach(child => walk(child));
+                    }
+                };
+
+                walk(el.readingSheet);
+
+                if (searchMatches.length > 0) {
+                    activeMatchIndex = 0;
+                    scrollToMatch(activeMatchIndex);
+                }
+                updateSearchResultCount(searchMatches.length > 0 ? activeMatchIndex + 1 : 0, searchMatches.length);
+            }
+
+            function removeSearchHighlights() {
+                const marks = el.readingSheet.querySelectorAll("mark.search-highlight");
+                marks.forEach(mark => {
+                    const textNode = document.createTextNode(mark.textContent);
+                    mark.parentNode.replaceChild(textNode, mark);
+                });
+                el.readingSheet.normalize();
+                searchMatches = [];
+                activeMatchIndex = -1;
+            }
+
+            function escapeRegExp(string) {
+                return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            }
+
+            function updateSearchResultCount(current, total) {
+                const countEl = document.getElementById("searchResultCount");
+                if (countEl) {
+                    countEl.textContent = total === 0 ? "0/0" : `${current}/${total}`;
+                }
+            }
+
+            function scrollToMatch(index) {
+                if (index < 0 || index >= searchMatches.length) return;
+                
+                searchMatches.forEach(m => m.classList.remove("active-match"));
+                
+                const activeMatch = searchMatches[index];
+                activeMatch.classList.add("active-match");
+                activeMatch.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+
+            // 3. Sematkan Kutipan ke Catatan (Pin Quote)
+            function pinQuoteToNotes(text) {
+                if (!el.readerNoteArea) return;
+                
+                const quoteBlock = `\n\n> "${text}"\n\n`;
+                el.readerNoteArea.value += quoteBlock;
+                
+                saveBookNote(true);
+                showToast("Kutipan disematkan ke Catatan Belajar! 📌");
+                playSoundFx("success");
+                
+                if (el.readerNotesSidebar.classList.contains("collapsed")) {
+                    el.readerNotesSidebar.classList.remove("collapsed");
+                    el.toggleNotes.classList.add("active");
+                }
+            }
+
+            // 4. Rangkuman Cepat Bab (AI Cheat Sheet)
+            function generateSummary() {
+                const chapter = activeBook.chapters[activeChapterIndex];
+                if (!chapter) return;
+
+                const summaryContainer = document.getElementById("summaryContent");
+                if (!summaryContainer) return;
+
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = chapter.content;
+
+                const headings = tempDiv.querySelectorAll("h2, h3");
+                let summaryHtml = "";
+
+                if (headings.length === 0) {
+                    summaryHtml = `<p style="font-size: 13px; color: var(--muted); font-weight: 500; text-align: center; margin-top: 20px;">Tidak ada rangkuman otomatis untuk bab ini.</p>`;
+                } else {
+                    headings.forEach((heading, idx) => {
+                        const nextEl = heading.nextElementSibling;
+                        let snippet = "";
+                        if (nextEl && nextEl.tagName === "P") {
+                            snippet = nextEl.textContent.substring(0, 120) + "...";
+                        } else if (nextEl && (nextEl.tagName === "UL" || nextEl.tagName === "OL")) {
+                            snippet = Array.from(nextEl.querySelectorAll("li")).slice(0, 2).map(li => `• ${li.textContent}`).join("<br/>");
+                        }
+                        
+                        summaryHtml += `
+                            <div style="background: rgba(102, 112, 133, 0.03); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: white; font-size: 11px; font-weight: 850;">${idx + 1}</span>
+                                    <span style="font-weight: 800; font-size: 13.5px; color: var(--text);">${heading.textContent}</span>
+                                </div>
+                                ${snippet ? `<p style="margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); font-weight: 500;">${snippet}</p>` : ""}
+                            </div>
+                        `;
+                    });
+                }
+
+                summaryContainer.innerHTML = summaryHtml;
+            }
+
+            // 5. Mode Fokus (Zen Mode)
+            function toggleZenMode() {
+                isZenMode = !isZenMode;
+                document.body.classList.toggle("zen-active", isZenMode);
+                
+                const zenBtn = el.zenToggle;
+                const exitBtn = document.getElementById("zenExitFloat");
+                
+                if (zenBtn) {
+                    zenBtn.classList.toggle("active", isZenMode);
+                    const icon = zenBtn.querySelector("i");
+                    const span = zenBtn.querySelector("span");
+                    if (isZenMode) {
+                        if (icon) icon.className = "fa-solid fa-eye";
+                        if (span) span.textContent = "Biasa";
+                    } else {
+                        if (icon) icon.className = "fa-solid fa-eye-slash";
+                        if (span) span.textContent = "Fokus";
+                    }
+                }
+                
+                if (exitBtn) {
+                    exitBtn.style.display = isZenMode ? "block" : "none";
+                }
+
+                if (isZenMode) {
+                    showToast("Mode Fokus aktif. Tekan ESC untuk keluar.");
+                    el.readerSidebar.classList.add("collapsed");
+                    el.readerNotesSidebar.classList.add("collapsed");
+                    if (el.toggleNotes) el.toggleNotes.classList.remove("active");
+                    const summaryDrawer = document.getElementById("summaryDrawer");
+                    if (summaryDrawer) summaryDrawer.classList.add("collapsed");
+                } else {
+                    showToast("Kembali ke mode biasa.");
+                }
+                playSoundFx("click");
+            }
+
+            function getCleanReadingText() {
+                const elements = el.readingSheet.querySelectorAll("h2, h3, p, li");
+                let textParts = [];
+                elements.forEach(element => {
+                    if (element.closest(".mini-quiz-card")) return;
+                    textParts.push(element.textContent.trim());
+                });
+                return textParts.join(". ");
+            }
+
+            function speakCurrentChapter() {
+                if (isPlayingTTS) {
+                    stopTTS();
+                    return;
+                }
+
+                const textToRead = getCleanReadingText();
+                if (!textToRead) {
+                    showToast("Tidak ada teks untuk dibaca.");
+                    return;
+                }
+
+                window.speechSynthesis.cancel();
+
+                ttsUtterance = new SpeechSynthesisUtterance(textToRead);
+
+                const englishCategories = ['CS', 'Database', 'Security', 'Literature', 'Web'];
+                const isEnglish = englishCategories.includes(activeBook.category);
+                ttsUtterance.lang = isEnglish ? 'en-US' : 'id-ID';
+
+                const voices = window.speechSynthesis.getVoices();
+                let matchingVoice = voices.find(v => v.lang.startsWith(ttsUtterance.lang));
+                if (matchingVoice) {
+                    ttsUtterance.voice = matchingVoice;
+                }
+
+                ttsUtterance.onend = () => {
+                    stopTTS();
+                };
+
+                ttsUtterance.onerror = (e) => {
+                    console.error("TTS error:", e);
+                    stopTTS();
+                };
+
+                window.speechSynthesis.speak(ttsUtterance);
+                isPlayingTTS = true;
+                updateTTSButton();
+                playSoundFx("click");
+            }
+
+            function stopTTS() {
+                window.speechSynthesis.cancel();
+                isPlayingTTS = false;
+                updateTTSButton();
+            }
+
+            function updateTTSButton() {
+                const btn = el.ttsToggle;
+                if (!btn) return;
+                const icon = btn.querySelector("i");
+                const span = btn.querySelector("span");
+                if (isPlayingTTS) {
+                    btn.classList.add("active");
+                    if (icon) icon.className = "fa-solid fa-square-stop";
+                    if (span) span.textContent = "Hentikan";
+                } else {
+                    btn.classList.remove("active");
+                    if (icon) icon.className = "fa-solid fa-volume-high";
+                    if (span) span.textContent = "Dengar";
+                }
+            }
+
+            function renderMiniQuiz() {
+                const chapter = activeBook.chapters[activeChapterIndex];
+                if (!chapter || !chapter.quiz) return;
+
+                const quizKey = `library_quiz_${bookId}_${activeChapterIndex}`;
+                const savedAnswer = storage.get(quizKey, null);
+
+                const quizCard = document.createElement("div");
+                quizCard.className = "mini-quiz-card";
+                quizCard.id = "miniQuizCard";
+                
+                const isCorrect = savedAnswer !== null ? (parseInt(savedAnswer) === chapter.quiz.correct) : false;
+
+                let optionsHtml = chapter.quiz.options.map((opt, oIdx) => {
+                    let btnClass = "quiz-option-btn";
+                    let disabledAttr = "";
+                    let iconHtml = `<i class="fa-regular fa-circle"></i>`;
+                    
+                    if (savedAnswer !== null) {
+                        disabledAttr = "disabled";
+                        const savedIdx = parseInt(savedAnswer);
+                        if (oIdx === chapter.quiz.correct) {
+                            btnClass += " correct";
+                            iconHtml = `<i class="fa-solid fa-circle-check"></i>`;
+                        } else if (oIdx === savedIdx) {
+                            btnClass += " wrong";
+                            iconHtml = `<i class="fa-solid fa-circle-xmark"></i>`;
+                        }
+                    }
+
+                    return `
+                        <button class="${btnClass}" ${disabledAttr} data-oidx="${oIdx}" style="width: 100%;">
+                            ${iconHtml}
+                            <span>${opt}</span>
+                        </button>
+                    `;
+                }).join("");
+
+                quizCard.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                        <i class="fa-solid fa-circle-question" style="color: var(--blue); font-size: 20px;"></i>
+                        <span style="font-weight: 850; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);">Kuis Cepat Pemahaman</span>
+                    </div>
+                    <h3 style="margin: 0 0 20px 0; font-size: 16px; font-weight: 750; line-height: 1.5;">${chapter.quiz.question}</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px;" id="quizOptionsContainer">
+                        ${optionsHtml}
+                    </div>
+                    <div id="quizExplanationBox" style="margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--border); display: ${savedAnswer !== null ? 'block' : 'none'};">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <span style="font-size: 14px; font-weight: 800; color: ${isCorrect ? 'var(--green)' : 'var(--danger)'};">
+                                ${isCorrect ? '<i class="fa-solid fa-circle-check"></i> Jawaban Anda Benar!' : '<i class="fa-solid fa-circle-xmark"></i> Jawaban Kurang Tepat'}
+                            </span>
+                        </div>
+                        <p style="font-size: 13.5px; line-height: 1.6; margin: 0; color: var(--text); font-weight: 500;">
+                            <strong>Penjelasan:</strong> ${chapter.quiz.explanation}
+                        </p>
+                    </div>
+                `;
+
+                el.readingSheet.appendChild(quizCard);
+
+                if (savedAnswer === null) {
+                    const btns = quizCard.querySelectorAll(".quiz-option-btn");
+                    btns.forEach(btn => {
+                        btn.addEventListener("click", () => {
+                            const chosenIdx = parseInt(btn.dataset.oidx);
+                            storage.set(quizKey, chosenIdx);
+                            
+                            const isAnsCorrect = chosenIdx === chapter.quiz.correct;
+                            if (isAnsCorrect) {
+                                playSoundFx("success");
+                            } else {
+                                playSoundFx("alarm");
+                            }
+
+                            renderMiniQuizContainer();
+                        });
+                        
+                        btn.addEventListener("mouseenter", () => {
+                            playSoundFx("hover");
+                        });
+                    });
+                }
+            }
+
+            function renderMiniQuizContainer() {
+                const existingCard = document.getElementById("miniQuizCard");
+                if (existingCard) {
+                    existingCard.remove();
+                }
+                renderMiniQuiz();
+            }
+
             function loadChapterContent() {
                 const chapter = activeBook.chapters[activeChapterIndex];
                 if (!chapter) return;
@@ -749,8 +1433,27 @@
                 setTimeout(() => {
                     el.readingSheet.innerHTML = chapter.content;
                     
+                    // Apply Stabilo highlights
+                    applyChapterHighlights();
+
+                    // Render quick understanding quiz
+                    renderMiniQuiz();
+
+                    // Restore search highlights if search is open
+                    const searchBar = document.getElementById("searchBarContainer");
+                    if (searchBar && searchBar.style.display === "flex") {
+                        const q = document.getElementById("searchInput").value;
+                        if (q) highlightSearchQuery(q);
+                    }
+
                     // Reset scroll to top of main area
                     el.readerMainContent.scrollTop = 0;
+                    
+                    // Trigger scroll progress bar calculations
+                    updateScrollProgress();
+
+                    // Generate summaries
+                    generateSummary();
 
                     // Animate fade-in
                     el.readingSheet.classList.remove("fade-out");
@@ -776,6 +1479,8 @@
             }
 
             function changeChapter(idx) {
+                stopTTS();
+                removeSearchHighlights(); // Clean up search matches
                 activeChapterIndex = idx;
                 
                 // Save progress bookmark
@@ -802,6 +1507,7 @@
             function initListeners() {
                 // Back to library
                 el.backToLibrary.addEventListener("click", () => {
+                    stopTTS();
                     playSoundFx("click");
                     window.location.href = "library.html";
                 });
@@ -810,6 +1516,36 @@
                 el.toggleSidebar.addEventListener("click", () => {
                     playSoundFx("click");
                     el.readerSidebar.classList.toggle("collapsed");
+                });
+
+                // Toggle highlighter mode
+                if (el.highlighterToggle) {
+                    el.highlighterToggle.addEventListener("click", () => {
+                        highlighterActive = !highlighterActive;
+                        el.highlighterToggle.classList.toggle("active", highlighterActive);
+                        el.readerMainContent.classList.toggle("highlighter-active", highlighterActive);
+                        
+                        if (highlighterActive) {
+                            showToast("Mode Stabilo aktif! Klik paragraf untuk menandai.");
+                            playSoundFx("click");
+                        } else {
+                            showToast("Mode Stabilo dinonaktifkan.");
+                            playSoundFx("click");
+                            const popover = document.getElementById("paragraphActionPopover");
+                            if (popover) popover.style.display = "none";
+                        }
+                    });
+                }
+
+                // Toggle TTS mode
+                if (el.ttsToggle) {
+                    el.ttsToggle.addEventListener("click", () => {
+                        speakCurrentChapter();
+                    });
+                }
+
+                window.addEventListener("beforeunload", () => {
+                    stopTTS();
                 });
 
                 // Font modifier size buttons
@@ -868,6 +1604,8 @@
                         changeChapter(activeChapterIndex + 1);
                     } else if (e.key === "ArrowLeft" && activeChapterIndex > 0) {
                         changeChapter(activeChapterIndex - 1);
+                    } else if (e.key === "Escape" && isZenMode) {
+                        toggleZenMode();
                     }
                 });
 
@@ -887,8 +1625,129 @@
                         playSoundFx("click");
                         el.readerNotesSidebar.classList.toggle("collapsed");
                         el.toggleNotes.classList.toggle("active");
+                        
+                        const drawer = document.getElementById("summaryDrawer");
+                        if (drawer && !drawer.classList.contains("collapsed")) {
+                            drawer.classList.add("collapsed");
+                            el.summaryToggle.classList.remove("active");
+                        }
                     });
                 }
+
+                // 1. Scroll progress listener
+                if (el.readerMainContent) {
+                    el.readerMainContent.addEventListener("scroll", updateScrollProgress);
+                }
+
+                // 2. Keyword Search Controls
+                if (el.searchToggle) {
+                    el.searchToggle.addEventListener("click", () => {
+                        const searchBar = document.getElementById("searchBarContainer");
+                        if (searchBar.style.display === "flex") {
+                            searchBar.style.display = "none";
+                            el.searchToggle.classList.remove("active");
+                            removeSearchHighlights();
+                        } else {
+                            searchBar.style.display = "flex";
+                            el.searchToggle.classList.add("active");
+                            const sInput = document.getElementById("searchInput");
+                            if (sInput) sInput.focus();
+                        }
+                        playSoundFx("click");
+                    });
+                }
+
+                const sInput = document.getElementById("searchInput");
+                if (sInput) {
+                    sInput.addEventListener("input", (e) => {
+                        highlightSearchQuery(e.target.value);
+                    });
+                    sInput.addEventListener("keydown", (e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (searchMatches.length > 0) {
+                                activeMatchIndex = (activeMatchIndex + 1) % searchMatches.length;
+                                scrollToMatch(activeMatchIndex);
+                                updateSearchResultCount(activeMatchIndex + 1, searchMatches.length);
+                            }
+                        }
+                    });
+                }
+
+                document.getElementById("btnNextSearch").addEventListener("click", () => {
+                    if (searchMatches.length > 0) {
+                        activeMatchIndex = (activeMatchIndex + 1) % searchMatches.length;
+                        scrollToMatch(activeMatchIndex);
+                        updateSearchResultCount(activeMatchIndex + 1, searchMatches.length);
+                        playSoundFx("click");
+                    }
+                });
+
+                document.getElementById("btnPrevSearch").addEventListener("click", () => {
+                    if (searchMatches.length > 0) {
+                        activeMatchIndex = (activeMatchIndex - 1 + searchMatches.length) % searchMatches.length;
+                        scrollToMatch(activeMatchIndex);
+                        updateSearchResultCount(activeMatchIndex + 1, searchMatches.length);
+                        playSoundFx("click");
+                    }
+                });
+
+                document.getElementById("btnCloseSearch").addEventListener("click", () => {
+                    const searchBar = document.getElementById("searchBarContainer");
+                    searchBar.style.display = "none";
+                    el.searchToggle.classList.remove("active");
+                    removeSearchHighlights();
+                    playSoundFx("click");
+                });
+
+                // 3. Close popover on document clicks
+                document.addEventListener("click", () => {
+                    const popover = document.getElementById("paragraphActionPopover");
+                    if (popover) popover.style.display = "none";
+                });
+
+                // 4. Summary Drawer Drawer Controls
+                if (el.summaryToggle) {
+                    el.summaryToggle.addEventListener("click", () => {
+                        const drawer = document.getElementById("summaryDrawer");
+                        drawer.classList.toggle("collapsed");
+                        el.summaryToggle.classList.toggle("active");
+                        
+                        if (!drawer.classList.contains("collapsed")) {
+                            el.readerNotesSidebar.classList.add("collapsed");
+                            el.toggleNotes.classList.remove("active");
+                        }
+                        playSoundFx("click");
+                    });
+                }
+
+                document.getElementById("btnCloseSummary").addEventListener("click", () => {
+                    const drawer = document.getElementById("summaryDrawer");
+                    drawer.classList.add("collapsed");
+                    el.summaryToggle.classList.remove("active");
+                    playSoundFx("click");
+                });
+
+                // 5. Zen Mode Toggle Controls
+                if (el.zenToggle) {
+                    el.zenToggle.addEventListener("click", () => {
+                        toggleZenMode();
+                    });
+                }
+
+                const exitZenFloat = document.getElementById("zenExitFloat");
+                if (exitZenFloat) {
+                    exitZenFloat.addEventListener("click", () => {
+                        toggleZenMode();
+                    });
+                }
+
+                // Sound on hover for buttons
+                document.querySelectorAll(".setting-btn, .theme-select-btn").forEach(btn => {
+                    btn.addEventListener("mouseenter", () => {
+                        playSoundFx("hover");
+                    });
+                });
             }
 
             // Notes handling

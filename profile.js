@@ -98,7 +98,7 @@
     function animateEntrance(containerSelector) {
         const items = document.querySelectorAll(containerSelector);
         items.forEach((item, index) => {
-            item.style.animationDelay = `${index * 70}ms`;
+            item.style.animationDelay = `${index * 120}ms`;
         });
     }
 

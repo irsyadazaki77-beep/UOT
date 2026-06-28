@@ -181,14 +181,37 @@
     function injectNavBadge() {
         const navbar = document.querySelector(".navbar");
         const brand = navbar?.querySelector(".brand");
-        if (!navbar || !brand || navbar.querySelector(".pro-nav-badge")) return;
-        const badge = document.createElement("div");
+        if (!navbar || !brand) return;
+
+        navbar.classList.add("pro-navbar");
+        const subscriptionBadge = navbar.querySelector("#navSubscriptionBadge, .subscription-badge.pro");
+        if (subscriptionBadge) {
+            subscriptionBadge.classList.add("pro-nav-chip");
+            subscriptionBadge.innerHTML = '<i class="fa-solid fa-crown"></i><strong>PRO</strong>';
+            subscriptionBadge.setAttribute("aria-label", "Akun Pro aktif");
+            subscriptionBadge.setAttribute("title", "Buka PRO Learning Hub");
+            subscriptionBadge.setAttribute("role", "link");
+            subscriptionBadge.tabIndex = 0;
+            const openHub = () => { window.location.href = "pro-hub.html"; };
+            subscriptionBadge.addEventListener("click", openHub);
+            subscriptionBadge.addEventListener("keydown", event => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    openHub();
+                }
+            });
+            return;
+        }
+        if (navbar.querySelector(".pro-nav-badge")) return;
+        const badge = document.createElement("a");
         badge.className = "pro-nav-badge";
+        badge.href = "pro-hub.html";
         badge.setAttribute("aria-label", "Akun Pro aktif");
         badge.setAttribute("title", "Akun Pro aktif");
-        badge.innerHTML = `<i class="fa-solid fa-crown"></i><strong>PRO</strong><span>Active</span>`;
-        brand.insertAdjacentElement("afterend", badge);
-        navbar.classList.add("pro-navbar");
+        badge.innerHTML = `<i class="fa-solid fa-crown"></i><strong>PRO</strong>`;
+        const navActions = navbar.querySelector(".nav-actions");
+        if (navActions) navActions.prepend(badge);
+        else brand.insertAdjacentElement("afterend", badge);
     }
 
     function injectSpotlight(config) {
@@ -489,6 +512,7 @@
                 </div>
 
                 <div class="pro-dock-links">
+                    <a href="pro-hub.html"><span>PRO Learning Hub<small>Diagnosis, review & planner</small></span><i class="fa-solid fa-arrow-right"></i></a>
                     ${config.actions.map(action => `<a href="${action.href}"><span>${action.label}<small>${action.meta}</small></span><i class="fa-solid fa-arrow-right"></i></a>`).join("")}
                 </div>
             </div>

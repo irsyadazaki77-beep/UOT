@@ -1,22 +1,23 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="security-helper.js"></script>
+    <script src="js/security-helper.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Wonderful Indonesia - Universe Of Tech</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="feature-pages.css">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="bahasa-daerah-polish.css">
-    <link rel="stylesheet" href="bahasa-daerah-updates.css?v=20260618-bubub-hero2">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
+    <link rel="stylesheet" href="css/feature-pages.css">
+    <link rel="stylesheet" href="css/nav-polish.css">
+    <link rel="stylesheet" href="css/bahasa-daerah-polish.css">
+    <link rel="stylesheet" href="css/bahasa-daerah-updates.css?v=20260621-profix">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/coursera-home.css">
 </head>
 
 <body data-page="bahasa">
@@ -25,24 +26,135 @@
     <div class="orb two"></div>
 
     <main class="page">
-        <nav class="navbar">
-            <a href="index.html" class="brand">
-                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
-                Universe Of Tech
-            </a>
+                                                <nav class="navbar">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand">
+                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    Universe Of Tech
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
+                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="explore-mega-menu" id="exploreMegaMenu">
+                        <!-- Column 1: Kategori Belajar -->
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="materi-basic.html" class="mega-item-link">
+                                        <div class="mega-icon-box">💻</div>
+                                        <span>Dasar Pemrograman</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🧠</div>
+                                        <span>Struktur Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🌐</div>
+                                        <span>Web Development</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="snbt.html" class="mega-item-link">
+                                        <div class="mega-icon-box">📈</div>
+                                        <span>Persiapan UTBK SNBT</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tka-lms.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏛</div>
+                                        <span>LMS TKA</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="bahasa-daerah.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <span>Wonderful Indonesia</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 2: Fitur & Dashboard -->
+                        <div class="mega-col">
+                            <h4>Fitur & Dashboard</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="learning-path.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🗺</div>
+                                        <span>Roadmap Belajar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="leaderboard.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏆</div>
+                                        <span>Leaderboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="achievements.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏅</div>
+                                        <span>Pencapaian</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="profile.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👤</div>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="payment.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👑</div>
+                                        <span>Upgrade Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 3: Spotlight -->
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header">
+                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
+                                </div>
+                                <h5>Dasar SQL & Database Relasional</h5>
+                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
+                                <a href="materi.html" class="btn-spotlight">
+                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Suggestions Popover -->
+                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
+            </div>
+
             <div class="nav-links">
                 <a href="index.html">Beranda</a>
                 <a href="materi.html">Materi</a>
                 <a href="quiz.html">Quiz</a>
-                <a href="snbt.html">TKA</a>
-                <a href="tka-lms.html">LMS TKA</a>
                 <a href="library.html">Library</a>
-                <a href="bahasa-daerah.html" class="active">Wonderful Indonesia</a>
             </div>
+
             <div class="nav-actions">
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">&#127769;</button>
+                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
                 <a class="btn btn-ghost" href="login.html">Masuk</a>
-                <a class="btn btn-primary" id="practiceNavLink" href="latihan-bahasa.html">Latihan</a>
+                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
         </nav>
 
@@ -56,6 +168,20 @@
                     <a href="profile.html#subscription" id="wonderfulPlanAction">Lihat Pro</a>
                 </div>
                 
+                <!-- Ambient Music Player -->
+                <div class="ambient-player-card" style="display: flex; align-items: center; gap: 12px; margin-top: 16px; padding: 10px 16px; border-radius: 16px; background: rgba(79,140,255,0.08); border: 1px solid rgba(79,140,255,0.15); max-width: 320px;">
+                    <button type="button" id="ambientPlayBtn" class="btn btn-primary" style="width: 36px; height: 36px; padding: 0; border-radius: 50%; display: grid; place-items: center;"><i class="fa-solid fa-play"></i></button>
+                    <div style="flex: 1; min-width: 0;">
+                        <span style="font-size: 0.72rem; opacity: 0.75; font-weight: 800; display: block;">Musik Ambient</span>
+                        <strong id="ambientTrackTitle" style="font-size: 0.82rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;">Suling & Kecapi Sunda 🌾</strong>
+                    </div>
+                    <select id="ambientTrackSelect" style="font-size: 0.75rem; padding: 4px; border-radius: 8px; background: var(--culture-surface); border: 1px solid var(--culture-line); color: var(--text);">
+                        <option value="sunda">Sunda</option>
+                        <option value="bali">Bali</option>
+                        <option value="minang">Minang</option>
+                    </select>
+                </div>
+
                 <!-- RPG Level & Kasta Card -->
                 <div class="kasta-level-card compact-kasta-card">
                     <div class="kasta-header">
@@ -93,7 +219,7 @@
                     <div class="bubub-mascot-stage" aria-hidden="true">
                         <span class="bubub-orbit orbit-one"></span>
                         <span class="bubub-orbit orbit-two"></span>
-                        <img class="bubub-hero-mascot" src="bubub-mascot.png" alt="">
+                        <img class="bubub-hero-mascot" src="assets/bubub-mascot.png" alt="">
                         <span class="bubub-spark spark-one"></span>
                         <span class="bubub-spark spark-two"></span>
                         <span class="bubub-spark spark-three"></span>
@@ -142,10 +268,15 @@
                         <!-- Filled by JS -->
                     </div>
                 </div>
-                <div class="indonesia-map-shell" aria-label="Peta Indonesia interaktif">
+                <div class="indonesia-map-shell" aria-label="Peta Indonesia interaktif" style="position: relative;">
                     <!-- Tooltip melayang -->
                     <div class="map-tooltip" id="mapTooltip" style="display: none;"></div>
-                    <svg class="indonesia-map" id="indonesiaMap" viewBox="0 0 700 234" role="img" aria-labelledby="mapTitle mapDesc">
+                    <div class="map-zoom-controls" style="position: absolute; right: 15px; bottom: 15px; display: flex; flex-direction: column; gap: 6px; z-index: 10;">
+                        <button type="button" class="btn btn-ghost" id="mapZoomIn" style="width:36px; height:36px; padding:0; display:grid; place-items:center; border-radius:10px; font-weight:bold; background:var(--culture-surface); border:1px solid var(--culture-line); color:var(--text); cursor:pointer;"><i class="fa-solid fa-plus"></i></button>
+                        <button type="button" class="btn btn-ghost" id="mapZoomOut" style="width:36px; height:36px; padding:0; display:grid; place-items:center; border-radius:10px; font-weight:bold; background:var(--culture-surface); border:1px solid var(--culture-line); color:var(--text); cursor:pointer;"><i class="fa-solid fa-minus"></i></button>
+                        <button type="button" class="btn btn-ghost" id="mapZoomReset" style="width:36px; height:36px; padding:0; display:grid; place-items:center; border-radius:10px; font-weight:bold; background:var(--culture-surface); border:1px solid var(--culture-line); color:var(--text); cursor:pointer;"><i class="fa-solid fa-arrows-to-eye"></i></button>
+                    </div>
+                    <svg class="indonesia-map" id="indonesiaMap" viewBox="0 0 700 234" role="img" aria-labelledby="mapTitle mapDesc" style="cursor: grab; user-select: none;">
                         <title id="mapTitle">Peta Indonesia Interaktif</title>
                         <desc id="mapDesc">Klik pulau Sumatra, Jawa, Kalimantan, Sulawesi, Bali-Nusa, atau Papua Raya untuk memfilter daerah.</desc>
                         <defs>
@@ -154,6 +285,7 @@
                                 <stop offset="100%" stop-color="#4f8cff" />
                             </linearGradient>
                         </defs>
+                        <g id="mapG" style="transform-origin: center;">
 
 <!-- Sumatra (Centroid: 108.7, 95.1) -->
 <g class="map-region" data-region="Sumatra" tabindex="0" role="button" aria-label="Pilih region Sumatra">
@@ -229,7 +361,7 @@
     <circle cx="665" cy="160" r="4" />
     <circle cx="522" cy="172" r="4" />
 </g>
-
+</g>
                     </svg>
                 </div>
             </div>
@@ -256,6 +388,24 @@
                 <p id="cultureResultMeta">Pilih region untuk menyaring daftar.</p>
             </div>
             <div class="culture-grid" id="cultureGrid"></div>
+
+            <!-- Kamus Mini Nusantara (Interactive Glossary) -->
+            <details class="section glossary-collapsible" style="margin-top: 32px; border-top: 1px dashed var(--culture-line); padding-top: 24px; width: 100%;">
+                <summary style="font-weight: 800; cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; user-select: none;">
+                    <span style="font-size: 1.25rem; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-book-atlas" style="color: #4f8cff;"></i> Kamus Mini Nusantara (Glosarium)</span>
+                    <span class="btn btn-ghost btn-sm" style="font-size:0.75rem; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--culture-line);">Buka Glosarium</span>
+                </summary>
+                <div style="margin-top: 16px; display: grid; gap: 16px;">
+                    <p style="font-size: 0.88rem; color: var(--muted); margin: 0;">Cari arti kata daerah dari seluruh Nusantara secara instan di satu tempat.</p>
+                    <div style="position: relative; max-width: 480px;">
+                        <input type="text" id="glossarySearch" placeholder="Cari kata daerah (misal: matur nuwun, hatur nuhun...)" style="width: 100%; padding: 12px 40px 12px 16px; border-radius: 12px; border: 1px solid var(--culture-line); background: var(--culture-soft); color: var(--text); outline: none; box-sizing: border-box;" />
+                        <span style="position: absolute; right: 15px; top: 12px; opacity: 0.5;"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    </div>
+                    <div id="glossaryResults" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; max-height: 280px; overflow-y: auto; padding-right: 6px; box-sizing: border-box;">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </details>
         </section>
 
         <div class="pro-compact-zone" id="pro-ringkas" aria-labelledby="proCompactTitle">
@@ -357,6 +507,40 @@
                     <span id="regionCoverageLabel">0% Indonesia dijelajahi</span>
                 </div>
                 <div class="region-progress-grid" id="regionProgressGrid"></div>
+            </div>
+
+            <!-- Weekly XP Analytics Chart & Export/Import Progres -->
+            <div class="explorer-dashboard-row" style="display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-top: 18px;">
+                <article class="hub-panel xp-chart-panel" style="display: flex; flex-direction: column; justify-content: space-between; border-radius: 24px; padding: 24px; box-sizing: border-box;">
+                    <div class="panel-title-row">
+                        <div><span class="mini-tag">Analisis Aktivitas</span><h3>XP Mingguan (7 Hari Terakhir)</h3></div>
+                    </div>
+                    <div class="xp-chart-wrapper" style="margin-top: 16px; width: 100%; height: 160px;">
+                        <svg id="weeklyXPChart" viewBox="0 0 500 150" style="width: 100%; height: 100%; overflow: visible;">
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#4f8cff" stop-opacity="0.3"/>
+                                    <stop offset="100%" stop-color="#4f8cff" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Filled dynamically by JS -->
+                        </svg>
+                    </div>
+                </article>
+
+                <article class="hub-panel backup-panel" style="display: flex; flex-direction: column; justify-content: space-between; border-radius: 24px; padding: 24px; box-sizing: border-box;">
+                    <div class="panel-title-row">
+                        <div><span class="mini-tag">Backup Data</span><h3>Ekspor & Impor</h3></div>
+                    </div>
+                    <p style="font-size: 0.8rem; margin: 10px 0; color: var(--muted); line-height: 1.5;">Simpan kemajuan belajar Anda ke file JSON atau unggah file backup Anda.</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: auto;">
+                        <button type="button" class="btn btn-primary" id="exportProgressBtn" style="width: 100%;"><i class="fa-solid fa-file-export"></i> Ekspor Progres (JSON)</button>
+                        <label class="btn btn-ghost" style="display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; margin: 0; width: 100%; box-sizing: border-box; font-weight: 800;">
+                            <i class="fa-solid fa-file-import"></i> Impor Progres
+                            <input type="file" id="importProgressInput" accept=".json" style="display: none;" />
+                        </label>
+                    </div>
+                </article>
             </div>
         </section>
 
@@ -471,6 +655,16 @@
                     </div>
                 </div>
 
+                <!-- Streak & Attendance Calendar -->
+                <div class="streak-calendar-section" style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--culture-line); display: flex; flex-direction: column; gap: 8px;">
+                    <span class="mini-tag" style="width: fit-content;">Kehadiran Harian</span>
+                    <h4 style="margin: 0; font-size: 1.1rem; color: var(--text);">Kalender Keaktifan Belajar</h4>
+                    <div id="attendanceCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; max-width: 320px; margin-top: 8px;">
+                        <!-- Filled by JS -->
+                    </div>
+                    <p style="font-size: 0.76rem; color: var(--muted); margin: 0;">Pelajari minimal 1 daerah/frasa setiap hari untuk mempertahankan streak belajar Anda!</p>
+                </div>
+
                 <!-- Museum Pusaka Grid -->
                 <div class="museum-header">
                     <div class="header-left">
@@ -514,11 +708,26 @@
             <div class="drawer-fact-box">
                 <strong>Fakta Cepat:</strong>
                 <p id="drawerFact">-</p>
+                <div class="typology-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; font-size: 0.72rem; text-align: center;">
+                    <div style="background: rgba(79, 140, 255, 0.08); padding: 8px; border-radius: 10px; border: 1px solid rgba(79, 140, 255, 0.15);">
+                        <span style="display: block; opacity: 0.75; font-weight: 700; margin-bottom: 2px;">Vitalitas</span>
+                        <strong id="drawerVitality" style="color: #4f8cff;">-</strong>
+                    </div>
+                    <div style="background: rgba(50, 214, 107, 0.08); padding: 8px; border-radius: 10px; border: 1px solid rgba(50, 214, 107, 0.15);">
+                        <span style="display: block; opacity: 0.75; font-weight: 700; margin-bottom: 2px;">Aksara</span>
+                        <strong id="drawerAksara" style="color: #16a34a;">-</strong>
+                    </div>
+                    <div style="background: rgba(185, 79, 255, 0.08); padding: 8px; border-radius: 10px; border: 1px solid rgba(185, 79, 255, 0.15);">
+                        <span style="display: block; opacity: 0.75; font-weight: 700; margin-bottom: 2px;">Rumpun</span>
+                        <strong id="drawerRumpun" style="color: #b94fff;">-</strong>
+                    </div>
+                </div>
             </div>
 
             <!-- Drawer Tabs -->
             <div class="drawer-tabs">
                 <button class="drawer-tab-btn active" data-tab="info">Budaya</button>
+                <button class="drawer-tab-btn" data-tab="folklore">Cerita Rakyat</button>
                 <button class="drawer-tab-btn" data-tab="flashcard">Flashcard</button>
                 <button class="drawer-tab-btn" data-tab="quiz">Kuis Cepat</button>
                 <button class="drawer-tab-btn" data-tab="instrument">Alat Musik</button>
@@ -526,6 +735,19 @@
 
             <!-- Tab Content: Info -->
             <div class="drawer-tab-content active" id="tab-info">
+                <div class="drawer-info-section">
+                    <h4>🏛️ Rumah & Pakaian Adat</h4>
+                    <div class="culture-slideshow" id="drawerSlideshow" style="margin-top: 10px; border-radius: 16px; background: var(--culture-soft); padding: 12px; border: 1px solid var(--culture-line);">
+                        <div class="slideshow-container" style="position: relative; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                            <div style="width: 100%; height: 130px; border-radius: 10px; background: linear-gradient(135deg, #4f8cff, #32d66b); display: flex; align-items: center; justify-content: center; color: white; font-size: 2.8rem; box-shadow: var(--culture-shadow);" id="slideshowIcon">🏛️</div>
+                            <div class="slideshow-caption" id="slideshowCaption" style="font-size: 0.82rem; font-weight: bold; line-height: 1.45; color: var(--text); padding-inline: 4px;">Loading...</div>
+                        </div>
+                        <div class="slideshow-controls" style="display: flex; gap: 8px; margin-top: 10px; justify-content: center;">
+                            <button type="button" class="btn btn-ghost btn-sm" id="slideshowPrev" style="font-size:0.75rem; padding: 4px 8px; border-radius: 8px; cursor: pointer; border: 1px solid var(--culture-line);">Sebelumnya</button>
+                            <button type="button" class="btn btn-ghost btn-sm" id="slideshowNext" style="font-size:0.75rem; padding: 4px 8px; border-radius: 8px; cursor: pointer; border: 1px solid var(--culture-line);">Berikutnya</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="drawer-info-section">
                     <h4>📍 Destinasi Populer</h4>
                     <strong id="drawerDestName">-</strong>
@@ -544,6 +766,17 @@
                 <div class="drawer-info-section">
                     <h4>🗣️ Frasa Pola Kalimat</h4>
                     <div class="drawer-phrase-list" id="drawerPhraseList"></div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Folklore -->
+            <div class="drawer-tab-content" id="tab-folklore">
+                <div class="drawer-info-section" style="border-radius: 20px; background: var(--culture-soft) !important; border: 1px solid var(--culture-line) !important; padding: 16px; box-sizing: border-box;">
+                    <h3 id="drawerFolkloreTitle" style="margin: 0 0 10px; font-size: 1.2rem; font-weight: 800; color: var(--dark);">Judul Legenda</h3>
+                    <p class="drawer-folklore-text" id="drawerFolkloreText" style="font-size: 0.85rem; line-height: 1.6; color: var(--text); margin-bottom: 12px; max-height: 240px; overflow-y: auto;">Konten cerita...</p>
+                    <div class="drawer-folklore-moral" id="drawerFolkloreMoral" style="border-top: 1px dashed var(--culture-line); padding-top: 10px; font-size: 0.82rem; line-height: 1.4;">
+                        <strong>Pesan Moral:</strong> <span style="font-style: italic; color: var(--green-dark);">...</span>
+                    </div>
                 </div>
             </div>
 
@@ -633,13 +866,13 @@
         </div>
     </div>
 
-    <script src="auth-helper.js"></script>
-    <script src="sound-engine.js"></script>
-    <script src="wonderful-data.js"></script>
-    <script src="wonderful-core.js"></script>
-    <script src="wonderful-pages.js?v=20260615-pro"></script>
-    <script src="wonderful-games.js?v=20260615-pro"></script>
-    <script src="bahasa-daerah-updates.js?v=20260618-compact"></script>
+    <script src="js/auth-helper.js"></script>
+    <script src="js/sound-engine.js"></script>
+    <script src="js/wonderful-data.js"></script>
+    <script src="js/wonderful-core.js"></script>
+    <script src="js/wonderful-pages.js?v=20260615-pro"></script>
+    <script src="js/wonderful-games.js?v=20260615-pro"></script>
+    <script src="js/bahasa-daerah-updates.js?v=20260621-profix"></script>
     <script>
         // Event delegation yang dioptimalkan dengan requestAnimationFrame untuk efek hover glow mulus
         (function() {
@@ -665,7 +898,8 @@
             });
         })();
     </script>
-    <script src="bubub-ai.js"></script>
+    <script src="js/bubub-ai.js"></script>
+    <script src="js/coursera-home.js"></script>
 </body>
 
 </html>

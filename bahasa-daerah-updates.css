@@ -1,4 +1,21 @@
+/* Premium Scroll Shield for Sticky Navbar floating peeks */
+body[data-page="bahasa"]::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    background: linear-gradient(to bottom, #fbfdff 45%, rgba(251, 253, 255, 0));
+    z-index: 9;
+    pointer-events: none;
+}
+body.dark-theme[data-page="bahasa"]::before {
+    background: linear-gradient(to bottom, #0d1726 45%, rgba(13, 23, 38, 0));
+}
+
 .page-progress{position:fixed;inset:0 0 auto;z-index:9999;height:4px;background:transparent}.page-progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,#32d66b,#4f8cff,#b94fff);box-shadow:0 0 14px rgba(79,140,255,.5)}
+
 .explorer-hub{position:relative}.explorer-hub:before{content:"";position:absolute;inset:-20px 0 auto;height:260px;background:radial-gradient(circle at 20% 20%,rgba(50,214,107,.13),transparent 42%),radial-gradient(circle at 80% 0,rgba(79,140,255,.12),transparent 38%);pointer-events:none}
 .explorer-hub-head,.panel-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}.explorer-hub-head{position:relative;margin-bottom:24px}.explorer-hub-head h2{margin:8px 0}.explorer-hub-head p{margin:0;color:var(--muted);max-width:680px}
 .explorer-toolbar{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}.hub-tool{border:1px solid var(--border);background:var(--white);color:var(--text);border-radius:14px;padding:11px 14px;font:inherit;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(24,34,56,.06);transition:.2s ease}.hub-tool:hover,.hub-tool[aria-pressed=true]{transform:translateY(-2px);border-color:var(--green);color:var(--green-dark)}
@@ -219,6 +236,10 @@ body[data-page="bahasa"] .indonesia-map-shell {
     background: linear-gradient(180deg, var(--culture-soft), rgba(79,140,255,.045));
     border: 1px solid var(--culture-line);
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 body[data-page="bahasa"] .indonesia-map-shell svg,
@@ -289,9 +310,18 @@ body[data-page="bahasa"] .region-chip {
 body[data-page="bahasa"] .region-chip.active,
 body[data-page="bahasa"] .filter-opt-btn.active {
     animation: none !important;
-    background: linear-gradient(135deg, rgba(50,214,107,.18), rgba(79,140,255,.14)) !important;
-    color: var(--green-dark);
+    background: linear-gradient(135deg, rgba(50, 214, 107, 0.18), rgba(79, 140, 255, 0.14)) !important;
+    color: var(--green-dark) !important;
+    border-color: rgba(50, 214, 107, 0.3) !important;
 }
+
+body.dark-theme[data-page="bahasa"] .region-chip.active,
+body.dark-theme[data-page="bahasa"] .filter-opt-btn.active {
+    background: linear-gradient(135deg, rgba(50, 214, 107, 0.25), rgba(79, 140, 255, 0.2)) !important;
+    color: var(--green) !important;
+    border-color: rgba(50, 214, 107, 0.4) !important;
+}
+
 
 body[data-page="bahasa"] .culture-grid-header {
     border-radius: 22px;
@@ -307,11 +337,16 @@ body[data-page="bahasa"] .culture-grid {
 
 body[data-page="bahasa"] .culture-card-link {
     min-height: 100%;
-    border-radius: 22px !important;
+    border-radius: 24px !important;
     border: 1px solid var(--culture-line) !important;
     box-shadow: var(--culture-shadow) !important;
-    will-change: auto !important;
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease !important;
+    background: var(--culture-surface) !important;
+    backdrop-filter: blur(16px) !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    will-change: transform, box-shadow, border-color !important;
+    transition: transform .25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow .25s ease, border-color .25s ease !important;
 }
 
 body[data-page="bahasa"] .culture-card-link::after {
@@ -319,23 +354,121 @@ body[data-page="bahasa"] .culture-card-link::after {
 }
 
 body[data-page="bahasa"] .culture-card-link:hover {
-    transform: translateY(-3px) !important;
-    border-color: rgba(50,214,107,.42) !important;
+    transform: translateY(-5px) scale(1.008) !important;
+    border-color: rgba(50, 214, 107, 0.45) !important;
     box-shadow: var(--culture-shadow-hover) !important;
 }
 
 body[data-page="bahasa"] .culture-card-main {
-    min-height: 188px;
+    padding: 24px !important;
+    flex: 1;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+body[data-page="bahasa"] .culture-mark {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    border-radius: 16px;
+    background: var(--culture-soft);
+    display: grid;
+    place-items: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--green-dark);
+    border: 1px solid var(--culture-line);
+}
+
+body[data-page="bahasa"] .culture-card-main > div {
+    min-width: 0;
+    flex: 1;
+}
+
+body[data-page="bahasa"] .culture-card-main strong {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 6px;
+    letter-spacing: -0.025em;
 }
 
 body[data-page="bahasa"] .culture-card-main p {
     color: var(--culture-muted);
+    font-size: 0.82rem;
     line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+body[data-page="bahasa"] .culture-card-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    margin: 10px 0 12px 0;
+}
+
+body[data-page="bahasa"] .culture-card-facts span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 750;
+    color: var(--dark);
+    background: var(--culture-soft);
+    padding: 5px 9px;
+    border-radius: 99px;
+    border: 1px solid var(--culture-line);
+}
+
+body[data-page="bahasa"] .culture-card-facts span i.fa-location-dot { color: var(--blue); }
+body[data-page="bahasa"] .culture-card-facts span i.fa-language { color: var(--green-dark); }
+body[data-page="bahasa"] .culture-card-facts span i.fa-utensils { color: var(--orange); }
+
+body[data-page="bahasa"] .culture-card-main small {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--green-dark);
+    margin-top: 4px;
 }
 
 body[data-page="bahasa"] .culture-card-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     border-top: 1px solid var(--culture-line);
+    background: rgba(0, 0, 0, 0.015);
 }
+
+body.dark-theme[data-page="bahasa"] .culture-card-actions {
+    background: rgba(255, 255, 255, 0.005);
+}
+
+body[data-page="bahasa"] .culture-card-actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--dark);
+    text-align: center;
+    border-right: 1px solid var(--culture-line);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+body[data-page="bahasa"] .culture-card-actions a:last-child {
+    border-right: none;
+}
+
+body[data-page="bahasa"] .culture-card-actions a:hover {
+    background: var(--culture-soft);
+    color: var(--green-dark);
+}
+
 
 body[data-page="bahasa"] .spin-wheel-section {
     display: grid;
@@ -629,6 +762,17 @@ body[data-page="bahasa"] .achievements-section {
 body[data-page="bahasa"] footer {
     order: 7;
 }
+
+/* PRO entitlement must be fully interactive after activation. */
+body.wonderful-pro .pro-lock-layer { display: none !important; }
+body.wonderful-pro .pro-entitlement > :not(.pro-lock-layer) {
+    filter: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    user-select: auto !important;
+}
+body.wonderful-pro .pro-action-btn { opacity: 1 !important; cursor: pointer; }
+body.wonderful-pro .pro-benefit-card { border-color: rgba(255, 174, 25, .22); }
 
 body[data-page="bahasa"] #jelajah-region .section-kicker::after,
 body[data-page="bahasa"] #pusat-eksplorasi .section-kicker::after,
@@ -985,27 +1129,44 @@ body[data-page="bahasa"] .compact-kasta-card {
     max-width: 560px;
     margin-top: 16px;
     margin-bottom: 10px;
-    padding: 12px 14px;
-    border-radius: 18px;
+    padding: 16px 20px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%) !important;
+    border: 1px solid var(--culture-line) !important;
+    box-shadow: var(--culture-shadow) !important;
+}
+
+body.dark-theme[data-page="bahasa"] .compact-kasta-card {
+    background: linear-gradient(135deg, rgba(19, 27, 43, 0.6) 0%, rgba(19, 27, 43, 0.3) 100%) !important;
 }
 
 body[data-page="bahasa"] .compact-kasta-card .kasta-header {
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 body[data-page="bahasa"] .compact-kasta-card h3 {
-    font-size: 1rem;
+    font-size: 1.05rem;
+    font-weight: 850;
     margin: 2px 0 0;
 }
 
 body[data-page="bahasa"] .compact-kasta-card .kasta-xp-bar {
-    height: 8px;
+    height: 9px;
+    border-radius: 99px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.dark-theme[data-page="bahasa"] .compact-kasta-card .kasta-xp-bar {
+    background: rgba(255, 255, 255, 0.08);
 }
 
 body[data-page="bahasa"] .compact-kasta-card .kasta-footer {
     margin-top: 8px;
+    font-size: 0.72rem;
+    font-weight: 750;
 }
+
 
 body[data-page="bahasa"] .hero-actions {
     margin-top: 20px;

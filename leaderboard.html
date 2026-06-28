@@ -1,0 +1,859 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <script src="js/security-helper.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Leaderboard Coder - Universe Of Tech</title>
+    <meta name="description" content="Papan peringkat pengembang global di Universe Of Tech. Bersaing dan kejar XP tertinggi.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/feature-pages.css">
+    <link rel="stylesheet" href="css/nav-polish.css">
+    <link rel="stylesheet" href="css/pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/bubub-ai.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .leaderboard-hero {
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(13, 27, 44, 0.94), rgba(23, 42, 66, 0.92)),
+                        radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.28), transparent 40%);
+            border-radius: 36px;
+            color: white;
+            box-shadow: var(--shadow);
+            margin: 40px auto 0;
+            width: min(1180px, calc(100% - 40px));
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .leaderboard-hero::after {
+            content: "";
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, transparent 70%);
+            right: -50px;
+            bottom: -50px;
+            pointer-events: none;
+        }
+
+        .leaderboard-hero h1 span {
+            background: linear-gradient(135deg, var(--green, #10b981), var(--blue, #6366f1));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-stats-mini {
+            display: flex;
+            gap: 16px;
+        }
+
+        .hero-stat-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 16px 20px;
+            border-radius: 20px;
+            text-align: center;
+            min-width: 110px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-stat-box strong {
+            display: block;
+            font-size: 24px;
+            letter-spacing: -0.04em;
+            color: var(--yellow, #ffd166);
+        }
+
+        .hero-stat-box span {
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .podium-container {
+            width: min(1180px, calc(100% - 40px));
+            margin: 40px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+
+        .podium-card {
+            background: var(--card-bg, rgba(255, 255, 255, 0.72));
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: visible;
+        }
+
+        .podium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow);
+        }
+
+        .podium-rank {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            font-size: 18px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .podium-1 {
+            order: 2;
+            padding: 40px 24px;
+            border-color: var(--yellow, #ffd166);
+            background: linear-gradient(180deg, rgba(255, 209, 102, 0.05), var(--card-bg));
+        }
+
+        .podium-1 .podium-rank {
+            background: var(--yellow, #ffd166);
+            color: #111827;
+        }
+
+        .podium-2 {
+            order: 1;
+            border-color: #cbd5e1;
+        }
+
+        .podium-2 .podium-rank {
+            background: #cbd5e1;
+            color: #111827;
+        }
+
+        .podium-3 {
+            order: 3;
+            border-color: #e27d60;
+        }
+
+        .podium-3 .podium-rank {
+            background: #e27d60;
+            color: white;
+        }
+
+        .podium-avatar {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .podium-card:hover .podium-avatar {
+            transform: scale(1.15) rotate(5deg);
+        }
+
+        .podium-username {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .podium-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .podium-xp {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-weight: 900;
+            font-size: 14px;
+        }
+
+        .podium-1 .podium-xp {
+            background: rgba(255, 209, 102, 0.15);
+            color: #b58900;
+        }
+
+        body.dark-theme .podium-1 .podium-xp {
+            color: var(--yellow, #ffd166);
+        }
+
+        .podium-2 .podium-xp {
+            background: rgba(148, 163, 184, 0.12);
+            color: #475569;
+        }
+
+        body.dark-theme .podium-2 .podium-xp {
+            color: #e2e8f0;
+        }
+
+        .podium-3 .podium-xp {
+            background: rgba(226, 125, 96, 0.12);
+            color: #e27d60;
+        }
+
+        /* Table */
+        .board-card {
+            width: min(1180px, calc(100% - 40px));
+            margin: 30px auto 40px;
+            background: var(--card-bg, rgba(255, 255, 255, 0.72));
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .board-title h3 {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .board-title p {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .board-filters {
+            display: flex;
+            gap: 8px;
+            background: var(--item-bg, #f3f4f6);
+            padding: 4px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .filter-tab {
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            font-weight: 800;
+            font-size: 12px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .filter-tab.active {
+            background: var(--white);
+            color: var(--blue, #6366f1);
+            box-shadow: var(--shadow-soft);
+        }
+
+        body.dark-theme .filter-tab.active {
+            color: var(--dark);
+        }
+
+        .leaderboard-table-container {
+            overflow-x: auto;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .leaderboard-table th {
+            padding: 16px 20px;
+            color: var(--muted);
+            font-weight: 800;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .leaderboard-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .leaderboard-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .rank-col {
+            width: 80px;
+            font-weight: 900 !important;
+            font-size: 15px !important;
+        }
+
+        .user-col {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-col-avatar {
+            font-size: 24px;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: var(--item-bg, #f3f4f6);
+            display: grid;
+            place-items: center;
+        }
+
+        .user-col-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .user-col-name {
+            font-weight: 800;
+        }
+
+        .user-col-title {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .badge-col span {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--green-dark, #0c7a5a);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        body.dark-theme .badge-col span {
+            color: var(--green, #10b981);
+        }
+
+        .xp-col {
+            font-weight: 900 !important;
+            color: var(--blue, #6366f1) !important;
+        }
+
+        body.dark-theme .xp-col {
+            color: hsl(226, 100%, 75%) !important;
+        }
+
+        .leaderboard-table tr.highlight-user {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .leaderboard-table tr.highlight-user td {
+            border-color: rgba(99, 102, 241, 0.15);
+        }
+
+        .my-ranking-bar {
+            margin-top: 24px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(16, 185, 129, 0.06));
+            border: 2px dashed rgba(99, 102, 241, 0.22);
+            border-radius: 20px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .my-ranking-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .my-ranking-badge {
+            background: var(--blue, #6366f1);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 13px;
+        }
+
+        .my-ranking-info strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .my-ranking-info span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .my-ranking-right {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--green-dark, #0c7a5a);
+        }
+
+        body.dark-theme .my-ranking-right {
+            color: var(--green, #10b981);
+        }
+
+        @media (max-width: 768px) {
+            .podium-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                align-items: stretch;
+            }
+
+            .podium-1 {
+                order: 1;
+                padding: 30px 24px;
+            }
+
+            .podium-2 {
+                order: 2;
+            }
+
+            .podium-3 {
+                order: 3;
+            }
+
+            .leaderboard-hero {
+                padding: 30px 24px;
+                text-align: center;
+                justify-content: center;
+            }
+
+            .hero-stats-mini {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="css/coursera-home.css">
+</head>
+<body data-page="leaderboard">
+    <div class="noise"></div><div class="orb one"></div><div class="orb two"></div>
+    <main class="page">
+                                                <nav class="navbar">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand">
+                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    Universe Of Tech
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
+                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="explore-mega-menu" id="exploreMegaMenu">
+                        <!-- Column 1: Kategori Belajar -->
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="materi-basic.html" class="mega-item-link">
+                                        <div class="mega-icon-box">💻</div>
+                                        <span>Dasar Pemrograman</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🧠</div>
+                                        <span>Struktur Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🌐</div>
+                                        <span>Web Development</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="snbt.html" class="mega-item-link">
+                                        <div class="mega-icon-box">📈</div>
+                                        <span>Persiapan UTBK SNBT</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tka-lms.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏛</div>
+                                        <span>LMS TKA</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="bahasa-daerah.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <span>Wonderful Indonesia</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 2: Fitur & Dashboard -->
+                        <div class="mega-col">
+                            <h4>Fitur & Dashboard</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="learning-path.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🗺</div>
+                                        <span>Roadmap Belajar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="leaderboard.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏆</div>
+                                        <span>Leaderboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="achievements.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏅</div>
+                                        <span>Pencapaian</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="profile.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👤</div>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="payment.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👑</div>
+                                        <span>Upgrade Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 3: Spotlight -->
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header">
+                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
+                                </div>
+                                <h5>Dasar SQL & Database Relasional</h5>
+                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
+                                <a href="materi.html" class="btn-spotlight">
+                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Suggestions Popover -->
+                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="library.html">Library</a>
+            </div>
+
+            <div class="nav-actions">
+                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <a class="btn btn-ghost" href="login.html">Masuk</a>
+                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
+            </div>
+        </nav>
+
+        <header class="leaderboard-hero">
+            <div>
+                <span class="section-kicker">Arena Persaingan</span>
+                <h1>Leaderboard <span>Coder</span></h1>
+                <p>Uji kompetensimu, selesaikan quest, dan naikkan peringkat di Universe Of Tech.</p>
+            </div>
+            <div class="hero-stats-mini">
+                <div class="hero-stat-box">
+                    <strong id="totalCodersVal">1,240</strong>
+                    <span>Total Coder</span>
+                </div>
+                <div class="hero-stat-box">
+                    <strong id="activeSeasonVal">Season 3</strong>
+                    <span>Season</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="podium-container" id="podiumContainer">
+            <!-- Will be rendered dynamically -->
+        </section>
+
+        <section class="board-card">
+            <div class="board-header">
+                <div class="board-title">
+                    <h3>Peringkat Season 3</h3>
+                    <p>Diperbarui secara berkala berdasarkan pencapaian XP harian.</p>
+                </div>
+                <div class="board-filters">
+                    <button class="filter-tab active" data-filter="weekly">Mingguan</button>
+                    <button class="filter-tab" data-filter="monthly">Bulanan</button>
+                    <button class="filter-tab" data-filter="alltime">All-Time</button>
+                </div>
+            </div>
+
+            <div class="leaderboard-table-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">Rank</th>
+                            <th>Coder</th>
+                            <th class="badge-col">Spesialisasi</th>
+                            <th class="xp-col">XP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Table rows injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="my-ranking-bar" id="myRankingBar">
+                <!-- User personal ranking card injected via JS -->
+            </div>
+        </section>
+    </main>
+
+    <script src="js/sound-engine.js"></script>
+    <script src="js/auth-helper.js"></script>
+    <script>
+        // Custom leaderboard logic
+        (() => {
+            const defaultLeaderboardData = {
+                weekly: [
+                    { name: "Muhammad Zaki", avatar: "🚀", level: 6, title: "DevOps Architect", specialty: "Fullstack", xp: 3450 },
+                    { name: "Aria Wijaya", avatar: "🔮", level: 5, title: "Query Warlord", specialty: "Database", xp: 2890 },
+                    { name: "Jessica Clara", avatar: "🎨", level: 4, title: "DOM Conqueror", specialty: "UI/UX", xp: 2150 },
+                    { name: "Budi Santoso", avatar: "👨‍💻", level: 4, title: "Syntax Squire", specialty: "Programming", xp: 1980 },
+                    { name: "Siti Rahma", avatar: "👩‍💻", level: 3, title: "Logic Knight", specialty: "Cyber Sec", xp: 1720 },
+                    { name: "Robby Kurnia", avatar: "👑", level: 3, title: "Logic Knight", specialty: "Analytics", xp: 1610 },
+                    { name: "Elisa Fitri", avatar: "🧙‍♂️", level: 2, title: "Syntax Squire", specialty: "Frontend", xp: 1250 }
+                ],
+                monthly: [
+                    { name: "Muhammad Zaki", avatar: "🚀", level: 6, title: "DevOps Architect", specialty: "Fullstack", xp: 12400 },
+                    { name: "Aria Wijaya", avatar: "🔮", level: 5, title: "Query Warlord", specialty: "Database", xp: 9500 },
+                    { name: "Jessica Clara", avatar: "🎨", level: 4, title: "DOM Conqueror", specialty: "UI/UX", xp: 8200 },
+                    { name: "Budi Santoso", avatar: "👨‍💻", level: 4, title: "Syntax Squire", specialty: "Programming", xp: 7550 },
+                    { name: "Robby Kurnia", avatar: "👑", level: 3, title: "Logic Knight", specialty: "Analytics", xp: 6200 },
+                    { name: "Siti Rahma", avatar: "👩‍💻", level: 3, title: "Logic Knight", specialty: "Cyber Sec", xp: 5900 },
+                    { name: "Elisa Fitri", avatar: "🧙‍♂️", level: 2, title: "Syntax Squire", specialty: "Frontend", xp: 4800 }
+                ],
+                alltime: [
+                    { name: "Muhammad Zaki", avatar: "🚀", level: 7, title: "AI Archmage", specialty: "Fullstack", xp: 48000 },
+                    { name: "Aria Wijaya", avatar: "🔮", level: 6, title: "DevOps Architect", specialty: "Database", xp: 39500 },
+                    { name: "Jessica Clara", avatar: "🎨", level: 5, title: "Query Warlord", specialty: "UI/UX", xp: 32000 },
+                    { name: "Budi Santoso", avatar: "👨‍💻", level: 4, title: "DOM Conqueror", specialty: "Programming", xp: 28550 },
+                    { name: "Siti Rahma", avatar: "👩‍💻", level: 4, title: "DOM Conqueror", specialty: "Cyber Sec", xp: 24900 },
+                    { name: "Robby Kurnia", avatar: "👑", level: 3, title: "Logic Knight", specialty: "Analytics", xp: 18200 },
+                    { name: "Elisa Fitri", avatar: "🧙‍♂️", level: 3, title: "Logic Knight", specialty: "Frontend", xp: 15400 }
+                ]
+            };
+
+            let currentFilter = "weekly";
+
+            // Load personal details from session & local storage
+            const session = JSON.parse(localStorage.getItem("eduquestUserSession") || "null");
+            const rpg = JSON.parse(localStorage.getItem("eduquestRPG") || "{}");
+
+            const myName = (session && session.username) || "Pengguna Universe";
+            const myAvatar = rpg.activeAvatar || (session && session.avatar) || "👨‍💻";
+            const myLevel = rpg.level || 1;
+            const myTotalXp = rpg.totalXp || 0;
+
+            const levelTitles = {
+                1: "Script Kiddie",
+                2: "Syntax Squire",
+                3: "Logic Knight",
+                4: "DOM Conqueror",
+                5: "Query Warlord",
+                6: "DevOps Architect",
+                7: "AI Archmage"
+            };
+            const myTitle = levelTitles[myLevel] || "Tech Legend";
+
+            function renderLeaderboard() {
+                const dataList = JSON.parse(JSON.stringify(defaultLeaderboardData[currentFilter]));
+                
+                // Inject current user into the leaderboard list
+                let myRank = -1;
+                // Try to find if user is already there, if not insert at proper position
+                const existingUserIdx = dataList.findIndex(item => item.name.toLowerCase() === myName.toLowerCase());
+                
+                const userObj = {
+                    name: myName + " (Anda)",
+                    avatar: myAvatar,
+                    level: myLevel,
+                    title: myTitle,
+                    specialty: "Explorer",
+                    xp: currentFilter === "weekly" ? myTotalXp : (currentFilter === "monthly" ? myTotalXp * 3 : myTotalXp * 12)
+                };
+
+                if (existingUserIdx > -1) {
+                    dataList[existingUserIdx] = userObj;
+                } else {
+                    dataList.push(userObj);
+                }
+
+                // Sort based on XP
+                dataList.sort((a, b) => b.xp - a.xp);
+
+                // Render podium (top 3)
+                const podiumContainer = document.getElementById("podiumContainer");
+                const top3 = dataList.slice(0, 3);
+
+                // Fill fallbacks if list has less than 3
+                while (top3.length < 3) {
+                    top3.push({ name: "Menanti Coder...", avatar: "🤖", level: 1, title: "-", specialty: "-", xp: 0 });
+                }
+
+                podiumContainer.innerHTML = `
+                    <div class="podium-card podium-2">
+                        <div class="podium-rank">2</div>
+                        <span class="podium-avatar">${top3[1].avatar}</span>
+                        <div class="podium-username">${top3[1].name}</div>
+                        <div class="podium-title">${top3[1].title} · Lv. ${top3[1].level}</div>
+                        <span class="podium-xp">${top3[1].xp.toLocaleString()} XP</span>
+                    </div>
+                    <div class="podium-card podium-1">
+                        <div class="podium-rank">1</div>
+                        <span class="podium-avatar" style="font-size: 64px;">👑<br>${top3[0].avatar}</span>
+                        <div class="podium-username" style="font-size: 21px;">${top3[0].name}</div>
+                        <div class="podium-title">${top3[0].title} · Lv. ${top3[0].level}</div>
+                        <span class="podium-xp">${top3[0].xp.toLocaleString()} XP</span>
+                    </div>
+                    <div class="podium-card podium-3">
+                        <div class="podium-rank">3</div>
+                        <span class="podium-avatar">${top3[2].avatar}</span>
+                        <div class="podium-username">${top3[2].name}</div>
+                        <div class="podium-title">${top3[2].title} · Lv. ${top3[2].level}</div>
+                        <span class="podium-xp">${top3[2].xp.toLocaleString()} XP</span>
+                    </div>
+                `;
+
+                // Render rest table rows
+                const leaderboardBody = document.getElementById("leaderboardBody");
+                const restRows = dataList.slice(3);
+                leaderboardBody.innerHTML = "";
+
+                dataList.forEach((item, index) => {
+                    const isUser = item.name.includes("(Anda)");
+                    if (isUser) {
+                        myRank = index + 1;
+                    }
+
+                    // Only show rows inside the list limit (e.g. up to top 10)
+                    if (index >= 3 && index < 10) {
+                        const tr = document.createElement("tr");
+                        if (isUser) tr.className = "highlight-user";
+                        tr.innerHTML = `
+                            <td class="rank-col">#${index + 1}</td>
+                            <td>
+                                <div class="user-col">
+                                    <span class="user-col-avatar">${item.avatar}</span>
+                                    <div class="user-col-info">
+                                        <span class="user-col-name">${item.name}</span>
+                                        <span class="user-col-title">${item.title} · Lv. ${item.level}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="badge-col"><span>${item.specialty}</span></td>
+                            <td class="xp-col">${item.xp.toLocaleString()}</td>
+                        `;
+                        leaderboardBody.appendChild(tr);
+                    }
+                });
+
+                // Render my personal ranking banner at the bottom
+                const myRankingBar = document.getElementById("myRankingBar");
+                myRankingBar.innerHTML = `
+                    <div class="my-ranking-left">
+                        <div class="my-ranking-badge">Peringkat #${myRank}</div>
+                        <div class="my-ranking-info">
+                            <strong>${myName}</strong>
+                            <span>Level ${myLevel} Coder · ${myTitle}</span>
+                        </div>
+                    </div>
+                    <div class="my-ranking-right">
+                        ${userObj.xp.toLocaleString()} XP
+                    </div>
+                `;
+            }
+
+            // Tabs events
+            document.querySelectorAll(".filter-tab").forEach(tab => {
+                tab.addEventListener("click", () => {
+                    document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
+                    tab.classList.add("active");
+                    currentFilter = tab.dataset.filter;
+                    renderLeaderboard();
+                    if (typeof playSound === "function") {
+                        try { playSound("click"); } catch(err){}
+                    }
+                });
+            });
+
+            // Theme toggling initialization
+            const savedTheme = localStorage.getItem("eduquest_theme") || "light";
+            document.body.classList.toggle("dark-theme", savedTheme === "dark");
+            const themeBtn = document.getElementById("themeToggleBtn");
+            if (themeBtn) {
+                themeBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+                themeBtn.addEventListener("click", () => {
+                    document.body.classList.toggle("dark-theme");
+                    const isDark = document.body.classList.contains("dark-theme");
+                    localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
+                    themeBtn.textContent = isDark ? "☀️" : "🌙";
+                    if (typeof playSound === "function") {
+                        try { playSound("click"); } catch(err){}
+                    }
+                });
+            }
+
+            // Init load
+            renderLeaderboard();
+        })();
+    </script>
+    <script src="js/coursera-home.js"></script>
+</body>
+</html>

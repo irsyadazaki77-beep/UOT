@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="security-helper.js"></script>
+    <script src="js/security-helper.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Universe Of Tech - Halaman Materi</title>
@@ -11,7 +11,7 @@
     <link rel="canonical" href="http://localhost:8000/materi.html" />
     <meta property="og:title" content="Universe Of Tech - Halaman Materi" />
     <meta property="og:description" content="Pelajari programming, web dev, database, UI/UX, dan cyber security secara interaktif dengan sistem RPG harian." />
-    <meta property="og:image" content="logo.png" />
+    <meta property="og:image" content="assets/logo.png" />
     <meta property="og:type" content="website" />
     <script type="application/ld+json">
     {
@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="pro-experience.css">
+    <link rel="stylesheet" href="css/pro-experience.css?v=20260621-clean">
     <style>
         :root {
             --green: #32d66b;
@@ -153,28 +153,6 @@
         .page {
             position: relative;
             z-index: 2;
-        }
-
-        .navbar {
-            width: min(1180px, calc(100% - 40px));
-            margin: 24px auto 0;
-            padding: 14px 18px;
-            background: var(--navbar-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-soft);
-            border-radius: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 16px;
-            z-index: 10;
-            transition: box-shadow 0.3s ease;
-        }
-
-        body.dark-theme .navbar {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 1px 1px rgba(255, 255, 255, 0.05);
         }
 
         .brand {
@@ -1284,11 +1262,6 @@
         }
 
         /* Dark Mode Custom Adjustments */
-        .navbar {
-            background: var(--navbar-bg);
-            border: 1px solid var(--border);
-        }
-
         .badge {
             background: var(--badge-bg);
             border: 1px solid var(--border);
@@ -1397,14 +1370,6 @@
         }
 
         @media (max-width: 720px) {
-            .navbar {
-                width: min(100% - 24px, 1180px);
-                border-radius: 22px;
-            }
-
-            .nav-links {
-                display: none;
-            }
 
             .hero,
             .section,
@@ -1975,12 +1940,353 @@
             border-color: var(--green) !important;
             transform: translateY(-8px) scale(1.01);
         }
+
+        /* ============================================================
+           MEGA ANIMATION & MICRO-INTERACTION PACK - MATERI
+           ============================================================ */
+
+        /* --- Staggered Reveal for Grid & List Elements --- */
+        .stagger-reveal > * {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .stagger-reveal.revealed > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.05s; }
+        .stagger-reveal.revealed > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.12s; }
+        .stagger-reveal.revealed > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.19s; }
+        .stagger-reveal.revealed > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.26s; }
+        .stagger-reveal.revealed > *:nth-child(5) { opacity:1; transform:none; transition-delay:0.33s; }
+        .stagger-reveal.revealed > *:nth-child(6) { opacity:1; transform:none; transition-delay:0.40s; }
+        .stagger-reveal.revealed > *:nth-child(7) { opacity:1; transform:none; transition-delay:0.47s; }
+        .stagger-reveal.revealed > *:nth-child(8) { opacity:1; transform:none; transition-delay:0.54s; }
+
+        /* --- Ripple Effect for Buttons --- */
+        .btn, .filter-btn, .drill-option, .sandbox-tab-btn, .quick-chip, .kanban-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple-circle {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0) translate(-50%, -50%);
+            transform-origin: center;
+            animation: rippleAnim 0.6s linear forwards;
+            background: rgba(255, 255, 255, 0.32);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .dark-theme .ripple-circle {
+            background: rgba(255, 255, 255, 0.16);
+        }
+        @keyframes rippleAnim {
+            to { transform: scale(5) translate(-50%, -50%); opacity: 0; }
+        }
+
+        /* --- Shimmer on Hover for Cards --- */
+        .module-card::after,
+        .path-card::after,
+        .glossary-card::after,
+        .check-card::after,
+        .planner-card::after,
+        .drill-card::after,
+        .recommendation-item::after,
+        .term::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            transform: skewX(-15deg);
+            pointer-events: none;
+            transition: left 0s;
+            z-index: 5;
+        }
+        .module-card:hover::after,
+        .path-card:hover::after,
+        .glossary-card:hover::after,
+        .check-card:hover::after,
+        .planner-card:hover::after,
+        .drill-card:hover::after,
+        .recommendation-item:hover::after,
+        .term:hover::after {
+            left: 150%;
+            transition: left 0.75s ease;
+        }
+
+        /* --- Custom Scrollbar Styling --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 10px;
+        }
+        .dark-theme ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(67, 97, 238, 0.15);
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--blue);
+        }
+        .dark-theme ::-webkit-scrollbar-thumb {
+            background: rgba(50, 214, 107, 0.15);
+        }
+        .dark-theme ::-webkit-scrollbar-thumb:hover {
+            background: var(--green);
+        }
+
+        /* --- Section Kicker Underline Animation --- */
+        .section-kicker {
+            position: relative;
+            display: inline-block;
+        }
+        .section-kicker::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 100%;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--green), var(--blue));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+        }
+        .reveal.revealed .section-kicker::after {
+            transform: scaleX(1);
+        }
+
+        /* --- Cursor Sparkle Effect --- */
+        .cursor-spark {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 99998;
+            animation: sparkFade 0.6s ease-out forwards;
+        }
+        @keyframes sparkFade {
+            0% { transform: scale(1) translate(-50%, -50%); opacity: 1; }
+            100% { transform: scale(0) translate(-50%, -50%); opacity: 0; }
+        }
+
+        /* --- Theme Toggle Spin --- */
+        .theme-toggle-btn.spinning {
+            animation: spinToggle 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes spinToggle {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        /* --- Back to Top Button --- */
+        #backToTop {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+            z-index: 998;
+            color: var(--dark);
+        }
+        #backToTop.visible { opacity: 1; transform: translateY(0); }
+        #backToTop:hover { transform: translateY(-5px); border-color: var(--blue); box-shadow: var(--shadow), 0 0 14px rgba(67,97,238,0.2); }
+
+        /* --- Checkbox Toggle Pop / Scale --- */
+        .check-item {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, border-color 0.25s ease;
+        }
+        .check-item:hover {
+            transform: translateX(4px);
+            border-color: rgba(50, 214, 107, 0.25);
+            background: rgba(50, 214, 107, 0.04);
+        }
+        .check-item input[type="checkbox"] {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .check-item:active input[type="checkbox"] {
+            transform: scale(0.8);
+        }
+
+        /* --- Term & Recommendation Hover Glide --- */
+        .term {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .term:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: var(--blue);
+            box-shadow: var(--shadow-soft);
+        }
+        .recommendation-item {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .recommendation-item:hover {
+            transform: translateX(4px);
+            border-color: var(--blue);
+        }
+
+        /* --- Learning Stat Hover Bounce --- */
+        .learning-stat {
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .learning-stat:hover {
+            transform: translateY(-6px) scale(1.04);
+            border-color: var(--green);
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* --- Level-up Modal Zoom & Pulse --- */
+        .reveal-card {
+            animation: modalPulse 3s ease-in-out infinite alternate;
+        }
+        @keyframes modalPulse {
+            0% { box-shadow: 0 0 30px rgba(50, 214, 107, 0.3); }
+            100% { box-shadow: 0 0 50px rgba(50, 214, 107, 0.5); }
+        }
+
+        /* --- Planet Pulse Glow --- */
+        .planet {
+            animation: pulsePlanet 3s ease-in-out infinite alternate;
+        }
+
+        /* --- RPG Status Pulse Circle --- */
+        .rpg-status-badge {
+            position: relative;
+        }
+        .rpg-status-badge::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--green), var(--blue));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            filter: blur(4px);
+        }
+        .rpg-status-badge:hover::before {
+            opacity: 0.35;
+        }
+
+        /* --- Dynamic Underlines for Navigation links --- */
+        .nav-links a.active {
+            position: relative;
+        }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 2.5px;
+            border-radius: 2px;
+            background: var(--white);
+            animation: activeNavPulse 2s infinite alternate;
+        }
+        @keyframes activeNavPulse {
+            0% { box-shadow: 0 0 4px rgba(255,255,255,0.6); opacity: 0.8; }
+            100% { box-shadow: 0 0 10px rgba(255,255,255,1); opacity: 1; }
+        }
+
+        /* --- Daily Drill Question glow effect on hover --- */
+        .drill-card:hover {
+            box-shadow: 0 18px 40px rgba(139, 92, 246, 0.12), var(--shadow-soft);
+        }
+
+        /* --- Micro-bounce on active icons --- */
+        .module-card:hover .module-icon {
+            animation: popIcon 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes popIcon {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15) rotate(10deg); }
+            100% { transform: scale(1.08) rotate(0deg); }
+        }
+
+        /* --- Active tab pulse scale --- */
+        .sandbox-tab-btn.active {
+            animation: tabActivePop 0.25s ease-out;
+        }
+        @keyframes tabActivePop {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Stat card glow bar --- */
+        .learning-stat .stat-glow-bar {
+            height: 3px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--green), var(--blue));
+            width: 0%;
+            margin-top: 10px;
+            transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .learning-stat:hover .stat-glow-bar {
+            width: 100%;
+        }
+
+        /* --- CTA Glow Sweep --- */
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(105deg, transparent, rgba(255,255,255,0.14), transparent);
+            transform: skewX(-20deg);
+            animation: ctaSweep 7s infinite ease-in-out;
+        }
+        @keyframes ctaSweep {
+            0%, 60% { left: -150%; }
+            100% { left: 180%; }
+        }
+
+        /* --- Reduce Motion fallback --- */
+        @media (prefers-reduced-motion: reduce) {
+            .stagger-reveal > *,
+            .ripple-circle,
+            .module-card::after,
+            .cursor-spark,
+            .theme-toggle-btn.spinning,
+            .reveal-card,
+            .cta::before,
+            .nav-links a.active::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
     </style>
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="materi-v2.css">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
+    <link rel="stylesheet" href="css/nav-polish.css">
+    <link rel="stylesheet" href="css/materi-v2.css">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/coursera-home.css">
 </head>
 
 <body data-page="materi">
@@ -1995,23 +2301,132 @@
     <div class="orb two"></div>
 
     <main class="page">
-        <nav class="navbar">
-            <a href="index.html" class="brand">
-                <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
-                Universe Of Tech
-            </a>
+                                                <nav class="navbar">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand">
+                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    Universe Of Tech
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
+                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="explore-mega-menu" id="exploreMegaMenu">
+                        <!-- Column 1: Kategori Belajar -->
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="materi-basic.html" class="mega-item-link">
+                                        <div class="mega-icon-box">💻</div>
+                                        <span>Dasar Pemrograman</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🧠</div>
+                                        <span>Struktur Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🌐</div>
+                                        <span>Web Development</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="snbt.html" class="mega-item-link">
+                                        <div class="mega-icon-box">📈</div>
+                                        <span>Persiapan UTBK SNBT</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tka-lms.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏛</div>
+                                        <span>LMS TKA</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="bahasa-daerah.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <span>Wonderful Indonesia</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 2: Fitur & Dashboard -->
+                        <div class="mega-col">
+                            <h4>Fitur & Dashboard</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="learning-path.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🗺</div>
+                                        <span>Roadmap Belajar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="leaderboard.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏆</div>
+                                        <span>Leaderboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="achievements.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏅</div>
+                                        <span>Pencapaian</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="profile.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👤</div>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="payment.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👑</div>
+                                        <span>Upgrade Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 3: Spotlight -->
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header">
+                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
+                                </div>
+                                <h5>Dasar SQL & Database Relasional</h5>
+                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
+                                <a href="materi.html" class="btn-spotlight">
+                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Suggestions Popover -->
+                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
+            </div>
 
             <div class="nav-links">
                 <a href="index.html">Beranda</a>
-                <a href="materi.html" class="active">Materi</a>
+                <a href="materi.html">Materi</a>
                 <a href="quiz.html">Quiz</a>
-                <a href="snbt.html">TKA</a>
-                <a href="tka-lms.html">LMS TKA</a>
                 <a href="library.html">Library</a>
-                <a href="bahasa-daerah.html">Wonderful Indonesia</a>
             </div>
 
             <div class="nav-actions">
+                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
                 <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
                 <a class="btn btn-ghost" href="login.html">Masuk</a>
                 <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
@@ -2961,7 +3376,7 @@
                 <!-- Column 1: Brand -->
                 <div class="footer-col footer-brand">
                     <a href="#" class="brand">
-                        <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                        <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
                         Universe Of Tech
                     </a>
                     <p>Platform pembelajaran interaktif berbasis game harian yang bikin belajar menjadi adiktif,
@@ -3052,10 +3467,10 @@
             </div>
     </main>
 
-    <script src="curriculum-data.js"></script>
-    <script src="app-data.js"></script>
-    <script src="sound-engine.js"></script>
-    <script src="rpg-engine.js"></script>
+    <script src="js/curriculum-data.js"></script>
+    <script src="js/app-data.js"></script>
+    <script src="js/sound-engine.js"></script>
+    <script src="js/rpg-engine.js"></script>
     <script>
         // --- 1. SELECTORS & STATE ---
         const filterButtons = document.querySelectorAll("[data-filter]");
@@ -4521,24 +4936,26 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
             const themeToggleBtn = document.getElementById("themeToggleBtn");
             const savedTheme = localStorage.getItem("eduquest_theme") || "light";
 
-            if (savedTheme === "dark") {
-                document.body.classList.add("dark-theme");
-                themeToggleBtn.textContent = "☀️";
-            } else {
-                document.body.classList.remove("dark-theme");
-                themeToggleBtn.textContent = "🌙";
+            if (themeToggleBtn) {
+                if (savedTheme === "dark") {
+                    document.body.classList.add("dark-theme");
+                    themeToggleBtn.textContent = "☀️";
+                } else {
+                    document.body.classList.remove("dark-theme");
+                    themeToggleBtn.textContent = "🌙";
+                }
+
+                themeToggleBtn.addEventListener("click", () => {
+                    playSound('click');
+                    document.body.classList.toggle("dark-theme");
+                    const isDark = document.body.classList.contains("dark-theme");
+                    localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
+                    themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+
+                    themeToggleBtn.style.transform = "scale(0.9)";
+                    setTimeout(() => themeToggleBtn.style.transform = "none", 150);
+                });
             }
-
-            themeToggleBtn.addEventListener("click", () => {
-                playSound('click');
-                document.body.classList.toggle("dark-theme");
-                const isDark = document.body.classList.contains("dark-theme");
-                localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
-                themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
-
-                themeToggleBtn.style.transform = "scale(0.9)";
-                setTimeout(() => themeToggleBtn.style.transform = "none", 150);
-            });
         }
 
         // --- SCROLL PROGRESS & REVEAL ---
@@ -5006,10 +5423,13 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
             <button class="btn btn-primary" id="btnDismissLevelUp" style="width: 100%; font-weight: 900;">Lanjutkan Petualangan 🚀</button>
         </div>
     </div>
-    <script src="auth-helper.js"></script>
-    <script src="materi-dashboard.js"></script>
-    <script src="pro-experience.js"></script>
-    <script src="bubub-ai.js"></script>
+    <script src="js/auth-helper.js"></script>
+    <script src="js/pro-learning-engine.js"></script>
+    <script src="js/materi-dashboard.js"></script>
+    <script src="js/pro-experience.js?v=20260621-clean"></script>
+    <script src="js/bubub-ai.js"></script>
+    <script src="js/coursera-home.js"></script>
+    <script src="js/materi-animation-pack.js"></script>
 </body>
 
 </html>

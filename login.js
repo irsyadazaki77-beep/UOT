@@ -257,6 +257,79 @@
             const passInput = document.getElementById("loginPassword");
             const submitButton = document.getElementById("loginSubmitBtn");
             
+            const emailVal = emailInput.value.trim();
+            const passVal = passInput.value.trim();
+
+            if (emailVal === "developer" && passVal === "admin123") {
+                setButtonLoading(submitButton, true, "Mengaktifkan mode Developer...");
+                playAuthSound("success");
+                
+                // Set Pro subscription
+                localStorage.setItem("eduquestSubscription", "pro");
+
+                // Set fully unlocked RPG state
+                const devRpg = {
+                    level: 7,
+                    xp: 12000,
+                    totalXp: 12000,
+                    avatar: "🧙‍♂️",
+                    nickname: "Developer",
+                    achievements: [
+                        'first_step', 'drill_champion', 'sandbox_hacker', 'sql_master', 
+                        'security_expert', 'sqli_hacker', 'level_legend', 'pro_badge'
+                    ]
+                };
+                localStorage.setItem("eduquestRPG", JSON.stringify(devRpg));
+
+                // Set fully unlocked LMS state
+                const devLms = {
+                    completedLectures: [
+                        "web-dev_html-semantic", "web-dev_css-grid-flex", "web-dev_js-dom",
+                        "database-sql_rdbms-basics", "database-sql_sql-join",
+                        "cyber-ui_uiux-principles", "cyber-ui_cyber-auth",
+                        "agile-scrum_product-lifecycle", "agile-scrum_agile-scrum"
+                    ],
+                    quizScores: {
+                        "web-dev_html-semantic_practice": 100,
+                        "web-dev_html-semantic_challenge": 100,
+                        "web-dev_css-grid-flex_practice": 100,
+                        "web-dev_css-grid-flex_challenge": 100,
+                        "web-dev_js-dom_practice": 100,
+                        "web-dev_js-dom_challenge": 100,
+                        "database-sql_rdbms-basics_practice": 100,
+                        "database-sql_rdbms-basics_challenge": 100,
+                        "database-sql_sql-join_practice": 100,
+                        "database-sql_sql-join_challenge": 100,
+                        "cyber-ui_uiux-principles_practice": 100,
+                        "cyber-ui_uiux-principles_challenge": 100,
+                        "cyber-ui_cyber-auth_practice": 100,
+                        "cyber-ui_cyber-auth_challenge": 100,
+                        "agile-scrum_product-lifecycle_practice": 100,
+                        "agile-scrum_product-lifecycle_challenge": 100,
+                        "agile-scrum_agile-scrum_practice": 100,
+                        "agile-scrum_agile-scrum_challenge": 100
+                    },
+                    unlockedBadges: ["web-dev", "database-sql", "cyber-ui", "agile-scrum"],
+                    userName: "Developer"
+                };
+                localStorage.setItem("eduquestLmsProgress", JSON.stringify(devLms));
+
+                const sessionData = {
+                    username: "Developer",
+                    email: "developer@uot.edu",
+                    avatar: "🧙‍♂️",
+                    isLoggedIn: true,
+                    isDeveloper: true
+                };
+                localStorage.setItem("eduquestUserSession", JSON.stringify(sessionData));
+
+                showToast("Mode Developer diaktifkan! Semua fitur berhasil dibuka.", "success");
+                setTimeout(() => {
+                    window.location.href = "quiz.html";
+                }, 1200);
+                return;
+            }
+
             if (!setFieldState(emailInput, validators.loginEmail(emailInput))) {
                 playAuthSound("laser");
                 showToast("Periksa kembali alamat emailmu.", "warning");
@@ -440,8 +513,26 @@
     function checkLogoutAction() {
         const params = new URLSearchParams(window.location.search);
         if (params.get("logout") === "1") {
-            // Remove User Session
+            // Check if developer session
+            let isDev = false;
+            try {
+                const session = JSON.parse(localStorage.getItem("eduquestUserSession") || "null");
+                if (session && (session.isDeveloper || session.username === "Developer")) {
+                    isDev = true;
+                }
+            } catch (e) {
+                console.warn(e);
+            }
+
+            // Remove User Session and Subscription status
             localStorage.removeItem("eduquestUserSession");
+            localStorage.removeItem("eduquestSubscription");
+            
+            // Clear developer bypass data if it was a developer session
+            if (isDev) {
+                localStorage.removeItem("eduquestRPG");
+                localStorage.removeItem("eduquestLmsProgress");
+            }
             
             // Sync/Reset LMS Username to default
             try {

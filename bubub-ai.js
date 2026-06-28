@@ -1,16 +1,15 @@
-(function () {
+﻿(function () {
     "use strict";
 
     const CONFIG = {
         name: "BUBUB",
-        logo: "bubub-logo.png",
+        logo: "assets/bubub-logo.png",
         maxHistory: 24,
         mainPages: new Set([
             "index.html",
             "materi.html",
             "quiz.html",
             "bahasa-daerah.html",
-            "library.html",
             "profile.html",
             "learning-path.html",
             "snbt.html",

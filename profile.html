@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="security-helper.js"></script>
+    <script src="js/security-helper.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Profil & Pengaturan - Universe Of Tech</title>
@@ -10,26 +10,148 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="feature-pages.css">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="profile.css">
-    <link rel="stylesheet" href="pro-experience.css">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
+    <link rel="stylesheet" href="css/feature-pages.css">
+    <link rel="stylesheet" href="css/nav-polish.css">
+    <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="css/profile-polish.css">
+    <link rel="stylesheet" href="css/bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/coursera-home.css">
 </head>
 <body data-page="profile">
     <div class="noise"></div><div class="orb one"></div><div class="orb two"></div>
     <main class="page">
-        <nav class="navbar">
-            <a href="index.html" class="brand"><img src="logo.png" alt="Universe Of Tech" class="brand-logo">Universe Of Tech</a>
-            <div class="nav-links">
-                <a href="index.html">Beranda</a><a href="materi.html">Materi</a><a href="quiz.html">Quiz</a>
-                <a href="snbt.html">TKA</a><a href="library.html">Library</a><a href="bahasa-daerah.html">Wonderful Indonesia</a>
+                                                <nav class="navbar">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand">
+                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    Universe Of Tech
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
+                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="explore-mega-menu" id="exploreMegaMenu">
+                        <!-- Column 1: Kategori Belajar -->
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="materi-basic.html" class="mega-item-link">
+                                        <div class="mega-icon-box">💻</div>
+                                        <span>Dasar Pemrograman</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🧠</div>
+                                        <span>Struktur Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🌐</div>
+                                        <span>Web Development</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="snbt.html" class="mega-item-link">
+                                        <div class="mega-icon-box">📈</div>
+                                        <span>Persiapan UTBK SNBT</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tka-lms.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏛</div>
+                                        <span>LMS TKA</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="bahasa-daerah.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <span>Wonderful Indonesia</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 2: Fitur & Dashboard -->
+                        <div class="mega-col">
+                            <h4>Fitur & Dashboard</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="learning-path.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🗺</div>
+                                        <span>Roadmap Belajar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="leaderboard.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏆</div>
+                                        <span>Leaderboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="achievements.html" class="mega-item-link">
+                                        <div class="mega-icon-box">🏅</div>
+                                        <span>Pencapaian</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="profile.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👤</div>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="payment.html" class="mega-item-link">
+                                        <div class="mega-icon-box">👑</div>
+                                        <span>Upgrade Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 3: Spotlight -->
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header">
+                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
+                                </div>
+                                <h5>Dasar SQL & Database Relasional</h5>
+                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
+                                <a href="materi.html" class="btn-spotlight">
+                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Suggestions Popover -->
+                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="library.html">Library</a>
+            </div>
+
             <div class="nav-actions">
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Ganti tema">&#127769;</button>
+                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
                 <a class="btn btn-ghost" href="login.html">Masuk</a>
+                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
         </nav>
 
@@ -226,7 +348,7 @@
                     <div class="panel-heading"><div><span>Paket Akun</span><h2>Subscription</h2></div><span class="current-plan" id="currentPlanLabel">Paket saat ini: Basic</span></div>
                     <div class="plan-grid">
                         <article class="plan-card" data-plan-card="basic"><span class="plan-label">Basic</span><h3>Gratis</h3><p>Fondasi belajar lengkap untuk memulai perjalanan.</p><ul><li>Materi dan quiz dasar</li><li>Progress lokal</li><li>Wonderful Indonesia Basic</li><li>20 nada autoplay</li></ul><button class="btn btn-ghost" data-plan="basic">Gunakan Basic</button></article>
-                        <article class="plan-card pro" data-plan-card="pro"><span class="plan-label">Pro</span><h3>Pro Learning</h3><p>Pengalaman penuh dengan fitur premium dan personalisasi.</p><ul><li>Semua materi dan jalur belajar</li><li>Golden Wheel & Double XP</li><li>Pusaka Radar dan Infinite Jam</li><li>Analitik pelafalan lengkap</li></ul><button class="btn btn-primary" data-plan="pro">Lihat Paket Pro</button></article>
+                        <article class="plan-card pro" data-plan-card="pro"><span class="plan-label">Pro</span><h3>Pro Learning</h3><p>Belajar terarah dengan insight dan latihan yang mengikuti kemampuanmu.</p><ul><li>Diagnosis kelemahan & analitik actionable</li><li>Smart Review dan latihan adaptif</li><li>Rencana personal & simulasi ujian</li><li>Mentor BUBUB, backup, dan sertifikat</li></ul><a class="btn btn-ghost" href="pro-hub.html">Buka PRO Learning Hub</a><button class="btn btn-primary" data-plan="pro">Lihat Paket Pro</button></article>
                     </div>
                 </section>
             </div>
@@ -237,7 +359,8 @@
     <div class="confirm-modal" id="confirmModal" aria-hidden="true">
         <div class="confirm-box"><div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><h2 id="confirmTitle">Konfirmasi</h2><p id="confirmText"></p><div><button class="btn btn-ghost" id="confirmCancel">Batal</button><button class="btn danger-button" id="confirmAction">Lanjutkan</button></div></div>
     </div>
-    <script src="sound-engine.js"></script><script src="auth-helper.js"></script><script src="profile.js?v=20260615-pro"></script><script src="pro-experience.js"></script>
-    <script src="bubub-ai.js"></script>
+    <script src="js/sound-engine.js"></script><script src="js/auth-helper.js"></script><script src="js/pro-learning-engine.js"></script><script src="js/profile.js?v=20260615-pro"></script><script src="js/pro-experience.js?v=20260621-clean"></script>
+    <script src="js/bubub-ai.js"></script>
+    <script src="js/coursera-home.js"></script>
 </body>
 </html>

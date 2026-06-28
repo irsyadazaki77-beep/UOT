@@ -404,17 +404,18 @@ body[data-page="bahasa"] .culture-card-actions a {
 
 /* Treasure Hunt widget styles */
 .hunt-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 207, 79, 0.05) 100%) !important;
+    border: 1px solid var(--culture-line) !important;
+    border-radius: 22px !important;
+    padding: 20px !important;
+    box-shadow: var(--culture-shadow) !important;
+    backdrop-filter: blur(12px) !important;
 }
 
-.dark-theme .hunt-card {
-    background: linear-gradient(135deg, rgba(255, 207, 79, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
-    border-color: rgba(255, 207, 79, 0.15);
+body.dark-theme .hunt-card {
+    background: linear-gradient(135deg, rgba(17, 32, 51, 0.72) 0%, rgba(255, 207, 79, 0.08) 100%) !important;
 }
+
 
 .hunt-header {
     display: flex;
@@ -457,12 +458,19 @@ body[data-page="bahasa"] .culture-card-actions a {
 }
 
 .hunt-done-card {
-    background: linear-gradient(135deg, rgba(50, 214, 107, 0.06) 0%, rgba(255, 207, 79, 0.02) 100%);
-    border: 1px solid rgba(50, 214, 107, 0.2);
-    border-radius: 20px;
-    padding: 24px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(50, 214, 107, 0.08) 100%) !important;
+    border: 1px solid var(--culture-line) !important;
+    border-radius: 22px !important;
+    padding: 24px !important;
+    box-shadow: var(--culture-shadow) !important;
+    backdrop-filter: blur(12px) !important;
     text-align: center;
 }
+
+body.dark-theme .hunt-done-card {
+    background: linear-gradient(135deg, rgba(17, 32, 51, 0.72) 0%, rgba(50, 214, 107, 0.08) 100%) !important;
+}
+
 
 .gold-crown {
     font-size: 38px;

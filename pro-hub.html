@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pusat diagnosis, smart review, rencana, simulasi, mentor, catatan, dan sertifikat QuizNation PRO.">
+    <title>PRO Learning Hub - QuizNation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/pro-hub.css">
+</head>
+<body data-page="pro-hub">
+    <header class="hub-nav">
+        <a class="hub-brand" href="index.html" aria-label="Kembali ke beranda">
+            <span class="hub-brand-mark"><i class="fa-solid fa-bolt"></i></span>
+            <span>QUIZ<span>NATION</span></span>
+        </a>
+        <nav aria-label="Navigasi utama">
+            <a href="materi.html">Materi</a><a href="quiz.html">Quiz</a><a href="snbt.html">TKA</a><a href="profile.html">Profil</a>
+        </nav>
+        <span class="hub-plan" id="hubPlanBadge"><i class="fa-solid fa-crown"></i> PRO</span>
+    </header>
+
+    <main class="hub-shell">
+        <section class="hub-hero">
+            <div>
+                <span class="eyebrow"><i class="fa-solid fa-sparkles"></i> PRO LEARNING SYSTEM</span>
+                <h1>Belajar lebih terarah,<br><span>bukan sekadar lebih banyak.</span></h1>
+                <p>Diagnosis kelemahan, review terjadwal, latihan adaptif, dan mentor yang memahami progres lokalmu.</p>
+            </div>
+            <div class="hero-score" aria-label="Skor kesiapan belajar">
+                <div class="score-ring" id="readinessRing"><strong id="readinessValue">0%</strong><small>Readiness</small></div>
+                <p id="heroRecommendation">Mulai quiz diagnosis agar rekomendasi menjadi personal.</p>
+            </div>
+        </section>
+
+        <section class="basic-preview" id="basicPreview" hidden>
+            <div><i class="fa-solid fa-lock"></i><div><strong>Preview PRO Learning Hub</strong><p>Data detail dan seluruh aksi terkunci untuk akun Basic. Progres lama tetap aman saat kamu upgrade.</p></div></div>
+            <a href="payment.html">Upgrade PRO</a>
+        </section>
+
+        <div class="hub-layout">
+            <aside class="hub-sidebar" aria-label="Menu Pro Learning Hub">
+                <button class="hub-tab active" data-tab="overview"><i class="fa-solid fa-grid-2"></i><span>Ringkasan</span></button>
+                <button class="hub-tab" data-tab="diagnosis"><i class="fa-solid fa-chart-radar"></i><span>Diagnosis</span></button>
+                <button class="hub-tab" data-tab="review"><i class="fa-solid fa-rotate"></i><span>Smart Review</span><b id="reviewBadge">0</b></button>
+                <button class="hub-tab" data-tab="plan"><i class="fa-solid fa-calendar-check"></i><span>Rencana</span></button>
+                <button class="hub-tab" data-tab="simulation"><i class="fa-solid fa-stopwatch"></i><span>Simulasi</span></button>
+                <button class="hub-tab" data-tab="mentor"><i class="fa-solid fa-robot"></i><span>Mentor BUBUB</span></button>
+                <button class="hub-tab" data-tab="notes"><i class="fa-solid fa-note-sticky"></i><span>Catatan</span></button>
+                <button class="hub-tab" data-tab="certificates"><i class="fa-solid fa-certificate"></i><span>Sertifikat</span></button>
+            </aside>
+
+            <section class="hub-content" id="hubContent">
+                <section class="hub-panel active" data-panel="overview">
+                    <div class="panel-heading"><div><span>Ringkasan hari ini</span><h2>Langkah terbaikmu berikutnya</h2></div><button class="button secondary" id="refreshHub"><i class="fa-solid fa-arrows-rotate"></i> Perbarui</button></div>
+                    <div class="metric-grid" id="metricGrid"></div>
+                    <article class="action-card primary-action">
+                        <div class="action-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <div><span>REKOMENDASI UTAMA</span><h3 id="mainRecommendation">Mulai quiz diagnosis</h3><p id="mainRecommendationCopy">Selesaikan beberapa soal agar sistem dapat memetakan kemampuanmu.</p></div>
+                        <button class="button primary" data-go-tab="review">Mulai sekarang</button>
+                    </article>
+                    <div class="split-grid"><article class="hub-card"><div class="card-head"><h3>Topik prioritas</h3><button data-go-tab="diagnosis">Lihat semua</button></div><div id="priorityTopics"></div></article><article class="hub-card"><div class="card-head"><h3>Agenda 3 hari</h3><button data-go-tab="plan">Atur target</button></div><div id="miniPlan"></div></article></div>
+                </section>
+
+                <section class="hub-panel" data-panel="diagnosis">
+                    <div class="panel-heading"><div><span>Diagnosis kelemahan</span><h2>Peta penguasaan per topik</h2></div><a class="button secondary" href="quiz-session.html?mode=practice">Ambil diagnosis</a></div>
+                    <div class="diagnosis-summary" id="diagnosisSummary"></div>
+                    <div class="topic-table" id="topicTable"></div>
+                    <div class="empty-state" id="diagnosisEmpty"><i class="fa-solid fa-chart-line"></i><h3>Belum cukup data</h3><p>Kerjakan quiz agar sistem dapat membandingkan akurasi, volume, dan kesalahan terbaru.</p><a href="quiz.html" class="button primary">Buka Quiz</a></div>
+                </section>
+
+                <section class="hub-panel" data-panel="review">
+                    <div class="panel-heading"><div><span>Spaced repetition</span><h2>Bank Kesalahan & Smart Review</h2></div><button class="button primary" id="startAdaptiveReview">Latihan adaptif</button></div>
+                    <div class="filter-row"><button class="filter active" data-review-filter="due">Jatuh tempo</button><button class="filter" data-review-filter="scheduled">Terjadwal</button><button class="filter" data-review-filter="mastered">Dikuasai</button><button class="filter" data-review-filter="all">Semua</button></div>
+                    <div class="review-list" id="reviewList"></div>
+                </section>
+
+                <section class="hub-panel" data-panel="plan">
+                    <div class="panel-heading"><div><span>Rencana personal</span><h2>Agenda yang mengikuti targetmu</h2></div></div>
+                    <form class="plan-form" id="planForm">
+                        <label><span>Target utama</span><input id="planGoal" maxlength="100" required></label>
+                        <label><span>Fokus</span><select id="planFocus"><option value="campuran">Campuran</option><option value="programming">Programming</option><option value="database">Database</option><option value="web">Web</option><option value="tka">TKA/SNBT</option><option value="budaya">Budaya</option></select></label>
+                        <label><span>Menit per hari</span><input id="planMinutes" type="number" min="10" max="180" step="5"></label>
+                        <label><span>Deadline</span><input id="planDeadline" type="date"></label>
+                        <button class="button primary" type="submit">Susun ulang agenda</button>
+                    </form>
+                    <div class="week-plan" id="weekPlan"></div>
+                </section>
+
+                <section class="hub-panel" data-panel="simulation">
+                    <div class="panel-heading"><div><span>Mode ujian</span><h2>Simulasi terukur</h2></div><span class="live-timer" id="simulationTimer" hidden>10:00</span></div>
+                    <div id="simulationSetup">
+                        <div class="preset-grid">
+                            <button class="preset active" data-preset="campuran"><i class="fa-solid fa-shuffle"></i><strong>Campuran</strong><span>10 soal · 10 menit</span></button>
+                            <button class="preset" data-preset="programming"><i class="fa-solid fa-code"></i><strong>Coding</strong><span>10 soal · 10 menit</span></button>
+                            <button class="preset" data-preset="tka"><i class="fa-solid fa-graduation-cap"></i><strong>TKA/SNBT</strong><span>10 soal · 10 menit</span></button>
+                        </div>
+                        <button class="button primary wide" id="startSimulation">Mulai simulasi</button>
+                        <div class="history-list" id="simulationHistory"></div>
+                    </div>
+                    <div class="simulation-workspace" id="simulationWorkspace" hidden>
+                        <div class="simulation-progress"><span id="simulationProgress"></span></div>
+                        <span class="question-meta" id="simulationMeta"></span><h3 id="simulationQuestion"></h3><div class="answer-grid" id="simulationAnswers"></div>
+                    </div>
+                    <div class="simulation-result" id="simulationResult" hidden></div>
+                </section>
+
+                <section class="hub-panel" data-panel="mentor">
+                    <div class="panel-heading"><div><span>Mentor kontekstual lokal</span><h2>BUBUB memahami progresmu</h2></div><span class="privacy-pill"><i class="fa-solid fa-shield-halved"></i> Tetap di perangkat</span></div>
+                    <div class="mentor-shell"><div class="mentor-messages" id="mentorMessages"><div class="mentor-message assistant">Halo! Aku sudah membaca progres lokalmu. Tanyakan kenapa kamu salah, minta hint, atau minta rencana belajar.</div></div><div class="mentor-chips"><button>Analisis progres saya</button><button>Kenapa saya sering salah?</button><button>Buat rencana belajar</button><button>Beri hint</button></div><form id="mentorForm"><input id="mentorInput" maxlength="300" placeholder="Tanyakan tentang progres atau kesalahanmu..." required><button type="submit" aria-label="Kirim"><i class="fa-solid fa-paper-plane"></i></button></form></div>
+                </section>
+
+                <section class="hub-panel" data-panel="notes">
+                    <div class="panel-heading"><div><span>Ruang catatan</span><h2>Tangkap insight penting</h2></div><button class="button secondary" id="printReport"><i class="fa-solid fa-file-pdf"></i> Cetak laporan</button></div>
+                    <form class="note-form" id="noteForm"><input id="noteTitle" maxlength="100" placeholder="Judul catatan" required><select id="noteContext"><option value="umum">Umum</option><option value="programming">Programming</option><option value="database">Database</option><option value="tka">TKA/SNBT</option><option value="budaya">Budaya</option></select><textarea id="noteBody" maxlength="5000" rows="6" placeholder="Konsep, rumus, atau refleksi belajar..." required></textarea><button class="button primary" type="submit">Simpan catatan</button></form>
+                    <div class="note-list" id="noteList"></div>
+                    <div class="backup-actions"><div><strong>Backup progres PRO</strong><p>Ekspor atau pulihkan diagnosis, review, rencana, simulasi, catatan, dan sertifikat.</p></div><button class="button secondary" id="exportBackup">Ekspor JSON</button><button class="button secondary" id="importBackup">Impor JSON</button><input id="importBackupFile" type="file" accept="application/json" hidden></div>
+                </section>
+
+                <section class="hub-panel" data-panel="certificates">
+                    <div class="panel-heading"><div><span>Pencapaian terverifikasi lokal</span><h2>Sertifikat berbasis kompetensi</h2></div></div>
+                    <article class="eligibility-card"><div><h3>Kelayakan sertifikat</h3><p>Sertifikat hanya terbit setelah modul, asesmen, dan proyek memenuhi standar.</p></div><div id="eligibilityRequirements"></div><button class="button primary" id="issueCertificate">Terbitkan sertifikat</button></article>
+                    <div class="certificate-list" id="certificateList"></div>
+                </section>
+            </section>
+        </div>
+    </main>
+
+    <div class="toast" id="hubToast" role="status" aria-live="polite"></div>
+    <script src="js/quiz-question-bank.js"></script>
+    <script src="js/pro-learning-engine.js"></script>
+    <script src="js/pro-hub.js"></script>
+</body>
+</html>

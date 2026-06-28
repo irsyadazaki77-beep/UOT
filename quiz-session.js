@@ -1,4 +1,4 @@
-(() => {
+﻿(() => {
     "use strict";
 
     const SESSION_KEY = "eduquestQuizSession";
@@ -314,6 +314,25 @@
             hint: question.hint,
             isCorrect
         };
+
+        if (window.QuizNationPro) {
+            const answeredCount = state.selected.filter(Boolean).length || 1;
+            window.QuizNationPro.recordAttempt({
+                questionId: question.id,
+                question: question.question,
+                topic: question.category,
+                difficulty: question.difficulty,
+                source: state.payload?.source || "quiz-session",
+                sessionId: state.payload?.sessionId,
+                selected: selectedAnswer.text,
+                correctAnswer: correctAnswer.text,
+                isCorrect,
+                durationMs: Math.round(((state.initialTime - state.timeLeft) * 1000) / answeredCount),
+                hintUsed: Boolean(state.helpUsed),
+                explanation: question.explanation,
+                answers: question.shuffledAnswers.map(answer => answer.text)
+            });
+        }
 
         if (isCorrect) {
             state.correct += 1;
@@ -883,7 +902,7 @@
         if (!restoreSession()) {
             document.getElementById("focusRoom").innerHTML = `
                 <section class="session-empty-state">
-                    <img src="logo.png" alt="" aria-hidden="true">
+                    <img src="assets/logo.png" alt="" aria-hidden="true">
                     <span class="result-kicker">Session expired</span>
                     <h1>Sesi quiz belum tersedia.</h1>
                     <p>Kamu akan diarahkan kembali ke katalog quiz untuk memulai sesi baru.</p>

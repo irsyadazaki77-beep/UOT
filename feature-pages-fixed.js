@@ -181,12 +181,16 @@ function initTKAPage() {
     };
 
     function updateStats() {
-        const accuracy = Math.round((stats.correct / Math.max(stats.done, 1)) * 100);
-        document.getElementById("snbtDone").textContent = stats.done;
+        const done = Number(stats.done) || 0;
+        const correct = Number(stats.correct) || 0;
+        const accuracy = done > 0 ? Math.round((correct / done) * 100) : 0;
+        document.getElementById("snbtDone").textContent = done;
         document.getElementById("snbtAccuracy").textContent = `${accuracy}%`;
         document.getElementById("snbtLevel").textContent = accuracy >= 80 ? "Siap" : accuracy >= 60 ? "Stabil" : accuracy >= 40 ? "Naik" : "Fondasi";
         ring.style.setProperty("--progress", `${Math.min(accuracy, 100)}%`);
         ringText.textContent = `${accuracy}%`;
+        stats.done = done;
+        stats.correct = correct;
         storage.set("snbt_stats", stats);
         renderDiagnostic(accuracy);
     }
@@ -218,7 +222,9 @@ function initTKAPage() {
     function renderDiagnostic(accuracy) {
         if (!diagnostic) return;
         const subjectRows = Object.entries(stats.bySubject || {}).map(([subject, data]) => {
-            const subjectAccuracy = Math.round((data.correct / Math.max(data.done, 1)) * 100);
+            const sDone = Number(data.done) || 0;
+            const sCorrect = Number(data.correct) || 0;
+            const subjectAccuracy = sDone > 0 ? Math.round((sCorrect / sDone) * 100) : 0;
             const label = {
                 indonesia: "Bahasa Indonesia",
                 matematika: "Matematika",
@@ -1460,13 +1466,36 @@ function initTKALMSPage() {
             options: ["Benar", "Salah"],
             correct: 0,
             explanation: "Rumus kepadatan penduduk adalah jumlah penduduk / luas wilayah."
-        }const fs = require('fs');
-const content = fs.readFileSync('feature-pages.js', 'utf8');
-
-const newQuestions = 
+        }
         ,{ id: 'ind-new1', subject: 'indonesia', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Pemahaman Wacana', prompt: 'Manakah penulisan kata serapan yang paling tepat sesuai dengan KBBI?', stimulus: 'Penyerapan kosakata asing ke dalam bahasa Indonesia dilakukan untuk memperkaya perbendaharaan kata. Namun, tidak semua kata diserap secara utuh.', options: ['Standardisasi', 'Standarisasi', 'Jadual', 'Praktek'], correct: 0, explanation: 'Menurut KBBI, penulisan yang benar adalah standardisasi, bukan standarisasi.' }
         ,{ id: 'ind-new2', subject: 'indonesia', difficulty: 'hots', type: 'multi', sourceKind: 'pola tka 2025', skill: 'Analisis Semantik', prompt: 'Pernyataan mana saja yang termasuk majas metafora?', stimulus: '', options: ['Dia adalah bintang kelas kami.', 'Waktu adalah uang.', 'Angin menari-nari di sela dedaunan.', 'Suaranya menggelegar membelah angkasa.'], correct: [0, 1], explanation: 'Metafora membandingkan dua hal secara langsung tanpa kata penghubung. Angin menari adalah personifikasi, menggelegar adalah hiperbola.' }
-        ,{ id: 'mat-new1', subject: 'matematika', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Geometri Analitik', prompt: 'Jarak titik pusat lingkaran ^2 + y^2 - 4x + 6y - 12 = 0$ ke titik asal adalah...', stimulus: '', options: ['$\\\\sqrt{13}, { answers: {}, streak: 0, elapsedSeconds: 0, timerRunning: false });
+        ,{ id: 'mat-new1', subject: 'matematika', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Geometri Analitik', prompt: 'Jarak titik pusat lingkaran $x^2 + y^2 - 4x + 6y - 12 = 0$ ke titik asal adalah...', stimulus: '', options: ['$\\sqrt{13}$', '$\\sqrt{10}$', '$\\sqrt{5}$', '5'], correct: 0, explanation: 'Pusat lingkaran adalah $(2, -3)$. Jarak ke $(0,0) = \\sqrt{2^2 + (-3)^2} = \\sqrt{13}$.' }
+        ,{ id: 'mat-new2', subject: 'matematika', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Peluang', prompt: 'Dua buah dadu dilempar bersamaan. Peluang munculnya jumlah mata dadu 7 adalah...', stimulus: '', options: ['1/6', '1/12', '1/8', '1/36'], correct: 0, explanation: 'Pasangan berjumlah 7: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1). Total ada 6 dari 36 kemungkinan, sehingga peluangnya 6/36 = 1/6.' }
+        ,{ id: 'ing-new1', subject: 'inggris', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Reading Comprehension', prompt: 'What is the primary purpose of the author in the passage?', stimulus: 'The rapid advancement of artificial intelligence has led to widespread debates. While some fear job displacement, others argue it will create new, highly-skilled opportunities.', options: ['To express fear about AI', 'To present varying perspectives on AI', 'To condemn technological advancement', 'To list future job opportunities'], correct: 1, explanation: 'The author mentions both the fear of job displacement and the hope for new opportunities, presenting a balanced view.' }
+        ,{ id: 'ing-new2', subject: 'inggris', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Vocabulary in Context', prompt: 'The word "ubiquitous" in the context most nearly means...', stimulus: 'Smartphones have become ubiquitous in modern society; it is rare to find someone without one.', options: ['Expensive', 'Rare', 'Ever-present', 'Complicated'], correct: 2, explanation: 'Ubiquitous means present, appearing, or found everywhere.' }
+        ,{ id: 'fis-new1', subject: 'fisika', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Dinamika', prompt: 'Sebuah balok bermassa 5 kg ditarik gaya 50 N membentuk sudut 37 derajat terhadap horizontal. Jika lantai licin, percepatannya adalah...', stimulus: '', options: ['8 m/s2', '10 m/s2', '6 m/s2', '4 m/s2'], correct: 0, explanation: 'Komponen gaya horizontal Fx = F cos 37 = 50 x 0,8 = 40 N. Percepatan a = Fx / m = 40 / 5 = 8 m/s2.' }
+        ,{ id: 'fis-new2', subject: 'fisika', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Termodinamika', prompt: 'Proses termodinamika di mana tidak ada kalor yang masuk atau keluar sistem disebut...', stimulus: '', options: ['Isotermal', 'Isobarik', 'Adiabatik', 'Isokhorik'], correct: 2, explanation: 'Proses adiabatik adalah proses termodinamika di mana tidak ada pertukaran kalor antara sistem dan lingkungannya (Q = 0).' }
+        ,{ id: 'kim-new1', subject: 'kimia', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Stoikiometri', prompt: 'Berapa mol H2O yang dihasilkan dari pembakaran sempurna 1 mol CH4?', stimulus: 'Reaksi: CH4 + 2O2 -> CO2 + 2H2O', options: ['1 mol', '2 mol', '3 mol', '4 mol'], correct: 1, explanation: 'Berdasarkan persamaan reaksi yang setara, koefisien H2O adalah 2, sehingga dihasilkan 2 mol H2O.' }
+        ,{ id: 'kim-new2', subject: 'kimia', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Ikatan Chemical', prompt: 'Bentuk geometri molekul SF6 adalah...', stimulus: '', options: ['Tetrahedral', 'Oktahedral', 'Trigonal Bipiramida', 'Linear'], correct: 1, explanation: 'SF6 memiliki 6 pasangan elektron ikatan dan 0 pasangan elektron bebas, sehingga bentuknya oktahedral.' }
+        ,{ id: 'bio-new1', subject: 'biologi', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Sel', prompt: 'Organel sel yang berfungsi sebagai tempat respirasi seluler dan penghasil energi adalah...', stimulus: '', options: ['Nukleus', 'Ribosom', 'Mitokondria', 'Badan Golgi'], correct: 2, explanation: 'Mitokondria adalah organel tempat terjadinya respirasi seluler untuk menghasilkan ATP (energi).' }
+        ,{ id: 'bio-new2', subject: 'biologi', difficulty: 'hots', type: 'multi', sourceKind: 'pola tka 2025', skill: 'Genetika', prompt: 'Manakah dari berikut ini yang merupakan penyimpangan semu hukum Mendel?', stimulus: '', options: ['Kriptomeri', 'Polimeri', 'Epistasis', 'Pautan Seks'], correct: [0, 1, 2], explanation: 'Penyimpangan semu hukum Mendel meliputi epistasis, kriptomeri, polimeri, komplementer, dan atavisme. Pautan seks bukan termasuk penyimpangan semu.' }
+        ,{ id: 'eko-new1', subject: 'ekonomi', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Mikroekonomi', prompt: 'Kurva permintaan bergeser ke kanan dapat disebabkan oleh...', stimulus: '', options: ['Penurunan pendapatan', 'Peningkatan selera konsumen', 'Kenaikan harga barang pengganti', 'Kenaikan harga barang itu sendiri'], correct: 1, explanation: 'Peningkatan selera konsumen terhadap suatu barang akan meningkatkan permintaan pada tingkat harga berapapun, menggeser kurva ke kanan.' }
+        ,{ id: 'eko-new2', subject: 'ekonomi', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Makroekonomi', prompt: 'Kebijakan moneter kontraktif yang dapat dilakukan oleh bank sentral adalah...', stimulus: '', options: ['Menurunkan suku bunga', 'Membeli surat berharga', 'Menaikkan giro wajib minimum', 'Menurunkan pajak'], correct: 2, explanation: 'Menaikkan giro wajib minimum (reserve requirement) mengurangi jumlah uang beredar, yang merupakan ciri kebijakan moneter kontraktif.' }
+        ,{ id: 'sos-new1', subject: 'sosiologi', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Interaksi Sosial', prompt: 'Suatu bentuk interaksi sosial yang ditandai dengan adanya persaingan untuk mencapai tujuan yang sama tanpa menggunakan ancaman fisik disebut...', stimulus: '', options: ['Kooperasi', 'Asimilasi', 'Kompetisi', 'Konflik'], correct: 2, explanation: 'Kompetisi (persaingan) adalah proses sosial bersaing mencapai keuntungan tanpa ancaman atau kekerasan.' }
+        ,{ id: 'sos-new2', subject: 'sosiologi', difficulty: 'hots', type: 'single', sourceKind: 'pola tka 2025', skill: 'Perubahan Sosial', prompt: 'Teori yang memandang perubahan sosial bergerak secara linear menuju masyarakat yang lebih kompleks disebut teori...', stimulus: '', options: ['Siklus', 'Evolusi', 'Konflik', 'Fungsional'], correct: 1, explanation: 'Teori evolusi (linear) menyatakan bahwa masyarakat berubah secara bertahap dan searah menuju tahap yang lebih kompleks/maju.' }
+        ,{ id: 'geo-new1', subject: 'geografi', difficulty: 'sedang', type: 'single', sourceKind: 'adaptasi resmi', skill: 'Atmosfer', prompt: 'Lapisan atmosfer tempat terjadinya fenomena cuaca seperti awan dan hujan adalah...', stimulus: '', options: ['Troposfer', 'Stratosfer', 'Mesosfer', 'Termosfer'], correct: 0, explanation: 'Fenomena cuaca dan iklim terjadi di lapisan troposfer, lapisan atmosfer terendah.' }
+        ,{ id: 'geo-new2', subject: 'geografi', difficulty: 'hots', type: 'multi', sourceKind: 'pola tka 2025', skill: 'SIG', prompt: 'Keunggulan Sistem Informasi Geografis (SIG) dibandingkan peta konvensional adalah...', stimulus: '', options: ['Pembaruan data lebih cepat', 'Biaya pengadaan awal sangat murah', 'Dapat melakukan analisis spasial kompleks', 'Penyimpanan data lebih efisien'], correct: [0, 2, 3], explanation: 'Keunggulan SIG meliputi kemudahan pembaruan, analisis spasial kompleks, dan efisiensi penyimpanan digital. Biaya awal hardware/software justru cenderung mahal.' }
+    ];
+    questionBank.push(...(window.TKA_SUPPLEMENTAL_QUESTIONS || []));
+
+    // Apply detailed expanded explanations if available
+    questionBank.forEach(q => {
+        if (window.TKA_EXPANDED_EXPLANATIONS && window.TKA_EXPANDED_EXPLANATIONS[q.id]) {
+            q.explanation = window.TKA_EXPANDED_EXPLANATIONS[q.id];
+        }
+    });
+
+    const progress = storage.get("tka_lms_progress", { answers: {}, streak: 0, elapsedSeconds: 0, timerRunning: false });
     progress.answers = progress.answers || {};
     progress.elapsedSeconds = Number(progress.elapsedSeconds || 0);
     progress.timerRunning = Boolean(progress.timerRunning);
