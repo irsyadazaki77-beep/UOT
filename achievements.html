@@ -1,22 +1,23 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="js/security-helper.js"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <script src="security-helper.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Pencapaian & Sertifikat Coder - Universe Of Tech</title>
     <meta name="description" content="Koleksi lencana coder dan sertifikat kompetensi jalur belajar yang telah Anda selesaikan di Universe Of Tech.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/feature-pages.css">
-    <link rel="stylesheet" href="css/nav-polish.css">
-    <link rel="stylesheet" href="css/pro-experience.css?v=20260621-clean">
-    <link rel="stylesheet" href="css/lms-quiz.css">
-    <link rel="stylesheet" href="css/mobile-compat.css">
-    <link rel="stylesheet" href="css/bubub-ai.css">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="lms-quiz.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="global-animations.css">
     <style>
         /* Theme Variables & Base Style overrides */
         :root {
@@ -1075,8 +1076,263 @@
             background: rgba(139, 92, 246, 0.18);
             color: hsl(258, 100%, 75%);
         }
+
+        /* ==============================
+           Footer Styles
+           ============================== */
+        footer {
+            width: min(1180px, calc(100% - 40px));
+            margin: 80px auto 40px;
+            padding: 60px 0 40px;
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue), var(--green), transparent);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(4, 1fr);
+            gap: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .footer-brand .brand {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--dark);
+            letter-spacing: -0.04em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-brand p {
+            font-size: 13.5px;
+            line-height: 1.65;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 13.5px;
+        }
+
+        .footer-links a {
+            position: relative;
+            width: fit-content;
+            transition: all 0.25s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--blue);
+            transform: translateX(4px);
+        }
+
+        .footer-links a::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--blue), var(--green));
+            transition: width 0.25s ease;
+        }
+
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .social-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: var(--item-bg);
+            border: 1px solid var(--border);
+            color: var(--dark);
+            display: grid;
+            place-items: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 16px rgba(67, 97, 238, 0.25);
+        }
+
+        .language-select {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--item-bg);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 12px;
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 700;
+            width: fit-content;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.25s ease;
+        }
+
+        .language-select:hover {
+            border-color: var(--blue);
+            background: var(--white);
+        }
+
+        .language-select select {
+            background: transparent;
+            border: 0;
+            color: inherit;
+            font-weight: inherit;
+            cursor: pointer;
+            outline: none;
+            padding-right: 4px;
+        }
+
+        .app-stores {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .store-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #111827;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            max-width: 170px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            text-align: left;
+        }
+
+        body.dark-theme .store-badge {
+            background: #060a14;
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .store-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: #1f2937;
+        }
+
+        .store-badge .store-sub {
+            display: block;
+            font-size: 8px;
+            text-transform: uppercase;
+            opacity: 0.6;
+            letter-spacing: 0.06em;
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .store-badge .store-title {
+            display: block;
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 24px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+            font-size: 13.5px;
+            font-weight: 600;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-legal-links a {
+            transition: color 0.25s ease;
+        }
+
+        .footer-legal-links a:hover {
+            color: var(--blue);
+        }
+
+        @media (max-width: 1160px) {
+            .footer-grid { grid-template-columns: 1.5fr 1.2fr 1.2fr; gap: 24px; }
+        }
+        @media (max-width: 900px) {
+            footer { padding: 45px 0 30px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .footer-brand { grid-column: span 2; }
+        }
+        @media (max-width: 600px) {
+            footer { padding: 35px 0 20px; margin: 60px auto 20px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 20px; }
+            .footer-brand { grid-column: span 1; }
+        }
     </style>
-    <link rel="stylesheet" href="css/coursera-home.css">
+    <link rel="stylesheet" href="coursera-home.css">
 </head>
 <body data-page="achievements">
     <div class="noise"></div>
@@ -1087,7 +1343,7 @@
                                                 <nav class="navbar">
             <div class="nav-left-group">
                 <a href="index.html" class="brand">
-                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
                     Universe Of Tech
                 </a>
                 <div class="explore-wrapper">
@@ -1102,37 +1358,37 @@
                             <ul class="mega-list">
                                 <li>
                                     <a href="materi-basic.html" class="mega-item-link">
-                                        <div class="mega-icon-box">💻</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Dasar Pemrograman</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🧠</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Struktur Data</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🌐</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Web Development</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="snbt.html" class="mega-item-link">
-                                        <div class="mega-icon-box">📈</div>
-                                        <span>Persiapan UTBK SNBT</span>
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Persiapan TKA SNBP</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="tka-lms.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🏛</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>LMS TKA</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="bahasa-daerah.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <div class="mega-icon-box">????</div>
                                         <span>Wonderful Indonesia</span>
                                     </a>
                                 </li>
@@ -1144,31 +1400,31 @@
                             <ul class="mega-list">
                                 <li>
                                     <a href="learning-path.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🗺</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Roadmap Belajar</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="leaderboard.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🏆</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Leaderboard</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="achievements.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🏅</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Pencapaian</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="profile.html" class="mega-item-link">
-                                        <div class="mega-icon-box">👤</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Profil Saya</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="payment.html" class="mega-item-link">
-                                        <div class="mega-icon-box">👑</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Upgrade Pro</span>
                                     </a>
                                 </li>
@@ -1210,7 +1466,7 @@
 
             <div class="nav-actions">
                 <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">??</button>
                 <a class="btn btn-ghost" href="login.html">Masuk</a>
                 <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
@@ -1227,17 +1483,17 @@
                 <!-- RPG Profile Card Component -->
                 <div class="rpg-profile-card">
                     <div class="profile-avatar-wrapper">
-                        <button class="avatar-select-btn" id="activeAvatarBtn" title="Ganti Avatar">💻</button>
+                        <button class="avatar-select-btn" id="activeAvatarBtn" title="Ganti Avatar">??</button>
                         <div class="avatar-dropdown" id="avatarDropdown">
-                            <span class="avatar-option">💻</span>
-                            <span class="avatar-option">🧠</span>
-                            <span class="avatar-option">🚀</span>
-                            <span class="avatar-option">🛡️</span>
-                            <span class="avatar-option">🤖</span>
-                            <span class="avatar-option">🧙‍♂️</span>
-                            <span class="avatar-option">👾</span>
-                            <span class="avatar-option">🔥</span>
-                            <span class="avatar-option">⚡</span>
+                            <span class="avatar-option">??</span>
+                            <span class="avatar-option">??</span>
+                            <span class="avatar-option">??</span>
+                            <span class="avatar-option">???</span>
+                            <span class="avatar-option">??</span>
+                            <span class="avatar-option">?????</span>
+                            <span class="avatar-option">??</span>
+                            <span class="avatar-option">??</span>
+                            <span class="avatar-option">?</span>
                         </div>
                     </div>
                     <div class="profile-info-wrapper">
@@ -1304,7 +1560,7 @@
                 <!-- Dynamic cards injected via JS -->
             </div>
             <div class="empty-state" id="badgeEmptyState" style="display: none;">
-                <div class="empty-icon">🔍</div>
+                <div class="empty-icon">??</div>
                 <div class="empty-title">Tidak ada lencana ditemukan</div>
                 <div class="empty-desc">Coba gunakan kata kunci pencarian lain atau pilih kategori yang berbeda.</div>
             </div>
@@ -1333,6 +1589,88 @@
                 <!-- Dynamic leaderboard items injected via JS -->
             </div>
         </section>
+
+        <!-- Site Footer -->
+        <footer>
+            <div class="footer-grid">
+                <div class="footer-col footer-brand">
+                    <a href="index.html" class="brand">
+                        <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" loading="lazy" />
+                        Universe Of Tech
+                    </a>
+                    <p>Platform pembelajaran teknologi interaktif berbasis gamifikasi harian yang membuat belajar koding menjadi adiktif dan menyenangkan.</p>
+                    <div class="language-select">
+                        <span>🌐</span>
+                        <select aria-label="Pilih Bahasa">
+                            <option>Bahasa Indonesia</option>
+                            <option>English</option>
+                            <option>Basa Jawa</option>
+                            <option>Basa Sunda</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Materi Belajar</h4>
+                    <ul class="footer-links">
+                        <li><a href="materi.html">Dasar Pemrograman</a></li>
+                        <li><a href="materi.html">Struktur Data</a></li>
+                        <li><a href="materi.html">Web Development</a></li>
+                        <li><a href="materi.html">OOP Java/C++</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Perusahaan</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#tentang">Tentang Kami</a></li>
+                        <li><a href="index.html#pricing">Paket Belajar</a></li>
+                        <li><a href="index.html#testimoni">Testimoni</a></li>
+                        <li><a href="index.html#kontak">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Komunitas</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Discord Community</a></li>
+                        <li><a href="#">Showcase Proyek</a></li>
+                        <li><a href="#">Leaderboard Global</a></li>
+                        <li><a href="#">Event Bulanan</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Dapatkan Aplikasi</h4>
+                    <div class="app-stores">
+                        <button class="store-badge" aria-label="Unduh di App Store">
+                            <span style="font-size: 24px; display: flex; align-items: center;"><i class="fa-brands fa-apple"></i></span>
+                            <div style="text-align: left;">
+                                <span class="store-sub">Download on the</span>
+                                <span class="store-title">App Store</span>
+                            </div>
+                        </button>
+                        <button class="store-badge" aria-label="Unduh di Google Play">
+                            <span style="font-size: 20px; display: flex; align-items: center;"><i class="fa-brands fa-google-play"></i></span>
+                            <div>
+                                <span class="store-sub">GET IT ON</span>
+                                <span class="store-title">Google Play</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="social-links">
+                        <button class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></button>
+                        <button class="social-btn" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></button>
+                        <button class="social-btn" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></button>
+                        <button class="social-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>©Â© 2026 Universe Of Tech. Built with passion for better learning.</span>
+                <div class="footer-legal-links">
+                    <a href="#">Kebijakan Privasi</a>
+                    <a href="#">Syarat Ketentuan</a>
+                    <a href="#">Kebijakan Cookie</a>
+                </div>
+            </div>
+        </footer>
     </main>
 
     <!-- Badge Detail Custom Modal popup -->
@@ -1340,7 +1678,7 @@
         <div class="lms-modal-content badge-modal-content">
             <div class="lms-modal-header">
                 <h3 class="lms-modal-title">Rincian Lencana Coder</h3>
-                <button class="lms-modal-close" id="badgeModalClose" type="button" aria-label="Tutup modal">×</button>
+                <button class="lms-modal-close" id="badgeModalClose" type="button" aria-label="Tutup modal">•</button>
             </div>
             <div class="lms-modal-body" id="badgeModalBody">
                 <!-- Injected via JS -->
@@ -1351,12 +1689,12 @@
     <!-- LMS Certificate Toast notification -->
     <div class="learning-toast" id="quizToast" role="status" aria-live="polite"></div>
 
-    <script src="js/app-data.js"></script>
-    <script src="js/sound-engine.js"></script>
-    <script src="js/quiz-core.js"></script>
-    <script src="js/quiz-question-bank.js"></script>
-    <script src="js/auth-helper.js"></script>
-    <script src="js/lms-quiz.js"></script>
+    <script src="app-data.js"></script>
+    <script src="sound-engine.js"></script>
+    <script src="quiz-core.js"></script>
+    <script src="quiz-question-bank.js"></script>
+    <script src="auth-helper.js"></script>
+    <script src="lms-quiz.js"></script>
     <script>
         (() => {
             const allAchievements = [
@@ -1364,7 +1702,7 @@
                     id: 'first_step', 
                     title: 'First Step Coder', 
                     desc: 'Selesaikan pendaftaran atau checklist profil pertamamu.', 
-                    icon: '🚶‍♂️', 
+                    icon: '?????', 
                     xp: 50,
                     category: 'basics',
                     quote: '"Langkah pertama adalah langkah terpenting dalam perjalanan seribu mil." - Lao Tzu'
@@ -1373,7 +1711,7 @@
                     id: 'drill_champion', 
                     title: 'Drill Champion', 
                     desc: 'Selesaikan kuis Arena harian pertama.', 
-                    icon: '⚡', 
+                    icon: '?', 
                     xp: 80,
                     category: 'challenges',
                     quote: '"Repetisi adalah ibu dari segala keahlian." - Pepatah Kuno'
@@ -1382,7 +1720,7 @@
                     id: 'sandbox_hacker', 
                     title: 'Sandbox Hacker', 
                     desc: 'Jalankan atau visualisasikan kode Javascript di Sandbox.', 
-                    icon: '💻', 
+                    icon: '??', 
                     xp: 100,
                     category: 'sandbox',
                     quote: '"Kode adalah puisi yang tertulis dalam angka dan instruksi." - Developer Anonim'
@@ -1391,7 +1729,7 @@
                     id: 'sql_master', 
                     title: 'SQL Warlord', 
                     desc: 'Jalankan kueri SQL tingkat lanjut di Sandbox.', 
-                    icon: '🗄️', 
+                    icon: '???', 
                     xp: 120,
                     category: 'database',
                     quote: '"Data adalah minyak baru di era digital, dan SQL adalah bornya." - Clive Humby'
@@ -1400,7 +1738,7 @@
                     id: 'security_expert', 
                     title: 'Security Warden', 
                     desc: 'Simulasikan ancaman keamanan siber.', 
-                    icon: '🛡️', 
+                    icon: '???', 
                     xp: 150,
                     category: 'security',
                     quote: '"Satu-satunya sistem yang benar-benar aman adalah sistem yang dimatikan dan dicor semen." - Gene Spafford'
@@ -1409,7 +1747,7 @@
                     id: 'sqli_hacker', 
                     title: 'SQL Injection Breaker', 
                     desc: 'Visualisasikan pembobolan basis data via injeksi kueri.', 
-                    icon: '☠️', 
+                    icon: '??', 
                     xp: 150,
                     category: 'security',
                     quote: '"Untuk mengalahkan penyerang, Anda harus berpikir seperti penyerang." - Pakar Keamanan siber'
@@ -1418,7 +1756,7 @@
                     id: 'level_legend', 
                     title: 'Tech Legend', 
                     desc: 'Capai Level 5 dalam RPG Pengembang.', 
-                    icon: '👑', 
+                    icon: '??', 
                     xp: 200,
                     category: 'basics',
                     quote: '"Setiap programmer hebat memulai sebagai programmer yang biasa-biasa saja." - Harvey Abelson'
@@ -1427,7 +1765,7 @@
                     id: 'pro_badge', 
                     title: 'Pro Member', 
                     desc: 'Langganan paket Pro untuk membuka akses tidak terbatas.', 
-                    icon: '🏆', 
+                    icon: '??', 
                     xp: 250,
                     category: 'basics',
                     quote: '"Investasi terbaik adalah investasi pada diri sendiri." - Benjamin Franklin'
@@ -1508,12 +1846,12 @@
             if (soundBtn) {
                 let savedSound = localStorage.getItem("eduquest_sound") !== "false";
                 soundEnabled = savedSound;
-                soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+                soundBtn.textContent = soundEnabled ? "??" : "??";
                 
                 soundBtn.addEventListener("click", () => {
                     soundEnabled = !soundEnabled;
                     localStorage.setItem("eduquest_sound", soundEnabled ? "true" : "false");
-                    soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+                    soundBtn.textContent = soundEnabled ? "??" : "??";
                     if (soundEnabled && typeof playSound === "function") {
                         try { playSound("click"); } catch(e){}
                     }
@@ -1621,7 +1959,7 @@
 
             if (avatarBtn && avatarDropdown && coderNameInput && rankBadge) {
                 // Load existing values from storage
-                const savedAvatar = rpg.avatar || "💻";
+                const savedAvatar = rpg.avatar || "??";
                 const savedName = rpg.nickname || (session?.username || "Coder Anonim");
                 
                 avatarBtn.textContent = savedAvatar;
@@ -1687,7 +2025,7 @@
                 body.innerHTML = `
                     <div class="badge-detail-hero">
                         <div class="badge-detail-icon" style="${isUnlocked ? 'border-color: var(--yellow);' : 'border-color: var(--border); opacity: 0.5;'}">
-                            ${isUnlocked ? ach.icon : '🔒'}
+                            ${isUnlocked ? ach.icon : '??'}
                         </div>
                         <div class="badge-detail-title">${ach.title}</div>
                         <div class="badge-detail-desc">${ach.desc}</div>
@@ -1832,18 +2170,18 @@
                 list.innerHTML = "";
 
                 const leaders = [
-                    { name: "Mega Byte", level: 7, xp: 6200, avatar: "🧙‍♂️", title: "AI Archmage" },
-                    { name: "Zero Bug", level: 6, xp: 4800, avatar: "🤖", title: "DevOps Architect" },
-                    { name: "Code Breaker", level: 5, xp: 2800, avatar: "🛡️", title: "Query Warlord" },
-                    { name: "Stack Overflow", level: 4, xp: 1950, avatar: "👾", title: "DOM Conqueror" },
-                    { name: "Hello World", level: 3, xp: 850, avatar: "🚀", title: "Logic Knight" }
+                    { name: "Mega Byte", level: 7, xp: 6200, avatar: "?????", title: "AI Archmage" },
+                    { name: "Zero Bug", level: 6, xp: 4800, avatar: "??", title: "DevOps Architect" },
+                    { name: "Code Breaker", level: 5, xp: 2800, avatar: "???", title: "Query Warlord" },
+                    { name: "Stack Overflow", level: 4, xp: 1950, avatar: "??", title: "DOM Conqueror" },
+                    { name: "Hello World", level: 3, xp: 850, avatar: "??", title: "Logic Knight" }
                 ];
 
                 const currentCoder = {
                     name: rpg.nickname || (session?.username || "Coder Anonim"),
                     level: myLevel,
                     xp: myXp,
-                    avatar: rpg.avatar || "💻",
+                    avatar: rpg.avatar || "??",
                     title: myTitle,
                     isCurrent: true
                 };
@@ -1948,7 +2286,7 @@
                         <div class="lock-overlay" style="${isUnlocked ? 'background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2);' : ''}">
                             <i class="fa-solid ${isUnlocked ? 'fa-check' : 'fa-lock'}"></i>
                         </div>
-                        <div class="badge-icon">${isUnlocked ? ach.icon : '🔒'}</div>
+                        <div class="badge-icon">${isUnlocked ? ach.icon : '??'}</div>
                         <div class="badge-title">${ach.title}</div>
                         <div class="badge-desc">${ach.desc}</div>
                         <div class="badge-xp" style="${isUnlocked ? 'background: rgba(139, 92, 246, 0.12); color: var(--purple);' : ''}">
@@ -2007,12 +2345,12 @@
             document.body.classList.toggle("dark-theme", savedTheme === "dark");
             const themeBtn = document.getElementById("themeToggleBtn");
             if (themeBtn) {
-                themeBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
+                themeBtn.textContent = savedTheme === "dark" ? "??" : "??";
                 themeBtn.addEventListener("click", () => {
                     document.body.classList.toggle("dark-theme");
                     const isDark = document.body.classList.contains("dark-theme");
                     localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
-                    themeBtn.textContent = isDark ? "☀️" : "🌙";
+                    themeBtn.textContent = isDark ? "??" : "??";
                     if (typeof playSound === "function") {
                         try { playSound("click"); } catch(err){}
                     }
@@ -2023,6 +2361,9 @@
             filterAndRender();
         })();
     </script>
-    <script src="js/coursera-home.js"></script>
+    <script src="bubub-ai.js"></script>
+    <script src="coursera-home.js"></script>
+    <script src="global-animations.js"></script>
 </body>
 </html>
+
