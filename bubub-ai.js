@@ -1,9 +1,9 @@
-﻿(function () {
+(function () {
     "use strict";
 
     const CONFIG = {
         name: "BUBUB",
-        logo: "assets/bubub-logo.png",
+        logo: "bubub-logo.png",
         maxHistory: 24,
         mainPages: new Set([
             "index.html",
@@ -14,6 +14,7 @@
             "learning-path.html",
             "snbt.html",
             "tka-lms.html",
+            "achievements.html",
             "login.html"
         ])
     };
@@ -69,6 +70,11 @@
             label: "TKA LMS",
             chips: ["Pilih subjek", "Mode ujian", "Analisis hasil", "Tips TKA", "Atur sesi"],
             intro: "Di TKA LMS, aku bisa bantu memilih subjek, mengatur mode latihan, dan memahami hasil belajar."
+        },
+        achievements: {
+            label: "Pencapaian",
+            chips: ["Cara buka lencana", "Cek XP saya", "Sertifikat jalur", "Milestone berikutnya", "Papan peringkat"],
+            intro: "Di halaman Pencapaian, aku bisa bantu menjelaskan cara membuka lencana, memantau XP, mengklaim sertifikat, dan melihat posisi di papan peringkat."
         },
         login: {
             label: "Login",

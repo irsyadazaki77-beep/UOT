@@ -108,7 +108,7 @@ body.dark-theme .navbar {
     top: calc(100% + 12px);
     left: 0;
     width: 780px; /* Expanded for 3 columns */
-    background: var(--card-bg);
+    background: var(--white);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: var(--glass-border);

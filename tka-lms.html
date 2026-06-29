@@ -1,19 +1,19 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>LMS TKA - Universe Of Tech</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/feature-pages.css">
-    <link rel="stylesheet" href="css/pro-experience.css?v=20260621-clean">
-    <link rel="stylesheet" href="css/nav-polish.css">
-    <link rel="stylesheet" href="css/mobile-compat.css">
-    <link rel="stylesheet" href="css/bubub-ai.css">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* MEGA CSS UPGRADE - 20 ENHANCEMENTS */
@@ -613,6 +613,7 @@
             border-radius: 16px;
             margin-bottom: 24px;
             overflow-x: auto;
+            position: relative;
             scrollbar-width: none; /* Hide scrollbar for Firefox */
         }
         .lms-workspace-tabs::-webkit-scrollbar {
@@ -639,21 +640,30 @@
             justify-content: center;
             gap: 8px;
             white-space: nowrap;
+            position: relative;
+            z-index: 1;
         }
         .tab-btn i {
             font-size: 14px;
+            transition: transform 0.25s ease;
         }
         .tab-btn:hover {
             color: var(--text);
             background: rgba(255, 255, 255, 0.05);
         }
+        .tab-btn:hover i {
+            transform: scale(1.15) translateY(-1px);
+        }
         body:not(.dark-theme) .tab-btn:hover {
             background: rgba(0, 0, 0, 0.03);
         }
         .tab-btn.active {
-            color: white;
+            color: white !important;
             background: linear-gradient(135deg, var(--blue), var(--purple));
-            box-shadow: 0 8px 20px rgba(79, 140, 255, 0.25);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.25);
+        }
+        body:not(.dark-theme) .tab-btn.active {
+            color: white !important;
         }
         .tab-pane {
             display: none;
@@ -678,12 +688,12 @@
             backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.08) !important;
             border-radius: 20px !important;
-            padding: 16px !important;
+            padding: 18px !important;
             transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
             display: flex;
             flex-direction: column;
-            gap: 10px !important;
+            gap: 12px !important;
         }
         body:not(.dark-theme) .lms-analytics-card {
             background: rgba(255, 255, 255, 0.7) !important;
@@ -691,18 +701,18 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02) !important;
         }
         .lms-analytics-card:hover {
-            transform: translateY(-3px) scale(1.01);
+            transform: translateY(-4px) scale(1.02);
             border-color: rgba(79, 140, 255, 0.4) !important;
             box-shadow: 0 15px 35px rgba(79, 140, 255, 0.15) !important;
         }
         .lms-analytics-card h3 {
-            font-size: 16px !important;
-            font-weight: 700 !important;
+            font-size: 17px !important;
+            font-weight: 750 !important;
             margin: 4px 0 !important;
             color: var(--text);
         }
         .lms-analytics-row {
-            font-size: 12px !important;
+            font-size: 13px !important;
             font-weight: 600 !important;
             display: flex;
             justify-content: space-between;
@@ -722,8 +732,8 @@
             padding-right: 4px;
         }
         .history-row {
-            grid-template-columns: 90px 1fr 110px 130px !important;
-            padding: 12px 18px !important;
+            grid-template-columns: 90px 1fr 110px 140px !important;
+            padding: 14px 18px !important;
             border-radius: 12px;
             margin-bottom: 8px;
             background: rgba(255, 255, 255, 0.02);
@@ -737,7 +747,7 @@
         .history-row:hover {
             background: rgba(79, 140, 255, 0.08) !important;
             border-color: rgba(79, 140, 255, 0.2);
-            transform: translateX(4px);
+            transform: translateX(6px);
         }
         .history-controls {
             display: flex;
@@ -803,8 +813,79 @@
             border-color: rgba(79, 140, 255, 0.3) !important;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
+
+        /* Interactive Strategy Action Cards */
+        .strategy-action-card {
+            display: grid;
+            grid-template-columns: 42px 1fr 20px;
+            gap: 14px;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--card-bg);
+            color: var(--text);
+            font-family: inherit;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .strategy-action-card:hover {
+            transform: translateX(4px);
+            border-color: var(--blue);
+            background: var(--surface-2);
+            box-shadow: 0 4px 12px rgba(79, 140, 255, 0.06);
+        }
+        .action-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+        .strategy-action-card:hover .action-card-icon {
+            transform: scale(1.1);
+        }
+        .action-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .action-card-body strong {
+            font-size: 13.5px;
+            font-weight: 750;
+            color: var(--text);
+        }
+        .action-card-body p {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.4;
+        }
+        .action-card-arrow {
+            color: var(--muted);
+            font-size: 12px;
+            text-align: right;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .strategy-action-card:hover .action-card-arrow {
+            transform: translateX(2px);
+            color: var(--blue);
+        }
+
+        /* Search Match Highlight */
+        .search-match-highlight {
+            background: rgba(255, 209, 102, 0.24);
+            color: inherit;
+            padding: 1px 2px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
     </style>
-    <link rel="stylesheet" href="css/coursera-home.css">
+    <link rel="stylesheet" href="coursera-home.css">
 </head>
 
 <body data-page="tka-lms">
@@ -816,7 +897,7 @@
                                                 <nav class="navbar">
             <div class="nav-left-group">
                 <a href="index.html" class="brand">
-                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
                     Universe Of Tech
                 </a>
                 <div class="explore-wrapper">
@@ -831,37 +912,37 @@
                             <ul class="mega-list">
                                 <li>
                                     <a href="materi-basic.html" class="mega-item-link">
-                                        <div class="mega-icon-box">💻</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Dasar Pemrograman</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🧠</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Struktur Data</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🌐</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Web Development</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="snbt.html" class="mega-item-link">
-                                        <div class="mega-icon-box">📈</div>
-                                        <span>Persiapan UTBK SNBT</span>
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Persiapan TKA SNBP</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="tka-lms.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🏛</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>LMS TKA</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="bahasa-daerah.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <div class="mega-icon-box">????</div>
                                         <span>Wonderful Indonesia</span>
                                     </a>
                                 </li>
@@ -873,31 +954,31 @@
                             <ul class="mega-list">
                                 <li>
                                     <a href="learning-path.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🗺</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Roadmap Belajar</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="leaderboard.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🏆</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Leaderboard</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="achievements.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🏅</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Pencapaian</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="profile.html" class="mega-item-link">
-                                        <div class="mega-icon-box">👤</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Profil Saya</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="payment.html" class="mega-item-link">
-                                        <div class="mega-icon-box">👑</div>
+                                        <div class="mega-icon-box">??</div>
                                         <span>Upgrade Pro</span>
                                     </a>
                                 </li>
@@ -939,7 +1020,7 @@
 
             <div class="nav-actions">
                 <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">🌙</button>
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">??</button>
                 <a class="btn btn-ghost" href="login.html">Masuk</a>
                 <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
             </div>
@@ -1293,18 +1374,18 @@
         </div>
         
         <footer class="section">
-            <span>&copy; 2026 Universe Of Tech. LMS TKA Practice Mode.</span>
+            <span>&copy;Â© 2026 Universe Of Tech. LMS TKA Practice Mode.</span>
             <span>Progress disimpan secara lokal di browser kamu (Local Storage).</span>
         </footer>
     </main>
     <div class="toast" id="toast"></div>
-    <script src="js/auth-helper.js"></script>
-    <script src="js/tka-question-supplement.js"></script>
-    <script src="js/tka-explanations.js"></script>
-    <script src="js/pro-learning-engine.js"></script>
-    <script src="js/feature-pages.js"></script>
-    <script src="js/pro-experience.js?v=20260621-clean"></script>
-    <script src="js/bubub-ai.js"></script>
+    <script src="auth-helper.js"></script>
+    <script src="tka-question-supplement.js"></script>
+    <script src="tka-explanations.js"></script>
+    <script src="pro-learning-engine.js"></script>
+    <script src="feature-pages.js"></script>
+    <script src="pro-experience.js?v=20260621-clean"></script>
+    <script src="bubub-ai.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const tabButtons = document.querySelectorAll(".tab-btn");
@@ -1347,7 +1428,8 @@
             });
         });
     </script>
-    <script src="js/coursera-home.js"></script>
+    <script src="coursera-home.js"></script>
 </body>
 
 </html>
+

@@ -481,11 +481,97 @@
             console.error("Clean navbar failed:", e);
         }
     }
+    function injectBububShortcut() {
+        try {
+            const navActions = document.querySelector(".nav-actions");
+            if (!navActions) return;
+            if (document.getElementById("navBububShortcut")) return;
+
+            // Inject styles if not present
+            if (!document.getElementById("navBububStyles")) {
+                const style = document.createElement("style");
+                style.id = "navBububStyles";
+                style.textContent = `
+                    .bubub-nav-shortcut {
+                        background: none;
+                        border: none;
+                        font-size: 18px;
+                        cursor: pointer;
+                        padding: 8px;
+                        border-radius: 50%;
+                        transition: background 0.3s, transform 0.2s;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 38px;
+                        height: 38px;
+                        color: var(--blue, #4361ee);
+                        margin-right: 8px;
+                    }
+                    .bubub-nav-shortcut:hover {
+                        background: var(--item-bg, rgba(0, 0, 0, 0.05));
+                        transform: scale(1.08);
+                    }
+                    body.dark-theme .bubub-nav-shortcut {
+                        color: #70a1ff;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            const shortcut = document.createElement("button");
+            shortcut.id = "navBububShortcut";
+            shortcut.className = "bubub-nav-shortcut";
+            shortcut.type = "button";
+            shortcut.title = "Tanya BUBUB (AI)";
+            shortcut.setAttribute("aria-label", "Tanya BUBUB (AI)");
+            shortcut.innerHTML = `<i class="fa-solid fa-sparkles"></i>`;
+            
+            shortcut.addEventListener("click", () => {
+                if (window.BUBUBAI) {
+                    window.BUBUBAI.open();
+                } else {
+                    const scriptTag = document.querySelector('script[src*="bubub-ai.js"]');
+                    if (scriptTag) {
+                        window.BUBUBAI?.open();
+                    } else {
+                        if (!document.querySelector('link[href*="bubub-ai.css"]')) {
+                            const link = document.createElement("link");
+                            link.rel = "stylesheet";
+                            link.href = "bubub-ai.css";
+                            document.head.appendChild(link);
+                        }
+                        const script = document.createElement("script");
+                        script.src = "bubub-ai.js";
+                        script.onload = () => {
+                            setTimeout(() => {
+                                window.BUBUBAI?.open();
+                            }, 150);
+                        };
+                        document.body.appendChild(script);
+                    }
+                }
+                if (typeof window.playSound === "function") {
+                    try { window.playSound("click"); } catch(e){}
+                }
+            });
+
+            const themeBtn = document.getElementById("themeToggleBtn") || navActions.querySelector(".theme-toggle-btn");
+            if (themeBtn) {
+                navActions.insertBefore(shortcut, themeBtn);
+            } else {
+                navActions.appendChild(shortcut);
+            }
+        } catch (e) {
+            console.error("Failed to inject BUBUB shortcut:", e);
+        }
+    }
 
     function initAuthAndSub() {
         updateNavbarForSession();
         updateSubscriptionBadge();
         cleanAndRestructureNavbar();
+        injectBububShortcut();
         document.addEventListener("touchstart", () => {}, { passive: true });
     }
 

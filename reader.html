@@ -1,17 +1,17 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Membaca Buku - Universe Of Tech</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/feature-pages.css">
-    <link rel="stylesheet" href="css/nav-polish.css">
-    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="mobile-compat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Base Reset override to support immersive reader themes */
@@ -796,7 +796,7 @@
                         <span class="footer-progress-percent" id="footerProgressPercent">Progress: 0% dibaca</span>
                         <span class="footer-progress-pages" id="footerProgressPages">Bab X dari Y</span>
                         <!-- Sisa Waktu Baca -->
-                        <span id="readerTimeRemainingBadge" style="font-size: 11.5px; font-weight: 800; color: var(--muted); margin-top: 4px; display: block;">⏱️ Sisa 0 menit</span>
+                        <span id="readerTimeRemainingBadge" style="font-size: 11.5px; font-weight: 800; color: var(--muted); margin-top: 4px; display: block;">?? Sisa 0 menit</span>
                     </div>
 
                     <button class="setting-btn" id="btnNextChapter" style="background: var(--blue); color: white; border-color: transparent;">
@@ -850,9 +850,9 @@
     <div class="toast" id="toast"></div>
 
     <!-- SCRIPT DEPS -->
-    <script src="js/auth-helper.js"></script>
-    <script src="js/sound-engine.js"></script>
-    <script src="js/book-data.js"></script>
+    <script src="auth-helper.js"></script>
+    <script src="sound-engine.js"></script>
+    <script src="book-data.js"></script>
     <script>
         // Immersive Focus E-Book Reader Logic
         (function() {
@@ -1058,7 +1058,7 @@
                     const progressBar = document.getElementById("scrollProgressBar");
                     if (progressBar) progressBar.style.width = "0%";
                     const timeBadge = document.getElementById("readerTimeRemainingBadge");
-                    if (timeBadge) timeBadge.textContent = `⏱️ Sisa 0 menit`;
+                    if (timeBadge) timeBadge.textContent = `?? Sisa 0 menit`;
                     return;
                 }
                 const scrollTop = contentArea.scrollTop;
@@ -1077,7 +1077,7 @@
 
                 const timeBadge = document.getElementById("readerTimeRemainingBadge");
                 if (timeBadge) {
-                    timeBadge.textContent = `⏱️ Sisa ${minutesRemaining} menit`;
+                    timeBadge.textContent = `?? Sisa ${minutesRemaining} menit`;
                 }
             }
 
@@ -1168,7 +1168,7 @@
                 el.readerNoteArea.value += quoteBlock;
                 
                 saveBookNote(true);
-                showToast("Kutipan disematkan ke Catatan Belajar! 📌");
+                showToast("Kutipan disematkan ke Catatan Belajar! ??");
                 playSoundFx("success");
                 
                 if (el.readerNotesSidebar.classList.contains("collapsed")) {
@@ -1200,7 +1200,7 @@
                         if (nextEl && nextEl.tagName === "P") {
                             snippet = nextEl.textContent.substring(0, 120) + "...";
                         } else if (nextEl && (nextEl.tagName === "UL" || nextEl.tagName === "OL")) {
-                            snippet = Array.from(nextEl.querySelectorAll("li")).slice(0, 2).map(li => `• ${li.textContent}`).join("<br/>");
+                            snippet = Array.from(nextEl.querySelectorAll("li")).slice(0, 2).map(li => `? ${li.textContent}`).join("<br/>");
                         }
                         
                         summaryHtml += `
@@ -1590,7 +1590,7 @@
                         changeChapter(activeChapterIndex + 1);
                     } else {
                         // Book read fully finished
-                        showToast("Hebat! Anda telah menyelesaikan seluruh bab buku ini. 🎉");
+                        showToast("Hebat! Anda telah menyelesaikan seluruh bab buku ini. ??");
                         playSoundFx("success");
                         setTimeout(() => {
                             window.location.href = "library.html";
@@ -1768,7 +1768,7 @@
                 if (isAuto) {
                     showAutosaveStatus("saved");
                 } else {
-                    showToast("Catatan tersimpan! 📝");
+                    showToast("Catatan tersimpan! ??");
                     playSoundFx("success");
                 }
             }
@@ -1840,3 +1840,4 @@
 </body>
 
 </html>
+

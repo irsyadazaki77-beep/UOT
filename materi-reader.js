@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     "use strict";
 
     const curriculum = window.QNCurriculum;
@@ -69,7 +69,7 @@
     }
 
     function iconForStatus(status) {
-        return status === "mastered" ? "★" : status === "completed" ? "✓" : status === "locked" ? "🔒" : "•";
+        return status === "mastered" ? "?" : status === "completed" ? "?" : status === "locked" ? "??" : "•";
     }
 
     function buildSidebar() {
@@ -88,7 +88,7 @@
                     ${track.chapters.map((item, chapterIndex) => `
                         <section class="reader-chapter ${item.id === chapter.id ? "open" : ""}">
                             <button class="reader-chapter-toggle" type="button" aria-expanded="${item.id === chapter.id}">
-                                <span><strong>${chapterIndex + 1}. ${item.title}</strong><small>${item.lessons.length} pelajaran</small></span><span>⌄</span>
+                                <span><strong>${chapterIndex + 1}. ${item.title}</strong><small>${item.lessons.length} pelajaran</small></span><span>?</span>
                             </button>
                             <div class="reader-lesson-list">
                                 ${item.lessons.map((itemLesson) => {
@@ -119,20 +119,20 @@
         root.innerHTML = `
             <div class="reader-page-progress" aria-hidden="true"><i id="readerPageProgress"></i></div>
             <header class="reader-header">
-                <a class="reader-brand" href="materi.html"><img src="assets/logo.png" alt=""><span>Universe Of Tech</span></a>
+                <a class="reader-brand" href="materi.html"><img src="logo.png" alt=""><span>Universe Of Tech</span></a>
                 <div class="reader-header-progress">
                     <div><span>${track.title}</span><span>${trackProgress.completed}/${trackProgress.total} • ${trackProgress.percent}%</span></div>
                     <div class="reader-progress-bar"><i style="--value:${trackProgress.percent}%"></i></div>
                 </div>
                 <div class="reader-actions">
-                    <button class="reader-icon-btn reader-mobile-menu" id="readerMenuBtn" type="button" aria-label="Buka daftar pelajaran">☰</button>
+                    <button class="reader-icon-btn reader-mobile-menu" id="readerMenuBtn" type="button" aria-label="Buka daftar pelajaran">?</button>
                     <div class="reader-font-controls" aria-label="Ukuran teks">
                         <button class="reader-icon-btn" id="readerFontDownBtn" type="button" aria-label="Perkecil teks">A-</button>
                         <button class="reader-icon-btn" id="readerFontUpBtn" type="button" aria-label="Perbesar teks">A+</button>
                     </div>
-                    <button class="reader-icon-btn" id="readerThemeBtn" type="button" aria-label="Ganti tema" title="Ganti tema">◐</button>
-                    <button class="reader-icon-btn ${record.bookmarked ? "active" : ""}" id="readerBookmarkBtn" type="button" aria-label="Bookmark pelajaran" aria-pressed="${record.bookmarked}" title="Bookmark (B)">★</button>
-                    <button class="reader-icon-btn" id="readerFocusBtn" type="button" aria-label="Mode fokus" aria-pressed="false" title="Mode fokus (F)">◉</button>
+                    <button class="reader-icon-btn" id="readerThemeBtn" type="button" aria-label="Ganti tema" title="Ganti tema">?</button>
+                    <button class="reader-icon-btn ${record.bookmarked ? "active" : ""}" id="readerBookmarkBtn" type="button" aria-label="Bookmark pelajaran" aria-pressed="${record.bookmarked}" title="Bookmark (B)">?</button>
+                    <button class="reader-icon-btn" id="readerFocusBtn" type="button" aria-label="Mode fokus" aria-pressed="false" title="Mode fokus (F)">?</button>
                 </div>
             </header>
             <button class="reader-sidebar-backdrop" id="readerSidebarBackdrop" type="button" aria-label="Tutup daftar pelajaran"></button>
@@ -222,11 +222,11 @@
 
                         <div class="reader-completion">
                             <div><strong id="completionTitle">${record.status === "mastered" ? "Pelajaran sudah mastered" : "Siap menyelesaikan pelajaran?"}</strong><p id="completionText">Mastery memerlukan latihan selesai dan checkpoint minimal 75%.</p></div>
-                            <button class="btn btn-primary" id="completeLessonBtn" type="button">${record.status === "mastered" ? "Mastered ✓" : "Tandai Selesai"}</button>
+                            <button class="btn btn-primary" id="completeLessonBtn" type="button">${record.status === "mastered" ? "Mastered ?" : "Tandai Selesai"}</button>
                         </div>
                         <nav class="reader-footer-nav" aria-label="Navigasi pelajaran">
-                            ${previous ? `<a class="reader-nav-link" href="${lessonUrl(previous)}"><small>← Sebelumnya</small><strong>${previous.lesson.title}</strong></a>` : `<span class="reader-nav-link disabled"><small>Awal jalur</small><strong>Tidak ada pelajaran sebelumnya</strong></span>`}
-                            ${next ? `<a class="reader-nav-link next ${nextState === "locked" ? "disabled" : ""}" href="${lessonUrl(next)}"><small>Berikutnya →</small><strong>${next.lesson.title}</strong></a>` : `<a class="reader-nav-link next" href="materi.html?track=${track.id}"><small>Selesai</small><strong>Kembali ke dashboard</strong></a>`}
+                            ${previous ? `<a class="reader-nav-link" href="${lessonUrl(previous)}"><small>? Sebelumnya</small><strong>${previous.lesson.title}</strong></a>` : `<span class="reader-nav-link disabled"><small>Awal jalur</small><strong>Tidak ada pelajaran sebelumnya</strong></span>`}
+                            ${next ? `<a class="reader-nav-link next ${nextState === "locked" ? "disabled" : ""}" href="${lessonUrl(next)}"><small>Berikutnya ?</small><strong>${next.lesson.title}</strong></a>` : `<a class="reader-nav-link next" href="materi.html?track=${track.id}"><small>Selesai</small><strong>Kembali ke dashboard</strong></a>`}
                         </nav>
                     </article>
                 </main>
@@ -252,7 +252,7 @@
                     <p>Nilai minimum: <strong>${capstone.passingScore}</strong> • Hadiah: <strong>${capstone.xp} XP</strong></p>
                     <label for="capstoneScore"><strong>Nilai review capstone</strong></label>
                     <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
-                        <input id="capstoneScore" type="number" min="0" max="100" value="${capstoneRecord.bestScore || ""}" placeholder="0–100" style="min-height:44px;max-width:130px;border:1px solid var(--border);border-radius:13px;padding:0 12px;background:var(--item-bg);color:var(--dark);">
+                        <input id="capstoneScore" type="number" min="0" max="100" value="${capstoneRecord.bestScore || ""}" placeholder="0•100" style="min-height:44px;max-width:130px;border:1px solid var(--border);border-radius:13px;padding:0 12px;background:var(--item-bg);color:var(--dark);">
                         <button class="btn btn-primary" id="submitCapstone" type="button">Simpan Penilaian</button>
                     </div>
                     <p id="capstoneFeedback" style="margin-top:10px;">${capstoneRecord.passed ? "Capstone lulus dan jalur siap dipresentasikan." : "Gunakan rubrik untuk self-review atau review bersama mentor."}</p>
@@ -614,11 +614,11 @@
         if (record.status === "mastered") {
             title.textContent = "Pelajaran sudah mastered";
             text.textContent = "Latihan selesai dan checkpoint memenuhi batas mastery.";
-            button.textContent = "Mastered ✓";
+            button.textContent = "Mastered ?";
         } else {
             title.textContent = "Siap menyelesaikan pelajaran?";
             text.textContent = `Praktik: ${record.practiceCompleted ? "selesai" : "belum"} • Skor terbaik: ${record.bestScore || 0}%`;
-            button.textContent = record.status === "completed" ? "Selesai ✓" : "Tandai Selesai";
+            button.textContent = record.status === "completed" ? "Selesai ?" : "Tandai Selesai";
         }
         document.getElementById("lessonStatusPill").textContent = record.status.replace("_", " ");
     }

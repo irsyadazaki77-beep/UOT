@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#08111f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
@@ -11,9 +11,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/quiz-session.css">
-    <link rel="stylesheet" href="css/mobile-compat.css">
-    <link rel="stylesheet" href="css/tka-quiz-polish.css">
+    <link rel="stylesheet" href="quiz-session.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="tka-quiz-polish.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 </head>
@@ -21,7 +21,7 @@
     <main class="focus-room" id="focusRoom">
         <header class="focus-header">
             <a class="focus-brand" href="tka-lms.html" id="exitLink" aria-label="Keluar ke halaman dashboard">
-                <img src="assets/logo.png" alt="" aria-hidden="true">
+                <img src="logo.png" alt="" aria-hidden="true">
                 <span>TKA Focus Room</span>
             </a>
 
@@ -31,10 +31,13 @@
             </div>
 
             <div class="focus-header-actions">
-                <button class="icon-button" id="tkaReadableToggle" type="button" aria-label="Ubah ukuran teks">Aa</button>
-                <button class="icon-button" id="tkaFullscreenToggle" type="button" aria-label="Aktifkan layar penuh"><i class="fa-solid fa-expand" aria-hidden="true"></i></button>
-                <button class="icon-button" id="themeToggleBtn" type="button" aria-label="Ganti tema" aria-pressed="true">Tema</button>
-                <a class="exit-button" href="tka-lms.html">Keluar</a>
+                <button class="icon-button" id="tkaReadableToggle" type="button" aria-label="Ubah ukuran teks" title="Ubah Ukuran Teks">Aa</button>
+                <button class="icon-button" id="tkaFullscreenToggle" type="button" aria-label="Aktifkan layar penuh" title="Layar Penuh"><i class="fa-solid fa-expand" aria-hidden="true"></i></button>
+                <button class="icon-button" id="themeToggleBtn" type="button" aria-label="Ganti tema" aria-pressed="true" title="Ganti Tema"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+                <a class="exit-button" href="tka-lms.html" title="Keluar ke Dashboard TKA">
+                    <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+                    <span>Keluar</span>
+                </a>
             </div>
         </header>
 
@@ -64,15 +67,18 @@
                 </div>
 
                 <div class="lms-note-box">
-                    <label for="tkaQuestionNote">Catatan Konsep (Disimpan di Browser)</label>
+                    <label for="tkaQuestionNote"><i class="fa-regular fa-pen-to-square"></i> Catatan Konsep (Disimpan di Browser)</label>
                     <textarea id="tkaQuestionNote" placeholder="Tulis alasan salah, rumus, kata kunci, atau strategi pengerjaan..."></textarea>
-                    <button class="action-button secondary" id="tkaSaveNote" type="button">Simpan Catatan</button>
+                    <button class="action-button secondary" id="tkaSaveNote" type="button"><i class="fa-regular fa-floppy-disk"></i> Simpan Catatan</button>
                 </div>
             </article>
 
             <aside class="focus-sidebar" id="focusSidebar">
                 <div class="timer-card" id="timerCard">
-                    <span>Sisa waktu</span>
+                    <div class="timer-label">
+                        <i class="fa-regular fa-clock" aria-hidden="true"></i>
+                        <span>Sisa waktu</span>
+                    </div>
                     <strong id="tkaTimerDisplay">00:00</strong>
                 </div>
 
@@ -106,15 +112,15 @@
     <div class="focus-toast" id="toast" role="status" aria-live="polite"></div>
     <dialog class="quiz-dialog" id="tkaShortcutDialog" aria-labelledby="shortcutTitle">
         <div class="dialog-head"><h2 id="shortcutTitle">Pintasan Keyboard</h2><button type="button" data-close-dialog aria-label="Tutup">&times;</button></div>
-        <div class="shortcut-grid"><kbd>A–F</kbd><span>Pilih jawaban</span><kbd>Enter</kbd><span>Submit jawaban</span><kbd>← / →</kbd><span>Soal sebelumnya / berikutnya</span><kbd>H</kbd><span>Tampilkan hint</span><kbd>R</kbd><span>Tandai review</span></div>
+        <div class="shortcut-grid"><kbd>A•F</kbd><span>Pilih jawaban</span><kbd>Enter</kbd><span>Submit jawaban</span><kbd>? / ?</kbd><span>Soal sebelumnya / berikutnya</span><kbd>H</kbd><span>Tampilkan hint</span><kbd>R</kbd><span>Tandai review</span></div>
     </dialog>
     <dialog class="quiz-dialog result-dialog" id="tkaResultDialog" aria-labelledby="resultTitle">
         <div class="dialog-head"><h2 id="resultTitle">Ringkasan Latihan</h2><button type="button" data-close-dialog aria-label="Tutup">&times;</button></div>
         <div id="tkaResultContent"></div>
         <div class="dialog-actions"><button class="action-button secondary" type="button" data-close-dialog>Kembali ke soal</button><a class="action-button primary" href="tka-lms.html#lms-dashboard">Selesai</a></div>
     </dialog>
-    <script src="js/tka-question-supplement.js"></script>
-    <script src="js/feature-pages.js"></script>
+    <script src="tka-question-supplement.js"></script>
+    <script src="feature-pages.js"></script>
     <script>
         let prefs = null;
         try {
@@ -165,4 +171,5 @@
     </script>
 </body>
 </html>
+
 

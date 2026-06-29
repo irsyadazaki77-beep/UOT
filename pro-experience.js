@@ -183,7 +183,7 @@
         const brand = navbar?.querySelector(".brand");
         if (!navbar || !brand) return;
 
-        navbar.classList.add("pro-navbar");
+        // Keep the same structural layout model as Basic mode navbar (do not add pro-navbar override class)
         const subscriptionBadge = navbar.querySelector("#navSubscriptionBadge, .subscription-badge.pro");
         if (subscriptionBadge) {
             subscriptionBadge.classList.add("pro-nav-chip");

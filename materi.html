@@ -2,16 +2,16 @@
 <html lang="id">
 
 <head>
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="js/security-helper.js"></script>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script src="security-helper.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Universe Of Tech - Halaman Materi</title>
     <meta name="description" content="Kembangkan keahlian tech Anda di Universe Of Tech. Pelajari dasar pemrograman, database SQL, web development, dan keamanan siber secara interaktif." />
     <link rel="canonical" href="http://localhost:8000/materi.html" />
     <meta property="og:title" content="Universe Of Tech - Halaman Materi" />
     <meta property="og:description" content="Pelajari programming, web dev, database, UI/UX, dan cyber security secara interaktif dengan sistem RPG harian." />
-    <meta property="og:image" content="assets/logo.png" />
+    <meta property="og:image" content="logo.png" />
     <meta property="og:type" content="website" />
     <script type="application/ld+json">
     {
@@ -29,7 +29,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="css/pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="global-animations.css">
     <style>
         :root {
             --green: #32d66b;
@@ -2280,13 +2281,64 @@
                 transition: none !important;
             }
         }
-    </style>
-    <link rel="stylesheet" href="css/nav-polish.css">
-    <link rel="stylesheet" href="css/materi-v2.css">
-    <link rel="stylesheet" href="css/mobile-compat.css">
-    <link rel="stylesheet" href="css/bubub-ai.css">
+    
+        /* --- Premium Feature Tab Layout --- */
+        .feature-tabs-nav {
+            display: flex;
+            justify-content: center;
+            margin: 40px auto 20px;
+            width: min(1180px, calc(100% - 40px));
+            gap: 12px;
+            flex-wrap: wrap;
+            z-index: 10;
+            position: relative;
+        }
+        .feature-tab-btn {
+            padding: 14px 24px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--card-bg);
+            color: var(--muted);
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(18px);
+            box-shadow: var(--shadow-soft);
+        }
+        .feature-tab-btn.active {
+            color: white !important;
+            background: linear-gradient(135deg, var(--green), var(--blue)) !important;
+            border-color: transparent !important;
+            box-shadow: 0 8px 24px rgba(50, 214, 107, 0.25) !important;
+            transform: translateY(-2px);
+        }
+        .feature-tab-btn:hover:not(.active) {
+            color: var(--green-dark) !important;
+            border-color: var(--green) !important;
+            transform: translateY(-2px);
+        }
+        body.dark-theme .feature-tab-btn:hover:not(.active) {
+            color: var(--green) !important;
+        }
+        .tab-content-panel {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .tab-content-panel.active {
+            display: block;
+            opacity: 1;
+        }</style>
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="materi-v2.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="bubub-ai.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/coursera-home.css">
+    <link rel="stylesheet" href="coursera-home.css">
 </head>
 
 <body data-page="materi">
@@ -2304,7 +2356,7 @@
                                                 <nav class="navbar">
             <div class="nav-left-group">
                 <a href="index.html" class="brand">
-                    <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
                     Universe Of Tech
                 </a>
                 <div class="explore-wrapper">
@@ -2325,7 +2377,7 @@
                                 </li>
                                 <li>
                                     <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🧠</div>
+                                        <div class="mega-icon-box">📄</div>
                                         <span>Struktur Data</span>
                                     </a>
                                 </li>
@@ -2337,19 +2389,19 @@
                                 </li>
                                 <li>
                                     <a href="snbt.html" class="mega-item-link">
-                                        <div class="mega-icon-box">📈</div>
-                                        <span>Persiapan UTBK SNBT</span>
+                                        <div class="mega-icon-box">📝</div>
+                                        <span>Persiapan TKA SNBP</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="tka-lms.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🏛</div>
+                                        <div class="mega-icon-box">🎓</div>
                                         <span>LMS TKA</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="bahasa-daerah.html" class="mega-item-link">
-                                        <div class="mega-icon-box">🇮🇩</div>
+                                        <div class="mega-icon-box">🇮🇹</div>
                                         <span>Wonderful Indonesia</span>
                                     </a>
                                 </li>
@@ -2385,7 +2437,7 @@
                                 </li>
                                 <li>
                                     <a href="payment.html" class="mega-item-link">
-                                        <div class="mega-icon-box">👑</div>
+                                        <div class="mega-icon-box">⚡</div>
                                         <span>Upgrade Pro</span>
                                     </a>
                                 </li>
@@ -2475,25 +2527,26 @@
                     <span>Avatar Shop (XP Store)</span>
                     <span id="rpgTotalXpText" style="font-size: 10px; text-transform: none; color: var(--blue); font-weight: 800;">Poin: 0 XP</span>
                 </h5>
-                <div class="rpg-shop-grid">
-                    <div class="rpg-shop-item" data-shop-avatar="🔮" data-shop-cost="150" title="Beli Avatar Cyber Wizard (150 XP)">
-                        <span class="item-avatar">🔮</span>
-                        <span class="item-cost">150 XP</span>
-                    </div>
-                    <div class="rpg-shop-item" data-shop-avatar="🚀" data-shop-cost="250" title="Beli Avatar Cosmic Dev (250 XP)">
-                        <span class="item-avatar">🚀</span>
-                        <span class="item-cost">250 XP</span>
-                    </div>
-                    <div class="rpg-shop-item" data-shop-avatar="🧙‍♂️" data-shop-cost="400" title="Beli Avatar AI Overlord (400 XP)">
-                        <span class="item-avatar">🧙‍♂️</span>
-                        <span class="item-cost">400 XP</span>
-                    </div>
-                    <div class="rpg-shop-item" data-shop-avatar="👑" data-shop-cost="600" title="Beli Avatar Tech Emperor (600 XP)">
-                        <span class="item-avatar">👑</span>
-                        <span class="item-cost">600 XP</span>
-                    </div>
+                            <div class="rpg-shop-grid">
+                <div class="rpg-shop-item" data-shop-avatar="🧙‍♂️" data-shop-cost="150" title="Beli Avatar Cyber Wizard (150 XP)">
+                    <span class="item-avatar">🧙‍♂️</span>
+                    <span class="item-cost">150 XP</span>
+                </div>
+                <div class="rpg-shop-item" data-shop-avatar="👨‍💻" data-shop-cost="250" title="Beli Avatar Cosmic Dev (250 XP)">
+                    <span class="item-avatar">👨‍💻</span>
+                    <span class="item-cost">250 XP</span>
+                </div>
+                <div class="rpg-shop-item" data-shop-avatar="🤖" data-shop-cost="400" title="Beli Avatar AI Overlord (400 XP)">
+                    <span class="item-avatar">🤖</span>
+                    <span class="item-cost">400 XP</span>
+                </div>
+                <div class="rpg-shop-item" data-shop-avatar="👑" data-shop-cost="600" title="Beli Avatar Tech Emperor (600 XP)">
+                    <span class="item-avatar">👑</span>
+                    <span class="item-cost">600 XP</span>
                 </div>
             </div>
+        </div>
+    </div>
         </div>
 
         <section class="hero">
@@ -2529,13 +2582,24 @@
                 </div>
             </aside>
         </section>
+        <nav class="feature-tabs-nav" aria-label="Navigasi Fitur Utama">
+            <button class="feature-tab-btn active" data-feature-tab="modules" type="button">
+                ðŸ“š <span>Modul & Jalur Belajar</span>
+            </button>
+            <button class="feature-tab-btn" data-feature-tab="sandbox" type="button">
+                âš¡ <span>Interactive Labs</span>
+            </button>
+            <button class="feature-tab-btn" data-feature-tab="planner" type="button">
+                ðŸ“… <span>Planner & RPG Stats</span>
+            </button>
+            <button class="feature-tab-btn" data-feature-tab="glossary" type="button">
+                ðŸƒ <span>Referensi & Flashcards</span>
+            </button>
+        </nav>
 
-        <section class="curriculum-dashboard motion-ready" id="curriculumDashboard" aria-label="Dashboard kurikulum">
-            <div class="curriculum-empty">
-                <h3>Menyiapkan kurikulum...</h3>
-                <p>Data jalur, progres, dan rekomendasi sedang dimuat.</p>
-            </div>
-        </section>
+        <div class='tab-content-panel active' id='tabPanel-modules'>
+
+        
 
         <section class="section study-os reveal" id="learning-os">
             <div class="study-panel">
@@ -2926,8 +2990,8 @@
                     <p style="max-width: 460px; text-align: right;">Ikuti dari fondasi logika sampai keamanan agar
                         pemahaman tech kamu tidak lompat-lompat.</p>
                     <div class="view-toggles" style="display: flex; gap: 8px;">
-                        <button class="filter-btn active" id="btnListView" type="button">📜 Daftar</button>
-                        <button class="filter-btn" id="btnUniverseView" type="button">🌌 Universe Map (Diluar
+                        <button class="filter-btn active" id="btnListView" type="button">📁 Daftar</button>
+                        <button class="filter-btn" id="btnUniverseView" type="button">?? Universe Map (Diluar
                             Nalar)</button>
                     </div>
                 </div>
@@ -2996,8 +3060,8 @@
                             style="display:block; width:100%; height:100%; cursor:grab;"></canvas>
                         <div
                             style="position:absolute; bottom:12px; left:12px; font-size:11px; color:rgba(255,255,255,0.5); pointer-events:none; background:rgba(0,0,0,0.5); padding:4px 8px; border-radius:8px; display:flex; flex-direction:column; gap:2px;">
-                            <span>🖱️ Geser mouse untuk merotasi orbit</span>
-                            <span>🔴 Klik planet untuk melihat fokus belajar modul</span>
+                            <span>🖱 Geser mouse untuk merotasi orbit</span>
+                            <span>💡 Klik planet untuk melihat fokus belajar modul</span>
                         </div>
                     </div>
                 </div>
@@ -3034,7 +3098,16 @@
             </div>
         </section>
 
-        <section class="section planner-layout reveal" id="planner">
+                </div>
+
+        <div class="tab-content-panel" id="tabPanel-planner">
+<section class="curriculum-dashboard motion-ready" id="curriculumDashboard" aria-label="Dashboard kurikulum">
+            <div class="curriculum-empty">
+                <h3>Menyiapkan kurikulum...</h3>
+                <p>Data jalur, progres, dan rekomendasi sedang dimuat.</p>
+            </div>
+        </section>
+<section class="section planner-layout reveal" id="planner">
             <div class="planner-card">
                 <div>
                     <div class="section-kicker">Study Planner</div>
@@ -3061,7 +3134,10 @@
             </div>
         </section>
 
-        <section class="section drill-card reveal">
+                </div>
+
+        <div class="tab-content-panel" id="tabPanel-sandbox">
+<section class="section drill-card reveal">
             <div class="section-header">
                 <div>
                     <div class="section-kicker">Daily Drill</div>
@@ -3132,7 +3208,7 @@
                         <span id="sandboxExecutionStatus" style="font-size: 11px; font-weight: bold; color: var(--muted);">Siap dijalankan</span>
                         <div style="display: flex; gap: 8px;">
                             <button class="btn btn-ghost" id="btnResetSandbox" style="padding: 10px 16px; border-radius: 12px; font-size: 12px;">Reset</button>
-                            <button class="btn btn-blue" id="btnVisualizeSandbox" style="padding: 10px 16px; border-radius: 12px; font-size: 12px;">🔍 Visualisasikan</button>
+                            <button class="btn btn-blue" id="btnVisualizeSandbox" style="padding: 10px 16px; border-radius: 12px; font-size: 12px;">👁 Visualisasikan</button>
                             <button class="btn btn-primary" id="btnRunSandbox" style="padding: 10px 16px; border-radius: 12px; font-size: 12px;">🚀 Jalankan</button>
                         </div>
                     </div>
@@ -3199,7 +3275,7 @@
                         </div>
                         <div id="sandboxXssStatusCard" style="background: rgba(79, 140, 255, 0.08); border: 1px solid rgba(79, 140, 255, 0.2); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; text-align: left;">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span id="sandboxXssStatusIcon" style="font-size: 18px;">🛡️</span>
+                                <span id="sandboxXssStatusIcon" style="font-size: 18px;">🔒</span>
                                 <h4 id="sandboxXssStatusTitle" style="font-size: 13px; font-weight: 800; color: var(--blue);">Sanitization Mode: Active</h4>
                             </div>
                             <p id="sandboxXssStatusText" style="font-size: 11px; line-height: 1.5; color: var(--muted); font-weight: 600; margin: 0;">
@@ -3231,7 +3307,7 @@
                         </div>
                         <div id="sandboxSqliStatusCard" style="background: rgba(255, 77, 109, 0.1); border: 1px solid rgba(255, 77, 109, 0.25); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; text-align: left;">
                             <div style="display: flex; align-items: center; gap: 8px;">
-                                <span id="sandboxSqliStatusIcon" style="font-size: 18px;">⚠️</span>
+                                <span id="sandboxSqliStatusIcon" style="font-size: 18px;">🛡</span>
                                 <h4 id="sandboxSqliStatusTitle" style="font-size: 13px; font-weight: 800; color: #ff4d6d;">SQLi Vulnerable: Bypass Login!</h4>
                             </div>
                             <p id="sandboxSqliStatusText" style="font-size: 11px; line-height: 1.5; color: var(--muted); font-weight: 600; margin: 0;">
@@ -3248,14 +3324,17 @@
 
                     <div style="border-top: 1px solid var(--border); padding-top: 14px; display: flex; align-items: center; justify-content: space-between;">
                         <span style="font-size: 11px; color: var(--muted); font-weight: bold;">Sandbox Award: +30 XP</span>
-                        <span id="sandboxAwardStatus" style="font-size: 11px; color: var(--green-dark); font-weight: 950; display: none;">🏆 XP Didapatkan!</span>
+                        <span id="sandboxAwardStatus" style="font-size: 11px; color: var(--green-dark); font-weight: 950; display: none;">🎉 XP Didapatkan!</span>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <section class="section">
+                </div>
+
+        <div class="tab-content-panel" id="tabPanel-glossary">
+<section class="section">
             <div class="section-header">
                 <div>
                     <div class="section-kicker">Glossary Cepat</div>
@@ -3265,8 +3344,8 @@
                     <p style="max-width: 460px; text-align: right;">Gunakan bagian ini sebagai pengingat cepat sebelum
                         masuk ke quiz atau membuat project kecil.</p>
                     <div class="view-toggles" style="display: flex; gap: 8px;">
-                        <button class="filter-btn active" id="btnGlossaryList" type="button">📜 Daftar</button>
-                        <button class="filter-btn" id="btnGlossaryFlash" type="button">🃏 Flashcards 3D (Diluar
+                        <button class="filter-btn active" id="btnGlossaryList" type="button">📁 Daftar</button>
+                        <button class="filter-btn" id="btnGlossaryFlash" type="button">?? Flashcards 3D (Diluar
                             Nalar)</button>
                     </div>
                 </div>
@@ -3333,7 +3412,7 @@
                                     API</h3>
                                 <p
                                     style="font-size:12px; color:var(--muted); font-weight:700; display:flex; align-items:center; gap:6px;">
-                                    Klik ganda / ketuk untuk melihat 🔄</p>
+                                    Klik ganda / ketuk untuk melihat ??</p>
                             </div>
                             <div class="flashcard-back"
                                 style="position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:24px; padding:28px; display:flex; flex-direction:column; justify-content:center; align-items:center; border:1px solid rgba(255,255,255,0.06); background:linear-gradient(135deg, #172a42, #0b1523); color:white; transform:rotateY(180deg); box-shadow:var(--shadow);">
@@ -3347,11 +3426,11 @@
                     </div>
                     <div style="display:flex; align-items:center; gap:16px;">
                         <button class="btn btn-ghost" id="btnPrevFlashcard"
-                            style="padding:10px 18px; border-radius:14px;" type="button">◀️</button>
+                            style="padding:10px 18px; border-radius:14px;" type="button">◀</button>
                         <span id="flashcardCount" style="font-weight:900; font-size:14px; color:var(--muted);">1 /
                             16</span>
                         <button class="btn btn-ghost" id="btnNextFlashcard"
-                            style="padding:10px 18px; border-radius:14px;" type="button">▶️</button>
+                            style="padding:10px 18px; border-radius:14px;" type="button">◀</button>
                     </div>
                     <div style="font-size:11px; color:var(--muted); font-weight:bold;">
                         <span>💡 Tip: klik ganda kartu untuk membalik, tekan tombol untuk navigasi istilah.</span>
@@ -3360,7 +3439,8 @@
             </div>
         </section>
 
-        <section class="cta reveal">
+                </div>
+<section class="cta reveal">
             <div>
                 <h2>Sudah baca materinya? Uji langsung di Quiz Arena.</h2>
                 <p>Quiz tech sudah punya kategori yang sama dengan halaman materi ini, jadi kamu bisa latihan sesuai
@@ -3376,7 +3456,7 @@
                 <!-- Column 1: Brand -->
                 <div class="footer-col footer-brand">
                     <a href="#" class="brand">
-                        <img src="assets/logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                        <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
                         Universe Of Tech
                     </a>
                     <p>Platform pembelajaran interaktif berbasis game harian yang bikin belajar menjadi adiktif,
@@ -3412,7 +3492,7 @@
                         <li><a href="index.html#fitur">Daily Streak</a></li>
                         <li><a href="index.html#fitur">Progress Tracker</a></li>
                         <li><a href="index.html#ranking">Leaderboard</a></li>
-                        <li><a href="quiz.html">Quiz Arena ⚡</a></li>
+                        <li><a href="quiz.html">Quiz Arena 🔥</a></li>
                     </ul>
                 </div>
 
@@ -3433,14 +3513,14 @@
                     <h4>Download App</h4>
                     <div style="display: flex; flex-direction: column; gap: 10px;">
                         <button class="store-badge" aria-label="Unduh di App Store">
-                            <span style="font-size: 20px;">🍎</span>
+                            <span style="font-size: 20px;">✉</span>
                             <div>
                                 <span class="store-sub">Download on the</span>
                                 <span class="store-title">App Store</span>
                             </div>
                         </button>
                         <button class="store-badge" aria-label="Unduh di Google Play">
-                            <span style="font-size: 20px;">🤖</span>
+                            <span style="font-size: 20px;">🗺</span>
                             <div>
                                 <span class="store-sub">GET IT ON</span>
                                 <span class="store-title">Google Play</span>
@@ -3448,7 +3528,7 @@
                         </button>
                     </div>
                     <div class="social-links">
-                        <button class="social-btn" aria-label="Instagram">📸</button>
+                        <button class="social-btn" aria-label="Instagram">📷</button>
                         <button class="social-btn" aria-label="Twitter">🐦</button>
                         <button class="social-btn" aria-label="TikTok">🎵</button>
                         <button class="social-btn" aria-label="LinkedIn">💼</button>
@@ -3458,7 +3538,7 @@
 
             <!-- Footer Bottom Bar -->
             <div class="footer-bottom">
-                <span>© 2026 Universe Of Tech. Built with passion for better learning.</span>
+                <span>©Â© 2026 Universe Of Tech. Built with passion for better learning.</span>
                 <div class="footer-legal-links">
                     <a href="#">Kebijakan Privasi</a>
                     <a href="#">Syarat Ketentuan</a>
@@ -3467,10 +3547,10 @@
             </div>
     </main>
 
-    <script src="js/curriculum-data.js"></script>
-    <script src="js/app-data.js"></script>
-    <script src="js/sound-engine.js"></script>
-    <script src="js/rpg-engine.js"></script>
+    <script src="curriculum-data.js"></script>
+    <script src="app-data.js"></script>
+    <script src="sound-engine.js"></script>
+    <script src="rpg-engine.js"></script>
     <script>
         // --- 1. SELECTORS & STATE ---
         const filterButtons = document.querySelectorAll("[data-filter]");
@@ -3988,7 +4068,7 @@
 
                 return `
                     <div class="sandbox-comment-bubble${hackedClass}">
-                        <strong style="display:block; font-size:11px; margin-bottom:4px;">👤 ${c.author}</strong>
+                        <strong style="display:block; font-size:11px; margin-bottom:4px;">💬 ${c.author}</strong>
                         <div>${commentText}</div>
                     </div>
                 `;
@@ -4019,13 +4099,13 @@
                         // Escape tags
                         finalCommentText = code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                         
-                        statusIcon.textContent = "🛡️";
+                        statusIcon.textContent = "???";
                         statusTitle.textContent = "Sanitization Active: Selamat!";
                         statusTitle.style.color = "var(--blue)";
                         statusTextPara.textContent = "Payload HTML script berhasil di-escape secara otomatis menjadi teks biasa. Database dan Web terhindar dari injeksi XSS.";
                         playSound('click');
                     } else {
-                        statusIcon.textContent = "🛡️";
+                        statusIcon.textContent = "???";
                         statusTitle.textContent = "Sanitization Active";
                         statusTitle.style.color = "var(--blue)";
                         statusTextPara.textContent = "Komentar teks biasa berhasil di-sanitize dan di-post dengan aman.";
@@ -4035,7 +4115,7 @@
                     if (isPayloadText) {
                         isHacked = true;
                         
-                        statusIcon.textContent = "⚠️";
+                        statusIcon.textContent = "??";
                         statusTitle.textContent = "SISTEM DIRETAK (XSS VULNERABLE)";
                         statusTitle.style.color = "#ff4d6d";
                         statusTextPara.innerHTML = `<span style="color:#ff4d6d; font-weight:800;">Peringatan!</span> Script jahat telah dieksekusi oleh browser. Halaman ini rentan terhadap pencurian cookie / session token.`;
@@ -4043,10 +4123,10 @@
                         
                         // Trigger simulation pop-up alert
                         setTimeout(() => {
-                            alert("⚠️ [XSS Simulator: Kerentanan Keamanan!]\n\nPayload script Anda berhasil dieksekusi secara ilegal di browser client!\n\nPayload: " + code);
+                            alert("?? [XSS Simulator: Kerentanan Keamanan!]\n\nPayload script Anda berhasil dieksekusi secara ilegal di browser client!\n\nPayload: " + code);
                         }, 300);
                     } else {
-                        statusIcon.textContent = "🛡️";
+                        statusIcon.textContent = "???";
                         statusTitle.textContent = "Sanitization Non-Aktif";
                         statusTitle.style.color = "var(--muted)";
                         statusTextPara.textContent = "Komentar diposting tanpa sensor. Pastikan untuk selalu menyaring input form pada aplikasi nyata!";
@@ -4055,7 +4135,7 @@
 
                 // Add to comment array
                 simulatedComments.push({
-                    author: isHacked ? "🚨 Hacker" : "Siswa Coder",
+                    author: isHacked ? "?? Hacker" : "Siswa Coder",
                     text: finalCommentText,
                     hacked: isHacked
                 });
@@ -4073,7 +4153,7 @@
                 if (isHacked) {
                     setTimeout(() => {
                         sanitizationActive = true;
-                        statusIcon.textContent = "🛡️";
+                        statusIcon.textContent = "???";
                         statusTitle.textContent = "Sistem Diperbaiki (Auto-Fix)";
                         statusTitle.style.color = "var(--green-dark)";
                         statusTextPara.textContent = "Fitur sanitasi input otomatis diaktifkan kembali. Silakan uji coba input payload lagi.";
@@ -4126,7 +4206,7 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
                 const isPayload = username.includes("'") || username.includes("--");
 
                 if (isSafe) {
-                    statusIcon.textContent = "🛡️";
+                    statusIcon.textContent = "???";
                     statusTitle.textContent = "Login Gagal (Aman)";
                     statusTitle.style.color = "var(--blue)";
                     statusCard.style.background = "rgba(79, 140, 255, 0.08)";
@@ -4138,7 +4218,7 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
                 } else {
                     if (isPayload) {
                         // Successful bypass
-                        statusIcon.textContent = "☠️";
+                        statusIcon.textContent = "??";
                         statusTitle.textContent = "BYPASS SUKSES: Masuk Sebagai Admin!";
                         statusTitle.style.color = "#ff4d6d";
                         statusCard.style.background = "rgba(255, 77, 109, 0.12)";
@@ -4153,11 +4233,11 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
 
                         // alert bypass simulation
                         setTimeout(() => {
-                            alert("☠️ [SQLi Simulator: Sukses Bypass Login!]\n\nPayload SQLi Anda berhasil mengubah struktur kueri kueri dan membobol autentikasi admin!\n\nKueri Akhir: SELECT * FROM users WHERE user = '" + username + "' AND pass = '...';");
+                            alert("?? [SQLi Simulator: Sukses Bypass Login!]\n\nPayload SQLi Anda berhasil mengubah struktur kueri kueri dan membobol autentikasi admin!\n\nKueri Akhir: SELECT * FROM users WHERE user = '" + username + "' AND pass = '...';");
                         }, 200);
                     } else {
                         // Normal login failed
-                        statusIcon.textContent = "🔒";
+                        statusIcon.textContent = "??";
                         statusTitle.textContent = "Login Gagal (Username Salah)";
                         statusTitle.style.color = "var(--muted)";
                         statusCard.style.background = "var(--item-bg)";
@@ -4551,7 +4631,7 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
                         universeCtx.fillText(p.desc, tx + 12, ty + 31);
 
                         universeCtx.fillStyle = p.isCompleted ? "var(--green)" : "var(--orange)";
-                        universeCtx.fillText(p.isCompleted ? "✓ Tuntas Belajar" : "○ Belum Checklist", tx + 12, ty + 42);
+                        universeCtx.fillText(p.isCompleted ? "? Tuntas Belajar" : "? Belum Checklist", tx + 12, ty + 42);
                     }
                 });
 
@@ -4939,10 +5019,10 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
             if (themeToggleBtn) {
                 if (savedTheme === "dark") {
                     document.body.classList.add("dark-theme");
-                    themeToggleBtn.textContent = "☀️";
+                    themeToggleBtn.textContent = "??";
                 } else {
                     document.body.classList.remove("dark-theme");
-                    themeToggleBtn.textContent = "🌙";
+                    themeToggleBtn.textContent = "??";
                 }
 
                 themeToggleBtn.addEventListener("click", () => {
@@ -4950,7 +5030,7 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
                     document.body.classList.toggle("dark-theme");
                     const isDark = document.body.classList.contains("dark-theme");
                     localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
-                    themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+                    themeToggleBtn.textContent = isDark ? "??" : "??";
 
                     themeToggleBtn.style.transform = "scale(0.9)";
                     setTimeout(() => themeToggleBtn.style.transform = "none", 150);
@@ -5181,13 +5261,13 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
                 cardEl.className = "kanban-card";
                 cardEl.innerHTML = `
                     <strong>Minggu ${task.week}: ${task.title}</strong>
-                    <span>📚 Konsep: ${task.hoursConcept} jam</span><br>
-                    <span>🛠️ Proyek: ${task.hoursProject} jam (${task.project})</span>
+                    <span>📖 Konsep: ${task.hoursConcept} jam</span><br>
+                    <span>💻 Proyek: ${task.hoursProject} jam (${task.project})</span>
                     <div class="kanban-card-actions">
-                        ${task.status === 'todo' ? `<button class="kanban-btn" onclick="moveTask('${task.id}', 'progress')">Mulai ➔</button>` : ''}
+                        ${task.status === 'todo' ? `<button class="kanban-btn" onclick="moveTask('${task.id}', 'progress')">Mulai ▶</button>` : ''}
                         ${task.status === 'progress' ? `
-                            <button class="kanban-btn" onclick="moveTask('${task.id}', 'todo')">⏮ Back</button>
-                            <button class="kanban-btn" style="color:var(--green-dark);" onclick="moveTask('${task.id}', 'done')">Selesai ✓</button>
+                            <button class="kanban-btn" onclick="moveTask('${task.id}', 'todo')">◀ Back</button>
+                            <button class="kanban-btn" style="color:var(--green-dark);" onclick="moveTask('${task.id}', 'done')">Selesai ✔</button>
                         ` : ''}
                         ${task.status === 'done' ? `<span style="color:var(--green-dark); font-size:10px; font-weight:bold;">🏆 TUNTAS</span>` : ''}
                     </div>
@@ -5412,7 +5492,7 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
     <!-- Level Up Modal overlay -->
     <div id="levelUpModal" style="display: none; position: fixed; inset: 0; z-index: 10001; background: rgba(11, 21, 35, 0.85); backdrop-filter: blur(8px); place-items: center; padding: 20px;">
         <div class="reveal-card" id="levelUpCard" style="width: min(100%, 420px); background: linear-gradient(180deg, #172a42 0%, #0d1726 100%); border: 2px solid var(--green); border-radius: 36px; padding: 36px; text-align: center; color: white; box-shadow: 0 0 40px rgba(50, 214, 107, 0.4); transform: scale(0.9); opacity: 0; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);">
-            <div style="font-size: 72px; margin-bottom: 16px; animation: bounce 1s infinite alternate;">🏆</div>
+            <div style="font-size: 72px; margin-bottom: 16px; animation: bounce 1s infinite alternate;">🎉</div>
             <h2 style="font-size: 32px; font-weight: 950; letter-spacing: -0.05em; background: linear-gradient(90deg, #32d66b, #4f8cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;">LEVEL UP!</h2>
             <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 24px; font-weight: 600;">Kamu baru saja naik ke level koding berikutnya, mantap coy!</p>
             <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 18px; margin-bottom: 28px;">
@@ -5423,14 +5503,73 @@ stmt.execute([<span style="color:var(--yellow);">'${safeUsername}'</span>, <span
             <button class="btn btn-primary" id="btnDismissLevelUp" style="width: 100%; font-weight: 900;">Lanjutkan Petualangan 🚀</button>
         </div>
     </div>
-    <script src="js/auth-helper.js"></script>
-    <script src="js/pro-learning-engine.js"></script>
-    <script src="js/materi-dashboard.js"></script>
-    <script src="js/pro-experience.js?v=20260621-clean"></script>
-    <script src="js/bubub-ai.js"></script>
-    <script src="js/coursera-home.js"></script>
-    <script src="js/materi-animation-pack.js"></script>
+    <script src="auth-helper.js"></script>
+    <script src="pro-learning-engine.js"></script>
+    <script src="materi-dashboard.js"></script>
+    <script src="pro-experience.js?v=20260621-clean"></script>
+    <script src="bubub-ai.js"></script>
+    <script src="coursera-home.js"></script>
+    <script src="materi-animation-pack.js"></script>
+    <script src="global-animations.js"></script>
+    <!-- Script for Feature Tabs Switching -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tabButtons = document.querySelectorAll(".feature-tab-btn");
+            const tabPanels = document.querySelectorAll(".tab-content-panel");
+            
+            tabButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const target = btn.dataset.featureTab;
+                    
+                    // Switch buttons state
+                    tabButtons.forEach(b => {
+                        b.classList.toggle("active", b === btn);
+                        const span = b.querySelector("span");
+                        if (span) {
+                            b.style.color = b === btn ? "white" : "var(--muted)";
+                        }
+                    });
+                    
+                    // Switch panels state
+                    tabPanels.forEach(panel => {
+                        const isTarget = panel.id === 'tabPanel-' + target;
+                        panel.classList.toggle("active", isTarget);
+                    });
+                    
+                    // Play switch sound
+                    if (typeof playSound === "function") {
+                        try { playSound("click"); } catch(err) {}
+                    }
+                });
+            });
+
+            // Handle cross-tab links
+            document.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener("click", (e) => {
+                    const href = link.getAttribute("href");
+                    if (href === "#") return;
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        // Find if this element is inside any tab panel
+                        const parentPanel = targetElement.closest(".tab-content-panel");
+                        if (parentPanel) {
+                            const tabName = parentPanel.id.replace("tabPanel-", "");
+                            const tabButton = document.querySelector('.feature-tab-btn[data-feature-tab="' + tabName + '"]');
+                            if (tabButton) {
+                                e.preventDefault();
+                                tabButton.click();
+                                setTimeout(() => {
+                                    targetElement.scrollIntoView({ behavior: "smooth" });
+                                }, 100);
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
+
 

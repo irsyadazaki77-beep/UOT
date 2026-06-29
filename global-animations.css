@@ -1,0 +1,723 @@
+/* ================================================================
+   QUIZNATION — GLOBAL ANIMATION SYSTEM v3.0
+   Smooth, premium micro-interactions for all pages
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   1. PAGE TRANSITION — Fade-in on load
+   ---------------------------------------------------------------- */
+@keyframes pageEnter {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+body {
+    animation: pageEnter 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ----------------------------------------------------------------
+   2. SCROLL-REVEAL — Elements fade/slide in as you scroll
+   ---------------------------------------------------------------- */
+.anim-reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.anim-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger children inside a parent */
+.anim-stagger > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.anim-stagger.revealed > *:nth-child(1)  { transition-delay: 0s;     opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(2)  { transition-delay: 0.07s;  opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(3)  { transition-delay: 0.14s;  opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(4)  { transition-delay: 0.21s;  opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(5)  { transition-delay: 0.28s;  opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(6)  { transition-delay: 0.35s;  opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(7)  { transition-delay: 0.42s;  opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(8)  { transition-delay: 0.49s;  opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(9)  { transition-delay: 0.56s;  opacity: 1; transform: none; }
+.anim-stagger.revealed > *:nth-child(n+10) { transition-delay: 0.6s; opacity: 1; transform: none; }
+
+/* Slide from left */
+.anim-slide-left {
+    opacity: 0;
+    transform: translateX(-36px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.anim-slide-left.revealed { opacity: 1; transform: translateX(0); }
+
+/* Slide from right */
+.anim-slide-right {
+    opacity: 0;
+    transform: translateX(36px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.anim-slide-right.revealed { opacity: 1; transform: translateX(0); }
+
+/* Scale in */
+.anim-scale-in {
+    opacity: 0;
+    transform: scale(0.88);
+    transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.anim-scale-in.revealed { opacity: 1; transform: scale(1); }
+
+/* ----------------------------------------------------------------
+   3. NAVBAR SCROLL SHRINK
+   ---------------------------------------------------------------- */
+.navbar {
+    transition: padding 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.4s ease,
+                backdrop-filter 0.4s ease !important;
+}
+.navbar.scrolled {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+}
+
+/* ----------------------------------------------------------------
+   4. CARD HOVER — Universal lift & glow
+   ---------------------------------------------------------------- */
+.feat-card,
+.course-card,
+.achievement-card,
+.badge-card,
+.rank-card,
+.rank-item,
+.stat-item,
+.mini-stat,
+.course-row,
+.topic-card,
+.chapter-card,
+.module-card,
+.prog-card,
+.leaderboard-item,
+.cert-card,
+.path-card {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.35s ease,
+                border-color 0.35s ease !important;
+    will-change: transform;
+}
+
+.feat-card:hover,
+.course-card:hover,
+.achievement-card:hover,
+.badge-card:hover,
+.rank-card:hover,
+.rank-item:hover,
+.stat-item:hover,
+.course-row:hover,
+.topic-card:hover,
+.chapter-card:hover,
+.module-card:hover,
+.prog-card:hover,
+.leaderboard-item:hover,
+.cert-card:hover,
+.path-card:hover {
+    transform: translateY(-5px) scale(1.012);
+    box-shadow: 0 20px 48px -10px rgba(67, 97, 238, 0.18),
+                0 4px 16px rgba(0, 0, 0, 0.06) !important;
+    border-color: rgba(67, 97, 238, 0.22) !important;
+}
+
+/* ----------------------------------------------------------------
+   5. BUTTON — Ripple + Spring Bounce
+   ---------------------------------------------------------------- */
+.btn,
+button,
+[class*="btn-"],
+.nav-btn,
+.action-btn,
+.cta-btn {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.3s ease,
+                background 0.3s ease !important;
+}
+
+.btn:hover,
+button:hover,
+[class*="btn-"]:hover {
+    transform: translateY(-3px) scale(1.04) !important;
+}
+
+.btn:active,
+button:active,
+[class*="btn-"]:active {
+    transform: scale(0.94) !important;
+    transition-duration: 0.1s !important;
+}
+
+/* Ripple effect */
+@keyframes rippleAnim {
+    from { transform: scale(0); opacity: 0.6; }
+    to   { transform: scale(1); opacity: 0; }
+}
+
+/* ----------------------------------------------------------------
+   6. PROGRESS BAR — Smooth fill animation
+   ---------------------------------------------------------------- */
+@keyframes progressFillIn {
+    from { width: 0%; }
+    to   { width: var(--progress-target, 100%); }
+}
+
+.progress-fill,
+.prog-fill,
+[class*="progress-fill"],
+[class*="-bar-fill"],
+.xp-fill,
+.streak-fill {
+    animation: progressFillIn 1.4s cubic-bezier(0.25, 1, 0.5, 1) both;
+    animation-play-state: paused;
+}
+.progress-fill.play,
+.prog-fill.play,
+[class*="progress-fill"].play,
+.xp-fill.play,
+.streak-fill.play {
+    animation-play-state: running;
+}
+
+/* ----------------------------------------------------------------
+   7. COUNTER NUMBER — Count up animation
+   ---------------------------------------------------------------- */
+.count-up {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+/* ----------------------------------------------------------------
+   8. SKELETON LOADING SHIMMER
+   ---------------------------------------------------------------- */
+@keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+
+.skeleton {
+    background: linear-gradient(90deg,
+        var(--border, #e5edf5) 25%,
+        rgba(255,255,255,0.7) 50%,
+        var(--border, #e5edf5) 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 10px;
+}
+
+/* ----------------------------------------------------------------
+   9. ICON BOUNCE — For interactive icons
+   ---------------------------------------------------------------- */
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    40%       { transform: translateY(-8px) scale(1.12); }
+    70%       { transform: translateY(2px) scale(0.96); }
+}
+
+.icon-bounce:hover i,
+.icon-bounce:hover .fa,
+.icon-bounce:hover svg,
+.feat-card:hover .icon-wrap,
+.feat-card:hover .card-icon,
+.module-card:hover .icon-wrap,
+.topic-card:hover .icon-wrap,
+.achievement-card:hover .badge-icon,
+.achievement-card:hover .icon {
+    animation: iconBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ----------------------------------------------------------------
+   10. FLOATING BADGE PULSE — XP, streak badges
+   ---------------------------------------------------------------- */
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4); }
+    50%       { box-shadow: 0 0 0 8px rgba(67, 97, 238, 0); }
+}
+
+.badge-glow,
+.xp-badge,
+.streak-badge {
+    animation: badgePulse 2.5s ease-in-out infinite;
+}
+
+/* ----------------------------------------------------------------
+   11. HERO SECTION — Staggered entrance
+   ---------------------------------------------------------------- */
+@keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(28px) scale(0.97); filter: blur(6px); }
+    to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+.hero-copy > *:nth-child(1) { animation: heroFadeUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-copy > *:nth-child(2) { animation: heroFadeUp 0.7s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-copy > *:nth-child(3) { animation: heroFadeUp 0.7s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-copy > *:nth-child(4) { animation: heroFadeUp 0.7s 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-copy > *:nth-child(5) { animation: heroFadeUp 0.7s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ----------------------------------------------------------------
+   12. SECTION TITLE — Gradient underline draw
+   ---------------------------------------------------------------- */
+.section-title,
+.section-head h2,
+[class*="section-"] h2,
+[class*="-section"] h2 {
+    position: relative;
+    display: inline-block;
+}
+.section-title::after,
+.section-head h2::after,
+[class*="section-"] h2::after,
+[class*="-section"] h2::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 3px;
+    width: 0;
+    background: linear-gradient(90deg, var(--green, #32d66b), var(--blue, #4f8cff));
+    border-radius: 9px;
+    transition: width 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.section-title.revealed::after,
+.section-head.revealed h2::after,
+[class*="section-"].revealed h2::after,
+[class*="-section"].revealed h2::after {
+    width: 60%;
+}
+
+/* ----------------------------------------------------------------
+   13. NOTIFICATION / TOAST ANIMATION
+   ---------------------------------------------------------------- */
+@keyframes toastSlideIn {
+    from { transform: translateX(110%) scale(0.9); opacity: 0; }
+    to   { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes toastSlideOut {
+    from { transform: translateX(0) scale(1); opacity: 1; }
+    to   { transform: translateX(110%) scale(0.9); opacity: 0; }
+}
+
+.toast, .notif-toast {
+    animation: toastSlideIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.toast.hide, .notif-toast.hide {
+    animation: toastSlideOut 0.35s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+/* ----------------------------------------------------------------
+   14. MODAL ANIMATION
+   ---------------------------------------------------------------- */
+@keyframes modalBackdropIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes modalPanelIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-overlay,
+.modal-backdrop,
+[class*="modal-overlay"],
+[class*="-overlay"].active {
+    animation: modalBackdropIn 0.3s ease both;
+}
+
+.modal-content,
+.modal-panel,
+.modal-box,
+[class*="modal-content"],
+[class*="modal-panel"],
+.popup-card {
+    animation: modalPanelIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ----------------------------------------------------------------
+   15. ACHIEVEMENT UNLOCK — Celebration burst
+   ---------------------------------------------------------------- */
+@keyframes achieveUnlock {
+    0%   { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+    60%  { transform: scale(1.15) rotate(5deg); opacity: 1; }
+    80%  { transform: scale(0.95) rotate(-2deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.achievement-unlocked,
+.badge-unlocked {
+    animation: achieveUnlock 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ----------------------------------------------------------------
+   16. TABLE ROW — Hover highlight
+   ---------------------------------------------------------------- */
+.rank-list tr,
+.leaderboard-table tr,
+.data-table tr {
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+.rank-list tr:hover,
+.leaderboard-table tr:hover,
+.data-table tr:hover {
+    background: rgba(67, 97, 238, 0.04);
+    transform: translateX(3px);
+}
+
+/* ----------------------------------------------------------------
+   17. INPUT FOCUS — Glow effect
+   ---------------------------------------------------------------- */
+input, textarea, select {
+    transition: border-color 0.3s ease,
+                box-shadow 0.3s ease,
+                transform 0.2s ease !important;
+}
+input:focus, textarea:focus, select:focus {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15),
+                0 4px 12px rgba(67, 97, 238, 0.08) !important;
+}
+
+/* ----------------------------------------------------------------
+   18. TAB SWITCH — Slide indicator
+   ---------------------------------------------------------------- */
+.tab-btn,
+.tab-item,
+[class*="tab-btn"],
+[class*="-tab"] {
+    position: relative;
+    transition: color 0.3s ease, background 0.3s ease !important;
+}
+.tab-btn::after,
+.tab-item::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    height: 2.5px;
+    width: 80%;
+    background: linear-gradient(90deg, var(--green, #32d66b), var(--blue, #4f8cff));
+    border-radius: 4px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tab-btn.active::after,
+.tab-item.active::after,
+.tab-btn[aria-selected="true"]::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+/* ----------------------------------------------------------------
+   19. FLOATING PARTICLES — Global CSS shimmer dots
+   ---------------------------------------------------------------- */
+@keyframes floatDot {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+    50%       { transform: translateY(-18px) scale(1.2); opacity: 0.9; }
+}
+
+/* ----------------------------------------------------------------
+   20. LINK UNDERLINE — Draw-in on hover
+   ---------------------------------------------------------------- */
+a.anim-link {
+    position: relative;
+    text-decoration: none;
+}
+a.anim-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 0;
+    height: 1.5px;
+    background: currentColor;
+    transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+a.anim-link:hover::after { width: 100%; }
+
+/* ----------------------------------------------------------------
+   21. LOGO SPIN on hover
+   ---------------------------------------------------------------- */
+.brand-logo {
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+.brand:hover .brand-logo {
+    transform: scale(1.18) rotate(15deg) !important;
+}
+
+/* ----------------------------------------------------------------
+   22. SCROLL PROGRESS BAR — top of page
+   ---------------------------------------------------------------- */
+#scrollProgressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--green, #32d66b), var(--blue, #4f8cff), var(--purple, #8b5cf6));
+    z-index: 99999;
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 0 0 10px rgba(67, 97, 238, 0.4);
+}
+
+/* ----------------------------------------------------------------
+   23. BACK-TO-TOP BUTTON
+   ---------------------------------------------------------------- */
+#backToTopGlobal {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue, #4f8cff), var(--purple, #8b5cf6));
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    box-shadow: 0 8px 24px rgba(67, 97, 238, 0.35);
+    z-index: 9000;
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+#backToTopGlobal.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+}
+#backToTopGlobal:hover {
+    transform: translateY(-4px) scale(1.1) !important;
+    box-shadow: 0 14px 30px rgba(67, 97, 238, 0.45) !important;
+}
+
+/* ----------------------------------------------------------------
+   24. CURSOR TRAIL SPARKLE
+   ---------------------------------------------------------------- */
+.cursor-spark {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    animation: sparkFade 0.7s ease-out forwards;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes sparkFade {
+    0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+    100% { transform: translate(-50%, -50%) scale(0) translateY(-20px); opacity: 0; }
+}
+
+/* ----------------------------------------------------------------
+   25. EMOJI BURST — Celebration
+   ---------------------------------------------------------------- */
+@keyframes emojiBurst {
+    0%   { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-80px) scale(0.5) rotate(var(--spin, 30deg)); opacity: 0; }
+}
+.emoji-burst {
+    position: fixed;
+    pointer-events: none;
+    z-index: 99999;
+    animation: emojiBurst 1s ease-out forwards;
+    font-size: 24px;
+    user-select: none;
+}
+
+/* ----------------------------------------------------------------
+   26. CARD SHIMMER OVERLAY on hover
+   ---------------------------------------------------------------- */
+.feat-card,
+.course-card,
+.achievement-card,
+.badge-card,
+.chapter-card,
+.module-card,
+.topic-card {
+    position: relative;
+    overflow: hidden;
+}
+.feat-card::before,
+.course-card::before,
+.achievement-card::before,
+.badge-card::before,
+.chapter-card::before,
+.module-card::before,
+.topic-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.18) 50%,
+        transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.65s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+.feat-card:hover::before,
+.course-card:hover::before,
+.achievement-card:hover::before,
+.badge-card:hover::before,
+.chapter-card:hover::before,
+.module-card:hover::before,
+.topic-card:hover::before {
+    transform: translateX(120%);
+}
+
+/* ----------------------------------------------------------------
+   27. NAV LINK — Active indicator spring
+   ---------------------------------------------------------------- */
+.nav-links a,
+.mega-item-link,
+.footer-links a {
+    transition: color 0.25s ease,
+                background 0.25s ease,
+                transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+.nav-links a:hover,
+.mega-item-link:hover {
+    transform: translateY(-2px) !important;
+}
+
+/* ----------------------------------------------------------------
+   28. SECTION ENTRANCE — Scroll-triggered fade+blur
+   ---------------------------------------------------------------- */
+@keyframes sectionReveal {
+    from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* ----------------------------------------------------------------
+   29. REDUCED MOTION — Respect accessibility
+   ---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    body {
+        animation: none !important;
+    }
+}
+
+/* ----------------------------------------------------------------
+   30. PULSE DOT — Live / online indicator
+   ---------------------------------------------------------------- */
+@keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+    50%       { transform: scale(1.2); opacity: 0.8; box-shadow: 0 0 0 6px rgba(50,214,107,0); }
+}
+.live-dot,
+.online-dot,
+.pulse-dot {
+    animation: pulseDot 2s ease-in-out infinite;
+}
+
+/* ----------------------------------------------------------------
+   31. LEADERBOARD — Row entrance stagger
+   ---------------------------------------------------------------- */
+.rank-list li,
+.leaderboard-item {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rank-list.revealed li,
+.leaderboard-list.revealed .leaderboard-item {
+    opacity: 1;
+    transform: translateX(0);
+}
+.rank-list.revealed li:nth-child(1),
+.leaderboard-list.revealed .leaderboard-item:nth-child(1)  { transition-delay: 0s; }
+.rank-list.revealed li:nth-child(2),
+.leaderboard-list.revealed .leaderboard-item:nth-child(2)  { transition-delay: 0.06s; }
+.rank-list.revealed li:nth-child(3),
+.leaderboard-list.revealed .leaderboard-item:nth-child(3)  { transition-delay: 0.12s; }
+.rank-list.revealed li:nth-child(4),
+.leaderboard-list.revealed .leaderboard-item:nth-child(4)  { transition-delay: 0.18s; }
+.rank-list.revealed li:nth-child(5),
+.leaderboard-list.revealed .leaderboard-item:nth-child(5)  { transition-delay: 0.24s; }
+.rank-list.revealed li:nth-child(6),
+.leaderboard-list.revealed .leaderboard-item:nth-child(6)  { transition-delay: 0.30s; }
+.rank-list.revealed li:nth-child(7),
+.leaderboard-list.revealed .leaderboard-item:nth-child(7)  { transition-delay: 0.36s; }
+.rank-list.revealed li:nth-child(8),
+.leaderboard-list.revealed .leaderboard-item:nth-child(8)  { transition-delay: 0.42s; }
+.rank-list.revealed li:nth-child(n+9),
+.leaderboard-list.revealed .leaderboard-item:nth-child(n+9) { transition-delay: 0.48s; }
+
+/* ----------------------------------------------------------------
+   32. ACHIEVEMENTS — Badge glow ring on hover
+   ---------------------------------------------------------------- */
+@keyframes glowRing {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.3), 0 0 20px rgba(255, 209, 102, 0.15); }
+    50%       { box-shadow: 0 0 0 6px rgba(255, 209, 102, 0.15), 0 0 40px rgba(255, 209, 102, 0.25); }
+}
+
+.badge-earned .badge-icon,
+.badge-earned .icon,
+.achievement-unlocked .badge-icon {
+    animation: glowRing 2s ease-in-out infinite;
+}
+
+/* ----------------------------------------------------------------
+   33. QUIZ / OPTION — Correct/wrong feedback
+   ---------------------------------------------------------------- */
+@keyframes correctPulse {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.06); box-shadow: 0 0 0 6px rgba(50, 214, 107, 0.25); }
+    100% { transform: scale(1); }
+}
+@keyframes wrongShake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-8px); }
+    40%       { transform: translateX(8px); }
+    60%       { transform: translateX(-5px); }
+    80%       { transform: translateX(5px); }
+}
+
+.option.correct,
+.quiz-option.correct { animation: correctPulse 0.4s ease both; }
+.option.wrong,
+.quiz-option.wrong   { animation: wrongShake 0.4s ease both; }
+
+/* ----------------------------------------------------------------
+   34. TYPEWRITER — text cursor blink
+   ---------------------------------------------------------------- */
+@keyframes cursorBlink {
+    0%, 100% { border-right-color: currentColor; }
+    50%       { border-right-color: transparent; }
+}
+.typewriter {
+    border-right: 2px solid currentColor;
+    animation: cursorBlink 0.75s step-end infinite;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* ----------------------------------------------------------------
+   35. SMOOTH SCROLL SNAPPING — Optional
+   ---------------------------------------------------------------- */
+html { scroll-behavior: smooth; }

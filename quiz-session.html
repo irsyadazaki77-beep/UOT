@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#08111f">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
@@ -11,15 +11,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/quiz-session.css">
-    <link rel="stylesheet" href="css/mobile-compat.css">
+    <link rel="stylesheet" href="quiz-session.css">
+    <link rel="stylesheet" href="mobile-compat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <main class="focus-room" id="focusRoom">
         <header class="focus-header">
             <a class="focus-brand" href="quiz.html" id="exitLink" aria-label="Keluar ke halaman quiz">
-                <img src="assets/logo.png" alt="" aria-hidden="true">
+                <img src="logo.png" alt="" aria-hidden="true">
                 <span>Focus Room</span>
             </a>
 
@@ -85,7 +85,7 @@
 
                 <div class="question-nav-head">
                     <strong>Navigator soal</strong>
-                    <button id="closeNavigator" type="button" aria-label="Tutup navigator">×</button>
+                    <button id="closeNavigator" type="button" aria-label="Tutup navigator">?</button>
                 </div>
                 <div class="question-navigator" id="questionNavigator"></div>
                 <div class="nav-legend">
@@ -139,7 +139,7 @@
                         <span class="result-kicker">Quick tools</span>
                         <h2 id="commandTitle">Aksi cepat</h2>
                     </div>
-                    <button id="closeCommandPalette" type="button" aria-label="Tutup tools cepat">×</button>
+                    <button id="closeCommandPalette" type="button" aria-label="Tutup tools cepat">?</button>
                 </div>
                 <div class="command-grid">
                     <button type="button" data-command="empty">Cari soal kosong</button>
@@ -160,7 +160,7 @@
                         <span class="result-kicker">Review sesi</span>
                         <h2 id="reviewDrawerTitle">Peta jawaban</h2>
                     </div>
-                    <button id="closeReviewDrawer" type="button" aria-label="Tutup review">×</button>
+                    <button id="closeReviewDrawer" type="button" aria-label="Tutup review">?</button>
                 </div>
                 <div class="review-summary" id="reviewSummary"></div>
                 <div class="review-list" id="reviewList"></div>
@@ -182,11 +182,12 @@
         </div>
     </main>
 
-    <script src="js/app-data.js"></script>
-    <script src="js/sound-engine.js"></script>
-    <script src="js/rpg-engine.js"></script>
-    <script src="js/quiz-core.js"></script>
-    <script src="js/pro-learning-engine.js"></script>
-    <script src="js/quiz-session.js"></script>
+    <script src="app-data.js"></script>
+    <script src="sound-engine.js"></script>
+    <script src="rpg-engine.js"></script>
+    <script src="quiz-core.js"></script>
+    <script src="pro-learning-engine.js"></script>
+    <script src="quiz-session.js"></script>
 </body>
 </html>
+

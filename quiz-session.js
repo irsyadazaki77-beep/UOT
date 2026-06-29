@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
     "use strict";
 
     const SESSION_KEY = "eduquestQuizSession";
@@ -219,8 +219,8 @@
 
         els.questionCounter.textContent = `Soal ${state.current + 1}/${state.questions.length}`;
         els.questionTopic.textContent = state.payload.source === "lms"
-            ? `${state.payload.lms.moduleTitle} · ${state.payload.config.difficultyLabel}`
-            : `${state.payload.config.categoryLabel} · ${state.payload.config.difficultyLabel}`;
+            ? `${state.payload.lms.moduleTitle} • ${state.payload.config.difficultyLabel}`
+            : `${state.payload.config.categoryLabel} • ${state.payload.config.difficultyLabel}`;
         els.questionText.textContent = question.question;
         els.answerList.replaceChildren();
         els.answerFeedback.classList.remove("show");
@@ -902,7 +902,7 @@
         if (!restoreSession()) {
             document.getElementById("focusRoom").innerHTML = `
                 <section class="session-empty-state">
-                    <img src="assets/logo.png" alt="" aria-hidden="true">
+                    <img src="logo.png" alt="" aria-hidden="true">
                     <span class="result-kicker">Session expired</span>
                     <h1>Sesi quiz belum tersedia.</h1>
                     <p>Kamu akan diarahkan kembali ke katalog quiz untuk memulai sesi baru.</p>

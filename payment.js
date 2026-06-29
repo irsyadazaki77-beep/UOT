@@ -539,6 +539,22 @@
             // Activate Pro subscription state
             localStorage.setItem(SUBSCRIPTION_KEY, "pro");
  
+            // If not logged in, auto-login as Guest Pro to preserve user premium features
+            let session = null;
+            try {
+                session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+            } catch (e) {
+                console.warn(e);
+            }
+            if (!session || !session.isLoggedIn) {
+                localStorage.setItem(SESSION_KEY, JSON.stringify({
+                    isLoggedIn: true,
+                    username: "Guest Pro",
+                    email: "guest@quiznation.com",
+                    avatar: "👑"
+                }));
+            }
+
             // Play success audio
             if (typeof playSound === "function") {
                 playSound("success");

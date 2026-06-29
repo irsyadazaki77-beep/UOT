@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    Universe Of Tech - LMS Quiz Engine (lms-quiz.js)
    ========================================================================== */
 
@@ -10,7 +10,7 @@ const lmsTracks = [
         badge: "Web Specialist",
         description: "Pelajari cara membangun antarmuka web modern yang responsif, interaktif, dan berkinerja tinggi mulai dari HTML5, CSS Grid/Flexbox, JavaScript modern, hingga optimasi Core Web Vitals.",
         color: "#32d66b",
-        badgeIcon: "🧙‍♂️",
+        badgeIcon: "?????",
         badgeName: "Web Wizard",
         badgeDesc: "Menyelesaikan Jalur Frontend Web Engineer",
         modules: [
@@ -28,7 +28,7 @@ const lmsTracks = [
                         <p>Semantic HTML adalah penggunaan tag HTML yang secara jelas menjelaskan arti elemen tersebut baik bagi browser, mesin pencari (SEO), maupun alat bantu pembaca layar (screen reader) bagi penyandang disabilitas. Contoh tag semantik meliputi <code>&lt;nav&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, dan <code>&lt;footer&gt;</code>.</p>
                         
                         <div class="lms-callout tip">
-                            <strong>💡 Tips Aksesibilitas:</strong>
+                            <strong>?? Tips Aksesibilitas:</strong>
                             Menggunakan tag semantik seperti <code>&lt;button&gt;</code> untuk aksi klik jauh lebih baik daripada menggunakan tag <code>&lt;div&gt;</code> dengan event listener kustom, karena browser secara otomatis mengaktifkan fokus keyboard dan pembaca layar untuk tombol asli.
                         </div>
 
@@ -85,7 +85,7 @@ const lmsTracks = [
                         </ul>
 
                         <div class="lms-callout important">
-                            <strong>⚠️ Aturan Spacing 8px Grid:</strong>
+                            <strong>?? Aturan Spacing 8px Grid:</strong>
                             Dalam UI/UX profesional, usahakan jarak antar elemen (gap, margin, padding) kelipatan 8px (misal: 8px, 16px, 24px, 32px) untuk menjaga konsistensi visual di berbagai layar.
                         </div>
 
@@ -127,7 +127,7 @@ const lmsTracks = [
                         <p>Daripada menggunakan callback yang memicu "callback hell", JavaScript modern menggunakan <code>Promise</code> yang dipercantik dengan sintaks <code>async/await</code> agar kode asinkron terlihat seperti kode sinkron.</p>
 
                         <div class="lms-callout warning">
-                            <strong>🔒 Keamanan Penyimpanan Token:</strong>
+                            <strong>?? Keamanan Penyimpanan Token:</strong>
                             Jangan pernah menyimpan token autentikasi (seperti JWT) sensitif di <code>localStorage</code> karena rentan terhadap serangan XSS (Cross-Site Scripting). Gunakan <code>httpOnly cookies</code> sebagai gantinya.
                         </div>
 
@@ -189,7 +189,7 @@ const lmsTracks = [
         badge: "DB Specialist",
         description: "Kuasai arsitektur penyimpanan data relasional dan NoSQL, sintaks kueri tingkat lanjut (JOIN & GROUP BY), normalisasi skema data, prinsip transaksi ACID, hingga penggunaan indeks.",
         color: "#4f8cff",
-        badgeIcon: "👑",
+        badgeIcon: "??",
         badgeName: "Query Overlord",
         badgeDesc: "Menyelesaikan Jalur Database & SQL",
         modules: [
@@ -210,7 +210,7 @@ const lmsTracks = [
                         </ul>
 
                         <div class="lms-callout important">
-                            <strong>🔑 Integritas Data:</strong>
+                            <strong>?? Integritas Data:</strong>
                             Dengan Foreign Key, database secara otomatis menolak penghapusan data induk jika masih ada data anak yang merujuk ke sana (misalnya, menghapus user yang masih memiliki transaksi pembelian aktif).
                         </div>
                     `
@@ -303,7 +303,7 @@ HAVING AVG(harga) > 50000;</code></pre>
                         <p>Index B-Tree membuat struktur pohon pencarian seimbang di memori. Pencarian data bergeser dari kompleksitas waktu O(N) menjadi O(log N) yang sangat cepat.</p>
                         
                         <div class="lms-callout warning">
-                            <strong>⚡ Efek Samping Indexing:</strong>
+                            <strong>? Efek Samping Indexing:</strong>
                             Index mempercepat kueri baca (SELECT), tetapi memperlambat kueri tulis (INSERT, UPDATE, DELETE) karena database harus menyusun ulang struktur pohon index setiap kali data dimodifikasi. Gunakan index hanya pada kolom yang sering dijadikan filter WHERE atau JOIN.
                         </div>
 
@@ -326,7 +326,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "Security & UI",
         description: "Pahami sistem pertahanan autentikasi web, enkripsi data, mitigasi phishing/malware, dipadukan dengan implementasi visual hierarchy, aksesibilitas WCAG, dan hukum interaksi pengguna (Hick's & Fitts's Laws).",
         color: "#8b5cf6",
-        badgeIcon: "🛡️",
+        badgeIcon: "???",
         badgeName: "Shield Guard",
         badgeDesc: "Menyelesaikan Jalur Cyber Security & UI/UX",
         modules: [
@@ -347,7 +347,7 @@ HAVING AVG(harga) > 50000;</code></pre>
                         </ul>
 
                         <div class="lms-callout important">
-                            <strong>🔒 Mitigasi XSS & CSRF:</strong>
+                            <strong>?? Mitigasi XSS & CSRF:</strong>
                             Gunakan header HTTP <code>Content-Security-Policy (CSP)</code> untuk membatasi eksekusi skrip ilegal di browser pengguna guna mencegah pencurian cookie sesi via Cross-Site Scripting (XSS).
                         </div>
                     `
@@ -377,7 +377,7 @@ HAVING AVG(harga) > 50000;</code></pre>
                         </ol>
 
                         <div class="lms-callout tip">
-                            <strong>💡 Perlindungan Utama:</strong>
+                            <strong>?? Perlindungan Utama:</strong>
                             Selalu gunakan protokol <strong>HTTPS</strong> yang mengenkripsi seluruh transfer data, dan hindari melakukan transaksi finansial saat terhubung ke WiFi publik tanpa menggunakan VPN (Virtual Private Network).
                         </div>
                     `
@@ -425,7 +425,7 @@ HAVING AVG(harga) > 50000;</code></pre>
                     category: "UI/UX Design",
                     readTime: "6 menit baca",
                     content: `
-                        <p>Desain yang baik adalah desain yang inklusif—dapat dinikmati oleh semua kalangan, termasuk mereka yang memiliki keterbatasan fisik atau sensorik.</p>
+                        <p>Desain yang baik adalah desain yang inklusif•dapat dinikmati oleh semua kalangan, termasuk mereka yang memiliki keterbatasan fisik atau sensorik.</p>
                         
                         <h3>Prinsip Aksesibilitas Web (WCAG):</h3>
                         <ul>
@@ -449,7 +449,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "Code Explorer",
         description: "Bangun fondasi coding yang kuat lewat logika pemrograman, struktur data, algoritma, debugging, dan clean code sebelum melangkah ke proyek yang lebih kompleks.",
         color: "#f59e0b",
-        badgeIcon: "💻",
+        badgeIcon: "??",
         badgeName: "Logic Crafter",
         badgeDesc: "Menyelesaikan Jalur Programming & Algorithm",
         modules: [
@@ -563,7 +563,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "Data Explorer",
         description: "Ubah data mentah menjadi keputusan melalui statistik dasar, visualisasi, KPI, funnel analysis, eksperimen, dan cara membaca insight tanpa terjebak kesimpulan palsu.",
         color: "#ec4899",
-        badgeIcon: "📊",
+        badgeIcon: "??",
         badgeName: "Insight Hunter",
         badgeDesc: "Menyelesaikan Jalur Data Analytics & Product Insight",
         modules: [
@@ -676,7 +676,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "Project Builder",
         description: "Satukan frontend, logika aplikasi, API, database, keamanan, dan performa menjadi satu jalur proyek untuk memahami alur aplikasi modern dari browser hingga data.",
         color: "#06b6d4",
-        badgeIcon: "🚀",
+        badgeIcon: "??",
         badgeName: "App Architect",
         badgeDesc: "Menyelesaikan Jalur Full-Stack App Builder",
         modules: [
@@ -790,7 +790,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "Cloud Specialist",
         description: "Pelajari komputasi awan, infrastruktur sebagai kode (IaC), pipeline CI/CD otomatis, containerization dengan Docker & Kubernetes, hingga pemantauan sistem.",
         color: "#a855f7",
-        badgeIcon: "☁️",
+        badgeIcon: "??",
         badgeName: "Cloud Architect",
         badgeDesc: "Menyelesaikan Jalur Cloud Engineering & DevOps",
         modules: [
@@ -850,7 +850,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "AI Explorer",
         description: "Masuki dunia kecerdasan buatan, pemrosesan bahasa alami (NLP), pembelajaran mendalam (Deep Learning), hingga pemanfaatan model bahasa besar (LLM).",
         color: "#e11d48",
-        badgeIcon: "🧠",
+        badgeIcon: "??",
         badgeName: "AI Engineer",
         badgeDesc: "Menyelesaikan Jalur AI & Machine Learning Explorer",
         modules: [
@@ -910,7 +910,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "Mobile Specialist",
         description: "Bangun aplikasi mobile native maupun cross-platform untuk iOS dan Android menggunakan framework modern seperti Flutter, React Native, hingga optimasi layout mobile.",
         color: "#f97316",
-        badgeIcon: "📱",
+        badgeIcon: "??",
         badgeName: "Mobile Crafter",
         badgeDesc: "Menyelesaikan Jalur Mobile App Developer",
         modules: [
@@ -968,7 +968,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "Game Builder",
         description: "Pelajari matematika game, loop utama (game loop), pemrograman fisika 2D/3D, dan logika game engine populer seperti Unity, Unreal, maupun Godot.",
         color: "#14b8a6",
-        badgeIcon: "🎮",
+        badgeIcon: "??",
         badgeName: "Game Architect",
         badgeDesc: "Menyelesaikan Jalur Game Development Foundation",
         modules: [
@@ -1027,7 +1027,7 @@ HAVING AVG(harga) > 50000;</code></pre>
         badge: "Agile Specialist",
         description: "Kuasai siklus hidup produk, penyusunan backlog, metodologi Scrum & Kanban, riset pasar, hingga metrik retensi dan akuisisi produk.",
         color: "#0ea5e9",
-        badgeIcon: "🎯",
+        badgeIcon: "??",
         badgeName: "Product Leader",
         badgeDesc: "Menyelesaikan Jalur Product Management & Agile",
         modules: [
@@ -1180,8 +1180,8 @@ function renderTabs() {
     tabContainer.className = "lms-tab-container";
     tabContainer.innerHTML = `
         <div class="lms-tab-nav" role="tablist">
-            <button class="lms-tab-btn active" data-tab="lms-classroom" role="tab" aria-selected="true">🎓 Jalur Belajar (LMS)</button>
-            <button class="lms-tab-btn" data-tab="quick-arena" role="tab" aria-selected="false">🎮 Quick Quiz Arena</button>
+            <button class="lms-tab-btn active" data-tab="lms-classroom" role="tab" aria-selected="true">?? Jalur Belajar (LMS)</button>
+            <button class="lms-tab-btn" data-tab="quick-arena" role="tab" aria-selected="false">?? Quick Quiz Arena</button>
         </div>
     `;
 
@@ -1211,15 +1211,15 @@ function renderTrackCards() {
             <div class="lms-global-stats">
                 <div class="lms-stat-line">
                     <span class="lms-stat-label">Materi Selesai</span>
-                    <strong class="lms-stat-value green">${totalLecturesRead} 📄</strong>
+                    <strong class="lms-stat-value green">${totalLecturesRead} ??</strong>
                 </div>
                 <div class="lms-stat-line">
                     <span class="lms-stat-label">Kuis Lulus</span>
-                    <strong class="lms-stat-value blue">${totalQuizzesPassed} ✍️</strong>
+                    <strong class="lms-stat-value blue">${totalQuizzesPassed} ??</strong>
                 </div>
                 <div class="lms-stat-line">
                     <span class="lms-stat-label">Sertifikat Diraih</span>
-                    <strong class="lms-stat-value purple">${totalBadges} 🏆</strong>
+                    <strong class="lms-stat-value purple">${totalBadges} ??</strong>
                 </div>
             </div>
 
@@ -1244,7 +1244,7 @@ function renderTrackCards() {
                     </div>
                 </div>
                 <div class="lms-syllabus-tree" id="lmsSyllabusTree"></div>
-                <button class="btn btn-danger" id="lmsResetOutlineBtn" style="margin-top: 14px; min-height:36px; font-size:11px; padding: 8px 12px; border-radius:12px; width: 100%;">✕ Reset Progres Jalur</button>
+                <button class="btn btn-danger" id="lmsResetOutlineBtn" style="margin-top: 14px; min-height:36px; font-size:11px; padding: 8px 12px; border-radius:12px; width: 100%;">? Reset Progres Jalur</button>
             </aside>
             
             <!-- Main Panel -->
@@ -1297,7 +1297,7 @@ function renderTrackCards() {
                 <p class="lms-track-description">${track.description}</p>
                 <div class="lms-track-meta">
                     <span class="lms-track-modules-count">
-                        📚 ${track.modules.length} Modul 
+                        ?? ${track.modules.length} Modul 
                         • ${isCompleted ? "Completed" : progressInfo.percent + "% Progress"}
                     </span>
                     <div class="lms-track-actions">
@@ -1885,8 +1885,8 @@ function renderLesson(step, trackId, moduleId) {
             <div class="lms-lecture-header">
                 <div class="lms-lecture-meta">
                     <span class="lms-lecture-tag">${lesson.category}</span>
-                    <span class="lms-lecture-tag">⏱️ ${lesson.readTime}</span>
-                    <span class="lms-lecture-tag">📚 ${step.title}</span>
+                    <span class="lms-lecture-tag">?? ${lesson.readTime}</span>
+                    <span class="lms-lecture-tag">?? ${step.title}</span>
                 </div>
                 <h1 class="lms-lecture-title">${lesson.title}</h1>
             </div>
@@ -1895,7 +1895,7 @@ function renderLesson(step, trackId, moduleId) {
             </div>
             <div class="lms-lecture-footer">
                 <button class="btn ${isCompleted ? 'btn-ghost' : 'btn-primary'}" id="lmsCompleteLectureBtn" ${isCompleted ? 'disabled' : ''}>
-                    ${isCompleted ? '✓ Selesai Dibaca' : `🚀 Selesai & Dapatkan +${step.xp} XP`}
+                    ${isCompleted ? '? Selesai Dibaca' : `?? Selesai & Dapatkan +${step.xp} XP`}
                 </button>
             </div>
         </div>
@@ -1957,18 +1957,18 @@ function renderQuizIntro(mod, quizStep) {
 
     main.innerHTML = `
         <div class="lms-quiz-intro">
-            <span class="lms-quiz-icon">${isChallenge ? '🏆' : '✍️'}</span>
+            <span class="lms-quiz-icon">${isChallenge ? '??' : '??'}</span>
             <h1 class="lms-quiz-intro-title">${quizStep.sessionTitle}</h1>
             <p class="lms-quiz-intro-desc">
                 Uji pemahaman Anda tentang ${mod.title}. Anda memerlukan skor minimal <strong>${quizStep.passThreshold}%</strong> untuk melengkapi langkah silabus ini.
             </p>
             
             <div class="lms-quiz-rules-card">
-                <h3 class="lms-quiz-rules-title">📋 Aturan & Info Kuis:</h3>
+                <h3 class="lms-quiz-rules-title">?? Aturan & Info Kuis:</h3>
                 <ul class="lms-quiz-rules-list">
                     <li><strong>Jumlah Soal</strong>: 5 Pertanyaan</li>
-                    <li><strong>Bantuan AI Tutor</strong>: ${isChallenge ? '🔴 Tidak tersedia (Mode Ujian)' : '🟢 Tersedia setiap saat'}</li>
-                    <li><strong>Bantuan 50:50 / Hint</strong>: ${isChallenge ? '🔴 Tidak' : '🟢 Ya, 2 Kali bantuan'}</li>
+                    <li><strong>Bantuan AI Tutor</strong>: ${isChallenge ? '?? Tidak tersedia (Mode Ujian)' : '?? Tersedia setiap saat'}</li>
+                    <li><strong>Bantuan 50:50 / Hint</strong>: ${isChallenge ? '?? Tidak' : '?? Ya, 2 Kali bantuan'}</li>
                     <li><strong>Skor Tertinggi Anda</strong>: ${highScore}%</li>
                     <li><strong>Reward</strong>: +${quizStep.xp} XP</li>
                     ${isChallenge ? '<li><strong>Integritas Fokus</strong>: Perpindahan tab dicatat dan memunculkan pengingat tanpa menggagalkan sesi otomatis.</li>' : ''}
@@ -2181,7 +2181,8 @@ function renderLmsQuizActiveLayout() {
         document.getElementById("lmsQuizFiftyBtn").disabled = true;
     } else {
         document.getElementById("lmsQuizHintBtn").addEventListener("click", triggerLmsHint);
-        document.getElementById("lmsQuizFiftyBtn").addEventListener("click", triggerLmsFifty);
+        document.getElementById("lmsQuizFiftyBtn").addEventListener("click", triggerLmsFifty);
+
 }
 
     // Keyboard navigation
@@ -2476,7 +2477,7 @@ function finishLmsQuiz(cheatFailed = false) {
 
     main.innerHTML = `
         <div class="lms-quiz-intro" style="animation: scoreBurst 0.5s ease both;">
-            <span class="lms-quiz-icon">${isPassed ? '🎉' : '❌'}</span>
+            <span class="lms-quiz-icon">${isPassed ? '??' : '?'}</span>
             <h1 class="lms-quiz-intro-title">${isPassed ? 'Selamat, Anda Lulus!' : 'Belum Lulus Kriteria'}</h1>
             <div class="result-score" style="font-size: 72px; margin: 10px 0; color: ${isPassed ? 'var(--green)' : 'var(--danger)'};">${score}%</div>
             
@@ -2634,7 +2635,7 @@ function showCertificate(trackId) {
         <div class="lms-modal-content">
             <div class="lms-modal-header">
                 <h3 class="lms-modal-title">Graduation Credentials & Academic Transcript</h3>
-                <button class="lms-modal-close" id="lmsCertificateClose" type="button" aria-label="Tutup sertifikat">×</button>
+                <button class="lms-modal-close" id="lmsCertificateClose" type="button" aria-label="Tutup sertifikat">•</button>
             </div>
             <div class="lms-modal-body">
                 <div class="lms-cert-input-row" style="margin-bottom: 20px;">
@@ -2645,14 +2646,14 @@ function showCertificate(trackId) {
                 <div class="lms-cert-wrapper" id="printableCertArea">
                     <!-- Page 1: Main Certificate -->
                     <div class="lms-cert-page page-1 lms-cert-frame">
-                        <img src="assets/logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
+                        <img src="logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
                         <div class="lms-cert-corner top-left"></div>
                         <div class="lms-cert-corner top-right"></div>
                         <div class="lms-cert-corner bottom-left"></div>
                         <div class="lms-cert-corner bottom-right"></div>
 
                         <div class="lms-cert-brand">
-                            <img src="assets/logo.png" alt="Universe Of Tech" class="lms-cert-logo">
+                            <img src="logo.png" alt="Universe Of Tech" class="lms-cert-logo">
                             <div>
                                 <div class="lms-cert-kicker">Universe Of Tech Academy</div>
                                 <div class="lms-cert-credential">Verified Digital Credential</div>
@@ -2707,14 +2708,14 @@ function showCertificate(trackId) {
 
                     <!-- Page 2: Academic Transcript -->
                     <div class="lms-cert-page page-2 lms-cert-frame lms-cert-transcript">
-                        <img src="assets/logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
+                        <img src="logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
                         <div class="lms-cert-corner top-left"></div>
                         <div class="lms-cert-corner top-right"></div>
                         <div class="lms-cert-corner bottom-left"></div>
                         <div class="lms-cert-corner bottom-right"></div>
 
                         <div class="lms-cert-brand">
-                            <img src="assets/logo.png" alt="Universe Of Tech" class="lms-cert-logo">
+                            <img src="logo.png" alt="Universe Of Tech" class="lms-cert-logo">
                             <div>
                                 <div class="lms-cert-kicker">Universe Of Tech Academy</div>
                                 <div class="lms-cert-credential">Academic Transcript Report</div>
@@ -2921,7 +2922,7 @@ function loadCertificateLogoJpeg() {
             }
         };
         image.onerror = () => resolve(null);
-        image.src = "assets/logo.png";
+        image.src = "logo.png";
     });
 }
 

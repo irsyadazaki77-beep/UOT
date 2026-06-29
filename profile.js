@@ -475,9 +475,13 @@
             window.location.href = "index.html#pricing";
             return;
         }
-        localStorage.setItem("eduquestSubscription", btn.dataset.plan === "pro" ? "pro" : "basic");
+        const newPlan = btn.dataset.plan === "pro" ? "pro" : "basic";
+        localStorage.setItem("eduquestSubscription", newPlan);
         render();
-        showToast(`Paket ${btn.dataset.plan === "pro" ? "Pro" : "Basic"} aktif.`);
+        showToast(`Paket ${newPlan === "pro" ? "Pro" : "Basic"} aktif.`);
+        setTimeout(() => {
+            window.location.reload();
+        }, 800);
     }));
 
     $("exportDataBtn").addEventListener("click", () => {

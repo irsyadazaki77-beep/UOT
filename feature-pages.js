@@ -1724,16 +1724,26 @@ function initTKALMSPage() {
         function renderSubjectOptions() {
             const visibleSubjects = getVisibleSubjects();
             focusedSubjectIndex = Math.min(focusedSubjectIndex, Math.max(visibleSubjects.length - 1, 0));
+            const query = subjectSearch.value.trim();
             options.innerHTML = visibleSubjects.map((subject, index) => {
                 const total = questionBank.filter(question => question.subject === subject.id).length;
                 const stats = getSubjectAccuracy(subject.id);
+                
+                let displayName = subject.name;
+                if (query) {
+                    try {
+                        const regex = new RegExp(`(${query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, "gi");
+                        displayName = subject.name.replace(regex, '<span class="search-match-highlight">$1</span>');
+                    } catch (e) {}
+                }
+                
                 return `
                     <button class="lms-subject-option ${index === focusedSubjectIndex ? "focused" : ""}"
                         type="button" role="option" aria-selected="${subject.id === activeSubject}"
                         data-tka-subject="${subject.id}">
                         <span class="lms-subject-mark">${subject.mark}</span>
                         <span class="lms-subject-copy">
-                            <strong>${subject.name}</strong>
+                            <strong>${displayName}</strong>
                             <small>${subject.group} - ${stats.done}/${total} selesai</small>
                         </span>
                         <small>${stats.accuracy}%</small>
@@ -2480,6 +2490,63 @@ function initTKALMSPage() {
                 renderStrategy();
             });
         }
+
+        const actionsList = document.getElementById("tkaStrategyActionsList");
+        if (actionsList) {
+            actionsList.addEventListener("click", (event) => {
+                const card = event.target.closest(".strategy-action-card");
+                if (!card) return;
+                const actionType = card.dataset.actionType;
+                if (!actionType) return;
+                
+                if (actionType.startsWith("weakSubject:")) {
+                    const subjId = actionType.split(":")[1];
+                    activeSubject = subjId;
+                    activeMode = "all";
+                    sessionSize = "5";
+                    updatePreferences();
+                    renderAll();
+                    showToast(`Melatih mapel terlemah: ${getSubject(subjId).name}`);
+                } else if (actionType === "coverage") {
+                    activeMode = "unanswered";
+                    sessionSize = "10";
+                    updatePreferences();
+                    renderAll();
+                    showToast("Menyiapkan latihan soal baru.");
+                } else if (actionType === "hots" || actionType === "hotsAccuracy") {
+                    activeDifficulty = "hots";
+                    activeMode = "all";
+                    sessionSize = "5";
+                    updatePreferences();
+                    renderAll();
+                    showToast("Menyiapkan Tantangan HOTS.");
+                } else if (actionType === "accuracy") {
+                    activeMode = "wrong";
+                    sessionSize = "5";
+                    updatePreferences();
+                    renderAll();
+                    showToast("Menyiapkan drill soal salah.");
+                } else if (actionType === "intensitas") {
+                    activeMode = "unanswered";
+                    sessionSize = "10";
+                    updatePreferences();
+                    renderAll();
+                    showToast("Menyiapkan latihan intensif.");
+                } else if (actionType === "wrong") {
+                    activeMode = "wrong";
+                    sessionSize = "5";
+                    updatePreferences();
+                    renderAll();
+                    showToast("Menyiapkan review berkala.");
+                }
+                
+                // Switch to setup tab
+                const setupTabBtn = document.querySelector('[data-target="tab-setup"]');
+                if (setupTabBtn) setupTabBtn.click();
+                
+                document.getElementById("lms-workspace")?.scrollIntoView({ behavior: "smooth" });
+            });
+        }
     }
 
     function renderRecommendations() {
@@ -2490,6 +2557,12 @@ function initTKALMSPage() {
         const btnErrors = document.querySelector("#recRepeatErrors button");
         const cardErrors = document.getElementById("recRepeatErrors");
         if (btnErrors && cardErrors) {
+            const p = cardErrors.querySelector("p");
+            if (p) {
+                p.innerHTML = wrongQuestions.length > 0 
+                    ? `Ulangi <strong>${wrongQuestions.length}</strong> soal yang pernah dijawab salah untuk evaluasi.` 
+                    : `Tidak ada soal salah saat ini. Bagus sekali!`;
+            }
             if (wrongQuestions.length === 0) {
                 btnErrors.disabled = true;
                 btnErrors.textContent = "Tidak Tersedia";
@@ -2509,6 +2582,12 @@ function initTKALMSPage() {
         const btnWeak = document.querySelector("#recWeakestDrill button");
         const cardWeak = document.getElementById("recWeakestDrill");
         if (btnWeak && cardWeak) {
+            const p = cardWeak.querySelector("p");
+            if (p) {
+                p.innerHTML = weakSubjectObj 
+                    ? `Sesi khusus mapel terlemahmu: <strong>${weakSubjectObj.name}</strong> (${weakSubjectObj.accuracy}% akurasi).` 
+                    : `Kerjakan minimal 2 mapel berbeda untuk mengidentifikasi kelemahan.`;
+            }
             if (!weakSubjectObj) {
                 btnWeak.disabled = true;
                 btnWeak.textContent = "Belum Ada Data";
@@ -2525,6 +2604,12 @@ function initTKALMSPage() {
         const btnHots = document.querySelector("#recHotsChallenge button");
         const cardHots = document.getElementById("recHotsChallenge");
         if (btnHots && cardHots) {
+            const p = cardHots.querySelector("p");
+            if (p) {
+                p.innerHTML = hotsQuestions.length > 0
+                    ? `5 soal level analisis tinggi campuran untuk melatih logika berpikir.`
+                    : `Tidak ada soal HOTS tersedia di mapel ${getSubject(activeSubject).name}.`;
+            }
             if (hotsQuestions.length === 0) {
                 btnHots.disabled = true;
                 btnHots.textContent = "Tidak Tersedia";
@@ -2556,7 +2641,7 @@ function initTKALMSPage() {
             projStatusText.style.color = "var(--muted)";
             gapText.textContent = "Kerjakan minimal 5 soal untuk menganalisis gap skor.";
             actionsList.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted);">
+                <div style="display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); padding: 12px;">
                     <i class="fa-solid fa-lock" style="font-size: 16px; color: var(--muted);"></i>
                     <span>Selesaikan minimal 5 soal di mapel apa pun untuk membuka rencana strategi aksi.</span>
                 </div>
@@ -2592,7 +2677,8 @@ function initTKALMSPage() {
                 icon: "fa-triangle-exclamation",
                 color: "var(--danger)",
                 title: `Tingkatkan akurasi ${weakSubject.name}`,
-                desc: `Akurasi saat ini ${weakSubject.accuracy}%. Lakukan drill minimal 5 soal dari materi ini untuk menaikkan proyeksi nilai.`
+                desc: `Akurasi saat ini ${weakSubject.accuracy}%. Lakukan drill minimal 5 soal dari materi ini untuk menaikkan proyeksi nilai.`,
+                actionType: `weakSubject:${weakSubject.id}`
             });
         }
         
@@ -2605,7 +2691,8 @@ function initTKALMSPage() {
                 icon: "fa-database",
                 color: "var(--blue)",
                 title: "Perluas cakupan materi latihan",
-                desc: `Kamu baru mengerjakan ${coverageRate}% dari bank soal TKA. Selesaikan minimal 15 soal lagi untuk menstabilkan estimasi nilai.`
+                desc: `Kamu baru mengerjakan ${coverageRate}% dari bank soal TKA. Selesaikan minimal 15 soal lagi untuk menstabilkan estimasi nilai.`,
+                actionType: "coverage"
             });
         }
         
@@ -2619,14 +2706,16 @@ function initTKALMSPage() {
                 icon: "fa-fire",
                 color: "var(--purple)",
                 title: "Coba Tantangan HOTS pertama kamu",
-                desc: "Uji logika analisis tinggi dengan menyelesaikan sesi khusus HOTS."
+                desc: "Uji logika analisis tinggi dengan menyelesaikan sesi khusus HOTS.",
+                actionType: "hots"
             });
         } else if (hotsAccuracy < 60) {
             actions.push({
                 icon: "fa-fire",
                 color: "var(--purple)",
                 title: "Perbaiki akurasi soal analisis tinggi (HOTS)",
-                desc: `Akurasi HOTS kamu saat ini ${hotsAccuracy}%. Pelajari kembali pembahasan di Riwayat & Review.`
+                desc: `Akurasi HOTS kamu saat ini ${hotsAccuracy}%. Pelajari kembali pembahasan di Riwayat & Review.`,
+                actionType: "hotsAccuracy"
             });
         }
         
@@ -2637,14 +2726,16 @@ function initTKALMSPage() {
                     icon: "fa-bullseye",
                     color: "var(--yellow)",
                     title: "Fokus pada ketelitian (Akurasi)",
-                    desc: "Akurasi belajar saat ini masih di bawah 75%. Kurangi kecepatan pengerjaan dan pastikan membaca stimulus soal secara teliti sebelum submit."
+                    desc: "Akurasi belajar saat ini masih di bawah 75%. Kurangi kecepatan pengerjaan dan pastikan membaca stimulus soal secara teliti sebelum submit.",
+                    actionType: "accuracy"
                 });
             } else {
                 actions.push({
                     icon: "fa-bolt",
                     color: "var(--green)",
                     title: "Tingkatkan intensitas latihan",
-                    desc: "Akurasi kamu sudah sangat baik! Terus selesaikan soal baru untuk menambahkan bobot progres belajar ke estimasi skor."
+                    desc: "Akurasi kamu sudah sangat baik! Terus selesaikan soal baru untuk menambahkan bobot progres belajar ke estimasi skor.",
+                    actionType: "intensitas"
                 });
             }
         } else {
@@ -2652,18 +2743,24 @@ function initTKALMSPage() {
                 icon: "fa-crown",
                 color: "var(--green)",
                 title: "Pertahankan keunggulan",
-                desc: "Rutinlah melakukan review berkala terhadap soal-soal salah agar kemampuanmu tetap prima menjelang ujian resmi."
+                desc: "Rutinlah melakukan review berkala terhadap soal-soal salah agar kemampuanmu tetap prima menjelang ujian resmi.",
+                actionType: "wrong"
             });
         }
         
         actionsList.innerHTML = actions.map(act => `
-            <div style="display: grid; grid-template-columns: 24px 1fr; gap: 12px; font-size: 14px; line-height: 1.4;">
-                <div style="color: ${act.color}; text-align: center; margin-top: 2px;"><i class="fa-solid ${act.icon}"></i></div>
-                <div>
-                    <strong style="display: block; color: var(--text);">${act.title}</strong>
-                    <span style="color: var(--muted); font-size: 12.5px; display: block; margin-top: 2px;">${act.desc}</span>
+            <button type="button" class="strategy-action-card" data-action-type="${act.actionType}">
+                <div class="action-card-icon" style="background-color: ${act.color}15; color: ${act.color};">
+                    <i class="fa-solid ${act.icon}"></i>
                 </div>
-            </div>
+                <div class="action-card-body">
+                    <strong>${act.title}</strong>
+                    <p>${act.desc}</p>
+                </div>
+                <div class="action-card-arrow">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div>
+            </button>
         `).join("");
     }
 
