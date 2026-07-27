@@ -1,0 +1,185 @@
+/* Quiz Budaya 2026 upgrade layer.
+   New behavior-specific rules live here so legacy quiz styles can be retired
+   incrementally without adding more scattered overrides. */
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+[hidden] { display: none !important; }
+
+.culture-check-row {
+    min-height: 48px;
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border: 1px solid var(--line, rgba(148, 163, 184, .28));
+    border-radius: 12px;
+    background: var(--surface, #fff);
+    font-weight: 600;
+}
+
+.culture-check-row input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary, #16a36a);
+}
+
+.culture-timer-option.is-disabled { opacity: .55; }
+.culture-timer-option.is-disabled .culture-check-row { cursor: not-allowed; }
+
+.culture-history-tools {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(180px, 260px);
+    gap: 12px;
+    margin: 0 0 10px;
+}
+
+.culture-history-tools input,
+.culture-history-tools select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    color: var(--text, #172033);
+    border: 1px solid var(--line, rgba(148, 163, 184, .28));
+    border-radius: 12px;
+    background: var(--surface, #fff);
+    font: inherit;
+}
+
+.culture-filter-status {
+    min-height: 20px;
+    margin: 0 0 14px;
+    color: var(--muted, #64748b);
+    font-size: .86rem;
+}
+
+.culture-mode-card.is-filtered,
+.culture-region-card.is-filtered,
+.culture-history-item.is-filtered { display: none !important; }
+
+.culture-continue-link:not([hidden]) {
+    display: inline-flex;
+    border-color: color-mix(in srgb, var(--primary, #16a36a) 50%, transparent);
+}
+
+.culture-timer-card {
+    padding: 16px 18px;
+    border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--line, transparent));
+    border-radius: 18px;
+    background: color-mix(in srgb, #f59e0b 8%, var(--surface, #fff));
+}
+
+.culture-timer-card span,
+.culture-timer-card small { display: block; }
+.culture-timer-card strong { display: block; margin: 4px 0; font-size: 1.45rem; font-variant-numeric: tabular-nums; }
+.culture-timer-card.is-over-target { border-color: #f97316; }
+
+.culture-study-panel {
+    border: 1px solid var(--line, rgba(148, 163, 184, .24));
+    border-radius: 16px;
+    background: var(--surface, #fff);
+}
+
+.culture-study-panel summary {
+    padding: 14px 16px;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.culture-study-panel[open] { padding-bottom: 14px; }
+.culture-study-panel[open] summary { margin-bottom: 8px; border-bottom: 1px solid var(--line, rgba(148, 163, 184, .2)); }
+.culture-study-panel > label { display: grid; gap: 6px; padding: 0 14px 10px; font-size: .82rem; font-weight: 700; }
+.culture-study-panel select { width: 100%; min-height: 42px; padding: 0 10px; border: 1px solid var(--line, rgba(148, 163, 184, .28)); border-radius: 10px; background: var(--surface, #fff); color: inherit; }
+.culture-study-panel .language-module-cards,
+.culture-study-panel .language-vocab-grid,
+.culture-study-panel .language-phrase-list { display: grid; gap: 7px; padding: 0 14px 8px; }
+.culture-study-panel .language-module-card,
+.culture-study-panel .language-vocab-card,
+.culture-study-panel .language-phrase-card { padding: 9px 10px; border-radius: 10px; background: color-mix(in srgb, var(--primary, #16a36a) 7%, var(--surface, #fff)); }
+.culture-study-panel .language-module-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; }
+.culture-study-panel strong,
+.culture-study-panel span,
+.culture-study-panel small { display: block; }
+
+.culture-result-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.culture-result-breakdown > div {
+    padding: 10px 12px;
+    border: 1px solid var(--line, rgba(148, 163, 184, .24));
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--surface, #fff) 82%, transparent);
+}
+
+.culture-result-breakdown span,
+.culture-result-breakdown small { display: block; }
+.culture-result-breakdown strong { font-size: 1.05rem; }
+
+.culture-result-recommendation {
+    margin-top: 14px;
+    padding: 13px 14px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--primary, #16a36a) 10%, var(--surface, #fff));
+}
+
+.culture-result-recommendation strong,
+.culture-result-recommendation span { display: block; }
+.culture-result-recommendation a { display: inline-flex; margin-top: 8px; font-weight: 800; }
+
+.result-overlay .result-panel {
+    max-height: min(86vh, 760px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.culture-source-notice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    max-width: 1180px;
+    margin: 14px auto 104px;
+    padding: 14px 18px;
+    border: 1px solid color-mix(in srgb, #f59e0b 32%, var(--line, transparent));
+    border-radius: 16px;
+    background: color-mix(in srgb, #f59e0b 7%, var(--surface, #fff));
+}
+
+.culture-source-notice strong,
+.culture-source-notice span { display: block; }
+.culture-source-notice span { margin-top: 3px; color: var(--muted, #64748b); font-size: .86rem; }
+
+.lms-module-btn[aria-current="step"] { outline: 2px solid color-mix(in srgb, var(--primary, #16a36a) 70%, transparent); outline-offset: 2px; }
+.lms-answer-btn:focus-visible,
+.lms-module-btn:focus-visible,
+.action-button:focus-visible,
+.culture-history-tools :focus-visible,
+.culture-check-row:focus-within {
+    outline: 3px solid color-mix(in srgb, var(--primary, #16a36a) 55%, transparent);
+    outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+    .culture-history-tools { grid-template-columns: 1fr; }
+    .culture-source-notice { align-items: stretch; flex-direction: column; margin: 12px 14px 164px; }
+    .culture-source-notice .action-button { width: 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .focus-progress span,
+    .lms-progress-track i { transition: none !important; }
+}

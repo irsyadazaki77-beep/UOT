@@ -1,0 +1,16 @@
+{
+  "name": "Universe Of Tech",
+  "short_name": "Universe Tech",
+  "description": "Platform pembelajaran teknologi interaktif berbasis quest dan kuis.",
+  "lang": "id",
+  "id": "./learning-journey.html",
+  "start_url": "./learning-journey.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7fbf9",
+  "theme_color": "#16a867",
+  "icons": [
+    { "src": "logo-uot-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "logo-uot-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

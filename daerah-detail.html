@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f1e7">
+  <meta name="description" content="Pelajari budaya, bahasa, cerita rakyat, dan pengetahuan daerah Indonesia secara interaktif.">
+  <title>Detail Daerah | Wonderful Indonesia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="daerah-detail.css?v=20260717-consolidated">
+</head>
+<body data-page="wonder-detail">
+  <a class="skip-link" href="#mainContent">Lewati ke konten utama</a>
+
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Navigasi utama">
+      <a class="brand" href="index.html" aria-label="Universe of Tech, beranda">
+        <img src="universe-of-tech-logo.jpg" alt="" width="40" height="40">
+        <span>Universe of Tech</span>
+      </a>
+      <div class="nav-links" aria-label="Tautan utama">
+        <a href="index.html">Beranda</a>
+        <a href="materi.html">Materi</a>
+        <a href="quiz.html">Quiz</a>
+        <a href="projects.html">Proyek</a>
+        <a href="bahasa-daerah.html" aria-current="page">Bahasa & Budaya</a>
+      </div>
+      <div class="nav-actions">
+        <button class="icon-button" id="themeToggleBtn" type="button" aria-label="Aktifkan tema gelap" aria-pressed="false"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+        <button class="icon-button header-utility" id="headerUtilityBtn" type="button" aria-label="Buka pengaturan belajar" aria-expanded="false" aria-controls="utilityMenu"><i class="fa-solid fa-sliders" aria-hidden="true"></i></button>
+        <a class="nav-login" href="login.html">Masuk</a>
+        <a class="button button-primary nav-start" href="bahasa-daerah.html">Jelajahi daerah</a>
+        <button class="icon-button nav-menu" id="mobileMenuBtn" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="mobileMenu"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="index.html">Beranda</a><a href="materi.html">Materi</a><a href="quiz.html">Quiz</a><a href="projects.html">Proyek</a><a href="bahasa-daerah.html">Bahasa & Budaya</a><a href="learning-path.html">Roadmap Belajar</a><a href="profile.html">Profil Saya</a>
+    </div>
+  </header>
+
+  <main id="mainContent" tabindex="-1">
+    <section class="hero" aria-labelledby="placeTitle">
+      <div class="hero-pattern" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <nav class="breadcrumb" aria-label="Breadcrumb"><a href="bahasa-daerah.html">Wonderful Indonesia</a><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span id="placeBreadcrumb" aria-current="page">Daerah</span></nav>
+        <div class="eyebrow-row"><span class="region-pill" id="placeRegion">Indonesia</span><span class="learning-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 8–12 menit</span></div>
+        <h1 id="placeTitle"><span id="placeMark">ID</span> <span id="placeName">Daerah</span></h1>
+        <p class="hero-lead" id="placeSummary">Jelajahi kekayaan budaya dan bahasa daerah Indonesia.</p>
+        <div class="hero-actions">
+          <button class="button button-primary" id="continueLearningBtn" type="button"><i class="fa-solid fa-play" aria-hidden="true"></i><span>Mulai perjalanan</span></button>
+          <button class="button button-secondary state-button" id="favoriteBtn" type="button" aria-pressed="false"><i class="fa-regular fa-heart" aria-hidden="true"></i><span>Simpan favorit</span></button>
+        </div>
+        <div class="hero-meta" aria-label="Status belajar">
+          <span><i class="fa-solid fa-chart-simple" aria-hidden="true"></i><b id="heroProgress">0%</b> selesai</span>
+          <span><i class="fa-solid fa-list-check" aria-hidden="true"></i><b id="heroActivityCount">0/7</b> aktivitas</span>
+          <span><i class="fa-solid fa-shield-heart" aria-hidden="true"></i>Progres tersimpan lokal</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <figure class="hero-figure">
+          <img id="placeHeroImage" src="assets/daerah/editorial-sumatra.jpg" alt="" width="1440" height="1080" fetchpriority="high" decoding="async">
+          <figcaption><span id="visualCaption">Warisan budaya Nusantara</span><small>Ilustrasi editorial</small></figcaption>
+        </figure>
+        <aside class="fact-card" aria-label="Fakta cepat"><span class="fact-icon"><i class="fa-solid fa-sparkles" aria-hidden="true"></i></span><div><span class="fact-label">Tahukah kamu?</span><p id="placeFact">Fakta daerah akan ditampilkan di sini.</p></div></aside>
+      </div>
+    </section>
+
+    <section class="learning-brief" aria-labelledby="learningBriefTitle">
+      <div class="brief-intro"><span class="section-kicker">Rencana sesi</span><h2 id="learningBriefTitle">Satu perjalanan, tiga tahap yang terarah</h2><p>Mulai dari konteks budaya, praktikkan bahasa, lalu kunci pemahamanmu dengan latihan.</p></div>
+      <ol class="brief-outcomes">
+        <li><span>01</span><div><b>Kenali konteks</b><small>Tempat, rasa, tradisi, dan cerita</small></div></li>
+        <li><span>02</span><div><b>Praktikkan bahasa</b><small>Dengar, baca, dan coba tulis</small></div></li>
+        <li><span>03</span><div><b>Uji pemahaman</b><small>Cocokkan kata dan selesaikan kuis</small></div></li>
+      </ol>
+      <div class="brief-time"><i class="fa-regular fa-clock" aria-hidden="true"></i><div><b>8–12 menit</b><small>7 aktivitas inti</small></div></div>
+    </section>
+
+    <section class="journey-shell" aria-labelledby="journeyTitle">
+      <div class="journey-heading"><div><span class="section-kicker">Perjalanan belajar</span><h2 id="journeyTitle">Mengenal <span id="journeyPlace">daerah ini</span> selangkah demi selangkah</h2></div><div class="journey-score"><span id="completedActivities">0/7</span><small>aktivitas selesai</small></div></div>
+      <div class="progress-track" role="progressbar" aria-label="Progres perjalanan belajar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progressBar"></span></div>
+      <div class="stage-tabs" role="tablist" aria-label="Tahap pembelajaran">
+        <button id="stage-explore-tab" class="stage-tab active" type="button" role="tab" aria-selected="true" aria-controls="stage-explore" data-stage="explore"><span class="stage-number">01</span><span><b>Jelajahi</b><small>0/2 aktivitas</small></span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+        <button id="stage-language-tab" class="stage-tab" type="button" role="tab" aria-selected="false" aria-controls="stage-language" tabindex="-1" data-stage="language"><span class="stage-number">02</span><span><b>Pelajari</b><small>0/3 aktivitas</small></span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+        <button id="stage-test-tab" class="stage-tab" type="button" role="tab" aria-selected="false" aria-controls="stage-test" tabindex="-1" data-stage="test"><span class="stage-number">03</span><span><b>Uji diri</b><small>0/2 aktivitas</small></span><i class="fa-solid fa-flag-checkered" aria-hidden="true"></i></button>
+      </div>
+    </section>
+
+    <div class="learning-layout">
+      <div class="learning-content">
+        <section class="stage-panel active" id="stage-explore" role="tabpanel" aria-labelledby="stage-explore-tab" data-panel="explore">
+          <header class="panel-intro" data-step="01"><span class="section-kicker">Tahap pertama</span><h2>Kenali jiwa daerahnya</h2><p>Bangun konteks dari bentang alam, kuliner, tradisi, dan cerita yang diwariskan.</p></header>
+          <article class="editorial-card culture-gallery" data-activity="gallery">
+            <div class="activity-guide"><span><b>01</b> Amati sorotan budaya</span><small><i class="fa-regular fa-clock"></i> 2 menit</small></div>
+            <div class="card-heading"><div><span class="card-kicker">Sorotan budaya</span><h3 id="galleryTitle">Jejak budaya</h3></div><div class="gallery-controls"><button class="icon-button" id="galleryPrev" type="button" aria-label="Sorotan sebelumnya"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button><span id="galleryPosition">1 / 3</span><button class="icon-button" id="galleryNext" type="button" aria-label="Sorotan berikutnya"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div></div>
+            <div class="gallery-stage" id="galleryStage" tabindex="0" aria-live="polite"></div>
+            <button class="activity-complete-button" id="galleryDoneBtn" type="button"><i class="fa-regular fa-circle-check"></i> Selesai menjelajah</button>
+          </article>
+          <div class="culture-grid" id="cultureGrid"></div>
+          <article class="editorial-card story-card" data-activity="story">
+            <div class="activity-guide"><span><b>02</b> Baca cerita rakyat</span><small><i class="fa-regular fa-clock"></i> 3 menit</small></div>
+            <div class="story-heading"><div><span class="card-kicker">Cerita rakyat</span><h3 id="storyTitle">Legenda daerah</h3></div><div class="story-controls"><button class="button button-secondary button-small" id="storyReadBtn" type="button"><i class="fa-solid fa-volume-high"></i><span>Bacakan</span></button><button class="icon-button" id="storyStopBtn" type="button" aria-label="Hentikan pembacaan" disabled><i class="fa-solid fa-stop"></i></button></div></div>
+            <p class="story-text" id="storyText"></p><blockquote id="storyMoral"></blockquote>
+            <button class="activity-complete-button" id="storyDoneBtn" type="button"><i class="fa-regular fa-circle-check"></i> Selesai membaca</button>
+          </article>
+          <div class="stage-footer"><div><small>Tahap berikutnya</small><strong>Praktikkan bahasa sehari-hari</strong></div><button class="button button-primary next-stage" type="button" data-next="language">Lanjut ke bahasa <i class="fa-solid fa-arrow-right"></i></button></div>
+        </section>
+
+        <section class="stage-panel" id="stage-language" role="tabpanel" aria-labelledby="stage-language-tab" data-panel="language" hidden>
+          <header class="panel-intro" data-step="02"><span class="section-kicker">Tahap kedua</span><h2>Dengar, baca, dan praktikkan</h2><p>Pelajari ungkapan penting lewat kartu kosakata, kamus mini, dan latihan tulis.</p></header>
+          <article class="editorial-card flashcard-section" data-activity="flashcard">
+            <div class="activity-guide"><span><b>03</b> Latih kartu kosakata</span><small><i class="fa-regular fa-clock"></i> 2 menit</small></div>
+            <div class="card-heading"><div><span class="card-kicker">Kartu kosakata</span><h3>Ungkapan sehari-hari</h3></div><span id="flashcardPosition">1 / 4</span></div>
+            <button class="flashcard" id="flashcard" type="button" aria-label="Balik kartu kosakata"><span class="flashcard-face flashcard-front"><small>Kata daerah</small><strong id="cardLocal">—</strong><span>Klik untuk melihat arti</span></span><span class="flashcard-face flashcard-back"><small>Arti & konteks</small><strong id="cardMeaning">—</strong><span id="cardContext">—</span></span></button>
+            <div class="flashcard-actions"><button class="icon-button" id="cardPrev" type="button" aria-label="Kartu sebelumnya"><i class="fa-solid fa-arrow-left"></i></button><button class="button button-secondary button-small" id="cardSpeak" type="button"><i class="fa-solid fa-volume-high"></i> Dengarkan</button><button class="button confidence-button" data-confidence="review" type="button">Ulangi</button><button class="button confidence-button" data-confidence="know" type="button">Sudah paham</button><button class="icon-button" id="cardNext" type="button" aria-label="Kartu berikutnya"><i class="fa-solid fa-arrow-right"></i></button></div>
+          </article>
+          <article class="editorial-card phrase-section" data-activity="phrases">
+            <div class="activity-guide"><span><b>04</b> Jelajahi kamus mini</span><small><i class="fa-regular fa-clock"></i> 2 menit</small></div>
+            <div class="card-heading"><div><span class="card-kicker">Kamus mini</span><h3>Frasa yang berguna</h3></div><span class="result-count" id="phraseCount">0 frasa</span></div>
+            <label class="search-field"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span class="sr-only">Cari frasa</span><input id="phraseSearch" type="search" placeholder="Cari frasa atau artinya…" autocomplete="off"></label><div class="phrase-list" id="phraseList"></div>
+            <button class="activity-complete-button" id="phrasesDoneBtn" type="button"><i class="fa-regular fa-circle-check"></i> Selesai mempelajari frasa</button>
+          </article>
+          <article class="editorial-card script-section" id="scriptSection" data-activity="script">
+            <div class="activity-guide"><span><b>05</b> Coba latihan tulis</span><small><i class="fa-regular fa-clock"></i> 2 menit</small></div>
+            <div class="card-heading"><div><span class="card-kicker">Studio bahasa</span><h3 id="scriptTitle">Coba tulis aksara lokal</h3></div><button class="button button-secondary button-small" id="copyScript" type="button"><i class="fa-regular fa-copy"></i> Salin</button></div>
+            <div class="script-output" id="scriptOutput" aria-live="polite">Pilih karakter di bawah</div><div class="script-keys" id="scriptKeys"></div><button class="text-button" id="clearScript" type="button"><i class="fa-solid fa-rotate-left"></i> Bersihkan tulisan</button>
+            <button class="activity-complete-button" id="scriptDoneBtn" type="button"><i class="fa-regular fa-circle-check"></i> Selesai berlatih</button>
+          </article>
+          <div class="stage-footer"><div><small>Tahap terakhir</small><strong>Uji apa yang sudah kamu pelajari</strong></div><button class="button button-primary next-stage" type="button" data-next="test">Mulai uji diri <i class="fa-solid fa-arrow-right"></i></button></div>
+        </section>
+
+        <section class="stage-panel" id="stage-test" role="tabpanel" aria-labelledby="stage-test-tab" data-panel="test" hidden>
+          <header class="panel-intro" data-step="03"><span class="section-kicker">Tahap terakhir</span><h2>Kunci pemahamanmu</h2><p>Cocokkan frasa dan tuntaskan tiga pertanyaan singkat untuk menyelesaikan perjalanan.</p></header>
+          <article class="editorial-card matching-section" data-activity="matching">
+            <div class="activity-guide"><span><b>06</b> Cocokkan pasangan kata</span><small><i class="fa-regular fa-clock"></i> 2 menit</small></div>
+            <div class="card-heading"><div><span class="card-kicker">Cocokkan kata</span><h3>Temukan pasangan yang tepat</h3></div><span class="match-score" id="matchScore">0/4 benar</span></div><p class="muted">Pilih frasa daerah, kemudian pilih arti bahasa Indonesianya.</p><div class="matching-grid"><div id="matchingLocal" aria-label="Frasa daerah"></div><div id="matchingMeaning" aria-label="Arti frasa"></div></div><div class="match-result" id="matchResult" role="status" aria-live="polite"></div><button class="button button-secondary button-small" id="resetMatching" type="button"><i class="fa-solid fa-rotate-right"></i> Acak ulang</button>
+          </article>
+          <article class="editorial-card quiz-section" data-activity="quiz">
+            <div class="activity-guide"><span><b>07</b> Tuntaskan kuis cepat</span><small><i class="fa-regular fa-clock"></i> 3 menit</small></div>
+            <div class="card-heading"><div><span class="card-kicker">Kuis cepat</span><h3>Seberapa kenal kamu?</h3></div><span class="quiz-best" id="quizBest">Skor terbaik —</span></div><div class="quiz-progress"><span id="quizProgressBar"></span></div><p class="quiz-counter" id="quizCounter">Pertanyaan 1 dari 3</p><h4 id="quizQuestion">Pertanyaan dimuat…</h4><div class="quiz-answers" id="quizAnswers"></div><div class="quiz-feedback" id="quizFeedback" role="status" aria-live="polite"></div><button class="button button-primary" id="quizNext" type="button" hidden>Berikutnya <i class="fa-solid fa-arrow-right"></i></button>
+          </article>
+          <article class="completion-card" id="completionCard"><div class="completion-icon"><i class="fa-solid fa-trophy"></i></div><div><span class="card-kicker">Ringkasan perjalanan</span><h3 id="completionTitle">Teruskan perjalananmu</h3><p id="completionText">Selesaikan tujuh aktivitas inti untuk menguasai daerah ini.</p></div><button class="button button-primary" id="completePlaceBtn" type="button" disabled>Tandai dikuasai</button></article>
+        </section>
+      </div>
+
+      <aside class="learning-companion" id="learningCompanion" aria-labelledby="companionTitle">
+        <div class="companion-header"><div><span class="section-kicker">Pendamping belajar</span><h2 id="companionTitle">Perjalananmu</h2></div><button class="icon-button companion-close" id="closeCompanion" type="button" aria-label="Tutup pendamping belajar"><i class="fa-solid fa-xmark"></i></button></div>
+        <section class="next-action-card"><span class="card-kicker">Langkah terbaik berikutnya</span><h3 id="nextActionTitle">Mulai dari sorotan budaya</h3><p id="nextActionText">Bangun konteks singkat sebelum masuk ke bahasa dan latihan.</p><button class="button button-primary button-small" id="nextActionButton" type="button">Buka aktivitas <i class="fa-solid fa-arrow-right"></i></button></section>
+        <section class="companion-section"><div class="companion-title"><h3>Progres aktivitas</h3><span id="companionProgress">0/7</span></div><div class="activity-checklist" id="activityChecklist"></div></section>
+        <details class="companion-section notes-section"><summary><span>Catatan & rencana</span><span class="pro-badge">PRO</span></summary><div id="proLocked" class="pro-locked"><i class="fa-solid fa-lock"></i><p>Masuk ke Ruang Belajar PRO untuk menyimpan catatan dan rencana belajarmu.</p><a class="button button-primary button-small" href="pro-hub.html">Lihat PRO</a></div><div id="proContent" hidden><label>Catatan pribadi<textarea id="privateNotes" maxlength="1500" rows="5" placeholder="Tulis hal penting yang kamu pelajari…"></textarea></label><span class="save-status" id="notesStatus">Tersimpan otomatis</span><label>Rencana belajar<input type="date" id="studyPlan"></label><button class="button button-secondary button-small" id="exportNotes" type="button"><i class="fa-solid fa-download"></i> Ekspor catatan</button></div></details>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div><b>Wonderful Indonesia</b><p>Belajar budaya dengan rasa ingin tahu dan sikap saling menghargai.</p></div><div class="footer-links"><a href="bahasa-daerah.html">Kembali ke katalog</a><button class="text-button" id="sourceInfo" type="button">Sumber & ilustrasi</button></div><small>© 2026 Universe of Tech</small></footer>
+
+  <nav class="mobile-dock" aria-label="Aksi halaman"><button id="mobileJourney" type="button"><i class="fa-solid fa-route"></i><span>Perjalanan</span></button><button id="openCompanion" type="button" aria-controls="learningCompanion" aria-expanded="false"><i class="fa-solid fa-list-check"></i><span>Progres</span></button><button id="utilityBtn" type="button" aria-expanded="false" aria-controls="utilityMenu"><i class="fa-solid fa-sliders"></i><span>Pengaturan</span></button></nav>
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <div class="utility-menu" id="utilityMenu" hidden>
+    <button id="focusModeBtn" type="button" aria-pressed="false"><i class="fa-solid fa-bullseye"></i><span>Mode fokus</span></button>
+    <button id="textScaleBtn" type="button"><i class="fa-solid fa-text-height"></i><span>Ukuran teks</span></button>
+    <button id="reduceMotionBtn" type="button" aria-pressed="false"><i class="fa-solid fa-person-walking"></i><span>Kurangi animasi</span></button>
+    <button id="shareBtn" type="button"><i class="fa-solid fa-link"></i><span>Salin tautan</span></button>
+    <button id="printBtn" type="button"><i class="fa-solid fa-print"></i><span>Cetak materi</span></button>
+    <button id="downloadBtn" type="button"><i class="fa-solid fa-download"></i><span>Unduh ringkasan</span></button>
+  </div>
+
+  <dialog class="source-dialog" id="sourceDialog" aria-labelledby="sourceDialogTitle"><button class="icon-button dialog-close" id="sourceDialogClose" type="button" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button><span class="section-kicker">Tentang materi</span><h2 id="sourceDialogTitle">Sumber & ilustrasi</h2><p>Materi diringkas untuk pembelajaran umum dari pengetahuan budaya Indonesia. Ilustrasi editorial dibuat khusus untuk pengalaman belajar ini dan bukan dokumentasi artefak.</p><p>Gunakan sumber kebudayaan resmi dan dokumentasi UNESCO untuk penelitian atau kutipan akademik.</p></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <noscript><div class="noscript-message">Aktifkan JavaScript untuk menggunakan aktivitas belajar interaktif pada halaman ini.</div></noscript>
+
+  <script src="wonderful-data.js" defer></script>
+  <script src="wonderful-core.js" defer></script>
+  <script src="subscription-core.js?v=20260717-pro-subscription" defer></script>
+  <script src="daerah-detail.js?v=20260717-consolidated" defer></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "quiznation-static",
+  "private": true,
+  "scripts": {
+    "check": "node quality-check.js",
+    "test": "node latihan-bahasa-engine.test.js && node materi-assessment.test.js && node quality-check.js",
+    "test:materi": "node materi-assessment.test.js",
+    "test:snbt": "node --test snbt-dashboard.test.js",
+    "prepare:production": "node prepare-production.js"
+  }
+}

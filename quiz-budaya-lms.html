@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id" class="culture-focus-html">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="app-shell.css">
+    <script src="app-shell.js" defer></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#08111f">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <title>Ruang Kuis Budaya - Wonderful Indonesia</title>
+    <meta name="description" content="Ruang pengerjaan kuis bahasa daerah Wonderful Indonesia.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="quiz-session.css">
+    <link rel="stylesheet" href="culture-quiz-lms.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="culture-lms-polish.css">
+    <link rel="stylesheet" href="responsive-system.css?v=20260716">
+    <link rel="stylesheet" href="culture-quiz-upgrades.css?v=20260717">
+</head>
+
+<body data-page="wonder-quiz-lms">
+    <main class="focus-room culture-focus-room" id="focusRoom">
+        <header class="focus-header">
+            <a class="focus-brand" href="quiz-budaya.html" aria-label="Keluar ke menu kuis budaya">
+                <img src="universe-of-tech-logo.jpg" alt="" aria-hidden="true">
+                <span>Ruang Kuis</span>
+            </a>
+
+            <div class="focus-session-meta" aria-label="Informasi sesi">
+                <span id="languageCourseBadge">Kelas Bahasa Daerah</span>
+                <span id="sessionModeLabel">Kuis Budaya</span>
+                <span>Ruang Belajar</span>
+            </div>
+
+            <div class="focus-header-actions">
+                <div class="focus-live-summary" aria-label="Ringkasan skor">
+                    <span id="sessionScoreLabel">Skor sementara</span>
+                    <strong id="sessionScore">0%</strong>
+                </div>
+                <a class="icon-button" id="learnPlaceLink" href="bahasa-daerah.html"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Materi</span></a>
+                <button class="icon-button" id="restartSessionBtn" type="button"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i><span>Ulangi</span></button>
+                <a class="exit-button" href="quiz-budaya.html"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Keluar</span></a>
+            </div>
+        </header>
+
+        <div class="focus-progress" id="sessionProgress" role="progressbar" aria-label="Progres kuis budaya" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0 dari 0 soal selesai">
+            <span id="sessionProgressBar"></span>
+        </div>
+
+        <section class="focus-layout culture-session-layout">
+            <article class="question-stage culture-question-stage" id="questionCard">
+                <div class="culture-stage-top">
+                    <div>
+                        <span class="culture-stage-kicker" id="questionType">Bahasa</span>
+                        <div class="question-overline">
+                            <span id="questionCounter">Soal 1/8</span>
+                            <span id="questionRegion">Region</span>
+                        </div>
+                    </div>
+                    <div class="session-insight lms-session-facts" id="sessionFacts" aria-label="Ringkasan sesi"></div>
+                </div>
+
+                <h1 id="questionText" tabindex="-1">Memuat soal...</h1>
+                <section class="culture-learning-context" aria-label="Konteks belajar">
+                    <div>
+                        <span>Konteks belajar</span>
+                        <strong id="cultureContextTitle">Bahasa daerah</strong>
+                    </div>
+                    <p id="cultureContextText">Baca konteks singkatnya, lalu pilih jawaban yang paling tepat.</p>
+                    <small id="cultureContextMeta">Kuis validasi pemahaman</small>
+                </section>
+                <div class="lms-answer-grid culture-focus-answers" id="answerGrid" aria-label="Pilihan jawaban"></div>
+                <div class="lms-explanation answer-feedback" id="answerExplanation" role="status" aria-live="polite" hidden></div>
+            </article>
+
+            <aside class="focus-sidebar culture-focus-sidebar">
+                <div class="timer-card language-course-meter">
+                    <span>Kesiapan belajar</span>
+                    <strong id="languageReadiness">0%</strong>
+                    <small id="languageReadinessText">Mulai dari modul pertama.</small>
+                </div>
+
+                <div class="culture-timer-card" id="challengeTimerCard" hidden aria-live="polite">
+                    <span>Target waktu</span>
+                    <strong id="challengeTimer">00:00</strong>
+                    <small id="challengeTimerStatus">Waktu berjalan tanpa mengurangi nilai.</small>
+                </div>
+
+                <details class="culture-study-panel">
+                    <summary>Materi ringkas sebelum kuis</summary>
+                    <label>
+                        <span>Pilih daerah bahasa</span>
+                        <select id="languageCourseSelect"></select>
+                    </label>
+                    <div class="language-module-cards" id="languageModuleCards"></div>
+                    <div class="language-vocab-grid" id="languageVocabGrid"></div>
+                    <div class="language-phrase-list" id="phrasePracticeList"></div>
+                </details>
+
+
+                <div class="lms-progress-card culture-progress-card">
+                    <div>
+                        <strong id="sessionProgressText">0/0 soal selesai</strong>
+                        <span>Progres sesi</span>
+                    </div>
+                    <div class="lms-progress-track"><i></i></div>
+                </div>
+
+
+                <div class="question-nav-head">
+                    <strong>Navigator soal</strong>
+                </div>
+                <div class="question-navigator lms-module-list" id="questionNavigator"></div>
+            </aside>
+        </section>
+
+        <footer class="focus-actions culture-focus-actions">
+            <div class="assist-actions">
+                <div class="culture-course-copy">
+                    <span class="mini-tag" id="sessionTitle">Kuis Budaya</span>
+                    <strong id="languageCourseTitle">Belajar satu bahasa daerah.</strong>
+                    <small id="sessionDescription">Sesi kuis sedang disiapkan.</small>
+                    <small id="languageCourseIntro">Pahami sapaan dan frasa penting, lalu kerjakan kuis singkat.</small>
+                </div>
+            </div>
+            <div class="primary-actions">
+                <button class="action-button secondary" id="prevQuestionBtn" type="button"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i><span>Sebelumnya</span></button>
+                <span class="lms-answer-status" id="answerStatus">Pilih jawaban untuk membuka pembahasan.</span>
+                <button class="action-button primary" id="nextQuestionBtn" type="button"><span>Berikutnya</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+            </div>
+        </footer>
+
+        <section class="result-overlay" id="resultPanel" role="dialog" aria-modal="true" aria-labelledby="resultTitle" aria-live="polite" tabindex="-1" hidden>
+            <div class="result-panel">
+                <span class="result-kicker">Hasil Sesi</span>
+                <div class="result-score" id="resultScore">0%</div>
+                <h2 id="resultTitle">Sesi selesai</h2>
+                <p id="resultText">Ringkasan hasil akan muncul di sini.</p>
+                    <div class="culture-result-meta" id="resultMeta">Teruskan latihan untuk memperkuat kosakata.</div>
+                    <div class="culture-result-breakdown" id="resultBreakdown" aria-label="Rincian hasil per kategori"></div>
+                    <div class="culture-result-recommendation" id="resultRecommendation"></div>
+                <div class="result-actions">
+                    <button class="action-button secondary" id="reviewWrongBtn" type="button">Review salah</button>
+                    <button class="action-button primary" id="restartResultBtn" type="button">Ulangi sesi</button>
+                    <a class="action-button subtle" href="quiz-budaya.html">Pilih kuis lain</a>
+                </div>
+            </div>
+        </section>
+        <aside class="culture-source-notice" aria-label="Status sumber materi">
+            <div>
+                <strong>Materi kurasi internal</strong>
+                <span>Bahasa dan konteks budaya perlu peninjauan penutur atau kontributor daerah.</span>
+            </div>
+            <button class="action-button subtle" id="reportContentBtn" type="button">Salin referensi koreksi</button>
+        </aside>
+    </main>
+
+    <div class="toast focus-toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="wonderful-data.js"></script>
+    <script src="wonderful-core.js"></script>
+    <script src="pro-learning-engine.js"></script>
+    <script src="culture-quiz-lms.js"></script>
+</body>
+
+</html>
+

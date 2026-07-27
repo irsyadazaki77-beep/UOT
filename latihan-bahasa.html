@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Ruang latihan adaptif untuk mengenal bahasa daerah Indonesia.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="app-shell.css">
+  <link rel="stylesheet" href="feature-pages.css">
+  <link rel="stylesheet" href="latihan-bahasa.css">
+  <title>Ruang Latihan Bahasa | Wonderful Indonesia</title>
+</head>
+<body data-page="wonder-latihan-custom">
+  <main class="practice-page">
+    <nav class="practice-nav" aria-label="Navigasi utama">
+      <a class="practice-brand" href="index.html"><span aria-hidden="true">&#10022;</span> Wonderful Indonesia</a>
+      <div class="practice-nav-links">
+        <a href="bahasa-daerah.html">Eksplorasi bahasa</a>
+        <a href="daerah-detail.html" id="detailLink">Detail daerah</a>
+      </div>
+      <button class="icon-button" id="themeToggle" type="button" aria-label="Ubah tema"><i class="fa-solid fa-moon"></i></button>
+    </nav>
+
+    <section class="practice-hero" aria-labelledby="pageTitle">
+      <div>
+        <p class="eyebrow"><i class="fa-solid fa-seedling"></i> Ruang latihan adaptif</p>
+        <h1 id="pageTitle">Belajar sedikit, <em>ingat lebih lama.</em></h1>
+        <p>Latihan hari ini dipilih dari kata yang perlu diulang, masih sulit, dan belum kamu kenal.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="startSession" type="button"><i class="fa-solid fa-play"></i> Mulai 10 kartu</button>
+          <button class="btn btn-ghost" id="hearRecommendation" type="button"><i class="fa-solid fa-volume-high"></i> Dengarkan contoh</button>
+        </div>
+      </div>
+      <aside class="today-card" aria-label="Ringkasan latihan hari ini">
+        <span class="today-card-label">Latihan hari ini</span>
+        <strong id="todayProgress">0 / 10</strong>
+        <p id="todayDescription">Siapkan sesi kecil untuk menjaga ingatanmu.</p>
+        <div class="progress-track"><i id="todayBar"></i></div>
+        <div class="today-stats"><span><b id="dueCount">0</b> perlu diulang</span><span><b id="newCount">0</b> baru</span></div>
+      </aside>
+    </section>
+
+    <section class="practice-layout" id="latihan">
+      <aside class="region-panel" aria-label="Peta progres daerah">
+        <div class="panel-heading"><div><p class="eyebrow">Peta progres</p><h2>Daerah</h2></div><span id="regionCount">0 daerah</span></div>
+        <label class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="regionSearch" type="search" placeholder="Cari daerah" autocomplete="off"></label>
+        <div class="region-filters" role="group" aria-label="Filter daerah">
+          <button class="filter-chip active" data-region="Semua" type="button">Semua</button>
+          <button class="filter-chip" data-region="progress" type="button">Berjalan</button>
+          <button class="filter-chip" data-region="complete" type="button">Dikuasai</button>
+        </div>
+        <nav class="region-list" id="regionList" aria-label="Pilih daerah"></nav>
+      </aside>
+
+      <section class="study-area" aria-label="Area latihan">
+        <header class="study-header">
+          <div><p class="eyebrow" id="activePlaceRegion">Daerah</p><h2><span id="activePlaceTitle">Memuat...</span><span id="activePlaceMark" class="place-mark">-</span></h2><p id="activePlaceSummary"></p></div>
+          <div class="study-header-actions"><button class="icon-button" id="favoritePlace" type="button" aria-label="Tandai daerah sebagai favorit"><i class="fa-regular fa-heart"></i></button><a class="btn btn-ghost" id="quizLink" href="quiz-budaya.html">Kuis budaya</a></div>
+        </header>
+
+        <section class="learning-status" aria-label="Status belajar">
+          <div><span>Level</span><strong id="levelLabel">1</strong><small id="xpLabel">0 XP</small></div>
+          <div><span>Akurasi sesi</span><strong id="accuracyLabel">-</strong><small id="sessionLabel">Belum ada jawaban</small></div>
+          <div><span>Streak</span><strong id="streakLabel">0 hari</strong><small>Teruskan kebiasaan baikmu</small></div>
+          <div><span>Rekomendasi</span><strong id="recommendationLabel">-</strong><small id="recommendationMeta">Memuat kartu</small></div>
+        </section>
+
+        <div class="mode-tabs" role="tablist" aria-label="Mode latihan">
+          <button class="mode-tab active" data-mode="flashcard" role="tab" aria-selected="true" aria-controls="view-flashcard"><i class="fa-solid fa-layer-group"></i> Belajar</button>
+          <button class="mode-tab" data-mode="quiz" role="tab" aria-selected="false" aria-controls="view-quiz"><i class="fa-solid fa-list-check"></i> Kuis</button>
+          <button class="mode-tab" data-mode="writing" role="tab" aria-selected="false" aria-controls="view-writing"><i class="fa-solid fa-pen"></i> Ketik</button>
+          <button class="mode-tab" data-mode="speaking" role="tab" aria-selected="false" aria-controls="view-speaking"><i class="fa-solid fa-microphone"></i> Bicara</button>
+          <button class="mode-tab" data-mode="match" role="tab" aria-selected="false" aria-controls="view-match"><i class="fa-solid fa-puzzle-piece"></i> Cocokkan</button>
+        </div>
+
+        <div class="practice-feedback" id="liveFeedback" aria-live="polite"></div>
+
+        <section class="mode-panel active" id="view-flashcard" role="tabpanel">
+          <div class="session-meter"><span id="cardPosition">Kartu latihan</span><div class="progress-track"><i id="sessionBar"></i></div></div>
+          <button class="study-card" id="flashcardCard" type="button" aria-label="Balik kartu untuk melihat arti">
+            <span class="card-side front"><span class="card-category" id="cardCategory">Kosakata</span><strong id="cardWord">Memuat...</strong><span id="cardPhonetic">/-/</span><small>Tekan untuk melihat arti</small></span>
+            <span class="card-side back"><span class="card-category" id="cardRegister">Ragam lokal</span><strong id="cardTranslation">-</strong><span id="cardContext">-</span><small id="cardCulture">-</small></span>
+          </button>
+          <div class="card-tools"><button class="btn btn-ghost" id="speakCard" type="button"><i class="fa-solid fa-volume-high"></i> Dengarkan</button><button class="btn btn-ghost" id="favoriteCard" type="button"><i class="fa-regular fa-star"></i> Simpan</button></div>
+          <div class="rating-row" aria-label="Seberapa baik kamu mengingatnya?"><span>Seberapa mudah diingat?</span><button data-rating="again" type="button">Ulangi</button><button data-rating="hard" type="button">Sulit</button><button data-rating="good" type="button">Ingat</button><button data-rating="easy" type="button">Mudah</button></div>
+          <p class="tts-note"><i class="fa-solid fa-circle-info"></i> Audio dibuat oleh pembaca perangkat, bukan rekaman penutur asli.</p>
+        </section>
+
+        <section class="mode-panel" id="view-quiz" role="tabpanel" hidden>
+          <div class="prompt-card"><span id="quizCount">Kuis</span><h3 id="quizPrompt">Memuat pertanyaan...</h3><button class="text-button" id="quizListen" type="button">Dengarkan lagi</button></div>
+          <div class="answer-grid" id="quizAnswers"></div><p class="mode-feedback" id="quizFeedback"></p><button class="btn btn-primary next-button" id="quizNext" type="button" hidden>Lanjut <i class="fa-solid fa-arrow-right"></i></button>
+        </section>
+
+        <section class="mode-panel" id="view-writing" role="tabpanel" hidden>
+          <div class="prompt-card"><span id="writingCategory">Ketik arti</span><h3 id="writingPrompt">Memuat...</h3><p>Jawab dalam bahasa Indonesia.</p></div><div class="answer-input"><input id="writingInput" type="text" placeholder="Tulis jawabanmu" autocomplete="off"><button class="btn btn-primary" id="writingCheck" type="button">Periksa</button></div><p class="mode-feedback" id="writingFeedback"></p><button class="btn btn-primary next-button" id="writingNext" type="button" hidden>Lanjut <i class="fa-solid fa-arrow-right"></i></button>
+        </section>
+
+        <section class="mode-panel" id="view-speaking" role="tabpanel" hidden>
+          <div class="prompt-card"><span id="speakingCategory">Latihan pelafalan</span><h3 id="speakingPrompt">Memuat...</h3><p id="speakingPhonetic">/-/</p></div><div class="speaking-actions"><button class="btn btn-primary" id="speakingStart" type="button"><i class="fa-solid fa-microphone"></i> Mulai bicara</button><button class="btn btn-ghost" id="speakingListen" type="button"><i class="fa-solid fa-volume-high"></i> Dengar contoh</button></div><p class="mode-feedback" id="speakingFeedback"></p><button class="btn btn-primary next-button" id="speakingNext" type="button" hidden>Lanjut <i class="fa-solid fa-arrow-right"></i></button>
+        </section>
+
+        <section class="mode-panel" id="view-match" role="tabpanel" hidden>
+          <div class="match-heading"><div><span>Pasangkan makna yang tepat</span><h3 id="matchScore">0 pasangan</h3></div><button class="btn btn-ghost" id="matchReset" type="button">Acak ulang</button></div><div class="match-board" id="matchBoard"></div><p class="mode-feedback" id="matchFeedback"></p>
+        </section>
+
+        <section class="session-summary" id="sessionSummary" hidden aria-live="polite"><span class="eyebrow">Sesi selesai</span><h2>Kamu hadir untuk dirimu hari ini.</h2><p id="sessionSummaryText"></p><button class="btn btn-primary" id="restartSession" type="button">Mulai sesi berikutnya</button></section>
+
+        <section class="dictionary-panel" aria-labelledby="dictionaryTitle"><div class="panel-heading"><div><p class="eyebrow">Kamus daerah</p><h2 id="dictionaryTitle">Kartu pembelajaran</h2></div><label class="search-field compact"><i class="fa-solid fa-magnifying-glass"></i><input id="cardSearch" type="search" placeholder="Cari kata atau arti"></label></div><div class="dictionary-list" id="dictionaryList"></div></section>
+      </section>
+    </section>
+  </main>
+  <script src="app-shell.js" defer></script>
+  <script src="wonderful-data.js"></script>
+  <script src="wonderful-core.js"></script>
+  <script src="sound-engine.js"></script>
+  <script src="latihan-bahasa-engine.js"></script>
+  <script src="latihan-bahasa.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+:root {
+    --account-bg:#f5f6fa; --account-surface:#ffffff; --account-surface-soft:#f0f2f7;
+    --account-ink:#141827; --account-muted:#667085; --account-line:#e3e6ee;
+    --account-brand:#10b981; --account-brand-strong:#0c7a5a; --account-success:#087a5b;
+    --account-danger:#c43249; --account-radius:18px; --account-shadow:0 18px 55px rgba(24,31,55,.09);
+}
+body[data-account-flow].dark-theme {
+    --account-bg:#0d1019; --account-surface:#151a27; --account-surface-soft:#1d2332;
+    --account-ink:#f5f6fa; --account-muted:#a6adbd; --account-line:#2b3242;
+    --account-brand:#32d66b; --account-brand-strong:#10b981; --account-success:#4ac6a0;
+    --account-danger:#ff8293; --account-shadow:0 22px 65px rgba(0,0,0,.3);
+}
+body[data-account-flow] { min-width:320px; background:var(--account-bg); color:var(--account-ink); font-family:Manrope,Inter,system-ui,-apple-system,sans-serif; }
+body[data-account-flow] *,body[data-account-flow] *::before,body[data-account-flow] *::after { box-sizing:border-box; }
+body[data-account-flow] :where(button,input,select,textarea) { font:inherit; }
+body[data-account-flow] :where(a,button,input,select,textarea):focus-visible { outline:3px solid color-mix(in srgb,var(--account-brand) 38%,transparent); outline-offset:3px; }
+body[data-account-flow] :where(input,select,textarea) { min-height:44px; border:1px solid var(--account-line); border-radius:12px; background:var(--account-surface); color:var(--account-ink); }
+body[data-account-flow] :where(input,select,textarea):hover { border-color:color-mix(in srgb,var(--account-brand) 38%,var(--account-line)); }
+body[data-account-flow] :where(input,select,textarea):focus { border-color:var(--account-brand); box-shadow:0 0 0 4px color-mix(in srgb,var(--account-brand) 12%,transparent); }
+body[data-account-flow] :where(button,[role="button"]) { min-height:44px; }
+body[data-account-flow] [hidden] { display:none!important; }
+.account-skip { position:fixed; top:10px; left:10px; z-index:999; padding:10px 14px; border-radius:10px; background:var(--account-ink); color:var(--account-surface); transform:translateY(-150%); }
+.account-skip:focus { transform:none; }
+.account-disclosure { border:1px solid var(--account-line); border-radius:var(--account-radius); background:var(--account-surface); }
+.account-disclosure>summary { display:flex; align-items:center; justify-content:space-between; min-height:54px; padding:0 18px; font-weight:750; cursor:pointer; list-style:none; }
+.account-disclosure>summary::-webkit-details-marker { display:none; }
+.account-disclosure>summary::after { content:"+"; color:var(--account-brand); font:600 20px "DM Mono",monospace; }
+.account-disclosure[open]>summary::after { content:"−"; }
+body[data-account-flow].reduce-motion *,
+body[data-account-flow].reduce-motion *::before,
+body[data-account-flow].reduce-motion *::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
+@media(prefers-reduced-motion:reduce){body[data-account-flow] *,body[data-account-flow] *::before,body[data-account-flow] *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}

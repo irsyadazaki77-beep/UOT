@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Personal Learning Hub Universe Of Tech untuk melanjutkan bacaan, memantau penguasaan bab, dan mengelola catatan serta stabilo dalam satu ruang.">
+    <meta name="theme-color" content="#2563eb">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
+    <link rel="canonical" href="library.html">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app-shell.css">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="coursera-home.css">
+    <link rel="stylesheet" href="responsive-system.css?v=20260716">
+    <link rel="stylesheet" href="library-polish.css?v=20260723-compact">
+    <link rel="stylesheet" href="navbar-explore.css?v=20260722">
+    <script src="app-shell.js" defer></script>
+    <title>Personal Learning Hub — Universe Of Tech</title>
+</head>
+
+<body data-page="library" class="library-layout-compact">
+    <div class="noise" aria-hidden="true"></div>
+    <div class="orb one" aria-hidden="true"></div>
+    <div class="orb two" aria-hidden="true"></div>
+
+    <main class="page" id="main-content">
+        <nav class="navbar" aria-label="Navigasi utama">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand" aria-label="Universe Of Tech, kembali ke beranda">
+                    <img src="universe-of-tech-logo.jpg" alt="" class="brand-logo">
+                    <span>Universe Of Tech</span>
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" type="button" aria-expanded="false" aria-controls="exploreMegaMenu">
+                        <i class="fa-solid fa-compass" aria-hidden="true"></i>
+                        Jelajahi
+                        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="explore-mega-menu" id="exploreMegaMenu" aria-hidden="true">
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li><a href="materi-basic.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-code" aria-hidden="true"></i></span><span>Dasar Pemrograman</span></a></li>
+                                <li><a href="materi.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></span><span>Struktur Data</span></a></li>
+                                <li><a href="materi.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-laptop-code" aria-hidden="true"></i></span><span>Web Development</span></a></li>
+                                <li><a href="snbt.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span><span>Persiapan TKA SNBT</span></a></li>
+                                <li><a href="tka-lms.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span><span>LMS TKA</span></a></li>
+                                <li><a href="bahasa-daerah.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i></span><span>Wonderful Indonesia</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="mega-col">
+                            <h4>Fitur &amp; Dashboard</h4>
+                            <ul class="mega-list">
+                                <li><a href="learning-path.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-route" aria-hidden="true"></i></span><span>Roadmap Belajar</span></a></li>
+                                <li><a href="leaderboard.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-trophy" aria-hidden="true"></i></span><span>Leaderboard</span></a></li>
+                                <li><a href="achievements.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-medal" aria-hidden="true"></i></span><span>Pencapaian</span></a></li>
+                                <li><a href="profile.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-user" aria-hidden="true"></i></span><span>Profil Saya</span></a></li>
+                                <li><a href="payment.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-crown" aria-hidden="true"></i></span><span>Upgrade Pro</span></a></li>
+                            </ul>
+                        </div>
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> Modul Terpopuler</div>
+                                <h5>Prinsip Sistem Basis Data SQL</h5>
+                                <p>Pelajari query, filter, JOIN, dan fondasi database relasional melalui bacaan singkat yang langsung bisa dipraktikkan.</p>
+                                <a href="library.html#katalog" class="btn-spotlight">Buka koleksi <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <label class="sr-only" for="navSearchInput">Cari seluruh koleksi buku</label>
+                    <input type="search" class="nav-search-input" id="navSearchInput" placeholder="Cari seluruh koleksi…" autocomplete="off" aria-controls="searchSuggestionsBox" aria-expanded="false">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                </div>
+                <div class="search-suggestions-box" id="searchSuggestionsBox" role="listbox" aria-label="Saran pencarian"></div>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="projects.html">Proyek</a>
+                <a href="library.html" aria-current="page">Library</a>
+            </div>
+
+            <div class="nav-actions">
+                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
+                <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Gunakan tema gelap" title="Tema gelap"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+                <a class="btn btn-ghost" href="login.html">Masuk</a>
+                <a class="btn btn-primary" href="materi.html">Mulai</a>
+            </div>
+        </nav>
+
+        <section class="hero library-hero" aria-labelledby="libraryHeroTitle">
+            <div class="library-hero-copy">
+                <div class="library-eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Personal Learning Hub</div>
+                <h1 id="libraryHeroTitle">Semua bacaan.<br><span class="gradient-text">Satu perjalanan belajar.</span></h1>
+                <p>Lanjutkan bab terakhir, pantau penguasaan, lalu temukan semua catatan dan stabilomu dalam satu ruang yang terhubung.</p>
+                <div class="library-stats compact-hero-stats" aria-label="Ringkasan perpustakaan">
+                    <div class="stat-pill"><span class="stat-icon blue"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></span><div><strong id="statTotalBooks">41</strong><span>Total buku</span></div></div>
+                    <div class="stat-pill"><span class="stat-icon green"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i></span><div><strong id="statDeskBooks">0</strong><span>Meja baca</span></div></div>
+                    <div class="stat-pill"><span class="stat-icon purple"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i></span><div><strong id="statNotesCount">0</strong><span>Catatan</span></div></div>
+                    <div class="stat-pill"><span class="stat-icon orange"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></span><div><strong id="statReadingProgress">0%</strong><span>Progres</span></div></div>
+                </div>
+                <div class="hero-actions library-hero-actions">
+                    <a class="btn btn-primary" href="#katalog" data-tab-target="katalog"><i class="fa-solid fa-compass" aria-hidden="true"></i> Jelajahi Katalog</a>
+                    <a class="btn btn-ghost" href="#workspace" data-tab-target="workspace"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i> Pusat Belajar</a>
+                </div>
+                <div class="library-trust-row" aria-label="Keunggulan Library">
+                    <span><i class="fa-solid fa-rotate" aria-hidden="true"></i> Progres tersinkron</span>
+                    <span><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i> Study Mode</span>
+                    <span><i class="fa-solid fa-lock" aria-hidden="true"></i> Tersimpan lokal</span>
+                </div>
+            </div>
+
+            <aside class="library-command-panel" aria-labelledby="continueReadingHeading">
+                <div class="command-panel-head">
+                    <div>
+                        <span class="section-kicker">Ritme belajarmu</span>
+                        <h2 id="continueReadingHeading">Lanjutkan Membaca</h2>
+                    </div>
+                    <span class="status-pill is-live"><span aria-hidden="true"></span> Aktif</span>
+                </div>
+                <div class="continue-reading-card" id="continueReadingCard">
+                    <div class="continue-cover" id="continueReadingCover" aria-hidden="true"><i class="fa-solid fa-book-open"></i></div>
+                    <div class="continue-reading-content">
+                        <span class="mini-label" id="continueReadingLabel">Koleksi pilihan</span>
+                        <h3 id="continueReadingTitle">Pilih bacaan pertama kamu</h3>
+                        <p id="continueReadingMeta">Simpan buku dari katalog untuk membangun Meja Baca pribadi.</p>
+                        <div class="continue-progress" id="continueReadingProgress" hidden>
+                            <div class="progress-meta"><span>Progress membaca</span><strong id="continueReadingProgressValue">0%</strong></div>
+                            <div class="progress-bar-container"><div class="progress-bar-fill" id="continueReadingProgressFill"></div></div>
+                        </div>
+                        <a class="btn btn-blue" id="continueReadingButton" href="#katalog" data-tab-target="katalog"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> Temukan bacaan</a>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="weekly-dashboard compact-dashboard" id="weeklyDashboard" aria-label="Perkembangan belajar mingguan"></section>
+
+        <nav class="ux-section-nav tablist-nav" role="tablist" aria-label="Navigasi cepat Library">
+            <a href="#readingDesk" role="tab" aria-selected="true" class="is-active" data-tab-target="readingDesk"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i> Meja Baca</a>
+            <a href="#discovery" role="tab" aria-selected="false" data-tab-target="discovery"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> Rekomendasi</a>
+            <a href="#katalog" role="tab" aria-selected="false" data-tab-target="katalog"><i class="fa-solid fa-book" aria-hidden="true"></i> Katalog</a>
+            <a href="#workspace" role="tab" aria-selected="false" data-tab-target="workspace"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i> Pusat Belajar</a>
+        </nav>
+
+        <div class="ux-tab-views">
+
+        <section class="section library-section tab-section is-tab-active" id="readingDesk" aria-labelledby="readingDeskHeading">
+            <div class="section-heading-row">
+                <div>
+                    <span class="section-kicker">Rak pribadi</span>
+                    <h2 id="readingDeskHeading">Meja Baca Saya</h2>
+                    <p class="section-lead">Buku yang kamu simpan, lengkap dengan bab terakhir, waktu tersisa, catatan, stabilo, dan penguasaan.</p>
+                </div>
+                <div class="section-heading-actions">
+                    <label class="select-control">
+                        <span>Urutkan</span>
+                        <select id="readingDeskSort" aria-label="Urutkan Meja Baca">
+                            <option value="recent">Terakhir Dibaca</option>
+                            <option value="progress">Progres Tertinggi</option>
+                            <option value="title">Abjad (A–Z)</option>
+                        </select>
+                    </label>
+                    <a class="text-link" href="#katalog" data-tab-target="katalog">Tambah bacaan <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </div>
+            <div class="reading-desk-container" aria-label="Buku di Meja Baca">
+                <div class="reading-desk-list" id="readingDeskList" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <section class="section library-section discovery-section tab-section" id="discovery" aria-labelledby="discoveryHeading">
+            <div class="section-heading-row">
+                <div>
+                    <span class="section-kicker">Langkah berikutnya</span>
+                    <h2 id="discoveryHeading">Rekomendasi yang memahami progresmu.</h2>
+                    <p class="section-lead">Diprioritaskan dari buku aktif, minat, penguasaan bab, favorit, dan level belajarmu.</p>
+                </div>
+                <button class="btn btn-ghost" id="refreshRecommendations" type="button"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i> Segarkan pilihan</button>
+            </div>
+            <div class="curated-shelves" id="curatedShelves" aria-live="polite"></div>
+        </section>
+
+        <section class="section library-section tab-section" id="katalog" aria-labelledby="catalogHeading">
+            <div class="section-heading-row catalog-heading-row">
+                <div>
+                    <span class="section-kicker">Koleksi pilihan</span>
+                    <h2 id="catalogHeading">Temukan referensi berikutnya.</h2>
+                    <p class="section-lead"><span id="libraryResultCount">41 koleksi</span> untuk memperluas cara berpikirmu.</p>
+                </div>
+                <div class="catalog-search-shell">
+                    <label class="sr-only" for="librarySearch">Cari judul, penulis, atau kode buku</label>
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input class="search-input" id="librarySearch" type="search" placeholder="Cari judul, penulis, kode..." autocomplete="off">
+                    <button id="libraryClearSearch" class="search-clear" type="button" aria-label="Hapus pencarian" hidden><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                </div>
+            </div>
+
+            <details class="catalog-filter-collapse">
+                <summary class="filter-collapse-head"><span class="filter-summary-title"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Filter katalog</span><span class="collapse-hint">Level, durasi, urutan &amp; kategori</span></summary>
+                <div class="filter-collapse-body">
+                    <div class="catalog-toolbar" aria-label="Kontrol katalog">
+                        <div class="catalog-filter-group" role="group" aria-label="Filter status">
+                            <button class="filter-chip is-active" type="button" data-library-status="all" aria-pressed="true"><i class="fa-solid fa-grid-2" aria-hidden="true"></i> Semua</button>
+                            <button class="filter-chip" type="button" data-library-status="borrowed" aria-pressed="false"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i> Sedang dibaca</button>
+                            <button class="filter-chip" type="button" data-library-status="completed" aria-pressed="false"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Selesai</button>
+                            <button class="filter-chip" type="button" data-library-status="favorites" aria-pressed="false"><i class="fa-solid fa-heart" aria-hidden="true"></i> Favorit <span id="libraryFavoritesCount">0</span></button>
+                        </div>
+                        <div class="catalog-toolbar-actions">
+                            <label class="select-control"><span>Level</span><select id="libraryLevel" aria-label="Filter level"><option value="all">Semua level</option><option value="Pemula">Pemula</option><option value="Menengah">Menengah</option><option value="Lanjutan">Lanjutan</option></select></label>
+                            <label class="select-control"><span>Durasi</span><select id="libraryDuration" aria-label="Filter durasi"><option value="all">Semua durasi</option><option value="short">≤ 20 menit</option><option value="medium">21–25 menit</option><option value="long">&gt; 25 menit</option></select></label>
+                            <label class="select-control"><span>Urutkan</span><select id="librarySort" aria-label="Urutkan katalog"><option value="recommended">Rekomendasi</option><option value="rating">Rating tertinggi</option><option value="newest">Terbaru</option><option value="title">Judul A–Z</option><option value="duration">Durasi terpendek</option></select></label>
+                            <div class="view-toggle" role="group" aria-label="Tampilan katalog">
+                                <button id="libraryViewGrid" type="button" class="view-toggle-button is-active" aria-label="Tampilan grid" aria-pressed="true"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i></button>
+                                <button id="libraryViewList" type="button" class="view-toggle-button" aria-label="Tampilan list" aria-pressed="false"><i class="fa-solid fa-list" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="catalog-category-strip" id="libraryCategoryStrip" role="group" aria-label="Filter kategori"></div>
+                </div>
+            </details>
+            <div class="active-filter-row" id="activeFilterRow" aria-live="polite"></div>
+
+            <div class="resource-grid" id="resourceGrid" aria-live="polite" aria-busy="false"></div>
+        </section>
+
+        <section class="section library-section workspace tab-section" id="workspace" aria-labelledby="workspaceHeading">
+            <div class="section-heading-row">
+                <div>
+                    <span class="section-kicker">Pusat Belajar</span>
+                    <h2 id="workspaceHeading">Semua jejak belajarmu, terkumpul.</h2>
+                    <p class="section-lead">Buka kembali catatan, stabilo, dan bab yang telah dikuasai langsung dari satu tempat.</p>
+                </div>
+            </div>
+            <div class="learning-hub-summary" id="learningHubSummary" aria-live="polite"></div>
+            <div class="workspace-grid">
+                <section class="ai-librarian-panel" aria-labelledby="bububHeading">
+                    <div class="workspace-panel-head">
+                        <div class="assistant-identity">
+                            <img src="bubub-mascot.webp" alt="" class="assistant-avatar" width="480" height="580" loading="lazy" decoding="async">
+                            <div><span class="section-kicker">Pemandu koleksi lokal</span><h3 id="bububHeading">BUBUB Rekomendasi</h3></div>
+                        </div>
+                        <span class="status-pill is-live"><span aria-hidden="true"></span> Online</span>
+                    </div>
+                    <div class="chat-history" id="chatHistory" role="log" aria-live="polite" aria-label="Rekomendasi koleksi dari BUBUB"></div>
+                    <div class="chat-suggestions" aria-label="Pertanyaan cepat untuk BUBUB">
+                        <button class="chat-suggest-chip" type="button" data-query="Rekomendasikan buku pemrograman dasar"><i class="fa-solid fa-code" aria-hidden="true"></i> Rekomendasi coding</button>
+                        <button class="chat-suggest-chip" type="button" data-query="Rekomendasikan buku untuk memahami SQL JOIN"><i class="fa-solid fa-database" aria-hidden="true"></i> Buku tentang SQL JOIN</button>
+                        <button class="chat-suggest-chip" type="button" data-query="Rekomendasikan buku UI/UX tingkat pemula"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i> Rekomendasi UI/UX</button>
+                    </div>
+                    <form class="chat-input-row" id="chatForm">
+                        <label class="sr-only" for="chatInput">Topik atau jenis buku yang dicari</label>
+                        <input class="chat-input" id="chatInput" type="text" placeholder="Topik, level, atau waktu yang tersedia..." autocomplete="off">
+                        <button class="btn btn-primary chat-send-btn" id="chatSendBtn" type="submit" aria-label="Kirim pertanyaan"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i></button>
+                    </form>
+                </section>
+
+                <section class="toolbox notes-panel" aria-labelledby="notesHeading">
+                    <div class="workspace-panel-head">
+                        <div><span class="section-kicker">Catatan terstruktur</span><h3 id="notesHeading">Catatan Belajar</h3></div>
+                        <span id="autosaveStatus" class="autosave-status" aria-live="polite"></span>
+                    </div>
+                    <p class="notes-intro">Simpan ide, istilah, atau ringkasan yang ingin kamu ingat. Catatan tersimpan otomatis di browser ini.</p>
+                    <div class="field note-book-field">
+                        <label for="noteBookSelect">Catatan untuk buku</label>
+                        <select id="noteBookSelect"><option value="general"><i class="fa-solid fa-note-sticky"></i> Catatan umum</option></select>
+                    </div>
+                    <div class="field note-editor-field">
+                        <label class="sr-only" for="libraryNote">Isi catatan belajar</label>
+                        <textarea id="libraryNote" placeholder="Tulis intisari bacaanmu di sini..."></textarea>
+                        <div class="note-editor-footer"><span id="noteCharCount">0 karakter</span><span>Autosave aktif</span></div>
+                    </div>
+                    <div class="note-actions">
+                        <button class="btn btn-ghost" id="clearLibraryNote" type="button"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Bersihkan</button>
+                        <button class="btn btn-ghost" id="copyLibraryNote" type="button" title="Salin isi catatan"><i class="fa-solid fa-copy" aria-hidden="true"></i> Salin</button>
+                        <button class="btn btn-ghost" id="exportLibraryNote" type="button" title="Unduh catatan (.md)"><i class="fa-solid fa-file-export" aria-hidden="true"></i> Ekspor (.md)</button>
+                        <button class="btn btn-primary" id="saveLibraryNote" type="button"><i class="fa-solid fa-check" aria-hidden="true"></i> Simpan catatan</button>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        </div>
+
+        <footer class="library-footer">
+            <span>© 2026 Universe Of Tech. Digital Reading Room.</span>
+            <span><i class="fa-solid fa-lock" aria-hidden="true"></i> Meja Baca, progres, favorit, dan catatan tersimpan lokal.</span>
+        </footer>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="book-detail-backdrop" id="bookDetailBackdrop" hidden></div>
+    <section class="book-detail-drawer" id="bookDetailDrawer" role="dialog" aria-modal="true" aria-labelledby="bookDetailTitle" aria-describedby="bookDetailSynopsis" hidden>
+        <div class="book-detail-shell">
+            <button class="book-detail-close" id="bookDetailClose" type="button" aria-label="Tutup detail buku"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            <div id="bookDetailContent"></div>
+        </div>
+    </section>
+    <script src="auth-helper.js" defer></script>
+    <script src="sound-engine.js" defer></script>
+    <script src="book-data.js" defer></script>
+    <script src="book-data-expansion.js?v=20260717-learning-studio" defer></script>
+    <script src="book-data-varied.js?v=20260724-sourced-topics" defer></script>
+    <script src="book-metadata.js?v=20260717-academic" defer></script>
+    <script src="library-academic.js?v=20260723-compact" defer></script>
+    <script src="pro-experience.js?v=20260621-clean" defer></script>
+    <script src="navbar-explore.js?v=20260722" defer></script>
+    <script src="coursera-home.js" defer></script>
+</body>
+
+</html>

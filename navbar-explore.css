@@ -1,0 +1,116 @@
+/* One visual contract for the Explore control and menu on every page. */
+body[data-page] .explore-wrapper {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+body[data-page] .btn-explore {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 11px;
+    color: #fff;
+    background: var(--blue, #4361ee);
+    box-shadow: 0 5px 14px rgba(67, 97, 238, .2);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+body[data-page] .btn-explore:hover,
+body[data-page] .btn-explore:focus-visible {
+    color: #fff;
+    background: #3451da;
+    box-shadow: 0 7px 18px rgba(67, 97, 238, .3);
+    transform: translateY(-1px);
+}
+
+body[data-page] .btn-explore:focus-visible {
+    outline: 3px solid rgba(67, 97, 238, .28);
+    outline-offset: 3px;
+}
+
+body[data-page] .btn-explore .explore-leading-icon { font-size: 13px; }
+body[data-page] .btn-explore.active .explore-leading-icon { transform: none; }
+body[data-page] .btn-explore .explore-chevron {
+    font-size: 10px;
+    transition: transform .22s ease;
+}
+body[data-page] .btn-explore.active .explore-chevron { transform: rotate(180deg); }
+
+body[data-page] .explore-mega-menu {
+    position: absolute;
+    z-index: 1200;
+    top: calc(100% + 12px);
+    left: 0;
+    width: min(780px, calc(100vw - 40px));
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    padding: 20px;
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 18px;
+    background: var(--white, #fff);
+    box-shadow: 0 22px 55px rgba(15, 23, 42, .16);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
+}
+
+body[data-page] .explore-mega-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+body[data-page] .explore-mega-menu .mega-col { min-width: 0; }
+body[data-page] .explore-mega-menu .mega-col + .mega-col {
+    padding-left: 18px;
+    border-left: 1px solid var(--border, #e5e7eb);
+}
+
+body[data-page] .mega-item-link[aria-current="page"] {
+    color: var(--blue, #4361ee);
+    background: rgba(67, 97, 238, .1);
+}
+
+body[data-page] .mega-item-link[aria-current="page"] .mega-icon-box {
+    color: #fff;
+    background: var(--blue, #4361ee);
+}
+
+@media (max-width: 900px) {
+    body[data-page] .explore-mega-menu {
+        position: fixed;
+        top: 72px;
+        right: 20px;
+        left: 20px;
+        width: auto;
+        max-height: calc(100dvh - 92px);
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+
+    body[data-page] .explore-mega-menu .mega-col + .mega-col {
+        padding-top: 16px;
+        padding-left: 0;
+        border-top: 1px solid var(--border, #e5e7eb);
+        border-left: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body[data-page] .btn-explore,
+    body[data-page] .btn-explore .explore-chevron,
+    body[data-page] .explore-mega-menu { transition: none; }
+}

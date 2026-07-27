@@ -1,0 +1,1355 @@
+/* ============================================================
+   STRIPE-STYLE CHECKOUT PORTAL STYLESHEET - UPGRADED UI/UX
+   ============================================================ */
+
+body[data-page="payment"] {
+    background: var(--bg-page);
+    color: var(--dark);
+    font-family: "Inter", sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Background Ambient Orbs */
+body[data-page="payment"] .orb {
+    position: fixed;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    filter: blur(140px);
+    z-index: 0;
+    opacity: 0.45;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+body[data-page="payment"] .orb.one {
+    top: -100px;
+    left: -150px;
+    background: radial-gradient(circle, var(--blue) 0%, rgba(79, 140, 255, 0) 70%);
+}
+
+body[data-page="payment"] .orb.two {
+    bottom: -100px;
+    right: -150px;
+    background: radial-gradient(circle, var(--purple) 0%, rgba(139, 92, 246, 0) 70%);
+}
+
+/* Split-Viewport Layout */
+.checkout-viewport {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+.checkout-panel-left,
+.checkout-panel-right {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Sisi Kiri: Formulir (Glassmorphic White/Dark) */
+.checkout-panel-left {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-right: 1px solid var(--border);
+    align-items: flex-end;
+}
+
+body.dark-theme .checkout-panel-left {
+    background: rgba(17, 32, 51, 0.45);
+}
+
+/* Sisi Kanan: Summary (Kontras Lembut / Navy Gelap) */
+.checkout-panel-right {
+    background: rgba(244, 248, 251, 0.65);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    align-items: flex-start;
+}
+
+body.dark-theme .checkout-panel-right {
+    background: rgba(11, 21, 35, 0.65);
+}
+
+/* Wrapper Konten */
+.checkout-panel-left .panel-content-wrapper {
+    width: 100%;
+    max-width: 620px;
+    padding: 60px 48px;
+    animation: panelContentFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.checkout-panel-right .panel-content-wrapper {
+    width: 100%;
+    max-width: 480px;
+    padding: 96px 48px 60px;
+    position: sticky;
+    top: 0;
+    animation: panelContentFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+@keyframes panelContentFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header & Brand */
+.checkout-header {
+    margin-bottom: 36px;
+}
+
+.checkout-demo-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: -8px 0 24px;
+    padding: 14px 16px;
+    border: 1px solid #f0c36a;
+    border-radius: 14px;
+    background: #fff8df;
+    color: #714f0b;
+}
+
+.checkout-demo-notice i { margin-top: 3px; }
+.checkout-demo-notice strong,
+.checkout-demo-notice span { display: block; }
+.checkout-demo-notice span { margin-top: 3px; font-size: 12px; line-height: 1.5; }
+body.dark-theme .checkout-demo-notice { background: #30260f; color: #ffe6a3; }
+body.production-checkout .payment-tabs-stripe,
+body.production-checkout .stripe-panels { display: none; }
+body.production-checkout .checkout-demo-notice { border-color: #7dd3a8; background: #ecfdf4; color: #17623b; }
+body.dark-theme.production-checkout .checkout-demo-notice { background: #102b20; color: #b7f7d2; }
+
+.checkout-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -0.04em;
+    color: var(--dark);
+    text-decoration: none;
+}
+
+.checkout-brand .brand-logo {
+    height: 44px;
+    width: auto;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+/* Navigasi & Judul */
+.checkout-step-container {
+    margin-bottom: 24px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.back-link:hover {
+    color: var(--blue);
+    transform: translateX(-4px);
+}
+
+.checkout-step-container h2 {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--dark);
+}
+
+/* Tab Metode Pembayaran Stripe */
+.payment-tabs-stripe {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--item-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+    gap: 6px;
+    margin-bottom: 30px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.stripe-tab-btn {
+    border: 0;
+    background: transparent;
+    padding: 12px 10px;
+    border-radius: 10px;
+    color: var(--muted);
+    font-weight: 800;
+    font-size: 13.5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.stripe-tab-btn:hover {
+    color: var(--dark);
+    background: rgba(0, 0, 0, 0.02);
+}
+
+body.dark-theme .stripe-tab-btn:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.stripe-tab-btn.active {
+    background: var(--white);
+    color: var(--blue);
+    box-shadow: 0 4px 12px rgba(17, 32, 51, 0.06);
+}
+
+body.dark-theme .stripe-tab-btn.active {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Panel Transisi */
+.stripe-panels {
+    margin-bottom: 24px;
+}
+
+.stripe-panel {
+    display: none;
+    animation: panelIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stripe-panel.active {
+    display: grid;
+    gap: 24px;
+}
+
+@keyframes panelIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 3D Interactive Card Preview Styles */
+.interactive-card-wrapper {
+    width: 100%;
+    perspective: 1200px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.credit-card-preview {
+    width: 100%;
+    max-width: 380px;
+    height: 220px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+body.dark-theme .credit-card-preview {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.credit-card-preview.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    color: #fff;
+}
+
+.card-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Front Face */
+.card-front {
+    background: linear-gradient(135deg, #1e3c72 0%, #1e2a4a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Card Front Elements */
+.card-chip-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 2;
+}
+
+.card-chip {
+    width: 45px;
+    height: 34px;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.card-chip::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 12px;
+    right: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.contactless-icon {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.card-type-logo {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    font-size: 28px;
+    opacity: 0.9;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.card-number-display {
+    font-size: 20px;
+    font-family: monospace;
+    letter-spacing: 2px;
+    margin: 32px 0 18px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.card-footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 2;
+}
+
+.card-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.card-value-display {
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Back Face */
+.card-back {
+    background: linear-gradient(135deg, #1e2a4a 0%, #0f172a 100%);
+    transform: rotateY(180deg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 24px 0 20px 0;
+    justify-content: flex-start;
+}
+
+.card-magnetic-strip {
+    width: 100%;
+    height: 45px;
+    background: #090d16;
+    margin-top: 8px;
+}
+
+.card-cvv-group {
+    padding: 20px 24px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.card-cvv-display-box {
+    width: 75px;
+    height: 36px;
+    background: #fff;
+    border-radius: 6px;
+    color: #112033;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-family: monospace;
+    font-size: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 6px;
+}
+
+.card-back-info {
+    font-size: 9px;
+    opacity: 0.4;
+    text-align: center;
+    width: 100%;
+    margin-top: auto;
+    padding: 0 24px;
+}
+
+/* Formulir Stripe */
+.stripe-form {
+    display: grid;
+    gap: 18px;
+}
+
+.form-row {
+    display: grid;
+    gap: 8px;
+}
+
+.form-row.split {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 20px;
+}
+
+.stripe-form label {
+    display: grid;
+    gap: 8px;
+    color: var(--dark);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.stripe-form label span {
+    color: var(--dark);
+    font-weight: 800;
+    opacity: 0.95;
+}
+
+.stripe-form input,
+.stripe-form select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--dark);
+    outline: none;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(17, 32, 51, 0.02);
+    transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.stripe-form input:focus,
+.stripe-form select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.15);
+    background: var(--white);
+}
+
+.stripe-form input::placeholder {
+    color: var(--muted);
+    opacity: 0.55;
+}
+
+/* Input Brand Logo Wrapper */
+.card-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.card-brand-icon {
+    position: absolute;
+    right: 16px;
+    font-size: 20px;
+    color: var(--muted);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-brand-icon.visa {
+    color: #1a1f71;
+    transform: scale(1.15);
+}
+
+.card-brand-icon.mastercard {
+    color: #eb001b;
+    transform: scale(1.15);
+}
+
+/* QRIS UI Panel */
+.qris-box-stripe {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.qris-label {
+    font-weight: 900;
+    font-size: 24px;
+    color: #e02027;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(224, 32, 39, 0.05);
+}
+
+.qris-qr-frame {
+    background: #fff;
+    padding: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 24px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+}
+
+body.dark-theme .qris-qr-frame {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.qr-border-corners {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    border: 1px dashed rgba(17, 32, 51, 0.15);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    color: #112033;
+    overflow: hidden;
+}
+
+.qr-border-corners .c {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 3.5px solid #112033;
+}
+
+.qr-border-corners .c.top-l { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+.qr-border-corners .c.top-r { top: -2px; right: -2px; border-left: 0; border-bottom: 0; }
+.qr-border-corners .c.bot-l { bottom: -2px; left: -2px; border-right: 0; border-top: 0; }
+.qr-border-corners .c.bot-r { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+
+.qr-scan-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #32d66b, transparent);
+    box-shadow: 0 0 10px #32d66b;
+    z-index: 10;
+    animation: qrScanPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes qrScanPulse {
+    0%, 100% {
+        top: 0%;
+    }
+    50% {
+        top: 100%;
+    }
+}
+
+.qris-timer-stripe {
+    display: grid;
+    gap: 8px;
+    justify-items: center;
+}
+
+.qris-timer-stripe span {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.timer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+.timer-dot {
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    animation: statusDotPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes statusDotPulse {
+    0%, 100% {
+        transform: scale(0.9);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+.qris-timer-stripe strong {
+    font-size: 20px;
+    font-weight: 900;
+    color: #ef4444;
+    font-family: monospace;
+}
+
+/* E-Wallet Grid Stripe */
+.wallet-grid-stripe {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.wallet-stripe-btn {
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    background: var(--white);
+    padding: 20px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(17, 32, 51, 0.02);
+}
+
+.wallet-stripe-btn:hover {
+    border-color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(79, 140, 255, 0.08);
+}
+
+body.dark-theme .wallet-stripe-btn:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.wallet-stripe-btn.active {
+    border-color: var(--blue);
+    background: rgba(79, 140, 255, 0.05);
+    box-shadow: 0 0 0 1px var(--blue);
+}
+
+body.dark-theme .wallet-stripe-btn.active {
+    background: rgba(79, 140, 255, 0.1);
+}
+
+.wallet-stripe-btn .wallet-svg {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.wallet-stripe-btn span {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.wallet-stripe-btn .checked-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: var(--blue);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.wallet-stripe-btn.active .checked-indicator {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Action button area */
+.stripe-checkout-action {
+    margin-top: 36px;
+}
+
+.stripe-pay-btn {
+    width: 100%;
+    padding: 16px;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
+    font-weight: 800;
+    font-size: 15.5px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(112, 102, 246, 0.25);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stripe-pay-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    box-shadow: 0 14px 30px rgba(112, 102, 246, 0.35);
+    transform: translateY(-2px);
+}
+
+.stripe-pay-btn:active {
+    transform: translateY(1px);
+}
+
+.stripe-pay-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.secure-checkout-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.secure-checkout-hint i {
+    color: var(--green);
+}
+
+/* Sisi Kanan: Order Summary styles */
+.order-header {
+    margin-bottom: 30px;
+}
+
+.order-header span {
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+.order-header h2 {
+    font-size: 34px;
+    font-weight: 950;
+    letter-spacing: -0.03em;
+    margin: 6px 0 12px;
+}
+
+.price-display {
+    font-size: 42px;
+    font-weight: 950;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.price-display .period {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--muted);
+}
+
+.order-details-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: var(--shadow-soft);
+    width: 100%;
+}
+
+body.dark-theme .order-details-card {
+    background: rgba(23, 42, 66, 0.7);
+}
+
+.item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.item-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(79, 140, 255, 0.08);
+    border: 1px solid rgba(79, 140, 255, 0.15);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    box-shadow: 0 4px 10px rgba(79, 140, 255, 0.05);
+}
+
+.item-info strong {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--dark);
+    display: block;
+}
+
+.item-info span {
+    font-size: 11.5px;
+    color: var(--muted);
+    font-weight: 600;
+    display: block;
+    margin-top: 2px;
+}
+
+.item-price {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.stripe-divider {
+    border: 0;
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+}
+
+.stripe-bill-details {
+    display: grid;
+    gap: 14px;
+}
+
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+    font-weight: 700;
+}
+
+.bill-row span:first-child {
+    color: var(--muted);
+}
+
+.bill-row.promo span:last-child {
+    color: var(--green);
+}
+
+.bill-row.total {
+    font-size: 16.5px;
+    font-weight: 900;
+    color: var(--dark);
+}
+
+/* Footer & Trust icons */
+.checkout-footer {
+    margin-top: 48px;
+    width: 100%;
+}
+
+.trust-icons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 10.5px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
+}
+
+.trust-icons i {
+    font-size: 13px;
+}
+
+/* Success Receipt Modal (Ticket design) */
+.receipt-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(5, 10, 20, 0.7);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    display: none;
+    place-items: center;
+    padding: 20px;
+}
+
+.receipt-modal.open {
+    display: grid;
+    animation: modalBgFadeIn 0.35s ease forwards;
+}
+
+@keyframes modalBgFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.receipt-card {
+    width: min(440px, 100%);
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 40px 32px;
+    text-align: center;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    transform: scale(0.92);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.45s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.receipt-modal.open .receipt-card {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Receipt ticket tear simulation style */
+.receipt-card::before,
+.receipt-card::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: rgba(5, 10, 20, 0.7);
+    border-radius: 50%;
+    top: 50%;
+    z-index: 10;
+}
+
+.receipt-card::before {
+    left: -8px;
+}
+
+.receipt-card::after {
+    right: -8px;
+}
+
+.receipt-success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(50, 214, 107, 0.1);
+    color: var(--green);
+    font-size: 26px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 24px;
+    box-shadow: 0 10px 24px rgba(50, 214, 107, 0.2);
+    border: 2px solid rgba(50, 214, 107, 0.2);
+    animation: successPulsePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes successPulsePop {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.receipt-card h3 {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    color: var(--dark);
+}
+
+.receipt-card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+    font-weight: 500;
+}
+
+.receipt-details {
+    background: var(--item-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    display: grid;
+    gap: 16px;
+    margin-bottom: 32px;
+    text-align: left;
+    position: relative;
+}
+
+.receipt-divider {
+    border: 0;
+    border-top: 1px dashed var(--border);
+    margin: 4px 0;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13.5px;
+    font-weight: 700;
+}
+
+.receipt-row span {
+    color: var(--muted);
+}
+
+.receipt-row strong {
+    color: var(--dark);
+}
+
+.badge-lunas {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(50, 214, 107, 0.12);
+    color: var(--green-dark);
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.receipt-btn {
+    width: 100%;
+    padding: 16px;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    color: #fff;
+    font-weight: 800;
+    font-size: 14.5px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(23, 168, 77, 0.2);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.receipt-btn:hover {
+    box-shadow: 0 14px 30px rgba(23, 168, 77, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Breakpoints & Adaptations */
+@media (max-width: 960px) {
+    .checkout-viewport {
+        grid-template-columns: 1fr;
+    }
+    
+    .checkout-panel-left {
+        align-items: center;
+        border-right: 0;
+    }
+    
+    .checkout-panel-right {
+        align-items: center;
+        border-top: 1px solid var(--border);
+        background: transparent;
+    }
+    
+    .checkout-panel-left .panel-content-wrapper {
+        padding: 60px 24px;
+    }
+    
+    .checkout-panel-right .panel-content-wrapper {
+        padding: 40px 24px 80px;
+        position: static;
+    }
+}
+
+/* ============================================================
+   UPGRADE: NEW STYLES FOR PAYMENTS & SIMULATIONS
+   ============================================================ */
+
+/* Helper for Demo Card Button container */
+.demo-card-helper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+/* Demo Card Button styling */
+.demo-fill-btn {
+    background: rgba(79, 140, 255, 0.1);
+    border: 1.5px dashed var(--blue);
+    color: var(--blue);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.demo-fill-btn:hover {
+    background: var(--blue) !important;
+    color: white !important;
+    border-style: solid !important;
+    box-shadow: 0 4px 12px rgba(79, 140, 255, 0.25);
+    transform: translateY(-1px);
+}
+.demo-fill-btn:active {
+    transform: translateY(1px);
+}
+
+/* QRIS Frame positioning and styling */
+#qrisQrFrame {
+    cursor: pointer;
+    position: relative;
+}
+
+.qris-qr-frame:hover {
+    border-color: var(--blue) !important;
+    transform: scale(1.02);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+/* QRIS Simulator Badge */
+#simulateQrisScanBtn {
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(79, 140, 255, 0.08);
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: -8px;
+    border: 1px dashed var(--blue);
+    transition: all 0.2s ease;
+}
+
+.qris-scan-simulator:hover {
+    background: var(--blue) !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(79, 140, 255, 0.15);
+}
+
+/* Plan details description */
+#planDescDisplay {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* Promo system inputs and blocks */
+.promo-section {
+    margin-bottom: 20px;
+}
+
+.promo-section label {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.promo-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+#promoCodeInput {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--dark);
+    outline: none;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+#promoCodeInput:focus {
+    border-color: var(--blue) !important;
+    box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.15);
+}
+
+#applyPromoBtn {
+    padding: 10px 18px;
+    border: 0;
+    background: var(--blue);
+    color: white;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#applyPromoBtn:hover {
+    background: var(--purple) !important;
+    box-shadow: 0 4px 10px rgba(112, 102, 246, 0.2);
+    transform: translateY(-1px);
+}
+#applyPromoBtn:active {
+    transform: translateY(1px);
+}
+
+#promoFeedback {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 8px;
+    min-height: 18px;
+    transition: all 0.2s ease;
+}
+
+/* Success modal receipt button custom coloring */
+#printReceiptBtn {
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    box-shadow: 0 10px 25px rgba(79, 140, 255, 0.2);
+}
+
+/* Confetti Container styling */
+#confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+}
+
+/* CSS Confetti system */
+.confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #f00;
+    opacity: 0.8;
+    border-radius: 50%;
+    animation: confetti-fall 3.5s linear infinite;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* PRINT MEDIA QUERY FOR CLEAN INVOICE RECEIPT */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    body[data-page="payment"] .orb,
+    body[data-page="payment"] .noise,
+    .checkout-viewport,
+    .secure-checkout-hint,
+    .receipt-btn,
+    .receipt-success-icon {
+        display: none !important;
+    }
+    
+    .receipt-modal, .receipt-modal.open {
+        position: relative !important;
+        display: flex !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        inset: auto !important;
+        padding: 0 !important;
+        width: 100% !important;
+        box-shadow: none !important;
+        margin: 0 auto !important;
+    }
+    
+    .receipt-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 20px !important;
+        width: 100% !important;
+        max-width: 500px !important;
+        margin: 0 auto !important;
+        background: white !important;
+        color: black !important;
+        transform: none !important;
+    }
+    
+    .receipt-details {
+        background: #f8fafc !important;
+        border: 1px solid #e2e8f0 !important;
+        color: black !important;
+    }
+}
+
+/* 2026 premium-minimal account checkout */
+body[data-page="payment"]{--stripe-bg:var(--account-bg);--stripe-card:var(--account-surface);--stripe-text:var(--account-ink);--stripe-muted:var(--account-muted);--stripe-border:var(--account-line);font-family:Manrope,Inter,system-ui,sans-serif;background:var(--account-bg);color:var(--account-ink)}
+body[data-page="payment"] .orb{opacity:.18;filter:blur(18px)}
+.checkout-viewport{grid-template-columns:minmax(0,1.1fr) minmax(390px,.9fr);gap:32px;width:min(1240px,calc(100% - 40px));min-height:100vh;margin:auto;padding:28px 0 52px}
+.checkout-panel-left,.checkout-panel-right{min-height:0;border:1px solid var(--account-line);border-radius:24px;background:var(--account-surface);box-shadow:none}
+.checkout-panel-left{order:1}.checkout-panel-right{order:2;align-self:start;position:sticky;top:24px;background:var(--account-surface-soft)}
+.checkout-panel-left .panel-content-wrapper,.checkout-panel-right .panel-content-wrapper{width:100%;max-width:none;padding:30px}
+.checkout-header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:28px}.checkout-brand{font-weight:800}.checkout-theme-toggle{display:grid;place-items:center;width:44px;min-height:44px;border:1px solid var(--account-line)!important;border-radius:12px;background:var(--account-surface)!important;color:var(--account-ink)!important;cursor:pointer}
+.payment-tabs-stripe{padding:5px;border:1px solid var(--account-line);border-radius:14px;background:var(--account-surface-soft)}
+.stripe-tab-btn{min-height:46px;border-radius:10px!important;color:var(--account-muted)!important}.stripe-tab-btn.active{background:var(--account-surface)!important;color:var(--account-ink)!important;box-shadow:0 4px 14px rgba(24,31,55,.07)!important}
+.credit-card-preview{box-shadow:0 18px 44px rgba(35,39,76,.18)!important}.stripe-input-group input,.stripe-input-group select,.promo-input-group input{border-color:var(--account-line)!important;border-radius:12px!important;background:var(--account-surface)!important;color:var(--account-ink)!important;box-shadow:none!important}
+.stripe-pay-btn{border-radius:13px!important;background:var(--account-brand)!important;box-shadow:0 10px 24px color-mix(in srgb,var(--account-brand) 22%,transparent)!important}.stripe-pay-btn:hover:not(:disabled){background:var(--account-brand-strong)!important;transform:translateY(-1px)}
+.order-header h2{color:var(--account-ink)}.order-header>span,.order-header p{color:var(--account-muted)}.checkout-plan-picker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}.checkout-plan-option{position:relative;min-width:0;padding:14px 12px;border:1px solid var(--account-line)!important;border-radius:14px!important;background:var(--account-surface)!important;color:var(--account-ink)!important;text-align:left;cursor:pointer}.checkout-plan-option span,.checkout-plan-option small{display:block}.checkout-plan-option span{margin-bottom:5px;color:var(--account-brand);font:600 9px "DM Mono",monospace;text-transform:uppercase;letter-spacing:.05em}.checkout-plan-option strong{display:block;font-size:13px}.checkout-plan-option small{margin-top:4px;color:var(--account-muted);font-size:10px}.checkout-plan-option.active{border-color:var(--account-brand)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--account-brand) 12%,transparent)!important}.checkout-source-note{display:none;margin-bottom:16px;padding:11px 13px;border:1px solid color-mix(in srgb,var(--account-brand) 22%,var(--account-line));border-radius:13px;background:color-mix(in srgb,var(--account-brand) 7%,var(--account-surface));color:var(--account-muted);font-size:11px}.checkout-source-note.show{display:block}.checkout-current-pro{margin-bottom:16px;padding:13px;border:1px solid #e5b94e;border-radius:14px;background:color-mix(in srgb,#e5b94e 10%,var(--account-surface))}.checkout-current-pro strong,.checkout-current-pro span{display:block}.checkout-current-pro span{margin-top:4px;color:var(--account-muted);font-size:11px}.order-details-card{border:1px solid var(--account-line)!important;border-radius:18px!important;background:var(--account-surface)!important;box-shadow:none!important}.promo-input-group button{padding:0 15px;border:0;border-radius:11px;background:var(--account-ink);color:var(--account-surface);font-size:11px;font-weight:750;cursor:pointer}.checkout-benefit-list{display:grid;gap:8px;margin:18px 0 0;padding:0;list-style:none;color:var(--account-muted)}.checkout-benefit-list li{display:flex;align-items:flex-start;gap:9px;font-size:11px;line-height:1.5}.checkout-benefit-list i{margin-top:3px;color:var(--account-success)}
+.mobile-summary-toggle{display:none;width:100%;padding:0 18px;border:0;border-bottom:1px solid var(--account-line);background:transparent;color:var(--account-ink);font-size:12px;text-align:left}.mobile-summary-toggle span{flex:1}.mobile-summary-toggle strong{margin-right:10px}.mobile-summary-toggle i{transition:transform .2s}.mobile-summary-toggle[aria-expanded="true"] i{transform:rotate(180deg)}
+@media(max-width:960px){.checkout-viewport{display:flex;flex-direction:column;width:min(720px,calc(100% - 24px));padding:16px 0 36px}.checkout-panel-right{order:0;position:static;width:100%}.checkout-panel-left{order:1;width:100%}.mobile-summary-toggle{display:flex;align-items:center}.checkout-panel-right .panel-content-wrapper{display:none;padding:22px}.checkout-panel-right.summary-open .panel-content-wrapper{display:block}.checkout-panel-left .panel-content-wrapper{padding:22px}.order-header{display:none}}
+@media(max-width:520px){.checkout-panel-left,.checkout-panel-right{border-radius:19px}.checkout-plan-picker{grid-template-columns:1fr}.payment-tabs-stripe{grid-template-columns:repeat(3,1fr)}.stripe-tab-btn{padding-inline:5px;font-size:10px}.checkout-panel-left .panel-content-wrapper,.checkout-panel-right .panel-content-wrapper{padding:18px}.credit-card-preview{transform:scale(.96);transform-origin:center top}}

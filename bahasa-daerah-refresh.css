@@ -1,0 +1,428 @@
+/* Final visual system for the Bahasa Daerah learning experience. */
+:root {
+    --culture-ink: #14213a;
+    --culture-muted: #66748b;
+    --culture-line: #dbe5f0;
+    --culture-canvas: #f6f9fc;
+    --culture-panel: rgba(255, 255, 255, .88);
+    --culture-blue: #3779ef;
+    --culture-green: #1ca86a;
+    --culture-shadow: 0 14px 38px rgba(29, 52, 84, .08);
+}
+
+body[data-page="bahasa"] {
+    color: var(--culture-ink);
+    background:
+        radial-gradient(circle at 7% 12%, rgba(55, 121, 239, .12), transparent 25rem),
+        radial-gradient(circle at 92% 4%, rgba(28, 168, 106, .1), transparent 22rem),
+        var(--culture-canvas);
+}
+
+body.dark-theme[data-page="bahasa"] {
+    --culture-ink: #ecf3ff;
+    --culture-muted: #a5b4ca;
+    --culture-line: rgba(162, 186, 220, .16);
+    --culture-canvas: #0d1727;
+    --culture-panel: rgba(18, 31, 52, .88);
+    --culture-shadow: 0 16px 42px rgba(0, 0, 0, .2);
+}
+
+body[data-page="bahasa"] .noise,
+body[data-page="bahasa"] .orb {
+    opacity: .28;
+    pointer-events: none;
+}
+
+body[data-page="bahasa"] .page {
+    width: min(1240px, calc(100% - 40px));
+    margin: 0 auto;
+    padding-bottom: 72px;
+}
+
+body[data-page="bahasa"] .section {
+    width: 100%;
+    margin-top: 0;
+    padding: 34px 0;
+    scroll-margin-top: 92px;
+}
+
+body[data-page="bahasa"] .section-header,
+body[data-page="bahasa"] .explorer-hub-head {
+    align-items: end;
+    gap: 28px;
+    margin-bottom: 22px;
+}
+
+body[data-page="bahasa"] .section-header > div,
+body[data-page="bahasa"] .explorer-hub-head > div:first-child {
+    min-width: 0;
+}
+
+body[data-page="bahasa"] .section-header h2,
+body[data-page="bahasa"] .explorer-hub-head h2,
+body[data-page="bahasa"] .pro-compact-header h2 {
+    max-width: 680px;
+    margin: 7px 0 0;
+    color: var(--culture-ink);
+    font-size: clamp(1.65rem, 3vw, 2.45rem);
+    letter-spacing: -.045em;
+    line-height: 1.08;
+}
+
+body[data-page="bahasa"] .section-header p,
+body[data-page="bahasa"] .explorer-hub-head p {
+    max-width: 400px;
+    margin: 0;
+    color: var(--culture-muted);
+    font-size: .92rem;
+}
+
+body[data-page="bahasa"] .section-kicker,
+body[data-page="bahasa"] .mini-tag,
+body[data-page="bahasa"] .badge {
+    color: var(--culture-blue);
+    font-size: .68rem;
+    font-weight: 850;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+/* Hero: one clear promise, supporting controls placed into calm surfaces. */
+body[data-page="bahasa"] .language-hero {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(34px, 6vw, 88px);
+    min-height: 0;
+    margin: 28px 0 10px;
+    padding: clamp(28px, 5vw, 64px) clamp(4px, 1vw, 12px) 26px;
+}
+
+body[data-page="bahasa"] .language-hero .hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 760px;
+}
+
+body[data-page="bahasa"] .language-hero .badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    margin: 0 0 16px;
+    padding: 0 11px;
+    border: 1px solid rgba(55, 121, 239, .18);
+    background: rgba(55, 121, 239, .08);
+}
+
+body[data-page="bahasa"] .language-hero h1 {
+    max-width: 670px;
+    margin: 0;
+    color: var(--culture-ink);
+    font-size: clamp(2.55rem, 5vw, 4.5rem);
+    letter-spacing: -.065em;
+    line-height: .98;
+}
+
+body[data-page="bahasa"] .language-hero .hero-copy > p {
+    max-width: 560px;
+    margin: 19px 0 0;
+    color: var(--culture-muted);
+    font-size: clamp(.98rem, 1.4vw, 1.1rem);
+    line-height: 1.7;
+}
+
+body[data-page="bahasa"] .subscription-demo,
+body[data-page="bahasa"] .ambient-player-card,
+body[data-page="bahasa"] .compact-kasta-card {
+    width: min(100%, 480px);
+    margin-top: 15px !important;
+    border: 1px solid var(--culture-line) !important;
+    background: var(--culture-panel) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(14px);
+}
+
+body[data-page="bahasa"] .subscription-demo {
+    display: inline-flex;
+    gap: 10px;
+    min-height: 36px;
+    padding: 5px 6px 5px 12px;
+    border-radius: 12px;
+    color: var(--culture-muted);
+    font-size: .78rem;
+    font-weight: 750;
+}
+
+body[data-page="bahasa"] .subscription-demo a {
+    border-radius: 8px;
+    padding: 6px 9px;
+    color: var(--culture-blue);
+    background: rgba(55, 121, 239, .08);
+}
+
+body[data-page="bahasa"] .ambient-player-card {
+    max-width: 440px !important;
+    min-height: 60px;
+    padding: 10px 12px !important;
+    border-radius: 16px !important;
+}
+
+body[data-page="bahasa"] .ambient-player-card .btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    background: var(--culture-blue) !important;
+}
+
+body[data-page="bahasa"] .compact-kasta-card {
+    padding: 14px 16px !important;
+    border-radius: 16px !important;
+}
+
+body[data-page="bahasa"] .compact-kasta-card .kasta-header { margin-bottom: 9px; }
+body[data-page="bahasa"] .compact-kasta-card h3 { color: var(--culture-ink); }
+body[data-page="bahasa"] .compact-kasta-card .kasta-kicker,
+body[data-page="bahasa"] .compact-kasta-card .kasta-footer { color: var(--culture-muted); }
+
+body[data-page="bahasa"] .hero-actions {
+    gap: 10px;
+    margin-top: 20px;
+}
+
+body[data-page="bahasa"] .hero-actions .btn {
+    min-height: 46px;
+    padding-inline: 17px;
+    border-radius: 12px;
+}
+
+body[data-page="bahasa"] .language-hero-stats {
+    display: grid;
+    width: min(100%, 620px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 24px;
+}
+
+body[data-page="bahasa"] .language-hero-stats > div {
+    padding: 12px 14px;
+    border-left: 2px solid rgba(55, 121, 239, .28);
+}
+
+body[data-page="bahasa"] .language-hero-stats strong {
+    display: block;
+    color: var(--culture-ink);
+    font-size: 1.15rem;
+    letter-spacing: -.03em;
+}
+
+body[data-page="bahasa"] .language-hero-stats span {
+    display: block;
+    margin-top: 3px;
+    color: var(--culture-muted);
+    font-size: .73rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+body[data-page="bahasa"] .culture-hero-panel {
+    min-height: 420px;
+    padding: 26px !important;
+    border: 1px solid var(--culture-line);
+    border-radius: 30px !important;
+    background: linear-gradient(145deg, var(--culture-panel), rgba(55, 121, 239, .08)) !important;
+    box-shadow: var(--culture-shadow) !important;
+}
+
+body[data-page="bahasa"] .culture-panel-topline h2 { color: var(--culture-ink); }
+body[data-page="bahasa"] .culture-panel-topline p { color: var(--culture-muted); }
+body[data-page="bahasa"] .bubub-mascot-stage { min-height: 180px; }
+body[data-page="bahasa"] .bubub-hero-mascot { animation: none !important; }
+body[data-page="bahasa"] .culture-route-step { border-color: var(--culture-line); background: rgba(255,255,255,.22); }
+
+/* Make the primary journey obvious immediately after the hero. */
+.culture-flow {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 0 14px;
+}
+
+.culture-flow-step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 82px;
+    padding: 15px 17px;
+    border: 1px solid var(--culture-line);
+    border-radius: 18px;
+    color: var(--culture-ink);
+    background: var(--culture-panel);
+    box-shadow: none;
+    transition: transform .18s ease, border-color .18s ease, background-color .18s ease;
+}
+
+.culture-flow-step:hover,
+.culture-flow-step:focus-visible {
+    border-color: rgba(55, 121, 239, .42);
+    color: var(--culture-ink);
+    transform: translateY(-2px);
+}
+
+.culture-flow-step.is-current { border-color: rgba(28, 168, 106, .4); background: linear-gradient(135deg, rgba(28,168,106,.1), rgba(55,121,239,.08)); }
+.culture-flow-number { color: var(--culture-blue); font-size: .72rem; font-weight: 900; letter-spacing: .06em; }
+.culture-flow-step strong { display: block; font-size: .92rem; }
+.culture-flow-step small { display: block; margin-top: 3px; color: var(--culture-muted); font-size: .75rem; line-height: 1.35; }
+.culture-flow-step > i { color: var(--culture-muted); font-size: .78rem; }
+
+/* Content panels share one tidy visual language. */
+body[data-page="bahasa"] .indonesia-map-panel,
+body[data-page="bahasa"] .search-filter-panel,
+body[data-page="bahasa"] .culture-grid-header,
+body[data-page="bahasa"] .explorer-stat,
+body[data-page="bahasa"] .hub-panel,
+body[data-page="bahasa"] .region-progress-panel,
+body[data-page="bahasa"] .pro-benefit-card,
+body[data-page="bahasa"] .achievements-card {
+    border: 1px solid var(--culture-line) !important;
+    background: var(--culture-panel) !important;
+    box-shadow: var(--culture-shadow) !important;
+}
+
+body[data-page="bahasa"] .indonesia-map-panel {
+    grid-template-columns: minmax(240px, .68fr) minmax(0, 1.32fr);
+    gap: clamp(24px, 4vw, 48px);
+    margin: 0 !important;
+    padding: clamp(22px, 4vw, 42px);
+    border-radius: 26px;
+}
+
+body[data-page="bahasa"] .map-copy h3 { color: var(--culture-ink); font-size: clamp(1.35rem, 2.4vw, 1.85rem); }
+body[data-page="bahasa"] .map-copy p { color: var(--culture-muted); }
+body[data-page="bahasa"] .indonesia-map-shell { min-height: 320px; padding: clamp(12px, 2vw, 24px); border-color: var(--culture-line); background: linear-gradient(145deg, rgba(55,121,239,.07), rgba(28,168,106,.05)); }
+body[data-page="bahasa"] .map-zoom-controls { right: 12px !important; bottom: 12px !important; }
+body[data-page="bahasa"] .map-zoom-controls .btn { width: 38px !important; height: 38px !important; min-height: 38px !important; border-radius: 11px !important; }
+
+body[data-page="bahasa"] .search-filter-panel {
+    position: static;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    margin: 22px 0 12px !important;
+    padding: 12px;
+    border-radius: 18px;
+}
+
+body[data-page="bahasa"] #cultureSearch { min-height: 48px; color: var(--culture-ink); background: rgba(55,121,239,.055); border: 1px solid transparent; }
+body[data-page="bahasa"] #cultureSearch::placeholder { color: var(--culture-muted); }
+body[data-page="bahasa"] #cultureSearch:focus { border-color: rgba(55,121,239,.45); box-shadow: 0 0 0 4px rgba(55,121,239,.1); }
+body[data-page="bahasa"] .filter-options,
+body[data-page="bahasa"] .region-chip-row { gap: 7px !important; margin: 0 !important; padding: 5px 0 7px !important; }
+body[data-page="bahasa"] .region-chip-row { overflow-x: auto; scrollbar-width: none; }
+body[data-page="bahasa"] .region-chip-row::-webkit-scrollbar { display: none; }
+body[data-page="bahasa"] .filter-opt-btn,
+body[data-page="bahasa"] .region-chip { min-height: 38px; padding: 0 13px; border: 1px solid var(--culture-line); color: var(--culture-muted); background: var(--culture-panel); font-size: .78rem; }
+body[data-page="bahasa"] .filter-opt-btn.active,
+body[data-page="bahasa"] .region-chip.active { color: #087449 !important; background: rgba(28,168,106,.11) !important; border-color: rgba(28,168,106,.32) !important; }
+
+body[data-page="bahasa"] .culture-grid-header {
+    margin: 13px 0 14px !important;
+    padding: 17px 19px !important;
+    border-radius: 18px;
+}
+body[data-page="bahasa"] .culture-grid-header h3 { color: var(--culture-ink); font-size: 1.12rem; }
+body[data-page="bahasa"] .culture-grid-header p { color: var(--culture-muted); }
+body[data-page="bahasa"] .culture-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px !important; }
+body[data-page="bahasa"] .culture-card-link { border-color: var(--culture-line) !important; border-radius: 18px !important; background: var(--culture-panel) !important; box-shadow: 0 7px 20px rgba(29,52,84,.055) !important; }
+body[data-page="bahasa"] .culture-card-link:hover { transform: translateY(-4px) !important; border-color: rgba(55,121,239,.32) !important; box-shadow: 0 14px 28px rgba(29,52,84,.1) !important; }
+body[data-page="bahasa"] .culture-card-link::after { display: none; }
+body[data-page="bahasa"] .culture-card-main { padding: 18px !important; gap: 12px !important; }
+
+body[data-page="bahasa"] .pro-compact-zone { margin-top: 24px; padding: 30px; border: 1px solid var(--culture-line); border-radius: 26px; background: rgba(55,121,239,.035); }
+body[data-page="bahasa"] .pro-compact-zone .section { padding: 18px 0 0; }
+body[data-page="bahasa"] .explorer-dashboard-grid { grid-template-columns: 1.25fr 1fr 1fr; gap: 14px; }
+body[data-page="bahasa"] .hub-panel,
+body[data-page="bahasa"] .region-progress-panel { padding: 20px; border-radius: 20px; }
+body[data-page="bahasa"] .explorer-stat { padding: 14px; border-radius: 16px; }
+body[data-page="bahasa"] .explorer-stat strong,
+body[data-page="bahasa"] .hub-panel h3 { color: var(--culture-ink); }
+body[data-page="bahasa"] .hub-panel p { color: var(--culture-muted); }
+body[data-page="bahasa"] .pro-benefit-grid { gap: 13px; }
+body[data-page="bahasa"] .pro-benefit-card { min-height: 0; padding: 19px; border-radius: 18px; }
+
+body[data-page="bahasa"] .bonus-collapsible { margin-top: 26px !important; border: 1px solid var(--culture-line) !important; border-radius: 20px; background: var(--culture-panel); overflow: hidden; }
+body[data-page="bahasa"] .bonus-summary { padding: 19px 22px; }
+body[data-page="bahasa"] .bonus-collapsible-body { padding: 0 22px 22px; }
+body[data-page="bahasa"] .achievements-card { border-radius: 22px; }
+body[data-page="bahasa"] .badge-item:not(.locked) { animation: none !important; }
+
+/* Movement is deliberate and remains calm on touch devices. */
+body[data-page="bahasa"] .map-region,
+body[data-page="bahasa"] .region-chip,
+body[data-page="bahasa"] .filter-opt-btn,
+body[data-page="bahasa"] .hub-tool { animation: none !important; }
+
+@media (max-width: 1080px) {
+    body[data-page="bahasa"] .language-hero { grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr); gap: 32px; }
+    body[data-page="bahasa"] .culture-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    body[data-page="bahasa"] .explorer-dashboard-grid { grid-template-columns: 1fr 1fr; }
+    body[data-page="bahasa"] .continue-panel { grid-column: 1 / -1; }
+}
+
+@media (max-width: 900px) {
+    body[data-page="bahasa"] .language-hero { grid-template-columns: 1fr; padding-top: 34px; }
+    body[data-page="bahasa"] .language-phone-wrap { display: none; }
+    body[data-page="bahasa"] .indonesia-map-panel { grid-template-columns: 1fr; }
+    body[data-page="bahasa"] .section-header,
+    body[data-page="bahasa"] .explorer-hub-head { align-items: flex-start; flex-direction: column; gap: 10px; }
+    body[data-page="bahasa"] .explorer-dashboard-row { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 720px) {
+    body[data-page="bahasa"] .page { width: 100%; padding-inline: 16px; }
+    body[data-page="bahasa"] .section { padding: 28px 0; }
+    body[data-page="bahasa"] .language-hero { margin-top: 8px; padding: 26px 0 20px; }
+    body[data-page="bahasa"] .language-hero h1 { font-size: clamp(2.35rem, 12vw, 3.45rem); }
+    body[data-page="bahasa"] .language-hero .hero-copy > p { font-size: .96rem; }
+    body[data-page="bahasa"] .hero-actions { width: 100%; display: grid; grid-template-columns: 1fr; }
+    body[data-page="bahasa"] .hero-actions .btn { width: 100%; justify-content: center; }
+    body[data-page="bahasa"] .language-hero-stats { gap: 4px; margin-top: 20px; }
+    body[data-page="bahasa"] .language-hero-stats > div { padding: 9px 10px; }
+    body[data-page="bahasa"] .language-hero-stats strong { font-size: 1rem; }
+    body[data-page="bahasa"] .language-hero-stats span { font-size: .66rem; }
+    .culture-flow { grid-template-columns: 1fr; gap: 8px; margin-bottom: 6px; }
+    .culture-flow-step { min-height: 66px; padding: 12px 14px; }
+    body[data-page="bahasa"] .indonesia-map-panel { gap: 18px; padding: 19px; border-radius: 20px; }
+    body[data-page="bahasa"] .indonesia-map-shell { min-height: 220px; padding: 10px; border-radius: 16px; }
+    body[data-page="bahasa"] .search-filter-panel { grid-template-columns: 1fr; margin-top: 17px !important; }
+    body[data-page="bahasa"] .filter-options { max-width: 100%; overflow-x: auto; padding-bottom: 3px; }
+    body[data-page="bahasa"] .filter-opt-btn { flex: 0 0 auto; }
+    body[data-page="bahasa"] .culture-grid-header { align-items: flex-start; flex-direction: column; gap: 7px; padding: 15px !important; }
+    body[data-page="bahasa"] .culture-grid { grid-template-columns: 1fr; gap: 12px !important; }
+    body[data-page="bahasa"] .culture-card-link:hover { transform: none !important; }
+    body[data-page="bahasa"] .pro-compact-zone { margin-inline: -2px; padding: 20px 16px; border-radius: 20px; }
+    body[data-page="bahasa"] .explorer-stats,
+    body[data-page="bahasa"] .region-progress-grid,
+    body[data-page="bahasa"] .explorer-dashboard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    body[data-page="bahasa"] .continue-panel,
+    body[data-page="bahasa"] .goal-panel,
+    body[data-page="bahasa"] .daily-panel { grid-column: 1 / -1; }
+    body[data-page="bahasa"] .explorer-stat { gap: 9px; padding: 12px; }
+    body[data-page="bahasa"] .explorer-stat strong { font-size: 1.25rem; }
+    body[data-page="bahasa"] .explorer-stat small { font-size: .69rem; }
+    body[data-page="bahasa"] .bonus-summary,
+    body[data-page="bahasa"] .bonus-collapsible-body { padding-inline: 16px; }
+}
+
+@media (max-width: 430px) {
+    body[data-page="bahasa"] .explorer-stats,
+    body[data-page="bahasa"] .region-progress-grid { grid-template-columns: 1fr; }
+    body[data-page="bahasa"] .ambient-player-card { gap: 9px !important; }
+    body[data-page="bahasa"] .ambient-player-card select { max-width: 74px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body[data-page="bahasa"] *,
+    body[data-page="bahasa"] *::before,
+    body[data-page="bahasa"] *::after { animation: none !important; transition-duration: .01ms !important; }
+}

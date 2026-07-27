@@ -1,0 +1,134 @@
+/* Focused polish for the TKA dashboard. Kept separate to avoid adding more overrides to shared bundles. */
+html,
+body[data-page="snbt"] { max-width: 100%; overflow-x: clip; }
+.official-context {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    margin: 18px 0 26px;
+    padding: 16px 18px;
+    border: 1px solid color-mix(in srgb, var(--blue) 24%, var(--border));
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--blue) 6%, var(--card-bg));
+}
+
+.official-context__icon {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border-radius: 13px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue), var(--green));
+}
+
+.official-context strong { color: var(--dark); }
+.official-context p { margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.official-context a { color: var(--blue); font-size: 13px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+
+body[data-page="snbt"] .hero-panel { min-width: 340px; }
+body[data-page="snbt"] .hero-panel .metric-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+body[data-page="snbt"] .hero-panel .metric-card { min-width: 0; padding-inline: 8px; }
+body[data-page="snbt"] .hero-panel .metric-card strong { font-size: clamp(17px, 1.7vw, 23px); white-space: nowrap; }
+body[data-page="snbt"] .hero-panel .metric-card span { font-size: 10px; line-height: 1.25; overflow-wrap: normal; }
+
+.diagnostic-assessment__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+    gap: 18px;
+}
+
+.diagnostic-assessment__question,
+.diagnostic-assessment__result,
+.mistake-review-panel,
+.practice-settings {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--card-bg);
+}
+
+.diagnostic-assessment__question,
+.diagnostic-assessment__result { padding: 22px; min-height: 220px; }
+.diagnostic-assessment__question:empty { background: linear-gradient(135deg, color-mix(in srgb, var(--blue) 8%, var(--card-bg)), var(--card-bg)); }
+.diagnostic-assessment__result { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.diagnostic-assessment__result h3 { margin: 10px 0 6px; font-size: 22px; color: var(--dark); }
+.diagnostic-assessment__result p { margin: 0 0 16px; color: var(--muted); line-height: 1.6; }
+.diagnostic-progress { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 16px; color: var(--muted); font-size: 12px; font-weight: 800; }
+.diagnostic-progress__track { height: 7px; margin-bottom: 22px; border-radius: 99px; background: var(--border); overflow: hidden; }
+.diagnostic-progress__fill { height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--blue), var(--green)); transition: width .25s ease; }
+.diagnostic-prompt { margin: 0 0 18px; color: var(--dark); font-size: 19px; line-height: 1.45; }
+.diagnostic-options { display: grid; gap: 10px; }
+.diagnostic-option {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    color: var(--dark);
+    background: var(--item-bg, var(--card-bg));
+    font: inherit;
+    font-size: 13px;
+    font-weight: 750;
+    text-align: left;
+    cursor: pointer;
+}
+.diagnostic-option:hover, .diagnostic-option:focus-visible { border-color: var(--blue); transform: translateY(-1px); }
+.diagnostic-score { font-size: 42px; font-weight: 900; color: var(--blue); line-height: 1; }
+.diagnostic-skill-list { width: 100%; display: grid; gap: 8px; margin: 14px 0 18px; }
+.diagnostic-skill-row { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--muted); }
+
+.field-hint { margin: 7px 0 0; color: var(--muted); font-size: 11.5px; line-height: 1.45; }
+.field-hint.is-error { color: #dc2626; }
+
+.practice-settings {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 14px;
+    padding: 14px 16px;
+}
+.practice-settings .field { min-width: 240px; margin: 0; }
+.practice-settings select { width: 100%; }
+.practice-settings p { margin: 0; color: var(--muted); font-size: 12px; }
+
+.mistake-review-panel { margin-top: 18px; padding: 20px; }
+.mistake-review-panel__header { display: flex; align-items: end; justify-content: space-between; gap: 16px; }
+.mistake-review-panel h3 { margin: 3px 0 0; color: var(--dark); }
+.mistake-review-panel input { width: min(320px, 100%); padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; color: var(--dark); background: var(--card-bg); }
+.mistake-review-list { display: grid; gap: 10px; margin-top: 16px; }
+.mistake-review-item { padding: 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--item-bg, var(--card-bg)); }
+.mistake-review-item strong { display: block; margin-bottom: 5px; color: var(--dark); font-size: 13px; line-height: 1.45; }
+.mistake-review-item p { margin: 0; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+.mistake-review-empty { padding: 18px; border: 1px dashed var(--border); border-radius: 14px; color: var(--muted); text-align: center; }
+
+.readiness-disclaimer,
+.progress-sync-note { color: var(--muted); font-size: 11.5px; line-height: 1.55; }
+.progress-import-label { cursor: pointer; }
+.progress-utilities > div { flex-wrap: wrap; }
+.progress-sync-note { width: 100%; margin: 6px 0 0; }
+
+.tka-tab-btn:focus-visible,
+.tka-main-tab-btn:focus-visible,
+.tka-accordion-header:focus-visible,
+.bookmark-toggle-btn:focus-visible,
+.formula-toggle-btn:focus-visible,
+.formula-drawer-close:focus-visible,
+.concept-modal-close:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--blue) 42%, transparent);
+    outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+    .official-context,
+    .diagnostic-assessment__grid { grid-template-columns: 1fr; }
+    .official-context a { white-space: normal; }
+    .practice-settings, .mistake-review-panel__header { align-items: stretch; flex-direction: column; }
+    .practice-settings .field, .mistake-review-panel input { min-width: 0; width: 100%; }
+    body[data-page="snbt"] .hero-panel { min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .diagnostic-option,
+    .diagnostic-progress__fill { transition: none !important; }
+}

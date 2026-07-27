@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#f5f7f2">
+    <meta name="color-scheme" content="light dark">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Learning Studio Universe Of Tech untuk belajar teknologi melalui materi terarah, eksperimen interaktif, latihan, dan checkpoint.">
+    <meta property="og:title" content="Learning Studio — Universe Of Tech">
+    <meta property="og:description" content="Pelajari teknologi melalui penjelasan terarah, playground interaktif, latihan bertingkat, dan checkpoint.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:image" content="universe-of-tech-logo.jpg">
+    <link rel="canonical" href="/materi-basic.html">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app-shell.css">
+    <link rel="icon" href="universe-of-tech-logo.webp" type="image/webp">
+    <link rel="stylesheet" href="learning-studio.css?v=20260724-editorial-refresh">
+    <title>Learning Studio — Universe Of Tech</title>
+</head>
+<body class="learning-studio-page">
+    <a class="skip-link" href="#lessonContent">Lewati ke isi pelajaran</a>
+    <div class="studio-app" id="lessonReader">
+        <div class="studio-loading" role="status">
+            <span class="studio-loading-mark" aria-hidden="true"><img src="universe-of-tech-logo.webp" alt=""></span>
+            <div class="studio-loading-copy">
+                <span class="studio-loading-kicker">Learning Studio</span>
+                <strong>Menyiapkan studio belajar</strong>
+                <span>Memuat silabus, progres, dan latihanmu…</span>
+                <span class="studio-loading-line" aria-hidden="true"><i></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="studio-toast" id="studioToast" role="status" aria-live="polite"></div>
+    <noscript>
+        <main class="studio-error">
+            <p class="studio-kicker">Universe Of Tech</p>
+            <h1>JavaScript diperlukan</h1>
+            <p>Aktifkan JavaScript untuk membuka materi, latihan, dan progres belajarmu.</p>
+            <a class="studio-btn primary" href="materi.html">Kembali ke dashboard materi</a>
+        </main>
+    </noscript>
+    <script src="app-shell.js" defer></script>
+    <script src="curriculum-data.js?v=20260723-chapter-assessment" defer></script>
+    <script src="sound-engine.js" defer></script>
+    <script src="rpg-engine.js" defer></script>
+    <script src="certificate-pdf.js?v=20260723-chapter-assessment" defer></script>
+    <script src="materi-studio.js?v=20260724-editorial-refresh" defer></script>
+</body>
+</html>
