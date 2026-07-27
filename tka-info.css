@@ -1645,3 +1645,44 @@ body.dark-theme .pomodoro-btn.start-pause {
         box-shadow: none !important;
     }
 }
+
+/* TKA dashboard polish: make the study path and key actions easier to scan. */
+body[data-page="snbt"] .hero-layout-grid { margin-bottom: 36px; }
+
+body[data-page="snbt"] .hero > div:first-child {
+    padding: clamp(24px, 4vw, 48px);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    background: radial-gradient(circle at 85% 12%, rgba(79, 140, 255, .2), transparent 28%), radial-gradient(circle at 10% 100%, rgba(16, 185, 129, .15), transparent 32%), var(--card-bg);
+    box-shadow: var(--shadow-soft);
+}
+
+body[data-page="snbt"] .hero .badge i { margin-right: 6px; }
+body[data-page="snbt"] .hero-actions .btn { min-height: 48px; display: inline-flex; align-items: center; gap: 9px; }
+
+body[data-page="snbt"] .tka-main-tabs-nav {
+    position: sticky;
+    top: 82px;
+    z-index: 20;
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto 28px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+    box-shadow: 0 14px 35px rgba(15, 23, 42, .08);
+    backdrop-filter: blur(16px);
+}
+
+body[data-page="snbt"] .tka-main-tab-btn { min-height: 54px; border-radius: 14px; }
+body[data-page="snbt"] .tka-main-tab-btn.active { box-shadow: 0 10px 22px rgba(79, 140, 255, .22); }
+body[data-page="snbt"] .hero-panel,
+body[data-page="snbt"] .pomodoro-widget { border-color: rgba(79, 140, 255, .2); }
+body[data-page="snbt"] .metric-card { min-height: 78px; justify-content: center; }
+body[data-page="snbt"] .section-header { padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+
+@media (max-width: 760px) {
+    body[data-page="snbt"] .hero-layout-grid { width: min(100% - 24px, 1180px); }
+    body[data-page="snbt"] .tka-main-tabs-nav { position: static; width: min(100% - 24px, 1180px); display: grid; grid-template-columns: 1fr; }
+    body[data-page="snbt"] .hero > div:first-child { border-radius: 22px; }
+}

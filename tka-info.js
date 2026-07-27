@@ -516,7 +516,87 @@ document.addEventListener("DOMContentLoaded", () => {
     initPomodoroWidget();
     initIrtSimulatorEnhanced();
     initDrawerAndReset();
+    initScrollProgress();
 });
+
+function initScrollProgress() {
+    window.addEventListener("scroll", () => {
+        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+        const progressEl = document.getElementById("scrollProgressBar");
+        if (progressEl) {
+            progressEl.style.width = scrolled + "%";
+        }
+    });
+}
+
+function triggerConfetti() {
+    const canvas = document.getElementById("confettiCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ["#32d66b", "#4f8cff", "#ffd166", "#ff9f43", "#8b5cf6", "#ff4d6d"];
+    const particleCount = 120;
+    const particles = [];
+
+    class Particle {
+        constructor() {
+            this.x = canvas.width / 2;
+            this.y = canvas.height + 15;
+            this.radius = Math.random() * 6 + 4;
+            this.vx = Math.random() * 14 - 7;
+            this.vy = -(Math.random() * 15 + 10);
+            this.gravity = 0.38;
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.opacity = 1;
+            this.decay = Math.random() * 0.012 + 0.008;
+        }
+        update() {
+            this.vy += this.gravity;
+            this.x += this.vx;
+            this.y += this.vy;
+            this.opacity -= this.decay;
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.opacity;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    let animationFrameId;
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            if (p.opacity > 0) {
+                p.update();
+                p.draw();
+                active = true;
+            }
+        }
+        if (active) {
+            animationFrameId = requestAnimationFrame(animate);
+        } else {
+            cancelAnimationFrame(animationFrameId);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+    animate();
+}
 
 // Helper for trigger toast alerts safely
 function triggerToast(msg) {
@@ -567,13 +647,28 @@ function initTkaTabs() {
             mainPanels.forEach(panel => {
                 panel.classList.add("hidden");
                 panel.style.display = "none";
+                panel.setAttribute("aria-hidden", "true");
             });
             
             const targetPanel = document.getElementById(targetId);
             if (targetPanel) {
                 targetPanel.classList.remove("hidden");
                 targetPanel.style.display = "block";
+                targetPanel.setAttribute("aria-hidden", "false");
+                if (targetId === "panel-practice") {
+                    document.dispatchEvent(new CustomEvent("tka:practice-activated"));
+                }
             }
+        });
+        btn.addEventListener("keydown", event => {
+            if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+            event.preventDefault();
+            const items = Array.from(mainTabBtns);
+            const current = items.indexOf(btn);
+            const next = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1 :
+                (current + (event.key === "ArrowRight" ? 1 : -1) + items.length) % items.length;
+            items[next].focus();
+            items[next].click();
         });
     });
 
@@ -587,16 +682,22 @@ function initTkaTabs() {
             const targetId = btn.dataset.target;
             if (!targetId) return;
 
-            tabButtons.forEach(t => t.classList.remove("active"));
+            tabButtons.forEach(t => {
+                t.classList.remove("active");
+                t.setAttribute("aria-selected", "false");
+            });
             tabContents.forEach(c => {
                 c.classList.add("hidden");
                 c.style.display = "none";
+                c.setAttribute("aria-hidden", "true");
             });
 
             btn.classList.add("active");
+            btn.setAttribute("aria-selected", "true");
             const targetContent = document.getElementById(targetId);
             if (targetContent) {
                 targetContent.style.display = "block";
+                targetContent.setAttribute("aria-hidden", "false");
                 targetContent.offsetHeight; // trigger reflow for smooth animations
                 targetContent.classList.remove("hidden");
             }
@@ -636,6 +737,13 @@ function initTkaAccordion() {
     const accordionHeaders = document.querySelectorAll(".tka-accordion-header");
 
     accordionHeaders.forEach(header => {
+        const item = header.closest(".tka-accordion-item");
+        const body = item?.querySelector(".tka-accordion-body");
+        if (body) {
+            if (!body.id) body.id = `tka-accordion-${Math.random().toString(36).slice(2, 9)}`;
+            header.setAttribute("aria-controls", body.id);
+            header.setAttribute("aria-expanded", "false");
+        }
         header.addEventListener("click", () => {
             const item = header.closest(".tka-accordion-item");
             const body = item.querySelector(".tka-accordion-body");
@@ -647,15 +755,18 @@ function initTkaAccordion() {
                 if (otherItem !== item) {
                     otherItem.classList.remove("active");
                     otherItem.querySelector(".tka-accordion-body").style.maxHeight = "0px";
+                    otherItem.querySelector(".tka-accordion-header")?.setAttribute("aria-expanded", "false");
                 }
             });
 
             if (isActive) {
                 item.classList.remove("active");
                 body.style.maxHeight = "0px";
+                header.setAttribute("aria-expanded", "false");
             } else {
                 item.classList.add("active");
                 body.style.maxHeight = body.scrollHeight + "px";
+                header.setAttribute("aria-expanded", "true");
             }
         });
     });
@@ -705,6 +816,12 @@ function initSyllabusFeatures() {
             if (cb.checked) {
                 if (li) li.classList.add("mastered");
                 if (typeof playSound === "function") playSound("success");
+
+                // Trigger Confetti Burst & Toast
+                if (typeof triggerConfetti === "function") triggerConfetti();
+                const conceptSpan = li ? li.querySelector("span") : null;
+                const conceptName = conceptSpan ? conceptSpan.textContent : "Topik";
+                triggerToast(`Luar biasa! Kamu menyelesaikan topik "${conceptName}". (+10 XP)`);
 
                 // Award +10 XP once
                 if (!xpAwarded[key]) {
@@ -782,10 +899,16 @@ function initSyllabusFeatures() {
 
 function updateAllSyllabusProgress() {
     const subjects = ["matematika-ipa", "fisika", "kimia", "biologi", "sejarah", "geografi", "sosiologi", "ekonomi"];
+    let totalChecked = 0;
+    let totalCheckboxes = 0;
+    
     subjects.forEach(sub => {
         const cbs = document.querySelectorAll(`.syllabus-checkbox[data-subject="${sub}"]`);
         if (!cbs.length) return;
         const checkedCount = Array.from(cbs).filter(cb => cb.checked).length;
+        totalChecked += checkedCount;
+        totalCheckboxes += cbs.length;
+        
         const pct = Math.round((checkedCount / cbs.length) * 100);
         
         const pctEl = document.getElementById(`pct-${sub}`);
@@ -793,6 +916,13 @@ function updateAllSyllabusProgress() {
         if (pctEl) pctEl.textContent = `${pct}%`;
         if (fillEl) fillEl.style.width = `${pct}%`;
     });
+
+    // Update global TKA progress percentage card in dashboard header
+    const globalPct = totalCheckboxes > 0 ? Math.round((totalChecked / totalCheckboxes) * 100) : 0;
+    const globalPctEl = document.getElementById("tkaProgressPct");
+    if (globalPctEl) {
+        globalPctEl.textContent = `${globalPct}%`;
+    }
 }
 
 /**
@@ -849,16 +979,16 @@ function initPlannerFeatures() {
     // Dynamic Roadmap rendering with Checkboxes (Interactive Roadmap)
     function buildTkaPlanEnhanced() {
         if (!planList) return;
-        const target = Number(targetInput.value || 680);
+        const target = Number(targetInput.value || 75);
         const weeks = Number(weeksInput.value || 6);
         const focus = focusSelect.value;
         const electivePair = `${firstElective.value} & ${secondElective.value}`;
         
         // Intensity multiplier
         let intensityLabel = "Normal Harian";
-        if (target >= 750 && weeks <= 4) {
+        if (target >= 90 && weeks <= 4) {
             intensityLabel = "Super-Intensif (Beban Ganda)";
-        } else if (target >= 700) {
+        } else if (target >= 80) {
             intensityLabel = "Intensif Terarah";
         }
         
@@ -877,7 +1007,7 @@ function initPlannerFeatures() {
             } else if (i <= Math.ceil((weeks * 2) / 3)) {
                 taskText = `Seimbangkan materi wajib dengan rumpun pilihan ${electivePair}. Atur jadwal belajar 3:2.`;
             } else {
-                taskText = `Fokus simulasi berwaktu penuh (tryout), analisis performa IRT, dan review Buku Catatan Salah.`;
+                taskText = `Fokus simulasi berwaktu, analisis kompetensi, dan review Buku Catatan Salah.`;
             }
 
             const key = `week_${i}`;
@@ -947,7 +1077,7 @@ function initPlannerFeatures() {
             el2,
             "Bahasa Indonesia",
             "Bahasa Inggris",
-            "Matematika IPA",
+            "Matematika",
             "Fisika",
             "Kimia",
             "Biologi",
@@ -1010,6 +1140,7 @@ function initTryoutFeatures() {
     const mistakesBox = document.getElementById("mistakesDiaryBox");
     const bookmarksPanel = document.getElementById("tkaBookmarksPanel");
     const bookmarksList = document.getElementById("tkaBookmarksList");
+    const practiceModeSelect = document.getElementById("practiceModeSelect");
 
     if (!questionText || !answerGrid) return;
 
@@ -1034,12 +1165,18 @@ function initTryoutFeatures() {
 
         // Reset timer countdown
         clearInterval(tryoutTimerInterval);
-        tryoutTimeLeft = 90;
+        const selectedDuration = Number(practiceModeSelect?.value ?? 90);
+        tryoutTimeLeft = selectedDuration;
         if (timerBadge) {
             timerBadge.classList.remove("warning");
-            timerBadge.innerHTML = `<i class="fa-solid fa-clock"></i> 90s`;
+            timerBadge.innerHTML = selectedDuration > 0
+                ? `<i class="fa-solid fa-clock"></i> ${selectedDuration}s`
+                : `<i class="fa-solid fa-infinity"></i> Tanpa timer`;
         }
 
+        const practicePanel = document.getElementById("panel-practice");
+        if (practicePanel?.getAttribute("aria-hidden") === "true") return;
+        if (selectedDuration === 0) return;
         tryoutTimerInterval = setInterval(() => {
             tryoutTimeLeft--;
             if (timerBadge) {
@@ -1282,6 +1419,8 @@ function initTryoutFeatures() {
         }
     }
 
+    practiceModeSelect?.addEventListener("change", handleNewQuestionLoaded);
+    document.addEventListener("tka:practice-activated", handleNewQuestionLoaded);
     renderBookmarksList();
     updateAccuracyChart();
     handleNewQuestionLoaded();
@@ -1376,12 +1515,12 @@ function initPomodoroWidget() {
 }
 
 /**
- * Logika Simulator Skor IRT Interaktif Ter-upgrade
+ * Simulator indeks kesiapan belajar berbasis data latihan internal
  */
 function initIrtSimulatorEnhanced() {
     const slider = document.getElementById("irtCorrectRange");
     const sliderVal = document.getElementById("irtCorrectVal");
-    const clusterSelect = document.getElementById("irtPtnCluster");
+    const stageSelect = document.getElementById("irtPtnCluster");
     const diffButtons = document.querySelectorAll(".irt-sim-option-btn");
     const scoreVal = document.getElementById("irtScoreVal");
     const scoreRing = document.getElementById("irtScoreRing");
@@ -1389,40 +1528,18 @@ function initIrtSimulatorEnhanced() {
     const desc = document.getElementById("irtDesc");
     const recomList = document.getElementById("irtRecommendationsList");
 
-    if (!slider || !sliderVal || !scoreVal) return;
-
-    // Weight select dynamic injection
-    const clusterField = clusterSelect.parentNode;
-    let weightSelect = document.getElementById("irtWeightAdjuster");
-    if (!weightSelect) {
-        const weightingField = document.createElement("div");
-        weightingField.className = "field";
-        weightingField.style.marginTop = "10px";
-        weightingField.innerHTML = `
-            <label for="irtWeightAdjuster">Bobot Relevansi Sub-tes (Minat Prodi)</label>
-            <select id="irtWeightAdjuster" style="width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-bg); color: var(--dark); font-family: inherit; font-weight: bold; cursor: pointer;">
-                <option value="1.0" selected>Netral (1.0x)</option>
-                <option value="1.1">Sesuai Minat (1.1x)</option>
-                <option value="1.2">Sangat Relevan (1.2x - Kedokteran/TI)</option>
-            </select>
-        `;
-        clusterField.parentNode.insertBefore(weightingField, clusterField.nextSibling);
-        weightSelect = document.getElementById("irtWeightAdjuster");
-    }
+    if (!slider || !sliderVal || !scoreVal || !stageSelect || !recomList) return;
 
     let correctCount = parseInt(slider.value) || 10;
-    let difficultyMultiplier = 1.0;
+    let varietyBonus = 5;
 
     slider.addEventListener("input", (e) => {
         correctCount = parseInt(e.target.value);
         sliderVal.textContent = correctCount;
-        calculateIrtScore();
+        calculateReadiness();
     });
 
-    clusterSelect.addEventListener("change", calculateIrtScore);
-    if (weightSelect) {
-        weightSelect.addEventListener("change", calculateIrtScore);
-    }
+    stageSelect.addEventListener("change", calculateReadiness);
 
     diffButtons.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -1430,161 +1547,54 @@ function initIrtSimulatorEnhanced() {
             btn.classList.add("active");
             
             const level = btn.dataset.difficulty;
-            if (level === "mudah") {
-                difficultyMultiplier = 0.85;
-            } else if (level === "sedang") {
-                difficultyMultiplier = 1.0;
-            } else if (level === "sulit") {
-                difficultyMultiplier = 1.25;
-            }
+            varietyBonus = level === "mudah" ? 0 : level === "sulit" ? 8 : 5;
             if (typeof playSound === "function") playSound("click");
-            calculateIrtScore();
+            calculateReadiness();
         });
     });
 
-    function calculateIrtScore() {
-        const totalQuestions = 20;
-        const cluster = parseInt(clusterSelect.value) || 2;
-        const relevanceMultiplier = weightSelect ? parseFloat(weightSelect.value) : 1.0;
+    function calculateReadiness() {
+        const accuracy = Math.round((correctCount / 20) * 100);
+        const stage = Number(stageSelect.value) || 2;
+        const evidencePenalty = correctCount < 5 ? 10 : correctCount < 10 ? 5 : 0;
+        const readiness = Math.max(0, Math.min(100, accuracy + varietyBonus - evidencePenalty));
+        const stageTargets = { 1: 55, 2: 70, 3: 82 };
+        const gap = Math.max(0, stageTargets[stage] - readiness);
 
-        let score = 400 + Math.round((correctCount / totalQuestions) * 400 * difficultyMultiplier * relevanceMultiplier);
-        score = Math.max(400, Math.min(900, score));
-        scoreVal.textContent = score;
+        scoreVal.textContent = readiness;
+        scoreRing.style.setProperty("--score-pct", `${readiness}%`);
+        const color = readiness >= 80 ? "#00a88f" : readiness >= 60 ? "#2563eb" : readiness >= 40 ? "#f59e0b" : "#ef4444";
+        scoreRing.style.background = `conic-gradient(${color} ${readiness}%, var(--border) 0)`;
 
-        const pct = ((score - 400) / 500) * 100;
-        scoreRing.style.setProperty("--score-pct", `${pct}%`);
-
-        let scoreColor = "#ef4444";
-        if (score >= 750) {
-            scoreColor = "#00d2d3"; // toska
-        } else if (score >= 650) {
-            scoreColor = "var(--green)"; // green
-        } else if (score >= 550) {
-            scoreColor = "var(--orange)"; // orange
-        }
-        scoreRing.style.background = `conic-gradient(${scoreColor} ${pct}%, var(--border) 0)`;
-
-        let verdictText = "";
-        let descText = "";
-
-        if (score >= 800) {
-            verdictText = "Sangat Istimewa (Top 1%)";
-            descText = "Peluang lolos sangat tinggi pada program studi dengan tingkat keketatan ekstrem seperti Kedokteran UI/UGM, STEI ITB, atau Aktuaria.";
-        } else if (score >= 700) {
-            verdictText = "Sangat Siap & Kompetitif";
-            descText = "Peluang tinggi untuk masuk prodi terfavorit (Teknik Informatika, Hukum, Psikologi, FEB) di PTN Kluster 1 (UI, ITB, UGM, Unair).";
-        } else if (score >= 600) {
-            verdictText = "Cukup Aman & Stabil";
-            descText = "Peluang baik pada program studi rumpun Saintek/Soshum menengah ke atas di PTN Kluster 2 atau prodi umum PTN Kluster 1.";
-        } else if (score >= 500) {
-            verdictText = "Butuh Penguatan Konsep";
-            descText = "Nilai Anda berada di rata-rata nasional. Fokuskan belajar pada mata pelajaran dengan akurasi terlemah untuk mendongkrak skor.";
+        if (readiness >= 82) {
+            verdict.textContent = "Siap masuk simulasi";
+            desc.textContent = "Akurasi latihan sudah kuat. Uji konsistensi pada paket lebih panjang dan batas waktu realistis.";
+        } else if (readiness >= 65) {
+            verdict.textContent = "Stabil, perlu dipadatkan";
+            desc.textContent = "Fondasi cukup baik. Tingkatkan variasi soal dan ulangi topik yang masih sering salah.";
+        } else if (readiness >= 45) {
+            verdict.textContent = "Sedang membangun fondasi";
+            desc.textContent = "Kurangi beban waktu, fokus pada konsep inti, lalu ukur ulang setelah dua sesi remedial.";
         } else {
-            verdictText = "Tahap Fondasi Awal";
-            descText = "Skor Anda di bawah rata-rata. Direkomendasikan mempelajari kembali materi fundamental dasar sebelum mencoba simulasi berwaktu.";
+            verdict.textContent = "Mulai dari konsep inti";
+            desc.textContent = "Kerjakan paket pendek tanpa tekanan waktu dan tulis alasan di balik setiap jawaban.";
         }
 
-        verdict.textContent = verdictText;
-        desc.textContent = descText;
-
-        let majors = [];
-        if (cluster === 1) {
-            if (score >= 750) {
-                majors = [
-                    { name: "Pendidikan Dokter UGM", quota: 180, chance: "Sangat Tinggi (85%)" },
-                    { name: "Ilmu Komputer UI", quota: 120, chance: "Sangat Tinggi (80%)" },
-                    { name: "STEI ITB", quota: 220, chance: "Tinggi (75%)" }
-                ];
-            } else if (score >= 650) {
-                majors = [
-                    { name: "Teknik Industri UI", quota: 150, chance: "Tinggi (70%)" },
-                    { name: "FEB (Akuntansi) UGM", quota: 200, chance: "Tinggi (68%)" },
-                    { name: "Statistika ITS", quota: 90, chance: "Sedang (55%)" }
-                ];
-            } else if (score >= 550) {
-                majors = [
-                    { name: "Sastra Inggris UI", quota: 80, chance: "Sedang (50%)" },
-                    { name: "Agribisnis IPB", quota: 160, chance: "Sedang (45%)" },
-                    { name: "Biologi UGM", quota: 100, chance: "Rendah (35%)" }
-                ];
-            } else {
-                majors = [
-                    { name: "Fisika Murni UI", quota: 90, chance: "Rendah (20%)" },
-                    { name: "Sastra Nusantara UGM", quota: 60, chance: "Rendah (25%)" }
-                ];
-            }
-        } else if (cluster === 2) {
-            if (score >= 700) {
-                majors = [
-                    { name: "Pendidikan Dokter UNPAD", quota: 150, chance: "Sangat Tinggi (90%)" },
-                    { name: "Teknik Informatika UB", quota: 250, chance: "Sangat Tinggi (85%)" },
-                    { name: "Farmasi UNPAD", quota: 120, chance: "Tinggi (78%)" }
-                ];
-            } else if (score >= 600) {
-                majors = [
-                    { name: "Manajemen UNPAD", quota: 180, chance: "Tinggi (70%)" },
-                    { name: "Psikologi UB", quota: 200, chance: "Tinggi (65%)" },
-                    { name: "Ilmu Komunikasi UNNES", quota: 140, chance: "Sedang (55%)" }
-                ];
-            } else if (score >= 500) {
-                majors = [
-                    { name: "Sosiologi UB", quota: 120, chance: "Sedang (50%)" },
-                    { name: "Ilmu Kelautan UNPAD", quota: 90, chance: "Sedang (45%)" },
-                    { name: "Kehutanan UB", quota: 180, chance: "Rendah (30%)" }
-                ];
-            } else {
-                majors = [
-                    { name: "Filsafat UB", quota: 80, chance: "Rendah (25%)" }
-                ];
-            }
-        } else {
-            if (score >= 600) {
-                majors = [
-                    { name: "Teknik Sipil Regional", quota: 120, chance: "Sangat Tinggi (95%)" },
-                    { name: "Manajemen Regional", quota: 160, chance: "Sangat Tinggi (90%)" },
-                    { name: "Farmasi Regional", quota: 80, chance: "Tinggi (80%)" }
-                ];
-            } else if (score >= 500) {
-                majors = [
-                    { name: "Ilmu Hukum Regional", quota: 150, chance: "Tinggi (75%)" },
-                    { name: "Agroteknologi", quota: 120, chance: "Tinggi (70%)" },
-                    { name: "Pendidikan Guru SD", quota: 180, chance: "Sedang (60%)" }
-                ];
-            } else if (score >= 400) {
-                majors = [
-                    { name: "Kehutanan Regional", quota: 100, chance: "Sedang (50%)" },
-                    { name: "Peternakan Regional", quota: 140, chance: "Sedang (45%)" }
-                ];
-            } else {
-                majors = [
-                    { name: "Pendidikan Sejarah", quota: 60, chance: "Rendah (30%)" }
-                ];
-            }
-        }
-
+        const steps = [
+            { action: "Review kesalahan", measure: "Tulis penyebab dan konsep terkait", when: "Hari ini" },
+            { action: "Latihan terarah", measure: `${Math.max(5, Math.ceil(gap / 2))} soal pada topik terlemah`, when: "Sesi berikutnya" },
+            { action: "Ukur ulang", measure: "Paket campuran 20 soal", when: "Setelah 48 jam" }
+        ];
         recomList.innerHTML = `
             <table class="irt-recom-table">
-                <thead>
-                    <tr>
-                        <th>Program Studi</th>
-                        <th>Daya Tampung</th>
-                        <th>Peluang Masuk</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${majors.map(m => `
-                        <tr>
-                            <td><strong>${m.name}</strong></td>
-                            <td>${m.quota} kursi</td>
-                            <td style="color: ${m.chance.includes('Sangat') || m.chance.includes('Tinggi') ? 'var(--green-dark)' : m.chance.includes('Sedang') ? 'var(--orange)' : '#ef4444'}; font-weight: 850;">${m.chance}</td>
-                        </tr>
-                    `).join("")}
-                </tbody>
+                <thead><tr><th>Langkah</th><th>Target terukur</th><th>Waktu</th></tr></thead>
+                <tbody>${steps.map(step => `<tr><td><strong>${step.action}</strong></td><td>${step.measure}</td><td>${step.when}</td></tr>`).join("")}</tbody>
             </table>
+            <p class="readiness-disclaimer">Rumus: akurasi latihan + bonus variasi, dengan koreksi jika sampel terlalu kecil. Tidak memakai data penerimaan universitas.</p>
         `;
     }
 
-    calculateIrtScore();
+    calculateReadiness();
 }
 
 /**

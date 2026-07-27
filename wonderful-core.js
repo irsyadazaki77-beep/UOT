@@ -29,9 +29,9 @@
         const themeToggleBtn = document.getElementById("themeToggleBtn");
         const savedTheme = localStorage.getItem("eduquest_theme") || "light";
         document.body.classList.toggle("dark-theme", savedTheme === "dark");
-        
+
         // Enable iOS CSS active state touch feedback
-        document.addEventListener("touchstart", () => {}, { passive: true });
+        document.addEventListener("touchstart", () => { }, { passive: true });
 
         if (!themeToggleBtn) return;
         themeToggleBtn.innerHTML = savedTheme === "dark" ? "&#9728;" : "&#127769;";

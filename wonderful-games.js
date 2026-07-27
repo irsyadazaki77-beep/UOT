@@ -207,16 +207,19 @@
                (masteredCount * 20) +
                (quizCorrect * 15) +
                (voiceSuccess * 25) +
-               (pusakasFound * 50);
+               (pusakasFound * 50) +
+               (progress.bonusXP || 0);
     }
 
     function addXP(amount) {
         const progress = core.getProgress();
         const oldXP = calculateTotalXP(progress);
         const oldLevelInfo = getLevelInfo(oldXP);
+        const isPro = localStorage.getItem("eduquestSubscription") === "pro";
+        const gainedXP = Math.max(0, Number(amount) || 0) * (isPro ? 2 : 1);
 
-        // We assign extra bonus XP directly in localStorage for quick additions
-        progress.bonusXP = (progress.bonusXP || 0) + amount;
+        // Bonus aktivitas disimpan terpisah agar kompatibel dengan progres lama.
+        progress.bonusXP = (progress.bonusXP || 0) + gainedXP;
         core.saveProgress(progress);
 
         const newXP = calculateTotalXP(progress);
@@ -228,7 +231,7 @@
             // Level Up!
             triggerLevelUpCelebration(newLevelInfo);
         } else {
-            core.showToast(`+${amount} XP diperoleh!`);
+            core.showToast(`+${gainedXP} XP diperoleh${isPro ? " · Bonus PRO 2x" : ""}!`);
             if (typeof window.playSound === 'function') window.playSound('success');
         }
     }

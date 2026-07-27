@@ -3,7 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="app-shell.css">
+    <script src="app-shell.js" defer></script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>LMS TKA - Universe Of Tech</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -886,6 +889,8 @@
         }
     </style>
     <link rel="stylesheet" href="coursera-home.css">
+    <link rel="stylesheet" href="responsive-system.css?v=20260716">
+    <link rel="stylesheet" href="navbar-explore.css?v=20260722">
 </head>
 
 <body data-page="tka-lms">
@@ -897,7 +902,7 @@
                                                 <nav class="navbar">
             <div class="nav-left-group">
                 <a href="index.html" class="brand">
-                    <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
+                    <img src="universe-of-tech-logo.jpg" alt="Universe Of Tech Logo" class="brand-logo" />
                     Universe Of Tech
                 </a>
                 <div class="explore-wrapper">
@@ -1015,6 +1020,7 @@
                 <a href="index.html">Beranda</a>
                 <a href="materi.html">Materi</a>
                 <a href="quiz.html">Quiz</a>
+                <a href="projects.html">Proyek</a>
                 <a href="library.html">Library</a>
             </div>
 
@@ -1022,7 +1028,7 @@
                 <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
                 <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">??</button>
                 <a class="btn btn-ghost" href="login.html">Masuk</a>
-                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
+                <a class="btn btn-primary" href="materi.html">Mulai</a>
             </div>
         </nav>
 
@@ -1428,6 +1434,7 @@
             });
         });
     </script>
+    <script src="navbar-explore.js?v=20260722"></script>
     <script src="coursera-home.js"></script>
 </body>
 

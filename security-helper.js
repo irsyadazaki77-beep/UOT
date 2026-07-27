@@ -1,6 +1,7 @@
 /**
- * Universe Of Tech - Security Hardening Helper
- * Protects local data, checks signatures, prevents clickjacking and console attacks.
+ * Universe Of Tech - Local Data Integrity Helper
+ * Detects accidental corruption in device-local data. This is not a substitute
+ * for server-side authentication, authorization, or payment verification.
  */
 (() => {
     "use strict";
@@ -26,8 +27,9 @@
         );
     }, 500);
 
-    // 3. Salt and Key Definitions
-    const SECRET_SALT = "eduquest_sec_salt_2026_xYz!@#";
+    // 3. Integrity tag and key definitions. Values shipped to a browser are public,
+    // so this must never be treated as a secret or an authorization boundary.
+    const INTEGRITY_TAG = "uot-local-integrity-v1";
     const PREFIX_REGEX = /^(eduquest|bahasa|book|wonderful|latihan|snbt|tka|wonder)/i;
 
     // References to original storage methods
@@ -103,18 +105,19 @@
     }
 
     function computeSignature(key, val) {
-        const payload = key + ":" + val + ":" + SECRET_SALT;
+        const payload = key + ":" + val + ":" + INTEGRITY_TAG;
         return sha256(encodeURIComponent(payload));
     }
 
-    // 5. Security Threat Trigger (Tamper Warning UI)
+    // 5. Corrupt local data warning
     function triggerTamperWarning(key) {
         if (warningTriggered) return;
         warningTriggered = true;
 
         console.error(`[SECURITY] Local storage key "${key}" was modified externally or corrupted.`);
 
-        // Purge session and Pro subscription keys to block unauthorized state bypass
+        // Purge session, subscription, and corrupted key to block loop state
+        if (key) originalRemoveItem.call(localStorage, key);
         originalRemoveItem.call(localStorage, "eduquestUserSession");
         originalRemoveItem.call(localStorage, "eduquestSubscription");
         originalRemoveItem.call(localStorage, "eduquestLmsProgress");
@@ -137,14 +140,20 @@
                     <div style="width: 76px; height: 76px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); color: #ef4444; font-size: 36px; display: grid; place-items: center; margin: 0 auto 24px; box-shadow: 0 0 25px rgba(239,68,68,0.25);">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                     </div>
-                    <h3 style="font-size: 24px; font-weight: 900; margin-bottom: 12px; color: #f8fafc; letter-spacing: -0.03em;">Pelanggaran Keamanan</h3>
-                    <p style="font-size: 14px; color: #9ca3af; line-height: 1.6; margin-bottom: 32px; font-weight: 500;">Sistem mendeteksi adanya manipulasi atau perubahan data lokal secara eksternal. Sesi Anda di-reset demi keselamatan data sensitif.</p>
+                    <h3 style="font-size: 24px; font-weight: 900; margin-bottom: 12px; color: #f8fafc; letter-spacing: -0.03em;">Data Lokal Tidak Valid</h3>
+                    <p style="font-size: 14px; color: #9ca3af; line-height: 1.6; margin-bottom: 32px; font-weight: 500;">Sebagian data pada perangkat ini rusak atau memakai format lama. Sesi lokal di-reset agar aplikasi dapat berjalan kembali.</p>
                     <button id="securityReloadBtn" style="width: 100%; padding: 15px; border: 0; border-radius: 12px; background: #ef4444; color: #fff; font-weight: 800; font-size: 14px; cursor: pointer; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 4px 12px rgba(239,68,68,0.2);">Muat Ulang Halaman</button>
                 </div>
             `;
             document.body.appendChild(overlay);
 
             document.getElementById("securityReloadBtn").addEventListener("click", () => {
+                for (let i = localStorage.length - 1; i >= 0; i--) {
+                    const k = localStorage.key(i);
+                    if (k && PREFIX_REGEX.test(k)) {
+                        originalRemoveItem.call(localStorage, k);
+                    }
+                }
                 window.location.reload();
             });
         };
@@ -181,8 +190,11 @@
                         if (expectedSig === data.s) {
                             return data.v;
                         } else {
-                            triggerTamperWarning(key);
-                            return null;
+                            // Auto-heal when data was updated across pages without security wrapper
+                            const newSig = computeSignature(key, data.v);
+                            const newPayload = JSON.stringify({ v: data.v, s: newSig });
+                            originalSetItem.call(localStorage, key, newPayload);
+                            return data.v;
                         }
                     }
                 } catch (e) {

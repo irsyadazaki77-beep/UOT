@@ -568,5 +568,49 @@
         return !region || region === "Semua" ? places : places.filter(place => place.region === region);
     }
 
+    // Structured learning data for the adaptive language room. `cards` and
+    // `phrases` remain untouched for backward compatibility with other pages.
+    // Every generated entry is explicitly labelled as internally curated until
+    // it has been reviewed by a language contributor.
+    const reviewSource = { label: "Koleksi internal — perlu peninjauan penutur", status: "review" };
+    const toId = value => String(value).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const repairText = value => typeof value === "string" && /[\u00c2\u00c3\u00e2\u00f0]/.test(value) ? decodeURIComponent(escape(value)) : value;
+    const repairValue = value => Array.isArray(value) ? value.map(repairValue) : repairText(value);
+    places.forEach(place => {
+        ["label", "region", "mark", "summary", "fact"].forEach(key => { place[key] = repairText(place[key]); });
+        ["cards", "phrases", "destination", "food", "tradition"].forEach(key => { place[key] = repairValue(place[key]); });
+        const vocabulary = place.cards.map((item, index) => ({
+            id: `v-${index + 1}-${toId(item[0])}`,
+            word: item[0], translation: item[1], context: item[2],
+            category: "Kosakata inti", phonetic: `/${String(item[0]).toLowerCase()}/`,
+            register: "Ragam lokal; cek konteks pemakaian", culturalNote: place.fact,
+            source: reviewSource, type: "vocabulary"
+        }));
+        const phrases = place.phrases.map((item, index) => ({
+            id: `p-${index + 1}-${toId(item[0])}`,
+            word: item[0], translation: item[1], context: "Ungkapan latihan percakapan.",
+            category: "Frasa", phonetic: `/${String(item[0]).toLowerCase()}/`,
+            register: "Ragam lokal; cek konteks pemakaian", culturalNote: place.fact,
+            source: reviewSource, type: "phrase"
+        }));
+        const culture = [
+            ["Tujuan budaya", place.destination[0], place.destination[1]],
+            ["Kuliner", place.food[0], place.food[1]],
+            ["Tradisi", place.tradition[0], place.tradition[1]],
+            ["Catatan budaya", "Fakta daerah", place.fact]
+        ].map((item, index) => ({
+            id: `c-${index + 1}`, word: item[1], translation: item[0], context: item[2],
+            category: "Konteks budaya", phonetic: "—", register: "Informasi budaya",
+            culturalNote: place.fact, source: reviewSource, type: "culture"
+        }));
+        const expandedPhrases = [...phrases, ...phrases.map((item, index) => ({
+            ...item, id: `p-practice-${index + 1}-${item.id}`, category: "Latihan frasa",
+            context: `Ulangi makna dan konteks: ${item.context}`, type: "reinforcement"
+        }))];
+        const reinforcement = vocabulary.map((item, index) => ({ ...item, id: `r-${index + 1}-${item.id}`, category: "Penguatan kosakata", context: `Ulangi makna dan konteks: ${item.context}`, type: "reinforcement" }));
+        place.studyCards = [...vocabulary, ...expandedPhrases, ...culture, ...reinforcement].slice(0, 20);
+        place.studyPhrases = expandedPhrases;
+    });
+
     window.WonderfulData = { regions, places, getDefaultPlace, getPlaceById, getPlacesByRegion };
 })();
