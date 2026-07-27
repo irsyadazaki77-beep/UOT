@@ -1,0 +1,898 @@
+/* ============================================================
+   MATERI COMPACT — Coursera-inspired UI overrides
+   Applied after all existing stylesheets
+   ============================================================ */
+
+/* ─── 1. GLOBAL SPACING RESET ─── */
+:root {
+    --compact-radius: 12px;
+    --compact-radius-lg: 18px;
+    --compact-gap: 12px;
+    --section-gap: 52px;
+}
+
+/* ─── 2. HERO — slim, two-column, no wasted space ─── */
+.hero {
+    width: calc(100% - 64px);
+    max-width: 1800px;
+    margin: 52px auto 0;
+    grid-template-columns: 1fr 360px;
+    gap: 32px;
+    align-items: center;
+}
+
+.hero > div > .badge {
+    padding: 6px 12px;
+    font-size: 11px;
+    margin-bottom: 14px;
+    border-radius: 6px;
+    gap: 7px;
+}
+
+/* Hero heading — much tighter, Coursera-style */
+h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    max-width: 580px;
+}
+
+.hero p {
+    font-size: 14px;
+    line-height: 1.65;
+    margin-top: 14px;
+    max-width: 520px;
+    font-weight: 450;
+    color: var(--muted);
+}
+
+.hero-actions {
+    margin-top: 20px;
+    gap: 10px;
+}
+
+/* Hero buttons — compact */
+.hero-actions .btn {
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 6px;
+    gap: 6px;
+}
+
+/* Hero dashboard widget — more compact */
+.dashboard {
+    border-radius: 20px;
+    padding: 10px;
+    transform: rotate(0.5deg);
+}
+
+.dashboard-inner {
+    min-height: 280px;
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.terminal {
+    gap: 10px;
+}
+
+.code-line {
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12px;
+}
+
+.meter {
+    height: 6px;
+}
+
+
+/* ─── 3. FEATURE TABS NAV — pill-style, tight ─── */
+.feature-tabs-nav {
+    display: flex;
+    justify-content: flex-start;
+    margin: 28px auto 0;
+    width: calc(100% - 64px);
+    max-width: 1800px;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.feature-tab-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    gap: 7px;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    transition: all 0.2s ease;
+}
+
+.feature-tab-btn i {
+    font-size: 11px;
+}
+
+.feature-tab-btn.active {
+    background: var(--dark) !important;
+    color: white !important;
+    border-color: var(--dark) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.feature-tab-btn:hover:not(.active) {
+    background: var(--soft) !important;
+    border-color: var(--border) !important;
+    color: var(--dark) !important;
+    transform: none !important;
+}
+
+body.dark-theme .feature-tab-btn {
+    background: rgba(255,255,255,0.05);
+    border-color: var(--border);
+    color: var(--muted);
+}
+
+body.dark-theme .feature-tab-btn.active {
+    background: var(--green-dark) !important;
+    border-color: var(--green-dark) !important;
+}
+
+body.dark-theme .feature-tab-btn:hover:not(.active) {
+    background: rgba(255,255,255,0.08) !important;
+    color: white !important;
+}
+
+
+/* ─── 4. SECTION — tighter spacing ─── */
+.section {
+    width: calc(100% - 64px);
+    max-width: 1800px;
+    margin-top: var(--section-gap);
+}
+
+.section-header {
+    margin-bottom: 18px;
+    gap: 20px;
+}
+
+.section-kicker {
+    font-size: 11px;
+    margin-bottom: 6px;
+    letter-spacing: 0.07em;
+}
+
+.section h2 {
+    font-size: clamp(20px, 3vw, 28px);
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.section-header p {
+    font-size: 13px;
+    line-height: 1.6;
+    max-width: 400px;
+}
+
+
+/* ─── 5. STUDY OS (Learning OS panel) — compact split ─── */
+.study-os {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 14px;
+}
+
+.study-panel,
+.focus-panel,
+.module-detail-panel,
+.planner-card,
+.drill-card {
+    border-radius: 14px;
+    padding: 18px;
+    backdrop-filter: blur(14px);
+}
+
+.study-panel {
+    gap: 12px;
+}
+
+.study-controls {
+    gap: 8px;
+}
+
+.study-controls input,
+.study-controls select,
+.planner-card input,
+.planner-card select {
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Stat boxes — compact inline */
+.learning-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.learning-stat {
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.learning-stat strong {
+    font-size: 18px;
+    letter-spacing: -0.03em;
+}
+
+.learning-stat span {
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+/* Focus panel — tighter */
+.focus-panel {
+    gap: 12px;
+}
+
+.recommendation-list {
+    gap: 8px;
+}
+
+.recommendation-item {
+    border-radius: 10px;
+    padding: 10px 12px;
+    gap: 8px;
+}
+
+.recommendation-item strong {
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+.recommendation-item span {
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+
+/* ─── 6. FILTER PILLS — compact, Coursera-style ─── */
+.filter-row {
+    margin-bottom: 16px;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--muted);
+    transition: all 0.18s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--dark);
+    color: white;
+    border-color: var(--dark);
+    transform: none;
+    box-shadow: none;
+}
+
+body.dark-theme .filter-btn {
+    background: rgba(255,255,255,0.05);
+}
+
+body.dark-theme .filter-btn:hover,
+body.dark-theme .filter-btn.active {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: white;
+}
+
+
+/* ─── 7. MODULE CARDS — 4-col, compact, Coursera card style ─── */
+.module-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.module-card {
+    min-height: 0;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    overflow: hidden !important;
+}
+
+/* Module icon — smaller */
+.module-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+/* Module card heading */
+.module-card h3 {
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    line-height: 1.25;
+}
+
+.module-card p {
+    font-size: 12.5px;
+    line-height: 1.5;
+    font-weight: 450;
+}
+
+/* Tags — very compact */
+.tag-list {
+    gap: 4px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    padding: 3px 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    border-radius: 3px;
+    background: var(--soft);
+}
+
+/* Footer row within module card */
+.module-footer {
+    margin-top: 14px;
+    gap: 8px;
+}
+
+.level {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.mini-link {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blue);
+}
+
+/* Hover effect — subtle lift only */
+.module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border-color: rgba(79, 140, 255, 0.35);
+}
+
+/* Override neon hover glows to be subtler */
+.module-card[data-topic="web"]:hover,
+.module-card[data-topic="database"]:hover,
+.module-card[data-topic="cloud"]:hover {
+    box-shadow: 0 6px 18px rgba(79, 140, 255, 0.18);
+    border-color: rgba(79, 140, 255, 0.35) !important;
+    transform: translateY(-3px) scale(1);
+}
+
+.module-card[data-topic="design"]:hover,
+.module-card[data-topic="cyber"]:hover,
+.module-card[data-topic="ai"]:hover {
+    box-shadow: 0 6px 18px rgba(139, 92, 246, 0.18);
+    border-color: rgba(139, 92, 246, 0.35) !important;
+    transform: translateY(-3px) scale(1);
+}
+
+.module-card[data-topic="analytics"]:hover,
+.module-card[data-topic="git"]:hover {
+    box-shadow: 0 6px 18px rgba(255, 209, 102, 0.2);
+    border-color: rgba(255, 209, 102, 0.45) !important;
+    transform: translateY(-3px) scale(1);
+}
+
+.module-card[data-topic="mobile"]:hover {
+    box-shadow: 0 6px 18px rgba(255, 77, 109, 0.18);
+    border-color: rgba(255, 77, 109, 0.35) !important;
+    transform: translateY(-3px) scale(1);
+}
+
+.module-card[data-topic="programming"]:hover {
+    box-shadow: 0 6px 18px rgba(50, 214, 107, 0.18);
+    border-color: rgba(50, 214, 107, 0.35) !important;
+    transform: translateY(-3px) scale(1);
+}
+
+
+/* ─── 8. MODULE DETAIL PANEL — compact two-col ─── */
+.module-detail-panel {
+    margin-top: 16px;
+    border-radius: 14px;
+    padding: 20px;
+    gap: 16px;
+}
+
+.module-detail-panel h2 {
+    font-size: 20px !important;
+}
+
+.detail-meta {
+    gap: 6px;
+    margin: 10px 0;
+}
+
+.detail-meta span,
+.mini-pill {
+    padding: 5px 9px;
+    font-size: 11px;
+    border-radius: 4px;
+}
+
+.detail-list {
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.detail-list li {
+    border-radius: 8px;
+    padding: 9px 11px;
+    font-size: 12.5px;
+    line-height: 1.4;
+}
+
+.module-detail-panel .focus-panel {
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.module-detail-panel .focus-panel h3 {
+    font-size: 15px;
+}
+
+.module-detail-panel .btn {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+
+/* ─── 9. LEARNING PATH SECTION ─── */
+.path-layout {
+    gap: 14px;
+}
+
+.path-card,
+.glossary-card,
+.check-card {
+    border-radius: 14px;
+    padding: 20px;
+}
+
+.path-card h3,
+.glossary-card h3,
+.check-card h3 {
+    font-size: 18px;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+}
+
+.timeline {
+    gap: 8px;
+    max-height: 340px;
+}
+
+.timeline-item {
+    grid-template-columns: 30px 1fr;
+    gap: 10px;
+}
+
+.timeline-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.timeline-item strong {
+    font-size: 13px;
+}
+
+.timeline-item span {
+    font-size: 11.5px;
+    line-height: 1.4;
+}
+
+
+/* ─── 10. GLOSSARY ─── */
+.glossary-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.term {
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.term span {
+    font-size: 12px;
+    line-height: 1.45;
+    margin-top: 4px;
+}
+
+/* Checklist — compact */
+.check-list {
+    gap: 6px;
+    max-height: 340px;
+}
+
+.check-item {
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12.5px;
+    line-height: 1.35;
+    background: var(--item-bg);
+    border: 1px solid transparent;
+}
+
+.check-item input {
+    width: 14px;
+    height: 14px;
+}
+
+.progress-panel {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.progress-panel .meter {
+    margin-top: 8px;
+}
+
+
+/* ─── 11. PLANNER SECTION ─── */
+.planner-layout {
+    gap: 14px;
+}
+
+.planner-card {
+    gap: 10px;
+}
+
+.planner-output {
+    gap: 8px;
+}
+
+.planner-item {
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.planner-item strong {
+    font-size: 13px;
+}
+
+.planner-item span {
+    font-size: 12px;
+}
+
+.drill-card {
+    gap: 12px;
+}
+
+.drill-option {
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+}
+
+
+/* ─── 12. CTA SECTION — compact, clean ─── */
+.cta {
+    width: calc(100% - 64px);
+    max-width: 1800px;
+    margin: var(--section-gap) auto 40px;
+    border-radius: 16px;
+    padding: 36px 40px;
+    gap: 20px;
+}
+
+.cta h2 {
+    font-size: clamp(22px, 3.5vw, 36px);
+    letter-spacing: -0.04em;
+    margin-bottom: 10px;
+}
+
+.cta p {
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.cta .btn {
+    padding: 12px 22px;
+    font-size: 13.5px;
+    border-radius: 8px;
+}
+
+
+/* ─── 13. KANBAN BOARD ─── */
+.kanban-board {
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.kanban-column {
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 160px;
+}
+
+.kanban-card {
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.kanban-card strong {
+    font-size: 11.5px;
+}
+
+
+/* ─── 14. FOOTER — compact ─── */
+footer {
+    width: calc(100% - 64px);
+    max-width: 1800px;
+    margin: 40px auto 30px;
+    gap: 24px;
+}
+
+.footer-grid {
+    grid-template-columns: 1.4fr repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.footer-col {
+    gap: 10px;
+}
+
+.footer-brand .brand {
+    font-size: 18px;
+}
+
+.footer-brand p {
+    font-size: 12.5px;
+    line-height: 1.55;
+}
+
+.footer-col h4 {
+    font-size: 12px;
+}
+
+.footer-links {
+    gap: 8px;
+    font-size: 12.5px;
+}
+
+.footer-bottom {
+    padding-top: 14px;
+    font-size: 12px;
+}
+
+
+/* ─── 15. GENERAL BUTTON REFINEMENTS ─── */
+.btn {
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    gap: 6px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    box-shadow: 0 6px 16px rgba(23, 168, 77, 0.22);
+}
+
+.btn-blue {
+    box-shadow: 0 6px 16px rgba(79, 140, 255, 0.22);
+}
+
+
+/* ─── 16. SCROLL PROGRESS ─── */
+.scroll-progress-container {
+    height: 3px;
+}
+
+
+/* ─── 17. BRAND LOGO — tighter ─── */
+.brand-logo {
+    height: 44px;
+}
+
+.brand {
+    font-size: 20px;
+    gap: 9px;
+}
+
+
+/* ─── 18. RPG HUD ─── */
+#rpgFloatingHud {
+    top: 72px;
+    right: 16px;
+    gap: 8px;
+}
+
+
+/* ─── 19. BACK TO TOP ─── */
+#backToTop {
+    bottom: 60px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+
+/* ─── 20. RESPONSIVE — compact breakpoints ─── */
+@media (max-width: 1100px) {
+    .module-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 880px) {
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .module-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .glossary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .study-os,
+    .path-layout,
+    .module-detail-panel,
+    .planner-layout,
+    .cta {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .cta-actions {
+        justify-content: flex-start;
+    }
+
+    .feature-tabs-nav {
+        gap: 5px;
+    }
+
+    .feature-tab-btn {
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .module-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .glossary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta {
+        padding: 24px 20px;
+        border-radius: 12px;
+    }
+
+    .hero {
+        margin-top: 36px;
+    }
+
+    .section {
+        margin-top: 38px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .module-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .glossary-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1700px) {
+    .module-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .glossary-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+/* ─── 21. DARK THEME REFINEMENTS ─── */
+body.dark-theme .module-card:hover {
+    border-color: rgba(255,255,255,0.15);
+}
+
+body.dark-theme .filter-btn {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--muted);
+}
+
+body.dark-theme .filter-btn:hover,
+body.dark-theme .filter-btn.active {
+    background: rgba(50, 214, 107, 0.15);
+    color: var(--green);
+    border-color: rgba(50, 214, 107, 0.25);
+}
+
+/* Fix shimmer ::after on module cards in compact mode */
+.module-card::after {
+    border-radius: 10px;
+    inset: -1px;
+}
+
+/* Clean up border-radius on all panels */
+.study-panel,
+.focus-panel {
+    border-radius: 14px;
+}
+
+/* Make section text more readable at smaller sizes */
+.section-header p {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+/* === 22. NEW DASHBOARD REFINEMENTS (curriculum-shell, track-card) === */
+.curriculum-shell { width: calc(100% - 64px); max-width: 1800px; margin-left: auto; margin-right: auto; }
+.curriculum-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 12px; }
+.track-card { padding: 14px; gap: 10px; border-radius: 10px; }
+.track-card h3 { font-size: 15px; }
+.track-card-head { grid-template-columns: 40px minmax(0, 1fr) auto; gap: 8px; }
+.track-mark { width: 40px; height: 40px; font-size: 11px; }
+.track-description { font-size: 12px; line-height: 1.45; }
+.syllabus-footer .btn { padding: 8px 14px; font-size: 12px; border-radius: 6px; }
+@media (max-width: 1100px) { .curriculum-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; } }
+@media (max-width: 880px) { .curriculum-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+@media (max-width: 600px) { .curriculum-grid { grid-template-columns: 1fr !important; } }
+@media (min-width: 1400px) { .curriculum-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; } }
+@media (min-width: 1700px) { .curriculum-grid { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; } }
+

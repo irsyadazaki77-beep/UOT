@@ -4,6 +4,8 @@
     const data = window.WonderfulData;
     const core = window.WonderfulCore;
     const HISTORY_KEY = "wonderCultureQuizHistory";
+    const SESSION_KEY_PREFIX = "wonderCultureQuizSession:";
+    const ACTIVE_SESSION_KEY = "wonderCultureQuizActiveSession";
 
     if (!data || !core) return;
 
@@ -16,9 +18,9 @@
             amount: 10
         },
         region: {
-            label: "Mastery Region",
+            label: "Penguasaan Region",
             icon: "fa-solid fa-map-location-dot",
-            title: "Mastery Per Region",
+            title: "Penguasaan Per Region",
             desc: "Fokus menguasai satu wilayah sampai pola budayanya terasa familiar.",
             amount: 10
         },
@@ -37,9 +39,9 @@
             amount: 12
         },
         challenge: {
-            label: "Challenge Cepat",
+            label: "Tantangan Cepat",
             icon: "fa-solid fa-bolt",
-            title: "Challenge Cepat",
+            title: "Tantangan Cepat",
             desc: "Sesi ringkas untuk menguji ingatan dengan tempo cepat.",
             amount: 5
         }
@@ -56,7 +58,11 @@
 
     function saveHistory(entry) {
         const history = [entry, ...getHistory()].slice(0, 12);
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        try {
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+        } catch {
+            core.showToast("Riwayat belum dapat disimpan di browser ini.");
+        }
     }
 
     function params() {
@@ -327,13 +333,14 @@
         });
     }
 
-    function buildStartUrl(mode, region, amount, placeId = "") {
+    function buildStartUrl(mode, region, amount, placeId = "", options = {}) {
         const query = new URLSearchParams({
             mode: normalizeMode(mode),
             region: normalizeRegion(region),
             amount: String(normalizeAmount(amount, modeMeta[normalizeMode(mode)].amount))
         });
         if (normalizePlace(placeId)) query.set("place", normalizePlace(placeId));
+        if (options.timer) query.set("timer", "1");
         return `quiz-budaya-lms.html?${query.toString()}`;
     }
 
@@ -384,29 +391,29 @@
         const displayAccuracy = selectedPlace ? placeAccuracy : accuracy;
         document.body.classList.toggle("is-place-quiz", isPlaceMode);
         const regionSection = document.querySelector(".culture-region-section");
-        if (regionSection) regionSection.hidden = true;
+        if (regionSection) regionSection.hidden = isPlaceMode;
         const compactOnlySections = [
             document.querySelector(".culture-quiz-control"),
             document.querySelector(".culture-mode-section"),
             document.querySelector(".culture-history-section")
         ];
         compactOnlySections.forEach(section => {
-            if (section) section.hidden = isPlaceMode;
+            if (section) section.hidden = false;
         });
         if (selectedPlace) {
-            document.title = `Quiz Budaya ${selectedPlace.label} - Wonderful Indonesia`;
+            document.title = `Kuis Budaya ${selectedPlace.label} - Wonderful Indonesia`;
             const hero = document.querySelector(".culture-quiz-copy");
-            hero?.querySelector(".mini-tag") && (hero.querySelector(".mini-tag").textContent = `${selectedPlace.region} Quiz`);
+            hero?.querySelector(".mini-tag") && (hero.querySelector(".mini-tag").textContent = `Kuis ${selectedPlace.region}`);
             const heroTitle = hero?.querySelector("h1");
             const heroText = hero?.querySelector("p");
-            if (heroTitle) heroTitle.textContent = `Quiz Budaya ${selectedPlace.label}.`;
-            if (heroText) heroText.textContent = `Latihan budaya ${selectedPlace.label} dengan soal, pembahasan, skor, dan progress.`;
+            if (heroTitle) heroTitle.textContent = `Kuis Budaya ${selectedPlace.label}.`;
+            if (heroText) heroText.textContent = `Latihan budaya ${selectedPlace.label} dengan soal, pembahasan, skor, dan kemajuan.`;
             const journey = document.querySelector(".culture-journey-flow");
             if (journey) {
                 journey.innerHTML = `
                     <span><b>1</b> ${selectedPlace.label}</span>
                     <span><b>2</b> Mode</span>
-                    <span><b>3</b> LMS</span>
+                    <span><b>3</b> Ruang Kuis</span>
                 `;
             }
             const controlHeader = document.querySelector(".culture-quiz-control .section-header");
@@ -414,8 +421,8 @@
                 const kicker = controlHeader.querySelector(".section-kicker");
                 const heading = controlHeader.querySelector("h2");
                 const text = controlHeader.querySelector("p");
-                if (kicker) kicker.textContent = "Quiz Setup";
-                if (heading) heading.textContent = `Atur quiz ${selectedPlace.label}.`;
+                if (kicker) kicker.textContent = "Pengaturan Kuis";
+                if (heading) heading.textContent = `Atur kuis ${selectedPlace.label}.`;
                 if (text) text.textContent = "Region sudah dikunci. Pilih mode dan jumlah soal saja.";
             }
             const modeHeader = document.querySelector(".culture-mode-section .section-header");
@@ -423,14 +430,14 @@
                 const heading = modeHeader.querySelector("h2");
                 const text = modeHeader.querySelector("p");
                 if (heading) heading.textContent = `Shortcut ${selectedPlace.label}.`;
-                if (text) text.textContent = "Semua shortcut masuk ke LMS khusus daerah ini.";
+                if (text) text.textContent = "Semua pintasan masuk ke ruang kuis khusus daerah ini.";
             }
             const historyHeader = document.querySelector(".culture-history-section .section-header");
             if (historyHeader) {
                 const heading = historyHeader.querySelector("h2");
                 const text = historyHeader.querySelector("p");
                 if (heading) heading.textContent = `Riwayat ${selectedPlace.label}.`;
-                if (text) text.textContent = "Hanya sesi quiz dari daerah ini yang ditampilkan di sini.";
+                if (text) text.textContent = "Hanya sesi kuis dari daerah ini yang ditampilkan di sini.";
             }
         }
         const summary = document.getElementById("quizSummaryCard");
@@ -442,13 +449,13 @@
             summary.querySelector("p").textContent = selectedPlace
                 ? scopedHistory.length
                     ? `Skor terbaik ${selectedPlace.label} ${best}%. Total latihan daerah ini: ${placeCorrect}/${placeAttempts} benar.`
-                    : `Belum ada sesi ${selectedPlace.label}. Mulai satu quiz untuk menyimpan skor daerah ini.`
+                    : `Belum ada sesi ${selectedPlace.label}. Mulai satu kuis untuk menyimpan skor daerah ini.`
                 : history.length
-                    ? `Skor terbaik LMS ${best}%. Total latihan Wonderful Indonesia: ${progress.correct || 0}/${reviewed} benar.`
+                    ? `Skor terbaik ${best}%. Total latihan Wonderful Indonesia: ${progress.correct || 0}/${reviewed} benar.`
                     : `Total latihan Wonderful Indonesia: ${progress.correct || 0}/${reviewed} benar.`;
             setText("cultureAccuracyMetric", `${displayAccuracy}%`);
             setText("culturePracticeMetric", selectedPlace ? `${placeCorrect}/${placeAttempts}` : `${progress.correct || 0}/${reviewed}`);
-            setText("cultureNextSession", selectedPlace ? `Quiz ${selectedPlace.label}` : history.length ? "Review sesi terakhir" : "Campuran Budaya");
+            setText("cultureNextSession", selectedPlace ? `Kuis ${selectedPlace.label}` : history.length ? "Tinjau sesi terakhir" : "Campuran Budaya");
         }
 
         const insightStrip = document.getElementById("quizInsightStrip");
@@ -476,7 +483,25 @@
         const scoreCardStart = document.getElementById("scoreCardStartLink");
         const sessionPreview = document.getElementById("sessionPreview");
         const regionGrid = document.getElementById("regionQuizGrid");
+        const timerToggle = document.getElementById("quizTimerToggle");
+        const timerOption = document.getElementById("quizTimerOption");
+        const continueLink = document.getElementById("continueSessionLink");
         const headerStart = document.querySelector('.nav-actions .btn-primary[href^="quiz-budaya-lms"]');
+
+        if (continueLink) {
+            let activeUrl = "";
+            try { activeUrl = sessionStorage.getItem(ACTIVE_SESSION_KEY) || ""; } catch { /* no-op */ }
+            if (activeUrl) {
+                continueLink.hidden = false;
+                continueLink.href = activeUrl;
+                continueLink.textContent = "Lanjutkan sesi tersimpan";
+            } else if (scopedHistory.length) {
+                const last = scopedHistory[0];
+                continueLink.hidden = false;
+                continueLink.href = buildStartUrl(last.mode, last.region, last.total, last.placeId, { timer: Boolean(last.timer) });
+                continueLink.textContent = `Ulangi ${last.title}`;
+            }
+        }
 
         if (regionSelect) {
             const availableRegions = selectedPlace ? [selectedPlace.region] : data.regions;
@@ -534,6 +559,7 @@
                 const bank = getSessionBank(key, region, placeId);
                 const card = document.createElement("article");
                 card.className = `culture-mode-card ${key === "mix" ? "is-recommended" : ""}`;
+                card.dataset.search = `${meta.label} ${meta.title} ${meta.desc}`.toLowerCase();
                 const icon = document.createElement("i");
                 icon.className = meta.icon;
                 const title = document.createElement("h3");
@@ -557,6 +583,7 @@
                 const places = data.getPlacesByRegion(region);
                 const card = document.createElement("article");
                 card.className = `culture-region-card ${region === activeRegion ? "is-active-region" : ""}`;
+                card.dataset.search = `${region} ${places.map(place => place.label).join(" ")}`.toLowerCase();
                 const icon = document.createElement("i");
                 icon.className = "fa-solid fa-map";
                 const title = document.createElement("h3");
@@ -582,7 +609,10 @@
             const amount = Math.min(selectedAmount, currentBank.length || selectedAmount);
             const smartBank = getSessionBank("mix", region, placeId);
             const smartAmount = Math.min(10, smartBank.length || 10);
-            if (customStart) customStart.href = buildStartUrl(mode, region, amount, placeId);
+            const timerEnabled = mode === "challenge" && Boolean(timerToggle?.checked);
+            if (timerToggle) timerToggle.disabled = mode !== "challenge";
+            timerOption?.classList.toggle("is-disabled", mode !== "challenge");
+            if (customStart) customStart.href = buildStartUrl(mode, region, amount, placeId, { timer: timerEnabled });
             if (smartStart) smartStart.href = buildStartUrl("mix", region, smartAmount, placeId);
             if (headerStart) headerStart.href = buildStartUrl(mode, region, amount, placeId);
             if (scoreCardStart) scoreCardStart.href = scopedHistory.length
@@ -591,13 +621,14 @@
             renderSessionPreview();
             renderModeCards();
             renderRegionCards();
+            window.queueMicrotask(applyCatalogFilters);
         }
 
         regionSelect?.addEventListener("change", () => {
             if (selectedPlaceId && data.getPlaceById(selectedPlaceId).region !== regionSelect.value) selectedPlaceId = "";
             syncStartLinks();
         });
-        [modeSelect, amountSelect].forEach(el => el && el.addEventListener("change", syncStartLinks));
+        [modeSelect, amountSelect, timerToggle].forEach(el => el && el.addEventListener("change", syncStartLinks));
         syncStartLinks();
 
         const historyList = document.getElementById("quizHistoryList");
@@ -606,24 +637,46 @@
                 const empty = document.createElement("div");
                 empty.className = "culture-empty-state";
                 empty.textContent = selectedPlace
-                    ? `Belum ada riwayat ${selectedPlace.label}. Mulai satu sesi LMS untuk menyimpan skor daerah ini.`
-                    : "Belum ada riwayat. Mulai satu sesi LMS untuk menyimpan skor pertamamu.";
+                    ? `Belum ada riwayat ${selectedPlace.label}. Mulai satu sesi kuis untuk menyimpan skor daerah ini.`
+                    : "Belum ada riwayat. Mulai satu sesi kuis untuk menyimpan skor pertamamu.";
                 historyList.replaceChildren(empty);
             } else {
                 historyList.replaceChildren(...scopedHistory.slice(0, 5).map(item => {
                     const row = document.createElement("article");
                     row.className = "culture-history-item";
+                    row.dataset.score = String(item.score || 0);
+                    row.dataset.search = `${item.title} ${item.region} ${item.mode} ${item.placeId || ""}`.toLowerCase();
                     const text = document.createElement("div");
                     const strong = document.createElement("strong");
                     strong.textContent = `${item.title} - ${item.score}%`;
                     const p = document.createElement("p");
                     p.textContent = `${item.correct}/${item.total} benar pada ${new Date(item.date).toLocaleDateString("id-ID")}.`;
                     text.append(strong, p);
-                    row.append(text, createLink("btn btn-ghost", buildStartUrl(item.mode, item.region, item.total, item.placeId), "Ulangi"));
+                    row.append(text, createLink("btn btn-ghost", buildStartUrl(item.mode, item.region, item.total, item.placeId, { timer: Boolean(item.timer) }), "Ulangi"));
                     return row;
                 }));
             }
         }
+
+        const catalogSearch = document.getElementById("quizCatalogSearch");
+        const historyFilter = document.getElementById("quizHistoryFilter");
+        const filterStatus = document.getElementById("quizFilterStatus");
+        function applyCatalogFilters() {
+            const term = String(catalogSearch?.value || "").trim().toLowerCase();
+            const scoreFilter = historyFilter?.value || "all";
+            let visible = 0;
+            document.querySelectorAll(".culture-mode-card, .culture-region-card, .culture-history-item").forEach(card => {
+                const matchesText = !term || String(card.dataset.search || card.textContent).toLowerCase().includes(term);
+                const score = Number(card.dataset.score);
+                const matchesScore = !card.classList.contains("culture-history-item") || scoreFilter === "all" || (scoreFilter === "strong" ? score >= 80 : score < 80);
+                const show = matchesText && matchesScore;
+                card.classList.toggle("is-filtered", !show);
+                if (show) visible += 1;
+            });
+            if (filterStatus) filterStatus.textContent = term || scoreFilter !== "all" ? `${visible} item cocok dengan filter.` : "";
+        }
+        catalogSearch?.addEventListener("input", applyCatalogFilters);
+        historyFilter?.addEventListener("change", applyCatalogFilters);
     }
 
     function initLms() {
@@ -640,18 +693,69 @@
         const meta = modeMeta[mode];
         const amount = normalizeAmount(query.get("amount"), meta.amount);
         const bank = getSessionBank(mode, region, isPlaceScoped ? placeId : "");
-        const questions = bank.slice(0, Math.min(amount, bank.length));
-        const answers = new Array(questions.length).fill(null);
+        const timerEnabled = mode === "challenge" && query.get("timer") === "1";
+        const sessionKey = `${SESSION_KEY_PREFIX}${mode}:${region}:${isPlaceScoped ? placeId : "all"}:${amount}:${timerEnabled ? "timer" : "free"}`;
+        let questions = bank.slice(0, Math.min(amount, bank.length));
+        let answers = new Array(questions.length).fill(null);
         let current = 0;
         let saved = false;
+        let reviewRound = false;
+        let restoredElapsedSeconds = 0;
+
+        try {
+            const stored = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
+            if (stored && Array.isArray(stored.questionIds) && Array.isArray(stored.answers)) {
+                const byId = new Map(bank.map(item => [item.id, item]));
+                const snapshots = Array.isArray(stored.questions) ? new Map(stored.questions.map(item => [item.id, item])) : new Map();
+                const restoredQuestions = stored.questionIds.map(id => {
+                    const canonical = byId.get(id);
+                    const snapshot = snapshots.get(id);
+                    if (!canonical) return null;
+                    const restoredOptions = Array.isArray(snapshot?.answers) && snapshot.answers.includes(canonical.correct)
+                        ? snapshot.answers.filter(answer => typeof answer === "string").slice(0, 4)
+                        : canonical.answers;
+                    return { ...canonical, answers: restoredOptions };
+                }).filter(Boolean);
+                if (restoredQuestions.length === stored.questionIds.length && restoredQuestions.length) {
+                    questions = restoredQuestions;
+                    answers = restoredQuestions.map((item, index) => {
+                        const answer = stored.answers[index];
+                        return answer && item.answers.includes(answer.answer) ? answer : null;
+                    });
+                    current = Math.min(Math.max(Number(stored.current) || 0, 0), questions.length - 1);
+                    reviewRound = Boolean(stored.reviewRound);
+                    restoredElapsedSeconds = Math.max(0, Number(stored.elapsedSeconds) || 0);
+                    core.showToast("Sesi sebelumnya dipulihkan.");
+                }
+            }
+        } catch {
+            sessionStorage.removeItem(sessionKey);
+        }
+
+        function persistSession() {
+            try {
+                sessionStorage.setItem(sessionKey, JSON.stringify({
+                    questionIds: questions.map(item => item.id),
+                    questions: questions.map(item => ({ id: item.id, answers: item.answers })),
+                    answers,
+                    current,
+                    reviewRound,
+                    elapsedSeconds: timerEnabled ? Math.floor((Date.now() - timerStartedAt) / 1000) : 0,
+                    updatedAt: new Date().toISOString()
+                }));
+                sessionStorage.setItem(ACTIVE_SESSION_KEY, window.location.href);
+            } catch {
+                // Session persistence is an enhancement; the quiz remains usable without it.
+            }
+        }
 
         setText("sessionModeLabel", meta.label);
-        setText("sessionTitle", `LMS ${getQuizTitle(mode, isPlaceScoped ? targetPlace.label : "")}`);
+        setText("sessionTitle", `Kuis ${getQuizTitle(mode, isPlaceScoped ? targetPlace.label : "")}`);
         setText("sessionDescription", isPlaceScoped
             ? `Fokus ${meta.label.toLowerCase()} untuk ${targetPlace.label}. Semua soal di sesi ini berasal dari daerah pilihan.`
-            : `${meta.desc} Selesaikan sesi untuk menyimpan skor dan progress Wonderful Indonesia.`);
-        setText("languageCourseBadge", isPlaceScoped ? `${targetPlace.region} - ${targetPlace.label}` : `${region} Quiz Course`);
-        setText("languageCourseTitle", isPlaceScoped ? `Kuasai quiz ${targetPlace.label}.` : getQuizTitle(mode));
+            : `${meta.desc} Selesaikan sesi untuk menyimpan skor dan kemajuan Wonderful Indonesia.`);
+        setText("languageCourseBadge", isPlaceScoped ? `${targetPlace.region} - ${targetPlace.label}` : `Kuis ${region}`);
+        setText("languageCourseTitle", isPlaceScoped ? `Kuasai kuis ${targetPlace.label}.` : getQuizTitle(mode));
         setText("languageCourseIntro", isPlaceScoped
             ? `${targetPlace.summary} Pilih jawaban, baca pembahasan, lalu ulangi mode yang sama untuk memperkuat pemahaman.`
             : `${meta.desc} Gunakan panel ini untuk berpindah fokus bahasa jika ingin latihan daerah tertentu.`);
@@ -669,6 +773,31 @@
         const phraseList = document.getElementById("phrasePracticeList");
         const readiness = document.getElementById("languageReadiness");
         const readinessText = document.getElementById("languageReadinessText");
+        const timerCard = document.getElementById("challengeTimerCard");
+        const timerText = document.getElementById("challengeTimer");
+        const timerStatus = document.getElementById("challengeTimerStatus");
+        const timerTargetSeconds = Math.max(60, questions.length * 35);
+        const timerStartedAt = Date.now() - (restoredElapsedSeconds * 1000);
+        let timerHandle = 0;
+
+        function renderTimer() {
+            if (!timerEnabled || !timerText) return;
+            const elapsed = Math.floor((Date.now() - timerStartedAt) / 1000);
+            const minutes = String(Math.floor(elapsed / 60)).padStart(2, "0");
+            const seconds = String(elapsed % 60).padStart(2, "0");
+            timerText.textContent = `${minutes}:${seconds}`;
+            const overTarget = elapsed > timerTargetSeconds;
+            timerCard?.classList.toggle("is-over-target", overTarget);
+            if (timerStatus) timerStatus.textContent = overTarget
+                ? "Target terlewati, tetapi kuis tetap dapat diselesaikan tanpa pengurangan nilai."
+                : `Target ${Math.ceil(timerTargetSeconds / 60)} menit. Waktu tidak mengurangi nilai.`;
+        }
+
+        if (timerCard) timerCard.hidden = !timerEnabled;
+        if (timerEnabled) {
+            renderTimer();
+            timerHandle = window.setInterval(renderTimer, 1000);
+        }
 
         if (sessionFacts) {
             const minutes = Math.max(3, Math.ceil((targetPlace.cards.length + targetPlace.phrases.length + questions.length) * 0.55));
@@ -676,7 +805,7 @@
                 <span><strong>${isPlaceScoped ? targetPlace.label : region}</strong> fokus</span>
                 <span><strong>${targetPlace.cards.length}</strong> kosakata</span>
                 <span><strong>${targetPlace.phrases.length}</strong> frasa</span>
-                <span><strong>${questions.length}</strong> quiz</span>
+                <span><strong>${questions.length}</strong> kuis</span>
                 <span><strong>${minutes}</strong> menit</span>
             `;
         }
@@ -699,7 +828,7 @@
                 ["fa-solid fa-comments", "Sapaan inti", `${targetPlace.cards.length} kartu kosakata`],
                 ["fa-solid fa-message", "Frasa praktis", `${targetPlace.phrases.length} frasa harian`],
                 ["fa-solid fa-book-open", "Konteks budaya", targetPlace.tradition[0]],
-                ["fa-solid fa-circle-question", "Quiz validasi", `${questions.length} soal ${meta.label.toLowerCase()}`]
+                ["fa-solid fa-circle-question", "Kuis validasi", `${questions.length} soal ${meta.label.toLowerCase()}`]
             ];
             moduleCards.replaceChildren(...modules.map((item, index) => {
                 const card = document.createElement("article");
@@ -741,16 +870,20 @@
                 const button = document.createElement("button");
                 button.type = "button";
                 button.className = `lms-module-btn ${index === current ? "is-active" : ""} ${state ? state.correct ? "is-correct" : "is-wrong" : ""}`;
+                button.setAttribute("aria-label", `Soal ${index + 1}: ${item.placeLabel}, ${item.type}${state ? state.correct ? ", benar" : ", perlu ditinjau" : ", belum dijawab"}`);
+                if (index === current) button.setAttribute("aria-current", "step");
                 button.innerHTML = `<span>${index + 1}</span><div><strong>${item.placeLabel}</strong><small>${item.type}</small></div><i class="fa-solid fa-chevron-right"></i>`;
                 button.addEventListener("click", () => {
                     if (typeof smoothTransition === "function") {
                         smoothTransition(() => {
                             current = index;
                             renderQuestion();
+                            persistSession();
                         });
                     } else {
                         current = index;
                         renderQuestion();
+                        persistSession();
                     }
                 });
                 return button;
@@ -762,13 +895,21 @@
             setText("sessionScore", `${currentScore.percentage}%`);
             setText("sessionScoreLabel", currentScore.answered === questions.length ? "Skor akhir" : "Skor sementara");
             setText("sessionProgressText", `${currentScore.answered}/${questions.length} soal selesai`);
+            const progressPercent = Math.round((currentScore.answered / Math.max(questions.length, 1)) * 100);
             const bar = document.getElementById("sessionProgressBar");
-            if (bar) bar.style.width = `${Math.round((currentScore.answered / Math.max(questions.length, 1)) * 100)}%`;
+            if (bar) bar.style.width = `${progressPercent}%`;
+            const sidebarBar = document.querySelector(".culture-progress-card .lms-progress-track i");
+            if (sidebarBar) sidebarBar.style.width = `${progressPercent}%`;
+            const progressEl = document.getElementById("sessionProgress");
+            if (progressEl) {
+                progressEl.setAttribute("aria-valuenow", String(progressPercent));
+                progressEl.setAttribute("aria-valuetext", `${currentScore.answered} dari ${questions.length} soal selesai`);
+            }
             const readinessScore = Math.round(((targetPlace.cards.length + targetPlace.phrases.length + currentScore.answered) / Math.max(targetPlace.cards.length + targetPlace.phrases.length + questions.length, 1)) * 100);
             const meter = document.querySelector(".language-course-meter");
             if (meter) meter.style.setProperty("--language-readiness", `${readinessScore}%`);
             if (readiness) readiness.textContent = `${readinessScore}%`;
-            if (readinessText) readinessText.textContent = currentScore.answered ? `${currentScore.answered} quiz sudah dijawab.` : "Mulai dari membaca kosakata inti.";
+            if (readinessText) readinessText.textContent = currentScore.answered ? `${currentScore.answered} soal sudah dijawab.` : "Mulai dari membaca kosakata inti.";
         }
 
         function finishIfDone() {
@@ -785,22 +926,64 @@
                     mode,
                     region,
                     placeId: isPlaceScoped ? placeId : questions[0]?.placeId || placeId,
-                    title: isPlaceScoped ? `${meta.label} ${targetPlace.label}` : getQuizTitle(mode),
+                    title: `${reviewRound ? "Review: " : ""}${isPlaceScoped ? `${meta.label} ${targetPlace.label}` : getQuizTitle(mode)}`,
                     score: currentScore.percentage,
                     correct: currentScore.correct,
                     total: questions.length,
+                    timer: timerEnabled,
                     date: new Date().toISOString()
                 });
                 saved = true;
             }
+            if (timerHandle) {
+                window.clearInterval(timerHandle);
+                timerHandle = 0;
+            }
+            try {
+                sessionStorage.removeItem(sessionKey);
+                sessionStorage.removeItem(ACTIVE_SESSION_KEY);
+            } catch { /* no-op */ }
             if (resultPanel) {
                 resultPanel.hidden = false;
                 setText("resultScore", `${currentScore.percentage}%`);
                 setText("resultTitle", currentScore.percentage >= 80 ? "Mantap, sesi tuntas." : "Sesi selesai, lanjut review.");
                 setText("resultText", `Skor kamu ${currentScore.percentage}% dengan ${currentScore.correct}/${questions.length} jawaban benar. ${currentScore.percentage >= 80 ? "Kamu sudah kuat di sesi ini." : "Cek soal yang salah lalu ulangi mode yang sama."}`);
                 setText("resultMeta", `${isPlaceScoped ? targetPlace.label : region} - ${meta.label} / ${currentScore.correct} benar dari ${questions.length} soal`);
+                const breakdown = document.getElementById("resultBreakdown");
+                const categoryScores = new Map();
+                questions.forEach((item, index) => {
+                    const entry = categoryScores.get(item.type) || { total: 0, correct: 0 };
+                    entry.total += 1;
+                    if (answers[index]?.correct) entry.correct += 1;
+                    categoryScores.set(item.type, entry);
+                });
+                if (breakdown) {
+                    breakdown.replaceChildren(...Array.from(categoryScores.entries()).map(([type, entry]) => {
+                        const item = document.createElement("div");
+                        const label = document.createElement("span");
+                        const value = document.createElement("strong");
+                        const detail = document.createElement("small");
+                        label.textContent = type;
+                        value.textContent = `${Math.round((entry.correct / Math.max(entry.total, 1)) * 100)}%`;
+                        detail.textContent = `${entry.correct}/${entry.total} benar`;
+                        item.append(label, value, detail);
+                        return item;
+                    }));
+                }
+                const weakest = Array.from(categoryScores.entries()).sort((a, b) => (a[1].correct / a[1].total) - (b[1].correct / b[1].total))[0];
+                const recommendation = document.getElementById("resultRecommendation");
+                if (recommendation && weakest) {
+                    const recommendedMode = ["Bahasa", "Kosakata", "Frasa"].includes(weakest[0]) ? "language" : "heritage";
+                    const title = document.createElement("strong");
+                    const copy = document.createElement("span");
+                    const link = createLink("", buildStartUrl(recommendedMode, region, Math.min(8, bank.length || 8), isPlaceScoped ? placeId : ""), "Mulai latihan rekomendasi");
+                    title.textContent = `Fokus berikutnya: ${weakest[0]}`;
+                    copy.textContent = `Kategori ini memiliki akurasi terendah. Latihan singkat berikut akan memperkuat bagian tersebut.`;
+                    recommendation.replaceChildren(title, copy, link);
+                }
                 const reviewWrong = document.getElementById("reviewWrongBtn");
                 if (reviewWrong) reviewWrong.disabled = !answers.some(item => item && !item.correct);
+                window.setTimeout(() => resultPanel.focus({ preventScroll: true }), 0);
             }
         }
 
@@ -821,6 +1004,7 @@
             }
             core.showToast(value === item.correct ? "Jawaban benar." : `Jawaban tepat: ${item.correct}`);
             renderQuestion();
+            persistSession();
             finishIfDone();
         }
 
@@ -830,7 +1014,6 @@
             const state = answers[current];
             const activePlace = data.getPlaceById(item.placeId);
             setText("questionRegion", item.region);
-            setText("questionTitle", `${meta.label} ${item.placeLabel}`);
             setText("questionCounter", `Soal ${current + 1}/${questions.length}`);
             setText("questionType", item.type);
             setText("questionText", item.prompt);
@@ -844,10 +1027,12 @@
                     const button = document.createElement("button");
                     button.type = "button";
                     button.className = "lms-answer-btn";
+                    button.setAttribute("aria-label", `Pilihan ${String.fromCharCode(65 + index)}: ${answer}`);
                     if (state) {
                         if (answer === item.correct) button.classList.add("is-correct");
                         if (answer === state.answer && answer !== item.correct) button.classList.add("is-wrong");
                         if (answer === state.answer) button.classList.add("is-selected");
+                        if (answer === state.answer) button.setAttribute("aria-pressed", "true");
                         button.disabled = true;
                     }
                     const marker = document.createElement("b");
@@ -915,6 +1100,7 @@
             smoothTransition(() => {
                 current = Math.max(0, current - 1);
                 renderQuestion();
+                persistSession();
             });
         });
 
@@ -923,6 +1109,7 @@
                 smoothTransition(() => {
                     current += 1;
                     renderQuestion();
+                    persistSession();
                 });
                 return;
             }
@@ -931,6 +1118,7 @@
                 smoothTransition(() => {
                     current = firstUnanswered;
                     renderQuestion();
+                    persistSession();
                 });
                 core.showToast("Masih ada soal yang belum dijawab.");
                 document.getElementById("questionCard")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -941,17 +1129,48 @@
         });
 
         document.getElementById("restartSessionBtn")?.addEventListener("click", () => {
-            window.location.href = buildStartUrl(mode, region, amount, isPlaceScoped ? placeId : "");
+            try { sessionStorage.removeItem(sessionKey); } catch { /* no-op */ }
+            window.location.href = buildStartUrl(mode, region, amount, isPlaceScoped ? placeId : "", { timer: timerEnabled });
+        });
+
+        document.getElementById("restartResultBtn")?.addEventListener("click", () => {
+            document.getElementById("restartSessionBtn")?.click();
         });
 
         document.getElementById("reviewWrongBtn")?.addEventListener("click", () => {
+            const wrongQuestions = questions.filter((item, index) => answers[index] && !answers[index].correct);
+            if (!wrongQuestions.length) return;
+            questions = wrongQuestions;
+            answers = new Array(questions.length).fill(null);
+            current = 0;
+            saved = false;
+            reviewRound = true;
             if (resultPanel) resultPanel.hidden = true;
+            if (timerEnabled && !timerHandle) timerHandle = window.setInterval(renderTimer, 1000);
             smoothTransition(() => {
-                const wrongIndex = answers.findIndex(item => item && !item.correct);
-                current = wrongIndex >= 0 ? wrongIndex : 0;
                 renderQuestion();
+                persistSession();
                 document.getElementById("questionCard")?.scrollIntoView({ behavior: "smooth", block: "start" });
             });
+        });
+
+        document.getElementById("reportContentBtn")?.addEventListener("click", async () => {
+            const item = questions[current];
+            const reference = `Koreksi materi Kuis Budaya\nID: ${item?.id || "tidak tersedia"}\nDaerah: ${item?.placeLabel || "-"}\nKategori: ${item?.type || "-"}\nPertanyaan: ${item?.prompt || "-"}`;
+            try {
+                await navigator.clipboard.writeText(reference);
+                core.showToast("Referensi koreksi disalin. Tambahkan catatanmu saat mengirimkannya ke pengelola.");
+            } catch {
+                core.showToast(`Referensi koreksi: ${item?.id || "tidak tersedia"}`);
+            }
+        });
+
+        document.addEventListener("keydown", event => {
+            if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+            if (/^[1-4]$/.test(event.key) && !answers[current]) {
+                const answer = questions[current]?.answers[Number(event.key) - 1];
+                if (answer) chooseAnswer(answer);
+            }
         });
 
         if (!questions.length) {
@@ -959,6 +1178,7 @@
             return;
         }
         renderQuestion();
+        persistSession();
     }
 
     document.addEventListener("DOMContentLoaded", () => {

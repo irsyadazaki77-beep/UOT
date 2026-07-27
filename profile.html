@@ -2,368 +2,382 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="security-helper.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Profil & Pengaturan - Universe Of Tech</title>
-    <meta name="description" content="Kelola profil, preferensi belajar, privasi, data, dan subscription Universe Of Tech.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Kelola identitas, progres belajar, preferensi, privasi, dan membership Universe Of Tech dalam satu account hub.">
+    <meta name="theme-color" content="#f5f6fa">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="feature-pages.css">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="profile.css">
-    <link rel="stylesheet" href="pro-experience.css?v=20260621-clean">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="profile-polish.css">
-    <link rel="stylesheet" href="bubub-ai.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="coursera-home.css">
-    <link rel="stylesheet" href="global-animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="app-shell.css">
+    <link rel="stylesheet" href="compact-global.css">
+    <link rel="stylesheet" href="clean-ui-refresh.css">
+    <link rel="stylesheet" href="profile-studio.css">
+    <link rel="stylesheet" href="profile-refinements.css">
+    <link rel="stylesheet" href="profile-modern.css">
+    <link rel="stylesheet" href="account-flow.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="app-shell.js" defer></script>
+    <script src="security-helper.js"></script>
+    <title>Profil & Account Hub — Universe Of Tech</title>
 </head>
-<body data-page="profile">
-    <div class="noise"></div><div class="orb one"></div><div class="orb two"></div>
-    <main class="page">
-                                                <nav class="navbar">
-            <div class="nav-left-group">
-                <a href="index.html" class="brand">
-                    <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
-                    Universe Of Tech
-                </a>
-                <div class="explore-wrapper">
-                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
-                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                    <!-- Mega Menu Dropdown -->
-                    <div class="explore-mega-menu" id="exploreMegaMenu">
-                        <!-- Column 1: Kategori Belajar -->
-                        <div class="mega-col">
-                            <h4>Kategori Belajar</h4>
-                            <ul class="mega-list">
-                                <li>
-                                    <a href="materi-basic.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Dasar Pemrograman</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Struktur Data</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Web Development</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="snbt.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Persiapan TKA SNBP</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="tka-lms.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>LMS TKA</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="bahasa-daerah.html" class="mega-item-link">
-                                        <div class="mega-icon-box">????</div>
-                                        <span>Wonderful Indonesia</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Column 2: Fitur & Dashboard -->
-                        <div class="mega-col">
-                            <h4>Fitur & Dashboard</h4>
-                            <ul class="mega-list">
-                                <li>
-                                    <a href="learning-path.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Roadmap Belajar</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="leaderboard.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Leaderboard</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="achievements.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Pencapaian</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="profile.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Profil Saya</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="payment.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Upgrade Pro</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Column 3: Spotlight -->
-                        <div class="mega-col">
-                            <div class="mega-spotlight">
-                                <div class="spotlight-header">
-                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
-                                </div>
-                                <h5>Dasar SQL & Database Relasional</h5>
-                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
-                                <a href="materi.html" class="btn-spotlight">
-                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<body data-page="profile" data-account-flow>
+    <a class="skip-link p-skip-link" href="#profileMain">Langsung ke konten</a>
+    <div class="p-ambient p-ambient-one" aria-hidden="true"></div>
+    <div class="p-ambient p-ambient-two" aria-hidden="true"></div>
 
-            <!-- Search Bar -->
-            <div class="nav-search-wrapper">
-                <div class="search-input-group">
-                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <!-- Suggestions Popover -->
-                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
-            </div>
-
-            <div class="nav-links">
-                <a href="index.html">Beranda</a>
-                <a href="materi.html">Materi</a>
-                <a href="quiz.html">Quiz</a>
-                <a href="library.html">Library</a>
-            </div>
-
-            <div class="nav-actions">
-                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">??</button>
-                <a class="btn btn-ghost" href="login.html">Masuk</a>
-                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
-            </div>
+    <header class="p-topbar">
+        <a class="p-brand" href="index.html" aria-label="Universe Of Tech, beranda">
+            <img src="universe-of-tech-logo.jpg" alt="" width="38" height="38">
+            <span>Universe Of Tech</span>
+        </a>
+        <nav class="p-topnav" aria-label="Navigasi utama">
+            <a href="learning-journey.html">Journey</a>
+            <a href="materi.html">Materi</a>
+            <a href="projects.html">Proyek</a>
+            <a href="snbt.html">SNBT</a>
+            <a href="bahasa-daerah.html">Budaya</a>
+            <a href="achievements.html">Prestasi</a>
         </nav>
+        <div class="p-top-context" aria-live="polite"><span id="currentSectionLabel">Account hub</span><button id="commandPaletteBtn" type="button" aria-label="Buka navigasi cepat"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Navigasi cepat</span><kbd>Ctrl K</kbd></button></div>
+        <div class="p-top-actions">
+            <span class="p-plan-chip" id="navSubscriptionBadge">Basic</span>
+            <button class="p-icon-button" id="themeToggleBtn" type="button" aria-label="Gunakan tema gelap" title="Ganti tema"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+        </div>
+    </header>
 
-        <header class="account-hero">
-            <div class="hero-copy">
-                <span class="section-kicker">Account Center</span>
-                <h1>Profil & <span>Pengaturan</span></h1>
-                <p>Kelola identitas, pengalaman belajar, keamanan data, dan paket akun dalam satu tempat.</p>
-                <div class="hero-pills" aria-label="Keunggulan halaman profil">
-                    <span><i class="fa-solid fa-bolt"></i> Live personal dashboard</span>
-                    <span><i class="fa-solid fa-sparkles"></i> Motion yang lebih dinamis</span>
-                    <span><i class="fa-solid fa-shield-heart"></i> Kontrol akun lebih rapi</span>
+    <main class="p-shell" id="profileMain">
+        <aside class="p-rail" aria-label="Navigasi account hub">
+            <div class="p-identity-card">
+                <div class="p-avatar" id="profileAvatar" aria-hidden="true">👨‍💻</div>
+                <div class="p-identity-copy">
+                    <strong id="profileName">Pengguna Universe</strong>
+                    <span id="profileEmail">Belum masuk ke akun</span>
                 </div>
+                <span class="p-identity-plan" id="profilePlan">Basic</span>
+                <button class="p-identity-edit" id="railEditProfileBtn" type="button" aria-label="Edit profil"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
             </div>
-            <div class="account-health">
-                <div class="health-glow"></div>
-                <div class="health-ring" id="healthRing"><strong id="healthScore">0%</strong></div>
-                <div><span>Kelengkapan Profil</span><small id="healthHint">Lengkapi data akunmu</small></div>
-                <div class="health-pulse-bars" aria-hidden="true">
-                    <i></i><i></i><i></i><i></i>
-                </div>
+
+            <nav class="p-rail-nav" aria-label="Bagian profil">
+                <button class="active" type="button" data-tab="overview"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Account hub</span></button>
+                <button type="button" data-tab="settings"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Preferensi</span></button>
+                <button type="button" data-tab="privacy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Privasi & data</span></button>
+                <button type="button" data-tab="subscription"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>Subscription</span></button>
+            </nav>
+
+            <div class="p-rail-footer">
+                <a class="p-btn p-btn-primary" id="profileLoginCta" href="login.html"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> Masuk ke akun</a>
+                <a class="p-logout" id="logoutLink" href="login.html?logout=1"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i> Keluar</a>
             </div>
-        </header>
+        </aside>
 
-        <section class="account-layout">
-            <aside class="account-sidebar">
-                <div class="identity-mini">
-                    <div class="profile-avatar" id="profileAvatar">&#128104;&#8205;&#128187;</div>
-                    <div><strong id="profileName">Pengguna Universe</strong><span id="profileEmail">Belum masuk</span></div>
-                    <span class="profile-plan" id="profilePlan">Basic</span>
+        <div class="p-content">
+            <section class="p-panel active" data-panel="overview" aria-labelledby="overviewTitle">
+                <!-- TIER 1: HERO & ACCOUNT HEALTH -->
+                <header class="p-hero-banner">
+                    <div class="p-hero-copy">
+                        <span class="p-eyebrow"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Premium Account Hub</span>
+                        <h1 id="overviewTitle">Satu ruang untuk <em>perjalanan belajarmu.</em></h1>
+                        <p>Kelola identitas, pantau ritme harian, serta akses fitur PRO dalam satu kendali terpadu tanpa kehilangan konteks.</p>
+                    </div>
+                    <div class="p-health-card" aria-label="Kelengkapan profil">
+                        <div class="p-health-head">
+                            <span>Kelengkapan Akun</span>
+                            <strong id="healthScore">0%</strong>
+                        </div>
+                        <i><b id="healthBar"></b></i>
+                        <small id="healthHint">Melengkapi akun membuat pengalamanmu lebih personal.</small>
+                        <button class="p-health-toggle" id="healthDetailsBtn" type="button" aria-expanded="false" aria-controls="healthBreakdown"><span>Lihat detail · <strong id="healthDoneCount">0/6</strong> Selesai</span> <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+                        <div class="p-health-breakdown" id="healthBreakdown" role="menu" hidden></div>
+                    </div>
+                </header>
+
+                <!-- TIER 2: DAILY PULSE & MOMENTUM ACTION CENTER -->
+                <section class="p-overview-grid p-action-center" aria-label="Aktivitas dan ritme harian">
+                    <article class="p-card p-learning-card">
+                        <div class="p-card-heading">
+                            <div><span class="p-eyebrow"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Learning Pulse</span><h2>Ritme & Statistik Belajar</h2></div>
+                            <span class="p-live-dot">Tersimpan lokal</span>
+                        </div>
+                        <div class="p-stat-row">
+                            <div><i class="fa-solid fa-star" aria-hidden="true"></i><strong id="profileXp">0</strong><span>Total XP</span></div>
+                            <div><i class="fa-solid fa-fire" aria-hidden="true"></i><strong id="profileStreak">0</strong><span>Hari streak</span></div>
+                            <div><i class="fa-solid fa-bullseye" aria-hidden="true"></i><strong id="profileAccuracy">0%</strong><span>Akurasi</span></div>
+                            <div><i class="fa-solid fa-hammer" aria-hidden="true"></i><strong id="profileProjectCount">0</strong><span>Karya selesai</span></div>
+                        </div>
+                        <div class="p-progress-block">
+                            <div><span id="profileLevel">Level 1</span><strong id="profileXpLabel">0 / 100 XP</strong></div>
+                            <i><b id="profileXpBar"></b></i>
+                            <small id="nextLevelLabel">100 XP lagi menuju level berikutnya</small>
+                        </div>
+                        <div class="p-divider" aria-hidden="true"></div>
+                        <div class="p-next-step-box">
+                            <div class="p-next-step-icon"><i class="fa-solid fa-bullseye" aria-hidden="true"></i></div>
+                            <div class="p-next-step-content">
+                                <span class="p-eyebrow">Next Best Step</span>
+                                <h3 id="smartTipTitle">Bangun momentum kecil hari ini.</h3>
+                                <p id="smartTipText">Selesaikan satu sesi singkat agar ritme belajarmu tetap terjaga.</p>
+                                <div class="p-goal-row"><i class="fa-regular fa-clock" aria-hidden="true"></i><span id="dailyGoalTitle">30 menit</span><small id="goalDescription">Target harian</small></div>
+                            </div>
+                            <a class="p-btn p-btn-primary p-next-btn" href="materi.html">Lanjut Belajar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                        <a class="p-text-link" href="projects.html">Lihat Proyek Saya <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                    </article>
+
+                    <article class="p-card p-mission-card">
+                        <div class="p-card-heading">
+                            <div><span class="p-eyebrow"><i class="fa-solid fa-calendar-day" aria-hidden="true"></i> Daily Action</span><h2>Momentum Hari Ini</h2></div>
+                            <button class="p-icon-button p-small-icon" id="resetMissionsBtn" type="button" aria-label="Reset misi" title="Reset status misi harian"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="p-mission-list">
+                            <label><input id="missionRead" type="checkbox"><span><i class="fa-solid fa-book-open" aria-hidden="true"></i>Selesaikan satu sesi materi</span></label>
+                            <label><input id="missionQuiz" type="checkbox"><span><i class="fa-solid fa-bolt" aria-hidden="true"></i>Kerjakan satu quiz singkat</span></label>
+                            <label><input id="missionReview" type="checkbox"><span><i class="fa-solid fa-note-sticky" aria-hidden="true"></i>Tinjau catatan penting</span></label>
+                        </div>
+                        <div class="p-progress-block"><i><b id="missionProgressBar"></b></i><small id="missionProgressLabel">0 dari 3 misi selesai.</small></div>
+                        <div id="missionSuccessBanner" class="p-mission-success" hidden>
+                            <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                            <div>
+                                <strong>🎉 Misi Harian Tuntas!</strong>
+                                <span>Ritme belajarmu hari ini maksimal. +15 XP Bonus tersimpan lokal.</span>
+                            </div>
+                        </div>
+                        <label class="p-note-label">
+                            <span class="p-note-head">Quick Note <span id="focusNoteStatus" class="p-note-status">Tersimpan</span></span>
+                            <textarea id="focusNoteInput" rows="3" maxlength="240" placeholder="Tulis fokus, ide, atau target kecil hari ini..."></textarea>
+                            <div class="p-note-footer">
+                                <div class="p-note-suggestions" aria-label="Saran catatan cepat">
+                                    <button type="button" class="p-note-pill" data-note="Target: Selesaikan 2 sesi latihan SNBT hari ini">🎯 2 Sesi SNBT</button>
+                                    <button type="button" class="p-note-pill" data-note="Fokus: Review catatan bab penting Aljabar">📚 Review Aljabar</button>
+                                    <button type="button" class="p-note-pill" data-note="Eksplorasi: Selesaikan 1 quest Bahasa & Budaya">🏛️ Quest Budaya</button>
+                                </div>
+                                <small id="focusNoteCount">0/240 karakter</small>
+                            </div>
+                        </label>
+                    </article>
+                </section>
+
+                <!-- TIER 3: IDENTITY & MEMBERSHIP STATUS -->
+                <section class="p-workspace-grid" aria-label="Identitas dan akses keanggotaan">
+                    <article class="p-card p-profile-summary">
+                        <div class="p-card-heading">
+                            <div><span class="p-eyebrow"><i class="fa-solid fa-id-card" aria-hidden="true"></i> Identitas</span><h2>Profil Personal</h2></div>
+                            <span class="p-save-state" id="profileSaveState" role="status" aria-live="polite">Tersimpan</span>
+                        </div>
+                        <div class="p-profile-summary-main">
+                            <div class="p-avatar p-avatar-large" id="profileAvatarLarge" aria-hidden="true">👨‍💻</div>
+                            <div>
+                                <strong id="profileEditorName">Pengguna Universe</strong>
+                                <span id="profileHeadlineDisplay">Tambahkan headline agar profilmu lebih personal.</span>
+                                <small id="profileBioDisplay">Identitas ini digunakan di seluruh pengalaman belajarmu.</small>
+                            </div>
+                        </div>
+                        <button class="p-btn p-btn-secondary p-full-btn" id="editProfileBtn" type="button"><i class="fa-solid fa-pen" aria-hidden="true"></i> Edit Profil & Avatar</button>
+                    </article>
+
+                    <article class="p-membership-card" id="membershipCard" aria-labelledby="membershipTitle">
+                        <div class="p-membership-orb" aria-hidden="true"></div>
+                        <div class="p-membership-main">
+                            <span class="p-eyebrow" id="membershipKicker">Basic Membership</span>
+                            <h2 id="membershipTitle">Mulai unlock cara belajar yang lebih terarah.</h2>
+                            <p id="membershipDescription">Upgrade ke PRO untuk membuka Smart Route, planner SNBT, dan Culture Passport.</p>
+                            <div class="p-membership-actions">
+                                <a class="p-btn p-btn-light" id="membershipPrimaryAction" href="payment.html?plan=pro&amp;source=profile"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>Upgrade ke PRO</span></a>
+                                <button class="p-btn p-btn-quiet" id="membershipDetailsAction" type="button" data-tab-target="subscription">Lihat Paket</button>
+                            </div>
+                        </div>
+                        <dl class="p-membership-metrics">
+                            <div><dt>Status</dt><dd id="membershipStatus">Basic</dd></div>
+                            <div><dt id="membershipTimeLabel">Akses</dt><dd id="subscriptionDays">Terbatas</dd></div>
+                            <div><dt>Invoice</dt><dd id="subscriptionInvoice">—</dd></div>
+                        </dl>
+                    </article>
+                </section>
+
+                <section class="p-section" aria-labelledby="benefitsTitle">
+                    <div class="p-section-heading">
+                        <div><span class="p-eyebrow">Your Access</span><h2 id="benefitsTitle">Benefit Yang Siap Kamu Gunakan</h2></div>
+                        <a href="pro-hub.html" class="p-text-link">Buka PRO Learning Hub <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                    </div>
+                    <details class="account-disclosure p-benefit-disclosure">
+                        <summary>Lihat Seluruh Daftar Benefit & Akses Akun</summary>
+                        <div class="p-benefit-grid" id="benefitGrid"></div>
+                    </details>
+                </section>
+            </section>
+
+            <section class="p-panel" data-panel="settings" aria-labelledby="settingsTitle">
+                <header class="p-panel-header">
+                    <span class="p-eyebrow"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Experience Settings</span>
+                    <h1 id="settingsTitle">Atur ritme yang paling cocok untukmu.</h1>
+                    <p>Preferensi ini berlaku secara langsung di perangkat ini dan dapat kamu sesuaikan kapan saja agar proses belajar tetap nyaman.</p>
+                </header>
+                <div class="p-settings-grid">
+                    <article class="p-card">
+                        <div class="p-card-heading"><div><span class="p-eyebrow">Learning Setup</span><h2>Preferensi Belajar</h2></div></div>
+                        <div class="p-form-grid">
+                            <label>
+                                <span class="p-field-label"><i class="fa-solid fa-book-reader" aria-hidden="true"></i> Mode belajar</span>
+                                <div class="p-field-input-group">
+                                    <select id="studyModeSetting"><option value="balanced">Balanced</option><option value="sprint">Sprint</option><option value="deep">Deep Work</option><option value="chill">Chill</option></select>
+                                    <small id="studyModeHint" class="p-field-hint">Balanced: Kombinasi seimbang antara materi & latihan.</small>
+                                </div>
+                            </label>
+                            <label>
+                                <span class="p-field-label"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> Target harian</span>
+                                <select id="dailyGoalSetting"><option value="15">15 menit</option><option value="30">30 menit</option><option value="45">45 menit</option><option value="60">60 menit</option></select>
+                            </label>
+                            <label>
+                                <span class="p-field-label"><i class="fa-solid fa-globe" aria-hidden="true"></i> Bahasa</span>
+                                <select id="languageSetting"><option value="id">Bahasa Indonesia</option><option value="en">English</option></select>
+                            </label>
+                            <label>
+                                <span class="p-field-label"><i class="fa-solid fa-house" aria-hidden="true"></i> Halaman awal</span>
+                                <select id="startPageSetting"><option value="index.html">Beranda</option><option value="materi.html">Materi</option><option value="snbt.html">SNBT</option><option value="bahasa-daerah.html">Budaya</option></select>
+                            </label>
+                            <label>
+                                <span class="p-field-label"><i class="fa-regular fa-clock" aria-hidden="true"></i> Jam pengingat</span>
+                                <input id="reminderTimeSetting" type="time">
+                            </label>
+                        </div>
+                    </article>
+                    <article class="p-card">
+                        <div class="p-card-heading"><div><span class="p-eyebrow">Appearance & Sound</span><h2>Suasana Belajar</h2></div></div>
+                        <div class="p-toggle-list">
+                            <label>
+                                <span class="p-toggle-copy"><strong>Tema Gelap (Dark Mode)</strong><small>Gunakan tampilan yang nyaman di ruang minim cahaya.</small></span>
+                                <input id="darkModeSetting" type="checkbox">
+                            </label>
+                            <label>
+                                <span class="p-toggle-copy"><strong>Suara Interaksi</strong><small>Putar audio feedback saat menyelesaikan aktivitas.</small></span>
+                                <input id="soundSetting" type="checkbox">
+                            </label>
+                            <label>
+                                <span class="p-toggle-copy"><strong>Kurangi Gerakan</strong><small>Minimalkan animasi antarmuka untuk kenyamanan mata.</small></span>
+                                <input id="motionSetting" type="checkbox">
+                            </label>
+                            <label>
+                                <span class="p-toggle-copy"><strong>Pengingat Belajar</strong><small>Aktifkan notifikasi target di waktu pilihanmu.</small></span>
+                                <input id="reminderSetting" type="checkbox">
+                            </label>
+                        </div>
+                        <div class="p-accent-picker" aria-label="Warna aksen">
+                            <button data-accent="ocean" type="button" aria-label="Aksen ocean" title="Ocean Blue"><span class="p-sr-only">Ocean</span></button>
+                            <button data-accent="emerald" type="button" aria-label="Aksen emerald" title="Emerald Green"><span class="p-sr-only">Emerald</span></button>
+                            <button data-accent="sunset" type="button" aria-label="Aksen sunset" title="Sunset Orange"><span class="p-sr-only">Sunset</span></button>
+                            <button data-accent="candy" type="button" aria-label="Aksen candy" title="Candy Pink"><span class="p-sr-only">Candy</span></button>
+                        </div>
+                    </article>
                 </div>
-                <nav class="settings-nav" aria-label="Menu profil dan pengaturan">
-                    <button class="active" data-tab="overview"><i class="fa-solid fa-grid-2"></i><span>Ringkasan</span></button>
-                    <button data-tab="insights"><i class="fa-solid fa-wave-square"></i><span>Insights</span></button>
-                    <button data-tab="profile"><i class="fa-solid fa-user-pen"></i><span>Profil</span></button>
-                    <button data-tab="preferences"><i class="fa-solid fa-sliders"></i><span>Preferensi</span></button>
-                    <button data-tab="privacy"><i class="fa-solid fa-shield-halved"></i><span>Privasi & Data</span></button>
-                    <button data-tab="subscription"><i class="fa-solid fa-crown"></i><span>Subscription</span></button>
-                </nav>
-                <a href="login.html" class="btn btn-primary sidebar-login" id="profileLoginCta">Masuk ke Akun</a>
-                <a href="login.html?logout=1" class="sidebar-logout" id="logoutLink"><i class="fa-solid fa-right-from-bracket"></i> Keluar</a>
-            </aside>
+                <button class="p-btn p-btn-quiet" id="resetPreferences" type="button"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Kembalikan preferensi default</button>
+            </section>
 
-            <div class="settings-content">
-                <section class="tab-panel active" data-panel="overview">
-                    <div class="panel-heading"><div><span>Dashboard Personal</span><h2>Ringkasan akun</h2></div><span class="status-chip"><i></i> Data tersimpan lokal</span></div>
-                    <div class="profile-stat-grid">
-                        <article><i class="fa-solid fa-star"></i><strong id="profileXp">0</strong><span>Total XP</span></article>
-                        <article><i class="fa-solid fa-fire"></i><strong id="profileStreak">0</strong><span>Hari Streak</span></article>
-                        <article><i class="fa-solid fa-map-location-dot"></i><strong id="profileExplored">0</strong><span>Daerah Dijelajahi</span></article>
-                        <article><i class="fa-solid fa-circle-check"></i><strong id="profileAccuracy">0%</strong><span>Akurasi Quiz</span></article>
-                    </div>
-                    <div class="overview-grid">
-                        <article class="settings-card level-card">
-                            <div class="card-title"><div><span>Level Belajar</span><h3 id="profileLevel">Level 1</h3></div><i class="fa-solid fa-chart-line"></i></div>
-                            <div class="profile-progress"><i id="profileXpBar"></i></div>
-                            <div class="progress-meta"><span id="profileXpLabel">0 / 100 XP</span><span id="nextLevelLabel">100 XP lagi</span></div>
-                        </article>
-                        <article class="settings-card focus-card">
-                            <div class="card-title"><div><span>Target Harian</span><h3 id="dailyGoalTitle">30 menit</h3></div><i class="fa-solid fa-bullseye"></i></div>
-                            <p id="goalDescription">Pertahankan ritme belajar dan selesaikan satu aktivitas hari ini.</p>
-                            <a href="materi.html" class="inline-action">Lanjut belajar <i class="fa-solid fa-arrow-right"></i></a>
-                        </article>
-                    </div>
-                    <article class="settings-card activity-card">
-                        <div class="card-title"><div><span>Akses Cepat</span><h3>Ruang belajar favorit</h3></div></div>
-                        <div class="quick-links">
-                            <a href="materi.html"><i class="fa-solid fa-book-open"></i><span>Materi<small>Lanjutkan jalur belajar</small></span></a>
-                            <a href="quiz.html"><i class="fa-solid fa-bolt"></i><span>Quiz<small>Uji kemampuanmu</small></span></a>
-                            <a href="bahasa-daerah.html"><i class="fa-solid fa-earth-asia"></i><span>Budaya<small>Jelajah Indonesia</small></span></a>
+            <section class="p-panel" data-panel="privacy" aria-labelledby="privacyTitle">
+                <header class="p-panel-header">
+                    <span class="p-eyebrow"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Data Control</span>
+                    <h1 id="privacyTitle">Kamu tetap memegang kendali atas datamu.</h1>
+                    <p>Semua data profil dan progres saat ini tersimpan secara aman dan lokal di perangkat ini.</p>
+                </header>
+                <div class="p-settings-grid p-data-grid">
+                    <article class="p-card">
+                        <div class="p-card-heading"><div><span class="p-eyebrow">Visibility</span><h2>Privasi Akun</h2></div></div>
+                        <div class="p-toggle-list">
+                            <label>
+                                <span class="p-toggle-copy"><strong>Profil Publik</strong><small>Izinkan nama dan avatar muncul di leaderboard lokal.</small></span>
+                                <input id="publicProfileSetting" type="checkbox">
+                            </label>
+                            <label>
+                                <span class="p-toggle-copy"><strong>Analitik Belajar</strong><small>Simpan statistik untuk rekomendasi personal di perangkat ini.</small></span>
+                                <input id="analyticsSetting" type="checkbox">
+                            </label>
                         </div>
                     </article>
-                    <div class="overview-extra-grid">
-                        <article class="settings-card smart-card">
-                            <div class="card-title"><div><span>Saran Pintar</span><h3 id="smartTipTitle">Langkah terbaik hari ini</h3></div><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                            <p id="smartTipText">Sistem akan menampilkan rekomendasi berdasarkan progres dan preferensi belajarmu.</p>
-                        </article>
-                        <article class="settings-card checklist-card">
-                            <div class="card-title"><div><span>Checklist Profil</span><h3>Yang masih bisa ditingkatkan</h3></div></div>
-                            <div class="profile-checklist" id="profileChecklist"></div>
-                        </article>
-                    </div>
-                </section>
-
-                <section class="tab-panel" data-panel="insights">
-                    <div class="panel-heading"><div><span>Growth Hub</span><h2>Insight & produktivitas</h2></div><span class="status-chip"><i></i> Personal engine aktif</span></div>
-                    <div class="insight-stat-grid">
-                        <article class="settings-card mini-insight"><span>Persona belajar</span><strong id="learnerPersona">Explorer</strong><small id="learnerPersonaHint">Suka variasi materi dan eksplorasi.</small></article>
-                        <article class="settings-card mini-insight"><span>Konsistensi</span><strong id="consistencyScore">0%</strong><small id="consistencyHint">Bangun streak untuk stabil.</small></article>
-                        <article class="settings-card mini-insight"><span>Mode belajar</span><strong id="studyModeBadge">Balanced</strong><small id="studyModeHint">Alur stabil untuk progres harian.</small></article>
-                    </div>
-                    <div class="insight-grid">
-                        <article class="settings-card rhythm-card">
-                            <div class="card-title"><div><span>Ritme Mingguan</span><h3>Aktivitas 7 hari</h3></div><span class="mini-badge" id="weeklySummary">0 sesi aktif</span></div>
-                            <div class="weekly-rhythm" id="weeklyRhythm" aria-label="Grafik ritme belajar mingguan"></div>
-                        </article>
-                        <article class="settings-card mission-card">
-                            <div class="card-title"><div><span>Misi Hari Ini</span><h3>Daily mission</h3></div><button class="text-button" id="resetMissionsBtn">Reset misi</button></div>
-                            <div class="mission-list">
-                                <label class="mission-item"><input type="checkbox" id="missionRead"><span>Selesaikan satu sesi materi</span></label>
-                                <label class="mission-item"><input type="checkbox" id="missionQuiz"><span>Kerjakan satu quiz singkat</span></label>
-                                <label class="mission-item"><input type="checkbox" id="missionReview"><span>Tinjau ulang catatan penting</span></label>
-                            </div>
-                            <div class="mission-progress"><i id="missionProgressBar"></i></div>
-                            <p id="missionProgressLabel">0 dari 3 misi selesai.</p>
-                        </article>
-                    </div>
-                    <div class="insight-grid single-column-mobile">
-                        <article class="settings-card achievement-card">
-                            <div class="card-title"><div><span>Pencapaian</span><h3>Badge terbaru</h3></div></div>
-                            <div class="achievement-grid" id="achievementGrid"></div>
-                        </article>
-                        <article class="settings-card note-card">
-                            <div class="card-title"><div><span>Quick Notes</span><h3>Catatan fokus</h3></div><span class="mini-badge" id="focusNoteMeta">Belum ada catatan</span></div>
-                            <textarea id="focusNoteInput" rows="6" maxlength="240" placeholder="Tulis insight, target, atau hal yang ingin kamu kejar hari ini..."></textarea>
-                            <div class="form-actions">
-                                <button class="btn btn-primary" id="saveFocusNoteBtn" type="button">Simpan Catatan</button>
-                                <span class="profile-message" id="focusNoteCount">0/240 karakter</span>
-                            </div>
-                        </article>
-                    </div>
-                </section>
-
-                <section class="tab-panel" data-panel="profile">
-                    <div class="panel-heading"><div><span>Identitas Akun</span><h2>Profil personal</h2></div></div>
-                    <article class="settings-card avatar-section">
-                        <div><div class="profile-avatar large" id="profileAvatarLarge">&#128104;&#8205;&#128187;</div><div><h3>Pilih avatar</h3><p>Avatar akan digunakan di navbar dan fitur RPG.</p></div></div>
-                        <div class="avatar-picker" aria-label="Pilih avatar">
-                            <button type="button" data-avatar="&#128104;&#8205;&#128187;">&#128104;&#8205;&#128187;</button>
-                            <button type="button" data-avatar="&#128105;&#8205;&#128187;">&#128105;&#8205;&#128187;</button>
-                            <button type="button" data-avatar="&#129489;&#8205;&#128300;">&#129489;&#8205;&#128300;</button>
-                            <button type="button" data-avatar="&#129489;&#8205;&#128640;">&#129489;&#8205;&#128640;</button>
-                            <button type="button" data-avatar="&#129489;&#8205;&#127891;">&#129489;&#8205;&#127891;</button>
-                            <button type="button" data-avatar="&#129302;">&#129302;</button>
+                    <details class="account-disclosure p-data-actions">
+                        <summary>Backup dan Portabilitas Data</summary>
+                        <div class="p-data-actions-body">
+                            <button class="p-action-row" id="exportDataBtn" type="button"><i class="fa-solid fa-file-export" aria-hidden="true"></i><span><strong>Ekspor Backup Data</strong><small>Unduh file JSON berisi profil, preferensi, dan progres belajarmu.</small></span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                            <button class="p-action-row" id="importDataBtn" type="button"><i class="fa-solid fa-file-import" aria-hidden="true"></i><span><strong>Impor Backup Data</strong><small>Pulihkan data progres belajar dari file backup lokal sebelumnya.</small></span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                            <input id="importDataInput" type="file" accept="application/json" hidden>
                         </div>
-                    </article>
-                    <article class="settings-card" id="profileEditPanel">
-                        <form id="profileForm" class="settings-form">
-                            <label><span>Nama lengkap</span><input id="profileNameInput" type="text" maxlength="40" placeholder="Nama kamu"></label>
-                            <label><span>Email</span><input id="profileEmailInput" type="email" placeholder="nama@email.com"></label>
-                            <label><span>Headline</span><input id="profileHeadlineInput" type="text" maxlength="70" placeholder="Contoh: Pelajar yang suka teknologi"></label>
-                            <label><span>Fokus belajar</span><select id="profileFocusInput"><option value="frontend">Frontend Development</option><option value="backend">Backend Development</option><option value="data">Data & AI</option><option value="cyber">Cyber Security</option><option value="tka">Persiapan TKA/SNBT</option></select></label>
-                            <label class="full"><span>Bio singkat</span><textarea id="profileBioInput" maxlength="180" rows="4" placeholder="Ceritakan tujuan belajarmu..."></textarea><small><b id="bioCount">0</b>/180 karakter</small></label>
-                            <div class="form-actions full"><button class="btn btn-primary" type="submit">Simpan Profil</button><span class="profile-message" id="profileMessage" role="status"></span></div>
-                        </form>
-                    </article>
-                </section>
-
-                <section class="tab-panel" data-panel="preferences">
-                    <div class="panel-heading"><div><span>Personalisasi</span><h2>Preferensi aplikasi</h2></div><button class="text-button" id="resetPreferences">Reset default</button></div>
-                    <article class="settings-card settings-list">
-                        <div class="setting-row"><div class="setting-icon"><i class="fa-solid fa-moon"></i></div><div><strong>Tema gelap</strong><span>Gunakan tampilan yang nyaman di kondisi minim cahaya.</span></div><label class="switch"><input type="checkbox" id="darkModeSetting"><i></i></label></div>
-                        <div class="setting-row"><div class="setting-icon"><i class="fa-solid fa-volume-high"></i></div><div><strong>Efek suara</strong><span>Suara interaksi, jawaban benar, dan pencapaian.</span></div><label class="switch"><input type="checkbox" id="soundSetting"><i></i></label></div>
-                        <div class="setting-row"><div class="setting-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div><div><strong>Kurangi animasi</strong><span>Minimalkan motion untuk pengalaman yang lebih tenang.</span></div><label class="switch"><input type="checkbox" id="motionSetting"><i></i></label></div>
-                        <div class="setting-row"><div class="setting-icon"><i class="fa-solid fa-bell"></i></div><div><strong>Pengingat belajar</strong><span>Tampilkan preferensi pengingat aktivitas harian.</span></div><label class="switch"><input type="checkbox" id="reminderSetting"><i></i></label></div>
-                    </article>
-                    <article class="settings-card preference-fields">
-                        <label><span>Bahasa antarmuka</span><select id="languageSetting"><option value="id">Bahasa Indonesia</option><option value="en">English</option></select></label>
-                        <label><span>Target belajar harian</span><select id="dailyGoalSetting"><option value="15">15 menit</option><option value="30">30 menit</option><option value="45">45 menit</option><option value="60">60 menit</option></select></label>
-                        <label><span>Halaman awal</span><select id="startPageSetting"><option value="index.html">Beranda</option><option value="materi.html">Materi</option><option value="quiz.html">Quiz</option><option value="profile.html">Profil</option></select></label>
-                    </article>
-                    <article class="settings-card preference-stack">
-                        <div class="preference-split">
-                            <label><span>Mode belajar</span><select id="studyModeSetting"><option value="balanced">Balanced Flow</option><option value="sprint">Sprint Mode</option><option value="deep">Deep Work</option><option value="chill">Chill Review</option></select></label>
-                            <label><span>Jam pengingat</span><input id="reminderTimeSetting" type="time"></label>
-                        </div>
+                    </details>
+                </div>
+                <details class="account-disclosure p-danger-disclosure">
+                    <summary>Tindakan Permanen & Area Sensitif</summary>
+                    <article class="p-danger-zone">
                         <div>
-                            <span class="accent-label">Warna aksen favorit</span>
-                            <div class="accent-picker" id="accentPicker">
-                                <button type="button" class="accent-dot ocean" data-accent="ocean" aria-label="Aksen ocean"></button>
-                                <button type="button" class="accent-dot emerald" data-accent="emerald" aria-label="Aksen emerald"></button>
-                                <button type="button" class="accent-dot sunset" data-accent="sunset" aria-label="Aksen sunset"></button>
-                                <button type="button" class="accent-dot candy" data-accent="candy" aria-label="Aksen candy"></button>
-                            </div>
+                            <span class="p-eyebrow">Perlu Perhatian</span>
+                            <h2>Reset atau Hapus Data</h2>
+                            <p>Reset progres hanya mengulang statistik belajar. Hapus akun akan membersihkan seluruh data Universe Of Tech pada perangkat ini.</p>
+                        </div>
+                        <div class="p-danger-buttons">
+                            <button class="p-btn p-btn-danger-soft" id="resetProgressBtn" type="button">Reset Progres Belajar</button>
+                            <button class="p-btn p-btn-danger" id="deleteAccountBtn" type="button">Hapus Data Akun</button>
                         </div>
                     </article>
-                </section>
+                </details>
+            </section>
 
-                <section class="tab-panel" data-panel="privacy">
-                    <div class="panel-heading"><div><span>Kontrol Pengguna</span><h2>Privasi & data</h2></div></div>
-                    <article class="settings-card settings-list">
-                        <div class="setting-row"><div class="setting-icon"><i class="fa-solid fa-eye"></i></div><div><strong>Profil publik</strong><span>Izinkan nama dan avatar terlihat pada leaderboard lokal.</span></div><label class="switch"><input type="checkbox" id="publicProfileSetting"><i></i></label></div>
-                        <div class="setting-row"><div class="setting-icon"><i class="fa-solid fa-chart-pie"></i></div><div><strong>Analitik belajar</strong><span>Simpan statistik lokal untuk rekomendasi personal.</span></div><label class="switch"><input type="checkbox" id="analyticsSetting"><i></i></label></div>
+            <section class="p-panel" data-panel="subscription" aria-labelledby="subscriptionTitle">
+                <header class="p-panel-header">
+                    <span class="p-eyebrow"><i class="fa-solid fa-crown" aria-hidden="true"></i> Membership Plan</span>
+                    <h1 id="subscriptionTitle">Kelola akses premium-mu.</h1>
+                    <p id="subscriptionDescription">Pilih paket yang memberi ruang belajar paling terarah sesuai kebutuhan belajarmu.</p>
+                </header>
+                <article class="p-subscription-summary" id="profileSubscriptionStatus">
+                    <div>
+                        <span id="subscriptionStatusText" class="p-plan-badge">Akun Basic</span>
+                        <h2 id="subscriptionPlanName">Mulai perjalanan PRO-mu</h2>
+                        <p id="subscriptionStatusDescription">Aktifkan akses premium untuk membuka seluruh command center belajar dan pendamping AI.</p>
+                    </div>
+                    <dl>
+                        <div><dt>Perpanjangan</dt><dd id="subscriptionRenewal">—</dd></div>
+                        <div><dt>Invoice</dt><dd id="subscriptionInvoiceDetail">—</dd></div>
+                    </dl>
+                </article>
+                <div class="p-plan-grid">
+                    <article class="p-plan-card" data-plan-card="pro">
+                        <span class="p-plan-tag">PRO BULANAN</span>
+                        <h2>Fleksibel untuk konsisten.</h2>
+                        <strong>Rp49.000 <small>/ bulan</small></strong>
+                        <ul>
+                            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Smart Route dan mastery insight</li>
+                            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Planner SNBT personal terarah</li>
+                            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Culture Passport dan XP 2×</li>
+                        </ul>
+                        <button class="p-btn p-btn-secondary" type="button" data-plan="pro" data-checkout-plan="pro">Pilih Pro Bulanan</button>
                     </article>
-                    <div class="data-actions">
-                        <article class="settings-card"><i class="fa-solid fa-file-export"></i><div><h3>Ekspor data</h3><p>Unduh salinan profil, preferensi, dan progres dalam format JSON.</p></div><button class="btn btn-ghost" id="exportDataBtn">Ekspor</button></article>
-                        <article class="settings-card"><i class="fa-solid fa-file-import"></i><div><h3>Impor data</h3><p>Pulihkan backup profil dan preferensi dari file JSON sebelumnya.</p></div><button class="btn btn-ghost" id="importDataBtn">Impor</button><input type="file" id="importDataInput" accept="application/json" hidden></article>
-                        <article class="settings-card"><i class="fa-solid fa-rotate-left"></i><div><h3>Reset progres</h3><p>Hapus progres belajar dan statistik, tanpa menghapus akun.</p></div><button class="btn danger-outline" id="resetProgressBtn">Reset</button></article>
-                        <article class="settings-card danger-card"><i class="fa-solid fa-user-xmark"></i><div><h3>Hapus data akun</h3><p>Keluar dan hapus profil serta seluruh data lokal aplikasi.</p></div><button class="btn danger-button" id="deleteAccountBtn">Hapus</button></article>
-                    </div>
-                </section>
-
-                <section class="tab-panel" data-panel="subscription">
-                    <div class="panel-heading"><div><span>Paket Akun</span><h2>Subscription</h2></div><span class="current-plan" id="currentPlanLabel">Paket saat ini: Basic</span></div>
-                    <div class="plan-grid">
-                        <article class="plan-card" data-plan-card="basic"><span class="plan-label">Basic</span><h3>Gratis</h3><p>Fondasi belajar lengkap untuk memulai perjalanan.</p><ul><li>Materi dan quiz dasar</li><li>Progress lokal</li><li>Wonderful Indonesia Basic</li><li>20 nada autoplay</li></ul><button class="btn btn-ghost" data-plan="basic">Gunakan Basic</button></article>
-                        <article class="plan-card pro" data-plan-card="pro"><span class="plan-label">Pro</span><h3>Pro Learning</h3><p>Belajar terarah dengan insight dan latihan yang mengikuti kemampuanmu.</p><ul><li>Diagnosis kelemahan & analitik actionable</li><li>Smart Review dan latihan adaptif</li><li>Rencana personal & simulasi ujian</li><li>Mentor BUBUB, backup, dan sertifikat</li></ul><a class="btn btn-ghost" href="pro-hub.html">Buka PRO Learning Hub</a><button class="btn btn-primary" data-plan="pro">Lihat Paket Pro</button></article>
-                    </div>
-                </section>
-            </div>
-        </section>
+                    <article class="p-plan-card p-plan-featured" data-plan-card="annual">
+                        <span class="p-plan-tag p-featured-tag">HEMAT 32% · PALING POPULER</span>
+                        <h2>Akses penuh selama setahun.</h2>
+                        <strong>Rp399.000 <small>/ tahun</small></strong>
+                        <ul>
+                            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Semua benefit PRO Bulanan</li>
+                            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Backup progres & sertifikat eksklusif</li>
+                            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Prioritas akses fitur baru</li>
+                        </ul>
+                        <button class="p-btn p-btn-light" type="button" data-plan="pro" data-checkout-plan="annual">Pilih Pro Tahunan</button>
+                    </article>
+                </div>
+                <div class="p-subscription-footer">
+                    <a class="p-text-link" href="pro-hub.html">Buka PRO Learning Hub <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                    <button class="p-btn p-btn-quiet" id="manageBasicPlan" type="button" data-plan="basic">Gunakan paket Basic</button>
+                </div>
+            </section>
+        </div>
     </main>
 
-    <div class="toast" id="profileToast" role="status"></div>
-    <div class="confirm-modal" id="confirmModal" aria-hidden="true">
-        <div class="confirm-box"><div class="confirm-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><h2 id="confirmTitle">Konfirmasi</h2><p id="confirmText"></p><div><button class="btn btn-ghost" id="confirmCancel">Batal</button><button class="btn danger-button" id="confirmAction">Lanjutkan</button></div></div>
-    </div>
-    <script src="sound-engine.js"></script><script src="auth-helper.js"></script><script src="pro-learning-engine.js"></script><script src="profile.js?v=20260615-pro"></script><script src="pro-experience.js?v=20260621-clean"></script>
-    <script src="bubub-ai.js"></script>
-    <script src="coursera-home.js"></script>
-    <script src="global-animations.js"></script>
+    <nav class="p-mobile-nav" aria-label="Navigasi account hub mobile"><button class="active" type="button" data-tab="overview"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Hub</span></button><button type="button" data-tab="settings"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Atur</span></button><button type="button" data-tab="privacy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Data</span></button><button type="button" data-tab="subscription"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>PRO</span></button></nav>
+
+    <div class="p-toast" id="profileToast" role="status" aria-live="polite"></div>
+    <button class="p-back-top" id="profileBackTop" type="button" tabindex="-1" aria-hidden="true" aria-label="Kembali ke atas"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
+    <div class="p-command-palette" id="commandPalette" aria-hidden="true" inert><div class="p-command-dialog" role="dialog" aria-modal="true" aria-labelledby="commandTitle"><div class="p-command-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><label class="p-sr-only" for="commandSearch">Cari navigasi atau tindakan</label><input id="commandSearch" type="search" placeholder="Cari halaman atau tindakan…" autocomplete="off"><kbd>Esc</kbd></div><div class="p-command-head"><span id="commandTitle">Navigasi cepat</span><small>Enter untuk memilih</small></div><div class="p-command-list" id="commandList"><button type="button" data-command-tab="overview"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span><strong>Account hub</strong><small>Status akun dan progres belajar</small></span><kbd>H</kbd></button><button type="button" data-command-tab="settings"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span><strong>Preferensi</strong><small>Tampilan dan ritme belajar</small></span><kbd>S</kbd></button><button type="button" data-command-tab="privacy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span><strong>Privasi & data</strong><small>Backup dan kontrol data</small></span><kbd>D</kbd></button><button type="button" data-command-tab="subscription"><i class="fa-solid fa-crown" aria-hidden="true"></i><span><strong>Subscription</strong><small>Paket serta benefit PRO</small></span><kbd>P</kbd></button><a href="learning-journey.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i><span><strong>Learning Journey</strong><small>Peta perjalanan belajarmu</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a><a href="materi.html"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span><strong>Lanjut belajar</strong><small>Buka katalog materi</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a><a href="snbt.html"><i class="fa-solid fa-bullseye" aria-hidden="true"></i><span><strong>Simulator SNBT</strong><small>Latihan dan tryout terukur</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a><a href="bahasa-daerah.html"><i class="fa-solid fa-compass" aria-hidden="true"></i><span><strong>Bahasa & Budaya</strong><small>Jelajahi warisan nusantara</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a><a href="achievements.html"><i class="fa-solid fa-award" aria-hidden="true"></i><span><strong>Prestasi & Lencana</strong><small>Koleksi badge dan statistikmu</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></div><p class="p-command-empty" id="commandEmpty" hidden>Tidak ada tindakan yang cocok.</p></div></div>
+    <div class="p-modal" id="confirmModal" aria-hidden="true"><div class="p-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText" tabindex="-1"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><h2 id="confirmTitle">Konfirmasi tindakan</h2><p id="confirmText"></p><div><button class="p-btn p-btn-quiet" id="confirmCancel" type="button">Batal</button><button class="p-btn p-btn-danger" id="confirmAction" type="button">Lanjutkan</button></div></div></div>
+    <div class="p-modal p-profile-modal" id="profileEditorModal" aria-hidden="true" inert><div class="p-modal-dialog p-profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profileEditorTitle" tabindex="-1"><div class="p-modal-head"><div><span class="p-eyebrow">Identitas</span><h2 id="profileEditorTitle">Edit profil</h2><p>Perubahan tersimpan otomatis di perangkat ini.</p></div><button class="p-icon-button" id="closeProfileEditorBtn" type="button" aria-label="Tutup editor profil"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div><form id="profileForm"><div class="p-form-grid"><label>Nama<input id="profileNameInput" type="text" maxlength="32" autocomplete="name" placeholder="Nama kamu"></label><label>Email<input id="profileEmailInput" type="email" autocomplete="email" placeholder="nama@email.com" aria-describedby="profileEmailError"><small class="p-field-error" id="profileEmailError"></small></label><label class="p-span-2">Headline<input id="profileHeadlineInput" type="text" maxlength="62" placeholder="Contoh: Membangun skill digital setiap hari"></label><label class="p-span-2">Fokus belajar<select id="profileFocusInput"><option value="frontend">Web & Frontend</option><option value="backend">Backend & Data</option><option value="tka">SNBT / TKA</option><option value="culture">Bahasa & Budaya</option></select></label><label class="p-span-2">Bio<textarea id="profileBioInput" rows="3" maxlength="180" placeholder="Ceritakan target belajar atau bidang yang ingin kamu kuasai."></textarea><small><span id="bioCount">0</span>/180</small></label></div><div class="p-avatar-options" aria-label="Pilih avatar"><button type="button" data-avatar="👨‍💻" aria-label="Avatar programmer">👨‍💻</button><button type="button" data-avatar="👩‍🚀" aria-label="Avatar astronaut">👩‍🚀</button><button type="button" data-avatar="🧠" aria-label="Avatar otak">🧠</button><button type="button" data-avatar="🧑‍🎨" aria-label="Avatar kreator">🧑‍🎨</button></div><div class="p-modal-actions"><button class="p-btn p-btn-quiet" id="cancelProfileEditorBtn" type="button">Selesai</button><button class="p-btn p-btn-secondary" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Simpan profil</button></div></form></div></div>
+
+    <script src="sound-engine.js"></script>
+    <script src="account-core.js"></script>
+    <script src="subscription-core.js"></script>
+    <script src="profile.js"></script>
+    <script src="profile-refinements.js"></script>
 </body>
 </html>
-

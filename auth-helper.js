@@ -1,6 +1,13 @@
 (() => {
     "use strict";
 
+    const escapeHTML = value => String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
     function updateNavbarForSession() {
         try {
             const session = JSON.parse(localStorage.getItem("eduquestUserSession") || "null");
@@ -20,16 +27,6 @@
                 const rpg = JSON.parse(localStorage.getItem("eduquestRPG") || "{}");
                 const currentAvatar = rpg.activeAvatar || session.avatar || "👨‍💻";
 
-                // Utility for HTML escaping to prevent XSS
-                const escapeHTML = (str) => {
-                    return String(str)
-                        .replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                        .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#039;");
-                };
-
                 const safeUsername = escapeHTML(session.username || "");
                 const safeAvatar = escapeHTML(currentAvatar);
 
@@ -39,7 +36,7 @@
                 userBadge.id = "navUserBadge";
                 userBadge.tabIndex = 0;
                 userBadge.setAttribute("role", "button");
-                userBadge.setAttribute("aria-label", `Profil ${safeUsername}. Klik untuk membuka menu`);
+                userBadge.setAttribute("aria-label", `Profil ${String(session.username || "Pengguna")}. Klik untuk membuka menu`);
 
                 userBadge.innerHTML = `
                     <span class="user-avatar">${safeAvatar}</span>
@@ -253,6 +250,28 @@
             const navLinks = document.querySelector(".nav-links");
             if (!navLinks) return;
 
+            const mobileMenuItems = [
+                { href: "index.html", label: "Beranda", icon: "fa-house" },
+                { href: "materi.html", label: "Materi belajar", icon: "fa-book-open" },
+                { href: "projects.html", label: "Proyek", icon: "fa-hammer" },
+                { href: "learning-path.html", label: "Roadmap belajar", icon: "fa-route" },
+                { href: "library.html", label: "Library", icon: "fa-bookmark" },
+                { href: "quiz.html", label: "Quiz & latihan", icon: "fa-circle-question" },
+                { href: "snbt.html", label: "Persiapan TKA & SNBT", icon: "fa-graduation-cap" },
+                { href: "bahasa-daerah.html", label: "Bahasa daerah", icon: "fa-language" },
+                { href: "leaderboard.html", label: "Leaderboard", icon: "fa-trophy" },
+                { href: "achievements.html", label: "Pencapaian", icon: "fa-medal" },
+                { href: "profile.html", label: "Profil saya", icon: "fa-user" },
+                { href: "payment.html", label: "Upgrade Pro", icon: "fa-crown" }
+            ];
+
+            const currentPage = (window.location.pathname.split("/").pop() || "index.html").split("?")[0];
+            const mobileMenuMarkup = mobileMenuItems.map((item, index) => {
+                const section = index === 0 ? "Utama" : index === 1 ? "Belajar" : index === 5 ? "Eksplorasi" : index === 7 ? "Progres" : index === 10 ? "Akun" : "";
+                const active = item.href === currentPage;
+                return `${section ? `<span class="mobile-menu-section">${section}</span>` : ""}<a href="${item.href}"${active ? ' class="active" aria-current="page"' : ""}><i class="fa-solid ${item.icon}" aria-hidden="true"></i><span>${item.label}</span></a>`;
+            }).join("");
+
             const isNewNavbar = !!(document.getElementById("btnExplore") || document.getElementById("navSearchInput"));
             let links = [];
 
@@ -384,6 +403,8 @@
                 hamburger.className = "nav-hamburger";
                 hamburger.type = "button";
                 hamburger.setAttribute("aria-label", "Menu Navigasi");
+                hamburger.setAttribute("aria-expanded", "false");
+                hamburger.setAttribute("aria-controls", "mobileNavigationDrawer");
                 hamburger.innerHTML = `<i class="fa-solid fa-bars"></i>`;
                 
                 const navActions = document.querySelector(".nav-actions");
@@ -395,25 +416,21 @@
 
                 const overlay = document.createElement("div");
                 overlay.className = "mobile-menu-overlay";
+                overlay.id = "mobileNavigationDrawer";
+                overlay.setAttribute("aria-hidden", "true");
+                overlay.setAttribute("inert", "");
                 overlay.innerHTML = `
-                    <div class="mobile-menu-drawer">
+                    <div class="mobile-menu-drawer" role="dialog" aria-modal="true" aria-labelledby="mobileNavigationTitle">
                         <div class="mobile-menu-header">
-                            <span class="mobile-menu-title">Menu</span>
+                            <span class="mobile-menu-title" id="mobileNavigationTitle">Menu</span>
                             <button class="mobile-menu-close" type="button" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
                         </div>
-                        <div class="mobile-menu-links"></div>
+                        <div class="mobile-menu-links">${mobileMenuMarkup}</div>
                     </div>
                 `;
                 document.body.appendChild(overlay);
 
                 const drawerLinks = overlay.querySelector(".mobile-menu-links");
-                links.forEach(link => {
-                    const cloned = link.cloneNode(true);
-                    cloned.addEventListener("click", () => {
-                        overlay.classList.remove("is-active");
-                    });
-                    drawerLinks.appendChild(cloned);
-                });
 
                 // Inject session/profile section at the bottom of the drawer for mobile accessibility
                 const drawer = overlay.querySelector(".mobile-menu-drawer");
@@ -433,9 +450,9 @@
                         const currentAvatar = rpg.activeAvatar || session.avatar || "👨‍💻";
                         sessionSection.innerHTML = `
                             <div style="display: flex; align-items: center; gap: 12px; padding: 0 8px; margin-bottom: 4px;">
-                                <span class="user-avatar" style="font-size: 24px; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(50,214,107,0.15), rgba(79,140,255,0.15));">${currentAvatar}</span>
+                                    <span class="user-avatar" style="font-size: 24px; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(50,214,107,0.15), rgba(79,140,255,0.15));">${escapeHTML(currentAvatar)}</span>
                                 <div style="display: flex; flex-direction: column; min-width: 0;">
-                                    <span class="user-name-label" style="font-weight: 800; font-size: 14px; color: var(--dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${session.username}</span>
+                                    <span class="user-name-label" style="font-weight: 800; font-size: 14px; color: var(--dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHTML(session.username || "Pengguna")}</span>
                                     <span style="font-size: 11px; color: var(--muted); font-weight: 600;">${localStorage.getItem("eduquestSubscription") === "pro" ? "Pro Member 👑" : "Basic Member"}</span>
                                 </div>
                             </div>
@@ -460,21 +477,37 @@
 
                 const openMenu = () => {
                     overlay.classList.add("is-active");
+                    overlay.setAttribute("aria-hidden", "false");
+                    overlay.removeAttribute("inert");
+                    hamburger.setAttribute("aria-expanded", "true");
+                    document.body.classList.add("nav-open");
+                    window.setTimeout(() => overlay.querySelector(".mobile-menu-close")?.focus(), 80);
                     if (typeof playSound === "function") {
                         try { playSound("click"); } catch(err){}
                     }
                 };
                 const closeMenu = () => {
                     overlay.classList.remove("is-active");
+                    overlay.setAttribute("aria-hidden", "true");
+                    overlay.setAttribute("inert", "");
+                    hamburger.setAttribute("aria-expanded", "false");
+                    document.body.classList.remove("nav-open");
                     if (typeof playSound === "function") {
                         try { playSound("click"); } catch(err){}
                     }
                 };
 
+                drawerLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", closeMenu));
                 hamburger.addEventListener("click", openMenu);
                 overlay.querySelector(".mobile-menu-close").addEventListener("click", closeMenu);
                 overlay.addEventListener("click", (e) => {
                     if (e.target === overlay) closeMenu();
+                });
+                document.addEventListener("keydown", (e) => {
+                    if (e.key === "Escape" && overlay.classList.contains("is-active")) {
+                        closeMenu();
+                        hamburger.focus();
+                    }
                 });
             }
         } catch (e) {
@@ -483,6 +516,8 @@
     }
     function injectBububShortcut() {
         try {
+            // Library has its own contextual librarian embedded in the workspace.
+            if (document.body?.dataset.page === "library") return;
             const navActions = document.querySelector(".nav-actions");
             if (!navActions) return;
             if (document.getElementById("navBububShortcut")) return;

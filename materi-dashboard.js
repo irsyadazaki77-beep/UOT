@@ -631,29 +631,52 @@
             return;
         }
 
+        const runnerFrame = document.createElement("iframe");
+        runnerFrame.src = "sandbox-runner.html";
+        runnerFrame.title = "Mesin latihan JavaScript terisolasi";
+        runnerFrame.sandbox = "allow-scripts";
+        runnerFrame.hidden = true;
+        document.body.appendChild(runnerFrame);
+
+        let activeRunId = "";
+        const handleRunnerMessage = event => {
+            if (event.source !== runnerFrame.contentWindow || event.data?.type !== "quiznation-sandbox-result") return;
+            if (!activeRunId || event.data.runId !== activeRunId) return;
+            activeRunId = "";
+            runBtn.disabled = false;
+            outputConsole.textContent = event.data.ok
+                ? (event.data.logs.length ? event.data.logs.join("\n") : "> Code ran successfully with no output.")
+                : `Error: ${event.data.error}`;
+            if (event.data.ok && typeof playSound === "function") playSound("success");
+        };
+        window.addEventListener("message", handleRunnerMessage);
+
         runBtn.addEventListener("click", () => {
             const code = codeText.value;
-            outputConsole.textContent = "> Compiling and running...\n";
-            
-            // Mock console capture
-            const logs = [];
-            const originalLog = console.log;
-            console.log = function (...args) {
-                logs.push(args.map(arg => typeof arg === "object" ? JSON.stringify(arg) : arg).join(" "));
-            };
-
-            try {
-                // Execute code safely using Function
-                const runner = new Function(code);
-                runner();
-                outputConsole.textContent = logs.length > 0 ? logs.join("\n") : "> Code ran successfully with no output.";
-                if (typeof playSound === "function") playSound("success");
-            } catch (err) {
-                outputConsole.textContent = `Error: ${err.message}`;
+            if (!code.trim()) {
+                outputConsole.textContent = "> Tulis kode terlebih dahulu.";
+                return;
             }
-
-            // Restore console log
-            console.log = originalLog;
+            if (code.length > 20000) {
+                outputConsole.textContent = "> Kode terlalu panjang (maksimal 20.000 karakter).";
+                return;
+            }
+            const runId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+            activeRunId = runId;
+            runBtn.disabled = true;
+            outputConsole.textContent = "> Compiling and running in isolated sandbox...\n";
+            runnerFrame.contentWindow.postMessage({
+                type: "quiznation-sandbox-run",
+                runId,
+                code
+            }, "*");
+            window.setTimeout(() => {
+                if (activeRunId !== runId) return;
+                activeRunId = "";
+                runBtn.disabled = false;
+                outputConsole.textContent = "Error: Eksekusi melewati batas waktu.";
+                runnerFrame.src = runnerFrame.src;
+            }, 3000);
         });
     }
 

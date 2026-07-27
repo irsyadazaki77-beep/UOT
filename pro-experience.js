@@ -116,7 +116,7 @@
                     { icon: "fa-list-check", title: "Actionable Next Step", text: "Setelah lihat teori, kamu langsung diarahkan ke latihan yang paling masuk akal." }
                 ],
                 actions: [
-                    { href: "#tka-irt-simulator", label: "Buka Simulator", meta: "Skor IRT" },
+                    { href: "#tka-readiness-simulator", label: "Buka Simulator", meta: "Indeks kesiapan" },
                     { href: "#planner", label: "Sprint Planner", meta: "Target mingguan" },
                     { href: "tka-lms.html", label: "Masuk LMS TKA", meta: "Drill mendalam" }
                 ],
@@ -593,7 +593,7 @@
                 selector: ".hero-panel",
                 title: "Pro readiness booster",
                 text: "Versi Pro menekankan jalur aksi setelah analisis: sprint, simulator, lalu drill mendalam ke LMS TKA.",
-                meta: ["Sprint TKA", "IRT aware", "Direct to LMS"]
+                meta: ["Sprint TKA", "Analitik transparan", "Direct to LMS"]
             },
             "tka-lms": {
                 selector: ".lms-session-panel",

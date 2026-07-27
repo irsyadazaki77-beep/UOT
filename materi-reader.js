@@ -119,7 +119,7 @@
         root.innerHTML = `
             <div class="reader-page-progress" aria-hidden="true"><i id="readerPageProgress"></i></div>
             <header class="reader-header">
-                <a class="reader-brand" href="materi.html"><img src="logo.png" alt=""><span>Universe Of Tech</span></a>
+                <a class="reader-brand" href="materi.html"><img src="universe-of-tech-logo.jpg" alt=""><span>Universe Of Tech</span></a>
                 <div class="reader-header-progress">
                     <div><span>${track.title}</span><span>${trackProgress.completed}/${trackProgress.total} • ${trackProgress.percent}%</span></div>
                     <div class="reader-progress-bar"><i style="--value:${trackProgress.percent}%"></i></div>

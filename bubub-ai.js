@@ -3,7 +3,7 @@
 
     const CONFIG = {
         name: "BUBUB",
-        logo: "bubub-logo.png",
+        logo: "bubub-universe-of-tech-logo.jpg",
         maxHistory: 24,
         mainPages: new Set([
             "index.html",
@@ -29,7 +29,7 @@
         index: {
             label: "Beranda",
             chips: ["Mulai dari mana?", "Fitur utama", "Rekomendasi belajar", "Akun Pro"],
-            intro: "Kamu sedang di beranda QUIZNATION. Aku bisa bantu arahkan ke materi, quiz, bahasa daerah, library, atau profil belajar."
+            intro: "Kamu sedang di beranda UNIVERSE OF TECH. Aku bisa bantu arahkan ke materi, quiz, bahasa daerah, library, atau profil belajar."
         },
         materi: {
             label: "Materi",
@@ -62,9 +62,9 @@
             intro: "Di learning path, aku bisa bantu memilih jalur belajar dan membuat rencana latihan yang realistis."
         },
         snbt: {
-            label: "SNBT",
-            chips: ["Strategi SNBT", "TPS", "TKA", "Rencana 7 hari", "Review kesalahan"],
-            intro: "Di halaman SNBT, aku bisa bantu strategi persiapan, pemilihan latihan, dan ringkasan pola belajar."
+            label: "TKA",
+            chips: ["Strategi TKA", "Pilih mapel", "Diagnosis awal", "Rencana 7 hari", "Review kesalahan"],
+            intro: "Di dashboard TKA, aku bisa bantu memilih fokus, menyusun latihan, dan merangkum pola belajar."
         },
         "tka-lms": {
             label: "TKA LMS",
@@ -226,7 +226,7 @@
         },
         {
             keys: ["snbt", "tps", "tka"],
-            text: "Untuk SNBT/TKA, bagi latihan jadi tiga bagian: konsep inti, drilling soal, dan review kesalahan. Catat pola salah yang berulang karena itu bahan belajar paling bernilai."
+            text: "Untuk TKA, bagi latihan jadi tiga bagian: konsep inti, drilling soal, dan review kesalahan. Catat pola salah yang berulang karena itu bahan belajar paling bernilai."
         },
         {
             keys: ["rencana 7 hari", "7 hari", "seminggu", "jadwal belajar"],
@@ -329,7 +329,15 @@
         try {
             const raw = localStorage.getItem(storageKey());
             const parsed = raw ? JSON.parse(raw) : [];
-            return Array.isArray(parsed) ? parsed.slice(-CONFIG.maxHistory) : [];
+            const recent = Array.isArray(parsed) ? parsed.slice(-CONFIG.maxHistory) : [];
+            if (state.page !== "snbt") return recent;
+            return recent.map(entry => ({
+                ...entry,
+                text: String(entry.text || "").replace(
+                    "Di halaman SNBT, aku bisa bantu strategi persiapan, pemilihan latihan, dan ringkasan pola belajar.",
+                    "Di dashboard TKA, aku bisa bantu memilih fokus, menyusun latihan, dan merangkum pola belajar."
+                )
+            }));
         } catch (error) {
             console.warn("BUBUB history load skipped:", error);
             return [];
@@ -550,7 +558,7 @@
                 return "TPS biasanya menilai penalaran, literasi, dan kuantitatif. Latihan terbaik: pahami pola soal, kerjakan dengan timer, lalu review alasan salah. Jangan hanya menghafal jawaban.";
             }
             if (includesAny(normalized, ["strategi", "jadwal", "tryout"])) {
-                return "Strategi SNBT: 2 hari konsep lemah, 2 hari drilling, 1 hari tryout mini, 1 hari review kesalahan, 1 hari simulasi. Simpan daftar salah untuk dipakai sebagai materi utama.";
+                return "Strategi TKA: 2 hari konsep lemah, 2 hari drilling, 1 hari tryout mini, 1 hari review kesalahan, dan 1 hari simulasi. Simpan daftar salah sebagai bahan remedial utama.";
             }
         }
 
@@ -661,7 +669,7 @@
 
         const widget = createEl("aside", "bubub-ai-widget");
         widget.id = "bububAiWidget";
-        widget.setAttribute("aria-label", "BUBUB asisten belajar QUIZNATION");
+        widget.setAttribute("aria-label", "BUBUB asisten belajar UNIVERSE OF TECH");
 
         const toggle = createEl("button", "bubub-ai-toggle");
         toggle.id = "bububAiToggle";
@@ -707,7 +715,7 @@
         const send = createEl("button", "bubub-ai-send", ">");
         send.type = "submit";
         send.setAttribute("aria-label", "Kirim pesan ke BUBUB");
-        const footnote = createEl("div", "bubub-ai-footnote", "BUBUB menjawab dari konteks lokal QUIZNATION.");
+        const footnote = createEl("div", "bubub-ai-footnote", "BUBUB menjawab dari konteks lokal UNIVERSE OF TECH.");
         compose.append(input, send, footnote);
 
         panel.append(header, messages, chips, compose);
@@ -721,7 +729,7 @@
         if (state.history.length) {
             state.history.forEach((entry) => appendMessage(entry.sender, entry.text, false));
         } else {
-            appendMessage("assistant", `Halo! Saya BUBUB, asisten belajar QUIZNATION. ${profile.intro}`, true);
+            appendMessage("assistant", `Halo! Saya BUBUB, asisten belajar UNIVERSE OF TECH. ${profile.intro}`, true);
         }
 
         toggle.addEventListener("click", () => {

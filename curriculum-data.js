@@ -406,7 +406,7 @@
 
     const STORAGE_KEY = "quiznationCurriculumProgress";
     const LEGACY_STORAGE_KEY = "eduquestMateriProgress";
-    const PROGRESS_VERSION = 2;
+    const PROGRESS_VERSION = 3;
 
     function slugify(value) {
         return value
@@ -417,10 +417,44 @@
             .replace(/^-|-$/g, "");
     }
 
+    const ENRICHMENT_BY_CATEGORY = {
+        engineering: { lens: "alur data, kontrak antarkomponen, performa, dan kemudahan pemeliharaan", artifact: "prototipe kecil yang dapat dijalankan dan diuji", terms: [["Interface", "Batas komunikasi yang mendefinisikan input, output, dan perilaku komponen."], ["Edge case", "Kondisi tidak umum yang tetap harus ditangani dengan aman."], ["Observability", "Kemampuan memahami keadaan sistem melalui log, metrik, dan jejak eksekusi."]] },
+        data: { lens: "kualitas data, definisi metrik, bias, konsistensi, dan keterulangan analisis", artifact: "dataset contoh, query, atau notebook analisis yang dapat diverifikasi", terms: [["Validasi data", "Pemeriksaan tipe, rentang, kelengkapan, dan konsistensi data."], ["Baseline", "Nilai pembanding awal untuk menilai dampak perubahan."], ["Lineage", "Catatan asal, transformasi, dan tujuan data sepanjang alurnya."]] },
+        design: { lens: "kebutuhan pengguna, hierarki informasi, state antarmuka, dan bukti usability", artifact: "alur, wireframe, atau prototipe yang dapat diuji", terms: [["Affordance", "Petunjuk visual yang membantu pengguna memahami cara berinteraksi."], ["Hierarchy", "Urutan penekanan visual yang mengarahkan perhatian pengguna."], ["Usability", "Efektivitas, efisiensi, dan kepuasan saat produk digunakan."]] },
+        security: { lens: "aset, ancaman, permukaan serangan, kontrol, dan bukti mitigasi", artifact: "threat model serta konfigurasi aman yang dapat diperiksa", terms: [["Threat model", "Pemetaan aset, ancaman, aktor, dan kontrol sebelum rilis."], ["Least privilege", "Memberi akses minimum yang diperlukan untuk menyelesaikan tugas."], ["Defense in depth", "Beberapa lapisan kontrol agar satu kegagalan tidak membahayakan seluruh sistem."]] },
+        operations: { lens: "reliability, observability, keamanan, kapasitas, biaya, dan pemulihan", artifact: "konfigurasi, runbook, atau diagram operasi yang dapat diuji", terms: [["SLO", "Target reliabilitas layanan yang diukur dari sudut pandang pengguna."], ["Runbook", "Panduan langkah demi langkah untuk operasi dan pemulihan layanan."], ["Blast radius", "Batas dampak yang dapat ditimbulkan oleh perubahan atau kegagalan."]] },
+        quality: { lens: "risiko, cakupan pengujian, keterulangan, feedback, dan bukti kualitas", artifact: "test plan serta kumpulan kasus uji yang dapat dijalankan ulang", terms: [["Test oracle", "Acuan untuk menentukan apakah hasil pengujian benar atau salah."], ["Regression", "Kerusakan perilaku lama setelah perubahan baru diterapkan."], ["Test coverage", "Cakupan perilaku dan risiko yang diperiksa oleh pengujian."]] },
+        business: { lens: "masalah pengguna, dampak bisnis, asumsi, prioritas, dan metrik keberhasilan", artifact: "decision brief atau eksperimen produk dengan metrik yang jelas", terms: [["Outcome", "Perubahan perilaku atau hasil yang ingin dicapai."], ["Trade-off", "Konsekuensi ketika memilih satu prioritas dibanding lainnya."], ["Leading indicator", "Metrik awal yang memberi sinyal sebelum hasil akhir terlihat."]] }
+    };
+
+    function buildEnrichment(track, title) {
+        const profile = ENRICHMENT_BY_CATEGORY[track.category] || ENRICHMENT_BY_CATEGORY.engineering;
+        return {
+            keyTakeaways: [
+                `${title} harus dimulai dari kebutuhan dan constraint yang dapat dijelaskan.`,
+                `Keputusan tentang ${title} perlu dinilai melalui ${profile.lens}.`,
+                "Versi minimum yang diuji memberi pembelajaran lebih cepat daripada solusi besar tanpa bukti."
+            ],
+            glossary: profile.terms.map(([term, definition]) => ({ term, definition })),
+            commonMistakes: [
+                `Menggunakan ${title} karena populer tanpa menghubungkannya ke masalah nyata.`,
+                "Mengabaikan kondisi gagal, aksesibilitas, keamanan, atau kualitas data yang relevan.",
+                "Tidak menyimpan asumsi, hasil pengujian, dan alasan perubahan untuk iterasi berikutnya."
+            ],
+            nextStep: { title: `Bawa ${title} ke konteks nyata`, description: `Pilih satu masalah kecil, buat ${profile.artifact}, uji satu happy path dan satu kondisi gagal, lalu catat keputusan untuk iterasi berikutnya.` },
+            practiceLevels: [
+                { label: "Terpandu", title: "Replikasi dan jelaskan", prompt: `Ikuti contoh ${title}, ubah satu input, lalu jelaskan mengapa hasilnya berubah.` },
+                { label: "Mandiri", title: "Terapkan pada kasus baru", prompt: `Buat ${profile.artifact} untuk kebutuhan berbeda dan tulis dua keputusan pentingmu.` },
+                { label: "Tantangan", title: "Uji batas solusi", prompt: `Tambahkan kondisi gagal, ukur hasilnya melalui ${profile.lens}, lalu usulkan satu perbaikan.` }
+            ]
+        };
+    }
+
     function buildLesson(track, chapter, title, lessonIndex) {
         const id = `${chapter[0]}-${slugify(title)}`;
         const isAdvanced = track.level.includes("Lanjut") || chapter[0].includes("production");
         const context = `${title} dalam jalur ${track.title}`;
+        const enrichment = buildEnrichment(track, title);
         return {
             id,
             title,
@@ -474,7 +508,170 @@
                 `Dokumentasi dan catatan resmi terkait ${title}.`,
                 `Checklist praktik ${track.title} untuk bab ${chapter[1]}.`
             ],
+            keyTakeaways: enrichment.keyTakeaways,
+            glossary: enrichment.glossary,
+            commonMistakes: enrichment.commonMistakes,
+            nextStep: enrichment.nextStep,
+            practiceLevels: enrichment.practiceLevels,
             xp: 25
+        };
+    }
+
+    function assessmentQuestion(id, prompt, correct, distractors, explanation, difficulty, lessonId) {
+        return {
+            id,
+            prompt,
+            options: [correct, ...distractors],
+            correctIndex: 0,
+            explanation,
+            difficulty,
+            lessonId
+        };
+    }
+
+    function buildChapterAssessment(track, chapter) {
+        const [first, second, third] = chapter.lessons;
+        const profile = ENRICHMENT_BY_CATEGORY[track.category] || ENRICHMENT_BY_CATEGORY.engineering;
+        const artifact = profile.artifact;
+        const lens = profile.lens;
+        const prefix = `${track.id}-${chapter.id}`;
+        const questions = [
+            assessmentQuestion(
+                `${prefix}-q1`,
+                `Apa tujuan paling penting saat mulai mempelajari ${first.title}?`,
+                first.outcomes[0],
+                [
+                    `Menghafal semua istilah ${first.title} tanpa memahami konteksnya.`,
+                    `Menghindari praktik sampai seluruh jalur ${track.title} selesai.`,
+                    "Memilih alat paling populer tanpa mendefinisikan kebutuhan."
+                ],
+                `${first.title} dimulai dari model mental yang jelas sebelum masuk ke implementasi atau alat.`,
+                "easy",
+                first.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q2`,
+                `Tim akan menerapkan ${first.title} pada proyek nyata. Langkah awal mana yang paling kuat?`,
+                "Definisikan kebutuhan, input, constraint, dan bukti keberhasilan sebelum membuat solusi minimum.",
+                [
+                    "Langsung menyalin implementasi proyek lain agar pekerjaan terlihat cepat.",
+                    "Menunda validasi sampai semua fitur selesai dibuat.",
+                    "Hanya menilai hasil dari tampilannya tanpa memeriksa perilaku."
+                ],
+                `Penerapan ${first.title} yang dapat dipertanggungjawabkan selalu menghubungkan kebutuhan, batasan, dan cara mengukur hasil.`,
+                "easy",
+                first.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q3`,
+                `Manakah bukti terbaik bahwa latihan ${first.title} benar-benar dipahami?`,
+                "Artefak minimum disertai asumsi, satu happy path, satu kondisi gagal, dan catatan hasil pengujian.",
+                [
+                    "Screenshot hasil akhir tanpa penjelasan keputusan.",
+                    "Daftar istilah panjang yang disalin dari sumber lain.",
+                    "Solusi besar yang belum pernah dijalankan atau diperiksa."
+                ],
+                `Bukti pemahaman ${first.title} harus dapat diperiksa dan menjelaskan alasan di balik keputusan.`,
+                "medium",
+                first.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q4`,
+                `Ketika menerapkan ${second.title}, keputusan sebaiknya dievaluasi melalui apa?`,
+                `Dampaknya terhadap ${lens}.`,
+                [
+                    "Jumlah fitur yang berhasil ditambahkan tanpa batas.",
+                    "Seberapa cepat solusi dapat disalin ke proyek lain.",
+                    "Popularitas alat yang digunakan di media sosial."
+                ],
+                `${second.title} perlu dinilai melalui ${lens}, bukan sekadar selesai dibuat.`,
+                "medium",
+                second.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q5`,
+                `Apa cara validasi paling tepat untuk ${second.title}?`,
+                "Bandingkan hasil dengan kebutuhan awal, ukur perilaku penting, lalu periksa satu kondisi gagal.",
+                [
+                    "Anggap benar selama tidak muncul pesan error.",
+                    "Uji hanya dengan satu input ideal yang sudah diketahui.",
+                    "Ganti pendekatan setiap kali hasil pertama belum sempurna."
+                ],
+                `Validasi ${second.title} membutuhkan bukti terhadap kebutuhan dan tidak boleh berhenti pada happy path.`,
+                "medium",
+                second.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q6`,
+                `Mengapa constraint penting ketika memilih pendekatan untuk ${second.title}?`,
+                "Constraint membantu membandingkan trade-off dan mencegah solusi yang benar secara teori tetapi tidak cocok digunakan.",
+                [
+                    "Constraint memastikan hanya ada satu jawaban untuk semua proyek.",
+                    "Constraint menghilangkan kebutuhan dokumentasi dan pengujian.",
+                    "Constraint membuat setiap keputusan teknis menjadi permanen."
+                ],
+                "Batasan waktu, data, pengguna, keamanan, biaya, dan lingkungan dapat mengubah pendekatan terbaik.",
+                "hard",
+                second.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q7`,
+                `Kesalahan apa yang paling perlu dihindari saat mengerjakan ${third.title}?`,
+                third.commonMistakes[0],
+                [
+                    "Mencatat asumsi dan alasan perubahan selama proses.",
+                    "Menguji hasil pada skenario normal dan kondisi gagal.",
+                    "Membuat versi minimum sebelum menambah kompleksitas."
+                ],
+                `${third.commonMistakes[0]} adalah pola yang membuat solusi sulit dipercaya dan dipelihara.`,
+                "medium",
+                third.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q8`,
+                `Skenario mana yang menunjukkan penerapan profesional ${third.title}?`,
+                `Membuat ${artifact}, menguji hasilnya, lalu mendokumentasikan keputusan dan perbaikan berikutnya.`,
+                [
+                    "Menyelesaikan tampilan akhir tanpa menyimpan bukti pengujian.",
+                    "Mengabaikan risiko karena implementasi terlihat sederhana.",
+                    "Menambah banyak fitur sebelum tujuan awal disepakati."
+                ],
+                `${third.title} menjadi kompetensi yang dapat dibuktikan ketika menghasilkan ${artifact} yang teruji.`,
+                "hard",
+                third.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q9`,
+                `Bagaimana hubungan yang tepat antara ${first.title}, ${second.title}, dan ${third.title}?`,
+                `Ketiganya dipakai sebagai rangkaian kompetensi untuk memahami masalah, membuat keputusan, dan membuktikan kualitas hasil pada bab ${chapter.title}.`,
+                [
+                    "Ketiganya berdiri sendiri sehingga tidak perlu dipakai dalam satu alur.",
+                    `Hanya ${third.title} yang perlu diuji karena merupakan pelajaran terakhir.`,
+                    `Cukup menguasai istilah ${first.title} untuk menyelesaikan seluruh bab.`
+                ],
+                `Bab ${chapter.title} dirancang sebagai rangkaian, bukan kumpulan istilah yang terpisah.`,
+                "hard",
+                third.id
+            ),
+            assessmentQuestion(
+                `${prefix}-q10`,
+                `Sebelum menyatakan bab ${chapter.title} selesai, checklist mana yang paling lengkap?`,
+                "Tujuan dipahami, artefak minimum dibuat, asumsi dicatat, happy path dan kondisi gagal diuji, serta hasil dievaluasi.",
+                [
+                    "Semua teks sudah dibaca sekali dan contoh belum perlu dicoba.",
+                    "Satu jawaban benar sudah cukup tanpa latihan atau refleksi.",
+                    "Proyek terlihat menarik meskipun kebutuhan dan hasilnya belum terukur."
+                ],
+                `Kelulusan bab ${chapter.title} menuntut pemahaman, penerapan, dan bukti evaluasi yang saling terhubung.`,
+                "hard",
+                third.id
+            )
+        ];
+        return {
+            id: `${prefix}-assessment`,
+            title: `Kuis Bab: ${chapter.title}`,
+            passingScore: 80,
+            questions
         };
     }
 
@@ -497,15 +694,27 @@
         return `// ${title}\nfunction execute(input) {\n  if (input == null) throw new Error("Input wajib tersedia");\n  const result = { ok: true, value: input };\n  return result;\n}\n\nconsole.log(execute("latihan"));`;
     }
 
-    const tracks = TRACK_BLUEPRINTS.map((track) => ({
+    const tracks = TRACK_BLUEPRINTS.map((track) => {
+        const chapters = track.chapters.map((chapter) => {
+            const lessons = chapter[2].map((title, index) => {
+                const lesson = buildLesson(track, chapter, title, index);
+                lesson.practice.levels = lesson.practiceLevels;
+                delete lesson.practiceLevels;
+                return lesson;
+            });
+            const item = {
+                id: chapter[0],
+                title: chapter[1],
+                summary: `Bab ini membahas ${chapter[2].join(", ")} melalui teori, contoh, checkpoint, dan praktik terarah.`,
+                lessons
+            };
+            item.assessment = buildChapterAssessment(track, item);
+            return item;
+        });
+        return {
         ...track,
         categoryLabel: CATEGORY_LABELS[track.category],
-        chapters: track.chapters.map((chapter) => ({
-            id: chapter[0],
-            title: chapter[1],
-            summary: `Bab ini membahas ${chapter[2].join(", ")} melalui teori, contoh, checkpoint, dan praktik terarah.`,
-            lessons: chapter[2].map((title, index) => buildLesson(track, chapter, title, index))
-        })),
+        chapters,
         capstone: {
             title: track.project,
             brief: `Gabungkan kompetensi dari seluruh bab ${track.title} menjadi artefak portofolio yang dapat diperiksa dan dipresentasikan.`,
@@ -518,12 +727,14 @@
             passingScore: 75,
             xp: 150
         }
-    }));
+    };
+    });
 
     function createEmptyProgress() {
         return {
             version: PROGRESS_VERSION,
             tracks: {},
+            certificates: {},
             lastTrackId: "programming",
             lastLessonId: tracks[0].chapters[0].lessons[0].id,
             totalXpAwarded: 0,
@@ -535,6 +746,12 @@
         const progress = raw && typeof raw === "object" ? raw : createEmptyProgress();
         progress.version = PROGRESS_VERSION;
         progress.tracks = progress.tracks && typeof progress.tracks === "object" ? progress.tracks : {};
+        progress.certificates = progress.certificates && typeof progress.certificates === "object" ? progress.certificates : {};
+        Object.values(progress.tracks).forEach((trackProgress) => {
+            trackProgress.lessons = trackProgress.lessons && typeof trackProgress.lessons === "object" ? trackProgress.lessons : {};
+            trackProgress.chapterAssessments = trackProgress.chapterAssessments && typeof trackProgress.chapterAssessments === "object" ? trackProgress.chapterAssessments : {};
+            trackProgress.capstone = trackProgress.capstone && typeof trackProgress.capstone === "object" ? trackProgress.capstone : {};
+        });
         progress.lastTrackId = getTrack(progress.lastTrackId) ? progress.lastTrackId : "programming";
         progress.updatedAt = new Date().toISOString();
         return progress;
@@ -646,6 +863,76 @@
         };
     }
 
+    function getChapter(trackId, chapterId) {
+        return getTrack(trackId)?.chapters.find((chapter) => chapter.id === chapterId) || null;
+    }
+
+    function isChapterComplete(trackId, chapterId, progress = readProgress()) {
+        const chapter = getChapter(trackId, chapterId);
+        if (!chapter) return false;
+        return chapter.lessons.every((lesson) => {
+            const status = progress.tracks?.[trackId]?.lessons?.[lesson.id]?.status;
+            return status === "completed" || status === "mastered";
+        });
+    }
+
+    function getChapterAssessmentState(trackId, chapterId, progress = readProgress()) {
+        const record = progress.tracks?.[trackId]?.chapterAssessments?.[chapterId];
+        if (record?.passed) return "passed";
+        if (!isChapterComplete(trackId, chapterId, progress)) return "locked";
+        return Number(record?.attempts || 0) > 0 ? "attempted" : "available";
+    }
+
+    function getCertificateEligibility(trackId, progress = readProgress()) {
+        const track = getTrack(trackId);
+        if (!track) return { eligible: false, passed: 0, total: 0, score: 0, chapters: [] };
+        const chapters = track.chapters.map((chapter) => {
+            const record = progress.tracks?.[trackId]?.chapterAssessments?.[chapter.id] || {};
+            return {
+                id: chapter.id,
+                title: chapter.title,
+                passed: Boolean(record.passed),
+                score: Number(record.bestScore || 0)
+            };
+        });
+        const passed = chapters.filter((item) => item.passed).length;
+        const score = chapters.length ? Math.round(chapters.reduce((sum, item) => sum + item.score, 0) / chapters.length) : 0;
+        return { eligible: passed === chapters.length, passed, total: chapters.length, score, chapters };
+    }
+
+    function hashText(value) {
+        let hash = 2166136261;
+        for (let index = 0; index < value.length; index += 1) {
+            hash ^= value.charCodeAt(index);
+            hash = Math.imul(hash, 16777619);
+        }
+        return (hash >>> 0).toString(16).padStart(8, "0").toUpperCase();
+    }
+
+    function issueCertificate(trackId, recipientName, progress = readProgress()) {
+        const track = getTrack(trackId);
+        const eligibility = getCertificateEligibility(trackId, progress);
+        if (!track || !eligibility.eligible) throw new Error("Selesaikan seluruh kuis bab sebelum menerbitkan sertifikat.");
+        const cleanName = String(recipientName || "").trim().slice(0, 80) || "Pembelajar Universe Of Tech";
+        const previous = progress.certificates?.[trackId];
+        const issuedAt = previous?.issuedAt || new Date().toISOString();
+        const id = previous?.id || `UOT-${track.mark}-${Date.now().toString(36).toUpperCase()}`;
+        const certificate = {
+            id,
+            trackId,
+            trackTitle: track.title,
+            recipientName: cleanName,
+            score: eligibility.score,
+            issuedAt,
+            updatedAt: new Date().toISOString(),
+            verification: hashText(`${id}|${trackId}|${cleanName}|${issuedAt}`)
+        };
+        progress.certificates ||= {};
+        progress.certificates[trackId] = certificate;
+        writeProgress(progress);
+        return certificate;
+    }
+
     function validate() {
         const errors = [];
         const ids = new Set();
@@ -664,6 +951,14 @@
                     if (ids.has(lesson.id)) errors.push(`Duplicate lesson: ${lesson.id}`);
                     ids.add(lesson.id);
                 });
+                if (!chapter.assessment || chapter.assessment.questions.length !== 10) errors.push(`${chapter.id} harus memiliki 10 soal assessment.`);
+                chapter.assessment?.questions.forEach((question) => {
+                    if (ids.has(question.id)) errors.push(`Duplicate question: ${question.id}`);
+                    ids.add(question.id);
+                    if (question.options.length !== 4) errors.push(`${question.id} harus memiliki 4 opsi.`);
+                    if (!Number.isInteger(question.correctIndex) || question.correctIndex < 0 || question.correctIndex > 3) errors.push(`${question.id} memiliki kunci tidak valid.`);
+                    if (!question.explanation) errors.push(`${question.id} belum memiliki pembahasan.`);
+                });
             });
         });
         return errors;
@@ -675,12 +970,17 @@
         categories: CATEGORY_LABELS,
         storageKey: STORAGE_KEY,
         getTrack,
+        getChapter,
         findLesson,
         flattenLessons,
         readProgress,
         writeProgress,
         getLessonState,
         getTrackProgress,
+        isChapterComplete,
+        getChapterAssessmentState,
+        getCertificateEligibility,
+        issueCertificate,
         isTrackUnlocked,
         validate
     };

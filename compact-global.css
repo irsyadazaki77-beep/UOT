@@ -1,0 +1,263 @@
+/* QUIZNATION shared compact-density layer. Loaded across all pages. */
+:root {
+    --compact-content: min(100% - clamp(24px, 4vw, 64px), 1780px);
+    --compact-control: 34px;
+    --compact-radius-sm: 8px;
+    --compact-radius-md: 12px;
+    --compact-radius-lg: 16px;
+}
+
+html { max-width: 100%; overflow-x: clip; font-size: 13.5px !important; }
+body { max-width: 100%; overflow-x: clip; line-height: 1.45; }
+:where(h1, h2, h3, h4, p) { text-wrap: pretty; }
+:where(h1) { font-size: clamp(1.6rem, 3.1vw, 2.35rem); line-height: 1.12; }
+:where(h2) { font-size: clamp(1.3rem, 2.3vw, 1.8rem); line-height: 1.18; }
+:where(h3) { font-size: clamp(1.02rem, 1.5vw, 1.25rem); line-height: 1.25; }
+:where(p, li) { line-height: 1.5; }
+
+/* Navigation */
+:is(body, body[data-page], .compact-ui) .navbar {
+    min-height: 52px !important;
+    height: 52px !important;
+    padding: 4px clamp(12px, 2.5vw, 32px) !important;
+    gap: 10px !important;
+}
+:is(body, body[data-page], .compact-ui) .navbar .brand { font-size: 14px !important; gap: 7px !important; }
+:is(body, body[data-page], .compact-ui) .navbar .brand-logo { width: 30px !important; height: 30px !important; border-radius: 8px !important; }
+:is(body, body[data-page], .compact-ui) .nav-left-group,
+:is(body, body[data-page], .compact-ui) .nav-actions { gap: 6px !important; }
+:is(body, body[data-page], .compact-ui) .nav-links { gap: 2px !important; }
+:is(body, body[data-page], .compact-ui) .nav-links a { padding: 5px 9px !important; font-size: 11.5px !important; border-radius: 8px !important; }
+:is(body, body[data-page], .compact-ui) .btn-explore { min-height: 32px !important; height: 32px !important; padding: 5px 11px !important; font-size: 11.5px !important; border-radius: 8px !important; }
+:is(body, body[data-page], .compact-ui) .nav-search-wrapper { max-width: 280px !important; }
+:is(body, body[data-page], .compact-ui) .search-input-group { min-height: 34px !important; height: 34px !important; border-radius: 8px !important; }
+:is(body, body[data-page], .compact-ui) .nav-search-input { font-size: 11.5px !important; padding-block: 6px !important; height: 34px !important; }
+:is(body, body[data-page], .compact-ui) :is(.theme-toggle-btn, .profile-nav-link, .nav-hamburger, .bubub-nav-shortcut) {
+    width: 32px !important; min-width: 32px !important;
+    height: 32px !important; min-height: 32px !important;
+    border-radius: 8px !important;
+}
+:is(body, body[data-page], .compact-ui) .subscription-badge { padding: 4px 8px !important; font-size: 9px !important; }
+
+/* Page rhythm */
+:where(.page, .shell, .app-shell, .dashboard-shell, .main-container, .content-container) {
+    --content-width: var(--compact-content);
+}
+:is(body, body[data-page], .compact-ui) .section { margin-top: 18px !important; padding-block: 16px !important; }
+:is(body, body[data-page], .compact-ui) .section-header { margin-bottom: 14px !important; gap: 6px !important; }
+:is(body, body[data-page], .compact-ui) .section-header p { margin-top: 4px !important; font-size: 12.5px !important; }
+:is(body, body[data-page], .compact-ui) .section-kicker { margin-bottom: 4px !important; font-size: 10px !important; }
+:where(.hero) { min-height: 0 !important; }
+:where(.hero-actions) { margin-top: 14px !important; gap: 8px !important; }
+
+/* Controls */
+:is(body, body[data-page], .compact-ui) :is(.btn, .button, .action-button, .filter-btn, .tab-btn, .setting-btn, .icon-button, button) {
+    min-height: var(--compact-control) !important;
+}
+:is(body, body[data-page], .compact-ui) :is(.btn, .button, .action-button) {
+    padding: 6px 12px !important;
+    border-radius: var(--compact-radius-sm) !important;
+    font-size: 11.5px !important;
+    gap: 6px !important;
+}
+:is(body, body[data-page], .compact-ui) .btn-sm { min-height: 28px !important; padding: 4px 9px !important; font-size: 11px !important; }
+:is(body, body[data-page], .compact-ui) :is(.filter-btn, .tab-btn, .setting-btn) { padding: 6px 10px !important; font-size: 11px !important; }
+:is(body, body[data-page], .compact-ui) :is(input, select, textarea) {
+    min-height: 34px;
+    padding: 6px 10px !important;
+    border-radius: var(--compact-radius-sm) !important;
+    font-size: 12.5px !important;
+}
+:where(textarea) { min-height: 72px; }
+:where(.form-group, .field) { gap: 4px !important; margin-bottom: 8px !important; }
+:where(label) { font-size: 11px; }
+
+/* Cards */
+:is(body, body[data-page], .compact-ui) :is(.card, .glass-card, .custom-card, .content-card, .section-card, .side-card,
+    .module-card, .metric-card, .settings-card, .hub-panel, .result-panel,
+    .feat-card, .program-card, .course-card, .pricing-card, .testimonial-card,
+    .profile-card, .achievement-card, .leaderboard-card, .library-card,
+    .tka-info-card, .pro-benefit-card, .lms-session-panel, .bento-card, .activity-card, .skill-card, .focus-module) {
+    padding: 13px !important;
+    border-radius: var(--compact-radius-md) !important;
+}
+:is(body, body[data-page], .compact-ui) :is(.card-header, .card-header-row, .module-top, .panel-heading, .panel-title-row) {
+    margin-bottom: 8px !important; gap: 6px !important;
+}
+:is(body, body[data-page], .compact-ui) :is(.card-title, .widget-title, .panel-heading, .panel-title) { font-size: 13.5px !important; }
+:is(body, body[data-page], .compact-ui) :is(.card-subtitle, .muted) { font-size: 11px !important; }
+:is(body, body[data-page], .compact-ui) :is(.module-icon, .metric-icon, .setting-icon, .feat-icon, .tka-info-card-icon) {
+    width: 34px !important; height: 34px !important; min-width: 34px !important;
+    border-radius: 8px !important;
+}
+
+/* Grids and lists */
+:is(body, body[data-page], .compact-ui) :is(.features-grid, .programs-grid, .course-layout, .pricing-grid,
+    .testimonials-grid, .team-grid, .metrics-grid, .stats-grid,
+    .module-grid, .modules-grid, .library-grid, .achievement-grid,
+    .settings-grid, .dashboard-grid, .tka-info-grid, .bento-grid, .path-grid, .steps-grid) { gap: 10px !important; }
+:is(body, body[data-page], .compact-ui) :is(.tag-list, .tool-list, .chips, .skill-tags) { gap: 5px !important; }
+:is(body, body[data-page], .compact-ui) :is(.tag, .mini-tag, .tool-chip, .skill-tag, .summary-chip, .badge) {
+    padding: 3px 7px !important; border-radius: 999px !important; font-size: 9px !important;
+}
+:is(body, body[data-page], .compact-ui) :is(.timeline-item, .topic-item, .check-item, .setting-row, .syllabus-text-group) {
+    padding-block: 6px !important; gap: 8px !important;
+}
+
+/* Data, tabs, accordions */
+:where(table) { font-size: 11.5px; }
+:where(th, td) { padding: 6px 8px !important; }
+:is(body, body[data-page], .compact-ui) :is(.tabs, .hub-tabs, .career-tabs, .filter-tabs) { gap: 5px !important; margin-bottom: 10px !important; }
+:is(body, body[data-page], .compact-ui) :is(.tka-accordion-header, .faq-question) { padding: 10px 12px !important; min-height: 38px !important; }
+:is(body, body[data-page], .compact-ui) :is(.tka-accordion-inner, .faq-answer-inner) { padding: 10px 12px !important; }
+
+/* Dialogs and footer */
+:is(body, body[data-page], .compact-ui) :is(.modal-content, .dialog-content, .sub-modal-content, .drawer-panel, .mobile-menu-drawer) {
+    padding: 16px !important; border-radius: var(--compact-radius-lg) !important;
+}
+:is(body, body[data-page], .compact-ui) :is(.modal-header, .dialog-header) { margin-bottom: 10px !important; }
+:is(body, body[data-page], .compact-ui) footer { margin-top: 20px !important; padding-block: 24px 14px !important; }
+:is(body, body[data-page], .compact-ui) .footer-grid { gap: 18px !important; }
+:is(body, body[data-page], .compact-ui) .footer-links { gap: 5px !important; }
+:is(body, body[data-page], .compact-ui) :is(.footer-links a, .footer-col p) { font-size: 11px !important; }
+
+/* Preserve long-form readability. */
+:where(.reader-content, .article-content, .lesson-content, .question-text) { font-size: max(13.5px, .92rem); }
+:where(.reader-content p, .article-content p, .lesson-content p) { line-height: 1.58; }
+
+@media (max-width: 760px) {
+    :root { --compact-control: 36px; }
+    html { font-size: 13.5px !important; }
+    body { line-height: 1.4; }
+    :is(body, body[data-page], .compact-ui) .navbar { min-height: 48px !important; height: 48px !important; padding: 4px 10px !important; gap: 6px !important; }
+    :is(body, body[data-page], .compact-ui) .brand-logo { width: 28px !important; height: 28px !important; }
+    :is(body, body[data-page], .compact-ui) :is(.theme-toggle-btn, .profile-nav-link, .nav-hamburger, .bubub-nav-shortcut) {
+        width: 34px !important; min-width: 34px !important;
+        height: 34px !important; min-height: 34px !important;
+    }
+    :is(body, body[data-page], .compact-ui) .section { margin-top: 14px !important; padding-block: 12px !important; }
+    :is(body, body[data-page], .compact-ui) .section-header { margin-bottom: 10px !important; }
+    :is(body, body[data-page], .compact-ui) .hero-actions { margin-top: 12px !important; }
+    :is(body, body[data-page], .compact-ui) :is(.btn, .button, .action-button) { min-height: 36px !important; padding: 6px 10px !important; }
+    :is(body, body[data-page], .compact-ui) :is(input, select, textarea) { min-height: 36px; font-size: 15px !important; }
+    :is(body, body[data-page], .compact-ui) :is(.card, .glass-card, .custom-card, .content-card, .section-card, .side-card,
+        .module-card, .metric-card, .settings-card, .hub-panel, .result-panel,
+        .feat-card, .program-card, .course-card, .pricing-card, .testimonial-card,
+        .profile-card, .achievement-card, .leaderboard-card, .library-card,
+        .tka-info-card, .pro-benefit-card, .lms-session-panel) { padding: 11px !important; }
+    :is(body, body[data-page], .compact-ui) :is(.features-grid, .programs-grid, .course-layout, .pricing-grid,
+        .testimonials-grid, .team-grid, .metrics-grid, .stats-grid,
+        .module-grid, .modules-grid, .library-grid, .achievement-grid,
+        .settings-grid, .dashboard-grid, .tka-info-grid) { gap: 8px !important; }
+    :is(body, body[data-page], .compact-ui) :is(.modal-content, .dialog-content, .sub-modal-content, .drawer-panel, .mobile-menu-drawer) {
+        width: min(92vw, 440px) !important; max-height: 88dvh !important; padding: 14px !important;
+    }
+    :is(body, body[data-page], .compact-ui) footer { margin-top: 16px !important; padding-block: 20px 12px !important; }
+    :is(body, body[data-page], .compact-ui) .footer-grid { gap: 14px 10px !important; }
+
+    /* Library: keep its two hero tools compact instead of stacking oversized panels. */
+    :is(body, body[data-page], .compact-ui)[data-page="library"] .hero > div { padding: 12px !important; }
+    :is(body, body[data-page], .compact-ui)[data-page="library"] .library-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 5px !important;
+    }
+    :is(body, body[data-page], .compact-ui)[data-page="library"] .library-stats > * { padding: 7px 5px !important; min-height: 56px !important; }
+    :is(body, body[data-page], .compact-ui)[data-page="library"] .reading-desk-container { padding: 12px !important; }
+}
+
+/* ========================================================================== */
+/* RATA TENGAH & MEMENUHI LAYAR (Full-Width High-Efficiency & Center-Aligned) */
+/* ========================================================================== */
+
+/* 1. Memenuhi Layar & Menempati Ruang Kosong (Full Screen Utilization) */
+:where(.page, .shell, .app-shell, .dashboard-shell, .main-container, .content-container, .page-shell, main > .section, footer, .section, .hero) {
+    width: 100% !important;
+    max-width: var(--compact-content) !important;
+    margin-inline: auto !important;
+}
+
+/* 2. Rata Tengah Pada Section Headings, Page Headers & Hero Copy */
+:is(body, body[data-page], .compact-ui) :is(.section-heading, .section-heading-row, .section-header, .page-header, .hero-copy, .hero-header, .dashboard-header, .library-header, .setup-main .section-heading, .trust-strip) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin-inline: auto !important;
+    width: 100% !important;
+}
+:is(body, body[data-page], .compact-ui) :is(.section-heading, .section-heading-row, .section-header, .hero-copy) > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* 3. Eyebrows, Kickers & Mini Labels Rata Tengah */
+:is(body, body[data-page], .compact-ui) :is(.eyebrow, .section-kicker, .mini-label, .sub-kicker, .stat-pill span) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin-inline: auto !important;
+}
+
+/* 4. Teks & Judul Rata Tengah Presisi */
+:is(body, body[data-page], .compact-ui) :is(.section-heading h1, .section-heading h2, .section-heading h3, .section-heading-row h1, .section-heading-row h2, .section-header h1, .section-header h2, .hero-copy h1, .hero-copy h2, .hero-copy .hero-lead, .hero-copy .hero-description, .section-heading p, .section-heading-row p, .section-header p, .section-lead, .trust-strip span, .footer-intro p) {
+    text-align: center !important;
+    margin-inline: auto !important;
+    max-width: 860px !important;
+}
+
+/* 5. Tombol Aksi, Metrik & Navigasi Filter Rata Tengah */
+:is(body, body[data-page], .compact-ui) :is(.hero-actions, .hero-metrics, .hero-trust, .hero-proof, .cta-actions, .paths-action, .section-actions, .path-filters, .ux-section-nav, .filter-tabs, .tabs, .catalog-filter-bar, .hub-tabs, .skill-marquee div) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    margin-inline: auto !important;
+    width: 100% !important;
+}
+
+/* 6. Banners & CTAs Rata Tengah & Efisien Tempat */
+:is(body, body[data-page], .compact-ui) :is(.final-cta, .resume-section, .progress-strip, .weekly-dashboard, .cta-banner) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin-inline: auto !important;
+    width: 100% !important;
+}
+
+/* 7. Footer & Info Bawah Rata Tengah */
+:is(body, body[data-page], .compact-ui) :is(.footer-intro, .footer-bottom) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin-inline: auto !important;
+}
+:is(body, body[data-page], .compact-ui) .footer-main {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    gap: 32px !important;
+    padding: 36px 0 !important;
+    border-top: 1px solid var(--line) !important;
+    justify-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: var(--compact-content) !important;
+    margin-inline: auto !important;
+}
+:is(body, body[data-page], .compact-ui) .footer-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    justify-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
+

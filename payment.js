@@ -1,10 +1,23 @@
 (() => {
     "use strict";
+
+    const Account = window.QuizNationAccount;
  
     const SESSION_KEY = "eduquestUserSession";
     const SUBSCRIPTION_KEY = "eduquestSubscription";
  
     const $ = id => document.getElementById(id);
+    const productionCheckout = Boolean(window.QuizNationAPI?.isConfigured());
+
+    if (productionCheckout) {
+        document.body.classList.add("production-checkout");
+        document.title = "Checkout Pro - Universe Of Tech";
+        $("checkoutModeTitle").textContent = "Checkout produksi";
+        $("checkoutModeDescription").textContent = "Kamu akan diarahkan ke halaman pembayaran milik penyedia resmi. Data kartu tidak dimasukkan di situs ini.";
+        const modeIcon = document.querySelector(".checkout-demo-notice i");
+        if (modeIcon) modeIcon.className = "fa-solid fa-shield-halved";
+        $("payNowBtn").querySelector(".btn-text").textContent = "Lanjut ke Checkout Aman";
+    }
  
     // Plans Configuration
     const PLANS = {
@@ -15,19 +28,12 @@
             period: "bulan",
             desc: "Termasuk diagnosis kelemahan, Smart Review, rencana personal, simulasi, BUBUB Mentor, backup progres, dan sertifikat kompetensi."
         },
-        premium: {
-            title: "Akselerasi Premium",
-            itemName: "Universe Of Tech (Premium)",
-            price: 99000,
-            period: "bulan",
-            desc: "Seluruh fitur Pro ditambah sesi konsultasi video 1-on-1 mingguan dengan Mentor Senior, materi eksklusif tingkat lanjut, dan review portofolio personal."
-        },
         annual: {
             title: "Akselerasi Tahunan",
             itemName: "Universe Of Tech (Annual)",
             price: 399000,
             period: "tahun",
-            desc: "Hemat 30%! Akses penuh satu tahun ke semua fitur Pro, prioritas support, sertifikat fisik yang dikirim ke rumah, dan merchandise eksklusif Universe Of Tech."
+            desc: "Hemat 32% dengan akses penuh satu tahun ke Smart Route, planner SNBT, Culture Passport, backup progres, dan seluruh benefit PRO."
         }
     };
 
@@ -36,6 +42,7 @@
     let qrisTimer = null;
     let selectedWallet = "";
     let selectedPlan = PLANS.pro;
+    let selectedPlanKey = "pro";
     let activePromo = null; // Stores { code, type, value }
  
     const cardNumInput = $("cardNumberInput");
@@ -61,6 +68,11 @@
     function applyTheme() {
         const dark = localStorage.getItem("eduquest_theme") === "dark";
         document.body.classList.toggle("dark-theme", dark);
+        const toggle = $("themeToggleBtn");
+        if (toggle) {
+            toggle.setAttribute("aria-label", dark ? "Gunakan tema terang" : "Gunakan tema gelap");
+            toggle.innerHTML = `<i class="fa-solid ${dark ? "fa-sun" : "fa-moon"}" aria-hidden="true"></i>`;
+        }
     }
  
     function formatRupiah(num) {
@@ -73,9 +85,36 @@
         const planParam = urlParams.get("plan");
         
         if (planParam && PLANS[planParam]) {
+            selectedPlanKey = planParam;
             selectedPlan = PLANS[planParam];
         }
 
+        updatePlanUI();
+
+        const source = urlParams.get("source");
+        const sourceNote = $("checkoutSourceNote");
+        if (source && sourceNote) {
+            const sourceLabels = { profile: "profil", materi: "halaman Materi", snbt: "halaman SNBT", budaya: "Wonderful Indonesia" };
+            sourceNote.textContent = `Kamu datang dari ${sourceLabels[source] || "fitur belajar"}. Setelah aktivasi, kamu akan kembali dengan seluruh benefit PRO terbuka.`;
+            sourceNote.classList.add("show");
+        }
+
+        if (window.QuizNationSubscription?.isPro()) {
+            const details = window.QuizNationSubscription.get();
+            const currentBox = $("checkoutCurrentPro");
+            currentBox.hidden = false;
+            currentBox.replaceChildren();
+            const title = document.createElement("strong");
+            const description = document.createElement("span");
+            title.textContent = "Paket PRO kamu sudah aktif";
+            description.textContent = `${details.planName || "Pro Learning"} · ${window.QuizNationSubscription.daysRemaining()} hari tersisa. Pilihan baru akan memperbarui periode paket.`;
+            currentBox.append(title, description);
+        }
+
+        // Promo hanya diterapkan ketika pengguna memasukkan kode secara sadar.
+    }
+
+    function updatePlanUI() {
         // Update UI displays
         $("planTitleDisplay").textContent = selectedPlan.title;
         $("planPriceHeader").innerHTML = `${formatRupiah(selectedPlan.price)} <span class="period" id="planPeriodHeader">/ ${selectedPlan.period}</span>`;
@@ -83,13 +122,32 @@
         $("planItemName").textContent = selectedPlan.itemName;
         $("planBasePriceDisplay").textContent = formatRupiah(selectedPlan.price);
         $("billSubtotal").textContent = formatRupiah(selectedPlan.price);
-
-        // Apply default welcome discount code automatically to demonstrate promo code system
-        applyPromoCode("BUBUBFREE", true);
+        if ($("mobileSummaryPrice")) $("mobileSummaryPrice").textContent = formatRupiah(selectedPlan.price);
+        document.querySelectorAll("[data-checkout-plan]").forEach(button => {
+            const active = button.dataset.checkoutPlan === selectedPlanKey;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+        });
+        if (activePromo) applyPromoCode(activePromo.code, true);
+        else recalculateTotals();
     }
 
+    document.querySelectorAll("[data-checkout-plan]").forEach(button => {
+        button.addEventListener("click", () => {
+            const key = button.dataset.checkoutPlan;
+            if (!PLANS[key] || key === selectedPlanKey) return;
+            selectedPlanKey = key;
+            selectedPlan = PLANS[key];
+            updatePlanUI();
+            const url = new URL(location.href);
+            url.searchParams.set("plan", key);
+            history.replaceState({}, "", url);
+            if (typeof playSound === "function") playSound("click");
+        });
+    });
+
     function initUserSession() {
-        const session = readJSON(SESSION_KEY, null);
+        const session = Account?.getSession() || readJSON(SESSION_KEY, null);
         if (session && session.isLoggedIn) {
             $("sessionUsername").textContent = session.username || "Pengguna Universe";
             if ($("sessionEmail")) {
@@ -118,10 +176,10 @@
             // Toggle active classes on tabs
             document.querySelectorAll(".stripe-tab-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
+            document.querySelectorAll(".stripe-tab-btn").forEach(b => b.setAttribute("aria-selected", String(b === btn)));
  
             // Toggle panels
-            document.querySelectorAll(".stripe-panel").forEach(p => p.classList.remove("active"));
-            $(`panel-${method}`).classList.add("active");
+            document.querySelectorAll(".stripe-panel").forEach(p => { const active = p.id === `panel-${method}`; p.classList.toggle("active", active); p.hidden = !active; });
  
             currentMethod = method;
  
@@ -494,29 +552,68 @@
         });
     }
 
-    // Process payment simulation
-    $("payNowBtn").addEventListener("click", () => {
+    function showCheckoutMessage(message) {
+        const box = $("checkoutInlineMessage");
+        if (!box) return;
+        box.textContent = message;
+        box.classList.add("show");
+        box.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function clearCheckoutMessage() {
+        const box = $("checkoutInlineMessage");
+        if (box) box.classList.remove("show");
+    }
+
+    // Process the local demo. A real deployment should redirect to a hosted
+    // checkout URL returned by QuizNationAPI.createCheckoutSession().
+    $("payNowBtn").addEventListener("click", async () => {
+        clearCheckoutMessage();
+
+        if (window.QuizNationAPI?.isConfigured()) {
+            const payBtn = $("payNowBtn");
+            const btnText = payBtn.querySelector(".btn-text");
+            const btnSpinner = payBtn.querySelector(".btn-spinner");
+            payBtn.disabled = true;
+            btnText.setAttribute("hidden", "");
+            btnSpinner.removeAttribute("hidden");
+            try {
+                const checkout = await window.QuizNationAPI.createCheckoutSession({
+                    planId: selectedPlanKey,
+                    source: new URLSearchParams(location.search).get("source") || "payment"
+                });
+                window.location.assign(checkout.checkoutUrl);
+                return;
+            } catch (error) {
+                showCheckoutMessage(error.message || "Checkout belum dapat dimulai. Coba lagi.");
+                payBtn.disabled = false;
+                btnText.removeAttribute("hidden");
+                btnSpinner.setAttribute("hidden", "");
+                return;
+            }
+        }
+
         // Validation check
         if (currentMethod === "card") {
             if (!cardNumInput.value || !cardHolderInput.value || !cardExpiryInput.value || !cardCvvInput.value) {
-                alert("Mohon lengkapi seluruh kolom informasi kartu kredit.");
+                showCheckoutMessage("Lengkapi nomor kartu, nama, masa berlaku, dan CVC sebelum melanjutkan.");
                 return;
             }
             if (cardNumInput.value.replace(/\s/g, "").length < 16) {
-                alert("Nomor kartu kredit harus 16 digit.");
+                showCheckoutMessage("Nomor kartu harus terdiri dari 16 digit.");
                 return;
             }
             if (cardExpiryInput.value.replace(/\s/g, "").length < 5) {
-                alert("Tanggal validitas kartu tidak lengkap.");
+                showCheckoutMessage("Tanggal kedaluwarsa belum lengkap.");
                 return;
             }
             if (cardCvvInput.value.length < 3) {
-                alert("CVV/CVC kartu tidak lengkap.");
+                showCheckoutMessage("CVC harus terdiri dari 3 digit.");
                 return;
             }
         } else if (currentMethod === "wallet") {
             if (!selectedWallet) {
-                alert("Mohon pilih salah satu e-wallet Anda.");
+                showCheckoutMessage("Pilih salah satu e-wallet sebelum melanjutkan.");
                 return;
             }
         }
@@ -534,25 +631,21 @@
             playSound("click");
         }
  
-        // Simulate secure bank verification delay
+        // Simulate an interface delay. No bank or payment provider is contacted.
         setTimeout(() => {
-            // Activate Pro subscription state
+            // Keep the legacy entitlement available while the richer subscription record is prepared.
             localStorage.setItem(SUBSCRIPTION_KEY, "pro");
  
             // If not logged in, auto-login as Guest Pro to preserve user premium features
-            let session = null;
-            try {
-                session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
-            } catch (e) {
-                console.warn(e);
-            }
+            const session = Account?.getSession() || readJSON(SESSION_KEY, null);
             if (!session || !session.isLoggedIn) {
-                localStorage.setItem(SESSION_KEY, JSON.stringify({
+                const guest = {
                     isLoggedIn: true,
                     username: "Guest Pro",
-                    email: "guest@quiznation.com",
+                    email: "guest@uot.local",
                     avatar: "👑"
-                }));
+                };
+                if (Account) Account.signIn(guest); else localStorage.setItem(SESSION_KEY, JSON.stringify(guest));
             }
 
             // Play success audio
@@ -571,13 +664,14 @@
                 successMethodLabel.textContent = `E-Wallet (${walletName})`;
             }
  
-            // Generate a random mock invoice number
+            // Generate a clearly marked demo reference number
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, "0");
             const date = String(now.getDate()).padStart(2, "0");
             const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-            $("receiptInvoiceNum").textContent = `#UOT-${year}${month}${date}-${randomSuffix}`;
+            const invoiceNumber = `DEMO-UOT-${year}${month}${date}-${randomSuffix}`;
+            $("receiptInvoiceNum").textContent = `#${invoiceNumber}`;
  
             // Generate formatting for date time
             const monthsIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -587,6 +681,16 @@
             // Set final amount paid in receipt modal
             const payable = getFinalPayableAmount();
             $("receiptFinalAmount").textContent = formatRupiah(payable);
+
+            const methodLabel = successMethodLabel.textContent;
+            if (window.QuizNationSubscription) {
+                window.QuizNationSubscription.activate(selectedPlanKey, {
+                    invoice: invoiceNumber,
+                    method: methodLabel,
+                    amountPaid: payable,
+                    source: "demo"
+                });
+            }
 
             // Open Success Modal & launch confetti
             const modal = $("successModal");
@@ -625,6 +729,14 @@
             }
         });
     }
+
+    const summaryToggle = $("mobileSummaryToggle");
+    summaryToggle?.addEventListener("click", () => {
+        const panel = document.querySelector(".checkout-panel-right");
+        const expanded = summaryToggle.getAttribute("aria-expanded") !== "true";
+        summaryToggle.setAttribute("aria-expanded", String(expanded));
+        panel?.classList.toggle("summary-open", expanded);
+    });
  
     // Init actions
     applyTheme();

@@ -1,0 +1,2037 @@
+/* ==========================================================================
+   MODERN UI POLISH & ULTRA-SMOOTH ANIMATION SYSTEM v4.0
+   Universe Of Tech - High-Density Enterprise & Premium Micro-Interactions
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. ORGANIC AMBIENT BACKGROUND BLOBS & FLOATING LIGHT ORBS
+   -------------------------------------------------------------------------- */
+@keyframes organicDriftOne {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33%  { transform: translate(40px, -60px) scale(1.12) rotate(120deg); }
+    66%  { transform: translate(-30px, 40px) scale(0.95) rotate(240deg); }
+    100% { transform: translate(0, 0) scale(1) rotate(360deg); }
+}
+
+@keyframes organicDriftTwo {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33%  { transform: translate(-50px, 40px) scale(1.15) rotate(-120deg); }
+    66%  { transform: translate(40px, -30px) scale(0.9) rotate(-240deg); }
+    100% { transform: translate(0, 0) scale(1) rotate(-360deg); }
+}
+
+.gradient-blob.blob-1 {
+    animation: organicDriftOne 22s ease-in-out infinite !important;
+    filter: blur(80px) saturate(180%) !important;
+    opacity: 0.35 !important;
+}
+
+.gradient-blob.blob-2 {
+    animation: organicDriftTwo 26s ease-in-out infinite !important;
+    filter: blur(90px) saturate(180%) !important;
+    opacity: 0.3 !important;
+}
+
+body.dark-theme .gradient-blob.blob-1 {
+    opacity: 0.22 !important;
+}
+
+body.dark-theme .gradient-blob.blob-2 {
+    opacity: 0.18 !important;
+}
+
+/* --------------------------------------------------------------------------
+   2. GLASSMORPHISM & SUB-PIXEL BORDER LIGHTING ON CARDS
+   -------------------------------------------------------------------------- */
+.feat-card,
+.course-card,
+.pricing-card,
+.testimonial-card,
+.outcome-card,
+.team-card,
+.showcase-display,
+.diagnostic-card,
+.faq-item,
+.newsletter-card,
+.sub-modal-content {
+    position: relative;
+    backdrop-filter: blur(24px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+    border-right-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03), 
+                0 1px 3px rgba(0, 0, 0, 0.02),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.4s ease,
+                background 0.4s ease !important;
+    overflow: hidden;
+}
+
+body.dark-theme .feat-card,
+body.dark-theme .course-card,
+body.dark-theme .pricing-card,
+body.dark-theme .testimonial-card,
+body.dark-theme .outcome-card,
+body.dark-theme .team-card,
+body.dark-theme .showcase-display,
+body.dark-theme .diagnostic-card,
+body.dark-theme .faq-item,
+body.dark-theme .newsletter-card,
+body.dark-theme .sub-modal-content {
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-top-color: rgba(255, 255, 255, 0.16) !important;
+    border-left-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Hover Elevation & Glowing Edge Projection */
+.feat-card:hover,
+.course-card:hover,
+.pricing-card:hover,
+.testimonial-card:hover,
+.outcome-card:hover,
+.team-card:hover,
+.newsletter-card:hover {
+    transform: translateY(-6px) scale(1.015) !important;
+    border-color: rgba(67, 97, 238, 0.35) !important;
+    box-shadow: 0 20px 45px -10px rgba(67, 97, 238, 0.18),
+                0 6px 18px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+body.dark-theme .feat-card:hover,
+body.dark-theme .course-card:hover,
+body.dark-theme .pricing-card:hover,
+body.dark-theme .testimonial-card:hover,
+body.dark-theme .outcome-card:hover,
+body.dark-theme .team-card:hover,
+body.dark-theme .newsletter-card:hover {
+    border-color: rgba(79, 140, 255, 0.45) !important;
+    box-shadow: 0 20px 50px -10px rgba(79, 140, 255, 0.28),
+                0 8px 24px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. AUTOMATED LIGHT BEAM SWEEP ON BUTTONS & BADGES
+   -------------------------------------------------------------------------- */
+@keyframes buttonLightBeam {
+    0%   { left: -120%; opacity: 0; }
+    20%  { left: -120%; opacity: 0.6; }
+    50%  { left: 120%; opacity: 0.6; }
+    100% { left: 120%; opacity: 0; }
+}
+
+.btn-primary,
+.btn-explore,
+.btn-green,
+.btn-blue,
+.badge,
+.pricing-card.popular::before {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::after,
+.btn-explore::after,
+.btn-green::after,
+.btn-blue::after,
+.badge::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(105deg, 
+        transparent 20%, 
+        rgba(255, 255, 255, 0.45) 50%, 
+        transparent 80%);
+    transform: skewX(-20deg);
+    animation: buttonLightBeam 5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Spring Physics Button Click Effect */
+.btn,
+button,
+.diag-pill,
+.showcase-tab {
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.28s ease,
+                background-color 0.28s ease,
+                border-color 0.28s ease !important;
+}
+
+.btn:hover,
+button:hover {
+    transform: translateY(-3px) scale(1.03) !important;
+}
+
+.btn:active,
+button:active,
+.diag-pill:active,
+.showcase-tab:active {
+    transform: scale(0.95) !important;
+    transition-duration: 0.08s !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. HERO PHONE MOCKUP LEVITATION & ORBITAL BADGES
+   -------------------------------------------------------------------------- */
+@keyframes levitatePhone {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%       { transform: translateY(-12px) rotate(1.5deg); }
+}
+
+@keyframes levitateBadgeOne {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50%       { transform: translateY(-8px) rotate(3deg) scale(1.04); }
+}
+
+@keyframes levitateBadgeTwo {
+    0%, 100% { transform: translateY(0) rotate(4deg); }
+    50%       { transform: translateY(10px) rotate(-2deg) scale(1.04); }
+}
+
+@keyframes textGradientWave {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.phone {
+    animation: levitatePhone 6s ease-in-out infinite !important;
+    box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+
+.float-one {
+    animation: levitateBadgeOne 5.5s ease-in-out infinite alternate !important;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+.float-two {
+    animation: levitateBadgeTwo 6.5s ease-in-out infinite alternate !important;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+.hero-title span {
+    background: linear-gradient(135deg, var(--green, #32d66b), var(--blue, #4f8cff), var(--purple, #8b5cf6), var(--green, #32d66b)) !important;
+    background-size: 300% 300% !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    animation: textGradientWave 8s ease infinite !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. INTERACTIVE FEATURE SHOWCASE & TERMINAL GLOW
+   -------------------------------------------------------------------------- */
+@keyframes terminalBorderPulse {
+    0%, 100% { border-color: rgba(79, 140, 255, 0.3); box-shadow: 0 20px 50px rgba(79, 140, 255, 0.15); }
+    50%       { border-color: rgba(50, 214, 107, 0.5); box-shadow: 0 20px 60px rgba(50, 214, 107, 0.22); }
+}
+
+.showcase-display {
+    animation: terminalBorderPulse 5s infinite alternate !important;
+}
+
+.showcase-tab.active {
+    border-left: 4px solid var(--green, #32d66b) !important;
+    background: linear-gradient(135deg, rgba(50, 214, 107, 0.12), rgba(79, 140, 255, 0.04)) !important;
+    box-shadow: 0 8px 24px rgba(50, 214, 107, 0.15) !important;
+    transform: translateX(6px) !important;
+}
+
+.demo-opt {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.demo-opt:hover:not(:disabled) {
+    transform: translateX(6px) scale(1.01) !important;
+    border-color: var(--blue, #4f8cff) !important;
+    background: rgba(79, 140, 255, 0.08) !important;
+    box-shadow: 0 4px 12px rgba(79, 140, 255, 0.15) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. DIAGNOSTIC STEPPER & ROADMAP ANIMATIONS
+   -------------------------------------------------------------------------- */
+@keyframes pillPop {
+    0%   { transform: scale(0.92); }
+    50%  { transform: scale(1.04); }
+    100% { transform: scale(1); }
+}
+
+.diag-pill:hover {
+    transform: translateY(-3px) translateX(4px) !important;
+    border-color: var(--blue) !important;
+    box-shadow: 0 8px 20px rgba(79, 140, 255, 0.15) !important;
+}
+
+.diag-pill.selected {
+    animation: pillPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+    box-shadow: 0 8px 25px rgba(50, 214, 107, 0.35) !important;
+}
+
+.diag-road-item {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    border-left: 3px solid transparent !important;
+}
+
+.diag-road-item:hover {
+    transform: translateX(6px) !important;
+    border-left-color: var(--blue) !important;
+    background: rgba(79, 140, 255, 0.06) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.diag-road-item:hover .road-icon {
+    transform: scale(1.15) rotate(8deg) !important;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. FAQ ACCORDION ULTRA-SMOOTHNESS
+   -------------------------------------------------------------------------- */
+.faq-item {
+    border-left: 4px solid transparent !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.faq-item.open,
+.faq-item.active {
+    border-left-color: var(--blue, #4f8cff) !important;
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(79, 140, 255, 0.04) 100%) !important;
+    box-shadow: 0 12px 32px rgba(79, 140, 255, 0.12),
+                0 2px 6px rgba(0, 0, 0, 0.04) !important;
+    transform: scale(1.008) !important;
+}
+
+.faq-question {
+    transition: color 0.25s ease, padding 0.3s ease !important;
+}
+
+.faq-item:hover .faq-question {
+    color: var(--blue, #4f8cff) !important;
+    padding-left: 32px !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. INPUT FOCUS GLOW RING & CONTACT FORM
+   -------------------------------------------------------------------------- */
+@keyframes inputFocusGlow {
+    0% { box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.18), 0 4px 12px rgba(79, 140, 255, 0.1); }
+    100% { box-shadow: 0 0 0 5px rgba(79, 140, 255, 0.28), 0 6px 18px rgba(79, 140, 255, 0.2); }
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--blue, #4f8cff) !important;
+    animation: inputFocusGlow 1.5s infinite alternate !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. LIVE TICKER SPRING ENTRANCE & FLAME FLICKER
+   -------------------------------------------------------------------------- */
+@keyframes tickerSpringIn {
+    0%   { transform: translateY(80px) scale(0.85); opacity: 0; }
+    70%  { transform: translateY(-8px) scale(1.02); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes flameFlicker {
+    0%, 100% { transform: scale(1) rotate(-3deg); }
+    50%       { transform: scale(1.18) rotate(4deg); filter: drop-shadow(0 0 10px rgba(255, 159, 67, 0.8)); }
+}
+
+#liveTicker.show {
+    animation: tickerSpringIn 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+    border: 1px solid rgba(50, 214, 107, 0.4) !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18),
+                0 0 20px rgba(50, 214, 107, 0.2) !important;
+}
+
+#tickerBadge {
+    animation: flameFlicker 1.2s infinite alternate !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. SCROLL PROGRESS COMET HEAD & POINTER ORB ENHANCED
+   -------------------------------------------------------------------------- */
+#scrollProgressBar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: 0 0 12px #ffffff, 0 0 20px var(--green, #32d66b);
+    border-radius: 50%;
+}
+
+.pointer-orb {
+    background: radial-gradient(circle, rgba(50, 214, 107, 0.22) 0%, rgba(79, 140, 255, 0.15) 40%, rgba(139, 92, 246, 0) 70%) !important;
+    width: 340px !important;
+    height: 340px !important;
+    filter: blur(8px) !important;
+}
+
+body.dark-theme .pointer-orb {
+    background: radial-gradient(circle, rgba(79, 140, 255, 0.28) 0%, rgba(168, 85, 247, 0.18) 40%, rgba(16, 185, 129, 0) 70%) !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. CELEBRATION FLOATING PARTICLE BURST (JS GENERATED)
+   -------------------------------------------------------------------------- */
+@keyframes burstFloat {
+    0%   { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
+    50%  { opacity: 1; }
+    100% { transform: translate(var(--tx, 0px), var(--ty, -80px)) scale(1.2) rotate(var(--trot, 180deg)); opacity: 0; }
+}
+
+.celebration-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999999;
+    font-size: 20px;
+    user-select: none;
+    animation: burstFloat 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --------------------------------------------------------------------------
+   12. FOOTER & SOCIAL LINKS SMOOTH HOVER
+   -------------------------------------------------------------------------- */
+.social-links a,
+.footer-legal-links a {
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    display: inline-block;
+}
+
+.social-links a:hover {
+    transform: translateY(-4px) scale(1.15) !important;
+    color: var(--blue, #4f8cff) !important;
+    text-shadow: 0 0 12px rgba(79, 140, 255, 0.5) !important;
+}
+
+.footer-legal-links a:hover {
+    color: var(--green, #32d66b) !important;
+    transform: translateX(4px) !important;
+}
+
+
+
+/* --------------------------------------------------------------------------
+   14. KEYBOARD SHORTCUT PILL & SEARCH BAR GLOW
+   -------------------------------------------------------------------------- */
+.search-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(243, 244, 246, 0.8);
+    border: 1px solid rgba(209, 213, 219, 0.8);
+    border-radius: 999px;
+    padding: 6px 14px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.dark-theme .search-input-group {
+    background: rgba(31, 41, 55, 0.6);
+    border-color: rgba(75, 85, 99, 0.6);
+}
+
+.search-input-group:focus-within {
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--blue, #4f8cff) !important;
+    box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.2), 0 4px 16px rgba(79, 140, 255, 0.12);
+    transform: scale(1.02);
+}
+
+body.dark-theme .search-input-group:focus-within {
+    background: rgba(17, 24, 39, 1);
+    box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.3), 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.kbd-shortcut {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    background: rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    margin-left: 8px;
+    user-select: none;
+    pointer-events: none;
+    transition: all 0.25s ease;
+}
+
+body.dark-theme .kbd-shortcut {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* --------------------------------------------------------------------------
+   15. BENTO GRID SPOTLIGHT EFFECT (DYNAMIC CSS VARIABLES)
+   -------------------------------------------------------------------------- */
+.bento-spotlight {
+    position: relative;
+    overflow: hidden;
+}
+
+.bento-spotlight::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        650px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+        rgba(79, 140, 255, 0.12),
+        transparent 45%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.bento-spotlight:hover::before {
+    opacity: 1;
+}
+
+body.dark-theme .bento-spotlight::before {
+    background: radial-gradient(
+        650px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+        rgba(79, 140, 255, 0.2),
+        transparent 45%
+    );
+}
+
+/* --------------------------------------------------------------------------
+   16. PULSING LIVE STATUS DOT & GLOWING HERO PILL
+   -------------------------------------------------------------------------- */
+@keyframes pulseRing {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.live-pulse-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #10b981;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulseRing 2s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+.hero-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    padding: 8px 18px;
+    border-radius: 999px;
+    color: var(--dark);
+    font-weight: 800;
+    font-size: 13px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(67, 97, 238, 0.25);
+    box-shadow: 0 8px 20px rgba(67, 97, 238, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: default;
+}
+
+body.dark-theme .hero-status-pill {
+    background: rgba(31, 41, 55, 0.75);
+    border-color: rgba(79, 140, 255, 0.35);
+    color: #fff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.hero-status-pill:hover {
+    transform: translateY(-2px) scale(1.02);
+    border-color: var(--blue, #4f8cff);
+    box-shadow: 0 12px 28px rgba(79, 140, 255, 0.2);
+}
+
+/* --------------------------------------------------------------------------
+   17. FROSTED GLASS PARTNER MARQUEE WITH GRADIENT FADE MASK
+   -------------------------------------------------------------------------- */
+.partner-marquee-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+.partner-card {
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    border-radius: 999px !important;
+    padding: 12px 24px !important;
+    font-weight: 800 !important;
+    font-size: 14.5px !important;
+    color: var(--dark) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+body.dark-theme .partner-card {
+    background: rgba(31, 41, 55, 0.65) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.partner-card:hover {
+    transform: translateY(-4px) scale(1.05) !important;
+    border-color: var(--blue, #4f8cff) !important;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.2) !important;
+    color: var(--blue, #4f8cff) !important;
+}
+
+/* --------------------------------------------------------------------------
+   18. PRO PRICING CARD NEON GLOW BORDER & RIBBON
+   -------------------------------------------------------------------------- */
+@keyframes neonBorderPulse {
+    0%, 100% { box-shadow: 0 0 25px rgba(99, 102, 241, 0.3), 0 0 50px rgba(139, 92, 246, 0.15), inset 0 0 15px rgba(99, 102, 241, 0.1); }
+    50%       { box-shadow: 0 0 35px rgba(99, 102, 241, 0.5), 0 0 70px rgba(139, 92, 246, 0.25), inset 0 0 25px rgba(99, 102, 241, 0.2); }
+}
+
+.pricing-card.popular {
+    border: 2px solid transparent !important;
+    background-image: linear-gradient(var(--card-bg), var(--card-bg)), 
+                      linear-gradient(135deg, #4f8cff, #8b5cf6, #ec4899, #10b981) !important;
+    background-origin: border-box !important;
+    background-clip: padding-box, border-box !important;
+    animation: neonBorderPulse 4s infinite alternate !important;
+    transform: scale(1.03) !important;
+    z-index: 2 !important;
+}
+
+.pricing-card.popular:hover {
+    transform: scale(1.05) translateY(-8px) !important;
+}
+
+.pro-ribbon {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: linear-gradient(135deg, #ff007f, #7f00ff);
+    color: white;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 5px 12px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 12px rgba(255, 0, 127, 0.4);
+    animation: flameFlicker 2s infinite alternate;
+}
+
+/* --------------------------------------------------------------------------
+   19. FLOATING BENTO WIDGETS AROUND HERO PHONE
+   -------------------------------------------------------------------------- */
+@keyframes widgetFloat1 {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%       { transform: translateY(-10px) rotate(2deg) scale(1.03); }
+}
+
+@keyframes widgetFloat2 {
+    0%, 100% { transform: translateY(0) rotate(3deg); }
+    50%       { transform: translateY(12px) rotate(-1deg) scale(1.03); }
+}
+
+.bento-widget {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    z-index: 10;
+    pointer-events: auto;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.dark-theme .bento-widget {
+    background: rgba(31, 41, 55, 0.8);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.bento-widget:hover {
+    transform: scale(1.08) translateY(-4px) !important;
+    border-color: var(--blue, #4f8cff);
+    box-shadow: 0 24px 48px rgba(79, 140, 255, 0.25);
+    cursor: pointer;
+}
+
+.widget-1 {
+    top: 8%;
+    left: -12%;
+    animation: widgetFloat1 6s ease-in-out infinite alternate;
+}
+
+.widget-2 {
+    bottom: 12%;
+    right: -10%;
+    animation: widgetFloat2 7s ease-in-out infinite alternate;
+}
+
+.widget-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.15), rgba(127, 86, 217, 0.15));
+    color: var(--blue);
+}
+
+body.dark-theme .widget-icon {
+    background: linear-gradient(135deg, rgba(79, 140, 255, 0.25), rgba(168, 85, 247, 0.25));
+    color: #fff;
+}
+
+.widget-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.widget-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.widget-sub {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+/* --------------------------------------------------------------------------
+   20. ULTRA-MODERN SILICON VALLEY PRO FOOTER (FULL SCREEN / EDGE-TO-EDGE)
+   -------------------------------------------------------------------------- */
+footer {
+    background: #0b0f19 !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    border: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+    padding: 48px 0 28px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 10 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 32px !important;
+}
+
+/* Constrain and center inner content so it looks perfect on any screen size */
+footer .footer-grid,
+footer .footer-watermark,
+footer .footer-bottom {
+    width: min(1280px, calc(100% - 80px)) !important;
+    max-width: 1280px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Glowing Neon Top Bar */
+.footer-top-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    height: 3px;
+    background: linear-gradient(90deg, #00f2fe, #4facfe, #8b5cf6, #ff007f, #10b981);
+    opacity: 0.95;
+    box-shadow: 0 0 25px rgba(79, 140, 255, 0.6);
+}
+
+/* Footer Brand Column Enhancements */
+.footer-brand .brand {
+    color: #ffffff !important;
+    font-size: 26px !important;
+    font-weight: 950 !important;
+    letter-spacing: -0.04em !important;
+}
+
+.footer-brand p {
+    color: rgba(255, 255, 255, 0.65) !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    max-width: 320px;
+}
+
+/* System Status Pill */
+.footer-system-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 6px 14px;
+    border-radius: 999px;
+    color: #32d66b;
+    font-size: 12px;
+    font-weight: 800;
+    margin: 6px 0 10px;
+    width: fit-content;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+.footer-system-status .status-dot {
+    width: 8px;
+    height: 8px;
+    background: #32d66b;
+    border-radius: 50%;
+    animation: pulseRing 2s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+/* Language Selector Dark Pill Override */
+footer .language-select {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    padding: 8px 16px !important;
+    border-radius: 12px !important;
+}
+
+footer .language-select:hover {
+    background: rgba(255, 255, 255, 0.14) !important;
+    border-color: #4f8cff !important;
+}
+
+footer .language-select select {
+    color: #ffffff !important;
+}
+
+footer .language-select select option {
+    background: #111827 !important;
+    color: #ffffff !important;
+}
+
+/* Column Titles (Monospace Uppercase Tracking) */
+.footer-col h4 {
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.14em !important;
+    color: #ffffff !important;
+    margin-bottom: 18px !important;
+    opacity: 0.9 !important;
+}
+
+/* Footer Navigation Links & Badges */
+.footer-links {
+    gap: 14px !important;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.7) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.footer-links a:hover {
+    color: #4f8cff !important;
+    transform: translateX(6px) !important;
+    text-shadow: 0 0 12px rgba(79, 140, 255, 0.4);
+}
+
+.link-tag {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.link-tag.pop { background: rgba(255, 94, 168, 0.18); color: #ff5ea8; border: 1px solid rgba(255, 94, 168, 0.35); }
+.link-tag.new { background: rgba(50, 214, 107, 0.18); color: #32d66b; border: 1px solid rgba(50, 214, 107, 0.35); }
+.link-tag.hot { background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); }
+.link-tag.pro { background: linear-gradient(135deg, rgba(79, 140, 255, 0.25), rgba(168, 85, 247, 0.25)); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+.link-tag.hiring { background: rgba(67, 97, 238, 0.25); color: #60a5fa; border: 1px solid rgba(67, 97, 238, 0.45); animation: pulse 2s infinite; }
+
+/* Interactive Discord Community Widget Pill */
+.footer-discord-widget {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    background: rgba(88, 101, 242, 0.16) !important;
+    border: 1px solid rgba(88, 101, 242, 0.4) !important;
+    padding: 12px 16px !important;
+    border-radius: 16px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    margin-bottom: 16px !important;
+    width: 100% !important;
+    max-width: 200px !important;
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.15) !important;
+}
+
+.footer-discord-widget:hover {
+    background: rgba(88, 101, 242, 0.28) !important;
+    border-color: #5865F2 !important;
+    transform: translateY(-4px) scale(1.03) !important;
+    box-shadow: 0 12px 28px rgba(88, 101, 242, 0.35) !important;
+}
+
+.discord-icon {
+    font-size: 26px;
+    color: #5865F2;
+    display: flex;
+    align-items: center;
+}
+
+.discord-text {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.discord-text span {
+    font-size: 11px;
+    color: #32d66b;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* App Store Badges Modern Polish in Footer */
+footer .store-badge {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 14px !important;
+    padding: 10px 16px !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    max-width: 200px !important;
+}
+
+footer .store-badge:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+    border-color: #4f8cff !important;
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 10px 24px rgba(79, 140, 255, 0.25) !important;
+}
+
+footer .footer-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+}
+
+footer .app-stores {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin-bottom: 8px !important;
+}
+
+footer .social-links {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-top: 6px !important;
+    width: 100% !important;
+}
+
+/* Social Buttons Glass Upgrade */
+footer .social-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+}
+
+footer .social-btn:hover {
+    background: linear-gradient(135deg, #4f8cff, #8b5cf6) !important;
+    border-color: transparent !important;
+    transform: translateY(-4px) scale(1.1) !important;
+    box-shadow: 0 10px 20px rgba(79, 140, 255, 0.4) !important;
+}
+
+/* Giant Watermark Lettering */
+.footer-watermark {
+    font-size: clamp(38px, 8.2vw, 120px);
+    font-weight: 950;
+    letter-spacing: -0.05em;
+    line-height: 0.8;
+    color: rgba(255, 255, 255, 0.035);
+    text-align: center;
+    margin: 48px 0 16px;
+    user-select: none;
+    pointer-events: none;
+    font-family: inherit;
+    width: 100%;
+}
+
+/* Footer Bottom Bar */
+footer .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    padding-top: 28px !important;
+    margin-top: 10px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 20px !important;
+    font-size: 13.5px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+footer .footer-legal-links a {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
+
+footer .footer-legal-links a:hover {
+    color: #32d66b !important;
+}
+
+/* Responsive Footer Layout */
+@media (max-width: 900px) {
+    footer {
+        padding: 50px 0 24px !important;
+        border-radius: 0 !important;
+        margin: 60px 0 0 0 !important;
+        width: 100% !important;
+    }
+    footer .footer-grid,
+    footer .footer-watermark,
+    footer .footer-bottom {
+        width: calc(100% - 40px) !important;
+    }
+    .footer-watermark {
+        font-size: clamp(28px, 10vw, 60px);
+        margin: 32px auto 10px;
+    }
+}
+
+/* ==========================================================================
+   21. HIGH-DENSITY ENTERPRISE COMPACT UI (VERCEL / LINEAR / STRIPE SYSTEM)
+   Universe Of Tech - Ultra-Compact & Professional Layout Refinement
+   ========================================================================== */
+
+/* --- 1. Compact Navbar (Removed to ensure navbar is 100% uniform with other pages like materi.html) --- */
+
+/* --- 2. Compact High-Density Hero Section --- */
+.hero {
+    margin-top: 64px !important;
+    gap: 20px !important;
+    width: min(1140px, calc(100% - 32px)) !important;
+    align-items: center !important;
+    padding-bottom: 12px !important;
+}
+.hero-status-pill {
+    padding: 4px 12px !important;
+    font-size: 11px !important;
+    margin-bottom: 12px !important;
+    border-radius: 999px !important;
+}
+.hero h1 {
+    font-size: clamp(28px, 3.2vw, 42px) !important;
+    line-height: 1.15 !important;
+    max-width: 580px !important;
+    letter-spacing: -0.035em !important;
+}
+.hero p {
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+    margin-top: 10px !important;
+    max-width: 520px !important;
+}
+.hero-actions {
+    margin-top: 16px !important;
+    gap: 10px !important;
+}
+.hero-actions .btn {
+    padding: 9px 18px !important;
+    font-size: 13px !important;
+    border-radius: 10px !important;
+}
+.hero-trust-metrics {
+    margin-top: 20px !important;
+    padding-top: 12px !important;
+    gap: 20px !important;
+}
+.trust-item strong {
+    font-size: 16px !important;
+}
+.trust-item span {
+    font-size: 11px !important;
+}
+
+/* --- 3. Compact Hero Right-Side Phone & Floating Bento --- */
+.phone-wrap {
+    min-height: 440px !important;
+}
+.hero-visual-ring {
+    width: 400px !important;
+    height: 400px !important;
+}
+.hero-visual-ring.second {
+    width: 320px !important;
+    height: 320px !important;
+}
+.phone {
+    width: min(310px, 85vw) !important;
+    border-radius: 36px !important;
+    padding: 10px !important;
+}
+.screen {
+    min-height: 440px !important;
+    padding: 16px !important;
+    border-radius: 26px !important;
+}
+.lesson-card {
+    padding: 16px !important;
+    border-radius: 20px !important;
+}
+.lesson-card h3 {
+    font-size: 18px !important;
+    margin-bottom: 4px !important;
+}
+.lesson-card p {
+    font-size: 12px !important;
+}
+.path, .path-list {
+    margin-top: 14px !important;
+    gap: 10px !important;
+}
+.path-item {
+    padding: 10px 12px !important;
+    border-radius: 16px !important;
+    gap: 12px !important;
+}
+.path-icon {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+    font-size: 18px !important;
+}
+.path-item h4 {
+    font-size: 13.5px !important;
+}
+.path-item span {
+    font-size: 11px !important;
+}
+
+/* Floating Badges & Bento Widgets around Phone */
+.bento-widget {
+    padding: 8px 12px !important;
+    border-radius: 14px !important;
+    gap: 10px !important;
+}
+.widget-icon {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 15px !important;
+    border-radius: 8px !important;
+}
+.widget-title {
+    font-size: 12px !important;
+}
+.widget-sub {
+    font-size: 10.5px !important;
+}
+.floating-card {
+    padding: 8px 12px !important;
+    border-radius: 14px !important;
+}
+.floating-card strong {
+    font-size: 13px !important;
+}
+.floating-card span {
+    font-size: 11px !important;
+}
+.visual-chip {
+    padding: 5px 10px !important;
+    font-size: 11px !important;
+    border-radius: 12px !important;
+}
+
+/* --- 4. Section Margins, Paddings & Wave Dividers --- */
+.section {
+    width: min(1140px, calc(100% - 32px)) !important;
+    margin: 16px auto 0 !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+.wave-divider {
+    margin: 4px 0 !important;
+    line-height: 0 !important;
+}
+.wave-divider svg {
+    max-height: 26px !important;
+    width: 100% !important;
+    display: block !important;
+    opacity: 0.75 !important;
+}
+.section-header {
+    margin-bottom: 12px !important;
+    gap: 8px !important;
+}
+.section-kicker {
+    font-size: 10.5px !important;
+    margin-bottom: 2px !important;
+    letter-spacing: 0.1em !important;
+}
+.section h2 {
+    font-size: clamp(18px, 2.2vw, 26px) !important;
+    letter-spacing: -0.03em !important;
+    line-height: 1.15 !important;
+}
+.section-header p {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+    margin-top: 4px !important;
+    max-width: 500px !important;
+}
+
+/* --- 5. Partner Marquee Compactness --- */
+.partner-ticker-section {
+    padding: 6px 0 !important;
+    margin: 10px 0 !important;
+}
+.partner-logos-title {
+    font-size: 11px !important;
+    margin-bottom: 8px !important;
+}
+.partner-card {
+    padding: 6px 14px !important;
+    font-size: 12px !important;
+}
+
+/* --- 6. Compact Grids & Card Layouts --- */
+/* Enforce 4 columns on desktop for Learning Programs & Features so they don't wrap and look bulky! */
+@media (min-width: 992px) {
+    .programs-grid,
+    .features-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 12px !important;
+    }
+}
+@media (min-width: 640px) and (max-width: 991px) {
+    .programs-grid,
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+}
+
+/* Learning Programs */
+.programs-grid {
+    gap: 12px !important;
+    margin-top: 14px !important;
+}
+.program-card {
+    padding: 16px !important;
+    border-radius: 16px !important;
+}
+.program-type-badge {
+    padding: 3px 8px !important;
+    font-size: 9px !important;
+    margin-bottom: 8px !important;
+}
+.program-card h3 {
+    font-size: 14.5px !important;
+    margin-bottom: 4px !important;
+    font-weight: 800 !important;
+}
+.program-card p {
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+    margin-bottom: 12px !important;
+}
+.program-meta {
+    padding-top: 8px !important;
+    font-size: 11px !important;
+}
+
+/* Features Grid */
+.features-grid {
+    gap: 12px !important;
+    margin-top: 14px !important;
+}
+.feat-card {
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+    gap: 6px !important;
+}
+.feat-icon {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+}
+.feat-card h3 {
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+    margin-bottom: 2px !important;
+}
+.feat-card p {
+    font-size: 11.5px !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+}
+
+/* Interactive Showcase */
+.showcase-layout {
+    gap: 16px !important;
+    margin-top: 14px !important;
+}
+.showcase-tab {
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    gap: 10px !important;
+}
+.showcase-tab h3 {
+    font-size: 13.5px !important;
+    margin-bottom: 2px !important;
+}
+.showcase-tab p {
+    font-size: 11.5px !important;
+}
+.showcase-display {
+    padding: 18px !important;
+    border-radius: 18px !important;
+}
+.showcase-screen-header {
+    font-size: 13px !important;
+    margin-bottom: 14px !important;
+}
+
+/* Learner Outcomes */
+.outcomes-container {
+    padding: 26px 30px !important;
+    border-radius: 20px !important;
+}
+.outcomes-grid {
+    gap: 16px !important;
+    margin-top: 20px !important;
+}
+.outcome-number {
+    font-size: clamp(30px, 3.5vw, 38px) !important;
+}
+.outcome-label {
+    font-size: 14px !important;
+}
+.outcome-desc {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+}
+
+/* Course Catalog */
+@media (min-width: 992px) {
+    .course-layout {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 12px !important;
+    }
+}
+.course-layout {
+    gap: 12px !important;
+    margin-top: 14px !important;
+}
+.course-card {
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+    gap: 10px !important;
+}
+.course-badge {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    font-size: 16px !important;
+}
+.course-card h3 {
+    font-size: 13.5px !important;
+    margin-bottom: 2px !important;
+    font-weight: 800 !important;
+}
+.course-card p {
+    font-size: 11.5px !important;
+    line-height: 1.4 !important;
+}
+
+/* Career Pathways */
+.career-pathways-container {
+    padding: 20px 24px !important;
+    border-radius: 20px !important;
+    margin-top: 14px !important;
+}
+.career-tabs {
+    margin-bottom: 14px !important;
+    gap: 4px !important;
+}
+.career-tab-btn {
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+}
+.career-tab-content {
+    gap: 20px !important;
+}
+.career-info h3 {
+    font-size: 17px !important;
+}
+.career-info p {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+}
+.career-stats-box {
+    padding: 14px !important;
+    border-radius: 16px !important;
+    gap: 12px !important;
+}
+.career-stat-item strong {
+    font-size: 17px !important;
+}
+.career-rec-course {
+    padding: 10px !important;
+    gap: 10px !important;
+}
+.career-course-icon {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 14px !important;
+}
+
+/* Diagnostic Test */
+.diagnostic-card {
+    padding: 20px 24px !important;
+    border-radius: 20px !important;
+    max-width: 560px !important;
+    margin: 0 auto !important;
+}
+.diag-step h3 {
+    font-size: 15px !important;
+    margin: 8px 0 12px !important;
+}
+.diag-options {
+    gap: 8px !important;
+}
+.diag-pill {
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    border-radius: 12px !important;
+}
+.diag-road-item {
+    padding: 8px 10px !important;
+    gap: 10px !important;
+}
+.road-icon {
+    font-size: 18px !important;
+}
+
+/* Testimonials */
+@media (min-width: 992px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 12px !important;
+    }
+}
+.testimonials-grid {
+    gap: 12px !important;
+    margin-top: 14px !important;
+}
+.testimonial-card {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    gap: 10px !important;
+}
+.testi-avatar {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 16px !important;
+}
+.testi-header h4 {
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+}
+.testi-header span {
+    font-size: 11px !important;
+}
+.testi-text {
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+}
+
+/* Pricing Cards */
+@media (min-width: 992px) {
+    .pricing-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 14px !important;
+    }
+}
+.pricing-grid {
+    gap: 14px !important;
+    margin-top: 16px !important;
+}
+.pricing-card {
+    padding: 18px 16px !important;
+    border-radius: 18px !important;
+    gap: 12px !important;
+}
+.pricing-header h3 {
+    font-size: 16px !important;
+    font-weight: 850 !important;
+}
+.pricing-header p {
+    font-size: 11.5px !important;
+}
+.pricing-price {
+    font-size: 22px !important;
+    margin: 6px 0 !important;
+    min-height: auto !important;
+}
+.pricing-features {
+    gap: 6px !important;
+    font-size: 12px !important;
+}
+.pro-ribbon {
+    padding: 3px 10px !important;
+    font-size: 9.5px !important;
+    top: 12px !important;
+    right: 12px !important;
+}
+
+/* About Us & Team */
+.about-container {
+    gap: 24px !important;
+    padding: 14px 0 !important;
+}
+.about-content h2 {
+    font-size: clamp(22px, 2.8vw, 30px) !important;
+}
+.about-content p {
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+}
+.about-metrics {
+    gap: 16px !important;
+    margin-top: 16px !important;
+}
+.about-metric-item h3 {
+    font-size: 22px !important;
+}
+.team-grid {
+    gap: 14px !important;
+    margin-top: 16px !important;
+}
+.team-card {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    gap: 6px !important;
+}
+.team-avatar {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 20px !important;
+}
+.team-card h4 {
+    font-size: 14.5px !important;
+}
+.team-card p {
+    font-size: 12px !important;
+}
+
+/* FAQ Section */
+.faq-list {
+    gap: 8px !important;
+    max-width: 660px !important;
+    margin: 16px auto 0 !important;
+}
+.faq-question {
+    padding: 12px 16px !important;
+    font-size: 13.5px !important;
+}
+.faq-answer-inner {
+    padding: 0 16px 12px !important;
+    font-size: 12.5px !important;
+    line-height: 1.55 !important;
+}
+
+/* Contact Section */
+.contact-container {
+    gap: 20px !important;
+    margin-top: 18px !important;
+}
+.contact-info-card {
+    padding: 20px !important;
+    border-radius: 18px !important;
+    gap: 14px !important;
+}
+.contact-info-card h3 {
+    font-size: 17px !important;
+}
+.contact-details {
+    gap: 12px !important;
+}
+.contact-detail-item {
+    gap: 10px !important;
+    font-size: 12.5px !important;
+}
+.contact-form-wrap {
+    padding: 20px !important;
+    border-radius: 18px !important;
+}
+.form-group {
+    margin-bottom: 12px !important;
+    gap: 4px !important;
+}
+.form-group input, .form-group textarea {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    border-radius: 8px !important;
+}
+
+/* --- 7. Compact High-Density Footer --- */
+footer {
+    padding: 48px 0 28px !important;
+    margin: 0 !important;
+    gap: 24px !important;
+}
+footer .footer-grid,
+footer .footer-watermark,
+footer .footer-bottom {
+    width: min(1280px, calc(100% - 40px)) !important;
+    max-width: 1280px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+.footer-grid {
+    gap: 20px !important;
+}
+.footer-brand .brand {
+    font-size: 20px !important;
+}
+.footer-brand p {
+    font-size: 12.5px !important;
+    line-height: 1.5 !important;
+}
+.footer-col h4 {
+    margin-bottom: 10px !important;
+    font-size: 11px !important;
+}
+.footer-links {
+    gap: 8px !important;
+}
+.footer-links a {
+    font-size: 12.5px !important;
+}
+.footer-watermark {
+    margin: 20px 0 8px !important;
+    font-size: clamp(28px, 5.5vw, 68px) !important;
+}
+footer .footer-bottom {
+    padding-top: 16px !important;
+    font-size: 12px !important;
+}
+
+
+
+/* ==========================================================================
+   22. FULL-BLEED LAYOUT & SPACE UTILIZATION UPGRADE (COURSERA-STYLE)
+   Universe Of Tech — Professional Space Efficiency System
+   ========================================================================== */
+
+/* --- A. Page Max-Width: Naik ke 1280px, Padding Lebih Efisien --- */
+.section,
+.hero {
+    max-width: 1280px !important;
+    width: min(1280px, calc(100% - 40px)) !important;
+}
+
+/* --- B. Full-Bleed Section Stripes (background putih memenuhi layar penuh) ---
+   Section dengan background var(--white) sebelumnya hanya memenuhi lebar
+   max-width container — sekarang kita buat full-width dengan konten tercentered */
+#fitur,
+#testimoni,
+#kontak,
+#tentang,
+.section[style*="background: var(--white)"],
+.section[style*="background:var(--white)"] {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Inner wrapper di dalam full-bleed section agar konten tetap terpusat */
+#fitur > *,
+#testimoni > *,
+#kontak > *,
+#tentang > * {
+    max-width: 1280px !important;
+    width: min(1280px, calc(100% - 40px)) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* --- C. Hero section lebih lebar dan breathing room yang benar --- */
+.hero {
+    margin-top: 70px !important;
+    padding: 24px 0 20px !important;
+}
+
+/* --- D. Section Padding & Separation Rhythm (Coursera-like) --- */
+.section {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+}
+
+#fitur,
+#testimoni,
+#tentang {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+}
+
+#kontak {
+    padding-top: 40px !important;
+    padding-bottom: 48px !important;
+}
+
+/* --- E. Section Headers — Tighter, More Professional --- */
+.section-header.center {
+    margin-bottom: 28px !important;
+    max-width: 680px !important;
+}
+
+.section-kicker {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    color: var(--blue) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 3px 10px !important;
+    background: var(--blue-glow) !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(0, 86, 210, 0.15) !important;
+    margin-bottom: 10px !important;
+}
+
+.section h2,
+.section-header.center h2 {
+    font-size: clamp(20px, 2.4vw, 28px) !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.035em !important;
+    line-height: 1.15 !important;
+    color: var(--dark) !important;
+}
+
+.section-header.center p,
+.section-header p {
+    font-size: 13.5px !important;
+    color: var(--muted) !important;
+    line-height: 1.6 !important;
+    margin-top: 8px !important;
+    max-width: 560px !important;
+}
+
+/* --- F. Programs Grid: 4-col Desktop, tightly spaced --- */
+@media (min-width: 1024px) {
+    .programs-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 14px !important;
+    }
+}
+.program-card {
+    border-radius: 14px !important;
+    padding: 18px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+/* --- G. Features Grid: 4-col Wide desktop with left-right space used --- */
+@media (min-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 14px !important;
+    }
+}
+
+/* --- H. Course Catalog: 4-col on large screens, 3 on medium --- */
+@media (min-width: 1100px) {
+    .course-layout {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 14px !important;
+    }
+}
+@media (min-width: 640px) and (max-width: 1099px) {
+    .course-layout {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+}
+
+/* --- I. Outcomes Grid: 3-col Full Width with balanced spacing --- */
+.outcomes-container {
+    max-width: 1280px !important;
+    width: min(1280px, calc(100% - 40px)) !important;
+    margin: 0 auto !important;
+    padding: 32px 40px !important;
+    border-radius: 20px !important;
+}
+@media (min-width: 768px) {
+    .outcomes-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 24px !important;
+    }
+}
+
+/* --- J. Testimonials: 3-col with card depth --- */
+@media (min-width: 1024px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+    }
+}
+
+/* --- K. Pricing Grid: Side-by-side Coursera layout --- */
+@media (min-width: 1024px) {
+    .pricing-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+        align-items: start !important;
+    }
+}
+
+/* --- L. About Us: 2-column layout with visual on left --- */
+.about-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1.6fr !important;
+    gap: 48px !important;
+    align-items: center !important;
+    padding: 16px 0 !important;
+}
+@media (max-width: 768px) {
+    .about-container {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+    }
+}
+
+/* --- M. Contact Section: 2-col, Info kiri, Form kanan --- */
+.contact-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1.4fr !important;
+    gap: 24px !important;
+    align-items: start !important;
+    margin-top: 24px !important;
+}
+@media (max-width: 768px) {
+    .contact-container {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* --- N. FAQ: Wider, 2-col on large screens --- */
+@media (min-width: 992px) {
+    .faq-list {
+        max-width: 820px !important;
+        margin: 20px auto 0 !important;
+    }
+}
+
+/* --- O. Partner Ticker: Full bleed with subtle separator --- */
+.partner-ticker-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 10px 0 !important;
+    border-top: 1px solid var(--border) !important;
+    border-bottom: 1px solid var(--border) !important;
+    background: var(--white) !important;
+}
+
+/* --- P. Newsletter: Full bleed background use --- */
+.newsletter-section {
+    width: min(1280px, calc(100% - 40px)) !important;
+    max-width: 1280px !important;
+    margin: 16px auto !important;
+}
+.newsletter-card {
+    border-radius: 20px !important;
+    padding: 32px 48px !important;
+}
+
+/* --- Q. Wave Dividers: Full bleed --- */
+.wave-divider {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+/* --- R. Footer: Full bleed, content centered at 1280px --- */
+/* Footer: Full bleed with centered content */
+footer {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 48px 0 28px !important;
+}
+footer .footer-grid,
+footer .footer-watermark,
+footer .footer-bottom {
+    max-width: 1280px !important;
+    width: min(1280px, calc(100% - 40px)) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* --- S. Showcase section layout: 2-col --- */
+.showcase-layout {
+    display: grid !important;
+    grid-template-columns: 260px 1fr !important;
+    gap: 20px !important;
+    align-items: start !important;
+    margin-top: 20px !important;
+}
+@media (max-width: 768px) {
+    .showcase-layout {
+        grid-template-columns: 1fr !important;
+    }
+}
+.showcase-tabs {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+/* --- T. Career Pathways: Full width container content centered --- */
+.career-pathways-container {
+    max-width: 100% !important;
+    padding: 24px 32px !important;
+    border-radius: 18px !important;
+    margin-top: 20px !important;
+}
+
+/* --- U. Outcome numbers: bolder, bigger visual impact --- */
+.outcome-card {
+    text-align: center !important;
+    padding: 24px 20px !important;
+    border-radius: 16px !important;
+}
+.outcome-number {
+    font-size: clamp(32px, 4vw, 42px) !important;
+    font-weight: 950 !important;
+    letter-spacing: -0.04em !important;
+    background: linear-gradient(135deg, var(--green), var(--blue)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    margin-bottom: 6px !important;
+}
+.outcome-label {
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    color: var(--dark) !important;
+    display: block !important;
+    margin-bottom: 4px !important;
+}
+.outcome-desc {
+    font-size: 12px !important;
+    color: var(--muted) !important;
+    line-height: 1.5 !important;
+}
+
+/* --- V. Dark theme: Full bleed sections --- */
+body.dark-theme #fitur,
+body.dark-theme #testimoni,
+body.dark-theme #kontak,
+body.dark-theme #tentang {
+    background: var(--white) !important;
+}
+
+/* --- W. Scrolled Navbar (stays standard across all pages) --- */
+.navbar {
+    padding: 0 32px !important;
+}
+
+/* --- X. Hero stats: Horizontal strip, Coursera-style --- */
+.hero-trust-metrics {
+    display: flex !important;
+    align-items: center !important;
+    gap: 28px !important;
+    margin-top: 20px !important;
+    padding-top: 14px !important;
+    border-top: 1px solid var(--border) !important;
+    flex-wrap: wrap !important;
+}
+
+/* Remove leftover inline margin from trust-item (inline style override) */
+.hero-trust-metrics .trust-item strong {
+    font-size: 18px !important;
+    font-weight: 900 !important;
+    color: var(--dark) !important;
+}
+.hero-trust-metrics .trust-item span {
+    font-size: 11.5px !important;
+    color: var(--muted) !important;
+    font-weight: 600 !important;
+}
+
+/* Trust item column layout */
+.trust-item {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}

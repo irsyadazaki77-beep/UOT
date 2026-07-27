@@ -373,7 +373,7 @@
         const issuedAt = nowIso();
         const id = `QN-PRO-${Date.now().toString(36).toUpperCase()}`;
         const certificate = {
-            id, name: session.name || session.username || "QuizNation Learner", title: "Pro Learning Achievement",
+            id, name: session.name || session.username || "Universe Of Tech Learner", title: "Pro Learning Achievement",
             competencies: analytics().topics.filter(topic => topic.mastery >= 70).map(topic => topic.topic).slice(0, 8),
             score: eligibility.highScore, completedModules: eligibility.completedModules, issuedAt,
             verification: hashText(`${id}|${session.email || "local"}|${issuedAt}|${eligibility.highScore}`),
@@ -410,11 +410,11 @@
     }
 
     function importBackup(payload) {
-        if (!payload || payload.format !== "quiznation-pro-backup" || !payload.data) throw new Error("Berkas bukan backup QuizNation PRO yang valid.");
+        if (!payload || payload.format !== "quiznation-pro-backup" || !payload.data) throw new Error("Berkas bukan backup Universe Of Tech PRO yang valid.");
         if (Number(payload.version) > SCHEMA_VERSION) throw new Error("Backup dibuat oleh versi aplikasi yang lebih baru.");
         const currentAccount = readLocal("eduquestUserSession", {}).email || "local-device";
         if (payload.accountHint && payload.accountHint !== "local-device" && currentAccount !== "local-device" && payload.accountHint !== currentAccount) {
-            throw new Error("Backup berasal dari akun QuizNation yang berbeda.");
+            throw new Error("Backup berasal dari akun Universe Of Tech yang berbeda.");
         }
         return save(normalizeState(payload.data));
     }

@@ -2,21 +2,23 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.webmanifest">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
     <script src="security-helper.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Pembayaran - Universe Of Tech</title>
-    <meta name="description" content="Portal checkout aman paket langganan Akselerasi Pro Universe Of Tech.">
+    <title>Demo Checkout Pro - Universe Of Tech</title>
+    <meta name="description" content="Simulasi checkout paket Akselerasi Pro Universe Of Tech untuk pengujian antarmuka. Tidak memproses pembayaran nyata.">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="quiznation-api-base" content="">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="feature-pages.css">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="payment.css">
-    <link rel="stylesheet" href="mobile-compat.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="payment.css?v=20260717-account-flow">
+    <link rel="stylesheet" href="account-flow.css?v=20260717-account-flow">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body data-page="payment">
+<body data-page="payment" data-account-flow>
+    <a class="account-skip" href="#paymentMethods">Langsung ke metode pembayaran</a>
     <div class="noise"></div>
     <div class="orb one"></div>
     <div class="orb two"></div>
@@ -27,27 +29,33 @@
             <div class="panel-content-wrapper">
                 <header class="checkout-header">
                     <a href="index.html" class="checkout-brand">
-                        <img src="logo.png" alt="Universe Of Tech" class="brand-logo">
+                        <img src="universe-of-tech-logo.webp" alt="Universe Of Tech" class="brand-logo" width="40" height="40">
                         <span>Universe Of Tech</span>
                     </a>
+                    <button class="checkout-theme-toggle" id="themeToggleBtn" type="button" aria-label="Gunakan tema gelap" title="Ganti tema"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
                 </header>
 
+                <aside class="checkout-demo-notice" role="note" aria-label="Status checkout">
+                    <i class="fa-solid fa-flask" aria-hidden="true"></i>
+                    <div><strong id="checkoutModeTitle">Mode demonstrasi</strong><span id="checkoutModeDescription">Tidak ada pembayaran nyata. Jangan masukkan data kartu asli.</span></div>
+                </aside>
+
                 <div class="checkout-step-container">
-                    <a href="index.html#pricing" class="back-link"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+                    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
                     <h2>Metode Pembayaran</h2>
                 </div>
 
                 <!-- Pemilihan Metode Pembayaran -->
-                <div class="payment-tabs-stripe">
-                    <button class="stripe-tab-btn active" data-method="card">
+                <div class="payment-tabs-stripe" id="paymentMethods" role="tablist" aria-label="Metode pembayaran">
+                    <button class="stripe-tab-btn active" data-method="card" role="tab" aria-selected="true" aria-controls="panel-card">
                         <i class="fa-solid fa-credit-card"></i>
                         <span>Kartu</span>
                     </button>
-                    <button class="stripe-tab-btn" data-method="qris">
+                    <button class="stripe-tab-btn" data-method="qris" role="tab" aria-selected="false" aria-controls="panel-qris">
                         <i class="fa-solid fa-qrcode"></i>
                         <span>QRIS</span>
                     </button>
-                    <button class="stripe-tab-btn" data-method="wallet">
+                    <button class="stripe-tab-btn" data-method="wallet" role="tab" aria-selected="false" aria-controls="panel-wallet">
                         <i class="fa-solid fa-wallet"></i>
                         <span>E-Wallet</span>
                     </button>
@@ -55,7 +63,7 @@
 
                 <div class="stripe-panels">
                     <!-- Panel 1: Kartu Kredit/Debit -->
-                    <div class="stripe-panel active" id="panel-card">
+                    <div class="stripe-panel active" id="panel-card" role="tabpanel">
                         <!-- Kartu Kredit Interaktif -->
                         <div class="interactive-card-wrapper">
                             <div class="credit-card-preview" id="creditCardPreview">
@@ -92,7 +100,7 @@
                                         </div>
                                     </div>
                                     <div class="card-back-info">
-                                        Universe Of Tech Secure Transaction Card
+                                        Universe Of Tech Demo Card
                                     </div>
                                 </div>
                             </div>
@@ -153,7 +161,7 @@
                     </div>
 
                     <!-- Panel 2: QRIS -->
-                    <div class="stripe-panel" id="panel-qris">
+                    <div class="stripe-panel" id="panel-qris" role="tabpanel" hidden>
                         <div class="qris-box-stripe">
                             <div class="qris-label">QRIS GPN</div>
                             <div class="qris-qr-frame" id="qrisQrFrame" title="Klik QR Code untuk mensimulasikan scan">
@@ -199,7 +207,7 @@
                     </div>
 
                     <!-- Panel 3: E-Wallet -->
-                    <div class="stripe-panel" id="panel-wallet">
+                    <div class="stripe-panel" id="panel-wallet" role="tabpanel" hidden>
                         <div class="wallet-grid-stripe">
                             <button type="button" class="wallet-stripe-btn" data-wallet="gopay">
                                 <svg class="wallet-svg" viewBox="0 0 100 100">
@@ -240,13 +248,14 @@
                 </div>
 
                 <div class="stripe-checkout-action">
+                    <div class="checkout-inline-message" id="checkoutInlineMessage" role="alert"></div>
                     <button type="button" class="stripe-pay-btn" id="payNowBtn">
-                        <span class="btn-text">Bayar Sekarang</span>
-                        <span class="btn-spinner" hidden><i class="fa-solid fa-circle-notch fa-spin"></i> Memverifikasi...</span>
+                        <span class="btn-text">Jalankan Simulasi</span>
+                        <span class="btn-spinner" hidden><i class="fa-solid fa-circle-notch fa-spin"></i> Memproses demo...</span>
                     </button>
                     <div class="secure-checkout-hint">
-                        <i class="fa-solid fa-lock"></i>
-                        <span>Enkripsi SSL 256-bit tepercaya. Ini adalah simulasi transaksi.</span>
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Form ini hanya menguji alur antarmuka dan tidak terhubung ke bank atau penyedia pembayaran.</span>
                     </div>
                 </div>
             </div>
@@ -254,7 +263,8 @@
 
         <!-- Panel Kanan: Ringkasan Pesanan (Stripe Style) -->
         <section class="checkout-panel-right">
-            <div class="panel-content-wrapper">
+            <button class="mobile-summary-toggle" id="mobileSummaryToggle" type="button" aria-expanded="false" aria-controls="checkoutOrderSummary"><span>Ringkasan pesanan</span><strong id="mobileSummaryPrice">Rp49.000</strong><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+            <div class="panel-content-wrapper" id="checkoutOrderSummary">
                 <div class="order-header">
                     <span>Berlangganan</span>
                     <h2 id="planTitleDisplay">Akselerasi Pro</h2>
@@ -264,13 +274,21 @@
                     <p id="planDescDisplay">Termasuk diagnosis kelemahan, Smart Review, rencana personal, simulasi, BUBUB Mentor, backup progres, dan sertifikat kompetensi.</p>
                 </div>
 
+                <div class="checkout-source-note" id="checkoutSourceNote"></div>
+                <div class="checkout-current-pro" id="checkoutCurrentPro" hidden></div>
+                <div class="checkout-plan-picker" aria-label="Pilih paket PRO">
+                    <button class="checkout-plan-option active" type="button" data-checkout-plan="pro"><span>Fleksibel</span><strong>Pro Bulanan</strong><small>Rp49.000 / bulan</small></button>
+                    <button class="checkout-plan-option" type="button" data-checkout-plan="annual"><span>Hemat 32%</span><strong>Pro Tahunan</strong><small>Rp399.000 / tahun</small></button>
+                </div>
+
                 <div class="order-details-card">
                     <div class="item-row">
                         <div class="item-info">
-                            <div class="item-badge">??</div>
+                            <div class="item-badge"><i class="fa-solid fa-crown" aria-hidden="true"></i></div>
                             <div>
                                 <strong id="planItemName">Universe Of Tech (Pro)</strong>
                                 <span id="sessionUsername">Pengguna Gratis</span>
+                                <small id="sessionEmail">Masuk atau lanjut sebagai akun tamu</small>
                             </div>
                         </div>
                         <span class="item-price" id="planBasePriceDisplay">Rp 49.000</span>
@@ -307,10 +325,17 @@
                     </div>
                 </div>
 
+                <ul class="checkout-benefit-list" aria-label="Benefit paket PRO">
+                    <li><i class="fa-solid fa-circle-check"></i><span>Semua jalur materi dan insight mastery terbuka.</span></li>
+                    <li><i class="fa-solid fa-circle-check"></i><span>Planner SNBT personal, Smart Review, dan simulasi terarah.</span></li>
+                    <li><i class="fa-solid fa-circle-check"></i><span>Culture Passport, quest budaya, dan bonus 2x XP.</span></li>
+                    <li><i class="fa-solid fa-circle-check"></i><span>Backup progres, mentor BUBUB, dan sertifikat kompetensi.</span></li>
+                </ul>
+
                 <footer class="checkout-footer">
                     <div class="trust-icons">
-                        <span><i class="fa-solid fa-shield-halved"></i> SECURE CHECKOUT</span>
-                        <span><i class="fa-brands fa-stripe"></i> SECURED BY STRIPE</span>
+                        <span><i class="fa-solid fa-flask"></i> DEMO CHECKOUT</span>
+                        <span><i class="fa-solid fa-ban"></i> TANPA TRANSAKSI NYATA</span>
                     </div>
                 </footer>
             </div>
@@ -323,8 +348,8 @@
             <div class="receipt-success-icon">
                 <i class="fa-solid fa-check"></i>
             </div>
-            <h3>Pembayaran Berhasil</h3>
-            <p>Terima kasih atas transaksi Anda. Akun Akselerasi Pro Anda kini aktif.</p>
+            <h3>Simulasi Berhasil</h3>
+            <p>Mode demo mengaktifkan Akselerasi Pro hanya pada perangkat ini. Tidak ada transaksi keuangan.</p>
 
             <div class="receipt-details">
                 <div class="receipt-row">
@@ -333,7 +358,7 @@
                 </div>
                 <div class="receipt-row">
                     <span>Tanggal & Jam</span>
-                    <strong id="receiptDateTime">19 JuniÂ© 2026, 08:20</strong>
+                    <strong id="receiptDateTime">19 Juni 2026, 08:20</strong>
                 </div>
                 <div class="receipt-row">
                     <span>Metode Bayar</span>
@@ -361,7 +386,10 @@
 
     <script src="sound-engine.js"></script>
     <script src="auth-helper.js"></script>
-    <script src="payment.js"></script>
+    <script src="account-core.js?v=20260717-account-flow"></script>
+    <script src="subscription-core.js?v=20260717-pro-subscription"></script>
+    <script src="api-client.js?v=20260718-api-foundation"></script>
+    <script src="payment.js?v=20260717-pro-subscription"></script>
 </body>
 </html>
 

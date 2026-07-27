@@ -1,0 +1,101 @@
+openapi: 3.1.0
+info:
+  title: QuizNation Production API
+  version: 1.0.0
+  description: Kontrak minimum untuk memindahkan identitas, progres, dan status Pro dari browser ke server.
+servers:
+  - url: https://api.example.invalid
+    description: Ganti dengan domain API HTTPS produksi.
+paths:
+  /v1/session:
+    get:
+      summary: Ambil pengguna dari cookie sesi HttpOnly.
+      responses:
+        "200":
+          description: Sesi aktif.
+        "401":
+          description: Tidak terautentikasi.
+    delete:
+      summary: Keluar dan hapus cookie sesi.
+      responses:
+        "204":
+          description: Sesi dihapus.
+  /v1/auth/login:
+    post:
+      summary: Masuk dan buat cookie sesi HttpOnly, Secure, SameSite=Lax.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email, maxLength: 254 }
+                password: { type: string, minLength: 8, maxLength: 128 }
+      responses:
+        "204": { description: Login berhasil. }
+        "400": { description: Input tidak valid. }
+        "401": { description: Kredensial salah. }
+        "429": { description: Terkena rate limit. }
+  /v1/progress:
+    get:
+      summary: Ambil progres milik pengguna yang sedang login.
+      responses:
+        "200": { description: Daftar progres. }
+        "401": { description: Tidak terautentikasi. }
+  /v1/learning-state:
+    get:
+      summary: Ambil snapshot Learning Journey milik pengguna dari sesi server.
+      responses:
+        "200": { description: Snapshot journey terbaru. }
+        "401": { description: Tidak terautentikasi. }
+    put:
+      summary: Sinkronkan snapshot journey; server memvalidasi ukuran, skema, dan kepemilikan.
+      responses:
+        "200": { description: Snapshot tersimpan. }
+        "400": { description: State atau timestamp tidak valid. }
+        "401": { description: Tidak terautentikasi. }
+    put:
+      summary: Simpan progres; user_id selalu berasal dari sesi server.
+      responses:
+        "200": { description: Progres tersimpan. }
+        "400": { description: Payload tidak valid. }
+        "401": { description: Tidak terautentikasi. }
+  /v1/checkout/sessions:
+    post:
+      summary: Buat hosted checkout dari paket yang diizinkan server.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [planId]
+              properties:
+                planId: { type: string, enum: [pro, annual] }
+                source: { type: string, maxLength: 40 }
+      responses:
+        "200":
+          description: URL checkout provider berumur pendek.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [checkoutUrl]
+                properties:
+                  checkoutUrl: { type: string, format: uri }
+        "401": { description: Tidak terautentikasi. }
+        "429": { description: Terkena rate limit. }
+  /v1/subscription:
+    get:
+      summary: Ambil status langganan yang sudah diverifikasi server.
+      responses:
+        "200": { description: Status langganan. }
+        "401": { description: Tidak terautentikasi. }
+  /v1/webhooks/payment:
+    post:
+      summary: Terima webhook bertanda tangan dari provider; satu-satunya jalur aktivasi Pro produksi.
+      responses:
+        "204": { description: Event terverifikasi dan diproses secara idempoten. }
+        "400": { description: Signature atau payload tidak valid. }

@@ -199,11 +199,11 @@ function initTKAPage() {
     }
 
     function buildPlan() {
-        const target = Number(targetInput.value || 650);
+        const target = Number(targetInput.value || 75);
         const weeks = Number(weeksInput.value || 6);
         const focus = focusSelect.value;
         const electivePair = `${firstElective.value} + ${secondElective.value}`;
-        const intensity = target >= 720 ? "intensif" : target >= 650 ? "stabil" : "fondasi";
+        const intensity = target >= 85 ? "intensif" : target >= 70 ? "stabil" : "fondasi";
         const firstEnd = Math.max(1, Math.ceil(weeks / 3));
         const secondStart = firstEnd + 1;
         const secondEnd = Math.ceil((weeks * 2) / 3);

@@ -124,7 +124,7 @@
         $("#issueCertificate").disabled = !eligibility.eligible || !pro.isPro();
         const certificates = pro.load().certificates.slice().reverse();
         $("#certificateList").innerHTML = certificates.map(item => `
-            <article class="certificate-card"><span>QUIZNATION · LOCAL VERIFICATION</span><h3>${escapeHtml(item.title)}</h3><p>Diberikan kepada <strong>${escapeHtml(item.name)}</strong> dengan nilai ${item.score}.<br>Kompetensi: ${escapeHtml(item.competencies.join(", ") || "Pembelajaran terpadu")}</p><p>ID ${escapeHtml(item.id)} · <code>${escapeHtml(item.verification)}</code></p><button class="button secondary" onclick="window.print()">Cetak / Simpan PDF</button></article>
+            <article class="certificate-card"><span>UNIVERSE OF TECH · LOCAL VERIFICATION</span><h3>${escapeHtml(item.title)}</h3><p>Diberikan kepada <strong>${escapeHtml(item.name)}</strong> dengan nilai ${item.score}.<br>Kompetensi: ${escapeHtml(item.competencies.join(", ") || "Pembelajaran terpadu")}</p><p>ID ${escapeHtml(item.id)} · <code>${escapeHtml(item.verification)}</code></p><button class="button secondary" onclick="window.print()">Cetak / Simpan PDF</button></article>
         `).join("");
     }
 
