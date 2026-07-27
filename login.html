@@ -2,346 +2,64 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:;">
-    <script src="security-helper.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0d1b2c">
-    <title>Masuk & Daftar - Universe Of Tech</title>
-    <meta name="description" content="Masuk atau buat akun Universe Of Tech untuk menyimpan progres belajar, nilai kuis, XP, catatan, dan sertifikat.">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Masuk atau daftar ke Universe Of Tech untuk melanjutkan progres, XP, dan jalur belajarmu.">
+    <meta name="theme-color" content="#f5f6fa">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="quiz-modern.css">
-    <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="coursera-home.css">
-    <link rel="stylesheet" href="global-animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css?v=20260717-account-flow">
+    <link rel="stylesheet" href="account-flow.css?v=20260717-account-flow">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Masuk atau Daftar — Universe Of Tech</title>
 </head>
-
-<body>
-    <a class="skip-link" href="#loginMainContent">Lewati ke konten utama</a>
-    <div class="login-orb-1" aria-hidden="true"></div>
-    <div class="login-orb-2" aria-hidden="true"></div>
+<body data-account-flow data-page="login">
+    <a class="account-skip" href="#loginCard">Langsung ke formulir</a>
     <div class="quiz-toast" id="quizToast" role="status" aria-live="polite" aria-atomic="true"></div>
-
-    <main class="page" id="loginMainContent">
-                        <nav class="navbar">
-            <div class="nav-left-group">
-                <a href="index.html" class="brand">
-                    <img src="logo.png" alt="Universe Of Tech Logo" class="brand-logo" />
-                    Universe Of Tech
-                </a>
-                <div class="explore-wrapper">
-                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
-                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                    <!-- Mega Menu Dropdown -->
-                    <div class="explore-mega-menu" id="exploreMegaMenu">
-                        <!-- Column 1: Kategori Belajar -->
-                        <div class="mega-col">
-                            <h4>Kategori Belajar</h4>
-                            <ul class="mega-list">
-                                <li>
-                                    <a href="materi-basic.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Dasar Pemrograman</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Struktur Data</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Web Development</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="snbt.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Persiapan TKA SNBP</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="tka-lms.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>LMS TKA</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="bahasa-daerah.html" class="mega-item-link">
-                                        <div class="mega-icon-box">????</div>
-                                        <span>Wonderful Indonesia</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Column 2: Fitur & Dashboard -->
-                        <div class="mega-col">
-                            <h4>Fitur & Dashboard</h4>
-                            <ul class="mega-list">
-                                <li>
-                                    <a href="learning-path.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Roadmap Belajar</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="leaderboard.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Leaderboard</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="achievements.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Pencapaian</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="profile.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Profil Saya</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="payment.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Upgrade Pro</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Column 3: Spotlight -->
-                        <div class="mega-col">
-                            <div class="mega-spotlight">
-                                <div class="spotlight-header">
-                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
-                                </div>
-                                <h5>Dasar SQL & Database Relasional</h5>
-                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
-                                <a href="materi.html" class="btn-spotlight">
-                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Search Bar -->
-            <div class="nav-search-wrapper">
-                <div class="search-input-group">
-                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <!-- Suggestions Popover -->
-                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
-            </div>
-
-            <div class="nav-links">
-                <a href="index.html">Beranda</a>
-                <a href="materi.html">Materi</a>
-                <a href="quiz.html">Quiz</a>
-                <a href="library.html">Library</a>
-            </div>
-
-            <div class="nav-actions">
-                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">??</button>
-                <a class="btn btn-ghost" href="login.html">Masuk</a>
-                <a class="btn btn-primary" href="index.html#fitur">Mulai</a>
-            </div>
-        </nav>
-
-        <section class="login-wrapper" aria-labelledby="loginCardTitle">
-            <aside class="login-showcase" aria-label="Manfaat akun Universe Of Tech">
-                <div class="showcase-orbit" aria-hidden="true">
-                    <span class="orbit-dot dot-one"></span>
-                    <span class="orbit-dot dot-two"></span>
-                    <span class="orbit-dot dot-three"></span>
-                    <div class="orbit-core"><i class="fa-solid fa-code"></i></div>
-                </div>
-
-                <div class="showcase-content">
-                    <span class="showcase-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> Learning account</span>
-                    <h1>Satu akun untuk seluruh perjalanan belajarmu.</h1>
-                    <p>Progress materi, skor kuis, catatan, XP, dan sertifikat tetap tersimpan saat kamu berpindah ruang pembelajaran.</p>
-
-                    <div class="showcase-features">
-                        <div class="showcase-feature">
-                            <span class="feature-icon green"><i class="fa-solid fa-chart-line"></i></span>
-                            <div><strong>Progress otomatis</strong><small>Lanjutkan tepat dari modul terakhir.</small></div>
-                        </div>
-                        <div class="showcase-feature">
-                            <span class="feature-icon blue"><i class="fa-solid fa-bolt"></i></span>
-                            <div><strong>XP dan pencapaian</strong><small>Bangun streak dan buka lencana baru.</small></div>
-                        </div>
-                        <div class="showcase-feature">
-                            <span class="feature-icon purple"><i class="fa-solid fa-certificate"></i></span>
-                            <div><strong>Sertifikat belajar</strong><small>Selesaikan jalur dan abadikan hasilmu.</small></div>
-                        </div>
-                    </div>
-
-                    <div class="showcase-proof">
-                        <div class="proof-avatars" aria-hidden="true">
-                            <span>ZA</span><span>AR</span><span>DI</span><span>+</span>
-                        </div>
-                        <div><strong>Belajar lebih terarah</strong><small>180 soal dan 6 jalur belajar tersedia.</small></div>
-                    </div>
-                </div>
-            </aside>
-
-            <div class="login-card" id="loginCard">
-                <div class="login-card-top">
-                    <a class="login-mobile-brand" href="index.html">
-                        <img src="logo.png" alt="" aria-hidden="true">
-                        <span>Universe Of Tech</span>
-                    </a>
-                    <span class="secure-session"><i class="fa-solid fa-shield-halved"></i> Sesi aman</span>
-                </div>
-
-                <div class="login-header">
-                    <span class="login-eyebrow" id="loginEyebrow">Selamat datang kembali</span>
-                    <h2 id="loginCardTitle">Masuk ke akunmu</h2>
-                    <p id="loginCardDesc">Lanjutkan progres dan aktivitas belajar yang tersimpan.</p>
-                </div>
-
-                <div class="login-tabs" role="tablist" aria-label="Pilih masuk atau daftar">
-                    <button class="login-tab-btn active" id="tabLoginBtn" role="tab" aria-selected="true" aria-controls="windowLogin" tabindex="0" type="button">
-                        <i class="fa-solid fa-right-to-bracket"></i> Masuk
-                    </button>
-                    <button class="login-tab-btn" id="tabRegisterBtn" role="tab" aria-selected="false" aria-controls="windowRegister" tabindex="-1" type="button">
-                        <i class="fa-solid fa-user-plus"></i> Daftar
-                    </button>
-                </div>
-
-                <div class="form-slider-container">
-                    <div class="form-slider-wrapper" id="formSliderWrapper">
-                        <div class="form-window" id="windowLogin" role="tabpanel" aria-labelledby="tabLoginBtn">
-                            <form id="formLogin" novalidate>
-                                <div class="form-group">
-                                    <label for="loginEmail">Alamat email</label>
-                                    <div class="input-wrapper">
-                                        <input type="email" id="loginEmail" name="email" placeholder="nama@email.com" autocomplete="email" inputmode="email" aria-describedby="loginEmailError" required>
-                                        <i class="fa-solid fa-envelope input-icon"></i>
-                                    </div>
-                                    <small class="field-error" id="loginEmailError"></small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="loginPassword">Kata sandi</label>
-                                    <div class="input-wrapper">
-                                        <input type="password" id="loginPassword" name="password" placeholder="Minimal 6 karakter" autocomplete="current-password" aria-describedby="loginPasswordError" required minlength="6">
-                                        <i class="fa-solid fa-lock input-icon"></i>
-                                        <button class="pass-toggle-btn" type="button" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye-slash"></i></button>
-                                    </div>
-                                    <small class="field-error" id="loginPasswordError"></small>
-                                </div>
-
-                                <div class="form-options">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="loginRemember">
-                                        <span>Ingat email saya</span>
-                                    </label>
-                                    <a href="#" class="forgot-link" id="forgotPasswordLink">Lupa sandi?</a>
-                                </div>
-
-                                <button class="login-btn" type="submit" id="loginSubmitBtn">
-                                    <span class="button-label">Masuk dan Lanjut Belajar</span>
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </button>
-                            </form>
-                        </div>
-
-                        <div class="form-window" id="windowRegister" role="tabpanel" aria-labelledby="tabRegisterBtn" hidden>
-                            <form id="formRegister" novalidate>
-                                <div class="form-group">
-                                    <label for="registerName">Nama lengkap</label>
-                                    <div class="input-wrapper">
-                                        <input type="text" id="registerName" name="name" placeholder="Contoh: Zaki Firdaus" autocomplete="name" aria-describedby="registerNameError" required maxlength="80">
-                                        <i class="fa-solid fa-user input-icon"></i>
-                                    </div>
-                                    <small class="field-error" id="registerNameError"></small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="registerEmail">Alamat email</label>
-                                    <div class="input-wrapper">
-                                        <input type="email" id="registerEmail" name="email" placeholder="nama@email.com" autocomplete="email" inputmode="email" aria-describedby="registerEmailError" required>
-                                        <i class="fa-solid fa-envelope input-icon"></i>
-                                    </div>
-                                    <small class="field-error" id="registerEmailError"></small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="registerPassword">Kata sandi</label>
-                                    <div class="input-wrapper">
-                                        <input type="password" id="registerPassword" name="new-password" placeholder="Minimal 6 karakter" autocomplete="new-password" aria-describedby="registerPasswordError passwordStrengthText" required minlength="6">
-                                        <i class="fa-solid fa-lock input-icon"></i>
-                                        <button class="pass-toggle-btn" type="button" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye-slash"></i></button>
-                                    </div>
-                                    <div class="password-strength" id="passwordStrength" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-                                    <small class="password-strength-text" id="passwordStrengthText">Gunakan huruf, angka, dan simbol agar lebih kuat.</small>
-                                    <small class="field-error" id="registerPasswordError"></small>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="registerConfirmPassword">Konfirmasi kata sandi</label>
-                                    <div class="input-wrapper">
-                                        <input type="password" id="registerConfirmPassword" name="confirm-password" placeholder="Ketik ulang kata sandi" autocomplete="new-password" aria-describedby="registerConfirmPasswordError" required minlength="6">
-                                        <i class="fa-solid fa-shield-halved input-icon"></i>
-                                        <button class="pass-toggle-btn" type="button" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye-slash"></i></button>
-                                    </div>
-                                    <small class="field-error" id="registerConfirmPasswordError"></small>
-                                </div>
-
-                                <label class="checkbox-label register-consent">
-                                    <input type="checkbox" id="registerTerms">
-                                    <span>Saya menyetujui <a href="#" id="termsLink">Ketentuan</a> dan <a href="#" id="privacyLink">Kebijakan Privasi</a>.</span>
-                                </label>
-                                <small class="field-error consent-error" id="registerTermsError"></small>
-
-                                <button class="login-btn" type="submit" id="registerSubmitBtn">
-                                    <span class="button-label">Buat Akun Gratis</span>
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="social-login-separator"><span>atau lanjutkan dengan</span></div>
-                <div class="social-btn-row">
-                    <button class="login-social-btn" type="button" id="socialGoogleBtn">
-                        <i class="fa-brands fa-google" style="color: #ea4335;"></i><span>Google</span>
-                    </button>
-                    <button class="login-social-btn" type="button" id="socialGithubBtn">
-                        <i class="fa-brands fa-github"></i><span>GitHub</span>
-                    </button>
-                </div>
-                <p class="login-privacy-note"><i class="fa-solid fa-lock"></i> Data demo tersimpan lokal di browser ini dan tidak dikirim ke server.</p>
-            </div>
+    <header class="auth-topbar">
+        <a class="auth-brand" href="index.html"><img src="logo-uot-display.webp" alt="" width="40" height="40" fetchpriority="high"><span>Universe Of Tech</span></a>
+        <div class="auth-utilities"><a href="index.html">Kembali ke beranda</a><button id="soundToggleBtn" type="button" aria-label="Nonaktifkan suara">🔊</button><button id="themeToggleBtn" type="button" aria-label="Aktifkan tema gelap">🌙</button></div>
+    </header>
+    <main class="auth-shell" id="loginMainContent">
+        <section class="auth-story" aria-labelledby="authStoryTitle">
+            <span class="auth-kicker"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> Ruang belajar personal</span>
+            <h1 id="authStoryTitle">Belajar lebih terarah, <em>setiap kali kembali.</em></h1>
+            <p>Satu akun untuk menyimpan progres, menjaga streak, dan melanjutkan jalur belajar tanpa kehilangan konteks.</p>
+            <div class="auth-proof" aria-label="Manfaat akun"><div><i class="fa-solid fa-route" aria-hidden="true"></i><span><strong>Progres tersambung</strong><small>Materi, quiz, dan budaya dalam satu ritme.</small></span></div><div><i class="fa-solid fa-bolt" aria-hidden="true"></i><span><strong>Rekomendasi personal</strong><small>Langkah berikutnya mengikuti fokus belajarmu.</small></span></div><div><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span><strong>Kendali tetap milikmu</strong><small>Profil dan backup dapat dikelola kapan saja.</small></span></div></div>
+            <div class="auth-quote"><span>“</span><p>Konsistensi tumbuh ketika langkah berikutnya terasa jelas.</p></div>
         </section>
-
-        <footer class="login-footer">&copy;Â© 2026 Universe Of Tech. Hak Cipta Dilindungi.</footer>
+        <section class="login-card" id="loginCard" aria-labelledby="loginCardTitle">
+            <header class="login-heading"><span class="login-eyebrow" id="loginEyebrow">Selamat datang kembali</span><h2 id="loginCardTitle">Masuk ke akunmu</h2><p id="loginCardDesc">Lanjutkan progres dan aktivitas belajar yang tersimpan.</p></header>
+            <div class="login-tabs" role="tablist" aria-label="Pilih autentikasi"><button class="login-tab-btn active" id="tabLoginBtn" role="tab" aria-selected="true" aria-controls="windowLogin" type="button">Masuk</button><button class="login-tab-btn" id="tabRegisterBtn" role="tab" aria-selected="false" aria-controls="windowRegister" tabindex="-1" type="button">Daftar</button></div>
+            <div class="form-slider-wrapper" id="formSliderWrapper">
+                <div class="form-window" id="windowLogin" role="tabpanel" aria-labelledby="tabLoginBtn">
+                    <form id="formLogin" novalidate>
+                        <label class="auth-field"><span>Email</span><div><i class="fa-regular fa-envelope" aria-hidden="true"></i><input type="email" id="loginEmail" name="email" placeholder="nama@email.com" autocomplete="email" inputmode="email" aria-describedby="loginEmailError" required></div><small class="field-error" id="loginEmailError"></small></label>
+                        <label class="auth-field"><span>Kata sandi</span><div><i class="fa-solid fa-lock" aria-hidden="true"></i><input type="password" id="loginPassword" name="password" placeholder="Minimal 6 karakter" autocomplete="current-password" aria-describedby="loginPasswordError" minlength="6" required><button class="password-toggle" type="button" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></div><small class="field-error" id="loginPasswordError"></small></label>
+                        <div class="auth-form-row"><label class="remember"><input type="checkbox" id="loginRemember"><span>Ingat email</span></label><a href="#" id="forgotPasswordLink">Lupa sandi?</a></div>
+                        <button class="login-btn" type="submit" id="loginSubmitBtn"><span class="button-label">Masuk</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+                <div class="form-window" id="windowRegister" role="tabpanel" aria-labelledby="tabRegisterBtn" hidden>
+                    <form id="formRegister" novalidate>
+                        <label class="auth-field"><span>Nama</span><div><i class="fa-regular fa-user" aria-hidden="true"></i><input type="text" id="registerName" name="name" placeholder="Nama lengkap" autocomplete="name" aria-describedby="registerNameError" maxlength="80" required></div><small class="field-error" id="registerNameError"></small></label>
+                        <label class="auth-field"><span>Email</span><div><i class="fa-regular fa-envelope" aria-hidden="true"></i><input type="email" id="registerEmail" name="email" placeholder="nama@email.com" autocomplete="email" inputmode="email" aria-describedby="registerEmailError" required></div><small class="field-error" id="registerEmailError"></small></label>
+                        <label class="auth-field"><span>Kata sandi</span><div><i class="fa-solid fa-lock" aria-hidden="true"></i><input type="password" id="registerPassword" name="new-password" placeholder="Minimal 6 karakter" autocomplete="new-password" aria-describedby="registerPasswordError passwordStrengthText" minlength="6" required><button class="password-toggle" type="button" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></div><div class="password-strength" id="passwordStrength" aria-hidden="true"><span></span><span></span><span></span><span></span></div><small class="password-strength-text" id="passwordStrengthText">Gunakan huruf, angka, dan simbol agar lebih kuat.</small><small class="field-error" id="registerPasswordError"></small></label>
+                        <label class="auth-field"><span>Ulangi kata sandi</span><div><i class="fa-solid fa-lock" aria-hidden="true"></i><input type="password" id="registerConfirmPassword" name="confirm-password" placeholder="Ketik ulang kata sandi" autocomplete="new-password" aria-describedby="registerConfirmPasswordError" minlength="6" required><button class="password-toggle" type="button" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye" aria-hidden="true"></i></button></div><small class="field-error" id="registerConfirmPasswordError"></small></label>
+                        <label class="terms"><input type="checkbox" id="registerTerms"><span>Saya menyetujui <a href="#" id="termsLink">Ketentuan</a> dan <a href="#" id="privacyLink">Kebijakan Privasi</a>.</span></label><small class="field-error" id="registerTermsError"></small>
+                        <button class="login-btn" type="submit" id="registerSubmitBtn"><span class="button-label">Buat akun</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="auth-divider"><span>atau lanjutkan dengan</span></div>
+            <div class="social-grid"><button class="login-social-btn" type="button" id="socialGoogleBtn"><i class="fa-brands fa-google" aria-hidden="true"></i> Google</button><button class="login-social-btn" type="button" id="socialGithubBtn"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</button></div>
+            <p class="auth-security"><i class="fa-solid fa-lock" aria-hidden="true"></i> Kata sandi tidak disimpan di perangkat ini.</p>
+        </section>
     </main>
-
-    <script src="app-data.js"></script>
+    <footer class="auth-footer">© 2026 Universe Of Tech · Dibuat untuk pelajar Indonesia.</footer>
     <script src="sound-engine.js"></script>
-    <script src="rpg-engine.js"></script>
-    <script src="auth-helper.js"></script>
-    <script src="login.js"></script>
-    <script src="bubub-ai.js"></script>
-    <script src="coursera-home.js"></script>
-    <script src="global-animations.js"></script>
+    <script src="account-core.js?v=20260717-account-flow"></script>
+    <script src="login.js?v=20260717-account-flow"></script>
 </body>
 </html>
-
-

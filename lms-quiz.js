@@ -2646,14 +2646,14 @@ function showCertificate(trackId) {
                 <div class="lms-cert-wrapper" id="printableCertArea">
                     <!-- Page 1: Main Certificate -->
                     <div class="lms-cert-page page-1 lms-cert-frame">
-                        <img src="logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
+                        <img src="universe-of-tech-logo.jpg" alt="" class="lms-cert-watermark" aria-hidden="true">
                         <div class="lms-cert-corner top-left"></div>
                         <div class="lms-cert-corner top-right"></div>
                         <div class="lms-cert-corner bottom-left"></div>
                         <div class="lms-cert-corner bottom-right"></div>
 
                         <div class="lms-cert-brand">
-                            <img src="logo.png" alt="Universe Of Tech" class="lms-cert-logo">
+                            <img src="universe-of-tech-logo.jpg" alt="Universe Of Tech" class="lms-cert-logo">
                             <div>
                                 <div class="lms-cert-kicker">Universe Of Tech Academy</div>
                                 <div class="lms-cert-credential">Verified Digital Credential</div>
@@ -2708,14 +2708,14 @@ function showCertificate(trackId) {
 
                     <!-- Page 2: Academic Transcript -->
                     <div class="lms-cert-page page-2 lms-cert-frame lms-cert-transcript">
-                        <img src="logo.png" alt="" class="lms-cert-watermark" aria-hidden="true">
+                        <img src="universe-of-tech-logo.jpg" alt="" class="lms-cert-watermark" aria-hidden="true">
                         <div class="lms-cert-corner top-left"></div>
                         <div class="lms-cert-corner top-right"></div>
                         <div class="lms-cert-corner bottom-left"></div>
                         <div class="lms-cert-corner bottom-right"></div>
 
                         <div class="lms-cert-brand">
-                            <img src="logo.png" alt="Universe Of Tech" class="lms-cert-logo">
+                            <img src="universe-of-tech-logo.jpg" alt="Universe Of Tech" class="lms-cert-logo">
                             <div>
                                 <div class="lms-cert-kicker">Universe Of Tech Academy</div>
                                 <div class="lms-cert-credential">Academic Transcript Report</div>
@@ -2922,7 +2922,7 @@ function loadCertificateLogoJpeg() {
             }
         };
         image.onerror = () => resolve(null);
-        image.src = "logo.png";
+        image.src = "universe-of-tech-logo.jpg";
     });
 }
 

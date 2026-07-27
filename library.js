@@ -1,846 +1,638 @@
 /**
- * Universe Of Tech - Perpustakaan Digital Universitas JS
+ * Universe Of Tech — Library / Digital Reading Room
+ * Local-first catalog, reading desk, notes, favorites, and BUBUB assistant.
  */
+(() => {
+    "use strict";
 
-const storage = {
-    get(key, fallback) {
-        try {
-            return JSON.parse(localStorage.getItem(key)) ?? fallback;
-        } catch {
-            return fallback;
-        }
-    },
-    set(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
-    }
-};
+    const BOOK_COLLECTION = typeof BOOKS !== "undefined" && Array.isArray(BOOKS) ? BOOKS : [];
+    const STORAGE_KEYS = {
+        borrowed: "library_borrowed",
+        bookmarks: "library_bookmarks",
+        favorites: "library_favorites",
+        viewMode: "library_view_mode",
+        sortMode: "library_sort_mode",
+        lastRead: "library_last_read"
+    };
 
-function initTheme() {
-    const themeToggleBtn = document.getElementById("themeToggleBtn");
-    const savedTheme = localStorage.getItem("eduquest_theme") || "light";
-
-    document.body.classList.toggle("dark-theme", savedTheme === "dark");
-    if (!themeToggleBtn) return;
-
-    themeToggleBtn.textContent = savedTheme === "dark" ? "☀️" : "🌙";
-    themeToggleBtn.addEventListener("click", () => {
-        document.body.classList.toggle("dark-theme");
-        const isDark = document.body.classList.contains("dark-theme");
-        localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
-        themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
-        themeToggleBtn.style.transform = "scale(0.9)";
-        setTimeout(() => themeToggleBtn.style.transform = "none", 150);
-    });
-}
-
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    if (!toast) return;
-    toast.textContent = message;
-    toast.classList.add("show");
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
-}
-
-// DATABASE BUKU DIGITAL UNIVERSITAS (Diimpor dari book-data.js)
-
-// STATE HALAMAN
-let borrowedIds = storage.get("library_borrowed", []);
-let bookmarks = storage.get("library_bookmarks", {}); // { bookId: chapterIndex }
-let activeFilter = "all";
-let searchQuery = "";
-
-// INVENTARISASI DOM ELEMENTS
-const el = {
-    statTotalBooks: document.getElementById("statTotalBooks"),
-    statDeskBooks: document.getElementById("statDeskBooks"),
-    statNotesCount: document.getElementById("statNotesCount"),
-    
-    readingDeskList: document.getElementById("readingDeskList"),
-    librarySearch: document.getElementById("librarySearch"),
-    resourceGrid: document.getElementById("resourceGrid"),
-    
-    chatHistory: document.getElementById("chatHistory"),
-    chatInput: document.getElementById("chatInput"),
-    chatForm: document.getElementById("chatForm"),
-    
-    libraryNote: document.getElementById("libraryNote"),
-    saveLibraryNote: document.getElementById("saveLibraryNote"),
-    noteBookSelect: document.getElementById("noteBookSelect"),
-    autosaveStatus: document.getElementById("autosaveStatus")
-};
-
-// ==========================================================================
-// RENDERING DASHBOARD PERPUSTAKAAN & MEJA BACA
-// ==========================================================================
-function updateDashboardStats() {
-    if (el.statTotalBooks) el.statTotalBooks.textContent = BOOKS.length;
-    if (el.statDeskBooks) el.statDeskBooks.textContent = borrowedIds.length;
-    
-    let activeNotes = 0;
-    if (storage.get("library_note_general", "").trim()) activeNotes++;
-    BOOKS.forEach(b => {
-        if (storage.get(`library_note_${b.id}`, "").trim()) {
-            activeNotes++;
-        }
-    });
-    // Fallback support for legacy global key
-    if (storage.get("library_note", "").trim()) {
-        activeNotes = Math.max(activeNotes, 1);
-    }
-    
-    if (el.statNotesCount) el.statNotesCount.textContent = activeNotes;
-}
-
-function updateNoteBookSelectOptions(items) {
-    if (!el.noteBookSelect) return;
-    const currentValue = el.noteBookSelect.value;
-    
-    el.noteBookSelect.innerHTML = `<option value="general">📝 Catatan Umum (Tidak Terikat Buku)</option>`;
-    items.forEach(book => {
-        el.noteBookSelect.innerHTML += `<option value="${book.id}">📚 [${book.code}] ${book.title}</option>`;
-    });
-    
-    if ([...el.noteBookSelect.options].some(opt => opt.value === currentValue)) {
-        el.noteBookSelect.value = currentValue;
-    } else {
-        el.noteBookSelect.value = "general";
-    }
-}
-
-function renderReadingDesk() {
-    if (!el.readingDeskList) return;
-    
-    const items = borrowedIds.map(id => BOOKS.find(b => b.id === id)).filter(Boolean);
-    
-    // Update dropdown options
-    updateNoteBookSelectOptions(items);
-    
-    if (items.length === 0) {
-        el.readingDeskList.innerHTML = `
-            <div style="padding: 20px; text-align: center; color: var(--muted); font-size: 13px; font-weight: 700; border: 1px dashed var(--border); border-radius: 18px;">
-                <i class="fa-solid fa-book-open" style="font-size: 24px; margin-bottom: 8px; display: block; color: var(--blue);"></i>
-                Meja belajar kosong.<br>Silakan pinjam buku dari katalog di bawah.
-            </div>
-        `;
-        return;
-    }
-    
-    el.readingDeskList.innerHTML = items.map(book => {
-        const lastReadChapter = bookmarks[book.id] !== undefined ? bookmarks[book.id] : 0;
-        const progressPercent = Math.round(((lastReadChapter + 1) / book.chapters.length) * 100);
-        
-        return `
-            <div class="desk-book-card" style="${progressPercent === 100 ? 'border-color: var(--green);' : ''}">
-                <div style="display: flex; flex-direction: column; width: 100%; gap: 8px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%;">
-                        <div class="desk-book-info">
-                            <div class="mini-cover" style="background: ${book.coverGradient}">
-                                ${book.code}
-                            </div>
-                            <div class="desk-book-meta">
-                                <strong>${book.title}</strong>
-                                <span style="display: flex; align-items: center; gap: 6px;">
-                                    Progress: ${progressPercent}% dibaca
-                                    ${progressPercent === 100 ? '<span class="mini-tag" style="background: rgba(50, 214, 107, 0.12); color: var(--green-dark); padding: 2px 6px; font-size: 9px;">Selesai</span>' : ''}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="desk-book-actions">
-                            <button class="btn btn-blue read-book-btn" data-id="${book.id}">Baca</button>
-                            <button class="btn btn-ghost return-book-btn" data-id="${book.id}" style="color: #ff4d6d; background: rgba(255, 77, 109, 0.1); padding: 8px 12px;">Kembalikan</button>
-                        </div>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar-fill" style="width: ${progressPercent}%; background: ${progressPercent === 100 ? 'var(--green)' : 'linear-gradient(90deg, var(--blue), var(--purple))'};"></div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join("");
-    
-    // Bind Event Listeners
-    el.readingDeskList.querySelectorAll(".read-book-btn").forEach(btn => {
-        btn.addEventListener("click", () => openReader(btn.dataset.id));
-    });
-    el.readingDeskList.querySelectorAll(".return-book-btn").forEach(btn => {
-        btn.addEventListener("click", () => returnBook(btn.dataset.id));
-    });
-}
-
-function renderCatalog() {
-    if (!el.resourceGrid) return;
-    
-    const filtered = BOOKS.filter(book => {
-        const matchFilter = activeFilter === "all" || book.category.toLowerCase() === activeFilter.toLowerCase();
-        const matchSearch = `${book.title} ${book.author} ${book.code} ${book.categoryLabel}`.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchFilter && matchSearch;
-    });
-    
-    if (filtered.length === 0) {
-        el.resourceGrid.innerHTML = `
-            <div class="card" style="grid-column: 1/-1; text-align: center; padding: 48px 24px;">
-                <h3>Buku tidak ditemukan</h3>
-                <p class="muted">Silakan coba kata kunci pencarian atau kategori filter lainnya.</p>
-            </div>
-        `;
-        return;
-    }
-    
-    el.resourceGrid.innerHTML = filtered.map(book => {
-        const isBorrowed = borrowedIds.includes(book.id);
-        const stars = Array(5).fill("").map((_, i) => {
-            return i < Math.floor(book.rating) ? '<i class="fa-solid fa-star" style="color: var(--yellow)"></i>' : '<i class="fa-regular fa-star"></i>';
-        }).join("");
-        
-        const lastReadChapter = bookmarks[book.id] !== undefined ? bookmarks[book.id] : 0;
-        const progressPercent = Math.round(((lastReadChapter + 1) / book.chapters.length) * 100);
-        
-        return `
-            <article class="resource-card" style="${isBorrowed ? 'border-color: rgba(79, 140, 255, 0.3);' : ''}">
-                <div class="book-cover" style="background: ${book.coverGradient}">
-                    <span class="book-cover-code">${book.code}</span>
-                    <strong class="book-cover-title">${book.title}</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <span class="mini-tag" style="background: rgba(79, 140, 255, 0.08); color: var(--blue); margin-bottom: 0;">${book.categoryLabel}</span>
-                    ${isBorrowed 
-                        ? `<span class="mini-tag" style="background: rgba(50, 214, 107, 0.12); color: var(--green-dark); margin-bottom: 0;">${progressPercent === 100 ? 'Selesai Dibaca' : 'Sedang Dibaca'}</span>` 
-                        : ''
-                    }
-                </div>
-                <h3>${book.title}</h3>
-                <div class="book-author">Oleh: ${book.author}</div>
-                <div style="font-size: 12px; margin-bottom: 16px; display: flex; align-items: center; gap: 6px;">
-                    <span style="display: inline-flex; gap: 2px;">${stars}</span>
-                    <strong style="color: var(--dark); font-weight: 800; margin-left: 4px;">${book.rating}</strong>
-                    <span class="muted">(${book.pages} hlm)</span>
-                </div>
-                
-                ${isBorrowed 
-                    ? `
-                    <div style="margin-bottom: 16px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 4px;">
-                            <span>Progres Membaca</span>
-                            <span>${progressPercent}%</span>
-                        </div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar-fill" style="width: ${progressPercent}%; background: ${progressPercent === 100 ? 'var(--green)' : 'linear-gradient(90deg, var(--blue), var(--purple))'};"></div>
-                        </div>
-                    </div>
-                    ` 
-                    : ''
-                }
-
-                <div style="display: flex; gap: 8px;">
-                    ${isBorrowed 
-                        ? `<button class="btn btn-ghost return-book-btn" data-id="${book.id}" style="flex:1; justify-content: center; color: #ff4d6d; background: rgba(255, 77, 109, 0.08); padding: 10px;">Kembalikan</button>`
-                        : `<button class="btn btn-primary borrow-book-btn" data-id="${book.id}" style="flex:1; justify-content: center;">Pinjam Buku</button>`
-                    }
-                    ${isBorrowed ? `<button class="btn btn-blue read-book-btn" data-id="${book.id}" style="padding: 10px 16px;"><i class="fa-solid fa-book-open"></i> Baca</button>` : ''}
-                </div>
-            </article>
-        `;
-    }).join("");
-    
-    // Bind Event Listeners
-    el.resourceGrid.querySelectorAll(".borrow-book-btn").forEach(btn => {
-        btn.addEventListener("click", () => borrowBook(btn.dataset.id));
-    });
-    el.resourceGrid.querySelectorAll(".return-book-btn").forEach(btn => {
-        btn.addEventListener("click", () => returnBook(btn.dataset.id));
-    });
-    el.resourceGrid.querySelectorAll(".read-book-btn").forEach(btn => {
-        btn.addEventListener("click", () => openReader(btn.dataset.id));
-    });
-}
-
-// LOGIKA PEMINJAMAN
-function borrowBook(bookId) {
-    if (borrowedIds.includes(bookId)) return;
-    
-    borrowedIds.push(bookId);
-    storage.set("library_borrowed", borrowedIds);
-    
-    showToast("Buku berhasil dipinjam ke Meja Baca! 📚");
-    if (window.playSound) playSound("success");
-    
-    renderReadingDesk();
-    renderCatalog();
-    updateDashboardStats();
-}
-
-function returnBook(bookId) {
-    const idx = borrowedIds.indexOf(bookId);
-    if (idx < 0) return;
-    
-    borrowedIds.splice(idx, 1);
-    storage.set("library_borrowed", borrowedIds);
-    
-    showToast("Buku dikembalikan ke katalog.");
-    if (window.playSound) playSound("click");
-    
-    renderReadingDesk();
-    renderCatalog();
-    updateDashboardStats();
-}
-
-function openReader(bookId) {
-    if (window.playSound) playSound("cyber");
-    // Redirect ke halaman baru agar pengguna bisa membaca dengan fokus
-    window.location.href = `reader.html?book=${bookId}`;
-}
-
-// ==========================================================================
-// ASISTEN PUSTAKAWAN AI CHATBOT LOGIC
-// ==========================================================================
-const LIBRARIAN_RESPONSES = {
-    rekomendasi: [
-        `Berikut adalah buku rekomendasi di perpustakaan kami berdasarkan kategori bidang pemrograman dan siber:
-        <br><br>
-        1. <strong>Dasar Pemrograman JavaScript (CS-101)</strong> - Sangat bagus untuk memulai karir Web Developer (Ulasan: 4.8/5).
-        <br>
-        2. <strong>Prinsip Sistem Basis Data SQL (DB-202)</strong> - Panduan query relasional komprehensif bagi Anda yang ingin menjadi Data Engineer.
-        <br>
-        3. <strong>Keamanan Siber & Defisit Sistem (SEC-404)</strong> - Membedah kriptografi siber dan celah keamanan jaringan.
-        <br><br>
-        Silakan klik <em>Pinjam Buku</em> pada katalog untuk meletakkannya di meja baca Anda!`,
-        `Ingin rekomendasi belajar? Coba intip koleksi unggulan kami ini:
-        <br><br>
-        • Bidang UI/UX: <strong>Panduan Desain Antarmuka UI/UX (DS-303)</strong>. Memandu Anda memahami riset pengguna dan aturan Heuristik.
-        <br>
-        • Bidang Web: <strong>Esensi HTML5 & Struktur Web Modern (WEB-102)</strong>. Sempurna untuk dasar SEO dan layout semantik.
-        <br>
-        • Bidang Ujian SNBT: <strong>Kalkulus Adaptif (MATH-505)</strong>. Sangat membantu penguasaan limit, turunan, dan integral.`,
-        `Halo! Di perpustakaan digital ini, Anda bisa meminjam beberapa buku rekomendasi berikut untuk meningkatkan keahlian Anda:
-        <br><br>
-        • <strong>Psikologi Belajar dan Kebiasaan Efektif (PSY-110)</strong>: Pelajari cara kerja memori, manajemen fokus, dan teknik belajar aktif.
-        <br>
-        • <strong>Keamanan Siber & Defisit Sistem (SEC-404)</strong>: Pahami kriptografi simetris/asimetris untuk proteksi data.
-        <br>
-        • <strong>Ekonomi Mikro (ECO-210)</strong>: Pelajari teori harga pasar, hukum penawaran, serta analisis keputusan bisnis.`
-    ],
-    sql: [
-        `Di buku <strong>Prinsip Sistem Basis Data SQL (DB-202) Bab 3</strong>, kami membedah secara visual bagaimana perintah <code>JOIN</code> menyatukan tabel-tabel berelasi:
-        <br><br>
-        • <code>INNER JOIN</code>: Mengambil baris data jika ada kecocokan kunci di kedua tabel.
-        <br>
-        • <code>LEFT JOIN</code>: Mengambil seluruh data dari tabel sebelah kiri, ditambah data tabel kanan yang berelasi cocok saja (data kosong di kanan diisi nilai NULL).
-        <br><br>
-        Anda dapat meminjam buku <strong>DB-202</strong> dan membaca Bab 3 langsung di modal pembaca kami yang nyaman!`,
-        `Ingin paham SQL JOIN? Berikut penjelasan ringkasnya:
-        <br><br>
-        • <code>INNER JOIN</code> menyaring data dan hanya menampilkan baris yang memiliki nilai kunci cocok di kedua tabel.
-        <br>
-        • <code>RIGHT JOIN</code> berkebalikan dengan LEFT JOIN, yaitu mengambil seluruh baris dari tabel kanan dan baris tabel kiri yang cocok saja.
-        <br>
-        • <code>FULL JOIN</code> menggabungkan semua data dari kedua tabel, mengisi kolom dengan NULL jika tidak ada relasi yang cocok di salah satu sisi.
-        <br><br>
-        Materi ini dibahas lengkap dengan studi kasus di buku <strong>Prinsip Sistem Basis Data SQL (DB-202)</strong>.`,
-        `SQL JOIN digunakan untuk menggabungkan kolom dari satu atau beberapa tabel berdasarkan nilai kolom yang terkait di antara keduanya.
-        <br><br>
-        Contoh Query Inner Join:
-        <br>
-        <code>SELECT users.name, orders.amount FROM users INNER JOIN orders ON users.id = orders.user_id;</code>
-        <br><br>
-        Query di atas akan menampilkan nama pengguna beserta jumlah belanjaan mereka jika data belanjanya tersedia. Silakan baca detail teorinya di buku <strong>DB-202</strong>!`
-    ],
-    ui: [
-        `Buku <strong>Panduan Desain Antarmuka UI/UX (DS-303)</strong> mengulas filosofi kegunaan digital:
-        <br><br>
-        • <strong>Bab 1</strong>: Menjelaskan User-Centered Design (Desain Berpusat Pengguna) dan tahap riset empati.
-        <br>
-        • <strong>Bab 2</strong>: Membahas pentingnya tipografi kontras serta kepatuhan kontras warna teks WCAG 2.0 (rasio minimal 4.5:1).
-        <br>
-        • <strong>Bab 3</strong>: Memaparkan 10 Aturan Heuristik Usabilitas Jakob Nielsen untuk mengevaluasi aplikasi.`,
-        `Mendesain aplikasi yang ramah pengguna memerlukan pemahaman UI/UX. Di buku <strong>DS-303</strong>, dibahas beberapa konsep kunci:
-        <br><br>
-        • <strong>Aksesibilitas (A11y)</strong>: Memastikan aplikasi dapat digunakan oleh siapa saja, termasuk penyandang disabilitas (misal: memberikan tag alt pada gambar).
-        <br>
-        • <strong>Wireframing</strong>: Membuat sketsa layout hitam-putih sebelum masuk ke tahap pewarnaan untuk menguji efisiensi navigasi.
-        <br>
-        • <strong>Prototyping</strong>: Membuat alur interaktif simulasi produk untuk diujikan kepada pengguna nyata.`,
-        `Desain antarmuka yang baik didasarkan pada kebiasaan mental pengguna. Menurut buku <strong>Panduan Desain Antarmuka UI/UX (DS-303)</strong>:
-        <br><br>
-        • Hindari membebani memori jangka pendek pengguna (gunakan ikon standar, petunjuk yang jelas, dan alur terprediksi).
-        <br>
-        • Gunakan visual hirarki (ukuran font, berat teks, dan jarak) untuk mengarahkan mata pengguna ke elemen terpenting terlebih dahulu.`
-    ],
-    cyber: [
-        `Buku <strong>Keamanan Siber & Defisit Sistem (SEC-404)</strong> adalah bacaan utama untuk memahami perlindungan sistem:
-        <br><br>
-        • <strong>Kriptografi Simetris</strong>: Menggunakan satu kunci (AES) untuk kunci/buka data dengan cepat.
-        <br>
-        • <strong>Kriptografi Asimetris</strong>: Memakai sepasang kunci (Kunci Publik & Kunci Privat) untuk pertukaran data jarak jauh secara aman.
-        <br>
-        • <strong>Hashing</strong>: Mengubah input sandi menjadi cipher satu arah (SHA-256) untuk validasi login database.`,
-        `Kunci utama dari keamanan siber adalah CIA Triad (Confidentiality, Integrity, Availability):
-        <br><br>
-        • <strong>Confidentiality (Kerahasiaan)</strong>: Data hanya bisa diakses oleh pihak berwenang melalui enkripsi.
-        <br>
-        • <strong>Integrity (Integritas)</strong>: Menjamin data tidak diubah di tengah jalan dengan menggunakan tanda tangan digital atau checksum hash.
-        <br>
-        • <strong>Availability (Ketersediaan)</strong>: Memastikan sistem dapat diakses saat dibutuhkan dengan mitigasi serangan DDoS.
-        <br><br>
-        Silakan pinjam buku <strong>Keamanan Siber & Defisit Sistem (SEC-404)</strong> untuk pembahasan mendalam!`,
-        `Dalam dunia keamanan siber, proteksi data dikerjakan melalui algoritma sandi. Di buku <strong>SEC-404</strong>, Anda akan mempelajari:
-        <br><br>
-        • Cara kerja protokol HTTPS dalam mengamankan lalu lintas web menggunakan enkripsi TLS/SSL.
-        <br>
-        • Konsep enkripsi ujung-ke-ujung (*End-to-End Encryption*) yang memastikan pesan hanya bisa dibaca oleh pengirim dan penerima akhir.`
-    ],
-    math: [
-        `Buku <strong>Kalkulus Adaptif untuk SNBT/TKA (MATH-505)</strong> dirancang khusus untuk persiapan ujian akademik universitas:
-        <br><br>
-        • <strong>Bab 1</strong>: Konsep limit fungsi aljabar, limit tak terhingga, dan kontinuitas titik fungsi.
-        <br>
-        • <strong>Bab 2</strong>: Turunan diferensial dasar (aturan rantai) dan penerapannya untuk mencari titik optimal.
-        <br>
-        • <strong>Bab 3</strong>: Integral dasar serta hitungan luas daerah di bawah grafik kurva koordinat.`,
-        `Materi Matematika SNBT/TKA berfokus pada penalaran matematis. Di buku <strong>MATH-505</strong>, Anda akan dilatih:
-        <br><br>
-        • Memahami aplikasi turunan untuk mencari nilai maksimum dan minimum pada soal cerita optimasi ekonomi.
-        <br>
-        • Menguasai metode substitusi aljabar untuk menyederhanakan penyelesaian integral yang kompleks.
-        <br><br>
-        Pinjam buku <strong>MATH-505</strong> ke Meja Baca Anda agar persiapan belajar lebih terstruktur!`,
-        `Kalkulus adalah dasar penalaran sains dan rekayasa. Menurut rangkuman materi di buku <strong>Kalkulus Adaptif (MATH-505)</strong>:
-        <br><br>
-        • Limit menggambarkan kecenderungan nilai fungsi saat mendekati titik tertentu.
-        <br>
-        • Turunan mengukur laju perubahan seketika (kemiringan garis singgung kurva).
-        <br>
-        • Integral mengukur akumulasi total (luas daerah di bawah kurva).`
-    ],
-    html: [
-        `Buku <strong>Esensi HTML5 & Struktur Web Modern (WEB-102)</strong> adalah modul wajib dasar rekayasa web:
-        <br><br>
-        • Tag semantik (<code>&lt;header&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;footer&gt;</code>) membantu mesin pencari melakukan indeksing SEO yang baik dan mempermudah screen reader bagi penyandang disabilitas.`,
-        `Mengapa HTML semantik penting? Buku <strong>WEB-102</strong> menjelaskan:
-        <br><br>
-        • Menghindari *div soup* (penggunaan tag div berlebihan tanpa makna) yang mempersulit pemeliharaan kode.
-        <br>
-        • Meningkatkan skor SEO karena algoritma Google dapat mengidentifikasi bagian mana yang merupakan konten utama (` + "`<main>`" + `) dan navigasi (` + "`<nav>`" + `).
-        <br><br>
-        Pelajari cara menulis struktur web standar W3C di buku <strong>Esensi HTML5 (WEB-102)</strong>.`,
-        `Struktur HTML5 yang kokoh adalah pondasi web engineering. Di buku <strong>WEB-102</strong>, Anda akan belajar:
-        <br><br>
-        • Form kontrol baru (input type email, date, number) yang meminimalkan validasi sisi klien menggunakan JavaScript.
-        <br>
-        • Penggunaan tag ` + "`<aside>`" + ` untuk konten sampingan (sidebar) yang melengkapi artikel utama.`
-    ],
-    psychology: [
-        `Untuk topik psikologi, Anda bisa mulai membaca <strong>Psikologi Belajar dan Kebiasaan Efektif (PSY-110)</strong>:
-        <br><br>
-        • Buku ini sangat direkomendasikan untuk memahami cara otak membentuk ingatan jangka panjang, mengelola kelelahan fokus, dan membangun kebiasaan belajar yang konsisten secara ilmiah.`,
-        `Psikologi kognitif menjelaskan bagaimana kita menyerap informasi baru. Buku <strong>PSY-110</strong> mengulas:
-        <br><br>
-        • <strong>Teknik Pomodoro</strong>: Belajar fokus selama 25 menit diikuti istirahat 5 menit untuk menjaga kesegaran otak.
-        <br>
-        • <strong>Spaced Repetition</strong>: Mengulang materi pada interval waktu tertentu untuk memindahkan memori dari jangka pendek ke jangka panjang.`,
-        `Belajar secara efektif membutuhkan pemahaman diri. Di buku <strong>Psikologi Belajar (PSY-110)</strong>, dibahas tentang:
-        <br><br>
-        • **Active Recall**: Menguji diri sendiri menggunakan flashcard atau ringkasan alih-alih hanya membaca ulang buku secara pasif.
-        <br>
-        • **Feynman Technique**: Menjelaskan konsep sulit dengan bahasa sederhana seolah mengajarkannya kepada anak kecil.`
-    ],
-    economics: [
-        `Untuk bidang ekonomi dan manajemen bisnis, kami memiliki koleksi berikut:
-        <br><br>
-        • <strong>Ekonomi Mikro untuk Pengambilan Keputusan (ECO-210)</strong>: Mengulas elastisitas harga, alokasi sumber daya, dan struktur pasar.
-        <br>
-        • <strong>Strategi Bisnis dan Kewirausahaan (BUS-220)</strong>: Panduan merancang model bisnis (Lean Canvas) dan riset produk pasar.`,
-        `Pahami dinamika pasar melalui buku ekonomi kami:
-        <br><br>
-        • Di buku <strong>ECO-210</strong>, Anda mempelajari bagaimana analisis biaya oportunitas (*opportunity cost*) membantu manajer memilih keputusan investasi terbaik.
-        <br>
-        • Di buku <strong>BUS-220</strong>, Anda diajarkan cara memvalidasi ide produk melalui pengembangan produk minimum yang layak (MVP) untuk menghemat biaya modal.`,
-        `Koleksi ekonomi kami, khususnya <strong>ECO-210</strong>, membedah hukum dasar pasar:
-        <br><br>
-        • Hukum Permintaan & Penawaran yang menentukan titik harga keseimbangan.
-        <br>
-        • Jenis pasar (monopoli, oligopoli, persaingan sempurna) beserta dampaknya pada konsumen dan harga barang.`
-    ],
-    history: [
-        `Untuk sejarah, buku utama kami adalah <strong>Sejarah Indonesia Modern (HIS-120)</strong>:
-        <br><br>
-        • Membahas secara mendalam garis waktu penting mulai dari kebangkitan nasional awal abad ke-20, proklamasi kemerdekaan, periode revolusi fisik, era reformasi, hingga tantangan sosial politik kontemporer.`,
-        `Mempelajari sejarah membantu kita memahami dinamika masa kini. Buku <strong>Sejarah Indonesia Modern (HIS-120)</strong> mengulas:
-        <br><br>
-        • Dampak geopolitik perang dingin terhadap transisi pemerintahan Indonesia di pertengahan dekade 1960-an.
-        <br>
-        • Lahirnya gerakan mahasiswa tahun 1998 yang mendorong demokratisasi dan otonomi daerah di Indonesia.`,
-        `Sejarah Indonesia Modern (buku <strong>HIS-120</strong>) memaparkan materi penting:
-        <br><br>
-        • Lahirnya Sumpah Pemuda tahun 1928 sebagai tonggak persatuan kebangsaan.
-        <br>
-        • Perundingan diplomatik (Linggadjati, Renville, KMB) dalam memenangkan pengakuan kedaulatan Indonesia secara hukum internasional.`
-    ],
-    biology: [
-        `Untuk sains hayati, silakan baca <strong>Biologi Sel dan Genetika Dasar (BIO-130)</strong>:
-        <br><br>
-        • Buku ini membedah sel sebagai unit fungsional terkecil makhluk hidup, struktur kromosom, susunan rantai ganda DNA, sintesis protein, serta penerapan bioteknologi modern seperti kloning dan rekayasa genetik.`,
-        `Pahami rahasia kehidupan melalui buku biologi kami:
-        <br><br>
-        • Di buku <strong>BIO-130</strong>, dipaparkan proses pembelahan sel (mitosis dan meiosis) serta dampaknya pada variasi makhluk hidup.
-        <br>
-        • Anda juga akan belajar hukum pewarisan sifat Mendel untuk memprediksi probabilitas karakteristik keturunan genetik.`,
-        `Struktur asam nukleat (DNA & RNA) dibahas lengkap pada buku <strong>Biologi Sel dan Genetika Dasar (BIO-130)</strong>:
-        <br><br>
-        • Bagaimana urutan basa nitrogen (Adenin, Timin, Guanin, Sitosin) menyandi asam amino pembentuk protein tubuh.
-        <br>
-        • Teknik rekayasa genetika CRISPR yang memungkinkan penyuntingan DNA secara presisi untuk pengobatan medis.`
-    ],
-    literature: [
-        `Untuk sastra dan penulisan kreatif, kami merekomendasikan buku <strong>Pengantar Teori Sastra dan Penulisan Kreatif (LIT-310)</strong>:
-        <br><br>
-        • Buku ini memandu Anda memahami struktur naratif (plot, konflik, penokohan), analisis gaya bahasa, metafora dalam puisi, serta metode menyusun esai sastra yang kritis.`,
-        `Sastra adalah cermin peradaban. Di buku <strong>LIT-310</strong>, Anda akan mempelajari:
-        <br><br>
-        • Perbedaan genre sastra klasik dan kontemporer.
-        <br>
-        • Teknik *Show, Don't Tell* dalam prosa untuk mendeskripsikan emosi tokoh melalui aksi konkrit, bukan penjelasan langsung penulis.`,
-        `Menulis karya sastra yang memikat membutuhkan penguasaan bahasa secara artistik. Menurut buku sastra <strong>LIT-310</strong>:
-        <br><br>
-        • Pelajari cara menganalisis tema tersembunyi pada karya puisi menggunakan pendekatan strukturalisme.
-        <br>
-        • Pahami unsur intrinsik dan ekstrinsik yang melatarbelakungi penulisan novel fiksi sejarah.`
-    ],
-    law: [
-        `Untuk bidang hukum, buku pegangan utama kami adalah <strong>Asas-Asas Hukum dan Tata Negara (LAW-410)</strong>:
-        <br><br>
-        • Membahas fondasi hukum publik dan privat, tata urutan peraturan perundang-undangan di Indonesia, fungsi lembaga yudikatif, serta prinsip dasar negara hukum konstitusional.`,
-        `Ingin mempelajari dasar-dasar hukum konstitusi? Buku <strong>LAW-410</strong> mengulas:
-        <br><br>
-        • Pemisahan kekuasaan negara (Legislatif, Eksekutif, Yudikatif) untuk mencegah penumpukan kekuasaan secara mutlak.
-        <br>
-        • Hak Asasi Manusia (HAM) dalam jaminan hukum konstitusi negara, serta tata cara uji materi undang-undang di Mahkamah Konstitusi.`,
-        `Hukum mengikat ketertiban hidup bermasyarakat. Buku <strong>Asas-Asas Hukum (LAW-410)</strong> menjelaskan:
-        <br><br>
-        • Pengenalan sumber-sumber hukum formal (Undang-Undang, Kebiasaan, Yurisprudensi, Traktat, Doktrin).
-        <br>
-        • Perbedaan mendasar antara hukum pidana (pelanggaran terhadap kepentingan umum) dan hukum perdata (sengketa kepentingan antar individu).`
-    ],
-    education: [
-        `Untuk metode pengajaran dan pedagogi, Anda dapat merujuk ke buku <strong>Metodologi Pendidikan dan Evaluasi Belajar (EDU-150)</strong>:
-        <br><br>
-        • Buku ini memaparkan teori-teori belajar (behavioristik, kognitif, konstruktif), desain kurikulum, teknik evaluasi autentik, serta manajemen kelas inklusif.`,
-        `Pendidikan modern berpusat pada keaktifan siswa. Menurut buku <strong>EDU-150</strong>:
-        <br><br>
-        • **Project-Based Learning**: Siswa memecahkan masalah nyata melalui proyek kerja kelompok untuk mengasah pemikiran kritis.
-        <br>
-        • **Flipped Classroom**: Siswa mempelajari materi dasar di rumah secara mandiri (melalui video/buku), lalu kelas tatap muka difokuskan untuk diskusi kelompok.`,
-        `Bagaimana cara mengevaluasi efektivitas pembelajaran? Di buku <strong>EDU-150</strong> dibahas tentang:
-        <br><br>
-        • Asesmen formatif (kuis berkala di tengah pelajaran untuk memantau progres pemahaman siswa).
-        <br>
-        • Asesmen sumatif (ujian akhir semester untuk mengukur ketercapaian kompetensi belajar lulusan).`
-    ],
-    health: [
-        `Untuk sains kesehatan dan nutrisi, baca buku <strong>Kesehatan Masyarakat dan Nutrisi Seimbang (HLT-250)</strong>:
-        <br><br>
-        • Membahas keseimbangan makronutrien dan mikronutrien, pencegahan penyakit epidemiologi, pentingnya sanitasi lingkungan, serta panduan kesehatan mental di era modern.`,
-        `Gaya hidup sehat didasarkan pada keputusan nutrisi ilmiah. Buku <strong>HLT-250</strong> mengulas:
-        <br><br>
-        • Peran serat makanan dan air bagi pencernaan, serta pencegahan penyakit kardiovaskular melalui diet rendah garam dan lemak jenuh.
-        <br>
-        • Manfaat aktivitas fisik teratur dalam menstimulasi pelepasan hormon endorfin yang meningkatkan kebahagiaan mental.`,
-        `Kesehatan mental dan fisik saling berkaitan secara holistik. Menurut buku <strong>HLT-250</strong>:
-        <br><br>
-        • Manajemen stres dapat dicapai melalui teknik mindfulness dan istirahat tidur yang cukup (7-8 jam per hari).
-        <br>
-        • Pahami bahaya konsumsi gula berlebih yang meningkatkan risiko diabetes tipe-2 di usia muda.`
-    ],
-    environment: [
-        `Untuk ilmu lingkungan, Anda dapat mempelajari buku <strong>Ekologi Lingkungan dan Pembangunan Berkelanjutan (ENV-350)</strong>:
-        <br><br>
-        • Ulasan komprehensif mengenai siklus biogeokimia, dampak pemanasan global terhadap keanekaragaman hayati, teknik pengelolaan limbah domestik, serta kebijakan energi terbarukan.`,
-        `Kelestarian bumi adalah tanggung jawab kolektif. Buku <strong>ENV-350</strong> mengulas:
-        <br><br>
-        • Konsep **Ekonomi Sirkular**: Mendesain produk agar bahan bakunya dapat didaur ulang kembali secara terus menerus, meniadakan konsep sampah.
-        <br>
-        • Dampak deforestasi hutan terhadap pengurangan penyerapan karbon dioksida di atmosfer, yang mempercepat efek rumah kaca.`,
-        `Energi terbarukan adalah masa depan peradaban. Menurut buku <strong>ENV-350</strong>:
-        <br><br>
-        • Pemanfaatan energi surya, angin, dan geotermal sebagai alternatif pengganti bahan bakar fosil guna meminimalkan emisi karbon.
-        <br>
-        • Langkah praktis individu dalam menghemat jejak karbon harian (mengurangi plastik sekali pakai, hemat listrik, naik transportasi umum).`
-    ],
-    generalStudies: [
-        `Katalog perpustakaan kami kini telah diperluas ke berbagai bidang ilmu:
-        <br><br>
-        Kami menyediakan buku-buku bidang non-teknik seperti Psikologi, Ekonomi, Sastra, Hukum, Pendidikan, Kesehatan, dan Lingkungan. Silakan gunakan chip kategori di katalog untuk menyaring judul yang ingin Anda baca!`,
-        `Halo! Di Meja Baca Anda sekarang dapat meletakkan buku-buku non-teknik:
-        <br><br>
-        Silakan telusuri katalog di bawah untuk menemukan topik humaniora, sosial, ilmu alam dasar, maupun sastra seni. Jika Anda butuh penjelasan materi dari bab tertentu, sebutkan saja topik atau kode bukunya di sini!`,
-        `Perpustakaan digital kami mendukung pembelajaran lintas disiplin ilmu.
-        <br><br>
-        Pilih bidang minat Anda dari daftar filter kategori yang tersedia. Pinjam buku pilihan Anda agar kami dapat menyiapkan bab bacaan secara instan di browser Anda.`
-    ],
-    default: [
-        `Maaf, saya belum memahami pertanyaan Anda. Sebagai BUBUB, Anda dapat bertanya tentang topik-topik berikut kepada saya:
-        <br><br>
-        • <strong>rekomendasi</strong> buku atau materi pemrograman
-        <br>
-        • materi ringkasan <strong>UI/UX Design</strong> atau <strong>HTML5</strong>
-        <br>
-        • penjelasan <strong>SQL Join</strong> database relasional
-        <br>
-        • konsep <strong>keamanan siber</strong> dan kriptografi
-        <br>
-        • bab pelajaran <strong>Matematika / Kalkulus</strong> SNBT.`,
-        `Hai! Pertanyaan tersebut berada di luar cakupan pemahaman saya saat ini. Anda dapat menanyakan materi akademik berikut:
-        <br><br>
-        • Topik ilmu sosial: <strong>Psikologi</strong> belajar atau <strong>Ekonomi Mikro</strong>
-        <br>
-        • Topik sains: <strong>Biologi Sel</strong> genetika atau <strong>Kalkulus</strong> integral
-        <br>
-        • Topik humaniora: <strong>Sejarah Indonesia Modern</strong> atau teori <strong>Sastra</strong>
-        <br>
-        • Topik pembangunan: <strong>Pendidikan</strong> pengajaran atau ilmu <strong>Lingkungan</strong>.`,
-        `Halo! Sebagai asisten pustakawan, saya dirancang untuk mendiskusikan isi buku di katalog perpustakaan. Coba tanyakan kata kunci berikut:
-        <br><br>
-        • **Keamanan Siber** (kunci enkripsi AES/RSA)
-        • **Aksesibilitas UI/UX** (WCAG kontras teks)
-        • **SQL INNER JOIN** (relasi antartabel)
-        • **Kesehatan & Nutrisi** (keseimbangan gizi)
-        • **Asas-Asas Hukum** (sumber hukum formal)`
-    ]
-};
-
-// Remove the dynamic assignment at the end of the file since it's now integrated inside LIBRARIAN_RESPONSES
-
-function appendChatMessage(sender, text) {
-    if (!el.chatHistory) return;
-    
-    const bubble = document.createElement("div");
-    bubble.className = `chat-bubble ${sender}`;
-    bubble.innerHTML = text;
-    
-    el.chatHistory.appendChild(bubble);
-    
-    // Auto scroll ke bawah
-    el.chatHistory.scrollTop = el.chatHistory.scrollHeight;
-}
-
-function handleLibrarianChat(event) {
-    if (event) event.preventDefault();
-    if (!el.chatInput) return;
-    
-    const query = el.chatInput.value.trim();
-    if (!query) return;
-    
-    el.chatInput.value = "";
-    processChatQuery(query);
-}
-
-function processChatQuery(query) {
-    // Tambahkan pesan User ke chatbox
-    appendChatMessage("user", query);
-    
-    // Cari respon AI yang sesuai dengan kata kunci
-    const qLower = query.toLowerCase();
-    let key = "default";
-    
-    if (qLower.includes("psikologi") || qLower.includes("kebiasaan") || qLower.includes("belajar efektif") || qLower.includes("fokus")) {
-        key = "psychology";
-    } else if (qLower.includes("ekonomi") || qLower.includes("bisnis") || qLower.includes("wirausaha") || qLower.includes("pasar")) {
-        key = "economics";
-    } else if (qLower.includes("sejarah") || qLower.includes("budaya") || qLower.includes("indonesia modern") || qLower.includes("reformasi")) {
-        key = "history";
-    } else if (qLower.includes("biologi") || qLower.includes("sel") || qLower.includes("gen") || qLower.includes("dna")) {
-        key = "biology";
-    } else if (qLower.includes("sastra") || qLower.includes("puisi") || qLower.includes("novel") || qLower.includes("buku sastra") || qLower.includes("naratif")) {
-        key = "literature";
-    } else if (qLower.includes("hukum") || qLower.includes("uu") || qLower.includes("undang") || qLower.includes("konstitusi")) {
-        key = "law";
-    } else if (qLower.includes("pendidikan") || qLower.includes("pedagogi") || qLower.includes("belajar") || qLower.includes("mengajar") || qLower.includes("guru")) {
-        key = "education";
-    } else if (qLower.includes("kesehatan") || qLower.includes("nutrisi") || qLower.includes("diet") || qLower.includes("olahraga") || qLower.includes("gizi")) {
-        key = "health";
-    } else if (qLower.includes("lingkungan") || qLower.includes("iklim") || qLower.includes("ekosistem") || qLower.includes("polusi") || qLower.includes("energi terbarukan")) {
-        key = "environment";
-    } else if (qLower.includes("non-tech") || qLower.includes("non tech") || qLower.includes("umum") || qLower.includes("studi umum")) {
-        key = "generalStudies";
-    } else if (qLower.includes("rekomendasi") || qLower.includes("buku pemrograman") || qLower.includes("coding") || qLower.includes("rekomendasi pemrograman")) {
-        key = "rekomendasi";
-    } else if (qLower.includes("sql") || qLower.includes("join") || qLower.includes("database")) {
-        key = "sql";
-    } else if (qLower.includes("ui") || qLower.includes("ux") || qLower.includes("desain") || qLower.includes("heuristic")) {
-        key = "ui";
-    } else if (qLower.includes("keamanan") || qLower.includes("siber") || qLower.includes("cyber") || qLower.includes("kriptografi") || qLower.includes("enkripsi")) {
-        key = "cyber";
-    } else if (qLower.includes("kalkulus") || qLower.includes("matematika") || qLower.includes("math") || qLower.includes("limit") || qLower.includes("integral")) {
-        key = "math";
-    } else if (qLower.includes("html") || qLower.includes("semantik") || qLower.includes("web")) {
-        key = "html";
-    }
-    
-    // Pick response variation randomly
-    const responses = LIBRARIAN_RESPONSES[key];
-    const responseText = Array.isArray(responses)
-        ? responses[Math.floor(Math.random() * responses.length)]
-        : responses;
-    
-    // Tampilkan animasi mengetik singkat (delay 1000ms)
-    showTypingIndicator();
-    setTimeout(() => {
-        removeTypingIndicator();
-        appendChatMessage("ai", responseText);
-        if (window.playSound) playSound("cyber");
-    }, 1000);
-}
-
-function initChatSuggestions() {
-    document.querySelectorAll(".chat-suggest-chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-            const query = chip.dataset.query;
-            processChatQuery(query);
-        });
-    });
-}
-
-function showTypingIndicator() {
-    if (!el.chatHistory) return;
-    removeTypingIndicator();
-    
-    const indicator = document.createElement("div");
-    indicator.className = "typing-indicator";
-    indicator.id = "typingIndicator";
-    indicator.innerHTML = `
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-    `;
-    el.chatHistory.appendChild(indicator);
-    el.chatHistory.scrollTop = el.chatHistory.scrollHeight;
-}
-
-function removeTypingIndicator() {
-    const indicator = document.getElementById("typingIndicator");
-    if (indicator) indicator.remove();
-}
-
-function initLibrarianChat() {
-    if (!el.chatHistory) return;
-    el.chatHistory.innerHTML = "";
-    appendChatMessage("ai", "Halo! Saya BUBUB, pustakawan digital Anda. Tanyakan tentang rekomendasi buku, materi SQL JOIN, UI/UX, keamanan siber, atau materi lainnya.");
-}
-
-// ==========================================================================
-// STUDY NOTES LOGIC
-// ==========================================================================
-let noteSaveTimeout = null;
-
-function getNoteKey(bookId) {
-    return bookId === "general" ? "library_note_general" : `library_note_${bookId}`;
-}
-
-function loadActiveNote() {
-    if (!el.libraryNote || !el.noteBookSelect) return;
-    const selectedBook = el.noteBookSelect.value;
-    const noteKey = getNoteKey(selectedBook);
-    
-    let content = storage.get(noteKey, "");
-    if (selectedBook === "general" && !content) {
-        content = storage.get("library_note", "");
-    }
-    el.libraryNote.value = content;
-}
-
-function saveActiveNote(isAuto = false) {
-    if (!el.libraryNote || !el.noteBookSelect) return;
-    const selectedBook = el.noteBookSelect.value;
-    const noteKey = getNoteKey(selectedBook);
-    const content = el.libraryNote.value;
-    
-    storage.set(noteKey, content);
-    if (selectedBook === "general") {
-        storage.set("library_note", content);
-    }
-    
-    updateDashboardStats();
-    
-    if (isAuto) {
-        showAutosaveStatus("saved");
-    } else {
-        showToast("Catatan berhasil disimpan! 📝");
-        if (window.playSound) playSound("success");
-    }
-}
-
-function showAutosaveStatus(state) {
-    if (!el.autosaveStatus) return;
-    el.autosaveStatus.style.opacity = "1";
-    if (state === "saving") {
-        el.autosaveStatus.innerHTML = `<i class="fa-solid fa-spinner fa-spin" style="color: var(--blue);"></i> Menyimpan...`;
-    } else if (state === "saved") {
-        el.autosaveStatus.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--green);"></i> Tersimpan otomatis`;
-        setTimeout(() => {
-            if (el.autosaveStatus && el.autosaveStatus.innerHTML.includes("circle-check")) {
-                el.autosaveStatus.style.opacity = "0.5";
+    const storage = {
+        read(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (raw === null) return fallback;
+                const value = JSON.parse(raw);
+                return value ?? fallback;
+            } catch (_) {
+                return fallback;
             }
-        }, 2000);
-    }
-}
+        },
+        write(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (_) {
+                // A private browsing quota or unavailable storage must not block reading.
+            }
+        },
+        readText(key, fallback) {
+            try {
+                return localStorage.getItem(key) ?? fallback;
+            } catch (_) {
+                return fallback;
+            }
+        },
+        writeText(key, value) {
+            try {
+                localStorage.setItem(key, String(value));
+            } catch (_) {
+                // A private browsing quota or unavailable storage must not block theme changes.
+            }
+        },
+        remove(key) {
+            try { localStorage.removeItem(key); } catch (_) { /* optional cleanup */ }
+        }
+    };
 
-function initStudyNotes() {
-    if (!el.libraryNote || !el.noteBookSelect) return;
-    
-    loadActiveNote();
-    
-    el.noteBookSelect.addEventListener("change", () => {
+    const state = {
+        borrowedIds: normalizeIdArray(storage.read(STORAGE_KEYS.borrowed, [])),
+        bookmarks: normalizeObject(storage.read(STORAGE_KEYS.bookmarks, {})),
+        favorites: normalizeIdArray(storage.read(STORAGE_KEYS.favorites, [])),
+        activeStatus: "all",
+        activeCategory: "all",
+        query: "",
+        sortMode: normalizeChoice(storage.read(STORAGE_KEYS.sortMode, "recommended"), ["recommended", "rating", "title", "duration"], "recommended"),
+        viewMode: normalizeChoice(storage.read(STORAGE_KEYS.viewMode, "grid"), ["grid", "list"], "grid")
+    };
+
+    const el = {};
+    let noteSaveTimeout = null;
+    let chatResponseTimer = null;
+
+    function normalizeObject(value) {
+        return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    }
+
+    function normalizeIdArray(value) {
+        if (!Array.isArray(value)) return [];
+        return [...new Set(value.filter((id) => typeof id === "string" && BOOK_COLLECTION.some((book) => book.id === id)))];
+    }
+
+    function normalizeChoice(value, choices, fallback) {
+        return choices.includes(value) ? value : fallback;
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    function getBook(bookId) {
+        return BOOK_COLLECTION.find((book) => book.id === bookId) || null;
+    }
+
+    function isBorrowed(bookId) {
+        return state.borrowedIds.includes(bookId);
+    }
+
+    function isFavorite(bookId) {
+        return state.favorites.includes(bookId);
+    }
+
+    function getBookProgress(book) {
+        if (!book?.chapters?.length || !Object.prototype.hasOwnProperty.call(state.bookmarks, book.id)) return 0;
+        const chapterIndex = Number(state.bookmarks[book.id]);
+        if (!Number.isFinite(chapterIndex) || chapterIndex < 0) return 0;
+        return Math.min(100, Math.round(((Math.min(chapterIndex, book.chapters.length - 1) + 1) / book.chapters.length) * 100));
+    }
+
+    function getOverallProgress() {
+        const activeBooks = state.borrowedIds.map(getBook).filter(Boolean);
+        if (!activeBooks.length) return 0;
+        return Math.round(activeBooks.reduce((total, book) => total + getBookProgress(book), 0) / activeBooks.length);
+    }
+
+    function getNoteKey(bookId) {
+        return bookId === "general" ? "library_note_general" : `library_note_${bookId}`;
+    }
+
+    function getNoteCount() {
+        let count = storage.read("library_note_general", "").trim() ? 1 : 0;
+        BOOK_COLLECTION.forEach((book) => {
+            if (storage.read(`library_note_${book.id}`, "").trim()) count += 1;
+        });
+        if (storage.read("library_note", "").trim()) count = Math.max(count, 1);
+        return count;
+    }
+
+    function getLastReadBook() {
+        const savedId = storage.read(STORAGE_KEYS.lastRead, "");
+        const savedBook = getBook(savedId);
+        if (savedBook && isBorrowed(savedBook.id)) return savedBook;
+        return state.borrowedIds.map(getBook).find(Boolean) || null;
+    }
+
+    function showToast(message) {
+        if (!el.toast) return;
+        el.toast.textContent = message;
+        el.toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => el.toast.classList.remove("show"), 2600);
+    }
+
+    function play(sound) {
+        if (typeof window.playSound === "function") window.playSound(sound);
+    }
+
+    function setThemeIcon(button) {
+        const dark = document.body.classList.contains("dark-theme");
+        button.innerHTML = `<i class="fa-solid ${dark ? "fa-sun" : "fa-moon"}" aria-hidden="true"></i>`;
+        button.setAttribute("aria-label", dark ? "Gunakan tema terang" : "Gunakan tema gelap");
+        button.title = dark ? "Tema terang" : "Tema gelap";
+    }
+
+    function initTheme() {
+        const button = el.themeToggleBtn;
+        const savedTheme = storage.readText("eduquest_theme", "light");
+        document.body.classList.toggle("dark-theme", savedTheme === "dark");
+        if (!button) return;
+        setThemeIcon(button);
+        button.addEventListener("click", () => {
+            const dark = !document.body.classList.contains("dark-theme");
+            document.body.classList.toggle("dark-theme", dark);
+            storage.writeText("eduquest_theme", dark ? "dark" : "light");
+            setThemeIcon(button);
+            play("click");
+        });
+    }
+
+    function updateStats() {
+        const overall = getOverallProgress();
+        if (el.statTotalBooks) el.statTotalBooks.textContent = String(BOOK_COLLECTION.length);
+        if (el.statDeskBooks) el.statDeskBooks.textContent = String(state.borrowedIds.length);
+        if (el.statNotesCount) el.statNotesCount.textContent = String(getNoteCount());
+        if (el.statReadingProgress) el.statReadingProgress.textContent = `${overall}%`;
+        if (el.libraryFavoritesCount) el.libraryFavoritesCount.textContent = String(state.favorites.length);
+    }
+
+    function updateNoteBookOptions() {
+        if (!el.noteBookSelect) return;
+        const previous = el.noteBookSelect.value;
+        const borrowedBooks = state.borrowedIds.map(getBook).filter(Boolean);
+        el.noteBookSelect.innerHTML = `<option value="general">Catatan umum</option>${borrowedBooks.map((book) => `<option value="${escapeHtml(book.id)}">${escapeHtml(book.code)} · ${escapeHtml(book.title)}</option>`).join("")}`;
+        el.noteBookSelect.value = [...el.noteBookSelect.options].some((option) => option.value === previous) ? previous : "general";
+    }
+
+    function getProgressMarkup(book, compact = false) {
+        const progress = getBookProgress(book);
+        if (compact && progress === 0) return "";
+        return `<div class="book-progress"><div class="progress-meta"><span>${progress === 100 ? "Selesai dibaca" : "Progress membaca"}</span><strong>${progress}%</strong></div><div class="progress-bar-container"><div class="progress-bar-fill ${progress === 100 ? "is-complete" : ""}" style="width: ${progress}%"></div></div></div>`;
+    }
+
+    function renderContinueReading() {
+        if (!el.continueReadingCard) return;
+        const book = getLastReadBook();
+        const cover = el.continueReadingCover;
+        const progressWrap = el.continueReadingProgress;
+        const progress = book ? getBookProgress(book) : 0;
+
+        if (!book) {
+            el.continueReadingCard.classList.add("is-empty");
+            el.continueReadingLabel.textContent = "Koleksi pilihan";
+            el.continueReadingTitle.textContent = "Pilih bacaan pertama kamu";
+            el.continueReadingMeta.textContent = "Pinjam buku dari katalog untuk membangun Meja Baca pribadi.";
+            el.continueReadingButton.href = "#katalog";
+            el.continueReadingButton.innerHTML = '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i> Temukan bacaan';
+            progressWrap.hidden = true;
+            cover.className = "continue-cover is-empty";
+            cover.innerHTML = '<i class="fa-solid fa-book-open" aria-hidden="true"></i>';
+            cover.style.removeProperty("background");
+            return;
+        }
+
+        el.continueReadingCard.classList.remove("is-empty");
+        el.continueReadingLabel.textContent = `${book.code} · ${book.categoryLabel}`;
+        el.continueReadingTitle.textContent = book.title;
+        el.continueReadingMeta.textContent = `${book.author} · ${book.time} · ${book.pages} halaman`;
+        el.continueReadingButton.href = `reader.html?book=${encodeURIComponent(book.id)}`;
+        el.continueReadingButton.innerHTML = `<i class="fa-solid ${progress === 100 ? "fa-rotate-right" : "fa-play"}" aria-hidden="true"></i> ${progress === 100 ? "Review buku" : "Lanjut membaca"}`;
+        progressWrap.hidden = false;
+        el.continueReadingProgressValue.textContent = `${progress}%`;
+        el.continueReadingProgressFill.style.width = `${progress}%`;
+        cover.className = "continue-cover";
+        cover.innerHTML = `<span>${escapeHtml(book.code)}</span><i class="fa-solid fa-book-open" aria-hidden="true"></i>`;
+        cover.style.background = book.coverGradient;
+    }
+
+    function renderReadingDesk() {
+        if (!el.readingDeskList) return;
+        const books = state.borrowedIds.map(getBook).filter(Boolean);
+        updateNoteBookOptions();
+
+        if (!books.length) {
+            el.readingDeskList.innerHTML = `<div class="empty-state desk-empty"><span class="empty-state-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></span><div><strong>Meja baca masih kosong</strong><span>Pinjam satu buku dari katalog untuk mulai membangun ritme belajarmu.</span></div><a class="btn btn-blue" href="#katalog">Buka katalog</a></div>`;
+            return;
+        }
+
+        el.readingDeskList.innerHTML = books.map((book) => {
+            const progress = getBookProgress(book);
+            return `<article class="desk-book-card ${progress === 100 ? "is-complete" : ""}" data-book-id="${escapeHtml(book.id)}">
+                <div class="desk-book-main">
+                    <div class="mini-cover" data-cover-book="${escapeHtml(book.id)}"><span>${escapeHtml(book.code)}</span></div>
+                    <div class="desk-book-meta"><span class="mini-label">${escapeHtml(book.categoryLabel)}</span><strong>${escapeHtml(book.title)}</strong><span>${escapeHtml(book.author)} · ${progress}% selesai</span></div>
+                </div>
+                <div class="desk-book-actions"><a class="btn btn-blue" data-action="read" data-book-id="${escapeHtml(book.id)}" href="reader.html?book=${encodeURIComponent(book.id)}"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Baca</span></a><button class="btn btn-ghost" data-action="return" data-book-id="${escapeHtml(book.id)}" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Kembalikan</span></button></div>
+                ${getProgressMarkup(book)}
+            </article>`;
+        }).join("");
+
+        el.readingDeskList.querySelectorAll("[data-cover-book]").forEach((cover) => {
+            const book = getBook(cover.dataset.coverBook);
+            if (book) cover.style.background = book.coverGradient;
+        });
+    }
+
+    function getFilteredBooks() {
+        const query = state.query.toLowerCase();
+        const filtered = BOOK_COLLECTION.filter((book) => {
+            const matchesStatus = state.activeStatus === "all" || (state.activeStatus === "borrowed" && isBorrowed(book.id)) || (state.activeStatus === "favorites" && isFavorite(book.id));
+            const matchesCategory = state.activeCategory === "all" || book.category.toLowerCase() === state.activeCategory.toLowerCase();
+            const searchText = `${book.title} ${book.author} ${book.code} ${book.categoryLabel}`.toLowerCase();
+            return matchesStatus && matchesCategory && (!query || searchText.includes(query));
+        });
+
+        return filtered.sort((a, b) => {
+            if (state.sortMode === "rating") return b.rating - a.rating;
+            if (state.sortMode === "title") return a.title.localeCompare(b.title, "id");
+            if (state.sortMode === "duration") return parseInt(a.time, 10) - parseInt(b.time, 10);
+            const lastRead = storage.read(STORAGE_KEYS.lastRead, "");
+            const priority = (book) => (book.id === lastRead ? 3 : isBorrowed(book.id) ? 2 : isFavorite(book.id) ? 1 : 0);
+            return priority(b) - priority(a) || b.rating - a.rating || a.title.localeCompare(b.title, "id");
+        });
+    }
+
+    function renderStars(rating) {
+        return Array.from({ length: 5 }, (_, index) => `<i class="fa-${index < Math.round(rating) ? "solid" : "regular"} fa-star" aria-hidden="true"></i>`).join("");
+    }
+
+    function renderCatalog() {
+        if (!el.resourceGrid) return;
+        const books = getFilteredBooks();
+        el.resourceGrid.classList.toggle("is-list-view", state.viewMode === "list");
+        el.resourceGrid.setAttribute("aria-busy", "true");
+
+        if (el.libraryResultCount) {
+            el.libraryResultCount.textContent = `${books.length} ${books.length === 1 ? "koleksi" : "koleksi"}`;
+        }
+
+        if (!books.length) {
+            const title = state.activeStatus === "favorites" ? "Belum ada buku favorit" : state.query ? "Tidak ada hasil yang cocok" : "Belum ada buku di filter ini";
+            const message = state.activeStatus === "favorites" ? "Tekan ikon hati pada kartu buku untuk menyimpannya di sini." : "Coba ubah kata kunci, status, atau bidang yang dipilih.";
+            el.resourceGrid.innerHTML = `<div class="empty-state catalog-empty"><span class="empty-state-icon"><i class="fa-solid fa-compass" aria-hidden="true"></i></span><div><strong>${title}</strong><span>${message}</span></div><button class="btn btn-ghost" type="button" data-action="reset-filters">Reset filter</button></div>`;
+            el.resourceGrid.setAttribute("aria-busy", "false");
+            return;
+        }
+
+        el.resourceGrid.innerHTML = books.map((book) => {
+            const borrowed = isBorrowed(book.id);
+            const favorite = isFavorite(book.id);
+            const progress = getBookProgress(book);
+            const status = borrowed ? (progress === 100 ? "Selesai dibaca" : "Sedang dibaca") : "Tersedia";
+            return `<article class="resource-card ${borrowed ? "is-borrowed" : ""} ${favorite ? "is-favorite" : ""}" data-book-id="${escapeHtml(book.id)}">
+                <div class="book-cover" data-cover-book="${escapeHtml(book.id)}">
+                    <span class="book-cover-code">${escapeHtml(book.code)}</span>
+                    <button class="favorite-button ${favorite ? "is-active" : ""}" data-action="favorite" data-book-id="${escapeHtml(book.id)}" type="button" aria-label="${favorite ? "Hapus dari favorit" : "Tambahkan ke favorit"}" aria-pressed="${favorite}"><i class="fa-${favorite ? "solid" : "regular"} fa-heart" aria-hidden="true"></i></button>
+                    <strong class="book-cover-title">${escapeHtml(book.title)}</strong>
+                    <span class="book-cover-footer"><span>${escapeHtml(book.categoryLabel)}</span><span>${escapeHtml(book.time)}</span></span>
+                </div>
+                <div class="resource-card-topline"><span class="category-badge">${escapeHtml(book.categoryLabel)}</span><span class="availability-badge ${borrowed ? "is-active" : ""}"><span aria-hidden="true"></span>${status}</span></div>
+                <div class="resource-card-body"><h3>${escapeHtml(book.title)}</h3><p class="book-author">${escapeHtml(book.author)}</p><div class="book-facts"><span class="rating"><span>${renderStars(book.rating)}</span><strong>${escapeHtml(book.rating)}</strong></span><span><i class="fa-regular fa-file-lines" aria-hidden="true"></i> ${escapeHtml(book.pages)} hlm</span></div>${borrowed ? getProgressMarkup(book, true) : ""}</div>
+                <div class="resource-card-actions">${borrowed ? `<a class="btn btn-blue" data-action="read" data-book-id="${escapeHtml(book.id)}" href="reader.html?book=${encodeURIComponent(book.id)}"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Baca</a><button class="btn btn-ghost" data-action="return" data-book-id="${escapeHtml(book.id)}" type="button">Kembalikan</button>` : `<button class="btn btn-primary" data-action="borrow" data-book-id="${escapeHtml(book.id)}" type="button"><i class="fa-solid fa-plus" aria-hidden="true"></i> Pinjam ke Meja</button>`}</div>
+            </article>`;
+        }).join("");
+
+        el.resourceGrid.querySelectorAll("[data-cover-book]").forEach((cover) => {
+            const book = getBook(cover.dataset.coverBook);
+            if (book) cover.style.background = book.coverGradient;
+        });
+        el.resourceGrid.setAttribute("aria-busy", "false");
+    }
+
+    function syncControls() {
+        document.querySelectorAll("[data-library-status]").forEach((button) => {
+            const active = button.dataset.libraryStatus === state.activeStatus;
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-pressed", String(active));
+        });
+        document.querySelectorAll("[data-library-filter]").forEach((button) => {
+            const active = button.dataset.libraryFilter.toLowerCase() === state.activeCategory.toLowerCase();
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-pressed", String(active));
+        });
+        if (el.librarySort) el.librarySort.value = state.sortMode;
+        [el.libraryViewGrid, el.libraryViewList].forEach((button) => button?.classList.remove("is-active"));
+        const activeView = state.viewMode === "list" ? el.libraryViewList : el.libraryViewGrid;
+        activeView?.classList.add("is-active");
+        [el.libraryViewGrid, el.libraryViewList].forEach((button) => button?.setAttribute("aria-pressed", String(button === activeView)));
+        if (el.libraryClearSearch) el.libraryClearSearch.hidden = !state.query;
+    }
+
+    function refreshPage() {
+        renderContinueReading();
+        renderReadingDesk();
+        renderCatalog();
+        updateStats();
+        syncControls();
+        updateNoteCount();
+    }
+
+    function borrowBook(bookId) {
+        if (!getBook(bookId) || isBorrowed(bookId)) return;
+        state.borrowedIds.push(bookId);
+        storage.write(STORAGE_KEYS.borrowed, state.borrowedIds);
+        storage.write(STORAGE_KEYS.lastRead, bookId);
+        showToast("Buku ditambahkan ke Meja Baca.");
+        play("success");
+        refreshPage();
+    }
+
+    function returnBook(bookId) {
+        if (!isBorrowed(bookId)) return;
+        state.borrowedIds = state.borrowedIds.filter((id) => id !== bookId);
+        storage.write(STORAGE_KEYS.borrowed, state.borrowedIds);
+        if (storage.read(STORAGE_KEYS.lastRead, "") === bookId) storage.remove(STORAGE_KEYS.lastRead);
+        showToast("Buku dikembalikan ke katalog.");
+        play("click");
+        refreshPage();
+    }
+
+    function toggleFavorite(bookId) {
+        if (!getBook(bookId)) return;
+        state.favorites = isFavorite(bookId) ? state.favorites.filter((id) => id !== bookId) : [...state.favorites, bookId];
+        storage.write(STORAGE_KEYS.favorites, state.favorites);
+        showToast(isFavorite(bookId) ? "Buku disimpan ke favorit." : "Buku dihapus dari favorit.");
+        play("click");
+        refreshPage();
+    }
+
+    function openReader(bookId) {
+        if (!getBook(bookId)) return;
+        storage.write(STORAGE_KEYS.lastRead, bookId);
+        play("cyber");
+        window.location.href = `reader.html?book=${encodeURIComponent(bookId)}`;
+    }
+
+    const LIBRARIAN_RESPONSES = {
+        rekomendasi: `<p>Untuk mulai dengan fondasi yang kuat, coba <strong>Dasar Pemrograman JavaScript (CS-101)</strong>. Setelah itu, lanjutkan ke <strong>Prinsip Sistem Basis Data SQL (DB-202)</strong> untuk memahami cara data bekerja.</p><p>Kalau kamu ingin membangun produk digital, <strong>Panduan Desain Antarmuka UI/UX (DS-303)</strong> adalah pasangan bacaan yang bagus.</p>`,
+        sql: `<p><strong>SQL JOIN</strong> menghubungkan baris dari dua tabel menggunakan kolom yang memiliki relasi.</p><ul><li><code>INNER JOIN</code> hanya menampilkan data yang cocok di kedua tabel.</li><li><code>LEFT JOIN</code> mempertahankan seluruh data dari tabel kiri.</li><li>Gunakan alias tabel agar query panjang tetap mudah dibaca.</li></ul><p>Contoh lengkapnya ada di <strong>DB-202</strong>.</p>`,
+        ui: `<p>Mulai UI/UX dari tiga hal: pahami pengguna, buat struktur informasi yang jelas, lalu uji prototype dengan pengguna nyata.</p><p>Buku <strong>DS-303</strong> membahas User-Centered Design, aksesibilitas, tipografi, dan heuristik Nielsen.</p>`,
+        cyber: `<p>Dasar keamanan informasi sering diringkas sebagai <strong>CIA Triad</strong>: Confidentiality, Integrity, dan Availability.</p><ul><li>Gunakan enkripsi untuk menjaga kerahasiaan.</li><li>Gunakan hashing atau signature untuk memeriksa integritas.</li><li>Siapkan backup dan mitigasi agar layanan tetap tersedia.</li></ul><p>Pelajari contoh teknisnya di <strong>SEC-404</strong>.</p>`,
+        math: `<p>Dalam kalkulus, <strong>limit</strong> menggambarkan kecenderungan nilai, <strong>turunan</strong> mengukur laju perubahan, dan <strong>integral</strong> mengukur akumulasi.</p><p><strong>MATH-505</strong> merangkai ketiganya untuk persiapan SNBT/TKA.</p>`,
+        html: `<p>HTML semantik membuat struktur halaman lebih mudah dipahami manusia, mesin pencari, dan screen reader.</p><p>Prioritaskan elemen seperti <code>&lt;main&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;article&gt;</code>, dan <code>&lt;footer&gt;</code> di <strong>WEB-102</strong>.</p>`,
+        psychology: `<p>Untuk belajar lebih efektif, gabungkan <strong>active recall</strong>, <strong>spaced repetition</strong>, dan sesi fokus yang realistis.</p><p><strong>PSY-110</strong> membahas cara membangun kebiasaan tanpa mengandalkan motivasi sesaat.</p>`,
+        economics: `<p>Mulai ekonomi mikro dari hubungan permintaan, penawaran, harga keseimbangan, dan opportunity cost.</p><p><strong>ECO-210</strong> menghubungkan konsep tersebut dengan pengambilan keputusan bisnis.</p>`,
+        history: `<p><strong>HIS-120</strong> membantu melihat sejarah Indonesia sebagai rangkaian perubahan sosial, politik, dan ekonomi—bukan sekadar daftar tanggal.</p>`,
+        biology: `<p><strong>BIO-130</strong> membahas sel, DNA, sintesis protein, mitosis, meiosis, serta dasar genetika dengan alur yang terstruktur.</p>`,
+        literature: `<p>Untuk membaca sastra secara kritis, perhatikan plot, konflik, penokohan, sudut pandang, dan konteks sosial karya.</p><p>Mulai dari <strong>LIT-310</strong> untuk pengantar teori sastra.</p>`,
+        law: `<p><strong>LAW-410</strong> membahas negara hukum, pemisahan kekuasaan, hierarki peraturan, dan prinsip konstitusional di Indonesia.</p>`,
+        education: `<p>Asesmen yang baik dimulai dari tujuan belajar yang jelas, bukti pemahaman yang terukur, dan umpan balik yang bisa ditindaklanjuti.</p><p>Rujuk <strong>EDU-610</strong> untuk strategi pembelajaran.</p>`,
+        health: `<p>Jadikan kesehatan sebagai sistem sederhana: tidur cukup, bergerak teratur, makan beragam, dan evaluasi kebiasaan secara berkala.</p><p><strong>HLT-710</strong> membahas dasar kesehatan publik.</p>`,
+        environment: `<p>Perubahan iklim perlu dibaca melalui hubungan antara emisi, energi, ekosistem, kebijakan, dan perilaku manusia.</p><p>Mulai dari <strong>ENV-801</strong>.</p>`,
+        generalStudies: `<p>Kalau belum tahu harus mulai dari mana, pilih buku dengan durasi terpendek lalu tulis tiga hal yang ingin kamu pahami sebelum membaca.</p>`,
+        default: `<p>Saya bisa membantu memilih buku, menjelaskan konsep, atau membuat ringkasan singkat.</p><p>Coba tanyakan tentang <strong>SQL</strong>, <strong>UI/UX</strong>, <strong>keamanan siber</strong>, <strong>HTML</strong>, matematika, atau buku favoritmu.</p>`
+    };
+
+    function responseKey(query) {
+        const q = query.toLowerCase();
+        const rules = [
+            ["psychology", ["psikologi", "kebiasaan", "fokus", "belajar efektif"]],
+            ["economics", ["ekonomi", "bisnis", "wirausaha", "pasar"]],
+            ["history", ["sejarah", "reformasi", "indonesia modern"]],
+            ["biology", ["biologi", "sel", "gen", "dna"]],
+            ["literature", ["sastra", "puisi", "novel", "naratif"]],
+            ["law", ["hukum", "undang", "konstitusi"]],
+            ["education", ["pendidikan", "pedagogi", "mengajar", "guru"]],
+            ["health", ["kesehatan", "nutrisi", "diet", "olahraga", "gizi"]],
+            ["environment", ["lingkungan", "iklim", "ekosistem", "polusi", "energi terbarukan"]],
+            ["generalStudies", ["non-tech", "umum", "studi umum"]],
+            ["rekomendasi", ["rekomendasi", "coding", "pemrograman"]],
+            ["sql", ["sql", "join", "database"]],
+            ["ui", ["ui", "ux", "desain", "heuristic"]],
+            ["cyber", ["keamanan", "siber", "cyber", "kriptografi", "enkripsi"]],
+            ["math", ["kalkulus", "matematika", "limit", "integral"]],
+            ["html", ["html", "semantik", "web"]]
+        ];
+        return rules.find(([, words]) => words.some((word) => q.includes(word)))?.[0] || "default";
+    }
+
+    function appendChatMessage(sender, content) {
+        if (!el.chatHistory) return;
+        const bubble = document.createElement("div");
+        bubble.className = `chat-bubble ${sender}`;
+        if (sender === "user") bubble.textContent = content;
+        else bubble.innerHTML = content;
+        el.chatHistory.appendChild(bubble);
+        el.chatHistory.scrollTop = el.chatHistory.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        if (!el.chatHistory) return;
+        document.getElementById("typingIndicator")?.remove();
+        const indicator = document.createElement("div");
+        indicator.className = "typing-indicator";
+        indicator.id = "typingIndicator";
+        indicator.setAttribute("aria-label", "BUBUB sedang mengetik");
+        indicator.innerHTML = '<span></span><span></span><span></span>';
+        el.chatHistory.appendChild(indicator);
+        el.chatHistory.scrollTop = el.chatHistory.scrollHeight;
+    }
+
+    function processChatQuery(query) {
+        const cleanQuery = query.trim();
+        if (!cleanQuery) return;
+        appendChatMessage("user", cleanQuery);
+        if (el.chatInput) el.chatInput.value = "";
+        showTypingIndicator();
+        clearTimeout(chatResponseTimer);
+        chatResponseTimer = setTimeout(() => {
+            document.getElementById("typingIndicator")?.remove();
+            appendChatMessage("ai", LIBRARIAN_RESPONSES[responseKey(cleanQuery)]);
+            play("cyber");
+        }, 700);
+    }
+
+    function initChat() {
+        if (!el.chatHistory) return;
+        appendChatMessage("ai", "Halo! Saya BUBUB, pustakawan digitalmu. Saya bisa membantu menemukan buku atau memecah konsep yang terasa rumit.");
+        el.chatForm?.addEventListener("submit", (event) => {
+            event.preventDefault();
+            processChatQuery(el.chatInput?.value || "");
+        });
+        document.querySelectorAll(".chat-suggest-chip").forEach((button) => button.addEventListener("click", () => processChatQuery(button.dataset.query || "")));
+    }
+
+    function updateNoteCount() {
+        if (el.libraryNote) el.noteCharCount.textContent = `${el.libraryNote.value.length.toLocaleString("id-ID")} karakter`;
+    }
+
+    function loadActiveNote() {
+        if (!el.libraryNote || !el.noteBookSelect) return;
+        const selected = el.noteBookSelect.value;
+        let content = storage.read(getNoteKey(selected), "");
+        if (selected === "general" && !content) content = storage.read("library_note", "");
+        el.libraryNote.value = content;
+        updateNoteCount();
+    }
+
+    function setAutosaveStatus(type) {
+        if (!el.autosaveStatus) return;
+        if (type === "saving") {
+            el.autosaveStatus.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Menyimpan...';
+            el.autosaveStatus.className = "autosave-status is-saving";
+        } else {
+            el.autosaveStatus.innerHTML = '<i class="fa-solid fa-circle-check" aria-hidden="true"></i> Tersimpan otomatis';
+            el.autosaveStatus.className = "autosave-status is-saved";
+        }
+    }
+
+    function saveActiveNote(isAuto = false) {
+        if (!el.libraryNote || !el.noteBookSelect) return;
+        const selected = el.noteBookSelect.value;
+        const content = el.libraryNote.value;
+        storage.write(getNoteKey(selected), content);
+        if (selected === "general") storage.write("library_note", content);
+        updateStats();
+        updateNoteCount();
+        if (isAuto) setAutosaveStatus("saved");
+        else {
+            setAutosaveStatus("saved");
+            showToast("Catatan berhasil disimpan.");
+            play("success");
+        }
+    }
+
+    function initNotes() {
+        if (!el.libraryNote || !el.noteBookSelect) return;
+        el.noteBookSelect.addEventListener("change", () => {
+            loadActiveNote();
+            play("click");
+        });
+        el.libraryNote.addEventListener("input", () => {
+            updateNoteCount();
+            setAutosaveStatus("saving");
+            clearTimeout(noteSaveTimeout);
+            noteSaveTimeout = setTimeout(() => saveActiveNote(true), 650);
+        });
+        el.saveLibraryNote?.addEventListener("click", () => saveActiveNote(false));
+        el.clearLibraryNote?.addEventListener("click", () => {
+            if (!el.libraryNote.value || window.confirm("Bersihkan catatan yang sedang dibuka?")) {
+                el.libraryNote.value = "";
+                saveActiveNote(false);
+            }
+        });
         loadActiveNote();
-        if (window.playSound) playSound("click");
-    });
-    
-    if (el.saveLibraryNote) {
-        el.saveLibraryNote.addEventListener("click", () => {
-            saveActiveNote(false);
-        });
     }
-    
-    el.libraryNote.addEventListener("input", () => {
-        showAutosaveStatus("saving");
-        clearTimeout(noteSaveTimeout);
-        noteSaveTimeout = setTimeout(() => {
-            saveActiveNote(true);
-        }, 600);
-    });
-}
 
-// ==========================================================================
-// INITIALIZATION
-// ==========================================================================
-document.addEventListener("DOMContentLoaded", () => {
-    initTheme();
-    
-    if (el.librarySearch) {
-        el.librarySearch.addEventListener("input", (e) => {
-            searchQuery = e.target.value.trim();
-            renderCatalog();
-        });
+    function resetFilters() {
+        state.activeStatus = "all";
+        state.activeCategory = "all";
+        state.query = "";
+        if (el.librarySearch) el.librarySearch.value = "";
+        refreshPage();
     }
-    
-    document.querySelectorAll("[data-library-filter]").forEach(chip => {
-        chip.addEventListener("click", () => {
-            document.querySelectorAll("[data-library-filter]").forEach(c => c.classList.remove("active"));
-            chip.classList.add("active");
-            activeFilter = chip.dataset.libraryFilter;
-            renderCatalog();
-            if (window.playSound) playSound("click");
-        });
-    });
-    
-    if (el.chatForm) {
-        el.chatForm.addEventListener("submit", handleLibrarianChat);
+
+    function handleAction(event) {
+        const target = event.target.closest("[data-action]");
+        if (!target) return;
+        const action = target.dataset.action;
+        const bookId = target.dataset.bookId;
+        if (action === "favorite") {
+            event.preventDefault();
+            toggleFavorite(bookId);
+        } else if (action === "borrow") {
+            event.preventDefault();
+            borrowBook(bookId);
+        } else if (action === "return") {
+            event.preventDefault();
+            returnBook(bookId);
+        } else if (action === "read") {
+            event.preventDefault();
+            openReader(bookId);
+        } else if (action === "reset-filters") {
+            event.preventDefault();
+            resetFilters();
+        }
     }
-    
-    renderReadingDesk();
-    renderCatalog();
-    updateDashboardStats();
-    
-    initLibrarianChat();
-    initChatSuggestions();
-    initStudyNotes();
-});
+
+    function initCatalogControls() {
+        el.librarySearch?.addEventListener("input", (event) => {
+            state.query = event.target.value.trim();
+            renderCatalog();
+            syncControls();
+        });
+        el.libraryClearSearch?.addEventListener("click", () => {
+            state.query = "";
+            if (el.librarySearch) el.librarySearch.value = "";
+            renderCatalog();
+            syncControls();
+            el.librarySearch?.focus();
+        });
+        el.librarySort?.addEventListener("change", (event) => {
+            state.sortMode = normalizeChoice(event.target.value, ["recommended", "rating", "title", "duration"], "recommended");
+            storage.write(STORAGE_KEYS.sortMode, state.sortMode);
+            renderCatalog();
+            play("click");
+        });
+        el.libraryViewGrid?.addEventListener("click", () => {
+            state.viewMode = "grid";
+            storage.write(STORAGE_KEYS.viewMode, state.viewMode);
+            refreshPage();
+        });
+        el.libraryViewList?.addEventListener("click", () => {
+            state.viewMode = "list";
+            storage.write(STORAGE_KEYS.viewMode, state.viewMode);
+            refreshPage();
+        });
+        document.querySelectorAll("[data-library-status]").forEach((button) => button.addEventListener("click", () => {
+            state.activeStatus = button.dataset.libraryStatus || "all";
+            renderCatalog();
+            syncControls();
+            play("click");
+        }));
+        document.querySelectorAll("[data-library-filter]").forEach((button) => button.addEventListener("click", () => {
+            state.activeCategory = button.dataset.libraryFilter || "all";
+            renderCatalog();
+            syncControls();
+            play("click");
+        }));
+        el.resourceGrid?.addEventListener("click", handleAction);
+        el.readingDeskList?.addEventListener("click", handleAction);
+    }
+
+    function cacheElements() {
+        [
+            "toast", "themeToggleBtn", "statTotalBooks", "statDeskBooks", "statNotesCount", "statReadingProgress", "libraryFavoritesCount",
+            "continueReadingCard", "continueReadingCover", "continueReadingLabel", "continueReadingTitle", "continueReadingMeta", "continueReadingProgress", "continueReadingProgressValue", "continueReadingProgressFill", "continueReadingButton",
+            "readingDeskList", "librarySearch", "libraryClearSearch", "libraryResultCount", "librarySort", "libraryViewGrid", "libraryViewList", "resourceGrid",
+            "chatHistory", "chatInput", "chatForm", "libraryNote", "saveLibraryNote", "clearLibraryNote", "noteBookSelect", "noteCharCount", "autosaveStatus"
+        ].forEach((id) => { el[id] = document.getElementById(id); });
+    }
+
+    function init() {
+        cacheElements();
+        initTheme();
+        initCatalogControls();
+        initChat();
+        initNotes();
+        refreshPage();
+        window.LibraryPage = {
+            getState: () => ({ ...state, borrowedIds: [...state.borrowedIds], favorites: [...state.favorites] }),
+            refresh: refreshPage
+        };
+    }
+
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
+    else init();
+})();
