@@ -3,18 +3,32 @@
 
     const CONFIG = {
         name: "BUBUB",
-        logo: "bubub-universe-of-tech-logo.jpg",
+        logo: "bubub-mascot.webp",
         maxHistory: 24,
         mainPages: new Set([
             "index.html",
             "materi.html",
+            "materi-basic.html",
             "quiz.html",
+            "quiz-session.html",
+            "quiz-budaya.html",
+            "quiz-budaya-lms.html",
             "bahasa-daerah.html",
+            "daerah-detail.html",
+            "latihan-bahasa.html",
             "profile.html",
             "learning-path.html",
+            "learning-journey.html",
             "snbt.html",
             "tka-lms.html",
+            "tka-quiz.html",
             "achievements.html",
+            "leaderboard.html",
+            "projects.html",
+            "library.html",
+            "reader.html",
+            "payment.html",
+            "pro-hub.html",
             "login.html"
         ])
     };
@@ -36,20 +50,60 @@
             chips: ["Jelaskan roadmap", "Tanya SQL", "Tanya JavaScript", "Debug konsep", "Tips belajar"],
             intro: "Di halaman materi, aku bisa bantu jelaskan konsep, menyusun urutan belajar, dan mengarahkan ke latihan atau sandbox."
         },
+        "materi-basic": {
+            label: "Learning Studio",
+            chips: ["Penjelasan kode", "Solusi sandbox", "Jalankan latihan", "Saran belajar", "Bab berikutnya"],
+            intro: "Di Learning Studio, aku bisa bantu memahami baris kode, menjalankan latihan interaktif, dan mereview jawaban sandbox."
+        },
         quiz: {
             label: "Quiz",
             chips: ["Strategi quiz", "Minta hint", "Review konsep", "Mode latihan", "Kenapa salah?"],
             intro: "Di halaman quiz, aku bisa memberi petunjuk belajar dan penjelasan konsep tanpa langsung membocorkan jawaban akhir."
+        },
+        "quiz-session": {
+            label: "Sesi Quiz",
+            chips: ["Petunjuk soal", "Eliminasi opsi", "Konsep terkait", "Manajemen waktu", "Fokus latihan"],
+            intro: "Di sesi kuis yang sedang berjalan, aku siap memberikan panduan berpikir, tips eliminasi opsi, dan penjelasan konseptual."
         },
         "bahasa-daerah": {
             label: "Bahasa Daerah",
             chips: ["Belajar frasa", "Budaya Nusantara", "Cara latihan", "Rekomendasi daerah", "Mulai region apa?"],
             intro: "Di halaman bahasa daerah, aku bisa bantu mengenal frasa, budaya, tradisi, dan cara latihan yang enak diikuti."
         },
+        "daerah-detail": {
+            label: "Detail Daerah",
+            chips: ["Frasa penting", "Adat istiadat", "Kuliner khas", "Destinasi budaya", "Latihan kosakata"],
+            intro: "Di halaman detail daerah ini, kamu bisa mendalami dialek, warisan budaya, dan kosakata autentik setempat."
+        },
+        "latihan-bahasa": {
+            label: "Latihan Bahasa",
+            chips: ["Review kartu", "Spaced repetition", "Uji ingatan", "Koreksi lafal", "Tips hafalan"],
+            intro: "Di ruang latihan bahasa daerah, aku memandu spaced repetition flashcard untuk mempercepat penguasaan kosakata."
+        },
         library: {
             label: "Library",
             chips: ["Rekomendasi buku", "Ringkas UI/UX", "Buku SQL", "Buku pemula", "Topik non-tech"],
             intro: "Di library, aku bisa bantu merekomendasikan buku, menjelaskan isi bab, dan memilih bacaan sesuai kebutuhanmu."
+        },
+        reader: {
+            label: "Reader Studio",
+            chips: ["Rangkum bab", "Poin kunci", "Pertanyaan uji", "Catatan penting", "Terapkan konsep"],
+            intro: "Di Reader Studio, aku siap membuatkan rangkuman terstruktur, intisari bab, dan kuis pemahaman bacaan."
+        },
+        projects: {
+            label: "Proyek Nyata",
+            chips: ["Ide proyek", "Struktur folder", "Tech stack", "Review arsitektur", "Tips portofolio"],
+            intro: "Di halaman Proyek, aku bantu mengarahkan implementasi studi kasus nyata untuk membangun portofolio solid."
+        },
+        leaderboard: {
+            label: "Papan Peringkat",
+            chips: ["Cara naik peringkat", "Sistem XP", "Misi mingguan", "Strategi konsistensi", "Poin quiz"],
+            intro: "Di Leaderboard, pantau posisi peringkat belajarmu dan dapatkan tips mendulang XP secara konsisten."
+        },
+        "learning-journey": {
+            label: "Learning Journey",
+            chips: ["Jalur karir", "Roadmap web", "Roadmap data", "Evaluasi skill", "Target pekanan"],
+            intro: "Di Learning Journey, rencanakan lintasan karir teknologi terpadu dari tingkat pemula sampai mahir."
         },
         profile: {
             label: "Profil",
@@ -62,9 +116,9 @@
             intro: "Di learning path, aku bisa bantu memilih jalur belajar dan membuat rencana latihan yang realistis."
         },
         snbt: {
-            label: "TKA",
+            label: "TKA & SNBT",
             chips: ["Strategi TKA", "Pilih mapel", "Diagnosis awal", "Rencana 7 hari", "Review kesalahan"],
-            intro: "Di dashboard TKA, aku bisa bantu memilih fokus, menyusun latihan, dan merangkum pola belajar."
+            intro: "Di dashboard TKA & SNBT, aku bisa bantu memilih fokus, menyusun latihan, dan merangkum pola belajar."
         },
         "tka-lms": {
             label: "TKA LMS",
@@ -75,6 +129,16 @@
             label: "Pencapaian",
             chips: ["Cara buka lencana", "Cek XP saya", "Sertifikat jalur", "Milestone berikutnya", "Papan peringkat"],
             intro: "Di halaman Pencapaian, aku bisa bantu menjelaskan cara membuka lencana, memantau XP, mengklaim sertifikat, dan melihat posisi di papan peringkat."
+        },
+        payment: {
+            label: "Upgrade Pro",
+            chips: ["Benefit Pro", "Metode pembayaran", "Akses penuh materi", "Bantuan checkout", "Paket belajar"],
+            intro: "Di halaman Upgrade Pro, aku siap menjelaskan keunggulan fitur Pro, sertifikasi, dan akses ujian tak terbatas."
+        },
+        "pro-hub": {
+            label: "Ruang PRO",
+            chips: ["Fitur eksklusif", "Materi lanjutan", "Mentoring AI", "Simulasi ujian penuh", "Download modul"],
+            intro: "Selamat datang di Ruang PRO! Nikmati akses eksklusif fitur premium, analitik mendalam, dan modul lanjutan."
         },
         login: {
             label: "Login",

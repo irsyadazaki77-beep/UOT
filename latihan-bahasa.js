@@ -214,8 +214,21 @@
         el.speakingStart.addEventListener("click", startSpeaking); el.speakingListen.addEventListener("click", () => { const item = currentItem(); if (item) speak(item.card.word); }); el.speakingNext.addEventListener("click", advanceCurrent); el.matchReset.addEventListener("click", renderMatch);
         el.regionSearch.addEventListener("input", renderRegionList); el.cardSearch.addEventListener("input", renderDictionary); document.querySelectorAll(".filter-chip").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".filter-chip").forEach(chip => chip.classList.remove("active")); button.classList.add("active"); renderRegionList(); }));
         el.favoritePlace.addEventListener("click", () => { const places = profile.favoritePlaces || []; profile.favoritePlaces = places.includes(activePlace.id) ? places.filter(id => id !== activePlace.id) : [...places, activePlace.id]; saveProfile(); renderOverview(); });
-        el.themeToggle.addEventListener("click", () => { document.body.classList.toggle("dark-theme"); localStorage.setItem("bahasaPractice.theme", document.body.classList.contains("dark-theme") ? "dark" : "light"); });
+        el.themeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-theme");
+            const isDark = document.body.classList.contains("dark-theme");
+            localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
+            localStorage.setItem("bahasaPractice.theme", isDark ? "dark" : "light");
+        });
         document.addEventListener("keydown", event => { if (!event.target.closest(".mode-tab")) return; const tabs = Array.from(document.querySelectorAll(".mode-tab")); const index = tabs.findIndex(tab => tab.dataset.mode === currentMode); if (event.key === "ArrowRight") { event.preventDefault(); showMode(tabs[(index + 1) % tabs.length].dataset.mode); tabs[(index + 1) % tabs.length].focus(); } if (event.key === "ArrowLeft") { event.preventDefault(); showMode(tabs[(index - 1 + tabs.length) % tabs.length].dataset.mode); tabs[(index - 1 + tabs.length) % tabs.length].focus(); } });
     }
-    document.addEventListener("DOMContentLoaded", () => { profile = loadProfile(); if (localStorage.getItem("bahasaPractice.theme") === "dark") document.body.classList.add("dark-theme"); activePlace = data.getPlaceById(new URLSearchParams(location.search).get("id")); attachEvents(); beginSession(); saveProfile(); });
+    document.addEventListener("DOMContentLoaded", () => {
+        profile = loadProfile();
+        const savedTheme = localStorage.getItem("eduquest_theme") || localStorage.getItem("bahasaPractice.theme");
+        if (savedTheme === "dark") document.body.classList.add("dark-theme");
+        activePlace = data.getPlaceById(new URLSearchParams(location.search).get("id"));
+        attachEvents();
+        beginSession();
+        saveProfile();
+    });
 })();

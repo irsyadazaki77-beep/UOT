@@ -1,0 +1,6 @@
+{
+  "name": "Universe Of Tech",
+  "description": "Platform belajar teknologi, pemrograman, proyek nyata, persiapan SNBT/TKA, dan pelestarian bahasa daerah secara interaktif dan terstruktur.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
