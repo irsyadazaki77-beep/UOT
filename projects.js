@@ -719,10 +719,45 @@
                 toast("Selesaikan seluruh langkah dan simpan refleksi atau tautan hasil terlebih dahulu.");
                 return;
             }
+            const isFirstTime = record.status !== "completed";
             state.projects[project.id] = { ...record, status: "completed", completedAt: record.completedAt || new Date().toISOString(), updatedAt: new Date().toISOString() };
             persist();
             triggerConfetti();
-            toast("Proyek selesai! Lencana baru telah terbuka. 🎉");
+
+            if (isFirstTime) {
+                if (typeof window !== "undefined" && window.ActivityService && typeof window.ActivityService.recordProject === "function") {
+                    window.ActivityService.recordProject(project.id, {
+                        title: project.title,
+                        xp: project.xp || 100,
+                        coins: Math.round((project.xp || 100) / 2)
+                    }, { showModal: true });
+                } else if (typeof window !== "undefined" && window.ProgressionEngine) {
+                    if (typeof window.ProgressionEngine.recordActivity === "function") {
+                        window.ProgressionEngine.recordActivity("project", {
+                            id: project.id,
+                            title: `Proyek: ${project.title}`,
+                            xp: project.xp || 100,
+                            coins: Math.round((project.xp || 100) / 2),
+                            reason: `Menyelesaikan proyek ${project.title}`,
+                            rewardId: `project:${project.id}`,
+                            missionType: "project_or_exam",
+                            achievementId: "project_master",
+                            showModal: true
+                        });
+                    } else if (typeof window.ProgressionEngine.completeActivity === "function") {
+                        window.ProgressionEngine.completeActivity(`project:${project.id}`, {
+                            xp: project.xp || 100,
+                            coins: Math.round((project.xp || 100) / 2),
+                            reason: `Menyelesaikan proyek ${project.title}`,
+                            achievementId: "project_master"
+                        });
+                    }
+                } else if (typeof window.addXp === "function") {
+                    window.addXp(project.xp || 100);
+                }
+            }
+
+            toast(`Proyek selesai! +${project.xp || 100} XP Didapatkan. Lencana baru telah terbuka. 🎉`);
             renderOverview();
             renderGrid();
             renderWorkspace(project, false);

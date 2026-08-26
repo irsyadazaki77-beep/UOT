@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: QuizNation Production API
+  title: Universe of Tech Production API
   version: 1.0.0
   description: Kontrak minimum untuk memindahkan identitas, progres, dan status Pro dari browser ke server.
 servers:

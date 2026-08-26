@@ -1,0 +1,238 @@
+[
+  {
+    "id": "landing-page",
+    "title": "Landing Page Personal",
+    "description": "",
+    "category": "web",
+    "difficulty": "medium",
+    "duration": "2-4 Jam",
+    "skills": [
+      "HTML",
+      "CSS"
+    ],
+    "prerequisites": [],
+    "steps": [
+      "Tentukan audiens dan susun tiga bagian utama halaman.",
+      "Bangun struktur HTML semantik untuk hero, tentang saya, dan kontak.",
+      "Terapkan warna, tipografi, dan layout responsif dengan CSS.",
+      "Uji halaman pada layar sempit lalu simpan tautan hasil."
+    ],
+    "rubric": [
+      {
+        "criteria": "Kelengkapan HTML Semantik",
+        "maxPoints": 40
+      },
+      {
+        "criteria": "Responsivitas Layout",
+        "maxPoints": 40
+      },
+      {
+        "criteria": "Kerapihan Kode",
+        "maxPoints": 20
+      }
+    ],
+    "rewards": {
+      "xp": 100,
+      "coins": 30
+    },
+    "status": "published",
+    "version": 2,
+    "objectives": [
+      "Menyusun struktur HTML semantik untuk hero, tentang saya, dan kontak",
+      "Menerapkan warna, tipografi, dan layout responsif dengan CSS",
+      "Uji halaman pada layar sempit"
+    ],
+    "milestones": [
+      {
+        "title": "Milestone 1: Struktur HTML",
+        "description": "Buat elemen header, section hero, dan footer."
+      },
+      {
+        "title": "Milestone 2: Styling Responsif",
+        "description": "Terapkan CSS Grid/Flexbox dan media queries."
+      }
+    ],
+    "files": {
+      "html": "<div class=\"profile-card\">\n  <h2>Halo, Saya Alex!</h2>\n  <p>Junior Web Developer.</p>\n</div>",
+      "css": "body { font-family: sans-serif; background: #f0fdf4; }",
+      "js": "console.log('Landing page loaded');"
+    },
+    "updatedAt": "2026-08-23T12:16:20.834Z",
+    "createdAt": "2026-08-23T12:16:20.834Z"
+  },
+  {
+    "id": "todo-interaktif",
+    "title": "To-do Interaktif",
+    "description": "",
+    "category": "javascript",
+    "difficulty": "medium",
+    "duration": "2-4 Jam",
+    "skills": [
+      "JavaScript",
+      "DOM"
+    ],
+    "prerequisites": [
+      "landing-page"
+    ],
+    "steps": [
+      "Buat struktur input, tombol tambah, dan daftar tugas.",
+      "Tambahkan event untuk membuat item baru dari input.",
+      "Buat aksi tandai selesai dan hapus untuk setiap item.",
+      "Uji tiga skenario penggunaan lalu simpan tautan hasil."
+    ],
+    "rubric": [
+      {
+        "criteria": "Fungsionalitas Tambah & Hapus",
+        "maxPoints": 50
+      },
+      {
+        "criteria": "Manipulasi DOM",
+        "maxPoints": 30
+      },
+      {
+        "criteria": "UX & Feedback Visual",
+        "maxPoints": 20
+      }
+    ],
+    "rewards": {
+      "xp": 150,
+      "coins": 45
+    },
+    "status": "published",
+    "version": 2,
+    "objectives": [
+      "Buat struktur input, tombol tambah, dan daftar tugas",
+      "Tambahkan event untuk membuat item baru dari input",
+      "Buat aksi tandai selesai dan hapus untuk setiap item"
+    ],
+    "milestones": [
+      {
+        "title": "Milestone 1: Dynamic DOM Creation",
+        "description": "Gunakan document.createElement dan appendChild."
+      },
+      {
+        "title": "Milestone 2: Event Listener & State",
+        "description": "Tangani click event untuk toggle completed class."
+      }
+    ],
+    "files": {
+      "html": "<div class=\"todo-app\">\n  <h3>Daftar Tugas Hari Ini</h3>\n</div>",
+      "css": "body { background: #e0e7ff; }",
+      "js": "console.log('Todo app initialized');"
+    },
+    "updatedAt": "2026-08-23T12:16:20.835Z",
+    "createdAt": "2026-08-23T12:16:20.835Z"
+  },
+  {
+    "id": "dashboard-data",
+    "title": "Dashboard Data Mini",
+    "description": "",
+    "category": "data",
+    "difficulty": "medium",
+    "duration": "2-4 Jam",
+    "skills": [
+      "Data",
+      "Visualisasi"
+    ],
+    "prerequisites": [],
+    "steps": [
+      "Pilih data sederhana dengan minimal 10 baris informasi.",
+      "Tentukan satu pertanyaan dan tiga metrik yang ingin ditampilkan.",
+      "Susun kartu metrik serta satu grafik atau tabel ringkas.",
+      "Tulis dua insight dari data dan simpan tautan hasil."
+    ],
+    "rubric": [],
+    "rewards": {
+      "xp": 200,
+      "coins": 25
+    },
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.835Z",
+    "createdAt": "2026-08-23T12:16:20.835Z"
+  },
+  {
+    "id": "ui-redesign",
+    "title": "Redesign UI",
+    "description": "",
+    "category": "uiux",
+    "difficulty": "medium",
+    "duration": "2-4 Jam",
+    "skills": [
+      "UI/UX",
+      "Figma"
+    ],
+    "prerequisites": [],
+    "steps": [
+      "Pilih satu layar aplikasi yang ingin diperbaiki.",
+      "Catat tiga masalah visual atau alur pengguna.",
+      "Buat redesign dengan hierarki, kontras, dan ruang yang lebih baik.",
+      "Tulis alasan perubahan lalu simpan tautan desain."
+    ],
+    "rubric": [],
+    "rewards": {
+      "xp": 100,
+      "coins": 25
+    },
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.835Z",
+    "createdAt": "2026-08-23T12:16:20.835Z"
+  },
+  {
+    "id": "form-aman",
+    "title": "Form Kontak Aman",
+    "description": "",
+    "category": "security",
+    "difficulty": "medium",
+    "duration": "2-4 Jam",
+    "skills": [
+      "Security",
+      "Validasi"
+    ],
+    "prerequisites": [],
+    "steps": [
+      "Tentukan field dan aturan validasi yang benar-benar dibutuhkan.",
+      "Bangun label, input, serta pesan kesalahan yang aksesibel.",
+      "Tambahkan validasi email dan batas karakter dengan JavaScript.",
+      "Uji input kosong, email salah, dan data valid lalu simpan hasil."
+    ],
+    "rubric": [],
+    "rewards": {
+      "xp": 150,
+      "coins": 25
+    },
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.836Z",
+    "createdAt": "2026-08-23T12:16:20.836Z"
+  },
+  {
+    "id": "git-readme",
+    "title": "Dokumentasi Proyek dengan Git",
+    "description": "",
+    "category": "git",
+    "difficulty": "medium",
+    "duration": "2-4 Jam",
+    "skills": [
+      "Git",
+      "README"
+    ],
+    "prerequisites": [],
+    "steps": [
+      "Pilih satu proyek yang akan didokumentasikan.",
+      "Tulis tujuan, fitur utama, serta teknologi yang dipakai.",
+      "Tambahkan langkah menjalankan dan satu gambar atau contoh hasil.",
+      "Tinjau README dari sudut pandang pengguna baru lalu simpan tautannya."
+    ],
+    "rubric": [],
+    "rewards": {
+      "xp": 100,
+      "coins": 25
+    },
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.836Z",
+    "createdAt": "2026-08-23T12:16:20.836Z"
+  }
+]

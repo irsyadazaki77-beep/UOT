@@ -7,17 +7,7 @@
     const SUBSCRIPTION_KEY = "eduquestSubscription";
  
     const $ = id => document.getElementById(id);
-    const productionCheckout = Boolean(window.QuizNationAPI?.isConfigured());
-
-    if (productionCheckout) {
-        document.body.classList.add("production-checkout");
-        document.title = "Checkout Pro - Universe Of Tech";
-        $("checkoutModeTitle").textContent = "Checkout produksi";
-        $("checkoutModeDescription").textContent = "Kamu akan diarahkan ke halaman pembayaran milik penyedia resmi. Data kartu tidak dimasukkan di situs ini.";
-        const modeIcon = document.querySelector(".checkout-demo-notice i");
-        if (modeIcon) modeIcon.className = "fa-solid fa-shield-halved";
-        $("payNowBtn").querySelector(".btn-text").textContent = "Lanjut ke Checkout Aman";
-    }
+    let isConfiguredProd = false;
  
     // Plans Configuration
     const PLANS = {
@@ -565,106 +555,107 @@
         if (box) box.classList.remove("show");
     }
 
-    // Process the local demo. A real deployment should redirect to a hosted
-    // checkout URL returned by QuizNationAPI.createCheckoutSession().
+    // Process checkout. In production with configured gateway, redirects to secure checkout.
+    // In demo/sandbox, processes simulation and registers sandbox on server.
     $("payNowBtn").addEventListener("click", async () => {
         clearCheckoutMessage();
 
-        if (window.QuizNationAPI?.isConfigured()) {
-            const payBtn = $("payNowBtn");
-            const btnText = payBtn.querySelector(".btn-text");
-            const btnSpinner = payBtn.querySelector(".btn-spinner");
-            payBtn.disabled = true;
-            btnText.setAttribute("hidden", "");
-            btnSpinner.removeAttribute("hidden");
-            try {
+        const payBtn = $("payNowBtn");
+        const btnText = payBtn.querySelector(".btn-text");
+        const btnSpinner = payBtn.querySelector(".btn-spinner");
+
+        payBtn.disabled = true;
+        btnText.setAttribute("hidden", "");
+        btnSpinner.removeAttribute("hidden");
+
+        try {
+            const configStatus = await window.QuizNationAPI?.getConfigStatus?.().catch(() => ({
+                paymentGateway: { isConfigured: false, mode: "demo" }
+            }));
+
+            const isConfiguredProd = Boolean(configStatus?.paymentGateway?.isConfigured);
+
+            if (isConfiguredProd) {
                 const checkout = await window.QuizNationAPI.createCheckoutSession({
                     planId: selectedPlanKey,
                     source: new URLSearchParams(location.search).get("source") || "payment"
                 });
-                window.location.assign(checkout.checkoutUrl);
-                return;
-            } catch (error) {
-                showCheckoutMessage(error.message || "Checkout belum dapat dimulai. Coba lagi.");
-                payBtn.disabled = false;
-                btnText.removeAttribute("hidden");
-                btnSpinner.setAttribute("hidden", "");
-                return;
+                if (checkout && checkout.checkoutUrl && !checkout.isDemo) {
+                    window.location.assign(checkout.checkoutUrl);
+                    return;
+                }
             }
-        }
 
-        // Validation check
-        if (currentMethod === "card") {
-            if (!cardNumInput.value || !cardHolderInput.value || !cardExpiryInput.value || !cardCvvInput.value) {
-                showCheckoutMessage("Lengkapi nomor kartu, nama, masa berlaku, dan CVC sebelum melanjutkan.");
-                return;
+            // Validation check for Sandbox Demo inputs
+            if (currentMethod === "card") {
+                if (!cardNumInput.value || !cardHolderInput.value || !cardExpiryInput.value || !cardCvvInput.value) {
+                    showCheckoutMessage("Lengkapi nomor kartu demo, nama, masa berlaku, dan CVC.");
+                    payBtn.disabled = false;
+                    btnText.removeAttribute("hidden");
+                    btnSpinner.setAttribute("hidden", "");
+                    return;
+                }
+                if (cardNumInput.value.replace(/\s/g, "").length < 16) {
+                    showCheckoutMessage("Nomor kartu harus terdiri dari 16 digit.");
+                    payBtn.disabled = false;
+                    btnText.removeAttribute("hidden");
+                    btnSpinner.setAttribute("hidden", "");
+                    return;
+                }
+            } else if (currentMethod === "wallet") {
+                if (!selectedWallet) {
+                    showCheckoutMessage("Pilih salah satu e-wallet sebelum melanjutkan.");
+                    payBtn.disabled = false;
+                    btnText.removeAttribute("hidden");
+                    btnSpinner.setAttribute("hidden", "");
+                    return;
+                }
             }
-            if (cardNumInput.value.replace(/\s/g, "").length < 16) {
-                showCheckoutMessage("Nomor kartu harus terdiri dari 16 digit.");
-                return;
+
+            if (typeof playSound === "function") {
+                playSound("click");
             }
-            if (cardExpiryInput.value.replace(/\s/g, "").length < 5) {
-                showCheckoutMessage("Tanggal kedaluwarsa belum lengkap.");
-                return;
+
+            // Call server to record sandbox activation
+            if (window.QuizNationAPI?.activateSandboxPro) {
+                try {
+                    await window.QuizNationAPI.activateSandboxPro({
+                        planId: selectedPlanKey,
+                        promoCode: activePromo?.code || ""
+                    });
+                } catch (serverErr) {
+                    console.warn("[Checkout] Server sandbox registration fallback:", serverErr.message);
+                }
             }
-            if (cardCvvInput.value.length < 3) {
-                showCheckoutMessage("CVC harus terdiri dari 3 digit.");
-                return;
-            }
-        } else if (currentMethod === "wallet") {
-            if (!selectedWallet) {
-                showCheckoutMessage("Pilih salah satu e-wallet sebelum melanjutkan.");
-                return;
-            }
-        }
- 
-        // Show spinner / loading state
-        const payBtn = $("payNowBtn");
-        const btnText = payBtn.querySelector(".btn-text");
-        const btnSpinner = payBtn.querySelector(".btn-spinner");
- 
-        payBtn.disabled = true;
-        btnText.setAttribute("hidden", "");
-        btnSpinner.removeAttribute("hidden");
- 
-        if (typeof playSound === "function") {
-            playSound("click");
-        }
- 
-        // Simulate an interface delay. No bank or payment provider is contacted.
-        setTimeout(() => {
-            // Keep the legacy entitlement available while the richer subscription record is prepared.
+
             localStorage.setItem(SUBSCRIPTION_KEY, "pro");
- 
-            // If not logged in, auto-login as Guest Pro to preserve user premium features
+
             const session = Account?.getSession() || readJSON(SESSION_KEY, null);
             if (!session || !session.isLoggedIn) {
                 const guest = {
                     isLoggedIn: true,
-                    username: "Guest Pro",
+                    username: "Guest Pro (Demo)",
                     email: "guest@uot.local",
-                    avatar: "👑"
+                    avatar: "👑",
+                    isDemo: true
                 };
                 if (Account) Account.signIn(guest); else localStorage.setItem(SESSION_KEY, JSON.stringify(guest));
             }
 
-            // Play success audio
             if (typeof playSound === "function") {
                 playSound("success");
             }
- 
-            // Set success modal details
+
             const successMethodLabel = $("successPaymentMethod");
             if (currentMethod === "card") {
-                successMethodLabel.textContent = "Kartu Kredit/Debit";
+                successMethodLabel.textContent = "Kartu Kredit/Debit (Simulasi)";
             } else if (currentMethod === "qris") {
-                successMethodLabel.textContent = "QRIS (GPN)";
+                successMethodLabel.textContent = "QRIS Sandbox (Simulasi)";
             } else if (currentMethod === "wallet") {
                 const walletName = selectedWallet.charAt(0).toUpperCase() + selectedWallet.slice(1);
-                successMethodLabel.textContent = `E-Wallet (${walletName})`;
+                successMethodLabel.textContent = `E-Wallet Sandbox (${walletName})`;
             }
- 
-            // Generate a clearly marked demo reference number
+
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -672,13 +663,11 @@
             const randomSuffix = Math.floor(1000 + Math.random() * 9000);
             const invoiceNumber = `DEMO-UOT-${year}${month}${date}-${randomSuffix}`;
             $("receiptInvoiceNum").textContent = `#${invoiceNumber}`;
- 
-            // Generate formatting for date time
+
             const monthsIndo = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
             const timeStr = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0");
             $("receiptDateTime").textContent = `${date} ${monthsIndo[now.getMonth()]} ${year}, ${timeStr}`;
- 
-            // Set final amount paid in receipt modal
+
             const payable = getFinalPayableAmount();
             $("receiptFinalAmount").textContent = formatRupiah(payable);
 
@@ -688,21 +677,21 @@
                     invoice: invoiceNumber,
                     method: methodLabel,
                     amountPaid: payable,
-                    source: "demo"
+                    source: "sandbox_demo"
                 });
             }
 
-            // Open Success Modal & launch confetti
             const modal = $("successModal");
             modal.classList.add("open");
             modal.setAttribute("aria-hidden", "false");
             launchConfetti();
- 
-            // Reset loading state
+        } catch (err) {
+            showCheckoutMessage(err.message || "Gagal memproses simulasi checkout.");
+        } finally {
             payBtn.disabled = false;
             btnText.removeAttribute("hidden");
             btnSpinner.setAttribute("hidden", "");
-        }, 1800);
+        }
     });
  
     // Success Modal redirects
@@ -738,9 +727,60 @@
         panel?.classList.toggle("summary-open", expanded);
     });
  
+    async function initCheckoutMode() {
+        try {
+            const configStatus = await window.QuizNationAPI?.getConfigStatus?.().catch(() => ({
+                paymentGateway: { isConfigured: false, mode: "demo" }
+            }));
+
+            isConfiguredProd = Boolean(configStatus?.paymentGateway?.isConfigured);
+
+            if (isConfiguredProd) {
+                document.body.classList.add("production-checkout");
+                document.title = "Checkout Pro - Universe Of Tech";
+                $("checkoutModeTitle").textContent = "Checkout produksi (Stripe)";
+                $("checkoutModeDescription").textContent = "Kamu akan diarahkan ke halaman pembayaran milik penyedia resmi (Stripe). Data kartu tidak dimasukkan di situs ini.";
+                const modeIcon = document.querySelector(".checkout-demo-notice i");
+                if (modeIcon) {
+                    modeIcon.className = "fa-solid fa-shield-halved text-emerald-500";
+                }
+                $("payNowBtn").querySelector(".btn-text").textContent = "Lanjut ke Checkout Stripe";
+                
+                // Hide input elements for card payments because we will use hosted checkout!
+                const helperEl = document.querySelector(".demo-card-helper");
+                if (helperEl) helperEl.style.display = "none";
+                const formEl = document.getElementById("cardPaymentForm");
+                if (formEl) {
+                    formEl.innerHTML = `
+                        <div class="stripe-secure-redirect-box p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex gap-3 items-center">
+                            <i class="fa-solid fa-shield-halved text-xl"></i>
+                            <div>
+                                <strong style="color: #047857; font-weight: 700;">Pembayaran Terenkripsi & Aman via Stripe</strong>
+                                <p style="font-size: 11px; color: #065f46; margin-top: 4px; line-height: 1.4;">Formulir di-host langsung oleh Stripe. Informasi pembayaran Anda terlindungi sepenuhnya dan dienkripsi.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                document.body.classList.remove("production-checkout");
+                document.title = "Demo Checkout Pro - Universe Of Tech";
+                $("checkoutModeTitle").textContent = "Mode demonstrasi (Sandbox Demo)";
+                $("checkoutModeDescription").textContent = "Tidak ada pembayaran nyata. Gunakan data kartu simulasi di bawah untuk menguji.";
+                const modeIcon = document.querySelector(".checkout-demo-notice i");
+                if (modeIcon) {
+                    modeIcon.className = "fa-solid fa-flask text-amber-500";
+                }
+                $("payNowBtn").querySelector(".btn-text").textContent = "Jalankan Simulasi";
+            }
+        } catch (e) {
+            console.error("Gagal memeriksa status konfigurasi pembayaran:", e);
+        }
+    }
+
     // Init actions
     applyTheme();
     initPlan();
     initUserSession();
+    initCheckoutMode();
  
 })();

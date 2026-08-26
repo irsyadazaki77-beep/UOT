@@ -86,6 +86,23 @@
         const accuracy = session.attempts ? Math.round(session.correct / session.attempts * 100) : 0;
         profile.lastSession = { completedAt: Date.now(), attempts: session.attempts, correct: session.correct, accuracy, reviewed: session.queue.map(getKey) };
         saveProfile();
+        if (typeof window !== "undefined" && window.ProgressionEngine) {
+            if (typeof window.ProgressionEngine.recordActivity === "function") {
+                window.ProgressionEngine.recordActivity("practice", {
+                    id: `bahasa_session_${activePlace?.id || "general"}_${Date.now()}`,
+                    title: `Latihan Bahasa Daerah: ${activePlace?.label || "Nusantara"}`,
+                    count: session.attempts || 10,
+                    missionType: "practice",
+                    configKey: "CULTURE_FLASHCARD_SESSION",
+                    xp: 25,
+                    coins: 15,
+                    rewardId: `culture_session_${todayKey()}`,
+                    showModal: true
+                });
+            } else {
+                window.ProgressionEngine.awardXp(25, "Sesi latihan bahasa daerah selesai", "culture_flashcard_session");
+            }
+        }
         el.sessionSummary.hidden = false;
         el.sessionSummaryText.textContent = `${session.attempts} kartu diproses dengan akurasi ${accuracy}%. Kartu yang sulit akan kembali lebih cepat.`;
         toast("Sesi selesai. Progresmu sudah disimpan di perangkat ini.");

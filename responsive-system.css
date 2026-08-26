@@ -1,3 +1,4 @@
+@import url('tokens.css');
 @import url('compact-global.css?v=20260720-neat-polish');
 
 /* ========================================================================== */
@@ -596,6 +597,99 @@ table {
     .achievements-hero,
     .wonder-page-hero {
         min-height: auto !important;
+    }
+}
+
+/* Focus visible high-contrast ring across light and dark themes */
+:focus-visible {
+    outline: 2px solid var(--uot-focus-ring, #10b981) !important;
+    outline-offset: 2px !important;
+}
+
+body.dark-theme :focus-visible {
+    outline-color: #34d399 !important;
+}
+
+/* Quiz options robust wrapping & touch area */
+.quiz-option,
+.answer-btn,
+.lms-option,
+.culture-option,
+.choice-card,
+.option-item,
+.match-card,
+.irt-sim-option-card,
+.lms-answer-option {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto;
+    min-height: 48px;
+    height: auto !important;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+/* Touch targets on mobile / coarse pointers */
+@media (max-width: 768px), (pointer: coarse) {
+    button,
+    input,
+    select,
+    textarea,
+    .btn,
+    .button,
+    .nav-links a,
+    .mega-item-link,
+    .tab-btn,
+    .filter-chip,
+    [role="button"],
+    [role="tab"] {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+}
+
+/* Ultra-wide desktop (1920px+) */
+@media (min-width: 1920px) {
+    :root {
+        --responsive-content: 1680px;
+    }
+
+    body {
+        font-size: 16.5px;
+    }
+}
+
+/* Ultra-compact phones (320px - 360px) */
+@media (max-width: 360px) {
+    :root {
+        --responsive-gutter: 10px;
+    }
+
+    body {
+        font-size: 14px;
+    }
+
+    .navbar {
+        padding-inline: 8px !important;
+    }
+
+    .brand span {
+        display: none;
+    }
+
+    .btn, button, .button {
+        padding-inline: 10px;
+        font-size: 12px;
+    }
+
+    .hero-actions, .cta-actions {
+        gap: 8px;
+    }
+
+    .card, .glass-card, .content-card, .section-card {
+        padding: 14px !important;
     }
 }
 

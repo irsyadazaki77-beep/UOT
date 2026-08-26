@@ -320,9 +320,35 @@
         renderRemedial(); renderCharts(); renderNotesList();
     }
 
-    function renderRemedial() {
-        const weak = weakestTopic(), accuracy = averageScore(), goal = getGoal();
+    async function renderRemedial() {
         if (!($("remedialTitle") && $("remedialText") && $("remedialReason") && $("remedialAction"))) return;
+        
+        if (window.RecommendationService) {
+            try {
+                const recs = await window.RecommendationService.getRecommendations();
+
+                if (recs && recs.remedialTrigger) {
+                    $("remedialTitle").textContent = `Remedial: ${recs.remedialTrigger.skillName}`;
+                    $("remedialText").textContent = recs.remedialTrigger.explanation;
+                    $("remedialReason").textContent = `Modul Micro-Lesson: ${recs.remedialTrigger.microLesson.title} (0 XP Penalty)`;
+                    $("remedialAction").href = state.goal === "culture" ? "quiz-budaya.html" : state.goal === "snbt" ? "tka-quiz.html" : "quiz.html";
+                    return;
+                }
+
+                if (recs && recs.recommendedNext && recs.recommendedNext.length > 0) {
+                    const topRec = recs.recommendedNext[0];
+                    $("remedialTitle").textContent = `Objektif Berikutnya: ${topRec.skillName}`;
+                    $("remedialText").textContent = topRec.explanation;
+                    $("remedialReason").textContent = `Tingkat Penguasaan Akademik: ${topRec.tier} (${topRec.score}%)`;
+                    $("remedialAction").href = state.goal === "culture" ? "quiz-budaya.html" : state.goal === "snbt" ? "tka-quiz.html" : "quiz.html";
+                    return;
+                }
+            } catch (err) {
+                console.warn("[LearningJourney] Failed to load recommendations", err);
+            }
+        }
+
+        const weak = weakestTopic(), accuracy = averageScore(), goal = getGoal();
         if (weak) {
             $("remedialTitle").textContent = `Perkuat ${weak.topic}.`;
             $("remedialText").textContent = `Skor rata-rata ${weak.score}% menunjukkan topik ini memberi peluang peningkatan terbesar.`;
@@ -390,7 +416,7 @@
         }
     }
 
-    function renderInsights() {
+    async function renderInsights() {
         const data = weekData(), minutes = totalMinutes(), accuracy = averageScore(), streak = calculateStreak(), sessions = state.activities.length;
         const metrics = [
             ["fa-clock", `${minutes}m`, "Total menit fokus"],
@@ -409,12 +435,33 @@
         }
         renderCharts(); render30DayHeatmap(); renderAllNotesArchive();
 
-        const goal = getGoal(), topicScores = {};
-        goal.topics.forEach((topic, i) => topicScores[topic] = Math.max(10, Math.min(100, accuracy ? accuracy + (i % 2 ? -8 : 5) : 20 + state.completedSteps.length * 8 - i * 3)));
-        state.activities.forEach(item => { if (item.topic && Number.isFinite(Number(item.score))) topicScores[item.topic] = Number(item.score); });
+        const goal = getGoal();
+        let topicScores = {};
+
+        if (window.RecommendationService) {
+            try {
+                const masteryMap = await window.RecommendationService.getMastery();
+                if (masteryMap && window.AdaptiveLearningEngine) {
+                    Object.keys(masteryMap).forEach(skillId => {
+                        const m = masteryMap[skillId];
+                        const sk = window.AdaptiveLearningEngine.SKILLS_REGISTRY[skillId];
+                        if (sk && m && m.score > 0) {
+                            topicScores[sk.name] = m.score;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.warn("[LearningJourney] Error fetching mastery:", e);
+            }
+        } 
+        
+        if (Object.keys(topicScores).length === 0) {
+            goal.topics.forEach((topic, i) => topicScores[topic] = Math.max(10, Math.min(100, accuracy ? accuracy + (i % 2 ? -8 : 5) : 20 + state.completedSteps.length * 8 - i * 3)));
+            state.activities.forEach(item => { if (item.topic && Number.isFinite(Number(item.score))) topicScores[item.topic] = Number(item.score); });
+        }
         
         if ($("masteryList")) {
-            $("masteryList").innerHTML = Object.entries(topicScores).slice(0, 4).map(([topic, score]) => `
+            $("masteryList").innerHTML = Object.entries(topicScores).slice(0, 5).map(([topic, score]) => `
                 <div class="j-mastery-row">
                     <div><span>${escapeHTML(topic)}</span><strong>${Math.round(score)}%</strong></div>
                     <div class="j-progress"><i style="width:${Math.round(score)}%"></i></div>

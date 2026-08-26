@@ -1909,8 +1909,15 @@ function renderLesson(step, trackId, moduleId) {
             markLessonCompleted(trackId, moduleId, step.id);
             saveLmsProgress();
             
-            // Add XP via RPG Engine
-            if (typeof addXp === 'function') {
+            // Add XP via ActivityService Pipeline
+            if (typeof window.ActivityService !== "undefined" && typeof window.ActivityService.recordLesson === "function") {
+                window.ActivityService.recordLesson(step.id, {
+                    trackId,
+                    moduleId,
+                    title: step.title,
+                    xp: step.xp || 15
+                });
+            } else if (typeof addXp === 'function') {
                 addXp(step.xp || 15);
             }
 
@@ -2461,10 +2468,32 @@ function finishLmsQuiz(cheatFailed = false) {
         saveLmsProgress();
     }
 
-    // Award XP via Coder RPG
-    if (score > 0 && typeof addXp === 'function') {
-        const xpReward = isPassed ? (score * 2) + 50 : (score * 2); // Bonus 50 XP if passed!
-        addXp(xpReward);
+    // Award XP via ActivityService Pipeline
+    if (score > 0) {
+        if (typeof window.ActivityService !== "undefined" && typeof window.ActivityService.recordQuiz === "function") {
+            window.ActivityService.recordQuiz(scoreKey, score, {
+                title: `Kuis: ${lmsTracks.find(t => t.id === lmsState.currentTrackId)?.title || "LMS"}`,
+                correctCount,
+                totalQuestions: totalQuestions,
+                trackId: lmsState.currentTrackId
+            }, {
+                showModal: true
+            });
+        } else if (typeof window.ProgressionEngine !== "undefined" && typeof window.ProgressionEngine.recordActivity === "function") {
+            window.ProgressionEngine.recordActivity("quiz", {
+                id: scoreKey,
+                title: `Kuis: ${lmsTracks.find(t => t.id === lmsState.currentTrackId)?.title || "LMS"}`,
+                count: correctCount,
+                missionType: "answer_quiz",
+                configKey: isPassed ? "QUIZ_PASSED" : "QUIZ_ANSWER_CORRECT",
+                multiplier: isPassed ? 1 : 0.5,
+                rewardId: isPassed ? `quiz:${scoreKey}:passed` : null,
+                showModal: true
+            });
+        } else if (typeof addXp === 'function') {
+            const xpReward = isPassed ? (score * 2) + 50 : (score * 2);
+            addXp(xpReward);
+        }
     }
 
     // Sound effect
@@ -2558,14 +2587,20 @@ function unlockTrackBadge(trackId) {
 
     // Trigger floating notification using RPG engine achievement helper
     const track = lmsTracks.find(t => t.id === trackId);
-    if (typeof unlockAchievement === 'function') {
-        // Unlock custom local achievement
-        unlockAchievement('level_legend'); // reuse existing or customize
-    }
-
-    // Award big XP
-    if (typeof addXp === 'function') {
-        addXp(150); // Big bonus for completing track!
+    // Award big XP via ActivityService Pipeline
+    if (typeof window.ActivityService !== "undefined" && typeof window.ActivityService.recordAchievement === "function") {
+        window.ActivityService.recordAchievement('level_legend', {
+            trackId,
+            title: `Penyelesaian Track ${track?.title || trackId}`,
+            xp: 150
+        });
+    } else {
+        if (typeof unlockAchievement === 'function') {
+            unlockAchievement('level_legend');
+        }
+        if (typeof addXp === 'function') {
+            addXp(150);
+        }
     }
 }
 

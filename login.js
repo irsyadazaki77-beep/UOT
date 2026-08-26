@@ -222,8 +222,8 @@
             loginPassword: input => input.value.length >= 6 ? "" : "Kata sandi minimal 6 karakter.",
             registerName: input => input.value.trim().length >= 2 ? "" : "Nama lengkap minimal 2 karakter.",
             registerEmail: input => isValidEmail(input.value) ? "" : "Masukkan alamat email yang valid.",
-            registerPassword: input => input.value.length >= 6 ? "" : "Kata sandi minimal 6 karakter.",
-            registerConfirmPassword: input => input.value === document.getElementById("registerPassword").value && input.value.length >= 6
+            registerPassword: input => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(input.value) ? "" : "Kata sandi minimal 8 karakter (harus ada huruf besar, kecil, dan angka).",
+            registerConfirmPassword: input => input.value === document.getElementById("registerPassword").value && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(input.value)
                 ? ""
                 : "Konfirmasi kata sandi belum cocok."
         };
@@ -253,12 +253,13 @@
         });
 
         // --- 3. Form Login Submission ---
-        formLogin.addEventListener("submit", (e) => {
+        formLogin.addEventListener("submit", async (e) => {
             e.preventDefault();
             
             const emailInput = document.getElementById("loginEmail");
             const passInput = document.getElementById("loginPassword");
             const submitButton = document.getElementById("loginSubmitBtn");
+            const rememberCheckbox = document.getElementById("loginRemember");
             
             const emailVal = emailInput.value.trim();
             const passVal = passInput.value.trim();
@@ -277,43 +278,64 @@
                 return;
             }
 
-            setButtonLoading(submitButton, true, "Menyiapkan akun...");
-            // Successfully Logged In
-            playAuthSound("success");
-            
-            // Extract display name from email (mocking name)
-            const mockUsername = emailInput.value.split("@")[0];
-            const cleanName = mockUsername.charAt(0).toUpperCase() + mockUsername.slice(1);
-            
-            const sessionData = {
-                username: cleanName,
-                email: emailInput.value.trim(),
-                avatar: "👨‍💻",
-                isLoggedIn: true
-            };
+            setButtonLoading(submitButton, true, "Menghubungkan ke server...");
 
-            Account?.signIn(sessionData) || localStorage.setItem("eduquestUserSession", JSON.stringify(sessionData));
-            if (rememberCheckbox.checked) {
-                localStorage.setItem("eduquestRememberedEmail", emailInput.value.trim());
-            } else {
-                localStorage.removeItem("eduquestRememberedEmail");
+            try {
+                let userObj = null;
+                if (window.QuizNationAPI) {
+                    try {
+                        const serverRes = await window.QuizNationAPI.loginUser({
+                            email: emailVal,
+                            password: passVal
+                        });
+                        if (serverRes && serverRes.ok && serverRes.user) {
+                            userObj = {
+                                ...serverRes.user,
+                                isLoggedIn: true
+                            };
+                        }
+                    } catch (apiErr) {
+                        setButtonLoading(submitButton, false);
+                        playAuthSound("laser");
+                        showToast(apiErr.message || "Email atau kata sandi tidak valid.", "warning");
+                        shakeElement(passInput);
+                        return;
+                    }
+                }
+
+                if (!userObj) {
+                    setButtonLoading(submitButton, false);
+                    playAuthSound("laser");
+                    showToast("Server autentikasi tidak dapat dijangkau.", "warning");
+                    return;
+                }
+
+                playAuthSound("success");
+                Account?.signIn(userObj) || localStorage.setItem("eduquestUserSession", JSON.stringify(userObj));
+                if (rememberCheckbox?.checked) {
+                    localStorage.setItem("eduquestRememberedEmail", emailVal);
+                } else {
+                    localStorage.removeItem("eduquestRememberedEmail");
+                }
+                syncUserToLms(userObj.username);
+
+                if (typeof loadRPG === "function") {
+                    loadRPG();
+                }
+
+                showToast(`Selamat datang kembali, ${userObj.username}!`, "success");
+                setTimeout(() => {
+                    window.location.href = destination();
+                }, 900);
+            } catch (err) {
+                setButtonLoading(submitButton, false);
+                playAuthSound("laser");
+                showToast(err.message || "Gagal masuk ke akun.", "warning");
             }
-            syncUserToLms(cleanName);
-
-            // Sync with RPG Engine
-            if (typeof loadRPG === "function") {
-                loadRPG();
-            }
-
-            showToast(`Selamat datang kembali, ${cleanName}!`, "success");
-            
-            setTimeout(() => {
-                window.location.href = destination();
-            }, 1200);
         });
 
         // --- 4. Form Register Submission ---
-        formRegister.addEventListener("submit", (e) => {
+        formRegister.addEventListener("submit", async (e) => {
             e.preventDefault();
             
             const nameInput = document.getElementById("registerName");
@@ -340,7 +362,7 @@
 
             if (!setFieldState(passInput, validators.registerPassword(passInput))) {
                 playAuthSound("laser");
-                showToast("Kata sandi belum memenuhi ketentuan.", "warning");
+                showToast("Kata sandi minimal 8 karakter (harus mengandung huruf besar, kecil, dan angka).", "warning");
                 shakeElement(passInput);
                 return;
             }
@@ -360,73 +382,84 @@
                 return;
             }
             termsError.textContent = "";
-            setButtonLoading(submitButton, true, "Membuat akun...");
+            setButtonLoading(submitButton, true, "Mendaftarkan akun...");
 
-            // Successfully Registered
-            playAuthSound("success");
-
-            const sessionData = {
-                username: nameInput.value.trim(),
-                email: emailInput.value.trim(),
-                avatar: "🚀",
-                isLoggedIn: true
-            };
-
-            Account?.signIn(sessionData) || localStorage.setItem("eduquestUserSession", JSON.stringify(sessionData));
-            syncUserToLms(nameInput.value.trim());
-
-            // Give +25 XP Bonus for registration!
-            if (typeof addXp === "function") {
-                try {
-                    loadRPG();
-                    addXp(25);
-                    // trigger floating notification inside login page
-                    showToast("Bonus pendaftaran: +25 XP Coder RPG!", "success");
-                } catch (rpgErr) {
-                    console.warn("Could not award registration XP:", rpgErr);
+            try {
+                let userObj = null;
+                if (window.QuizNationAPI) {
+                    try {
+                        const serverRes = await window.QuizNationAPI.registerUser({
+                            username: nameInput.value.trim(),
+                            email: emailInput.value.trim(),
+                            password: passInput.value.trim()
+                        });
+                        if (serverRes && serverRes.ok && serverRes.user) {
+                            userObj = {
+                                ...serverRes.user,
+                                isLoggedIn: true
+                            };
+                        }
+                    } catch (apiErr) {
+                        setButtonLoading(submitButton, false);
+                        playAuthSound("laser");
+                        showToast(apiErr.message || "Pendaftaran gagal.", "warning");
+                        shakeElement(emailInput);
+                        return;
+                    }
                 }
+
+                if (!userObj) {
+                    setButtonLoading(submitButton, false);
+                    playAuthSound("laser");
+                    showToast("Server autentikasi tidak dapat dijangkau.", "warning");
+                    return;
+                }
+
+                playAuthSound("success");
+                Account?.signIn(userObj) || localStorage.setItem("eduquestUserSession", JSON.stringify(userObj));
+                syncUserToLms(userObj.username);
+
+                if (typeof addXp === "function") {
+                    try {
+                        loadRPG();
+                        addXp(25);
+                        showToast("Bonus pendaftaran: +25 XP Coder RPG!", "success");
+                    } catch (rpgErr) {
+                        console.warn("Could not award registration XP:", rpgErr);
+                    }
+                }
+
+                showToast("Akun berhasil dibuat. Menyiapkan ruang belajar...", "success");
+                setTimeout(() => {
+                    window.location.href = destination();
+                }, 1000);
+            } catch (err) {
+                setButtonLoading(submitButton, false);
+                playAuthSound("laser");
+                showToast(err.message || "Gagal membuat akun.", "warning");
             }
-
-            showToast("Akun berhasil dibuat. Menyiapkan ruang belajar...", "success");
-
-            setTimeout(() => {
-                window.location.href = destination();
-            }, 1500);
         });
 
         // --- 5. Social Mock Logins ---
         document.getElementById("socialGoogleBtn")?.addEventListener("click", () => {
-            playAuthSound("success");
-            const mockUser = {
-                username: "Google Scholar",
-                email: "google.scholar@uot.edu",
-                avatar: "🎓",
-                isLoggedIn: true
-            };
-            Account?.signIn(mockUser) || localStorage.setItem("eduquestUserSession", JSON.stringify(mockUser));
-            syncUserToLms("Google Scholar");
-            showToast("Masuk via Google Sukses!", "success");
-            setTimeout(() => window.location.href = destination(), 1000);
+            playAuthSound("click");
+            showToast("Otentikasi Google OAuth belum terhubung pada server ini.", "warning");
         });
 
         document.getElementById("socialGithubBtn")?.addEventListener("click", () => {
-            playAuthSound("success");
-            const mockUser = {
-                username: "Git Committer",
-                email: "git.committer@uot.edu",
-                avatar: "👾",
-                isLoggedIn: true
-            };
-            Account?.signIn(mockUser) || localStorage.setItem("eduquestUserSession", JSON.stringify(mockUser));
-            syncUserToLms("Git Committer");
-            showToast("Masuk via GitHub Sukses!", "success");
-            setTimeout(() => window.location.href = destination(), 1000);
+            playAuthSound("click");
+            showToast("Otentikasi GitHub OAuth belum terhubung pada server ini.", "warning");
         });
 
-        document.getElementById("forgotPasswordLink")?.addEventListener("click", event => {
+        document.getElementById("forgotPasswordLink")?.addEventListener("click", async event => {
             event.preventDefault();
             playAuthSound("click");
-            showToast("Pemulihan sandi belum terhubung ke server pada versi demo.", "warning");
+            try {
+                const res = await window.QuizNationAPI?.request?.("/api/auth/forgot-password", { method: "POST" });
+                showToast(res?.message || "Layanan pemulihan kata sandi via email belum dikonfigurasi.", "warning");
+            } catch (err) {
+                showToast(err.message || "Layanan pemulihan kata sandi via email belum dikonfigurasi pada server ini.", "warning");
+            }
         });
 
         ["termsLink", "privacyLink"].forEach(id => {
@@ -446,6 +479,9 @@
     function checkLogoutAction() {
         const params = new URLSearchParams(window.location.search);
         if (params.get("logout") === "1") {
+            try {
+                window.QuizNationAPI?.logoutUser?.();
+            } catch (_) {}
             Account?.signOut() || localStorage.removeItem("eduquestUserSession");
 
             playAuthSound("laser");

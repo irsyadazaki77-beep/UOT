@@ -1,13 +1,264 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#2563eb">
-  <title>Offline — UNIVERSE OF TECH</title>
-  <link rel="stylesheet" href="compact-global.css?v=20260715">
-  <style>body{margin:0;min-height:100vh;display:grid;place-items:center;padding:16px;background:#f8fafc;color:#172033;font:15px/1.5 system-ui,sans-serif}.card{max-width:430px;padding:20px;border-radius:16px;background:#fff;box-shadow:0 12px 32px #0f172a18}a{display:inline-block;margin-top:6px;padding:8px 13px;border-radius:8px;background:#2563eb;color:#fff;text-decoration:none;font-weight:700}</style>
+    <script src="theme-init.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#108e54">
+    <title>Mode Offline — Universe Of Tech</title>
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="app-shell.css">
+    <link rel="stylesheet" href="compact-global.css?v=20260715">
     <link rel="stylesheet" href="responsive-system.css?v=20260716">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            background: var(--uot-bg, #f7fbf9);
+            color: var(--uot-text-primary, #10251c);
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .offline-container {
+            width: min(520px, 100%);
+            background: var(--uot-surface, #ffffff);
+            border: 1px solid var(--uot-line, rgba(20, 62, 45, 0.12));
+            border-radius: var(--uot-radius-container, 18px);
+            padding: clamp(24px, 5vw, 36px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .status-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+        h1 {
+            font-size: clamp(22px, 4vw, 26px);
+            font-weight: 800;
+            margin: 0 0 10px;
+            letter-spacing: -0.02em;
+        }
+        p.subtitle {
+            font-size: 14px;
+            color: var(--uot-text-secondary, #475569);
+            line-height: 1.6;
+            margin: 0 0 24px;
+        }
+        .mini-game-card {
+            background: var(--uot-surface-soft, #eff7f3);
+            border: 1px solid var(--uot-line, rgba(20, 62, 45, 0.12));
+            border-radius: var(--uot-radius-card, 14px);
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--uot-accent, #108e54);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .question-text {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--uot-text-primary, #10251c);
+        }
+        .options-grid {
+            display: grid;
+            gap: 10px;
+        }
+        .opt-btn {
+            background: var(--uot-surface, #ffffff);
+            border: 1.5px solid var(--uot-line, rgba(20, 62, 45, 0.12));
+            padding: 12px 16px;
+            border-radius: var(--uot-radius-item, 10px);
+            color: var(--uot-text-primary, #10251c);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+        .opt-btn:hover {
+            border-color: var(--uot-accent, #108e54);
+            transform: translateY(-1px);
+        }
+        .opt-btn.correct {
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #166534;
+        }
+        .opt-btn.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+        .action-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 22px;
+            border-radius: var(--uot-radius-item, 10px);
+            background: var(--uot-accent, #108e54);
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 22px;
+            border-radius: var(--uot-radius-item, 10px);
+            background: transparent;
+            border: 1px solid var(--uot-line, rgba(20, 62, 45, 0.12));
+            color: var(--uot-text-primary, #10251c);
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body><main class="card"><h1>Anda sedang offline</h1><p>Materi yang sebelumnya sudah dibuka mungkin tetap tersedia. Sambungkan internet lalu coba lagi untuk memuat konten terbaru.</p><a href="index.html">Kembali ke beranda</a></main></body>
+<body>
+    <main class="offline-container">
+        <div class="status-badge" id="netStatusBadge">
+            <span class="dot"></span>
+            <span id="netStatusText">Anda Sedang Offline</span>
+        </div>
+
+        <h1>Tidak Ada Koneksi Internet</h1>
+        <p class="subtitle">Materi dan kuis yang sebelumnya pernah dibuka tetap tersimpan di perangkat. Sambil menunggu internet kembali, uji kosakata nusantara di bawah ini:</p>
+
+        <section class="mini-game-card">
+            <div class="game-header">
+                <span>Asah Kosakata Nusantara</span>
+                <span id="gameScore">Skor: 0</span>
+            </div>
+            <div class="question-text" id="quizQuestion">Memuat pertanyaan...</div>
+            <div class="options-grid" id="quizOptions"></div>
+        </section>
+
+        <div class="action-links">
+            <button class="btn-secondary" onclick="window.location.reload()">Coba Muat Ulang</button>
+            <a href="index.html" class="btn-primary">Ke Beranda Lokal</a>
+        </div>
+    </main>
+
+    <script>
+        const OFFLINE_QUESTIONS = [
+            {
+                q: "Apa arti kata 'Matur Nuwun' dalam Bahasa Jawa?",
+                options: ["Terima Kasih", "Selamat Pagi", "Permisi", "Sampai Jumpa"],
+                ans: 0
+            },
+            {
+                q: "Apa arti sapaan 'Tabe' dalam Bahasa Bugis/Makassar?",
+                options: ["Kabar Baik", "Permisi / Maaf", "Terima Kasih", "Selamat Jalan"],
+                ans: 1
+            },
+            {
+                q: "Apa arti 'Horas' dalam tradisi Bahasa Batak?",
+                options: ["Semoga sehat, selamat, dan berkah", "Selamat malam", "Mari makan bersama", "Salam damai"],
+                ans: 0
+            },
+            {
+                q: "Protokol apa yang digunakan untuk mengenkripsi transfer data di web?",
+                options: ["HTTP", "HTTPS / TLS", "FTP", "DNS"],
+                ans: 1
+            },
+            {
+                q: "Apa arti istilah 'Suksma' dalam Bahasa Bali?",
+                options: ["Terima Kasih", "Sama-sama", "Selamat Datang", "Bagus Sekali"],
+                ans: 0
+            }
+        ];
+
+        let qIndex = 0;
+        let score = 0;
+
+        function renderQuestion() {
+            const current = OFFLINE_QUESTIONS[qIndex % OFFLINE_QUESTIONS.length];
+            document.getElementById("quizQuestion").textContent = current.q;
+            const container = document.getElementById("quizOptions");
+            container.innerHTML = "";
+
+            current.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "opt-btn";
+                btn.textContent = opt;
+                btn.onclick = () => handleAnswer(idx, current.ans, btn);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(selected, correct, btn) {
+            const allBtns = document.querySelectorAll(".opt-btn");
+            allBtns.forEach(b => b.disabled = true);
+
+            if (selected === correct) {
+                btn.classList.add("correct");
+                score += 10;
+                document.getElementById("gameScore").textContent = "Skor: " + score;
+            } else {
+                btn.classList.add("wrong");
+                allBtns[correct].classList.add("correct");
+            }
+
+            setTimeout(() => {
+                qIndex++;
+                renderQuestion();
+            }, 1400);
+        }
+
+        window.addEventListener("online", () => {
+            const badge = document.getElementById("netStatusBadge");
+            const text = document.getElementById("netStatusText");
+            badge.style.background = "rgba(16, 142, 84, 0.1)";
+            badge.style.color = "#108e54";
+            badge.querySelector(".dot").style.background = "#108e54";
+            text.textContent = "Koneksi Tersambung! Memuat ulang...";
+            setTimeout(() => window.location.reload(), 1000);
+        });
+
+        renderQuestion();
+    </script>
+</body>
 </html>

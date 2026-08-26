@@ -1,0 +1,512 @@
+{
+  "version": 1,
+  "createdAt": "2026-08-23T03:57:22.848Z",
+  "label": "test_run",
+  "users": [
+    {
+      "id": "usr_anomaly_1787457442845",
+      "username": "AnomalyUser",
+      "email": "anomaly_1787457442845@test.com",
+      "passwordHash": "hash",
+      "salt": "salt",
+      "role": "user",
+      "isPro": false,
+      "createdAt": "2026-08-23T03:57:22.845Z",
+      "updatedAt": "2026-08-23T03:57:22.845Z"
+    },
+    {
+      "id": "usr_test_1787457442826",
+      "username": "TestPersistenceUser",
+      "email": "test_pers_1787457442826@universeoftech.id",
+      "passwordHash": "hash_test_12345",
+      "salt": "salt_test_12345",
+      "role": "user",
+      "isPro": false,
+      "createdAt": "2026-08-23T03:57:22.826Z",
+      "updatedAt": "2026-08-23T03:57:22.826Z"
+    },
+    {
+      "id": "usr_cheater",
+      "username": "usr_cheater",
+      "email": "usr_cheater@auto.local",
+      "passwordHash": "auto",
+      "salt": "auto",
+      "role": "user",
+      "isPro": false,
+      "createdAt": "2026-08-23T03:57:01.861Z",
+      "updatedAt": "2026-08-23T03:57:01.861Z"
+    }
+  ],
+  "content": {
+    "culture": [
+      {
+        "id": "bahasa-sunda",
+        "title": "Latihan Bahasa Sunda Dasar",
+        "category": "language",
+        "skills": [
+          "bahasa-daerah",
+          "sunda"
+        ],
+        "summary": "Kosakata sehari-hari, tata krama undak-usuk basa Sunda.",
+        "items": [
+          {
+            "id": "lang-sun-1",
+            "type": "vocab",
+            "word": "Wilujeng Sumping",
+            "translation": "Selamat Datang"
+          }
+        ],
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "budaya-jawa",
+        "title": "Kebudayaan Jawa & Wayang",
+        "category": "culture",
+        "skills": [
+          "budaya-nusantara",
+          "sejarah-daerah"
+        ],
+        "summary": "Mengenal warisan seni wayang kulit, rumah joglo, dan falsafah hidup Jawa.",
+        "items": [
+          {
+            "id": "cul-jawa-1",
+            "type": "fact",
+            "title": "Rumah Joglo",
+            "content": "Rumah adat Jawa dengan atap tajug berstruktur empat tiang utama (soko guru)."
+          }
+        ],
+        "status": "published",
+        "version": 1
+      }
+    ],
+    "lessons": [
+      {
+        "id": "html-a11y",
+        "title": "HTML Semantik dan Aksesibilitas Web",
+        "description": "Pelajari cara menyusun dokumen web semantik yang ramah screen reader dan SEO.",
+        "category": "web",
+        "skills": [
+          "html",
+          "accessibility"
+        ],
+        "prerequisites": [
+          "js-basic"
+        ],
+        "difficulty": 1,
+        "contentBlocks": [
+          {
+            "type": "html",
+            "title": "Bab 1: Struktur HTML Semantik",
+            "data": "<h2>HTML Semantik</h2><p>Elemen semantik seperti &lt;header&gt;, &lt;nav&gt;, &lt;main&gt;, &lt;section&gt;, dan &lt;footer&gt; memberikan makna struktural bagi browser dan assistive technology.</p>"
+          }
+        ],
+        "quizIds": [
+          "web-1"
+        ],
+        "estimatedMinutes": 20,
+        "rewards": {
+          "xp": 120,
+          "coins": 20
+        },
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "js-basic",
+        "title": "Dasar Pemrograman JavaScript",
+        "description": "Kuasai sintaks dasar, variabel, tipe data, dan kontrol alur dalam JavaScript modern.",
+        "category": "programming",
+        "skills": [
+          "javascript",
+          "programming-basics"
+        ],
+        "prerequisites": [],
+        "difficulty": 1,
+        "contentBlocks": [
+          {
+            "type": "html",
+            "title": "Bab 1: Pengenalan JavaScript & Ekosistem Web",
+            "data": "<h2>Bab 1: Pengenalan JavaScript</h2><p>JavaScript adalah bahasa pemrograman tingkat tinggi, dinamis, dan berbasis prototipe yang menjadi pilar utama pengembangan aplikasi web interaktif. Ciptaan Brendan Eich pada tahun 1995 ini kini berjalan di browser maupun server (Node.js).</p>"
+          },
+          {
+            "type": "code",
+            "title": "Contoh Variabel & Tipe Data",
+            "data": "let counter = 1;\nconst appName = 'Universe of Tech';\nlet isLogged = true;"
+          }
+        ],
+        "quizIds": [
+          "programming-1",
+          "programming-2",
+          "programming-3"
+        ],
+        "estimatedMinutes": 15,
+        "rewards": {
+          "xp": 100,
+          "coins": 15
+        },
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "sql-fundamentals",
+        "title": "Dasar Database Relasional & SQL",
+        "description": "Pelajari konsep tabel, primary key, foreign key, dan kueri SELECT, INSERT, UPDATE, DELETE.",
+        "category": "database",
+        "skills": [
+          "database",
+          "sql"
+        ],
+        "prerequisites": [
+          "js-basic"
+        ],
+        "difficulty": 2,
+        "contentBlocks": [
+          {
+            "type": "html",
+            "title": "Bab 1: Pengenalan Database Relasional",
+            "data": "<h2>Relational Database & Primary Key</h2><p>Database relasional menyimpan data dalam tabel yang terdiri dari kolom dan baris. Primary Key mengidentifikasi setiap baris secara unik.</p>"
+          }
+        ],
+        "quizIds": [
+          "database-1"
+        ],
+        "estimatedMinutes": 25,
+        "rewards": {
+          "xp": 150,
+          "coins": 25
+        },
+        "status": "published",
+        "version": 1
+      }
+    ],
+    "projects": [
+      {
+        "id": "landing-page",
+        "title": "Landing Page Personal",
+        "objectives": [
+          "Menyusun struktur HTML semantik untuk hero, tentang saya, dan kontak",
+          "Menerapkan warna, tipografi, dan layout responsif dengan CSS",
+          "Uji halaman pada layar sempit"
+        ],
+        "skills": [
+          "HTML",
+          "CSS"
+        ],
+        "prerequisites": [],
+        "milestones": [
+          {
+            "title": "Milestone 1: Struktur HTML",
+            "description": "Buat elemen header, section hero, dan footer."
+          },
+          {
+            "title": "Milestone 2: Styling Responsif",
+            "description": "Terapkan CSS Grid/Flexbox dan media queries."
+          }
+        ],
+        "rubric": [
+          {
+            "criteria": "Kelengkapan HTML Semantik",
+            "maxPoints": 40
+          },
+          {
+            "criteria": "Responsivitas Layout",
+            "maxPoints": 40
+          },
+          {
+            "criteria": "Kerapihan Kode",
+            "maxPoints": 20
+          }
+        ],
+        "rewards": {
+          "xp": 100,
+          "coins": 30
+        },
+        "files": {
+          "html": "<div class=\"profile-card\">\n  <h2>Halo, Saya Alex!</h2>\n  <p>Junior Web Developer.</p>\n</div>",
+          "css": "body { font-family: sans-serif; background: #f0fdf4; }",
+          "js": "console.log('Landing page loaded');"
+        },
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "todo-interaktif",
+        "title": "To-do Interaktif",
+        "objectives": [
+          "Buat struktur input, tombol tambah, dan daftar tugas",
+          "Tambahkan event untuk membuat item baru dari input",
+          "Buat aksi tandai selesai dan hapus untuk setiap item"
+        ],
+        "skills": [
+          "JavaScript",
+          "DOM"
+        ],
+        "prerequisites": [
+          "landing-page"
+        ],
+        "milestones": [
+          {
+            "title": "Milestone 1: Dynamic DOM Creation",
+            "description": "Gunakan document.createElement dan appendChild."
+          },
+          {
+            "title": "Milestone 2: Event Listener & State",
+            "description": "Tangani click event untuk toggle completed class."
+          }
+        ],
+        "rubric": [
+          {
+            "criteria": "Fungsionalitas Tambah & Hapus",
+            "maxPoints": 50
+          },
+          {
+            "criteria": "Manipulasi DOM",
+            "maxPoints": 30
+          },
+          {
+            "criteria": "UX & Feedback Visual",
+            "maxPoints": 20
+          }
+        ],
+        "rewards": {
+          "xp": 150,
+          "coins": 45
+        },
+        "files": {
+          "html": "<div class=\"todo-app\">\n  <h3>Daftar Tugas Hari Ini</h3>\n</div>",
+          "css": "body { background: #e0e7ff; }",
+          "js": "console.log('Todo app initialized');"
+        },
+        "status": "published",
+        "version": 1
+      }
+    ],
+    "quizzes": [
+      {
+        "id": "database-1",
+        "question": "Apa fungsi utama primary key dalam tabel database?",
+        "options": [
+          "Mengidentifikasi setiap baris secara unik",
+          "Menghapus tabel",
+          "Mengubah warna kolom",
+          "Membuat animasi data"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Primary key memastikan setiap record memiliki identitas unik agar mudah direferensikan.",
+        "skills": [
+          "database",
+          "sql"
+        ],
+        "difficulty": "easy",
+        "source": "quiz-question-bank",
+        "tags": [
+          "database",
+          "primary-key"
+        ],
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "design-1",
+        "question": "Apa tujuan utama wireframe?",
+        "options": [
+          "Menysun struktur dan alur layar sebelum desain visual detail",
+          "Menghitung pajak aplikasi",
+          "Membuat database production",
+          "Menghapus semua teks"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Wireframe membantu tim melihat struktur, hirarki, dan alur sebelum masuk ke visual final.",
+        "skills": [
+          "design",
+          "ui-ux"
+        ],
+        "difficulty": "easy",
+        "source": "quiz-question-bank",
+        "tags": [
+          "design",
+          "wireframe"
+        ],
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "programming-1",
+        "question": "Apa fungsi variabel dalam program?",
+        "options": [
+          "Menyimpan nilai yang bisa digunakan ulang",
+          "Menghapus error otomatis",
+          "Mengubah desain database",
+          "Menjalankan internet"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Variabel dipakai untuk menyimpan nilai, lalu nilai itu dapat dibaca atau diubah selama program berjalan.",
+        "skills": [
+          "programming",
+          "variables"
+        ],
+        "difficulty": "easy",
+        "source": "quiz-question-bank",
+        "tags": [
+          "javascript",
+          "basics"
+        ],
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "programming-2",
+        "question": "Apa arti tipe data boolean?",
+        "options": [
+          "Nilai benar atau salah",
+          "Daftar gambar",
+          "Koneksi server",
+          "Ukuran layar"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Boolean digunakan untuk kondisi logika seperti valid atau tidak valid, aktif atau tidak aktif.",
+        "skills": [
+          "programming",
+          "data-types"
+        ],
+        "difficulty": "easy",
+        "source": "quiz-question-bank",
+        "tags": [
+          "javascript",
+          "boolean"
+        ],
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "programming-3",
+        "question": "Mengapa komentar kode sebaiknya dipakai seperlunya?",
+        "options": [
+          "Agar menjelaskan bagian yang tidak langsung jelas tanpa membuat kode bising",
+          "Agar semua baris kode menjadi hijau",
+          "Agar program selalu lebih cepat",
+          "Agar tidak perlu testing"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Komentar paling berguna untuk menjelaskan alasan atau konteks, bukan mengulang hal yang sudah jelas dari kode.",
+        "skills": [
+          "programming",
+          "code-quality"
+        ],
+        "difficulty": "easy",
+        "source": "quiz-question-bank",
+        "tags": [
+          "javascript",
+          "comments"
+        ],
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "snbt-pu-1",
+        "question": "2, 5, 10, 17, 26, ... Angka berikutnya adalah...",
+        "options": [
+          "33",
+          "35",
+          "37",
+          "39"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Selisihnya 3, 5, 7, 9, lalu 11. Jadi 26 + 11 = 37.",
+        "skills": [
+          "snbt",
+          "penalaran-umum"
+        ],
+        "difficulty": "easy",
+        "source": "snbt-dashboard",
+        "tags": [
+          "snbt",
+          "pu",
+          "induktif"
+        ],
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "tka-ind-1",
+        "question": "Sebuah artikel menjelaskan bahwa membaca singkat setiap hari lebih efektif daripada membaca lama tetapi jarang. Simpulan paling tepat adalah...",
+        "options": [
+          "Durasi belajar tidak penting",
+          "Konsistensi latihan membantu pemahaman",
+          "Membaca lama selalu buruk",
+          "Artikel hanya membahas fiksi"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Gagasan utama menekankan manfaat konsistensi, bukan menolak durasi belajar.",
+        "skills": [
+          "tka",
+          "bahasa-indonesia"
+        ],
+        "difficulty": "easy",
+        "source": "snbt-dashboard",
+        "tags": [
+          "tka",
+          "indonesia"
+        ],
+        "status": "published",
+        "version": 1
+      },
+      {
+        "id": "web-1",
+        "question": "Apa fungsi HTML dalam halaman web?",
+        "options": [
+          "Menyusun struktur konten halaman",
+          "Mengatur query database",
+          "Menjalankan server fisik",
+          "Mengenkripsi password"
+        ],
+        "correctAnswer": 0,
+        "explanation": "HTML mendefinisikan struktur seperti heading, paragraf, link, form, dan elemen halaman.",
+        "skills": [
+          "web",
+          "html"
+        ],
+        "difficulty": "easy",
+        "source": "quiz-question-bank",
+        "tags": [
+          "web",
+          "html"
+        ],
+        "status": "published",
+        "version": 1
+      }
+    ]
+  },
+  "featureFlags": {
+    "adaptive_quiz_mode": {
+      "key": "adaptive_quiz_mode",
+      "enabled": true,
+      "fallback": false,
+      "description": "Penyesuaian tingkat kesulitan kuis otomatis berbasis performa",
+      "updatedAt": "2026-08-23T03:49:50.751Z"
+    },
+    "social_leaderboard_v2": {
+      "key": "social_leaderboard_v2",
+      "enabled": true,
+      "fallback": true,
+      "description": "Papan peringkat sosial real-time dan tantangan mingguan",
+      "updatedAt": "2026-08-23T03:49:50.751Z"
+    },
+    "dark_theme_default": {
+      "key": "dark_theme_default",
+      "enabled": false,
+      "fallback": false,
+      "description": "Penggunaan mode gelap sebagai tema standar",
+      "updatedAt": "2026-08-23T03:49:50.751Z"
+    },
+    "interactive_sandbox_v2": {
+      "key": "interactive_sandbox_v2",
+      "enabled": true,
+      "fallback": false,
+      "description": "Lingkungan eksekusi kode interaktif versi 2",
+      "updatedAt": "2026-08-23T03:49:50.751Z"
+    }
+  },
+  "analyticsEventsCount": 0
+}

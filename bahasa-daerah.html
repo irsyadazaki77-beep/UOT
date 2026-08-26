@@ -2,6 +2,7 @@
 <html lang="id">
 
 <head>
+    <script src="theme-init.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
@@ -14,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="app-shell.css">
     <link rel="stylesheet" href="feature-pages.css">
     <link rel="stylesheet" href="nav-polish.css">
@@ -35,7 +37,7 @@
         <nav class="navbar" aria-label="Navigasi utama">
             <div class="nav-left-group">
                 <a href="index.html" class="brand" aria-label="Universe Of Tech — Beranda">
-                    <img src="universe-of-tech-logo.jpg" alt="" class="brand-logo" width="34" height="34">
+                    <img src="universe-of-tech-logo.webp" alt="" class="brand-logo" width="38" height="38" fetchpriority="high">
                     <span>Universe Of Tech</span>
                 </a>
                 <div class="explore-wrapper">
@@ -121,16 +123,17 @@
             <div class="hero-collage" aria-label="Potret budaya dari berbagai region Indonesia">
                 <figure class="collage-main">
                     <img src="assets/daerah/editorial-papua.jpg" alt="Potret budaya Papua" width="1440" height="1080"
-                        fetchpriority="high">
+                        fetchpriority="high" decoding="async">
                     <figcaption><span>Papua Raya</span><strong>Suara dari timur</strong></figcaption>
                 </figure>
                 <figure class="collage-small collage-top">
-                    <img src="assets/daerah/editorial-sumatra.jpg" alt="Potret budaya Sumatra" width="1440" height="1080">
+                    <img src="assets/daerah/editorial-sumatra.jpg" alt="Potret budaya Sumatra" width="1440" height="1080"
+                        loading="lazy" decoding="async">
                     <figcaption>Sumatra</figcaption>
                 </figure>
                 <figure class="collage-small collage-bottom">
                     <img src="assets/daerah/editorial-bali-nusa.jpg" alt="Potret budaya Bali dan Nusa Tenggara"
-                        width="1440" height="1080">
+                        width="1440" height="1080" loading="lazy" decoding="async">
                     <figcaption>Bali & Nusa</figcaption>
                 </figure>
                 <div class="hero-seal" aria-hidden="true"><span>Jelajah</span><strong>INDONESIA</strong><i>2026</i></div>
@@ -377,16 +380,16 @@
     <div class="atlas-visually-hidden" id="atlasStatus" role="status" aria-live="polite" aria-atomic="true"></div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="auth-helper.js"></script>
-    <script src="sound-engine.js"></script>
-    <script src="wonderful-data.js"></script>
-    <script src="wonderful-core.js"></script>
-    <script src="wonderful-pages.js?v=20260727-atlas"></script>
-    <script src="bubub-ai.js"></script>
-    <script src="navbar-explore.js?v=20260722"></script>
-    <script src="coursera-home.js"></script>
-    <script src="subscription-core.js?v=20260717-pro-subscription"></script>
-    <script src="site-pro-benefits.js?v=20260717-pro-benefits"></script>
+    <script src="auth-helper.js" defer></script>
+    <script src="sound-engine.js" defer></script>
+    <script src="wonderful-data.js" defer></script>
+    <script src="wonderful-core.js" defer></script>
+    <script src="wonderful-pages.js?v=20260727-atlas" defer></script>
+    <script src="bubub-ai.js" defer></script>
+    <script src="navbar-explore.js?v=20260722" defer></script>
+    <script src="coursera-home.js" defer></script>
+    <script src="subscription-core.js?v=20260717-pro-subscription" defer></script>
+    <script src="site-pro-benefits.js?v=20260717-pro-benefits" defer></script>
 </body>
 
 </html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="theme-init.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="Kelola identitas, progres belajar, preferensi, privasi, dan membership Universe Of Tech dalam satu account hub.">
@@ -9,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="app-shell.css">
     <link rel="stylesheet" href="compact-global.css">
     <link rel="stylesheet" href="clean-ui-refresh.css">
@@ -28,7 +30,7 @@
 
     <header class="p-topbar">
         <a class="p-brand" href="index.html" aria-label="Universe Of Tech, beranda">
-            <img src="universe-of-tech-logo.jpg" alt="" width="38" height="38">
+            <img src="universe-of-tech-logo.webp" alt="" width="38" height="38" fetchpriority="high">
             <span>Universe Of Tech</span>
         </a>
         <nav class="p-topnav" aria-label="Navigasi utama">
@@ -374,10 +376,10 @@
     <div class="p-modal" id="confirmModal" aria-hidden="true"><div class="p-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText" tabindex="-1"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><h2 id="confirmTitle">Konfirmasi tindakan</h2><p id="confirmText"></p><div><button class="p-btn p-btn-quiet" id="confirmCancel" type="button">Batal</button><button class="p-btn p-btn-danger" id="confirmAction" type="button">Lanjutkan</button></div></div></div>
     <div class="p-modal p-profile-modal" id="profileEditorModal" aria-hidden="true" inert><div class="p-modal-dialog p-profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profileEditorTitle" tabindex="-1"><div class="p-modal-head"><div><span class="p-eyebrow">Identitas</span><h2 id="profileEditorTitle">Edit profil</h2><p>Perubahan tersimpan otomatis di perangkat ini.</p></div><button class="p-icon-button" id="closeProfileEditorBtn" type="button" aria-label="Tutup editor profil"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div><form id="profileForm"><div class="p-form-grid"><label>Nama<input id="profileNameInput" type="text" maxlength="32" autocomplete="name" placeholder="Nama kamu"></label><label>Email<input id="profileEmailInput" type="email" autocomplete="email" placeholder="nama@email.com" aria-describedby="profileEmailError"><small class="p-field-error" id="profileEmailError"></small></label><label class="p-span-2">Headline<input id="profileHeadlineInput" type="text" maxlength="62" placeholder="Contoh: Membangun skill digital setiap hari"></label><label class="p-span-2">Fokus belajar<select id="profileFocusInput"><option value="frontend">Web & Frontend</option><option value="backend">Backend & Data</option><option value="tka">SNBT / TKA</option><option value="culture">Bahasa & Budaya</option></select></label><label class="p-span-2">Bio<textarea id="profileBioInput" rows="3" maxlength="180" placeholder="Ceritakan target belajar atau bidang yang ingin kamu kuasai."></textarea><small><span id="bioCount">0</span>/180</small></label></div><div class="p-avatar-options" aria-label="Pilih avatar"><button type="button" data-avatar="👨‍💻" aria-label="Avatar programmer">👨‍💻</button><button type="button" data-avatar="👩‍🚀" aria-label="Avatar astronaut">👩‍🚀</button><button type="button" data-avatar="🧠" aria-label="Avatar otak">🧠</button><button type="button" data-avatar="🧑‍🎨" aria-label="Avatar kreator">🧑‍🎨</button></div><div class="p-modal-actions"><button class="p-btn p-btn-quiet" id="cancelProfileEditorBtn" type="button">Selesai</button><button class="p-btn p-btn-secondary" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Simpan profil</button></div></form></div></div>
 
-    <script src="sound-engine.js"></script>
-    <script src="account-core.js"></script>
-    <script src="subscription-core.js"></script>
-    <script src="profile.js"></script>
-    <script src="profile-refinements.js"></script>
+    <script src="sound-engine.js" defer></script>
+    <script src="account-core.js" defer></script>
+    <script src="subscription-core.js" defer></script>
+    <script src="profile.js" defer></script>
+    <script src="profile-refinements.js" defer></script>
 </body>
 </html>

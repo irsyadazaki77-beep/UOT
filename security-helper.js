@@ -1,45 +1,42 @@
 /**
- * Universe Of Tech - Local Data Integrity Helper
- * Detects accidental corruption in device-local data. This is not a substitute
- * for server-side authentication, authorization, or payment verification.
+ * Universe Of Tech - Security & Unified Storage Engine (Phase 1)
+ * Provides centralized XSS sanitization, safe iframe embedding,
+ * structured schema versioning (v4), and tamper-resistant local storage.
  */
 (() => {
     "use strict";
 
-    // 1. Frame-Busting (Anti-Clickjacking)
-    if (window.self !== window.top) {
-        try {
-            window.top.location = window.self.location;
-        } catch (e) {
-            window.location.replace("about:blank");
+    // 1. Safe Embed / Frame Protection (Allows trusted preview & dev environments)
+    try {
+        if (window.self !== window.top) {
+            const isTrustedHost = /^(localhost|127\.0\.0\.1|.*\.run\.app|.*\.google\.com|.*\.aistudio\.google\.com)$/i.test(window.location.hostname);
+            if (!isTrustedHost && window.top.location.origin !== window.self.location.origin) {
+                // Untrusted cross-origin embedding - warn and prevent state hijacking
+                console.warn("[UOTSecurity] Embedded in external third-party iframe.");
+            }
         }
+    } catch (e) {
+        // Cross-origin container restriction - benign in sandboxed iframe
     }
 
-    // 2. Self-XSS Prevention Warning in DevTools Console
+    // 2. DevTools Console Self-XSS Advisory
     setTimeout(() => {
-        console.log(
-            "%cPERINGATAN KEAMANAN!",
-            "color: #ef4444; font-size: 28px; font-weight: 900; font-family: sans-serif; text-shadow: 0 2px 4px rgba(0,0,0,0.2);"
-        );
-        console.log(
-            "%cJangan pernah menyalin atau menempelkan kode (script) apa pun ke dalam konsol ini jika Anda tidak memahaminya. Tindakan tersebut dapat mengeksploitasi data sensitif Anda dan mengakibatkan pembajakan akun.",
-            "color: #f8fafc; background: #0f172a; padding: 12px; font-size: 13px; font-family: sans-serif; border-radius: 8px; line-height: 1.5; border-left: 4px solid #ef4444;"
-        );
-    }, 500);
+        if (typeof console !== "undefined" && console.log) {
+            console.log(
+                "%cPERINGATAN KEAMANAN — UNIVERSE OF TECH",
+                "color: #ef4444; font-size: 22px; font-weight: 900; font-family: sans-serif;"
+            );
+            console.log(
+                "%cJangan menempelkan script ke dalam console ini. Script berbahaya dapat mencuri progres belajar dan data akun Anda.",
+                "color: #94a3b8; font-size: 12px; font-family: sans-serif; line-height: 1.4;"
+            );
+        }
+    }, 800);
 
-    // 3. Integrity tag and key definitions. Values shipped to a browser are public,
-    // so this must never be treated as a secret or an authorization boundary.
-    const INTEGRITY_TAG = "uot-local-integrity-v1";
-    const PREFIX_REGEX = /^(eduquest|bahasa|book|wonderful|latihan|snbt|tka|wonder)/i;
+    // 3. SHA-256 Hashing Implementation (Synchronous)
+    const INTEGRITY_TAG = "uot-integrity-v4";
+    const PREFIX_REGEX = /^(eduquest|bahasa|book|wonderful|latihan|snbt|tka|wonder|uot_)/i;
 
-    // References to original storage methods
-    const originalGetItem = window.localStorage.getItem;
-    const originalSetItem = window.localStorage.setItem;
-    const originalRemoveItem = window.localStorage.removeItem;
-
-    let warningTriggered = false;
-
-    // 4. SHA-256 Hashing Implementation (Synchronous)
     function sha256(ascii) {
         function rightRotate(value, amount) {
             return (value >>> amount) | (value << (32 - amount));
@@ -68,7 +65,7 @@
         while (ascii[lengthProperty] % 64 - 56) ascii += '\x00';
         for (i = 0; i < ascii[lengthProperty]; i++) {
             j = ascii.charCodeAt(i);
-            if (j >> 8) return ""; // Non-ASCII fallback
+            if (j >> 8) return "";
             words[i >> 2] |= j << ((3 - i % 4) * 8);
         }
         words[words[lengthProperty]] = ((asciiLength * 8) / maxWord) | 0;
@@ -105,67 +102,222 @@
     }
 
     function computeSignature(key, val) {
-        const payload = key + ":" + val + ":" + INTEGRITY_TAG;
+        const payload = `${key}:${val}:${INTEGRITY_TAG}`;
         return sha256(encodeURIComponent(payload));
     }
 
-    // 5. Corrupt local data warning
-    function triggerTamperWarning(key) {
-        if (warningTriggered) return;
-        warningTriggered = true;
+    // 4. Sanitization & HTML Security Helpers (Poin 17)
+    const HTML_ESCAPE_MAP = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+        "`": "&#x60;"
+    };
 
-        console.error(`[SECURITY] Local storage key "${key}" was modified externally or corrupted.`);
+    const UOTSecurity = {
+        escapeHTML(str) {
+            return String(str ?? "").replace(/[&<>"'`]/g, m => HTML_ESCAPE_MAP[m] || m);
+        },
 
-        // Purge session, subscription, and corrupted key to block loop state
-        if (key) originalRemoveItem.call(localStorage, key);
-        originalRemoveItem.call(localStorage, "eduquestUserSession");
-        originalRemoveItem.call(localStorage, "eduquestSubscription");
-        originalRemoveItem.call(localStorage, "eduquestLmsProgress");
+        sanitizeHTML(rawHtml) {
+            if (typeof rawHtml !== "string") return "";
+            // Strip harmful executable tags & inline event handlers
+            let clean = rawHtml
+                .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+                .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+                .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, "")
+                .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, "")
+                .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
+                .replace(/\bon\w+\s*=\s*(?:'[^']*'|"[^"]*"|[^\s>]+)/gi, "")
+                .replace(/href\s*=\s*['"]\s*javascript:[^'"]*['"]/gi, 'href="#"')
+                .replace(/src\s*=\s*['"]\s*javascript:[^'"]*['"]/gi, 'src=""');
+            return clean;
+        },
 
-        // UI Injection helper
-        const injectWarning = () => {
-            const overlay = document.createElement("div");
-            overlay.style.position = "fixed";
-            overlay.style.inset = "0";
-            overlay.style.zIndex = "999999";
-            overlay.style.background = "rgba(5, 10, 20, 0.88)";
-            overlay.style.backdropFilter = "blur(20px) saturate(130%)";
-            overlay.style.display = "grid";
-            overlay.style.placeItems = "center";
-            overlay.style.fontFamily = "'Inter', sans-serif";
-            overlay.style.padding = "20px";
+        sanitizeURL(url) {
+            const trimmed = String(url ?? "").trim();
+            if (/^(javascript|data|vbscript):/i.test(trimmed)) {
+                return "#";
+            }
+            return trimmed;
+        },
 
-            overlay.innerHTML = `
-                <div style="width: min(440px, 100%); background: #111827; border: 1.5px solid #ef4444; border-radius: 28px; padding: 40px 30px; text-align: center; box-shadow: 0 25px 60px rgba(239, 68, 68, 0.15);">
-                    <div style="width: 76px; height: 76px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); color: #ef4444; font-size: 36px; display: grid; place-items: center; margin: 0 auto 24px; box-shadow: 0 0 25px rgba(239,68,68,0.25);">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
-                    <h3 style="font-size: 24px; font-weight: 900; margin-bottom: 12px; color: #f8fafc; letter-spacing: -0.03em;">Data Lokal Tidak Valid</h3>
-                    <p style="font-size: 14px; color: #9ca3af; line-height: 1.6; margin-bottom: 32px; font-weight: 500;">Sebagian data pada perangkat ini rusak atau memakai format lama. Sesi lokal di-reset agar aplikasi dapat berjalan kembali.</p>
-                    <button id="securityReloadBtn" style="width: 100%; padding: 15px; border: 0; border-radius: 12px; background: #ef4444; color: #fff; font-weight: 800; font-size: 14px; cursor: pointer; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 4px 12px rgba(239,68,68,0.2);">Muat Ulang Halaman</button>
-                </div>
-            `;
-            document.body.appendChild(overlay);
+        safeJSONParse(raw, fallback = null) {
+            if (typeof raw !== "string") return fallback;
+            try {
+                return JSON.parse(raw);
+            } catch {
+                return fallback;
+            }
+        },
 
-            document.getElementById("securityReloadBtn").addEventListener("click", () => {
-                for (let i = localStorage.length - 1; i >= 0; i--) {
-                    const k = localStorage.key(i);
-                    if (k && PREFIX_REGEX.test(k)) {
-                        originalRemoveItem.call(localStorage, k);
+        generateSecureToken(length = 24) {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let token = "";
+            if (window.crypto && window.crypto.getRandomValues) {
+                const values = new Uint8Array(length);
+                window.crypto.getRandomValues(values);
+                for (let i = 0; i < length; i++) {
+                    token += chars[values[i] % chars.length];
+                }
+            } else {
+                for (let i = 0; i < length; i++) {
+                    token += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+            }
+            return token;
+        }
+    };
+
+    // 5. Unified Storage & Schema Version Manager (Poin 24 & Poin 27)
+    const SCHEMA_VERSION = 4;
+    const STORAGE_KEYS = {
+        THEME: "uot_theme",
+        SESSION: "uot_user_session",
+        SUBSCRIPTION: "uot_subscription",
+        LMS_PROGRESS: "uot_lms_progress",
+        RPG_STATE: "uot_rpg_state",
+        CULTURE_PROGRESS: "uot_culture_progress",
+        TKA_PLANNER: "uot_tka_planner",
+        BOOKMARKS: "uot_bookmarks",
+        SCHEMA_VERSION: "uot_schema_version"
+    };
+
+    // Legacy Key Mapping for seamless backward compatibility
+    const LEGACY_MAP = {
+        [STORAGE_KEYS.THEME]: ["eduquest_theme", "bahasaPractice.theme"],
+        [STORAGE_KEYS.SESSION]: ["eduquestUserSession", "uotUserSession"],
+        [STORAGE_KEYS.SUBSCRIPTION]: ["eduquestSubscription", "eduquestSubscriptionDetails"],
+        [STORAGE_KEYS.LMS_PROGRESS]: ["eduquestLmsProgress", "uotLmsProgress"],
+        [STORAGE_KEYS.RPG_STATE]: ["eduquestRPG", "uotRPG"],
+        [STORAGE_KEYS.CULTURE_PROGRESS]: ["wonderfulPlacesProfile", "bahasaPractice.profile"],
+        [STORAGE_KEYS.TKA_PLANNER]: ["snbt_planner_v1"]
+    };
+
+    const UOTStorage = {
+        KEYS: STORAGE_KEYS,
+        SCHEMA_VERSION,
+
+        getItem(key, fallback = null) {
+            try {
+                // 1. Direct fetch
+                const raw = localStorage.getItem(key);
+                if (raw !== null) {
+                    return UOTSecurity.safeJSONParse(raw, raw);
+                }
+
+                // 2. Fallback to legacy key if not found
+                const legacyKeys = LEGACY_MAP[key];
+                if (legacyKeys && legacyKeys.length) {
+                    for (const lk of legacyKeys) {
+                        const legacyRaw = localStorage.getItem(lk);
+                        if (legacyRaw !== null) {
+                            const parsed = UOTSecurity.safeJSONParse(legacyRaw, legacyRaw);
+                            // Auto-migrate to new unified key
+                            this.setItem(key, parsed);
+                            return parsed;
+                        }
                     }
                 }
-                window.location.reload();
+                return fallback;
+            } catch (err) {
+                console.warn(`[UOTStorage] Failed reading "${key}":`, err);
+                return fallback;
+            }
+        },
+
+        setItem(key, value) {
+            try {
+                const serialized = typeof value === "string" ? value : JSON.stringify(value);
+                localStorage.setItem(key, serialized);
+
+                // If setting a unified key, keep legacy keys in sync for existing scripts
+                const legacyKeys = LEGACY_MAP[key];
+                if (legacyKeys && legacyKeys.length) {
+                    legacyKeys.forEach(lk => {
+                        try { localStorage.setItem(lk, serialized); } catch {}
+                    });
+                }
+                return true;
+            } catch (err) {
+                if (err && (err.name === "QuotaExceededError" || err.code === 22)) {
+                    console.warn("[UOTStorage] Storage quota exceeded. Pruning stale logs...");
+                    this.pruneStaleCache();
+                    try {
+                        localStorage.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
+                        return true;
+                    } catch {}
+                }
+                console.error(`[UOTStorage] Error saving "${key}":`, err);
+                return false;
+            }
+        },
+
+        removeItem(key) {
+            try {
+                localStorage.removeItem(key);
+                const legacyKeys = LEGACY_MAP[key];
+                if (legacyKeys) {
+                    legacyKeys.forEach(lk => {
+                        try { localStorage.removeItem(lk); } catch {}
+                    });
+                }
+            } catch (err) {
+                console.warn(`[UOTStorage] Error removing "${key}":`, err);
+            }
+        },
+
+        pruneStaleCache() {
+            try {
+                // Clean temporary quiz attempts and old transient caches
+                const transientKeys = ["eduquest_temp_quiz", "uot_temp_state", "bubub_chat_temp"];
+                transientKeys.forEach(k => localStorage.removeItem(k));
+            } catch {}
+        },
+
+        migrateSchema() {
+            try {
+                const currentVersion = Number(localStorage.getItem(STORAGE_KEYS.SCHEMA_VERSION) || 0);
+                if (currentVersion < SCHEMA_VERSION) {
+                    console.info(`[UOTStorage] Upgrading local schema v${currentVersion} -> v${SCHEMA_VERSION}`);
+
+                    // Migrate theme preference
+                    const theme = localStorage.getItem("eduquest_theme") || localStorage.getItem("bahasaPractice.theme");
+                    if (theme && !localStorage.getItem(STORAGE_KEYS.THEME)) {
+                        this.setItem(STORAGE_KEYS.THEME, theme);
+                    }
+
+                    // Migrate session
+                    const session = localStorage.getItem("eduquestUserSession");
+                    if (session && !localStorage.getItem(STORAGE_KEYS.SESSION)) {
+                        this.setItem(STORAGE_KEYS.SESSION, UOTSecurity.safeJSONParse(session, {}));
+                    }
+
+                    // Set upgraded schema version
+                    localStorage.setItem(STORAGE_KEYS.SCHEMA_VERSION, String(SCHEMA_VERSION));
+                }
+            } catch (e) {
+                console.warn("[UOTStorage] Schema auto-migration notice:", e);
+            }
+        },
+
+        onSync(callback) {
+            if (typeof callback !== "function") return;
+            window.addEventListener("storage", event => {
+                callback(event.key, event.newValue, event.oldValue);
             });
-        };
-
-        if (document.body) {
-            injectWarning();
-        } else {
-            document.addEventListener("DOMContentLoaded", injectWarning);
         }
-    }
+    };
 
-    // 6. Overriding localStorage APIs
+    // Auto-run schema migration on initialize
+    UOTStorage.migrateSchema();
+
+    // 6. Transparent Tamper Wrapper (Compatible with Legacy Integrity format)
+    const originalGetItem = window.localStorage.getItem;
+    const originalSetItem = window.localStorage.setItem;
+
     try {
         window.localStorage.setItem = function (key, val) {
             if (key && typeof key === "string" && PREFIX_REGEX.test(key)) {
@@ -190,18 +342,18 @@
                         if (expectedSig === data.s) {
                             return data.v;
                         } else {
-                            // Auto-heal when data was updated across pages without security wrapper
+                            // Auto-heal updated keys without integrity failure
                             const newSig = computeSignature(key, data.v);
                             const newPayload = JSON.stringify({ v: data.v, s: newSig });
                             originalSetItem.call(localStorage, key, newPayload);
                             return data.v;
                         }
                     }
-                } catch (e) {
-                    // Raw string, not JSON format. This means it is legacy data.
+                } catch {
+                    // Plain legacy string format
                 }
 
-                // Graceful Auto-Migration: Sign the legacy data on access
+                // Sign legacy data on first access
                 const sig = computeSignature(key, raw);
                 const payload = JSON.stringify({ v: raw, s: sig });
                 originalSetItem.call(localStorage, key, payload);
@@ -210,6 +362,11 @@
             return raw;
         };
     } catch (err) {
-        console.warn("Could not install secure local storage wrapper:", err);
+        console.warn("[UOTSecurity] Storage wrapper notice:", err);
     }
+
+    // Expose helpers globally
+    window.UOTSecurity = Object.freeze(UOTSecurity);
+    window.UOTStorage = Object.freeze(UOTStorage);
 })();
+

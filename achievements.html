@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="theme-init.js"></script>
     <meta charset="UTF-8">
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="app-shell.css">
     <script src="app-shell.js" defer></script>
+    <script src="progression-engine.js"></script>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
     <script src="security-helper.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1348,7 +1351,7 @@
                                                 <nav class="navbar">
             <div class="nav-left-group">
                 <a href="index.html" class="brand">
-                    <img src="universe-of-tech-logo.jpg" alt="Universe Of Tech Logo" class="brand-logo" />
+                    <img src="universe-of-tech-logo.webp" alt="Universe Of Tech Logo" class="brand-logo" width="38" height="38" fetchpriority="high" />
                     Universe Of Tech
                 </a>
                 <div class="explore-wrapper">
@@ -1874,27 +1877,40 @@
             const completedLects = lmsAvailable ? (lmsState.progress?.completedLectures || []) : [];
             const quizScs = lmsAvailable ? (lmsState.progress?.quizScores || {}) : {};
 
-            const myLevel = rpg.level || 1;
-            const myXp = rpg.totalXp || 0;
-            const currentXp = rpg.xp || 0;
-            const nextLevelXp = myLevel * 100;
-            const xpPercent = Math.min(100, Math.round((currentXp / nextLevelXp) * 100));
+            const hasEngine = typeof window !== "undefined" && Boolean(window.ProgressionEngine);
+            const progress = hasEngine ? window.ProgressionEngine.getLevelProgress() : null;
+            const gameState = hasEngine ? window.ProgressionEngine.getGameState() : null;
+
+            const myLevel = progress ? progress.level : (rpg.level || 1);
+            const myXp = gameState ? gameState.lifetimeXp : (rpg.totalXp || 0);
+            const currentXp = progress ? progress.currentLevelXp : (rpg.xp || 0);
+            const nextLevelXp = progress ? progress.xpNeededForNext : (myLevel * 100);
+            const xpPercent = progress ? progress.percentage : Math.min(100, Math.round((currentXp / (nextLevelXp || 100)) * 100));
 
             // Load achievements unlocked array
-            const unlockedList = rpg.achievements || [];
+            const unlockedList = (gameState ? gameState.achievements : (rpg.achievements || [])).slice();
+
+            const tryUnlock = (achId) => {
+                if (hasEngine) {
+                    window.ProgressionEngine.unlockAchievement(achId);
+                }
+                if (!unlockedList.includes(achId)) {
+                    unlockedList.push(achId);
+                }
+            };
             
             // Sync with session & progress variables
-            if (session && session.isLoggedIn && !unlockedList.includes('first_step')) {
-                unlockedList.push('first_step');
+            if (session && session.isLoggedIn) {
+                tryUnlock('first_step');
             }
-            if (myLevel >= 5 && !unlockedList.includes('level_legend')) {
-                unlockedList.push('level_legend');
+            if (myLevel >= 5) {
+                tryUnlock('level_legend');
             }
-            if (pro && !unlockedList.includes('pro_badge')) {
-                unlockedList.push('pro_badge');
+            if (pro) {
+                tryUnlock('pro_badge');
             }
-            if (myXp > 150 && !unlockedList.includes('drill_champion')) {
-                unlockedList.push('drill_champion');
+            if (myXp > 150) {
+                tryUnlock('drill_champion');
             }
 
             // Sync with LMS progress
@@ -1902,26 +1918,23 @@
                 return Object.keys(quizScs).some(key => key.includes(prefix) && quizScs[key] >= 80);
             };
 
-            if (hasPassedQuiz("web-dev") && !unlockedList.includes('sandbox_hacker')) {
-                unlockedList.push('sandbox_hacker');
+            if (hasPassedQuiz("web-dev")) {
+                tryUnlock('sandbox_hacker');
             }
-            if (hasPassedQuiz("database-sql") && !unlockedList.includes('sql_master')) {
-                unlockedList.push('sql_master');
+            if (hasPassedQuiz("database-sql")) {
+                tryUnlock('sql_master');
             }
-            if (hasPassedQuiz("cyber-ui") && !unlockedList.includes('security_expert')) {
-                unlockedList.push('security_expert');
+            if (hasPassedQuiz("cyber-ui")) {
+                tryUnlock('security_expert');
             }
-            if (quizScs["cyber-ui_cyber-auth_practice"] >= 80 && !unlockedList.includes('sqli_hacker')) {
-                unlockedList.push('sqli_hacker');
+            if (quizScs["cyber-ui_cyber-auth_practice"] >= 80) {
+                tryUnlock('sqli_hacker');
             }
 
             if (session && session.isDeveloper) {
                 const devAchievements = ['first_step', 'drill_champion', 'sandbox_hacker', 'sql_master', 'security_expert', 'sqli_hacker', 'level_legend', 'pro_badge'];
-                devAchievements.forEach(id => {
-                    if (!unlockedList.includes(id)) unlockedList.push(id);
-                });
+                devAchievements.forEach(id => tryUnlock(id));
             }
-
 
             // Save synced state
             rpg.achievements = unlockedList;
@@ -1943,7 +1956,7 @@
                 6: "DevOps Architect",
                 7: "AI Archmage"
             };
-            const myTitle = levelTitles[myLevel] || "Tech Legend";
+            const myTitle = progress?.title || levelTitles[myLevel] || "Tech Legend";
 
             document.getElementById("levelHud").textContent = `Lv. ${myLevel} ${myTitle}`;
             document.getElementById("xpHud").textContent = `${myXp.toLocaleString()} XP Total`;
@@ -1965,7 +1978,7 @@
 
             if (avatarBtn && avatarDropdown && coderNameInput && rankBadge) {
                 // Load existing values from storage
-                const savedAvatar = rpg.avatar || "??";
+                const savedAvatar = (gameState?.equippedItems?.avatar) || rpg.avatar || "??";
                 const savedName = rpg.nickname || (session?.username || "Coder Anonim");
                 
                 avatarBtn.textContent = savedAvatar;
@@ -1983,6 +1996,9 @@
                     opt.addEventListener("click", () => {
                         const newAvatar = opt.textContent;
                         avatarBtn.textContent = newAvatar;
+                        if (hasEngine) {
+                            window.ProgressionEngine.equipAvatar(newAvatar);
+                        }
                         rpg.avatar = newAvatar;
                         localStorage.setItem("eduquestRPG", JSON.stringify(rpg));
                         avatarDropdown.classList.remove("show");
@@ -2367,10 +2383,10 @@
             filterAndRender();
         })();
     </script>
-    <script src="bubub-ai.js"></script>
-    <script src="navbar-explore.js?v=20260722"></script>
-    <script src="coursera-home.js"></script>
-    <script src="global-animations.js"></script>
+    <script src="bubub-ai.js" defer></script>
+    <script src="navbar-explore.js?v=20260722" defer></script>
+    <script src="coursera-home.js" defer></script>
+    <script src="global-animations.js" defer></script>
 </body>
 </html>
 

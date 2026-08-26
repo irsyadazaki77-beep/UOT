@@ -1,16 +1,25 @@
 {
-  "name": "quiznation-static",
+  "name": "universe-of-tech",
   "private": true,
   "scripts": {
     "build": "echo 'No build step required'",
     "dev": "node server.js",
     "check": "node quality-check.js",
-    "test": "node latihan-bahasa-engine.test.js && node materi-assessment.test.js && node quality-check.js",
-    "test:materi": "node materi-assessment.test.js",
+    "lint": "node quality-check.js",
+    "test": "node quality-check.js && node database-persistence.test.js && node cloud-sync.test.js && node adaptive-learning.test.js && node content-engine.test.js && node social-leaderboard.test.js && node analytics-observability.test.js && node --test core-features.test.js progression-engine.test.js snbt-dashboard.test.js latihan-bahasa-engine.test.js materi-assessment.test.js games.test.js uot-system.test.js security-audit.test.js a11y-audit.test.js e2e-browser.test.js routes-smoke.test.js",
+    "test:unit": "node database-persistence.test.js && node cloud-sync.test.js && node adaptive-learning.test.js && node content-engine.test.js && node social-leaderboard.test.js && node analytics-observability.test.js && node --test core-features.test.js progression-engine.test.js snbt-dashboard.test.js latihan-bahasa-engine.test.js materi-assessment.test.js games.test.js uot-system.test.js security-audit.test.js a11y-audit.test.js",
+    "test:e2e": "node --test e2e-browser.test.js routes-smoke.test.js",
     "test:snbt": "node --test snbt-dashboard.test.js",
+    "test:materi": "node materi-assessment.test.js",
     "prepare:production": "node prepare-production.js"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "compression": "^1.8.1",
+    "express": "^5.2.1",
+    "pg": "^8.23.0",
+    "stripe": "^22.5.0"
+  },
+  "devDependencies": {
+    "jsdom": "^30.0.1"
   }
 }

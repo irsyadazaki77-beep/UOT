@@ -98,7 +98,38 @@
         showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
-    function awardXpSafely(amount) {
+    function awardXpSafely(amount, options = {}) {
+        if (typeof window.ActivityService !== "undefined" && typeof window.ActivityService.recordLesson === "function") {
+            try {
+                window.ActivityService.recordLesson(lesson?.id || "lesson_step", {
+                    title: lesson?.title || "Pelajaran Materi",
+                    xp: Number(amount) || 20,
+                    trackId: track?.id,
+                    reason: options.reason || `Menyelesaikan ${lesson?.title || "Pelajaran"}`
+                }, {
+                    showModal: true
+                });
+                return;
+            } catch (error) {
+                console.warn("[MateriStudio] ActivityService recordLesson error:", error);
+            }
+        }
+        if (typeof window.ProgressionEngine !== "undefined" && typeof window.ProgressionEngine.recordActivity === "function") {
+            try {
+                window.ProgressionEngine.recordActivity(options.type || "materi", {
+                    id: lesson?.id || "lesson_step",
+                    title: lesson?.title || "Pelajaran Materi",
+                    xp: Number(amount) || 20,
+                    reason: options.reason || `Menyelesaikan ${lesson?.title || "Pelajaran"}`,
+                    rewardId: options.rewardId || (lesson?.id ? `lesson:${lesson.id}` : null),
+                    missionType: "read_lesson",
+                    showModal: true
+                });
+                return;
+            } catch (error) {
+                console.warn("[MateriStudio] ProgressionEngine.recordActivity error:", error);
+            }
+        }
         if (typeof window.addXp !== "function") return;
         try {
             window.addXp(amount);

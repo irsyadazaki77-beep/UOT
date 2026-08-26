@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="id">
 <head>
+    <script src="theme-init.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#f7fbf9">
@@ -14,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="app-shell.css">
     <link rel="stylesheet" href="feature-pages.css">
     <link rel="stylesheet" href="nav-polish.css">
@@ -39,7 +41,7 @@
         <nav class="navbar" aria-label="Navigasi utama">
             <div class="nav-left-group">
                 <a href="index.html" class="brand" aria-label="Universe Of Tech — Beranda">
-                    <img src="universe-of-tech-logo.jpg" alt="" class="brand-logo" width="34" height="34">
+                    <img src="universe-of-tech-logo.webp" alt="" class="brand-logo" width="38" height="38" fetchpriority="high">
                     <span>Universe Of Tech</span>
                 </a>
                 <div class="explore-wrapper">
@@ -215,10 +217,11 @@
 
     <div class="toast" id="projectToast" role="status" aria-live="polite"></div>
 
-    <script src="auth-helper.js"></script>
-    <script src="sound-engine.js"></script>
-    <script src="navbar-explore.js?v=20260722"></script>
-    <script src="projects-features.js?v=20260727"></script>
-    <script src="projects.js?v=20260727-premium"></script>
+    <script src="auth-helper.js" defer></script>
+    <script src="progression-engine.js" defer></script>
+    <script src="sound-engine.js" defer></script>
+    <script src="navbar-explore.js?v=20260722" defer></script>
+    <script src="projects-features.js?v=20260727" defer></script>
+    <script src="projects.js?v=20260727-premium" defer></script>
 </body>
 </html>

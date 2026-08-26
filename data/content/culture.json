@@ -1,0 +1,437 @@
+[
+  {
+    "id": "jawa",
+    "name": "jawa",
+    "title": "jawa",
+    "region": "Jawa",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Jawa"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.836Z",
+    "createdAt": "2026-08-23T12:16:20.836Z"
+  },
+  {
+    "id": "sunda",
+    "name": "sunda",
+    "title": "sunda",
+    "region": "Jawa",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Jawa"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.837Z",
+    "createdAt": "2026-08-23T12:16:20.837Z"
+  },
+  {
+    "id": "bali",
+    "name": "bali",
+    "title": "bali",
+    "region": "Bali-Nusa",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Bali-Nusa"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.837Z",
+    "createdAt": "2026-08-23T12:16:20.837Z"
+  },
+  {
+    "id": "minang",
+    "name": "minang",
+    "title": "minang",
+    "region": "Sumatra",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Sumatra"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.837Z",
+    "createdAt": "2026-08-23T12:16:20.837Z"
+  },
+  {
+    "id": "batak",
+    "name": "batak",
+    "title": "batak",
+    "region": "Sumatra",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Sumatra"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.837Z",
+    "createdAt": "2026-08-23T12:16:20.837Z"
+  },
+  {
+    "id": "aceh",
+    "name": "aceh",
+    "title": "aceh",
+    "region": "Sumatra",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Sumatra"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.838Z",
+    "createdAt": "2026-08-23T12:16:20.838Z"
+  },
+  {
+    "id": "betawi",
+    "name": "betawi",
+    "title": "betawi",
+    "region": "Jawa",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Jawa"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.838Z",
+    "createdAt": "2026-08-23T12:16:20.838Z"
+  },
+  {
+    "id": "dayak",
+    "name": "dayak",
+    "title": "dayak",
+    "region": "Kalimantan",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Kalimantan"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.838Z",
+    "createdAt": "2026-08-23T12:16:20.838Z"
+  },
+  {
+    "id": "banjar",
+    "name": "banjar",
+    "title": "banjar",
+    "region": "Kalimantan",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Kalimantan"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.838Z",
+    "createdAt": "2026-08-23T12:16:20.838Z"
+  },
+  {
+    "id": "bugis",
+    "name": "bugis",
+    "title": "bugis",
+    "region": "Sulawesi",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Sulawesi"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.839Z",
+    "createdAt": "2026-08-23T12:16:20.839Z"
+  },
+  {
+    "id": "madura",
+    "name": "madura",
+    "title": "madura",
+    "region": "Jawa",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Jawa"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.839Z",
+    "createdAt": "2026-08-23T12:16:20.839Z"
+  },
+  {
+    "id": "papua-provinsi",
+    "name": "papua-provinsi",
+    "title": "papua-provinsi",
+    "region": "Papua Raya",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Papua Raya"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.839Z",
+    "createdAt": "2026-08-23T12:16:20.839Z"
+  },
+  {
+    "id": "papua-barat",
+    "name": "papua-barat",
+    "title": "papua-barat",
+    "region": "Papua Raya",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Papua Raya"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.840Z",
+    "createdAt": "2026-08-23T12:16:20.840Z"
+  },
+  {
+    "id": "papua-selatan",
+    "name": "papua-selatan",
+    "title": "papua-selatan",
+    "region": "Papua Raya",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Papua Raya"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.840Z",
+    "createdAt": "2026-08-23T12:16:20.840Z"
+  },
+  {
+    "id": "papua-tengah",
+    "name": "papua-tengah",
+    "title": "papua-tengah",
+    "region": "Papua Raya",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Papua Raya"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.840Z",
+    "createdAt": "2026-08-23T12:16:20.840Z"
+  },
+  {
+    "id": "papua-pegunungan",
+    "name": "papua-pegunungan",
+    "title": "papua-pegunungan",
+    "region": "Papua Raya",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Papua Raya"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.841Z",
+    "createdAt": "2026-08-23T12:16:20.841Z"
+  },
+  {
+    "id": "papua-barat-daya",
+    "name": "papua-barat-daya",
+    "title": "papua-barat-daya",
+    "region": "Papua Raya",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Papua Raya"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.841Z",
+    "createdAt": "2026-08-23T12:16:20.841Z"
+  },
+  {
+    "id": "sasak",
+    "name": "sasak",
+    "title": "sasak",
+    "region": "Bali-Nusa",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Bali-Nusa"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.841Z",
+    "createdAt": "2026-08-23T12:16:20.841Z"
+  },
+  {
+    "id": "toraja",
+    "name": "toraja",
+    "title": "toraja",
+    "region": "Sulawesi",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Sulawesi"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.842Z",
+    "createdAt": "2026-08-23T12:16:20.842Z"
+  },
+  {
+    "id": "melayu-riau",
+    "name": "melayu-riau",
+    "title": "melayu-riau",
+    "region": "Sumatra",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Sumatra"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.842Z",
+    "createdAt": "2026-08-23T12:16:20.842Z"
+  },
+  {
+    "id": "lampung",
+    "name": "lampung",
+    "title": "lampung",
+    "region": "Sumatra",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Sumatra"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.842Z",
+    "createdAt": "2026-08-23T12:16:20.842Z"
+  },
+  {
+    "id": "ambon",
+    "name": "ambon",
+    "title": "ambon",
+    "region": "Maluku",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Maluku"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.843Z",
+    "createdAt": "2026-08-23T12:16:20.843Z"
+  },
+  {
+    "id": "gorontalo",
+    "name": "gorontalo",
+    "title": "gorontalo",
+    "region": "Sulawesi",
+    "description": "",
+    "category": "budaya",
+    "highlight": "",
+    "tags": [
+      "Sulawesi"
+    ],
+    "rating": 4.8,
+    "status": "published",
+    "version": 1,
+    "updatedAt": "2026-08-23T12:16:20.843Z",
+    "createdAt": "2026-08-23T12:16:20.843Z"
+  },
+  {
+    "id": "bahasa-sunda",
+    "title": "Latihan Bahasa Sunda Dasar",
+    "category": "language",
+    "skills": [
+      "bahasa-daerah",
+      "sunda"
+    ],
+    "summary": "Kosakata sehari-hari, tata krama undak-usuk basa Sunda.",
+    "items": [
+      {
+        "id": "lang-sun-1",
+        "type": "vocab",
+        "word": "Wilujeng Sumping",
+        "translation": "Selamat Datang"
+      }
+    ],
+    "status": "published",
+    "version": 2,
+    "updatedAt": "2026-08-23T12:16:20.844Z",
+    "createdAt": "2026-08-23T12:16:20.844Z"
+  },
+  {
+    "id": "budaya-jawa",
+    "title": "Kebudayaan Jawa & Wayang",
+    "category": "culture",
+    "skills": [
+      "budaya-nusantara",
+      "sejarah-daerah"
+    ],
+    "summary": "Mengenal warisan seni wayang kulit, rumah joglo, dan falsafah hidup Jawa.",
+    "items": [
+      {
+        "id": "cul-jawa-1",
+        "type": "fact",
+        "title": "Rumah Joglo",
+        "content": "Rumah adat Jawa dengan atap tajug berstruktur empat tiang utama (soko guru)."
+      }
+    ],
+    "status": "published",
+    "version": 2,
+    "updatedAt": "2026-08-23T12:16:20.844Z",
+    "createdAt": "2026-08-23T12:16:20.844Z"
+  }
+]

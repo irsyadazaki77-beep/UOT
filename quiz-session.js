@@ -798,6 +798,23 @@
             writeText(localStore, BEST_KEY, Math.min(100, Math.max(0, best)));
         }
 
+        if (typeof window !== "undefined" && window.ProgressionEngine && typeof window.ProgressionEngine.recordActivity === "function") {
+            try {
+                window.ProgressionEngine.recordActivity("quiz", {
+                    id: session.sessionId || `quiz_${Date.now()}`,
+                    title: `Kuis: ${state.payload?.config?.categoryLabel || "Quiz"}`,
+                    count: state.correct,
+                    missionType: "answer_quiz",
+                    configKey: isPassed ? "QUIZ_PASSED" : "QUIZ_ANSWER_CORRECT",
+                    multiplier: isPassed ? 1 : 0.5,
+                    rewardId: isPassed ? `quiz_session_${session.sessionId || Date.now()}` : null,
+                    showModal: false
+                });
+            } catch (err) {
+                console.warn("[QuizSession] ProgressionEngine record error:", err);
+            }
+        }
+
         core.storage.remove(sessionStore, ACTIVE_KEY);
         els.progressBar.value = 100;
         els.focusProgress.setAttribute("aria-valuenow", "100");

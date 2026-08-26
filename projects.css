@@ -1631,10 +1631,40 @@ body.dark-theme .playground-outputs {
         align-self: flex-start;
     }
     .workspace-main, .workspace-sidebar {
-        padding: 20px;
+        padding: 16px;
     }
     .workspace-actions {
         grid-template-columns: 1fr;
+    }
+    .playground-head {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px 10px;
+    }
+    .playground-tabs {
+        overflow-x: auto;
+        max-width: 100%;
+        scrollbar-width: none;
+    }
+    .playground-tab-btn {
+        padding: 10px 12px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+    .playground-run-btn {
+        min-height: 44px;
+        padding: 10px 16px;
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+    .playground-editors {
+        height: 200px;
+    }
+    .playground-outputs {
+        height: 220px;
     }
     .badges-grid {
         grid-template-columns: repeat(4, 1fr);
@@ -1661,5 +1691,24 @@ body.dark-theme .playground-outputs {
     .project-card {
         min-height: auto;
         padding: 20px;
+    }
+    .playground-editors {
+        height: 180px;
+    }
+    .playground-outputs {
+        height: 200px;
+    }
+}
+
+@media (max-width: 360px) {
+    .workspace-panel {
+        border-radius: 14px;
+    }
+    .workspace-header h2 {
+        font-size: 18px;
+    }
+    .playground-editor-textarea {
+        font-size: 11.5px;
+        padding: 10px;
     }
 }

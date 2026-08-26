@@ -1,0 +1,511 @@
+/**
+ * Universe of Tech - Mini Games & Challenge Arena CSS
+ * FASE 4 - Responsive, Accessible & High-Contrast Design
+ */
+
+:root {
+    --game-bg: var(--uot-bg, #f6f8f7);
+    --game-surface: var(--uot-surface, #ffffff);
+    --game-surface-soft: var(--uot-surface-soft, #edf3ef);
+    --game-primary: var(--uot-primary, #15803d);
+    --game-primary-hover: var(--uot-primary-hover, #166534);
+    --game-accent: var(--uot-accent, #d97706);
+    --game-text: var(--uot-text-primary, #0f172a);
+    --game-muted: var(--uot-text-muted, #475569);
+    --game-border: var(--uot-border, rgba(15, 23, 42, 0.12));
+    --game-correct: #16a34a;
+    --game-wrong: #dc2626;
+    --game-radius: 12px;
+    --game-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.dark-theme {
+    --game-bg: #0b1310;
+    --game-surface: #13221c;
+    --game-surface-soft: #1b2f27;
+    --game-primary: #22c55e;
+    --game-primary-hover: #4ade80;
+    --game-text: #f1f5f9;
+    --game-muted: #94a3b8;
+    --game-border: rgba(255, 255, 255, 0.12);
+}
+
+.game-arena-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    font-family: inherit;
+    color: var(--game-text);
+}
+
+/* Header & Tab Selector */
+.game-arena-header {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.game-arena-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+}
+
+.game-arena-subtitle {
+    color: var(--game-muted);
+    font-size: 15px;
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* Game Category Tabs */
+.game-tabs-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 8px 4px;
+    margin-bottom: 20px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.game-tabs-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.game-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    border-radius: 999px;
+    border: 1px solid var(--game-border);
+    background: var(--game-surface);
+    color: var(--game-text);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    min-height: 44px;
+}
+
+.game-tab-btn:hover {
+    border-color: var(--game-primary);
+    background: var(--game-surface-soft);
+}
+
+.game-tab-btn.active {
+    background: var(--game-primary);
+    color: #ffffff;
+    border-color: var(--game-primary);
+}
+
+/* Game Control Bar (Difficulty & Topic Selectors) */
+.game-controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--game-surface);
+    padding: 14px 18px;
+    border-radius: var(--game-radius);
+    border: 1px solid var(--game-border);
+    box-shadow: var(--game-shadow);
+    margin-bottom: 20px;
+}
+
+.difficulty-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.diff-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: 1px solid var(--game-border);
+    background: transparent;
+    color: var(--game-muted);
+    cursor: pointer;
+    min-height: 38px;
+    transition: all 0.15s ease;
+}
+
+.diff-btn.active {
+    background: var(--game-surface-soft);
+    color: var(--game-text);
+    border-color: var(--game-primary);
+    box-shadow: 0 0 0 1px var(--game-primary);
+}
+
+.topic-select {
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid var(--game-border);
+    background: var(--game-surface);
+    color: var(--game-text);
+    min-height: 40px;
+    cursor: pointer;
+}
+
+/* Live Stats Bar */
+.game-stats-hud {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: var(--game-surface);
+    border: 1px solid var(--game-border);
+    border-radius: var(--game-radius);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--game-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--game-text);
+}
+
+/* Game Stage / Board Canvas */
+.game-stage-card {
+    background: var(--game-surface);
+    border: 1px solid var(--game-border);
+    border-radius: var(--game-radius);
+    padding: 24px;
+    box-shadow: var(--game-shadow);
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* ========================================================
+   Matching Game Styles
+   ======================================================== */
+.matching-grid-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
+}
+
+.match-tile-btn {
+    min-height: 80px;
+    padding: 14px 12px;
+    background: var(--game-surface-soft);
+    border: 2px solid var(--game-border);
+    border-radius: 10px;
+    color: var(--game-text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    user-select: none;
+}
+
+.match-tile-btn:focus-visible {
+    outline: 3px solid var(--game-primary);
+    outline-offset: 2px;
+}
+
+.match-tile-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--game-primary);
+}
+
+.match-tile-btn.selected {
+    border-color: var(--game-primary);
+    background: rgba(22, 163, 74, 0.12);
+    box-shadow: 0 0 0 2px var(--game-primary);
+}
+
+.match-tile-btn.matched {
+    background: rgba(22, 163, 74, 0.15);
+    border-color: var(--game-correct);
+    color: var(--game-correct);
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+}
+
+.match-tile-btn.hinted {
+    animation: hintGlow 1.2s infinite alternate;
+    border-color: var(--game-accent);
+}
+
+@keyframes hintGlow {
+    from { background: rgba(217, 119, 6, 0.1); }
+    to { background: rgba(217, 119, 6, 0.35); }
+}
+
+/* ========================================================
+   Culture & Tech Clue Hunt Styles
+   ======================================================== */
+.clue-riddle-card {
+    background: var(--game-surface-soft);
+    border-radius: var(--game-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--game-accent);
+}
+
+.clue-riddle-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--game-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+}
+
+.clue-riddle-text {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--game-text);
+}
+
+.clue-hint-box {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(217, 119, 6, 0.12);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--game-text);
+}
+
+.clue-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.clue-option-btn {
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    background: var(--game-surface);
+    border: 2px solid var(--game-border);
+    border-radius: 10px;
+    color: var(--game-text);
+    text-align: left;
+    cursor: pointer;
+    min-height: 52px;
+    transition: all 0.15s ease;
+}
+
+.clue-option-btn:hover:not(:disabled) {
+    border-color: var(--game-primary);
+    background: var(--game-surface-soft);
+}
+
+.clue-option-btn.correct {
+    background: rgba(22, 163, 74, 0.15);
+    border-color: var(--game-correct);
+    color: var(--game-correct);
+}
+
+.clue-option-btn.wrong {
+    background: rgba(220, 38, 38, 0.12);
+    border-color: var(--game-wrong);
+    color: var(--game-wrong);
+}
+
+/* ========================================================
+   Pronunciation / Voice Challenge Styles
+   ======================================================== */
+.voice-hero-card {
+    text-align: center;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.voice-phrase-display {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--game-text);
+    margin-bottom: 8px;
+}
+
+.voice-phonetic-text {
+    font-size: 16px;
+    color: var(--game-accent);
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.voice-meaning-text {
+    font-size: 15px;
+    color: var(--game-muted);
+}
+
+.voice-actions-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin: 20px 0;
+}
+
+.voice-record-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--game-primary);
+    color: #ffffff;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, background 0.15s ease;
+    box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
+}
+
+.voice-record-btn.recording {
+    background: var(--game-wrong);
+    animation: recordPulse 1s infinite alternate;
+}
+
+@keyframes recordPulse {
+    from { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+    to { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+}
+
+.voice-listen-btn {
+    padding: 10px 18px;
+    background: var(--game-surface-soft);
+    border: 1px solid var(--game-border);
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--game-text);
+    cursor: pointer;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ========================================================
+   Code & Syntax Scramble Styles
+   ======================================================== */
+.syntax-lines-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.syntax-line-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--game-surface-soft);
+    border: 2px solid var(--game-border);
+    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+    color: var(--game-text);
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+.syntax-line-row.selected {
+    border-color: var(--game-primary);
+    background: rgba(22, 163, 74, 0.12);
+}
+
+.syntax-line-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.syntax-arrow-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    border: 1px solid var(--game-border);
+    background: var(--game-surface);
+    color: var(--game-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Completion Modal & Dialog */
+.game-result-modal {
+    text-align: center;
+    padding: 32px 20px;
+}
+
+.result-stars-row {
+    font-size: 32px;
+    color: #f59e0b;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.result-score-title {
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--game-text);
+    margin-bottom: 6px;
+}
+
+.result-badge-pill {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(22, 163, 74, 0.15);
+    color: var(--game-correct);
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .clue-options-grid {
+        grid-template-columns: 1fr;
+    }
+    .game-arena-title {
+        font-size: 22px;
+    }
+    .matching-grid-board {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

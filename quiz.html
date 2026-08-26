@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="id">
 <head>
+    <script src="theme-init.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#f7fbf9">
@@ -9,11 +10,13 @@
     <meta property="og:description" content="Simulator kuis adaptif untuk menguasai kompetensi teknologi masa depan: Quantum Computing, Web3, Biologi Sintetis, dan Sistem Otonom.">
     <meta property="og:image" content="universe-of-tech-logo.jpg">
     <meta property="og:type" content="website">
-    <link rel="canonical" href="/quiz.html">
+    <link rel="canonical" href="quiz.html">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="app-shell.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="nav-polish.css">
     <link rel="stylesheet" href="home-navbar-fix.css?v=20260713">
@@ -34,7 +37,7 @@
     <nav class="navbar" id="siteHeader" aria-label="Navigasi utama">
         <div class="nav-left-group">
             <a href="index.html" class="brand" aria-label="Universe Of Tech, kembali ke beranda">
-                <img src="universe-of-tech-logo.jpg" alt="Logo Universe Of Tech" class="brand-logo">
+                <img src="universe-of-tech-logo.webp" alt="Logo Universe Of Tech" class="brand-logo" width="38" height="38" fetchpriority="high">
                 Universe Of Tech
             </a>
             <div class="explore-wrapper">
@@ -286,7 +289,7 @@
 
     <footer class="site-footer page-shell">
         <div class="footer-main">
-            <div class="footer-intro"><a class="footer-brand" href="index.html"><img src="universe-of-tech-logo.jpg" alt="" width="42" height="42"><strong>Universe Of Tech</strong></a><p>Belajar lebih terarah. Tumbuh setiap hari.</p></div>
+            <div class="footer-intro"><a class="footer-brand" href="index.html"><img src="universe-of-tech-logo.webp" alt="" width="42" height="42" loading="lazy"><strong>Universe Of Tech</strong></a><p>Belajar lebih terarah. Tumbuh setiap hari.</p></div>
             <div class="footer-column"><strong>Belajar</strong><a href="materi.html">Semua Materi</a><a href="learning-path.html">Roadmap</a><a href="quiz.html">Quiz</a></div>
             <div class="footer-column"><strong>Eksplorasi</strong><a href="library.html">Library</a><a href="leaderboard.html">Leaderboard</a><a href="achievements.html">Pencapaian</a></div>
             <div class="footer-column"><strong>Akun</strong><a href="login.html">Masuk</a><a href="profile.html">Profil</a><a href="payment.html">Upgrade Pro</a></div>
@@ -296,12 +299,13 @@
 
     <div class="quiz-toast" id="quizToast" role="status" aria-live="polite" aria-atomic="true"></div>
     <div class="sr-only" id="liveRegion" role="status" aria-live="polite"></div>
-    <script src="curriculum-data.js"></script>
-    <script src="quiz-core.js"></script>
-    <script src="quiz-question-bank.js"></script>
-    <script src="navbar-explore.js?v=20260722"></script>
-    <script src="coursera-home.js"></script>
-    <script src="global-animations.js?v=20260721"></script>
-    <script src="quiz-clean.js?v=20260726-academic"></script>
+    <script src="curriculum-data.js" defer></script>
+    <script src="progression-engine.js" defer></script>
+    <script src="quiz-core.js" defer></script>
+    <script src="quiz-question-bank.js" defer></script>
+    <script src="navbar-explore.js?v=20260722" defer></script>
+    <script src="coursera-home.js" defer></script>
+    <script src="global-animations.js?v=20260721" defer></script>
+    <script src="quiz-clean.js?v=20260726-academic" defer></script>
 </body>
 </html>

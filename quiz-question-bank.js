@@ -469,4 +469,19 @@ window.questionBank = [
             { id: "futuretech-7", category: "futuretech", difficulty: "hard", question: "Apakah yang dimaksud dengan BCI (Brain-Computer Interface) non-invasif dibandingkan dengan invasif (seperti Neuralink)?", answers: ["Non-invasif membaca sinyal otak dari permukaan kulit kepala (seperti EEG), sedangkan invasif menanamkan elektroda langsung di dalam jaringan otak", "Non-invasif tidak memerlukan koneksi bluetooth, sedangkan invasif wajib nirkabel", "Non-invasif mengendalikan komputer dengan mata, sedangkan invasif mengendalikan dengan otot tangan", "Non-invasif dipasang di leher pasien, sedangkan invasif dipasang di mata"], correct: 0, hint: "Tanpa bedah kepala vs memerlukan operasi bedah saraf.", explanation: "BCI non-invasif menangkap sinyal listrik otak melalui kulit kepala (seperti topi sensor EEG) tanpa bedah. BCI invasif (seperti chip Neuralink) memerlukan operasi bedah saraf untuk menanamkan sensor elektroda ultra-halus langsung ke dalam korteks serebral untuk mendapatkan resolusi sinyal yang jauh lebih tinggi." },
             { id: "futuretech-8", category: "futuretech", difficulty: "hard", question: "Apa fungsi dari teknologi 'Swarm Robotics' (Robotika Kawanan) yang terinspirasi dari alam?", answers: ["Mengoordinasikan ratusan robot kecil agar bekerja sama secara terdesentralisasi menyelesaikan tugas tanpa komando tunggal", "Membuat robot berbentuk serangga untuk membasmi hama tanaman pertanian", "Menggabungkan beberapa bagian robot menjadi satu robot raksasa fungsional", "Membuat robot militer dengan sistem pertahanan kebal peluru"], correct: 0, hint: "Koloni semut atau kawanan lebah.", explanation: "Swarm Robotics menggunakan prinsip kecerdasan kawanan (swarm intelligence). Robot-robot berinteraksi secara lokal satu sama lain dan dengan lingkungan mereka, menghasilkan perilaku kolektif global untuk menyelesaikan tugas-tugas kompleks secara mandiri dan tangguh." },
             { id: "futuretech-9", category: "futuretech", difficulty: "hard", question: "Dalam teknologi dirgantara futuristik, apakah tantangan utama pengembangan mesin Scramjet (Supersonic Combusting Ramjet) untuk penerbangan hipersonik?", answers: ["Menjaga kestabilan pembakaran bahan bakar di dalam aliran udara supersonic yang bergerak sangat cepat di dalam mesin", "Membuat mesin menyala saat pesawat masih berada di landasan pacu bandara", "Mengurangi kebisingan suara agar tidak memekakkan telinga penumpang sipil", "Menemukan bahan bakar gas helium cair yang murah dan aman digunakan"], correct: 0, hint: "Pembakaran dalam aliran udara yang melebihi kecepatan suara.", explanation: "Mesin Scramjet tidak memiliki bagian bergerak (kompresor) dan mengandalkan kompresi udara masuk pada kecepatan supersonik. Tantangannya adalah mencampur dan membakar bahan bakar secara stabil dalam aliran udara supersonik yang melintas dalam hitungan milidetik." }
-         ];
+          ];
+
+if (typeof window !== "undefined" && window.ContentEngine) {
+    window.ContentEngine.registerContent('quizzes', window.questionBank.map(q => ({
+        id: q.id,
+        question: q.question,
+        options: q.answers || q.options,
+        correctAnswer: q.correct !== undefined ? q.correct : q.correctAnswer,
+        explanation: q.explanation || "",
+        skills: [q.category],
+        difficulty: q.difficulty || "easy",
+        source: "quiz-question-bank",
+        status: "published",
+        version: 1
+    })));
+}

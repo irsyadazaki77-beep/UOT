@@ -1,4 +1,4 @@
-# Rilis produksi QUIZNATION
+# Rilis produksi UNIVERSE OF TECH
 
 Fondasi front-end pada repositori ini berjalan sebagai aplikasi statis. Beberapa fitur penting tidak boleh diperlakukan sebagai aman sebelum memiliki layanan server.
 

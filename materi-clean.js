@@ -22,10 +22,12 @@
     const state = {
         query: "",
         category: "all",
+        adaptiveFilter: "all",
         level: "all",
         career: "all",
         sort: "recommended",
-        selectedId: curriculum.tracks[0]?.id || null
+        selectedId: curriculum.tracks[0]?.id || null,
+        adaptiveData: null
     };
 
     const elements = {
@@ -40,6 +42,7 @@
         level: document.getElementById("levelFilter"),
         sort: document.getElementById("sortModules"),
         categories: document.getElementById("categoryFilters"),
+        adaptiveFilters: document.getElementById("adaptiveFilters"),
         reset: document.getElementById("resetFilters"),
         emptyReset: document.getElementById("emptyReset"),
         results: document.getElementById("resultsStatus"),
@@ -55,6 +58,47 @@
     const categoryMarks = {
         engineering: "DEV", data: "DATA", design: "UX", security: "SEC", operations: "OPS", quality: "QA"
     };
+
+    const trackSkillsMap = {
+        frontend: ["html_structure", "css_layout", "javascript_basics", "web_apis"],
+        backend: ["javascript_basics", "javascript_arrays", "web_apis", "database_sql"],
+        data: ["logic_algorithms", "database_sql", "javascript_arrays"],
+        security: ["database_sql", "logic_algorithms", "web_apis"],
+        mobile: ["javascript_basics", "javascript_arrays", "web_apis"],
+        ai: ["logic_algorithms", "javascript_arrays", "database_sql"],
+        testing: ["javascript_basics", "html_structure", "web_apis"],
+        operations: ["database_sql", "logic_algorithms"]
+    };
+
+    function getAdaptiveTagForTrack(track, adaptiveData) {
+        if (!adaptiveData) return null;
+        const skillsInTrack = trackSkillsMap[track.id] || ["javascript_basics"];
+
+        if (adaptiveData.remedialTrigger && skillsInTrack.includes(adaptiveData.remedialTrigger.skillId)) {
+            return { tag: "needs_practice", label: "⚠️ Remedial", explanation: adaptiveData.remedialTrigger.explanation, className: "status-remedial" };
+        }
+        const reviewMatch = (adaptiveData.reviewDue || []).find(r => skillsInTrack.includes(r.id));
+        if (reviewMatch) {
+            return { tag: "review_due", label: "⏰ Jadwal Review", explanation: reviewMatch.explanation, className: "status-review" };
+        }
+        const practiceMatch = (adaptiveData.needsPractice || []).find(p => skillsInTrack.includes(p.id));
+        if (practiceMatch) {
+            return { tag: "needs_practice", label: "🎯 Perlu Latihan", explanation: practiceMatch.explanation, className: "status-practice" };
+        }
+        const continueMatch = (adaptiveData.continue || []).find(c => skillsInTrack.includes(c.id));
+        if (continueMatch) {
+            return { tag: "continue", label: "⚡ Lanjutkan", explanation: continueMatch.explanation, className: "status-continue" };
+        }
+        const challengeMatch = (adaptiveData.readyForChallenge || []).find(ch => skillsInTrack.includes(ch.id));
+        if (challengeMatch) {
+            return { tag: "ready_for_challenge", label: "🔥 Tantangan Siap", explanation: challengeMatch.explanation, className: "status-challenge" };
+        }
+        const nextMatch = (adaptiveData.recommendedNext || []).find(n => skillsInTrack.includes(n.id));
+        if (nextMatch) {
+            return { tag: "recommended", label: "✨ Rekomendasi", explanation: nextMatch.explanation, className: "status-recommended" };
+        }
+        return null;
+    }
 
     function escapeHTML(value) {
         return String(value ?? "").replace(/[&<>'"]/g, char => ({
@@ -116,6 +160,13 @@
                 ${escapeHTML(label)}
             </button>
         `).join("");
+
+        if (elements.adaptiveFilters) {
+            elements.adaptiveFilters.querySelectorAll("[data-adaptive-filter]").forEach(btn => {
+                const f = btn.dataset.adaptiveFilter;
+                btn.classList.toggle("active", state.adaptiveFilter === f);
+            });
+        }
     }
 
     function getFilteredTracks() {
@@ -128,7 +179,12 @@
                 ...track.chapters.map(chapter => chapter.title),
                 ...curriculum.flattenLessons(track).map(({ lesson }) => lesson.title)
             ].join(" ").toLocaleLowerCase("id");
+
+            const adaptiveInfo = getAdaptiveTagForTrack(track, state.adaptiveData);
+            const matchesAdaptive = (state.adaptiveFilter === "all") || (adaptiveInfo && adaptiveInfo.tag === state.adaptiveFilter);
+
             return (!query || searchable.includes(query))
+                && matchesAdaptive
                 && (state.category === "all" || track.category === state.category)
                 && (state.level === "all" || track.level === state.level)
                 && (state.career === "all" || track.careerTags.includes(state.career));
@@ -160,15 +216,21 @@
     function cardTemplate(track, index, progress) {
         const trackProgress = curriculum.getTrackProgress(track.id, progress);
         const status = statusFor(track, progress);
+        const adaptive = getAdaptiveTagForTrack(track, state.adaptiveData);
+
         return `
             <article class="module-card${state.selectedId === track.id ? " selected" : ""}" data-track-card="${escapeHTML(track.id)}">
                 <button class="module-card-main" type="button" data-open-track="${escapeHTML(track.id)}" aria-label="Lihat detail ${escapeHTML(track.title)}">
                     <span class="card-topline">
                         <span class="module-mark">${escapeHTML(track.mark || categoryMarks[track.category] || "QN")}</span>
-                        <span class="status-pill ${status.className}">${status.label}</span>
+                        <span style="display: flex; gap: 0.35rem; align-items: center;">
+                            ${adaptive ? `<span class="status-pill ${adaptive.className}" style="font-weight: 600; font-size: 0.72rem; padding: 0.2rem 0.55rem; border-radius: 9999px;">${escapeHTML(adaptive.label)}</span>` : ""}
+                            <span class="status-pill ${status.className}">${status.label}</span>
+                        </span>
                     </span>
                     <h3>${escapeHTML(track.title)}</h3>
                     <p>${escapeHTML(track.summary)}</p>
+                    ${adaptive?.explanation ? `<p style="font-size: 0.78rem; opacity: 0.85; margin-top: 0.35rem; color: #4338ca;"><i class="fa-solid fa-circle-info"></i> ${escapeHTML(adaptive.explanation)}</p>` : ""}
                     <span class="card-footer">
                         <span>${escapeHTML(track.level)}</span><i></i><span>${formatDuration(track.durationMinutes)}</span><i></i><span>${trackProgress.completed}/${trackProgress.total} pelajaran</span>
                     </span>
@@ -343,6 +405,14 @@
             state.category = button.dataset.category;
             renderModules(true);
         });
+        if (elements.adaptiveFilters) {
+            elements.adaptiveFilters.addEventListener("click", event => {
+                const button = event.target.closest("[data-adaptive-filter]");
+                if (!button) return;
+                state.adaptiveFilter = button.dataset.adaptiveFilter;
+                renderModules(true);
+            });
+        }
         elements.grid.addEventListener("click", event => {
             const button = event.target.closest("[data-open-track]");
             if (!button) return;
@@ -365,18 +435,22 @@
         });
         elements.mobileNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => toggleMenu(false)));
         window.addEventListener("scroll", () => elements.header.classList.toggle("ux-scrolled", window.scrollY > 24), { passive: true });
+        let resizeRaf = 0;
         window.addEventListener("resize", () => {
-            if (!isMobileDetail()) {
-                elements.detail.removeAttribute("inert");
-                elements.detail.classList.remove("open");
-                elements.detailBackdrop.classList.remove("open");
-                elements.detail.setAttribute("aria-hidden", "false");
-                document.body.classList.remove("drawer-open");
-            } else if (!elements.detail.classList.contains("open")) {
-                elements.detail.setAttribute("aria-hidden", "true");
-                elements.detail.setAttribute("inert", "");
-            }
-        });
+            if (resizeRaf) cancelAnimationFrame(resizeRaf);
+            resizeRaf = requestAnimationFrame(() => {
+                if (!isMobileDetail()) {
+                    elements.detail.removeAttribute("inert");
+                    elements.detail.classList.remove("open");
+                    elements.detailBackdrop.classList.remove("open");
+                    elements.detail.setAttribute("aria-hidden", "false");
+                    document.body.classList.remove("drawer-open");
+                } else if (!elements.detail.classList.contains("open")) {
+                    elements.detail.setAttribute("aria-hidden", "true");
+                    elements.detail.setAttribute("inert", "");
+                }
+            });
+        }, { passive: true });
         window.addEventListener("curriculum-progress", () => {
             updateOverview();
             renderModules(false);
@@ -412,6 +486,17 @@
         badge.textContent = subscription === "pro" ? "Pro" : "Basic";
         elements.mobileNav.setAttribute("inert", "");
         elements.header.classList.toggle("ux-scrolled", window.scrollY > 24);
+
+        if (window.RecommendationService) {
+            window.RecommendationService.getRecommendations().then(recs => {
+                if (recs) {
+                    state.adaptiveData = recs;
+                    renderModules(false);
+                }
+            }).catch(err => {
+                console.warn("Could not fetch adaptive recommendations:", err);
+            });
+        }
     }
 
     init();

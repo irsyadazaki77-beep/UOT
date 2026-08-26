@@ -76,7 +76,18 @@
     function improveMediaLoading() {
         document.querySelectorAll("img").forEach((image) => {
             image.decoding = "async";
-            if (!image.classList.contains("brand-logo") && !image.hasAttribute("loading")) image.loading = "lazy";
+            const isHero = image.classList.contains("hero-img") ||
+                image.classList.contains("brand-logo") ||
+                image.hasAttribute("data-hero") ||
+                image.closest(".hero, .hero-section, .landing-hero, .hero-visual, .header-banner, .daerah-banner") ||
+                image.getAttribute("fetchpriority") === "high";
+
+            if (isHero) {
+                image.loading = "eager";
+                image.setAttribute("fetchpriority", "high");
+            } else if (!image.hasAttribute("loading")) {
+                image.loading = "lazy";
+            }
         });
     }
 
@@ -114,14 +125,138 @@
         });
     }
 
+    let lastFocusedElement = null;
+
+    function trackLastFocus(e) {
+        if (e.target && e.target !== document.body && !e.target.closest('[role="dialog"], .modal, .lms-modal, .mobile-menu-drawer')) {
+            lastFocusedElement = e.target;
+        }
+    }
+    document.addEventListener("focusin", trackLastFocus, { passive: true });
+
     function improveKeyboardEscape() {
         document.addEventListener("keydown", (event) => {
             if (event.key !== "Escape") return;
-            const visibleDialog = [...document.querySelectorAll('[role="dialog"][aria-modal="true"]')]
-                .find((dialog) => dialog.offsetParent !== null);
+            const visibleDialog = [...document.querySelectorAll('[role="dialog"], .modal, .modal-overlay, .lms-modal, .confirm-modal, .concept-modal, .review-modal-overlay, .pro-paywall-modal, .mobile-menu-overlay.is-active, #commandPalette:not([hidden])')]
+                .find((dialog) => {
+                    if (dialog.hasAttribute("hidden") || dialog.style.display === "none") return false;
+                    const rect = dialog.getBoundingClientRect();
+                    return rect.width > 0 && rect.height > 0;
+                });
             if (!visibleDialog) return;
-            const close = visibleDialog.querySelector('[aria-label*="Tutup"], .modal-close, .lms-modal-close, .pro-paywall-close, .quiz-dialog-cancel');
-            if (close) close.click();
+            const close = visibleDialog.querySelector('[aria-label*="Tutup"], .modal-close, .lms-modal-close, .pro-paywall-close, .quiz-dialog-cancel, .btn-close, .close-btn');
+            if (close) {
+                close.click();
+            } else if (visibleDialog.classList.contains("is-active")) {
+                visibleDialog.classList.remove("is-active");
+            } else if (visibleDialog.id === "commandPalette") {
+                visibleDialog.setAttribute("hidden", "true");
+            }
+            if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+                window.setTimeout(() => lastFocusedElement.focus(), 50);
+            }
+        });
+    }
+
+    function setupFocusTrap() {
+        document.addEventListener("keydown", (e) => {
+            if (e.key !== "Tab") return;
+            const activeModal = [...document.querySelectorAll('[role="dialog"], .modal.is-active, .lms-modal.is-active, .modal-overlay.is-active, .mobile-menu-overlay.is-active')]
+                .find(el => el.offsetParent !== null && !el.hasAttribute("hidden"));
+            if (!activeModal) return;
+
+            const focusables = [...activeModal.querySelectorAll('a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+                .filter(el => el.offsetParent !== null);
+            if (focusables.length === 0) return;
+
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        });
+    }
+
+    function repairAccessibilityLabels() {
+        // Icon-only buttons accessibility
+        document.querySelectorAll("button, a[role='button']").forEach(btn => {
+            const hasText = btn.textContent.trim().length > 0;
+            const hasAria = btn.hasAttribute("aria-label") || btn.hasAttribute("aria-labelledby") || btn.hasAttribute("title");
+            if (!hasText && !hasAria) {
+                const icon = btn.querySelector("i, svg");
+                if (icon) {
+                    const iconClasses = icon.className || "";
+                    if (iconClasses.includes("fa-moon") || iconClasses.includes("fa-sun")) {
+                        btn.setAttribute("aria-label", "Ganti tema visual");
+                    } else if (iconClasses.includes("fa-xmark") || iconClasses.includes("fa-times") || iconClasses.includes("fa-close")) {
+                        btn.setAttribute("aria-label", "Tutup");
+                    } else if (iconClasses.includes("fa-bars")) {
+                        btn.setAttribute("aria-label", "Buka menu navigasi");
+                    } else if (iconClasses.includes("fa-magnifying-glass") || iconClasses.includes("fa-search")) {
+                        btn.setAttribute("aria-label", "Cari konten");
+                    } else if (iconClasses.includes("fa-volume") || iconClasses.includes("fa-music")) {
+                        btn.setAttribute("aria-label", "Pengaturan suara");
+                    } else if (iconClasses.includes("fa-arrow-up")) {
+                        btn.setAttribute("aria-label", "Kembali ke atas");
+                    } else if (iconClasses.includes("fa-arrow-left")) {
+                        btn.setAttribute("aria-label", "Kembali");
+                    } else if (iconClasses.includes("fa-copy")) {
+                        btn.setAttribute("aria-label", "Salin teks");
+                    } else if (iconClasses.includes("fa-play")) {
+                        btn.setAttribute("aria-label", "Putar");
+                    } else {
+                        btn.setAttribute("aria-label", "Tombol aksi");
+                    }
+                }
+            }
+        });
+
+        // Form controls accessibility
+        document.querySelectorAll("input, select, textarea").forEach(input => {
+            if (input.type === "hidden") return;
+            const hasLabel = input.id && document.querySelector(`label[for="${input.id}"]`);
+            const wrappedInLabel = input.closest("label");
+            const hasAria = input.hasAttribute("aria-label") || input.hasAttribute("aria-labelledby");
+            if (!hasLabel && !wrappedInLabel && !hasAria) {
+                const placeholder = input.getAttribute("placeholder") || input.name || "Input";
+                input.setAttribute("aria-label", placeholder);
+            }
+        });
+
+        // Tabs accessibility
+        document.querySelectorAll(".tab-list, .tabs-nav, .hub-tabs, [role='tablist']").forEach(tablist => {
+            if (!tablist.getAttribute("role")) tablist.setAttribute("role", "tablist");
+            tablist.querySelectorAll("button, a").forEach(tab => {
+                if (!tab.getAttribute("role")) tab.setAttribute("role", "tab");
+                const isActive = tab.classList.contains("active") || tab.classList.contains("is-active") || tab.getAttribute("aria-current") === "true";
+                tab.setAttribute("aria-selected", isActive ? "true" : "false");
+                tab.setAttribute("tabindex", isActive ? "0" : "-1");
+            });
+        });
+
+        // Mobile drawer hamburger
+        document.querySelectorAll(".nav-hamburger, .menu-toggle").forEach(toggle => {
+            if (!toggle.getAttribute("aria-expanded")) toggle.setAttribute("aria-expanded", "false");
+            if (!toggle.getAttribute("aria-controls")) toggle.setAttribute("aria-controls", "mobileMenuDrawer");
+            toggle.addEventListener("click", () => {
+                const expanded = toggle.getAttribute("aria-expanded") === "true";
+                toggle.setAttribute("aria-expanded", String(!expanded));
+            });
+        });
+
+        // Table wrappers
+        document.querySelectorAll("table").forEach(table => {
+            if (!table.parentElement.classList.contains("table-responsive") && !table.parentElement.classList.contains("table-container")) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "table-responsive";
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            }
         });
     }
 
@@ -207,9 +342,98 @@
         } catch (_) { /* Analytics must never block the learning experience. */ }
     }
 
+    function showPwaUpdateBanner(registration) {
+        if (document.getElementById("pwaUpdateBanner")) return;
+        const banner = document.createElement("aside");
+        banner.id = "pwaUpdateBanner";
+        banner.className = "pwa-update-toast";
+        banner.setAttribute("role", "alert");
+        banner.setAttribute("aria-live", "assertive");
+        banner.innerHTML = `
+            <div class="pwa-update-content">
+                <span class="pwa-update-icon"><i class="fa-solid fa-cloud-arrow-down" aria-hidden="true"></i></span>
+                <div class="pwa-update-text">
+                    <strong>Versi Baru Tersedia</strong>
+                    <p>Pembaruan sistem siap digunakan untuk pengalaman belajar lebih cepat.</p>
+                </div>
+            </div>
+            <div class="pwa-update-actions">
+                <button type="button" class="pwa-update-btn-refresh" id="pwaReloadBtn">Perbarui</button>
+                <button type="button" class="pwa-update-btn-dismiss" id="pwaDismissBtn" aria-label="Tutup notifikasi"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
+        `;
+        document.body.appendChild(banner);
+
+        document.getElementById("pwaReloadBtn")?.addEventListener("click", () => {
+            if (registration.waiting) {
+                registration.waiting.postMessage({ type: "SKIP_WAITING" });
+            } else {
+                window.location.reload();
+            }
+        });
+
+        document.getElementById("pwaDismissBtn")?.addEventListener("click", () => {
+            banner.remove();
+        });
+    }
+
     function registerServiceWorker() {
         if (isLocal || !("serviceWorker" in navigator)) return;
-        window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("sw.js").then((reg) => {
+                // If a worker is already waiting, prompt immediately
+                if (reg.waiting && navigator.serviceWorker.controller) {
+                    showPwaUpdateBanner(reg);
+                }
+
+                reg.addEventListener("updatefound", () => {
+                    const newWorker = reg.installing;
+                    if (!newWorker) return;
+                    newWorker.addEventListener("statechange", () => {
+                        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                            showPwaUpdateBanner(reg);
+                        }
+                    });
+                });
+            }).catch(() => {});
+
+            let isRefreshing = false;
+            navigator.serviceWorker.addEventListener("controllerchange", () => {
+                if (!isRefreshing) {
+                    isRefreshing = true;
+                    window.location.reload();
+                }
+            });
+        });
+    }
+
+    function ensureSyncEngine() {
+        if (!window.SyncEngine && !document.querySelector('script[src*="sync-engine.js"]')) {
+            const script = document.createElement("script");
+            script.src = "sync-engine.js";
+            script.async = true;
+            document.head.appendChild(script);
+        }
+    }
+
+    function ensureActivityService() {
+        if (!window.ActivityService && !document.querySelector('script[src*="activity-service.js"]')) {
+            const script = document.createElement("script");
+            script.src = "activity-service.js";
+            script.async = true;
+            document.head.appendChild(script);
+        }
+    }
+
+    function setupActivityBusListeners() {
+        window.addEventListener("uot:activity", (e) => {
+            if (e.detail?.feedback?.title && typeof window.showToast === "function") {
+                const fb = e.detail.feedback;
+                if (fb.xpAwarded || fb.coinsAwarded) {
+                    window.showToast(`✨ ${fb.title}: +${fb.xpAwarded || 0} XP ${fb.coinsAwarded ? `· +${fb.coinsAwarded} Coins` : ""}`);
+                }
+            }
+        });
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -217,10 +441,15 @@
         ensureMetadata();
         installSkipLink();
         installConnectionStatus();
+        ensureSyncEngine();
+        ensureActivityService();
+        setupActivityBusListeners();
         improveMediaLoading();
         repairVisualPlaceholders();
         markCurrentNavigation();
         improveKeyboardEscape();
+        setupFocusTrap();
+        repairAccessibilityLabels();
         enhanceEmptyStates();
         installBackToTop();
         installSectionNavigation();
@@ -231,10 +460,14 @@
             const link = event.target.closest("a[href]");
             if (link && !link.matches('[href^="#"]')) track("navigation_click", { href: link.getAttribute("href") });
         });
-        new MutationObserver(() => document.querySelectorAll(".theme-toggle-btn").forEach(setThemeIcon))
-            .observe(document.body, { attributes: true, attributeFilter: ["class"] });
-        new MutationObserver(enhanceEmptyStates)
-            .observe(document.body, { childList: true, subtree: true });
+        new MutationObserver(() => {
+            document.querySelectorAll(".theme-toggle-btn").forEach(setThemeIcon);
+            repairAccessibilityLabels();
+        }).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+        new MutationObserver(() => {
+            enhanceEmptyStates();
+            repairAccessibilityLabels();
+        }).observe(document.body, { childList: true, subtree: true });
     });
     registerServiceWorker();
     if (!window.QuizNation) {

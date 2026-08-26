@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="theme-init.js"></script>
     <meta charset="UTF-8">
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="app-shell.css">
     <script src="app-shell.js" defer></script>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
@@ -475,7 +477,7 @@
                                                 <nav class="navbar">
             <div class="nav-left-group">
                 <a href="index.html" class="brand">
-                    <img src="universe-of-tech-logo.jpg" alt="Universe Of Tech Logo" class="brand-logo" />
+                    <img src="universe-of-tech-logo.webp" alt="Universe Of Tech Logo" class="brand-logo" width="38" height="38" fetchpriority="high" />
                     Universe Of Tech
                 </a>
                 <div class="explore-wrapper">
@@ -609,7 +611,10 @@
             <div>
                 <span class="section-kicker">Arena Persaingan</span>
                 <h1>Leaderboard <span>Coder</span></h1>
-                <p>Uji kompetensimu, selesaikan quest, dan naikkan peringkat di Universe Of Tech.</p>
+                <p>Uji kompetensimu, selesaikan quest, dan pantau kenaikan peringkat di Universe Of Tech.</p>
+                <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; background:rgba(99,102,241,0.18); border:1px solid rgba(99,102,241,0.35); border-radius:20px; font-size:12px; font-weight:600; color:#a5b4fc; margin-top:12px;">
+                    <i class="fa-solid fa-flask"></i> Mode Simulasi Demo &amp; Papan Peringkat Lokal
+                </div>
             </div>
             <div class="hero-stats-mini">
                 <div class="hero-stat-box">
@@ -630,8 +635,8 @@
         <section class="board-card">
             <div class="board-header">
                 <div class="board-title">
-                    <h3>Peringkat Season 3</h3>
-                    <p>Diperbarui secara berkala berdasarkan pencapaian XP harian.</p>
+                    <h3>Peringkat Season 3 (Simulasi Demo)</h3>
+                    <p>Mode Simulasi Papan Peringkat Lokal. Peringkat kamu diperbarui berdasarkan akumulasi XP nyata di akun ini.</p>
                 </div>
                 <div class="board-filters">
                     <button class="filter-tab active" data-filter="weekly">Mingguan</button>
@@ -660,210 +665,68 @@
                 <!-- User personal ranking card injected via JS -->
             </div>
         </section>
+        <section class="board-card" id="challengesSection" style="margin-top: 24px;">
+            <div class="board-header">
+                <div class="board-title">
+                    <h3>Tantangan Teman & Rekor Pribadi</h3>
+                    <p>Lacak rekor belajarmu sendiri atau terima tantangan dari teman belajarmu.</p>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                <!-- Personal Best -->
+                <div class="pb-card" style="background: var(--bg-secondary); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
+                    <h4 style="margin-top:0; color:var(--text-primary);"><i class="fa-solid fa-medal" style="color:var(--yellow); margin-right:8px;"></i> Rekor Pribadi</h4>
+                    <div id="personalBestContainer">
+                        <div style="color:var(--text-secondary); font-size:14px; text-align:center; padding: 20px 0;">Memuat rekor...</div>
+                    </div>
+                </div>
+
+                <!-- Challenges -->
+                <div class="challenge-card" style="background: var(--bg-secondary); padding: 20px; border-radius: 20px; border: 1px solid var(--border);">
+                    <h4 style="margin-top:0; color:var(--text-primary);"><i class="fa-solid fa-handshake-angle" style="color:var(--blue); margin-right:8px;"></i> Tantangan Aktif</h4>
+                    <div id="challengesContainer">
+                        <div style="color:var(--text-secondary); font-size:14px; text-align:center; padding: 20px 0;">Memuat tantangan...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
+    <!-- Social Profile Modal -->
+    <div id="socialProfileModal" style="display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: var(--card-bg, #fff); border-radius: 24px; padding: 32px; width: 100%; max-width: 400px; box-shadow: var(--shadow-xl); position: relative;">
+            <button id="closeProfileModal" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-secondary);"><i class="fa-solid fa-xmark"></i></button>
+            <div style="text-align: center; margin-bottom: 24px;">
+                <div id="modalAvatar" style="font-size: 64px; line-height: 1; margin-bottom: 16px; display: inline-flex; width: 96px; height: 96px; background: var(--bg-secondary); border-radius: 50%; align-items: center; justify-content: center;">👨‍💻</div>
+                <h3 id="modalName" style="margin: 0; font-size: 24px; color: var(--text-primary);">Nama User</h3>
+                <p id="modalTitle" style="margin: 4px 0 0; font-size: 14px; color: var(--text-secondary);">Level 1 Coder</p>
+                <div id="modalBio" style="margin-top: 12px; font-size: 14px; color: var(--text-primary); font-style: italic;"></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
+                <div style="text-align: center; padding: 12px; background: var(--bg-secondary); border-radius: 12px;">
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 4px;">XP</div>
+                    <div id="modalXp" style="font-weight: 700; color: var(--blue);">0</div>
+                </div>
+                <div style="text-align: center; padding: 12px; background: var(--bg-secondary); border-radius: 12px;">
+                    <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 4px;">Streak</div>
+                    <div id="modalStreak" style="font-weight: 700; color: var(--orange, #f97316);">0 Hari</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px; flex-direction: column;" id="modalActions">
+                <button id="btnFollow" class="btn btn-primary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-user-plus"></i> Ikuti</button>
+                <button id="btnChallenge" class="btn btn-secondary" style="width: 100%; justify-content: center;"><i class="fa-solid fa-bolt"></i> Tantang</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="progression-engine.js"></script>
     <script src="sound-engine.js"></script>
     <script src="auth-helper.js"></script>
-    <script>
-        // Custom leaderboard logic
-        (() => {
-            const defaultLeaderboardData = {
-                weekly: [
-                    { name: "Muhammad Zaki", avatar: "??", level: 6, title: "DevOps Architect", specialty: "Fullstack", xp: 3450 },
-                    { name: "Aria Wijaya", avatar: "??", level: 5, title: "Query Warlord", specialty: "Database", xp: 2890 },
-                    { name: "Jessica Clara", avatar: "??", level: 4, title: "DOM Conqueror", specialty: "UI/UX", xp: 2150 },
-                    { name: "Budi Santoso", avatar: "?????", level: 4, title: "Syntax Squire", specialty: "Programming", xp: 1980 },
-                    { name: "Siti Rahma", avatar: "?????", level: 3, title: "Logic Knight", specialty: "Cyber Sec", xp: 1720 },
-                    { name: "Robby Kurnia", avatar: "??", level: 3, title: "Logic Knight", specialty: "Analytics", xp: 1610 },
-                    { name: "Elisa Fitri", avatar: "?????", level: 2, title: "Syntax Squire", specialty: "Frontend", xp: 1250 }
-                ],
-                monthly: [
-                    { name: "Muhammad Zaki", avatar: "??", level: 6, title: "DevOps Architect", specialty: "Fullstack", xp: 12400 },
-                    { name: "Aria Wijaya", avatar: "??", level: 5, title: "Query Warlord", specialty: "Database", xp: 9500 },
-                    { name: "Jessica Clara", avatar: "??", level: 4, title: "DOM Conqueror", specialty: "UI/UX", xp: 8200 },
-                    { name: "Budi Santoso", avatar: "?????", level: 4, title: "Syntax Squire", specialty: "Programming", xp: 7550 },
-                    { name: "Robby Kurnia", avatar: "??", level: 3, title: "Logic Knight", specialty: "Analytics", xp: 6200 },
-                    { name: "Siti Rahma", avatar: "?????", level: 3, title: "Logic Knight", specialty: "Cyber Sec", xp: 5900 },
-                    { name: "Elisa Fitri", avatar: "?????", level: 2, title: "Syntax Squire", specialty: "Frontend", xp: 4800 }
-                ],
-                alltime: [
-                    { name: "Muhammad Zaki", avatar: "??", level: 7, title: "AI Archmage", specialty: "Fullstack", xp: 48000 },
-                    { name: "Aria Wijaya", avatar: "??", level: 6, title: "DevOps Architect", specialty: "Database", xp: 39500 },
-                    { name: "Jessica Clara", avatar: "??", level: 5, title: "Query Warlord", specialty: "UI/UX", xp: 32000 },
-                    { name: "Budi Santoso", avatar: "?????", level: 4, title: "DOM Conqueror", specialty: "Programming", xp: 28550 },
-                    { name: "Siti Rahma", avatar: "?????", level: 4, title: "DOM Conqueror", specialty: "Cyber Sec", xp: 24900 },
-                    { name: "Robby Kurnia", avatar: "??", level: 3, title: "Logic Knight", specialty: "Analytics", xp: 18200 },
-                    { name: "Elisa Fitri", avatar: "?????", level: 3, title: "Logic Knight", specialty: "Frontend", xp: 15400 }
-                ]
-            };
-
-            let currentFilter = "weekly";
-
-            // Load personal details from session & local storage
-            const session = JSON.parse(localStorage.getItem("eduquestUserSession") || "null");
-            const rpg = JSON.parse(localStorage.getItem("eduquestRPG") || "{}");
-
-            const myName = (session && session.username) || "Pengguna Universe";
-            const myAvatar = rpg.activeAvatar || (session && session.avatar) || "?????";
-            const myLevel = rpg.level || 1;
-            const myTotalXp = rpg.totalXp || 0;
-
-            const levelTitles = {
-                1: "Script Kiddie",
-                2: "Syntax Squire",
-                3: "Logic Knight",
-                4: "DOM Conqueror",
-                5: "Query Warlord",
-                6: "DevOps Architect",
-                7: "AI Archmage"
-            };
-            const myTitle = levelTitles[myLevel] || "Tech Legend";
-
-            function renderLeaderboard() {
-                const dataList = JSON.parse(JSON.stringify(defaultLeaderboardData[currentFilter]));
-                
-                // Inject current user into the leaderboard list
-                let myRank = -1;
-                // Try to find if user is already there, if not insert at proper position
-                const existingUserIdx = dataList.findIndex(item => item.name.toLowerCase() === myName.toLowerCase());
-                
-                const userObj = {
-                    name: myName + " (Anda)",
-                    avatar: myAvatar,
-                    level: myLevel,
-                    title: myTitle,
-                    specialty: "Explorer",
-                    xp: currentFilter === "weekly" ? myTotalXp : (currentFilter === "monthly" ? myTotalXp * 3 : myTotalXp * 12)
-                };
-
-                if (existingUserIdx > -1) {
-                    dataList[existingUserIdx] = userObj;
-                } else {
-                    dataList.push(userObj);
-                }
-
-                // Sort based on XP
-                dataList.sort((a, b) => b.xp - a.xp);
-
-                // Render podium (top 3)
-                const podiumContainer = document.getElementById("podiumContainer");
-                const top3 = dataList.slice(0, 3);
-
-                // Fill fallbacks if list has less than 3
-                while (top3.length < 3) {
-                    top3.push({ name: "Menanti Coder...", avatar: "??", level: 1, title: "-", specialty: "-", xp: 0 });
-                }
-
-                podiumContainer.innerHTML = `
-                    <div class="podium-card podium-2">
-                        <div class="podium-rank">2</div>
-                        <span class="podium-avatar">${top3[1].avatar}</span>
-                        <div class="podium-username">${top3[1].name}</div>
-                        <div class="podium-title">${top3[1].title} • Lv. ${top3[1].level}</div>
-                        <span class="podium-xp">${top3[1].xp.toLocaleString()} XP</span>
-                    </div>
-                    <div class="podium-card podium-1">
-                        <div class="podium-rank">1</div>
-                        <span class="podium-avatar" style="font-size: 64px;">??<br>${top3[0].avatar}</span>
-                        <div class="podium-username" style="font-size: 21px;">${top3[0].name}</div>
-                        <div class="podium-title">${top3[0].title} • Lv. ${top3[0].level}</div>
-                        <span class="podium-xp">${top3[0].xp.toLocaleString()} XP</span>
-                    </div>
-                    <div class="podium-card podium-3">
-                        <div class="podium-rank">3</div>
-                        <span class="podium-avatar">${top3[2].avatar}</span>
-                        <div class="podium-username">${top3[2].name}</div>
-                        <div class="podium-title">${top3[2].title} • Lv. ${top3[2].level}</div>
-                        <span class="podium-xp">${top3[2].xp.toLocaleString()} XP</span>
-                    </div>
-                `;
-
-                // Render rest table rows
-                const leaderboardBody = document.getElementById("leaderboardBody");
-                const restRows = dataList.slice(3);
-                leaderboardBody.innerHTML = "";
-
-                dataList.forEach((item, index) => {
-                    const isUser = item.name.includes("(Anda)");
-                    if (isUser) {
-                        myRank = index + 1;
-                    }
-
-                    // Only show rows inside the list limit (e.g. up to top 10)
-                    if (index >= 3 && index < 10) {
-                        const tr = document.createElement("tr");
-                        if (isUser) tr.className = "highlight-user";
-                        tr.innerHTML = `
-                            <td class="rank-col">#${index + 1}</td>
-                            <td>
-                                <div class="user-col">
-                                    <span class="user-col-avatar">${item.avatar}</span>
-                                    <div class="user-col-info">
-                                        <span class="user-col-name">${item.name}</span>
-                                        <span class="user-col-title">${item.title} • Lv. ${item.level}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="badge-col"><span>${item.specialty}</span></td>
-                            <td class="xp-col">${item.xp.toLocaleString()}</td>
-                        `;
-                        leaderboardBody.appendChild(tr);
-                    }
-                });
-
-                // Render my personal ranking banner at the bottom
-                const myRankingBar = document.getElementById("myRankingBar");
-                myRankingBar.innerHTML = `
-                    <div class="my-ranking-left">
-                        <div class="my-ranking-badge">Peringkat #${myRank}</div>
-                        <div class="my-ranking-info">
-                            <strong>${myName}</strong>
-                            <span>Level ${myLevel} Coder • ${myTitle}</span>
-                        </div>
-                    </div>
-                    <div class="my-ranking-right">
-                        ${userObj.xp.toLocaleString()} XP
-                    </div>
-                `;
-            }
-
-            // Tabs events
-            document.querySelectorAll(".filter-tab").forEach(tab => {
-                tab.addEventListener("click", () => {
-                    document.querySelectorAll(".filter-tab").forEach(t => t.classList.remove("active"));
-                    tab.classList.add("active");
-                    currentFilter = tab.dataset.filter;
-                    renderLeaderboard();
-                    if (typeof playSound === "function") {
-                        try { playSound("click"); } catch(err){}
-                    }
-                });
-            });
-
-            // Theme toggling initialization
-            const savedTheme = localStorage.getItem("eduquest_theme") || "light";
-            document.body.classList.toggle("dark-theme", savedTheme === "dark");
-            const themeBtn = document.getElementById("themeToggleBtn");
-            if (themeBtn) {
-                themeBtn.textContent = savedTheme === "dark" ? "??" : "??";
-                themeBtn.addEventListener("click", () => {
-                    document.body.classList.toggle("dark-theme");
-                    const isDark = document.body.classList.contains("dark-theme");
-                    localStorage.setItem("eduquest_theme", isDark ? "dark" : "light");
-                    themeBtn.textContent = isDark ? "??" : "??";
-                    if (typeof playSound === "function") {
-                        try { playSound("click"); } catch(err){}
-                    }
-                });
-            }
-
-            // Init load
-            renderLeaderboard();
-        })();
-    </script>
-    <script src="navbar-explore.js?v=20260722"></script>
-    <script src="coursera-home.js"></script>
-    <script src="global-animations.js"></script>
+    <script src="leaderboard.js"></script>
+    <script src="navbar-explore.js?v=20260722" defer></script>
+    <script src="coursera-home.js" defer></script>
+    <script src="global-animations.js" defer></script>
 </body>
 </html>
 

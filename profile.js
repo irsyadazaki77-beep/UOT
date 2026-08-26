@@ -86,11 +86,14 @@
 
     function render() {
         const user = session(); const rpg = readJSON(RPG_KEY, {}); const prefs = getPrefs(); const hub = getHub(); const stats = getStats(); const projectStats = getProjectStats(); const loggedIn = isLoggedIn();
-        const avatar = rpg.activeAvatar || user?.avatar || "👨‍💻"; const name = user?.username || "Pengguna Universe"; const email = user?.email || "Belum masuk ke akun"; const level = Math.floor(stats.xp / 100) + 1; const current = stats.xp % 100;
+        const progress = (typeof window !== "undefined" && window.ProgressionEngine) ? window.ProgressionEngine.getLevelProgress() : { level: Math.floor(stats.xp / 100) + 1, currentLevelXp: stats.xp % 100, xpNeededForNext: 100, percentage: stats.xp % 100, title: "Coder" };
+        const avatar = (typeof window !== "undefined" && window.ProgressionEngine) ? (window.ProgressionEngine.getGameState().equippedItems?.avatar || user?.avatar || "👨‍💻") : (rpg.activeAvatar || user?.avatar || "👨‍💻");
+        const name = user?.username || "Pengguna Universe"; const email = user?.email || "Belum masuk ke akun";
+        const level = progress.level; const current = progress.currentLevelXp; const needed = progress.xpNeededForNext; const pct = progress.percentage;
         ["profileAvatar", "profileAvatarLarge"].forEach(id => setText(id, avatar)); setText("profileName", name); setText("profileEmail", email); setText("profileEditorName", name);
-        setText("profileXp", stats.xp.toLocaleString("id-ID")); setText("profileStreak", stats.streak); setText("profileAccuracy", `${stats.accuracy}%`); setText("profileProjectCount", projectStats.completed); setText("profileLevel", `Level ${level}`); setText("profileXpLabel", `${current} / 100 XP`); setText("nextLevelLabel", `${100 - current} XP lagi menuju level berikutnya`); $("profileXpBar").style.width = `${current}%`;
+        setText("profileXp", stats.xp.toLocaleString("id-ID")); setText("profileStreak", stats.streak); setText("profileAccuracy", `${stats.accuracy}%`); setText("profileProjectCount", projectStats.completed); setText("profileLevel", `Level ${level}`); setText("profileXpLabel", `${current} / ${needed} XP`); setText("nextLevelLabel", `${needed - current} XP lagi menuju level berikutnya`); $("profileXpBar").style.width = `${pct}%`;
         const tip = getTip(stats, prefs); setText("smartTipTitle", tip.title); setText("smartTipText", tip.copy); setText("dailyGoalTitle", `${prefs.dailyGoal} menit`); setText("goalDescription", prefs.reminder ? `Pengingat aktif pukul ${prefs.reminderTime}` : "Pengingat belum aktif");
-        const completeness = [loggedIn, Boolean(user?.username), Boolean(user?.email), Boolean(prefs.headline), Boolean(prefs.bio), Boolean(rpg.activeAvatar || user?.avatar)].filter(Boolean).length; const health = Math.round((completeness / 6) * 100); setText("healthScore", `${health}%`); $("healthBar").style.width = `${health}%`; setText("healthHint", health === 100 ? "Profilmu sudah lengkap dan siap dipersonalisasi." : "Lengkapi headline dan bio untuk personalisasi lebih baik."); if ($("healthDoneCount")) $("healthDoneCount").textContent = `${completeness}/6`;
+        const completeness = [loggedIn, Boolean(user?.username), Boolean(user?.email), Boolean(prefs.headline), Boolean(prefs.bio), Boolean(avatar)].filter(Boolean).length; const health = Math.round((completeness / 6) * 100); setText("healthScore", `${health}%`); $("healthBar").style.width = `${health}%`; setText("healthHint", health === 100 ? "Profilmu sudah lengkap dan siap dipersonalisasi." : "Lengkapi headline dan bio untuk personalisasi lebih baik."); if ($("healthDoneCount")) $("healthDoneCount").textContent = `${completeness}/6`;
         $("profileNameInput").value = user?.username || ""; $("profileEmailInput").value = user?.email || ""; $("profileHeadlineInput").value = prefs.headline; $("profileFocusInput").value = prefs.focus; $("profileBioInput").value = prefs.bio; setText("bioCount", prefs.bio.length); $("profileLoginCta").hidden = loggedIn; $("logoutLink").hidden = !loggedIn;
         setText("profileHeadlineDisplay", prefs.headline || "Tambahkan headline agar profilmu lebih personal.");
         setText("profileBioDisplay", prefs.bio || (loggedIn ? "Tambahkan bio singkat tentang target belajarmu." : "Masuk untuk menyimpan identitas dan progres belajarmu."));
@@ -103,7 +106,39 @@
         renderSubscription();
     }
 
-    function savePrefs(patch, message) { if (Account) Account.updatePreferences(patch); else writeJSON(PREFS_KEY, { ...getPrefs(), ...patch }); applyPreferences(); render(); if (message) showToast(message); }
+    async function savePrefs(patch, message) { 
+        if (Account) Account.updatePreferences(patch); 
+        else writeJSON(PREFS_KEY, { ...getPrefs(), ...patch }); 
+        
+        // Sync to backend if logged in
+        if (isLoggedIn()) {
+            try {
+                const csrfRes = await fetch("/api/csrf-token", { credentials: "include" });
+                if (csrfRes.ok) {
+                    const { csrfToken } = await csrfRes.json();
+                    const backendPatch = { ...patch };
+                    if (patch.publicProfile !== undefined) {
+                        backendPatch.showOnLeaderboard = patch.publicProfile;
+                    }
+                    if (patch.headline !== undefined) {
+                        backendPatch.displayName = document.getElementById("profileNameInput")?.value?.trim() || patch.headline;
+                    }
+                    await fetch("/api/settings", {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
+                        body: JSON.stringify(backendPatch),
+                        credentials: "include"
+                    });
+                }
+            } catch (e) {
+                console.warn("API sync failed", e);
+            }
+        }
+
+        applyPreferences(); 
+        render(); 
+        if (message) showToast(message); 
+    }
     function saveProfile(notify = false) {
         if (!isLoggedIn()) { updateSaveState("Masuk untuk menyimpan profil"); return; }
         const nextSession = { ...session(), username: $("profileNameInput").value.trim() || "Pengguna Universe", email: $("profileEmailInput").value.trim(), isLoggedIn: true };
@@ -169,7 +204,17 @@
             saveProfile(false);
         }, 650);
     }));
-    document.querySelectorAll("[data-avatar]").forEach(button => button.addEventListener("click", () => { if (!isLoggedIn()) return showToast("Masuk ke akun untuk memilih avatar."); const rpg = readJSON(RPG_KEY, {}); writeJSON(RPG_KEY, { ...rpg, activeAvatar: button.dataset.avatar }); render(); showToast("Avatar diperbarui."); }));
+    document.querySelectorAll("[data-avatar]").forEach(button => button.addEventListener("click", () => {
+        if (!isLoggedIn()) return showToast("Masuk ke akun untuk memilih avatar.");
+        const chosen = button.dataset.avatar;
+        if (typeof window !== "undefined" && window.ProgressionEngine) {
+            window.ProgressionEngine.equipAvatar(chosen);
+        }
+        const rpg = readJSON(RPG_KEY, {});
+        writeJSON(RPG_KEY, { ...rpg, activeAvatar: chosen });
+        render();
+        showToast("Avatar diperbarui.");
+    }));
     $("darkModeSetting").addEventListener("change", e => { localStorage.setItem("eduquest_theme", e.target.checked ? "dark" : "light"); applyPreferences(); });
     $("soundSetting").addEventListener("change", e => { localStorage.setItem("eduquest_sound", e.target.checked ? "on" : "off"); showToast("Preferensi suara diperbarui."); });
     $("motionSetting").addEventListener("change", e => savePrefs({ reducedMotion: e.target.checked }, "Preferensi gerakan diperbarui.")); $("reminderSetting").addEventListener("change", e => savePrefs({ reminder: e.target.checked }, "Pengingat belajar diperbarui.")); ["studyModeSetting", "dailyGoalSetting", "languageSetting", "startPageSetting", "reminderTimeSetting"].forEach(id => $(id).addEventListener("change", e => savePrefs({ [id.replace("Setting", "").replace("studyMode", "studyMode").replace("dailyGoal", "dailyGoal").replace("reminderTime", "reminderTime").replace("startPage", "startPage").replace("language", "language")]: e.target.value }, "Preferensi disimpan.")));

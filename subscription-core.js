@@ -149,8 +149,34 @@
         return `${url.pathname.split("/").pop()}${url.search}`;
     }
 
+    async function syncWithServer() {
+        if (typeof window !== "undefined" && window.QuizNationAPI?.verifySubscription) {
+            try {
+                const res = await window.QuizNationAPI.verifySubscription();
+                if (res && res.ok) {
+                    if (res.active === false && !res.isDemo && localStorage.getItem(STATUS_KEY) === "pro") {
+                        // Server states not active on non-demo mode, invalidate unauthorized client pro claim
+                        localStorage.setItem(STATUS_KEY, "free");
+                        const current = get();
+                        if (current.status === "active" && current.source !== "sandbox_demo") {
+                            current.status = "expired";
+                            write(DETAILS_KEY, current);
+                            window.dispatchEvent(new CustomEvent("uot-subscription-change", { detail: current }));
+                        }
+                    } else if (res.active && res.status === "active") {
+                        localStorage.setItem(STATUS_KEY, "pro");
+                    }
+                }
+            } catch (_) {}
+        }
+    }
+
+    if (typeof window !== "undefined") {
+        setTimeout(syncWithServer, 1000);
+    }
+
     window.QuizNationSubscription = {
         STATUS_KEY, DETAILS_KEY, HISTORY_KEY, PLANS, BENEFITS,
-        get, isPro, activate, downgrade, daysRemaining, formatPrice, planUrl
+        get, isPro, activate, downgrade, daysRemaining, formatPrice, planUrl, syncWithServer
     };
 })();

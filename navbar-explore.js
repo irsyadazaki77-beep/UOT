@@ -23,6 +23,7 @@
                 <h4>Latihan &amp; Eksplorasi</h4>
                 <ul class="mega-list">
                     <li><a href="quiz.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-circle-question" aria-hidden="true"></i></span><span>Quiz &amp; Latihan</span></a></li>
+                    <li><a href="games.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-gamepad" aria-hidden="true"></i></span><span>Arena Game</span></a></li>
                     <li><a href="snbt.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span><span>Persiapan SNBT</span></a></li>
                     <li><a href="tka-lms.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span><span>Persiapan TKA</span></a></li>
                     <li><a href="bahasa-daerah.html" class="mega-item-link"><span class="mega-icon-box"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i></span><span>Bahasa &amp; Budaya</span></a></li>

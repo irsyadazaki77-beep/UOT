@@ -1,0 +1,84 @@
+{
+  "events": [
+    {
+      "id": "evt_1787539995980_zyr5n",
+      "event": "lesson_complete",
+      "timestamp": "2026-08-24T02:53:15.980Z",
+      "sessionId": "sess_1787539995980",
+      "userId": "usr_da0af5cbc689361cecbfb562",
+      "properties": {
+        "lessonId": "javascript-101"
+      }
+    }
+  ],
+  "errors": [],
+  "vitals": [
+    {
+      "id": "vit_1787539986305_qvvzn",
+      "metric": "LCP",
+      "value": 1800,
+      "rating": "good",
+      "page": "/",
+      "deviceType": "desktop",
+      "sessionId": "sess_unknown",
+      "timestamp": "2026-08-24T02:53:06.305Z"
+    },
+    {
+      "id": "vit_1787539986305_xfy2s",
+      "metric": "LCP",
+      "value": 3200,
+      "rating": "needs-improvement",
+      "page": "/",
+      "deviceType": "desktop",
+      "sessionId": "sess_unknown",
+      "timestamp": "2026-08-24T02:53:06.305Z"
+    },
+    {
+      "id": "vit_1787539986305_po5b1",
+      "metric": "CLS",
+      "value": 0.05,
+      "rating": "good",
+      "page": "/",
+      "deviceType": "desktop",
+      "sessionId": "sess_unknown",
+      "timestamp": "2026-08-24T02:53:06.305Z"
+    },
+    {
+      "id": "vit_1787539986305_6s9iq",
+      "metric": "INP",
+      "value": 120,
+      "rating": "good",
+      "page": "/",
+      "deviceType": "desktop",
+      "sessionId": "sess_unknown",
+      "timestamp": "2026-08-24T02:53:06.305Z"
+    }
+  ],
+  "featureFlags": {
+    "adaptive_quiz_mode": {
+      "key": "adaptive_quiz_mode",
+      "enabled": true,
+      "fallback": false,
+      "description": "Penyesuaian tingkat kesulitan kuis otomatis berbasis performa"
+    },
+    "social_leaderboard_v2": {
+      "key": "social_leaderboard_v2",
+      "enabled": true,
+      "fallback": true,
+      "description": "Papan peringkat sosial real-time dan tantangan mingguan"
+    },
+    "dark_theme_default": {
+      "key": "dark_theme_default",
+      "enabled": false,
+      "fallback": false,
+      "description": "Penggunaan mode gelap sebagai tema standar"
+    },
+    "interactive_sandbox_v2": {
+      "key": "interactive_sandbox_v2",
+      "enabled": true,
+      "fallback": false,
+      "description": "Lingkungan eksekusi kode interaktif versi 2"
+    }
+  },
+  "updatedAt": "2026-08-24T02:53:15.980Z"
+}

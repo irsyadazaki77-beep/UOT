@@ -31,14 +31,52 @@
         $("visualContinueLink").href=`materi-basic.html?topik=${encodeURIComponent(track.id)}`;$("visualCompleted").textContent=data.completed;
         document.querySelector(".skill-ring").style.background=`radial-gradient(circle at center,var(--surface) 56%,transparent 58%),conic-gradient(var(--green) ${data.percent*3.6}deg,var(--surface-soft) 0)`;
         $("bentoProgress").textContent=`${data.percent}%`;document.querySelector(".progress-orbit").style.setProperty("--total",`${data.percent*3.6}deg`);
+
+        if (typeof window.ProgressionEngine !== "undefined") {
+            try {
+                const gameState = window.ProgressionEngine.getGameState();
+                const streakPill = document.querySelector(".streak-pill");
+                if (streakPill) {
+                    streakPill.innerHTML = `<i class="fa-solid fa-fire" style="color:#f59e0b"></i> ${gameState.streak > 0 ? `${gameState.streak} Hari Streak` : "Mulai Streak"}`;
+                }
+                const nextObj = window.ProgressionEngine.getNextObjective(data.progress);
+                if (nextObj) {
+                    $("visualTrackTitle").textContent = nextObj.title || track.title;
+                    $("visualLessonText").textContent = nextObj.reason || `${trackProgress.completed} dari ${trackProgress.total} pelajaran`;
+                    if (nextObj.url) $("visualContinueLink").href = nextObj.url;
+                }
+            } catch (e) {
+                console.warn("[IndexClean] ProgressionEngine dashboard sync error:", e);
+            }
+        }
+
         updateResume(data,track,trackProgress);
     }
 
     function updateResume(data,track,trackProgress){
         const section=$("resumeSection");
-        if(data.completed===0){section.hidden=true;return;}
-        section.hidden=false;$("resumeTitle").textContent=`Lanjutkan ${track.title}`;$("resumeText").textContent=`${trackProgress.completed} dari ${trackProgress.total} pelajaran sudah selesai.`;
-        $("resumePercent").textContent=`${trackProgress.percent}%`;$("resumeBar").style.width=`${trackProgress.percent}%`;$("resumeLink").href=`materi-basic.html?topik=${encodeURIComponent(track.id)}`;
+        let nextObj = null;
+        if (typeof window.ProgressionEngine !== "undefined") {
+            try {
+                nextObj = window.ProgressionEngine.getNextObjective(data.progress);
+            } catch (_) {}
+        }
+        if (data.completed===0 && !nextObj){section.hidden=true;return;}
+        section.hidden=false;
+        if (nextObj) {
+            $("resumeTitle").textContent = nextObj.title;
+            $("resumeText").textContent = nextObj.reason;
+            $("resumePercent").textContent = `${trackProgress.percent}%`;
+            $("resumeBar").style.width = `${trackProgress.percent}%`;
+            $("resumeLink").href = nextObj.url || `materi-basic.html?topik=${encodeURIComponent(track.id)}`;
+            $("resumeLink").innerHTML = `${escapeHTML(nextObj.actionLabel || "Lanjutkan")} <span aria-hidden="true">→</span>`;
+        } else {
+            $("resumeTitle").textContent=`Lanjutkan ${track.title}`;
+            $("resumeText").textContent=`${trackProgress.completed} dari ${trackProgress.total} pelajaran sudah selesai.`;
+            $("resumePercent").textContent=`${trackProgress.percent}%`;
+            $("resumeBar").style.width=`${trackProgress.percent}%`;
+            $("resumeLink").href=`materi-basic.html?topik=${encodeURIComponent(track.id)}`;
+        }
     }
 
     function selectedTracks(){
