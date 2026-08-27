@@ -3,7 +3,7 @@
  * FASE 19: Server-Verified Progression, Authoritative Catalog, Reward Ledger & Anti-Cheat
  */
 
-const AdaptiveLearningEngine = require('../../adaptive-learning-engine');
+const AdaptiveLearningEngine = require('../../public/adaptive-learning-engine');
 const { contentCatalog } = require('../content-catalog');
 const { RewardLedger } = require('../reward-ledger');
 const { REWARD_POLICY } = require('../reward-policy');

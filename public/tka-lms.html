@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <script src="theme-init.js"></script>
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="app-shell.css">
+    <script src="app-shell.js" defer></script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>LMS TKA - Universe Of Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="feature-pages.css">
+    <link rel="stylesheet" href="pro-experience.css?v=20260621-clean">
+    <link rel="stylesheet" href="nav-polish.css">
+    <link rel="stylesheet" href="mobile-compat.css">
+    <link rel="stylesheet" href="bubub-ai.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* MEGA CSS UPGRADE - 20 ENHANCEMENTS */
+        
+        /* 1. Deep Glassmorphism */
+        .lms-overview-card {
+            backdrop-filter: blur(25px) saturate(150%);
+            -webkit-backdrop-filter: blur(25px) saturate(150%);
+            background: rgba(16, 29, 47, 0.65) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+        }
+        body:not(.dark-theme) .lms-overview-card {
+            background: rgba(255, 255, 255, 0.7) !important;
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+        }
+
+        /* 2. Dynamic Glow on CTA */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 8px 24px rgba(79, 140, 255, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 12px 32px rgba(79, 140, 255, 0.6);
+        }
+
+        /* 3. Animated Progress Bar */
+        #tkaLmsProgressBar {
+            background: linear-gradient(90deg, var(--blue), var(--purple), var(--green), var(--blue));
+            background-size: 300% 100%;
+            animation: gradientMove 3s linear infinite;
+            position: relative;
+            border-radius: 6px;
+            height: 100%;
+        }
+        .lms-progress-track {
+            height: 12px;
+            background: var(--surface-2);
+            border-radius: 6px;
+            margin: 16px 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        @keyframes gradientMove { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+
+        /* 4. Gradient Metrics */
+        .metric-card strong {
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+            display: block;
+        }
+        .metric-icon { font-size: 1.2rem; margin-bottom: 8px; color: var(--blue); opacity: 0.8; display: block; }
+
+        /* 5. Card Hover Lift */
+        .card, .flow-step, .lms-session-panel, .lms-history-container {
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .card:hover, .flow-step:hover, .lms-session-panel:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            border-color: rgba(79,140,255,0.3);
+        }
+
+        /* 6, 7, 8, 9, 10. Icons styling */
+        .nav-links a i { margin-right: 6px; font-size: 0.9em; opacity: 0.8; }
+        .btn i { margin-right: 8px; }
+
+        /* 11, 12, 13. Typography & Balance */
+        h1, h2, h3 { text-wrap: balance; }
+        p { line-height: 1.7; letter-spacing: 0.01em; }
+        .section-kicker { 
+            text-transform: uppercase; letter-spacing: 2.5px; 
+            font-weight: 900; opacity: 0.8; margin-bottom: 12px; 
+            color: var(--blue);
+        }
+
+        /* 14. Pill-shaped Chips */
+        .tool-chip {
+            border-radius: 50px;
+            padding: 8px 18px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+        }
+        .tool-chip:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .tool-chip.active { background: linear-gradient(135deg, var(--blue), var(--purple)); color: white; border-color: transparent; }
+        .tool-chip.active::before {
+            content: '\f00c'; font-family: "Font Awesome 6 Free"; font-weight: 900; font-size: 0.8em;
+        }
+
+        /* 15. Modern Select Dropdown */
+        select#tkaSessionSize {
+            appearance: none;
+            border-radius: 12px;
+            padding: 12px 40px 12px 16px;
+            background-color: var(--surface-2);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234f8cff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 100%;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        select#tkaSessionSize:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), 0 0 0 4px rgba(79,140,255,0.15);
+        }
+
+        /* 16. Input Focus Effects */
+        .search-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
+        .search-wrapper i { position: absolute; left: 16px; color: var(--muted); }
+        input#tkaQuestionSearch {
+            padding: 14px 16px 14px 44px;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            width: 100%;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text);
+            font-size: 15px;
+        }
+        input#tkaQuestionSearch:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), 0 0 0 4px rgba(79,140,255,0.15);
+            transform: translateY(-1px);
+        }
+
+        /* 18. Grid Gap Optimization & Layouts */
+        .metric-grid { gap: 16px; margin-bottom: 16px; display: grid; grid-template-columns: repeat(3, 1fr); }
+        .card-grid { gap: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        
+        body[data-page="tka-lms"] .tka-lms-shell {
+            display: block;
+            grid-template-columns: none;
+            align-items: initial;
+            position: relative;
+            z-index: 5;
+        }
+        body[data-page="tka-lms"] .lms-session-panel {
+            position: relative;
+            padding: clamp(24px, 4vw, 40px);
+            border: 1px solid rgba(79, 140, 255, 0.28);
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 90% 20%, rgba(139, 92, 246, 0.2), transparent 34%),
+                linear-gradient(135deg, rgba(79, 140, 255, 0.1), rgba(50, 214, 107, 0.04)),
+                var(--card-bg);
+            box-shadow: var(--shadow-soft);
+            overflow: visible;
+            transform: none;
+        }
+        body[data-page="tka-lms"] .lms-session-panel:hover {
+            transform: none;
+            box-shadow: 0 24px 55px rgba(15, 23, 42, 0.12);
+        }
+        body[data-page="tka-lms"] .lms-session-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            align-items: flex-start;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        body[data-page="tka-lms"] .lms-session-head > div {
+            min-width: 0;
+            flex: 1;
+        }
+        body[data-page="tka-lms"] .lms-session-head h2 {
+            margin: 4px 0 8px;
+            font-size: clamp(1.7rem, 3vw, 2.4rem);
+            line-height: 1.12;
+        }
+        body[data-page="tka-lms"] .lms-session-head p {
+            max-width: 680px;
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+        body[data-page="tka-lms"] .lms-session-grid {
+            display: grid;
+            grid-template-columns: minmax(250px, 1.1fr) minmax(360px, 1.55fr) minmax(180px, 0.7fr);
+            gap: 24px;
+            align-items: end;
+            padding: 28px 0 24px;
+            width: 100%;
+        }
+        body[data-page="tka-lms"] .lms-control {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+        .lms-control-label {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 850;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        body[data-page="tka-lms"] .lms-subject-picker {
+            position: relative;
+            min-width: 0;
+        }
+        .lms-subject-trigger {
+            width: 100%;
+            min-height: 58px;
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface-2);
+            color: var(--text);
+            text-align: left;
+            cursor: pointer;
+        }
+        .lms-subject-trigger:hover, .lms-subject-trigger[aria-expanded="true"] {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.12);
+        }
+        .lms-subject-mark {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            color: white;
+            font-size: 13px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+        }
+        .lms-subject-copy { min-width: 0; }
+        .lms-subject-copy strong, .lms-subject-copy small { display: block; }
+        .lms-subject-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lms-subject-copy small { margin-top: 2px; color: var(--muted); font-size: 12px; }
+        .lms-subject-menu {
+            position: absolute;
+            z-index: 100;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            padding: 12px;
+            border: 1px solid rgba(79, 140, 255, 0.2);
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 20px 48px rgba(15, 23, 42, 0.2);
+            isolation: isolate;
+        }
+        body.dark-theme .lms-subject-menu {
+            background: #101d2f;
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 24px 58px rgba(0, 0, 0, 0.48);
+        }
+        .lms-subject-menu[hidden] { display: none; }
+        .lms-subject-search {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid rgba(102, 112, 133, 0.28);
+            border-radius: 10px;
+            background: #f7f9fc;
+            color: var(--text);
+            font: inherit;
+            box-shadow: none;
+        }
+        body.dark-theme .lms-subject-search {
+            background: #172940;
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+        .lms-subject-search:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.14);
+        }
+        .lms-subject-options {
+            max-height: 210px;
+            overflow-y: auto;
+            display: grid;
+            gap: 4px;
+            margin-top: 8px;
+            padding-right: 4px;
+            overscroll-behavior: contain;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(102, 112, 133, 0.45) transparent;
+        }
+        .lms-subject-option {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 36px minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+            min-height: 54px;
+            padding: 8px 10px;
+            border: 1px solid transparent;
+            border-radius: 11px;
+            background: #ffffff;
+            color: var(--text);
+            text-align: left;
+            cursor: pointer;
+        }
+        body.dark-theme .lms-subject-option { background: #101d2f; }
+        .lms-subject-option:hover, .lms-subject-option.focused {
+            background: #f3f6fb;
+            border-color: rgba(102, 112, 133, 0.18);
+        }
+        body.dark-theme .lms-subject-option:hover,
+        body.dark-theme .lms-subject-option.focused { background: #172940; }
+        .lms-subject-option[aria-selected="true"] {
+            color: var(--blue);
+            background: rgba(79, 140, 255, 0.1);
+            border-color: rgba(79, 140, 255, 0.3);
+        }
+        body.dark-theme .lms-subject-option[aria-selected="true"] {
+            background: rgba(79, 140, 255, 0.16);
+        }
+        .lms-subject-option .lms-subject-mark { width: 34px; height: 34px; border-radius: 9px; }
+        .lms-subject-option small { color: var(--muted); font-size: 11px; }
+        .lms-subject-empty { padding: 18px; color: var(--muted); text-align: center; }
+        body[data-page="tka-lms"] .lms-mode-row {
+            min-height: 58px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        body[data-page="tka-lms"] .lms-mode-row .tool-chip {
+            min-height: 42px;
+            justify-content: center;
+            white-space: nowrap;
+        }
+        body[data-page="tka-lms"] .lms-session-footer {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 20px;
+            align-items: center;
+            padding-top: 22px;
+            border-top: 1px solid var(--border);
+        }
+        body[data-page="tka-lms"] .lms-launch-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(120px, auto));
+            justify-content: start;
+            gap: 8px 24px;
+            min-width: 0;
+        }
+        .lms-summary-item { display: flex; flex-direction: column; gap: 2px; }
+        .lms-summary-item span { color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
+        .lms-summary-item strong { font-size: 14px; }
+        .lms-summary-empty { color: var(--danger, #ff4f4f); font-size: 13px; font-weight: 700; }
+        .lms-launch-summary .lms-summary-empty,
+        .lms-launch-summary .lms-summary-note {
+            grid-column: 1 / -1;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .lms-session-footer .btn {
+            min-width: 190px;
+            min-height: 52px;
+            justify-content: center;
+        }
+        body[data-page="tka-lms"] .lms-advanced-toggle {
+            display: inline-flex;
+            gap: 9px;
+            align-items: center;
+            flex: 0 0 auto;
+            margin-top: 2px;
+            padding: 10px 13px;
+            border: 1px solid rgba(79, 140, 255, 0.18);
+            border-radius: 12px;
+            background: rgba(79, 140, 255, 0.07);
+            color: var(--blue);
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        body[data-page="tka-lms"] .lms-advanced-toggle:hover {
+            border-color: rgba(79, 140, 255, 0.38);
+            background: rgba(79, 140, 255, 0.12);
+        }
+        .lms-advanced-toggle i:last-child { transition: transform 0.2s ease; }
+        .lms-advanced-toggle[aria-expanded="true"] i:last-child { transform: rotate(180deg); }
+        .lms-advanced-toggle.has-active-filter::after {
+            content: "Aktif";
+            padding: 3px 7px;
+            border-radius: 999px;
+            background: rgba(50, 214, 107, 0.14);
+            color: var(--green);
+            font-size: 10px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        body[data-page="tka-lms"] .lms-advanced-panel {
+            display: grid;
+            gap: 22px;
+            padding: 24px;
+            margin-bottom: 22px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--surface-2);
+        }
+        body[data-page="tka-lms"] .lms-advanced-panel[hidden] { display: none; }
+        .lms-advanced-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+        .lms-filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .lms-filter-group > span {
+            font-weight: 800;
+            color: var(--muted);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .lms-filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .lms-analytics-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 24px; 
+        }
+        body[data-page="tka-lms"] .lms-analytics-section {
+            position: relative;
+            z-index: 1;
+        }
+        .lms-bottom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        /* 19. Footer Polish */
+        footer {
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+
+        /* 20. Fade-in Section Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section, .lms-hero {
+            animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.2s; }
+        .section:nth-child(4) { animation-delay: 0.3s; }
+        .section:nth-child(5) { animation-delay: 0.4s; }
+        
+        /* 21. History Table & Modal (New Feature) */
+        .lms-history-container {
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+        .history-row {
+            display: grid;
+            grid-template-columns: 100px 1fr 100px 160px;
+            gap: 16px;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s ease;
+        }
+        .history-row:last-child { border-bottom: none; }
+        .history-row:hover { background: rgba(139, 92, 246, 0.05); }
+        .history-tag { font-size: 11px; padding: 6px 12px; border-radius: 30px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; text-align: center; }
+        .tag-correct { background: rgba(50, 214, 107, 0.15); color: var(--green); }
+        .tag-wrong { background: rgba(255, 79, 79, 0.15); color: var(--danger); }
+        .history-preview { font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+        
+        .review-modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .review-modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .review-modal-content {
+            background: var(--card-bg); width: 90%; max-width: 700px;
+            border-radius: 24px; border: 1px solid var(--border);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+            transform: translateY(30px) scale(0.95); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            max-height: 85vh; display: flex; flex-direction: column;
+        }
+        .review-modal-overlay.show .review-modal-content { transform: translateY(0) scale(1); }
+        .review-modal-header {
+            padding: 24px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .review-modal-header h3 { margin: 0; font-size: 1.4rem; font-weight: 800; }
+        .close-modal-btn { background: var(--surface-2); border: none; width: 36px; height: 36px; border-radius: 50%; color: var(--text); cursor: pointer; transition: all 0.2s; display: grid; place-items: center; }
+        .close-modal-btn:hover { background: var(--danger, #ff4f4f); color: white; transform: rotate(90deg); }
+        .review-modal-body { padding: 32px 24px; overflow-y: auto; line-height: 1.7; font-size: 15px; }
+        .review-correct-answer { margin-top: 24px; padding: 16px; background: rgba(50, 214, 107, 0.1); border-left: 4px solid var(--green); border-radius: 0 12px 12px 0; }
+        .review-explanation { margin-top: 16px; padding: 16px; background: var(--surface-2); border-radius: 12px; }
+
+        .diagnostic-row.lms-weak-row {
+            margin-top: 16px;
+            background: rgba(255, 79, 79, 0.05);
+            border-color: rgba(255, 79, 79, 0.2);
+            padding: 16px;
+        }
+        .diagnostic-row.lms-weak-row span { color: var(--muted); }
+        .diagnostic-row.lms-weak-row strong { color: var(--danger, #ff4f4f); font-size: 15px; }
+
+        .answer-choice:disabled { cursor: default; }
+        @media (max-width: 992px) {
+            body[data-page="tka-lms"] .lms-session-grid {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            }
+            body[data-page="tka-lms"] .lms-control:first-child { grid-column: 1 / -1; }
+            .history-row { grid-template-columns: 80px 1fr; }
+            .history-row > div:nth-child(3), .history-row > div:nth-child(4) { display: none; }
+        }
+        @media (max-width: 680px) {
+            body[data-page="tka-lms"] .lms-session-panel {
+                padding: 20px;
+                border-radius: 22px;
+            }
+            body[data-page="tka-lms"] .lms-session-head,
+            body[data-page="tka-lms"] .lms-session-footer {
+                grid-template-columns: 1fr;
+                display: grid;
+            }
+            body[data-page="tka-lms"] .lms-advanced-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+            body[data-page="tka-lms"] .lms-session-grid,
+            body[data-page="tka-lms"] .lms-advanced-grid { grid-template-columns: 1fr; }
+            body[data-page="tka-lms"] .lms-control:first-child { grid-column: auto; }
+            body[data-page="tka-lms"] .lms-launch-summary { grid-template-columns: 1fr 1fr; }
+            body[data-page="tka-lms"] .lms-session-footer .btn { width: 100%; }
+            body[data-page="tka-lms"] .lms-mode-row .tool-chip {
+                flex: 1 1 calc(50% - 8px);
+                justify-content: center;
+            }
+            body[data-page="tka-lms"] .lms-subject-options { max-height: 180px; }
+            body[data-page="tka-lms"] .lms-subject-menu {
+                left: -4px;
+                right: -4px;
+                padding: 10px;
+            }
+        }
+
+        /* Unified Tab Workspace & Premium Aesthetics */
+        .lms-workspace-container {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .lms-workspace-tabs {
+            display: flex;
+            gap: 8px;
+            background: rgba(16, 29, 47, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 6px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            position: relative;
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+        }
+        .lms-workspace-tabs::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome/Safari */
+        }
+        body:not(.dark-theme) .lms-workspace-tabs {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .tab-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+            position: relative;
+            z-index: 1;
+        }
+        .tab-btn i {
+            font-size: 14px;
+            transition: transform 0.25s ease;
+        }
+        .tab-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .tab-btn:hover i {
+            transform: scale(1.15) translateY(-1px);
+        }
+        body:not(.dark-theme) .tab-btn:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+        .tab-btn.active {
+            color: white !important;
+            background: linear-gradient(135deg, var(--blue), var(--purple));
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.25);
+        }
+        body:not(.dark-theme) .tab-btn.active {
+            color: white !important;
+        }
+        .tab-pane {
+            display: none;
+            animation: tabFadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Premium Analytics Grid Overrides */
+        .lms-analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+            gap: 16px !important;
+        }
+        .lms-analytics-card {
+            background: rgba(16, 29, 47, 0.5) !important;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-radius: 20px !important;
+            padding: 18px !important;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+            display: flex;
+            flex-direction: column;
+            gap: 12px !important;
+        }
+        body:not(.dark-theme) .lms-analytics-card {
+            background: rgba(255, 255, 255, 0.7) !important;
+            border: 1px solid rgba(0, 0, 0, 0.06) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02) !important;
+        }
+        .lms-analytics-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: rgba(79, 140, 255, 0.4) !important;
+            box-shadow: 0 15px 35px rgba(79, 140, 255, 0.15) !important;
+        }
+        .lms-analytics-card h3 {
+            font-size: 17px !important;
+            font-weight: 750 !important;
+            margin: 4px 0 !important;
+            color: var(--text);
+        }
+        .lms-analytics-row {
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .lms-analytics-row strong {
+            color: var(--text) !important;
+            font-weight: 700 !important;
+        }
+
+        /* Scrollable and Premium Review History */
+        .lms-history-container {
+            max-height: 480px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(79, 140, 255, 0.3) transparent;
+            padding-right: 4px;
+        }
+        .history-row {
+            grid-template-columns: 90px 1fr 110px 140px !important;
+            padding: 14px 18px !important;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.2s ease;
+        }
+        body:not(.dark-theme) .history-row {
+            background: rgba(0, 0, 0, 0.01);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+        .history-row:hover {
+            background: rgba(79, 140, 255, 0.08) !important;
+            border-color: rgba(79, 140, 255, 0.2);
+            transform: translateX(6px);
+        }
+        .history-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .history-search-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 320px;
+            min-width: 200px;
+        }
+        .history-search-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .history-search-wrapper input {
+            width: 100%;
+            padding: 10px 12px 10px 36px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface-2);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .history-search-wrapper input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(79, 140, 255, 0.15);
+        }
+        .history-filter-chips {
+            display: flex;
+            gap: 6px;
+        }
+        .history-filter-chips .tool-chip {
+            padding: 6px 12px !important;
+            font-size: 12px !important;
+            min-height: auto !important;
+        }
+        
+        /* Layout Adjustments */
+        #tkaLmsWeakRow strong {
+            transition: color 0.2s ease;
+        }
+        #tkaLmsWeakRow:hover strong {
+            color: #ff6b6b !important;
+        }
+        
+        /* Recommendation Cards Hover & Layout */
+        .recommendation-card {
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .recommendation-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(79, 140, 255, 0.3) !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Interactive Strategy Action Cards */
+        .strategy-action-card {
+            display: grid;
+            grid-template-columns: 42px 1fr 20px;
+            gap: 14px;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--card-bg);
+            color: var(--text);
+            font-family: inherit;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .strategy-action-card:hover {
+            transform: translateX(4px);
+            border-color: var(--blue);
+            background: var(--surface-2);
+            box-shadow: 0 4px 12px rgba(79, 140, 255, 0.06);
+        }
+        .action-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+        .strategy-action-card:hover .action-card-icon {
+            transform: scale(1.1);
+        }
+        .action-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .action-card-body strong {
+            font-size: 13.5px;
+            font-weight: 750;
+            color: var(--text);
+        }
+        .action-card-body p {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.4;
+        }
+        .action-card-arrow {
+            color: var(--muted);
+            font-size: 12px;
+            text-align: right;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        .strategy-action-card:hover .action-card-arrow {
+            transform: translateX(2px);
+            color: var(--blue);
+        }
+
+        /* Search Match Highlight */
+        .search-match-highlight {
+            background: rgba(255, 209, 102, 0.24);
+            color: inherit;
+            padding: 1px 2px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="coursera-home.css">
+    <link rel="stylesheet" href="responsive-system.css?v=20260716">
+    <link rel="stylesheet" href="navbar-explore.css?v=20260722">
+</head>
+
+<body data-page="tka-lms">
+    <div class="noise"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <main class="page">
+                                                <nav class="navbar">
+            <div class="nav-left-group">
+                <a href="index.html" class="brand">
+                    <img src="universe-of-tech-logo.jpg" alt="Universe Of Tech Logo" class="brand-logo" />
+                    Universe Of Tech
+                </a>
+                <div class="explore-wrapper">
+                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
+                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="explore-mega-menu" id="exploreMegaMenu">
+                        <!-- Column 1: Kategori Belajar -->
+                        <div class="mega-col">
+                            <h4>Kategori Belajar</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="materi-basic.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Dasar Pemrograman</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Struktur Data</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="materi.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Web Development</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="snbt.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Persiapan TKA SNBP</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="tka-lms.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>LMS TKA</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="bahasa-daerah.html" class="mega-item-link">
+                                        <div class="mega-icon-box">????</div>
+                                        <span>Wonderful Indonesia</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 2: Fitur & Dashboard -->
+                        <div class="mega-col">
+                            <h4>Fitur & Dashboard</h4>
+                            <ul class="mega-list">
+                                <li>
+                                    <a href="learning-path.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Roadmap Belajar</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="leaderboard.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Leaderboard</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="achievements.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Pencapaian</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="profile.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Profil Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="payment.html" class="mega-item-link">
+                                        <div class="mega-icon-box">??</div>
+                                        <span>Upgrade Pro</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Column 3: Spotlight -->
+                        <div class="mega-col">
+                            <div class="mega-spotlight">
+                                <div class="spotlight-header">
+                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
+                                </div>
+                                <h5>Dasar SQL & Database Relasional</h5>
+                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
+                                <a href="materi.html" class="btn-spotlight">
+                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <!-- Suggestions Popover -->
+                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
+            </div>
+
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="materi.html">Materi</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="projects.html">Proyek</a>
+                <a href="library.html">Library</a>
+            </div>
+
+            <div class="nav-actions">
+                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
+                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">??</button>
+                <a class="btn btn-ghost" href="login.html">Masuk</a>
+                <a class="btn btn-primary" href="materi.html">Mulai</a>
+            </div>
+        </nav>
+
+        <section class="hero lms-hero">
+            <div>
+                <div class="badge"><i class="fa-solid fa-bolt" style="color: var(--yellow);"></i> LMS TKA Adaptif</div>
+                <h1>Pusat latihan TKA dengan <span class="gradient-text">menu adaptif & analytics</span>.</h1>
+                <p>Atur mapel dan paket latihan, pantau progres, lalu kerjakan soal di ruang quiz khusus yang lebih tenang dan fokus.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#lms-workspace"><i class="fa-solid fa-sliders"></i> Atur Sesi Quiz</a>
+                    <a class="btn btn-blue" href="#lms-dashboard"><i class="fa-solid fa-chart-line"></i> Lihat Progress</a>
+                </div>
+            </div>
+            <aside class="hero-panel lms-overview-card" id="lms-dashboard">
+                <div class="panel-top">
+                    <div>
+                        <div class="section-kicker">Progress Utama</div>
+                        <h2 class="panel-title">Kesiapan Latihan</h2>
+                    </div>
+                    <span class="mini-tag"><i class="fa-solid fa-database"></i> 282 Soal</span>
+                </div>
+                <div class="lms-progress-track"><div id="tkaLmsProgressBar"></div></div>
+                <div class="metric-grid">
+                    <div class="metric-card"><i class="fa-solid fa-check-double metric-icon"></i><strong id="tkaLmsDone">0/282</strong><span>Selesai</span></div>
+                    <div class="metric-card"><i class="fa-solid fa-bullseye metric-icon"></i><strong id="tkaLmsAccuracy">0%</strong><span>Akurasi</span></div>
+                    <div class="metric-card"><i class="fa-solid fa-fire metric-icon"></i><strong id="tkaLmsStreak">0</strong><span>Streak</span></div>
+                </div>
+                <div class="metric-grid lms-mini-metrics">
+                    <div class="metric-card"><i class="fa-solid fa-rotate-left metric-icon"></i><strong id="tkaLmsReviewCount">0</strong><span>Review</span></div>
+                    <div class="metric-card"><i class="fa-solid fa-crown metric-icon"></i><strong id="tkaLmsMastery">0%</strong><span>Mastery</span></div>
+                    <div class="metric-card"><i class="fa-solid fa-flag-checkered metric-icon"></i><strong id="tkaLmsSessionTarget">0/10</strong><span>Target Sesi</span></div>
+                </div>
+                
+                <!-- Estimasi Skor TKA Card -->
+                <div class="lms-score-estimator" style="background: rgba(79, 140, 255, 0.08); border: 1px dashed rgba(79, 140, 255, 0.2); border-radius: 16px; padding: 12px 16px; text-align: center; margin-top: 10px; margin-bottom: 10px;">
+                    <span style="font-size: 11px; text-transform: uppercase; font-weight: 800; color: var(--blue); letter-spacing: 0.08em; display: block; margin-bottom: 4px;"><i class="fa-solid fa-chart-line"></i> Estimasi Skor TKA</span>
+                    <strong id="tkaLmsEstimatedScore" style="font-size: 24px; font-weight: 900; background: linear-gradient(135deg, var(--blue), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block;">Belum Terukur</strong>
+                    <span style="font-size: 11px; color: var(--muted); margin-top: 2px; display: block;">Mulai kerjakan minimal 5 soal untuk menghitung estimasi nilai</span>
+                </div>
+
+                <div class="diagnostic-row lms-weak-row" id="tkaLmsWeakRow" style="cursor: pointer;" title="Klik untuk melatih mapel terlemah kamu">
+                    <span><i class="fa-solid fa-triangle-exclamation"></i> Mapel Terlemah</span>
+                    <strong id="tkaLmsWeak" style="text-decoration: underline; color: var(--danger, #ff4f4f);">Belum ada</strong>
+                </div>
+            </aside>
+        </section>
+
+        <!-- TABS WORKSPACE CONTAINER -->
+        <section class="section lms-workspace-container" id="lms-workspace">
+            <div class="lms-workspace-tabs">
+                <button class="tab-btn active" data-target="tab-setup" aria-controls="tab-setup" aria-selected="true" role="tab"><i class="fa-solid fa-play"></i> Mulai Sesi</button>
+                <button class="tab-btn" data-target="tab-analytics" aria-controls="tab-analytics" aria-selected="false" role="tab"><i class="fa-solid fa-chart-simple"></i> Peta Kekuatan</button>
+                <button class="tab-btn" data-target="tab-history" aria-controls="tab-history" aria-selected="false" role="tab"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat & Review</button>
+                <button class="tab-btn" data-target="tab-guide" aria-controls="tab-guide" aria-selected="false" role="tab"><i class="fa-solid fa-circle-info"></i> Panduan & Sumber</button>
+            </div>
+
+            <div class="lms-tab-content">
+                <!-- TAB 1: SETUP -->
+                <div class="tab-pane active" id="tab-setup" role="tabpanel">
+                    <div class="lms-session-panel">
+                        <div class="lms-session-head">
+                            <div>
+                                <div class="section-kicker">Mulai Latihan</div>
+                                <h2>Siapkan Sesi Quiz</h2>
+                                <p>Pilih mapel, mode, dan jumlah soal. Pengaturan tambahan tersedia bila kamu membutuhkannya.</p>
+                            </div>
+                            <button class="lms-advanced-toggle" id="tkaAdvancedToggle" type="button" aria-expanded="false" aria-controls="tkaAdvancedPanel">
+                                <i class="fa-solid fa-sliders"></i>
+                                Filter lanjutan
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+                        </div>
+
+                        <div class="lms-session-grid">
+                            <div class="lms-control">
+                                <span class="lms-control-label">Mapel</span>
+                                <div class="lms-subject-picker" id="tkaLmsSubjects"></div>
+                            </div>
+                            <div class="lms-control">
+                                <span class="lms-control-label">Mode Belajar</span>
+                                <div class="lms-mode-row">
+                                    <button class="tool-chip active" data-tka-mode="all">Semua</button>
+                                    <button class="tool-chip" data-tka-mode="unanswered">Belum dijawab</button>
+                                    <button class="tool-chip" data-tka-mode="wrong">Salah</button>
+                                    <button class="tool-chip" data-tka-mode="review">Review</button>
+                                </div>
+                            </div>
+                            <div class="lms-control">
+                                <label class="lms-control-label" for="tkaSessionSize">Jumlah Soal</label>
+                                <select id="tkaSessionSize">
+                                    <option value="5">5 soal</option>
+                                    <option value="10" selected>10 soal</option>
+                                    <option value="20">20 soal</option>
+                                    <option value="all">Marathon</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="lms-advanced-panel" id="tkaAdvancedPanel" hidden>
+                            <div class="lms-filter-group">
+                                <span><i class="fa-solid fa-magnifying-glass"></i> Cari Topik atau Kata Kunci</span>
+                                <div class="search-wrapper">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <input id="tkaQuestionSearch" type="search" placeholder="Contoh: peluang, ekologi, stoikiometri, mekanika...">
+                                </div>
+                            </div>
+
+                            <div class="lms-advanced-grid">
+                                <div class="lms-filter-group">
+                                    <span><i class="fa-solid fa-layer-group"></i> Tingkat Kesulitan</span>
+                                    <div class="chips">
+                                        <button class="tool-chip active" data-tka-difficulty="all">Semua</button>
+                                        <button class="tool-chip" data-tka-difficulty="dasar">Dasar</button>
+                                        <button class="tool-chip" data-tka-difficulty="sedang">Sedang</button>
+                                        <button class="tool-chip" data-tka-difficulty="hots">HOTS</button>
+                                        <button class="tool-chip" data-tka-difficulty="prediksi">Prediksi</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="lms-filter-group">
+                                    <span><i class="fa-solid fa-shapes"></i> Tipe Soal</span>
+                                    <div class="chips">
+                                        <button class="tool-chip active" data-tka-type="all">Semua</button>
+                                        <button class="tool-chip" data-tka-type="single">Pilihan Ganda</button>
+                                        <button class="tool-chip" data-tka-type="multi">Pilihan Kompleks</button>
+                                        <button class="tool-chip" data-tka-type="truefalse">Benar/Salah</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="lms-filter-actions">
+                                <button class="btn btn-ghost" id="tkaResetFilters" type="button" aria-label="Reset Semua Filter" title="Hapus filter pencarian dan kategori">
+                                    <i class="fa-solid fa-arrow-rotate-right"></i> Reset Filter
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="lms-session-footer">
+                            <div class="lms-launch-summary" id="tkaLaunchSummary" aria-live="polite"></div>
+                            <button class="btn btn-primary" id="tkaLaunchQuiz" type="button">
+                                <i class="fa-solid fa-play"></i> Mulai Quiz
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Rekomendasi Sesi Pintar -->
+                    <div class="lms-session-panel" style="margin-top: 24px;">
+                        <div class="lms-session-head" style="border-bottom: none; padding-bottom: 8px;">
+                            <div>
+                                <div class="section-kicker"><i class="fa-solid fa-wand-magic-sparkles"></i> Rekomendasi Pintar</div>
+                                <h2>Pilih Sesi Kilat</h2>
+                                <p>Sistem merekomendasikan paket latihan cepat berdasarkan status kesiapan belajarmu.</p>
+                            </div>
+                        </div>
+                        <div class="quick-recommendations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 16px;">
+                            <article class="recommendation-card" id="recRepeatErrors" style="border: 1px solid var(--border); border-radius: 16px; padding: 16px; background: var(--surface-2); transition: all 0.3s; display: flex; flex-direction: column; justify-content: space-between; min-height: 150px;">
+                                <div>
+                                    <div style="font-size: 18px; color: var(--danger); margin-bottom: 8px;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                    <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 6px 0;">Drill Soal Salah</h3>
+                                    <p style="font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4;">Ulangi 5 soal yang pernah dijawab salah untuk evaluasi.</p>
+                                </div>
+                                <button class="btn btn-ghost" style="width: 100%; min-height: 36px; padding: 6px; font-size: 12px; margin-top: 12px; border-radius: 10px;" type="button">Mulai Drill</button>
+                            </article>
+                            <article class="recommendation-card" id="recWeakestDrill" style="border: 1px solid var(--border); border-radius: 16px; padding: 16px; background: var(--surface-2); transition: all 0.3s; display: flex; flex-direction: column; justify-content: space-between; min-height: 150px;">
+                                <div>
+                                    <div style="font-size: 18px; color: var(--blue); margin-bottom: 8px;"><i class="fa-solid fa-bolt"></i></div>
+                                    <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 6px 0;">Drill Mapel Terlemah</h3>
+                                    <p style="font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4;">Sesi 5 soal dari materi terlemah kamu untuk perbaikan cepat.</p>
+                                </div>
+                                <button class="btn btn-ghost" style="width: 100%; min-height: 36px; padding: 6px; font-size: 12px; margin-top: 12px; border-radius: 10px;" type="button">Mulai Drill</button>
+                            </article>
+                            <article class="recommendation-card" id="recHotsChallenge" style="border: 1px solid var(--border); border-radius: 16px; padding: 16px; background: var(--surface-2); transition: all 0.3s; display: flex; flex-direction: column; justify-content: space-between; min-height: 150px;">
+                                <div>
+                                    <div style="font-size: 18px; color: var(--purple); margin-bottom: 8px;"><i class="fa-solid fa-fire"></i></div>
+                                    <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 6px 0;">Tantangan HOTS</h3>
+                                    <p style="font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4;">5 soal level analisis tinggi campuran untuk melatih logika berpikir.</p>
+                                </div>
+                                <button class="btn btn-ghost" style="width: 100%; min-height: 36px; padding: 6px; font-size: 12px; margin-top: 12px; border-radius: 10px;" type="button">Mulai Sesi</button>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: ANALYTICS -->
+                <div class="tab-pane" id="tab-analytics" role="tabpanel">
+                    <div class="lms-session-panel">
+                        <div class="lms-session-head" style="border-bottom: none; padding-bottom: 8px;">
+                            <div>
+                                <div class="section-kicker">Analytics</div>
+                                <h2>Peta Kekuatan per Mapel</h2>
+                                <p>Gunakan ringkasan ini untuk memilih sesi berikutnya: ulang mapel merah, lanjutkan mapel stabil, dan pertahankan streak.</p>
+                            </div>
+                        </div>
+                        <div class="lms-analytics-grid" id="tkaAnalyticsGrid"></div>
+                    </div>
+
+                    <!-- Rencana Aksi Sukses TKA -->
+                    <div class="lms-session-panel" style="margin-top: 24px;">
+                        <div class="lms-session-head" style="border-bottom: none; padding-bottom: 8px;">
+                            <div>
+                                <div class="section-kicker"><i class="fa-solid fa-graduation-cap"></i> Target & Rencana Aksi</div>
+                                <h2>Proyeksi & Strategi Kelulusan</h2>
+                                <p>Atur target nilai TKA kamu dan dapatkan rekomendasi aksi dinamis untuk mencapainya secara optimal.</p>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 16px; align-items: start;">
+                            <!-- Left: Target Input & Status -->
+                            <div style="background: var(--surface-2); border: 1px solid var(--border); padding: 20px; border-radius: 16px; display: flex; flex-direction: column; gap: 16px;">
+                                <div>
+                                    <label for="tkaTargetScoreLMS" style="font-size: 13px; font-weight: 800; color: var(--muted); text-transform: uppercase; display: block; margin-bottom: 8px;">Target Skor UTBK</label>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="number" id="tkaTargetScoreLMS" min="400" max="900" value="700" style="padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 18px; font-weight: 700; width: 100px; text-align: center;">
+                                        <span style="font-weight: 700; color: var(--muted);">Poin</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span style="font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; display: block; margin-bottom: 4px;">Status Proyeksi</span>
+                                    <div style="display: flex; align-items: baseline; gap: 8px;">
+                                        <strong id="tkaProjectionStatusText" style="font-size: 22px; font-weight: 800; color: var(--blue);">Belum Terukur</strong>
+                                    </div>
+                                    <span id="tkaScoreGapText" style="font-size: 12px; color: var(--muted); display: block; margin-top: 4px;">Kerjakan minimal 5 soal untuk menghitung.</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Right: Dynamic Checklist of Actions -->
+                            <div style="background: var(--surface-2); border: 1px solid var(--border); padding: 20px; border-radius: 16px;">
+                                <span style="font-size: 13px; font-weight: 800; color: var(--muted); text-transform: uppercase; display: block; margin-bottom: 12px;"><i class="fa-solid fa-list-check"></i> Rekomendasi Langkah Prioritas</span>
+                                <div id="tkaStrategyActionsList" style="display: flex; flex-direction: column; gap: 12px;">
+                                    <!-- Dynamically populated checklist -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: HISTORY -->
+                <div class="tab-pane" id="tab-history" role="tabpanel">
+                    <div class="lms-session-panel">
+                        <div class="lms-session-head" style="border-bottom: none; padding-bottom: 8px;">
+                            <div>
+                                <div class="section-kicker">Riwayat & Review</div>
+                                <h2>Soal yang Pernah Dikerjakan</h2>
+                                <p>Cek kembali jawaban dan pelajari pembahasannya.</p>
+                            </div>
+                            <div class="lms-danger-zone" style="border: none; padding: 0; background: transparent;">
+                                <button class="btn btn-ghost" id="tkaResetProgress" type="button" aria-label="Reset Data Latihan" title="Hapus data progress dan simpanan lokal" style="color:var(--danger, #ff4f4f); background: rgba(255,79,79,0.1); padding: 8px 16px; border-radius: 12px; font-size: 13px;">
+                                    <i class="fa-solid fa-trash-can"></i> Reset Progress
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- ADVANCED HISTORY CONTROLS -->
+                        <div class="history-controls">
+                            <div class="history-search-wrapper">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input id="tkaHistorySearch" type="search" placeholder="Cari soal di riwayat...">
+                            </div>
+                            <div class="history-filter-chips">
+                                <button class="tool-chip active" data-history-filter="all">Semua</button>
+                                <button class="tool-chip" data-history-filter="correct"><i class="fa-solid fa-circle-check" style="color: var(--green);"></i> Benar</button>
+                                <button class="tool-chip" data-history-filter="wrong"><i class="fa-solid fa-circle-xmark" style="color: var(--danger);"></i> Salah</button>
+                            </div>
+                        </div>
+
+                        <div class="lms-history-container" id="tkaHistoryContainer">
+                            <div style="padding: 60px; text-align: center; color: var(--muted); font-style: italic; font-size: 16px;">
+                                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 24px; margin-bottom: 16px; color: var(--blue);"></i><br>
+                                Memuat riwayat latihan...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: GUIDE & SOURCES -->
+                <div class="tab-pane" id="tab-guide" role="tabpanel">
+                    <div class="lms-session-panel">
+                        <div class="lms-bottom-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px;">
+                            <div>
+                                <div class="section-header" style="margin-bottom: 20px;">
+                                    <div>
+                                        <div class="section-kicker">Paket V1</div>
+                                        <h2>Wajib Lengkap, Populer.</h2>
+                                        <p style="margin-top: 8px; font-size: 14px;">282 soal campuran dari dasar hingga prediksi sudah tersedia.</p>
+                                    </div>
+                                </div>
+                                <div class="card-grid" style="grid-template-columns: 1fr; gap: 12px;">
+                                    <article class="card" style="padding: 16px; border-radius: 16px;">
+                                        <div class="card-icon" style="width: 40px; height: 40px; font-size: 16px;"><i class="fa-solid fa-bolt"></i></div>
+                                        <h3 style="font-size: 16px; margin-top: 8px;">282 Soal Adaptif</h3>
+                                        <p style="font-size: 13px; line-height: 1.5;">Soal dibuat orisinal dari pola asesmen akademik terbaru.</p>
+                                    </article>
+                                    <article class="card" style="padding: 16px; border-radius: 16px;">
+                                        <div class="card-icon" style="width: 40px; height: 40px; font-size: 16px;"><i class="fa-solid fa-layer-group"></i></div>
+                                        <h3 style="font-size: 16px; margin-top: 8px;">Mode Sesi Fleksibel</h3>
+                                        <p style="font-size: 13px; line-height: 1.5;">Latihan semua soal, belum dijawab, salah, atau khusus review.</p>
+                                    </article>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="section-header" style="margin-bottom: 20px;">
+                                    <div>
+                                        <div class="section-kicker">Catatan Sumber</div>
+                                        <h2>Aman untuk Latihan Mandiri.</h2>
+                                        <p style="margin-top: 8px; font-size: 14px;">Ditulis ulang sebagai soal prediktif berstandar nasional.</p>
+                                    </div>
+                                </div>
+                                <div class="tka-flow" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                    <article class="flow-step" style="padding: 12px; border-radius: 14px;">
+                                        <span style="font-size: 20px; font-weight: 800; opacity: 0.5;">01</span>
+                                        <strong style="font-size: 14px; display: block; margin: 4px 0;">Adaptasi Resmi</strong>
+                                        <p style="font-size: 12px; line-height: 1.4;">Mengikuti gaya dan silabus soal akademik asli.</p>
+                                    </article>
+                                    <article class="flow-step" style="padding: 12px; border-radius: 14px;">
+                                        <span style="font-size: 20px; font-weight: 800; opacity: 0.5;">02</span>
+                                        <strong style="font-size: 14px; display: block; margin: 4px 0;">Pola TKA 2025</strong>
+                                        <p style="font-size: 12px; line-height: 1.4;">Meniru cara berpikir, logika silogisme, dan validasi.</p>
+                                    </article>
+                                    <article class="flow-step" style="padding: 12px; border-radius: 14px;">
+                                        <span style="font-size: 20px; font-weight: 800; opacity: 0.5;">03</span>
+                                        <strong style="font-size: 14px; display: block; margin: 4px 0;">Prediksi HOTS</strong>
+                                        <p style="font-size: 12px; line-height: 1.4;">Melatih konsep rumit yang kemungkinan besar muncul.</p>
+                                    </article>
+                                    <article class="flow-step" style="padding: 12px; border-radius: 14px;">
+                                        <span style="font-size: 20px; font-weight: 800; opacity: 0.5;">04</span>
+                                        <strong style="font-size: 14px; display: block; margin: 4px 0;">Review Berkala</strong>
+                                        <p style="font-size: 12px; line-height: 1.4;">Sistem merekomendasikan soal salah untuk diulang.</p>
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. REVIEW MODAL -->
+        <div class="review-modal-overlay" id="reviewModalOverlay">
+            <div class="review-modal-content">
+                <div class="review-modal-header">
+                    <h3>Pembahasan Lengkap</h3>
+                    <button class="close-modal-btn" id="closeReviewModal"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="review-modal-body" id="reviewModalBody">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
+        </div>
+        
+        <footer class="section">
+            <span>&copy;Â© 2026 Universe Of Tech. LMS TKA Practice Mode.</span>
+            <span>Progress disimpan secara lokal di browser kamu (Local Storage).</span>
+        </footer>
+    </main>
+    <div class="toast" id="toast"></div>
+    <script src="auth-helper.js"></script>
+    <script src="tka-questions.js"></script>
+    <script src="tka-question-supplement.js"></script>
+    <script src="tka-explanations.js"></script>
+    <script src="pro-learning-engine.js"></script>
+    <script src="feature-pages.js"></script>
+    <script src="pro-experience.js?v=20260621-clean"></script>
+    <script src="bubub-ai.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tabButtons = document.querySelectorAll(".tab-btn");
+            const tabPanes = document.querySelectorAll(".tab-pane");
+
+            function switchTab(targetId) {
+                tabButtons.forEach(btn => {
+                    const active = btn.dataset.target === targetId;
+                    btn.classList.toggle("active", active);
+                    btn.setAttribute("aria-selected", active ? "true" : "false");
+                });
+                tabPanes.forEach(pane => {
+                    pane.classList.toggle("active", pane.id === targetId);
+                });
+            }
+
+            tabButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    switchTab(btn.dataset.target);
+                });
+            });
+
+            // Hero links interception
+            const setupLinks = document.querySelectorAll('a[href="#lms-workspace"]');
+            setupLinks.forEach(link => {
+                link.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    switchTab("tab-setup");
+                    document.getElementById("lms-workspace")?.scrollIntoView({ behavior: "smooth" });
+                });
+            });
+
+            const progressLinks = document.querySelectorAll('a[href="#lms-dashboard"]');
+            progressLinks.forEach(link => {
+                link.addEventListener("click", (e) => {
+                    // Switch to analytics tab when progress is clicked
+                    switchTab("tab-analytics");
+                    document.getElementById("lms-workspace")?.scrollIntoView({ behavior: "smooth" });
+                });
+            });
+        });
+    </script>
+    <script src="navbar-explore.js?v=20260722"></script>
+    <script src="coursera-home.js"></script>
+</body>
+
+</html>
+

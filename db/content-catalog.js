@@ -30,7 +30,7 @@ class ContentCatalog {
 
     _loadCurriculumData() {
         try {
-            const curriculumPath = path.join(__dirname, '..', 'curriculum-data.js');
+            const curriculumPath = path.join(__dirname, '..', 'public', 'curriculum-data.js');
             if (!fs.existsSync(curriculumPath)) return;
 
             const code = fs.readFileSync(curriculumPath, 'utf8');
@@ -124,7 +124,7 @@ class ContentCatalog {
 
     _loadQuizQuestionBank() {
         try {
-            const bankPath = path.join(__dirname, '..', 'quiz-question-bank.js');
+            const bankPath = path.join(__dirname, '..', 'public', 'quiz-question-bank.js');
             if (!fs.existsSync(bankPath)) return;
 
             const code = fs.readFileSync(bankPath, 'utf8');
@@ -184,7 +184,7 @@ class ContentCatalog {
 
     _loadProjectsData() {
         try {
-            const projectsPath = path.join(__dirname, '..', 'projects.js');
+            const projectsPath = path.join(__dirname, '..', 'public', 'projects.js');
             if (fs.existsSync(projectsPath)) {
                 const code = fs.readFileSync(projectsPath, 'utf8');
                 const sandbox = {
