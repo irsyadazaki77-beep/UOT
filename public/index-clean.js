@@ -10,7 +10,7 @@
     };
     const $=id=>document.getElementById(id);
     const elements={
-        header:$("siteHeader"),theme:$("themeToggleBtn"),menu:$("menuToggle"),mobileNav:$("mobileNav"),menuClose:$("mobileMenuClose"),
+        header:$("siteHeader"),theme:$("themeToggleBtn"),
         pathFilters:$("pathFilters"),pathGrid:$("pathGrid"),live:$("liveRegion"),heroVisual:$("heroVisual")
     };
     let activeCareer="all";
@@ -116,7 +116,6 @@
         document.querySelector('meta[name="theme-color"]')?.setAttribute("content",dark?"#09140f":"#f7fbf9");
     }
     function initTheme(){const saved=storage.get("eduquest_theme"),preferred=matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light";setTheme(saved||preferred);elements.theme.addEventListener("click",()=>{const next=document.body.classList.contains("dark-theme")?"light":"dark";storage.set("eduquest_theme",next);setTheme(next);});}
-    function toggleMenu(open){elements.mobileNav.toggleAttribute("inert",!open);elements.mobileNav.classList.toggle("is-active",open);elements.mobileNav.setAttribute("aria-hidden",String(!open));elements.menu.setAttribute("aria-expanded",String(open));document.body.classList.toggle("nav-open",open);if(open)setTimeout(()=>elements.menuClose.focus(),80);else elements.menu.focus({preventScroll:true});}
 
     function initReveal(){
         const reduced=matchMedia("(prefers-reduced-motion:reduce)").matches,targets=document.querySelectorAll(".reveal");
@@ -158,17 +157,6 @@
         if(elements.pathFilters){
             elements.pathFilters.addEventListener("click",event=>{const button=event.target.closest("[data-career]");if(!button)return;activeCareer=button.dataset.career;elements.pathFilters.querySelectorAll("button").forEach(item=>{const active=item===button;item.classList.toggle("active",active);item.setAttribute("aria-pressed",String(active));});renderPaths(true);});
         }
-        if(elements.menu && elements.mobileNav){
-            elements.menu.addEventListener("click",()=>toggleMenu(!elements.mobileNav.classList.contains("is-active")));
-        }
-        if(elements.menuClose){
-            elements.menuClose.addEventListener("click",()=>toggleMenu(false));
-        }
-        if(elements.mobileNav){
-            elements.mobileNav.addEventListener("click",event=>{if(event.target===elements.mobileNav)toggleMenu(false);});
-            elements.mobileNav.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>toggleMenu(false)));
-        }
-        document.addEventListener("keydown",event=>{if(event.key==="Escape"&&elements.mobileNav&&elements.mobileNav.classList.contains("is-active"))toggleMenu(false);});
         if(elements.header){
             window.addEventListener("scroll",()=>elements.header.classList.toggle("ux-scrolled",scrollY>24),{passive:true});
         }

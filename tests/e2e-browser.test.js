@@ -66,7 +66,7 @@ test("Browser E2E 1: Homepage opens cleanly and renders critical layout without 
     // Verify key landmark elements exist
     assert.ok(document.getElementById("siteHeader"), "Header landmark missing");
     assert.ok(document.querySelector(".brand"), "Brand logo/link missing");
-    assert.ok(document.getElementById("btnExplore"), "Explore menu missing");
+    assert.ok(document.getElementById("navBelajarTrigger"), "Explore menu missing");
     assert.ok(document.getElementById("navSearchInput"), "Search bar missing");
     assert.ok(document.querySelector("main") || document.getElementById("mainContent"), "Main content area missing");
 });

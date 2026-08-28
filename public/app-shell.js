@@ -2,16 +2,6 @@
 (() => {
     "use strict";
 
-    // Load the shared density layer after each page's own styles.
-    if (!document.querySelector('link[data-compact-ui]')) {
-        const compactUI = document.createElement("link");
-        compactUI.rel = "stylesheet";
-        compactUI.href = "compact-global.css?v=20260720-neat-polish";
-        compactUI.dataset.compactUi = "true";
-        document.head.appendChild(compactUI);
-    }
-    document.body.classList.add("compact-ui");
-
     const isLocal = /^(localhost|127\.0\.0\.1|::1)$/.test(window.location.hostname);
     const pageUrl = new URL(window.location.href);
     pageUrl.search = "";

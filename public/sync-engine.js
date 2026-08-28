@@ -59,6 +59,10 @@
         };
     }
 
+    function isGuest() {
+        return !localStorage.getItem("uot_current_user") && !localStorage.getItem("quiznationCurrentUser") && !localStorage.getItem("eduquestUserSession");
+    }
+
     function updateSyncStatus(nextStatus, message = "") {
         syncStatus = nextStatus;
         if (nextStatus === "synced") lastSyncedAt = new Date().toISOString();
@@ -106,7 +110,16 @@
         let icon = "fa-cloud-check";
         let label = "Synced";
 
-        if (status === "synced") {
+        if (isGuest()) {
+            bg = "rgba(107, 114, 128, 0.12)";
+            border = "1px solid rgba(107, 114, 128, 0.3)";
+            color = "#9ca3af";
+            icon = "fa-hard-drive";
+            label = "Tersimpan di perangkat";
+            container.style.display = "inline-flex";
+            container.style.opacity = "1";
+            container.style.pointerEvents = "auto";
+        } else if (status === "synced") {
             container.style.opacity = "0";
             container.style.pointerEvents = "none";
             setTimeout(() => { if (syncStatus === "synced") container.style.display = "none"; }, 300);
@@ -117,46 +130,48 @@
             container.style.pointerEvents = "auto";
         }
 
-        if (status === "syncing") {
-            bg = "rgba(59, 130, 246, 0.12)";
-            border = "1px solid rgba(59, 130, 246, 0.3)";
-            color = "#3b82f6";
-            icon = "fa-rotate fa-spin";
-            label = "Syncing...";
-        } else if (status === "offline") {
-            bg = "rgba(107, 114, 128, 0.12)";
-            border = "1px solid rgba(107, 114, 128, 0.3)";
-            color = "#9ca3af";
-            icon = "fa-wifi";
-            label = "Offline";
-        } else if (status === "error") {
-            bg = "rgba(239, 68, 68, 0.12)";
-            border = "1px solid rgba(239, 68, 68, 0.3)";
-            color = "#ef4444";
-            icon = "fa-rotate-right";
-            label = "Mencoba lagi...";
-            
-            // Hide error badge after 5 seconds to prevent permanent navbar clutter
-            setTimeout(() => {
-                if (syncStatus === "error") {
-                    container.style.opacity = "0";
-                    container.style.pointerEvents = "none";
-                }
-            }, 5000);
+        if (!isGuest()) {
+            if (status === "syncing") {
+                bg = "rgba(59, 130, 246, 0.12)";
+                border = "1px solid rgba(59, 130, 246, 0.3)";
+                color = "#3b82f6";
+                icon = "fa-rotate fa-spin";
+                label = "Syncing...";
+            } else if (status === "offline") {
+                bg = "rgba(107, 114, 128, 0.12)";
+                border = "1px solid rgba(107, 114, 128, 0.3)";
+                color = "#9ca3af";
+                icon = "fa-wifi";
+                label = "Offline";
+            } else if (status === "error") {
+                bg = "rgba(239, 68, 68, 0.12)";
+                border = "1px solid rgba(239, 68, 68, 0.3)";
+                color = "#ef4444";
+                icon = "fa-rotate-right";
+                label = "Mencoba lagi...";
+                
+                // Hide error badge after 5 seconds to prevent permanent navbar clutter
+                setTimeout(() => {
+                    if (syncStatus === "error") {
+                        container.style.opacity = "0";
+                        container.style.pointerEvents = "none";
+                    }
+                }, 5000);
+            }
         }
 
         container.style.background = bg;
         container.style.border = border;
         container.style.color = color;
-        container.title = message || `Status Cloud Save: ${label}. Klik untuk sinkronisasi ulang.`;
+        container.title = message || (isGuest() ? "Progress disimpan lokal. Login untuk cloud sync." : `Status Cloud Save: ${label}. Klik untuk sinkronisasi ulang.`);
 
         const pendingCount = getPendingQueue().length;
-        const pendingBadge = pendingCount > 0 ? `<span style="font-size:10px; opacity:0.85;">(${pendingCount})</span>` : "";
+        const pendingBadge = (pendingCount > 0 && !isGuest()) ? `<span style="font-size:10px; opacity:0.85;">(${pendingCount})</span>` : "";
 
         container.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${label}</span> ${pendingBadge}`;
 
         container.onclick = () => {
-            if (syncStatus !== "syncing") {
+            if (syncStatus !== "syncing" && !isGuest()) {
                 flushQueue(true);
             }
         };
@@ -164,6 +179,11 @@
 
     async function flushQueue(force = false) {
         if (isFlushing) return;
+
+        if (isGuest()) {
+            updateSyncStatus("local", "Progress tersimpan secara lokal.");
+            return;
+        }
 
         if (typeof navigator !== "undefined" && !navigator.onLine) {
             updateSyncStatus("offline", "Perangkat sedang offline. Progress tersimpan secara lokal.");
@@ -184,6 +204,7 @@
         try {
             const API = window.QuizNationAPI;
             let response = null;
+            let status = 200;
 
             if (API && typeof API.request === "function") {
                 response = await API.request("/api/progress/sync", {
@@ -193,46 +214,67 @@
                         legacyData
                     })
                 });
+                status = 200;
             } else {
-                // Fetch fallback
                 const res = await fetch("/api/progress/sync", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "X-Requested-With": "QuizNation" },
                     body: JSON.stringify({ events: queue, legacyData })
                 });
-                response = await res.json();
+                status = res.status;
+                
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    response = await res.json();
+                } else {
+                    response = { ok: res.ok, message: await res.text() };
+                }
             }
 
-            if (response && response.ok) {
-                // Remove only acknowledged events from queue (Poin 10)
+            if (status >= 200 && status < 300 && (response && response.ok !== false)) {
                 const acknowledged = new Set(response.acknowledgedEventIds || queue.map(e => e.eventId));
                 const currentQueue = getPendingQueue();
                 const remainingQueue = currentQueue.filter(e => !acknowledged.has(e.eventId));
                 setPendingQueue(remainingQueue);
 
-                // Mark legacy migration done
                 if (legacyData) {
                     localStorage.setItem(MIGRATED_KEY, "true");
                 }
 
-                // Update Progression Engine local state from server authoritative progress
                 if (response.progress && window.Progression && typeof window.Progression.updateFromCloud === "function") {
                     window.Progression.updateFromCloud(response.progress);
                 }
 
-                backoffDelay = 1000; // Reset backoff on success
+                backoffDelay = 1000;
                 updateSyncStatus("synced");
             } else {
-                throw new Error(response?.message || "Sync response not OK");
+                const err = new Error(response?.message || `Sync failed with status ${status}`);
+                err.status = status;
+                throw err;
             }
         } catch (err) {
-            console.warn("[SyncEngine] Sync failed, will retry with backoff:", err.message);
+            console.warn("[SyncEngine] Sync failed:", err.message);
             updateSyncStatus("error", err.message);
-
-            // Exponential backoff
-            backoffDelay = Math.min(backoffDelay * 2, 30000);
-            if (syncTimer) clearTimeout(syncTimer);
-            syncTimer = setTimeout(() => flushQueue(), backoffDelay);
+            
+            const status = err.status || 0;
+            
+            if (status === 401 || status === 403) {
+                // Auth error - do not retry automatically, wait for login
+                if (syncTimer) clearTimeout(syncTimer);
+            } else if (status === 400) {
+                // Bad request - do not retry automatically
+                if (syncTimer) clearTimeout(syncTimer);
+            } else if (status === 429) {
+                // Rate limited - respect backoff
+                backoffDelay = Math.min(backoffDelay * 2, 60000);
+                if (syncTimer) clearTimeout(syncTimer);
+                syncTimer = setTimeout(() => flushQueue(), backoffDelay);
+            } else {
+                // Network or 5xx - exponential backoff
+                backoffDelay = Math.min(backoffDelay * 2, 30000);
+                if (syncTimer) clearTimeout(syncTimer);
+                syncTimer = setTimeout(() => flushQueue(), backoffDelay);
+            }
         } finally {
             isFlushing = false;
         }

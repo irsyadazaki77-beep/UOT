@@ -12,14 +12,12 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="tokens.css">
     <link rel="stylesheet" href="app-shell.css">
-    <link rel="stylesheet" href="compact-global.css">
-    <link rel="stylesheet" href="clean-ui-refresh.css">
-    <link rel="stylesheet" href="profile-studio.css">
-    <link rel="stylesheet" href="profile-refinements.css">
-    <link rel="stylesheet" href="profile-modern.css">
-    <link rel="stylesheet" href="account-flow.css">
+    <link rel="stylesheet" href="navbar-shared.css">
+    <link rel="stylesheet" href="responsive-system.css">
+    <link rel="stylesheet" href="profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script type="module" src="app-shell.js" defer></script>
+    <script type="module" src="navbar-explore.js" defer></script>
     <script type="module" src="security-helper.js" ></script>
     <title>Profil & Account Hub — Universe Of Tech</title>
 </head>
@@ -27,26 +25,130 @@
     <a class="skip-link p-skip-link" href="#profileMain">Langsung ke konten</a>
     <div class="p-ambient p-ambient-one" aria-hidden="true"></div>
     <div class="p-ambient p-ambient-two" aria-hidden="true"></div>
+    <span id="currentSectionLabel" class="sr-only" aria-live="polite">Account hub</span>
 
-    <header class="p-topbar">
-        <a class="p-brand" href="index.html" aria-label="Universe Of Tech, beranda">
-            <img src="logo-uot-display.webp" alt="Logo Universe Of Tech" width="32" height="32" fetchpriority="high">
-            <span>Universe Of Tech</span>
-        </a>
-        <nav class="p-topnav" aria-label="Navigasi utama">
+    <!-- Universal Navigation Bar -->
+    <nav class="navbar" id="siteHeader" aria-label="Navigasi utama">
+        <div class="nav-left-group">
+            <a href="index.html" class="brand" aria-label="Universe Of Tech, kembali ke beranda">
+                <img src="logo-uot-display.webp" alt="Logo Universe Of Tech" class="brand-logo" width="32" height="32" fetchpriority="high">
+                <span>Universe Of Tech</span>
+            </a>
+        </div>
+
+        <div class="nav-links">
             <a href="index.html">Beranda</a>
-            <a href="learning-journey.html">Belajar</a>
-            <a href="materi.html">Materi</a>
+            <div class="nav-dropdown-wrapper">
+                <button class="nav-dropdown-trigger" id="navBelajarTrigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="navBelajarMenu">
+                    <span>Belajar</span>
+                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                </button>
+                <div class="nav-mega-menu" id="navBelajarMenu" role="menu" aria-label="Menu Belajar & Latihan">
+                    <div class="nav-mega-group">
+                        <span class="nav-mega-heading">Jalur &amp; Materi</span>
+                        <a href="learning-journey.html" class="nav-mega-item" role="menuitem">
+                            <span class="nav-mega-icon"><i class="fa-solid fa-compass" aria-hidden="true"></i></span>
+                            <div class="nav-mega-text">
+                                <span class="nav-mega-title">Learning Journey</span>
+                                <span class="nav-mega-desc">Roadmap personal &amp; target harian</span>
+                            </div>
+                        </a>
+                        <a href="materi.html" class="nav-mega-item" role="menuitem">
+                            <span class="nav-mega-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></span>
+                            <div class="nav-mega-text">
+                                <span class="nav-mega-title">Semua Materi</span>
+                                <span class="nav-mega-desc">Katalog modul tech terstruktur</span>
+                            </div>
+                        </a>
+                        <a href="materi-basic.html?topik=programming" class="nav-mega-item" role="menuitem">
+                            <span class="nav-mega-icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
+                            <div class="nav-mega-text">
+                                <span class="nav-mega-title">Dasar Pemrograman</span>
+                                <span class="nav-mega-desc">Logika, variabel, dan algoritma</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="nav-mega-group">
+                        <span class="nav-mega-heading">Latihan &amp; Eksplorasi</span>
+                        <a href="quiz.html" class="nav-mega-item" role="menuitem">
+                            <span class="nav-mega-icon"><i class="fa-solid fa-circle-question" aria-hidden="true"></i></span>
+                            <div class="nav-mega-text">
+                                <span class="nav-mega-title">Quiz &amp; Latihan</span>
+                                <span class="nav-mega-desc">Uji pemahaman dengan feedback cepat</span>
+                            </div>
+                        </a>
+                        <a href="snbt.html" class="nav-mega-item" role="menuitem">
+                            <span class="nav-mega-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span>
+                            <div class="nav-mega-text">
+                                <span class="nav-mega-title">Persiapan SNBT</span>
+                                <span class="nav-mega-desc">Simulasi UTBK &amp; penalaran umum</span>
+                            </div>
+                        </a>
+                        <a href="tka-lms.html" class="nav-mega-item" role="menuitem">
+                            <span class="nav-mega-icon"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span>
+                            <div class="nav-mega-text">
+                                <span class="nav-mega-title">Persiapan TKA</span>
+                                <span class="nav-mega-desc">Tes kemampuan akademik terarah</span>
+                            </div>
+                        </a>
+                        <a href="bahasa-daerah.html" class="nav-mega-item" role="menuitem">
+                            <span class="nav-mega-icon"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i></span>
+                            <div class="nav-mega-text">
+                                <span class="nav-mega-title">Bahasa &amp; Budaya</span>
+                                <span class="nav-mega-desc">Kekayaan nusantara interaktif</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
             <a href="projects.html">Proyek</a>
             <a href="library.html">Library</a>
             <a class="active" href="profile.html" aria-current="page">Profil</a>
-        </nav>
-        <div class="p-top-context" aria-live="polite"><span id="currentSectionLabel">Account hub</span><button id="commandPaletteBtn" type="button" aria-label="Buka navigasi cepat"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Navigasi cepat</span><kbd>Ctrl K</kbd></button></div>
-        <div class="p-top-actions">
-            <span class="p-plan-chip" id="navSubscriptionBadge">Basic</span>
-            <button class="p-icon-button" id="themeToggleBtn" type="button" aria-label="Gunakan tema gelap" title="Ganti tema"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
         </div>
-    </header>
+
+        <div class="nav-search-wrapper">
+            <button class="nav-search-input" id="commandPaletteBtn" type="button" aria-label="Buka navigasi cepat" style="display:flex; align-items:center; justify-content:space-between; cursor:pointer; text-align:left; color:var(--uot-text-muted);">
+                <span><i class="fa-solid fa-magnifying-glass" style="margin-right:8px;" aria-hidden="true"></i>Cari menu &amp; aksi...</span>
+                <kbd style="font-size:10px; padding:2px 6px; border-radius:4px; background:var(--uot-surface-soft); border:1px solid var(--uot-border);">Ctrl K</kbd>
+            </button>
+        </div>
+
+        <div class="nav-actions">
+            <span class="p-plan-chip" id="navSubscriptionBadge">Basic</span>
+            <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Ganti mode visual"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+            <a class="btn-ghost" id="navLoginLink" href="login.html">Masuk</a>
+        </div>
+
+        <button class="nav-hamburger" id="menuToggle" type="button" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="mobileNav">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-menu-overlay" id="mobileNav" aria-hidden="true" inert>
+        <div class="mobile-menu-drawer" role="dialog" aria-modal="true" aria-labelledby="mobileMenuTitle">
+            <div class="mobile-menu-header">
+                <span class="mobile-menu-title" id="mobileMenuTitle">Navigasi UOT</span>
+                <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
+            <div class="mobile-menu-links">
+                <span class="mobile-menu-section">Utama</span>
+                <a href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Beranda</span></a>
+                <a href="learning-journey.html"><i class="fa-solid fa-compass" aria-hidden="true"></i><span>Learning Journey</span></a>
+                <a href="materi.html"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Semua Materi</span></a>
+                <a href="projects.html"><i class="fa-solid fa-hammer" aria-hidden="true"></i><span>Proyek Nyata</span></a>
+                <a href="library.html"><i class="fa-solid fa-bookmark" aria-hidden="true"></i><span>Library</span></a>
+                <a class="active" href="profile.html" aria-current="page"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Profil &amp; Progres</span></a>
+
+                <span class="mobile-menu-section">Latihan &amp; Eksplorasi</span>
+                <a href="quiz.html"><i class="fa-solid fa-circle-question" aria-hidden="true"></i><span>Quiz &amp; Latihan</span></a>
+                <a href="snbt.html"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span>Persiapan SNBT UTBK</span></a>
+                <a href="tka-lms.html"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span>Persiapan TKA</span></a>
+                <a href="bahasa-daerah.html"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i><span>Bahasa &amp; Budaya</span></a>
+                <a href="leaderboard.html"><i class="fa-solid fa-trophy" aria-hidden="true"></i><span>Leaderboard</span></a>
+            </div>
+        </div>
+    </div>
 
     <main class="p-shell" id="profileMain">
         <aside class="p-rail" aria-label="Navigasi account hub">

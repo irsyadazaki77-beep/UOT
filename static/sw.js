@@ -24,7 +24,6 @@ const APP_SHELL = [
     "./nav-polish.css",
     "./home-navbar-fix.css",
     "./curriculum-data.js",
-    "./coursera-home.js",
     "./projects.html",
     "./projects.css",
     "./projects-features.js",

@@ -5,78 +5,13 @@
 (() => {
     "use strict";
 
-    const dropdownMarkup = `
-        <button class="nav-dropdown-trigger" id="navBelajarTrigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="navBelajarMenu">
-            <span>Belajar</span>
-            <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-        </button>
-        <div class="nav-mega-menu" id="navBelajarMenu" role="menu" aria-label="Menu Belajar & Latihan">
-            <div class="nav-mega-group">
-                <span class="nav-mega-heading">Jalur &amp; Materi</span>
-                <a href="learning-journey.html" class="nav-mega-item" role="menuitem">
-                    <span class="nav-mega-icon"><i class="fa-solid fa-compass" aria-hidden="true"></i></span>
-                    <div class="nav-mega-text">
-                        <span class="nav-mega-title">Learning Journey</span>
-                        <span class="nav-mega-desc">Roadmap personal &amp; target harian</span>
-                    </div>
-                </a>
-                <a href="materi.html" class="nav-mega-item" role="menuitem">
-                    <span class="nav-mega-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></span>
-                    <div class="nav-mega-text">
-                        <span class="nav-mega-title">Semua Materi</span>
-                        <span class="nav-mega-desc">Katalog modul tech terstruktur</span>
-                    </div>
-                </a>
-                <a href="materi-basic.html?topik=programming" class="nav-mega-item" role="menuitem">
-                    <span class="nav-mega-icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
-                    <div class="nav-mega-text">
-                        <span class="nav-mega-title">Dasar Pemrograman</span>
-                        <span class="nav-mega-desc">Logika, variabel, dan algoritma</span>
-                    </div>
-                </a>
-            </div>
-            <div class="nav-mega-group">
-                <span class="nav-mega-heading">Latihan &amp; Eksplorasi</span>
-                <a href="quiz.html" class="nav-mega-item" role="menuitem">
-                    <span class="nav-mega-icon"><i class="fa-solid fa-circle-question" aria-hidden="true"></i></span>
-                    <div class="nav-mega-text">
-                        <span class="nav-mega-title">Quiz &amp; Latihan</span>
-                        <span class="nav-mega-desc">Uji pemahaman dengan feedback cepat</span>
-                    </div>
-                </a>
-                <a href="snbt.html" class="nav-mega-item" role="menuitem">
-                    <span class="nav-mega-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span>
-                    <div class="nav-mega-text">
-                        <span class="nav-mega-title">Persiapan SNBT</span>
-                        <span class="nav-mega-desc">Simulasi UTBK &amp; penalaran umum</span>
-                    </div>
-                </a>
-                <a href="tka-lms.html" class="nav-mega-item" role="menuitem">
-                    <span class="nav-mega-icon"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span>
-                    <div class="nav-mega-text">
-                        <span class="nav-mega-title">Persiapan TKA</span>
-                        <span class="nav-mega-desc">Tes kemampuan akademik terarah</span>
-                    </div>
-                </a>
-                <a href="bahasa-daerah.html" class="nav-mega-item" role="menuitem">
-                    <span class="nav-mega-icon"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i></span>
-                    <div class="nav-mega-text">
-                        <span class="nav-mega-title">Bahasa &amp; Budaya</span>
-                        <span class="nav-mega-desc">Kekayaan nusantara interaktif</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    `;
-
     function initNavbarDropdown() {
         const dropdownWrapper = document.querySelector(".nav-dropdown-wrapper");
         if (dropdownWrapper && !dropdownWrapper.dataset.initialized) {
-            dropdownWrapper.innerHTML = dropdownMarkup;
             dropdownWrapper.dataset.initialized = "true";
 
-            const trigger = dropdownWrapper.querySelector("#navBelajarTrigger");
-            const menu = dropdownWrapper.querySelector("#navBelajarMenu");
+            const trigger = dropdownWrapper.querySelector("#navBelajarTrigger") || dropdownWrapper.querySelector(".nav-dropdown-trigger");
+            const menu = dropdownWrapper.querySelector("#navBelajarMenu") || dropdownWrapper.querySelector(".nav-mega-menu");
 
             if (trigger && menu) {
                 const toggleDropdown = (open) => {
