@@ -114,8 +114,9 @@
                         nextObjective: progressionEngine.getNextObjective()
                     };
                 } else {
-                    progressionFeedback = progressionEngine.recordActivity(activityType, {
+                                        progressionFeedback = progressionEngine.recordActivity(activityType, {
                         ...options,
+                        ...payload,
                         count: payload.count || 1,
                         xp: options.xp !== undefined ? options.xp : payload.xp,
                         coins: options.coins !== undefined ? options.coins : payload.coins,
@@ -265,7 +266,18 @@
         },
 
         recordLesson(lessonId, payload = {}, options = {}) {
-            return processPipeline("lesson_complete", { lessonId, ...payload }, {
+            const meta = (typeof window !== "undefined" && window.AdaptiveLearningEngine && typeof window.AdaptiveLearningEngine.getActivityMetadata === "function")
+                ? window.AdaptiveLearningEngine.getActivityMetadata(lessonId)
+                : {};
+            const enrichedPayload = {
+                lessonId,
+                skill: payload.skill || meta.skill,
+                topic: payload.topic || meta.topic || lessonId,
+                category: payload.category || meta.domain,
+                duration: payload.duration || 0,
+                ...payload
+            };
+            return processPipeline("lesson_complete", enrichedPayload, {
                 title: payload.title || "Membaca Bagian Materi",
                 reason: "Membaca Bagian Materi",
                 configKey: "READ_LESSON_STEP",
@@ -277,25 +289,24 @@
             const meta = (typeof window !== "undefined" && window.AdaptiveLearningEngine && typeof window.AdaptiveLearningEngine.getActivityMetadata === "function")
                 ? window.AdaptiveLearningEngine.getActivityMetadata(quizId)
                 : {};
-
             const enrichedPayload = {
                 quizId,
                 score: Number(score) || 0,
-                skill: payload.skill || meta.skill || "javascript_basics",
+                accuracy: payload.accuracy !== undefined ? payload.accuracy : (Number(score) || 0),
+                skill: payload.skill || meta.skill || "js_variables",
                 topic: payload.topic || meta.topic || quizId,
+                category: payload.category || meta.domain || "programming",
                 difficulty: Number(payload.difficulty || meta.difficulty || 1),
                 answers: payload.answers || [],
                 hintCount: payload.hintCount !== undefined ? payload.hintCount : (payload.usedHint ? 1 : 0),
                 usedHint: Boolean(payload.usedHint || payload.hintCount > 0),
                 completionTimeSeconds: Number(payload.completionTimeSeconds || payload.timeSpentSeconds || payload.duration || 0),
+                errorType: payload.errorType || "none", // concept, careless, calculation, guessing, reading
                 ...payload
             };
-
-            // Invalidate recommendation cache on activity completion
             if (typeof window !== "undefined" && window.RecommendationService && typeof window.RecommendationService.invalidateCache === "function") {
                 window.RecommendationService.invalidateCache();
             }
-
             return processPipeline("quiz_complete", enrichedPayload, {
                 title: payload.title || "Menyelesaikan Kuis",
                 reason: score >= 100 ? "Skor Sempurna Kuis" : (score >= 70 ? "Menyelesaikan Kuis (Lulus)" : "Mencoba Latihan Kuis"),
@@ -305,7 +316,18 @@
         },
 
         recordProject(projectId, payload = {}, options = {}) {
-            return processPipeline("project_complete", { projectId, ...payload }, {
+            const meta = (typeof window !== "undefined" && window.AdaptiveLearningEngine && typeof window.AdaptiveLearningEngine.getActivityMetadata === "function")
+                ? window.AdaptiveLearningEngine.getActivityMetadata(projectId)
+                : {};
+            const enrichedPayload = {
+                projectId,
+                skill: payload.skill || meta.skill,
+                topic: payload.topic || meta.topic || projectId,
+                category: payload.category || meta.domain,
+                duration: payload.duration || 0,
+                ...payload
+            };
+            return processPipeline("project_complete", enrichedPayload, {
                 title: payload.title || "Menyelesaikan Proyek Portofolio",
                 reason: "Menyelesaikan Proyek Portofolio",
                 configKey: "PROJECT_COMPLETE",
@@ -315,7 +337,19 @@
         },
 
         recordGame(gameId, score, payload = {}, options = {}) {
-            return processPipeline("game_complete", { gameId, score, ...payload }, {
+            const meta = (typeof window !== "undefined" && window.AdaptiveLearningEngine && typeof window.AdaptiveLearningEngine.getActivityMetadata === "function")
+                ? window.AdaptiveLearningEngine.getActivityMetadata(gameId)
+                : {};
+            const enrichedPayload = {
+                gameId,
+                score,
+                skill: payload.skill || meta.skill,
+                topic: payload.topic || meta.topic || gameId,
+                category: payload.category || meta.domain,
+                duration: payload.duration || 0,
+                ...payload
+            };
+            return processPipeline("game_complete", enrichedPayload, {
                 title: payload.title || "Menyelesaikan Game Arena",
                 reason: "Latihan Interaktif Arena Game",
                 configKey: "PRACTICE_CHALLENGE",

@@ -219,6 +219,9 @@ function createApp(options = {}) {
         analyticsEngineInstance
     });
 
+    const AIController = require('./controllers/ai-controller');
+    const { createAIRouter } = require('./routes/ai-router');
+
     // 4. Mount Domain Routes
     const authController = new AuthController({
         userStore,
@@ -229,6 +232,12 @@ function createApp(options = {}) {
         clearSessionCookie
     });
     app.use('/', createAuthRouter({ authController, middlewares, rateLimiter }));
+
+    const aiController = new AIController({
+        dbInstance,
+        analyticsEngineInstance
+    });
+    app.use('/', createAIRouter({ aiController, middlewares, rateLimiter }));
 
     const subscriptionController = new SubscriptionController({
         subscriptionStore,

@@ -996,6 +996,21 @@
                 answer: value,
                 correct: isCorrect
             };
+            if (typeof window !== "undefined" && window.ActivityService && typeof window.ActivityService.recordQuiz === "function") {
+                window.ActivityService.recordQuiz(
+                    item.id || `${item.placeId}-${item.type}-${current}`,
+                    isCorrect ? 100 : 0,
+                    {
+                        category: "culture",
+                        topic: item.region || item.placeLabel,
+                        difficulty: 2, // medium by default
+                        errorType: isCorrect ? "none" : "concept",
+                        accuracy: isCorrect ? 100 : 0,
+                        answers: [value],
+                        skill: "culture_tradition"
+                    }
+                );
+            }
             if (window.QuizNationPro) {
                 window.QuizNationPro.recordAttempt({
                     questionId: item.id || `${item.placeId}-${item.type}-${current}`,

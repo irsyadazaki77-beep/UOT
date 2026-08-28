@@ -527,6 +527,35 @@
         else delete data.mistakes[currentQuestion.id];
         if (practiceMode === "tryout") tryoutResponses[currentQuestion.id] = { selected, correct, submitted: true };
         saveState();
+        if (typeof window !== "undefined" && window.ActivityService && typeof window.ActivityService.recordQuiz === "function") {
+            try {
+                // Determine Error Type for TKA/SNBT
+                let errorType = "none";
+                if (!correct) {
+                    if (fromTimeout) errorType = "time pressure";
+                    else if (currentQuestion.difficulty === "hots") errorType = "concept"; // Often logic/concept error on HOTS
+                    else errorType = "careless";
+                }
+                
+                // Map SNBT subject to Activity category/topic
+                const isTka = currentQuestion.track === "tka";
+                const cat = isTka ? "tka" : "snbt";
+                
+                window.ActivityService.recordQuiz(
+                    currentQuestion.id,
+                    correct ? 100 : 0,
+                    {
+                        category: cat,
+                        topic: currentQuestion.topic,
+                        difficulty: currentQuestion.difficulty,
+                        errorType: errorType,
+                        accuracy: correct ? 100 : 0
+                    }
+                );
+            } catch (err) {
+                console.warn("ActivityService record error in SNBT:", err);
+            }
+        }
         renderAnswers();
         showFeedback(correct, fromTimeout);
         const subBtn = $("submitAnswer");

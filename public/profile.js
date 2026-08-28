@@ -52,6 +52,39 @@
         return { title: "Ritmemu sedang tumbuh dengan baik.", copy: "Lanjutkan satu materi, satu latihan, dan satu catatan singkat untuk menjaga momentum." };
     }
 
+    
+    async function renderMastery() {
+        if (typeof window === "undefined" || !window.RecommendationService) return;
+        try {
+            const recs = await window.RecommendationService.getRecommendations();
+            if (!recs || !recs.masterySummary) return;
+            
+            const skills = Object.values(recs.masterySummary).filter(m => m.score > 0);
+            const strongest = [...skills].sort((a,b) => b.score - a.score).slice(0, 3);
+            const weakest = [...skills].sort((a,b) => a.score - b.score).slice(0, 3);
+            
+            const renderSkill = (s) => `<div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 13px; font-weight: 600; color: var(--uot-text);">${s.skillName}</span>
+                    <span style="font-size: 11px; color: var(--uot-text-muted);">${s.tier.label} ${s.tier.badge} · ${s.attemptsCount} percobaan</span>
+                </div>
+                <div style="font-weight: 800; font-size: 14px; color: ${s.tier.color};">${s.score}%</div>
+            </div>`;
+            
+            const strongEl = document.getElementById("masteryStrongest");
+            if (strongEl) {
+                strongEl.innerHTML = strongest.length > 0 ? strongest.map(renderSkill).join('<div style="height: 1px; background: var(--uot-border);"></div>') : '<p style="font-size: 13px; color: var(--uot-text-muted);">Belum ada data mastery.</p>';
+            }
+            
+            const weakEl = document.getElementById("masteryWeakest");
+            if (weakEl) {
+                weakEl.innerHTML = weakest.length > 0 ? weakest.map(renderSkill).join('<div style="height: 1px; background: var(--uot-border);"></div>') : '<p style="font-size: 13px; color: var(--uot-text-muted);">Terus berlatih untuk mengukur kelemahan.</p>';
+            }
+        } catch (e) {
+            console.error("Mastery rendering failed:", e);
+        }
+    }
+
     function applyPreferences() {
         const prefs = getPrefs(); const dark = localStorage.getItem("eduquest_theme") === "dark";
         document.body.classList.toggle("dark-theme", dark); document.body.classList.toggle("reduce-motion", prefs.reducedMotion); document.body.dataset.accent = prefs.accent;
@@ -93,154 +126,70 @@
         renderBenefits(pro);
     }
 
+    
     function render() {
-        const user = session(); const rpg = readJSON(RPG_KEY, {}); const prefs = getPrefs(); const hub = getHub(); const stats = getStats(); const projectStats = getProjectStats(); const loggedIn = isLoggedIn();
-        const progress = (typeof window !== "undefined" && window.ProgressionEngine) ? window.ProgressionEngine.getLevelProgress() : { level: Math.floor(stats.xp / 100) + 1, currentLevelXp: stats.xp % 100, xpNeededForNext: 100, percentage: stats.xp % 100, title: "Coder" };
-        const avatar = (typeof window !== "undefined" && window.ProgressionEngine) ? (window.ProgressionEngine.getGameState().equippedItems?.avatar || user?.avatar || "👨‍💻") : (rpg.activeAvatar || user?.avatar || "👨‍💻");
-        const name = user?.username || "Pengguna Universe"; const email = user?.email || "Belum masuk ke akun";
-        const level = progress.level; const current = progress.currentLevelXp; const needed = progress.xpNeededForNext; const pct = progress.percentage;
-        ["profileAvatar", "profileAvatarLarge"].forEach(id => setText(id, avatar)); setText("profileName", name); setText("profileEmail", email); setText("profileEditorName", name);
-        setText("profileXp", stats.xp.toLocaleString("id-ID")); setText("profileStreak", stats.streak); setText("profileAccuracy", `${stats.accuracy}%`); setText("profileProjectCount", projectStats.completed); setText("profileLevel", `Level ${level}`); setText("profileXpLabel", `${current} / ${needed} XP`); setText("nextLevelLabel", `${needed - current} XP lagi menuju level berikutnya`); $("profileXpBar").style.width = `${pct}%`;
-        const tip = getTip(stats, prefs); setText("smartTipTitle", tip.title); setText("smartTipText", tip.copy); setText("dailyGoalTitle", `${prefs.dailyGoal} menit`); setText("goalDescription", prefs.reminder ? `Pengingat aktif pukul ${prefs.reminderTime}` : "Pengingat belum aktif");
-        const completeness = [loggedIn, Boolean(user?.username), Boolean(user?.email), Boolean(prefs.headline), Boolean(prefs.bio), Boolean(avatar)].filter(Boolean).length; const health = Math.round((completeness / 6) * 100); setText("healthScore", `${health}%`); $("healthBar").style.width = `${health}%`; setText("healthHint", health === 100 ? "Profilmu sudah lengkap dan siap dipersonalisasi." : "Lengkapi headline dan bio untuk personalisasi lebih baik."); if ($("healthDoneCount")) $("healthDoneCount").textContent = `${completeness}/6`;
-        $("profileNameInput").value = user?.username || ""; $("profileEmailInput").value = user?.email || ""; $("profileHeadlineInput").value = prefs.headline; $("profileFocusInput").value = prefs.focus; $("profileBioInput").value = prefs.bio; setText("bioCount", prefs.bio.length); $("profileLoginCta").hidden = loggedIn; $("logoutLink").hidden = !loggedIn;
-        setText("profileHeadlineDisplay", prefs.headline || "Tambahkan headline agar profilmu lebih personal.");
-        setText("profileBioDisplay", prefs.bio || (loggedIn ? "Tambahkan bio singkat tentang target belajarmu." : "Masuk untuk menyimpan identitas dan progres belajarmu."));
-        document.querySelectorAll("[data-avatar]").forEach(button => { button.classList.toggle("active", button.dataset.avatar === avatar); button.disabled = !loggedIn; });
-        $("studyModeSetting").value = prefs.studyMode; $("dailyGoalSetting").value = prefs.dailyGoal; $("languageSetting").value = prefs.language; $("startPageSetting").value = prefs.startPage; $("reminderTimeSetting").value = prefs.reminderTime; $("darkModeSetting").checked = localStorage.getItem("eduquest_theme") === "dark"; $("soundSetting").checked = localStorage.getItem("eduquest_sound") !== "off"; $("motionSetting").checked = prefs.reducedMotion; $("reminderSetting").checked = prefs.reminder; $("publicProfileSetting").checked = prefs.publicProfile; $("analyticsSetting").checked = prefs.analytics; document.querySelectorAll("[data-accent]").forEach(button => button.classList.toggle("active", button.dataset.accent === prefs.accent));
-        $("missionRead").checked = hub.missions.read; $("missionQuiz").checked = hub.missions.quiz; $("missionReview").checked = hub.missions.review; const done = Object.values(hub.missions).filter(Boolean).length; $("missionProgressBar").style.width = `${(done / 3) * 100}%`; setText("missionProgressLabel", `${done} dari 3 misi selesai.`); $("focusNoteInput").value = hub.focusNote; setText("focusNoteCount", `${hub.focusNote.length}/240 karakter`);
-        if ($("missionSuccessBanner")) $("missionSuccessBanner").hidden = done !== 3;
-        const studyHints = { balanced: "Balanced: Kombinasi seimbang antara materi & latihan.", sprint: "Sprint: Fokus pada penyelesaian soal dan tryout cepat.", deep: "Deep Work: Sesi materi mendalam tanpa gangguan interupsi.", chill: "Chill: Santai dengan bacaan santai dan eksplorasi budaya." };
-        if ($("studyModeHint")) setText("studyModeHint", studyHints[prefs.studyMode] || studyHints.balanced);
-        renderSubscription();
-    }
-
-    async function savePrefs(patch, message) { 
-        if (Account) Account.updatePreferences(patch); 
-        else writeJSON(PREFS_KEY, { ...getPrefs(), ...patch }); 
+        const session = readJSON("eduquestUserSession", null);
+        const prefs = getPrefs();
+        const rpg = readJSON("eduquestRPG", {});
+        const avatar = rpg.activeAvatar || session?.avatar || "👨‍💻";
+        const name = session?.username || "Pengguna Universe";
         
-        // Sync to backend if logged in
-        if (isLoggedIn()) {
-            try {
-                const csrfRes = await fetch("/api/csrf-token", { credentials: "include" });
-                if (csrfRes.ok) {
-                    const { csrfToken } = await csrfRes.json();
-                    const backendPatch = { ...patch };
-                    if (patch.publicProfile !== undefined) {
-                        backendPatch.showOnLeaderboard = patch.publicProfile;
-                    }
-                    if (patch.headline !== undefined) {
-                        backendPatch.displayName = document.getElementById("profileNameInput")?.value?.trim() || patch.headline;
-                    }
-                    await fetch("/api/settings", {
-                        method: "PATCH",
-                        headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
-                        body: JSON.stringify(backendPatch),
-                        credentials: "include"
-                    });
-                }
-            } catch (e) {
-                console.warn("API sync failed", e);
-            }
-        }
-
-        applyPreferences(); 
-        render(); 
-        if (message) showToast(message); 
+        if (document.getElementById("profileEditorName")) document.getElementById("profileEditorName").textContent = name;
+        if (document.getElementById("profileAvatarLarge")) document.getElementById("profileAvatarLarge").textContent = avatar;
+        
+        const headline = prefs.headline || "Tambahkan headline agar profilmu lebih personal.";
+        if (document.getElementById("profileHeadlineDisplay")) document.getElementById("profileHeadlineDisplay").textContent = headline;
+        
+        const bio = prefs.bio || "Identitas ini digunakan di seluruh pengalaman belajarmu.";
+        if (document.getElementById("profileBioDisplay")) document.getElementById("profileBioDisplay").textContent = bio;
+        
+        // Stats
+        if (document.getElementById("profileXp")) document.getElementById("profileXp").textContent = rpg.xp || 0;
+        if (document.getElementById("profileStreak")) document.getElementById("profileStreak").textContent = rpg.streak || 0;
+        if (document.getElementById("profileAccuracy")) document.getElementById("profileAccuracy").textContent = (rpg.accuracy || 0) + "%";
+        if (document.getElementById("profileProjectCount")) document.getElementById("profileProjectCount").textContent = rpg.projects || 0;
+        
+        const level = rpg.level || 1;
+        if (document.getElementById("profileLevel")) document.getElementById("profileLevel").textContent = "Level " + level;
+        
+        const xpForNext = level * 100;
+        if (document.getElementById("profileXpLabel")) document.getElementById("profileXpLabel").textContent = (rpg.xp || 0) + " / " + xpForNext + " XP";
+        
+        const pct = Math.min(100, ((rpg.xp || 0) / xpForNext) * 100);
+        if (document.getElementById("profileXpBar")) document.getElementById("profileXpBar").style.width = pct + "%";
+        
+        if (document.getElementById("nextLevelLabel")) document.getElementById("nextLevelLabel").textContent = (xpForNext - (rpg.xp || 0)) + " XP lagi menuju level berikutnya";
+        
+        renderHealthBreakdown();
+        renderSubscription();
+        renderMastery();
     }
-    function saveProfile(notify = false) {
-        if (!isLoggedIn()) { updateSaveState("Masuk untuk menyimpan profil"); return; }
-        const nextSession = { ...session(), username: $("profileNameInput").value.trim() || "Pengguna Universe", email: $("profileEmailInput").value.trim(), isLoggedIn: true };
-        if (Account) Account.setSession(nextSession); else localStorage.setItem(SESSION_KEY, JSON.stringify(nextSession));
-        savePrefs({ headline: $("profileHeadlineInput").value.trim(), focus: $("profileFocusInput").value, bio: $("profileBioInput").value.trim() }); updateSaveState("Tersimpan"); if (notify) showToast("Profil diperbarui.");
-    }
-    function saveHub(patch) { writeJSON(HUB_KEY, { ...getHub(), ...patch }); render(); }
-    function switchTab(requested) {
-        const name = tabAliases[requested] || "overview";
-        document.querySelectorAll("[data-tab]").forEach(button => {
-            const active = button.dataset.tab === name;
-            button.classList.toggle("active", active);
-            button.setAttribute("aria-current", active ? "page" : "false");
-        });
-        document.querySelectorAll("[data-panel]").forEach(panel => {
-            const active = panel.dataset.panel === name;
-            panel.classList.toggle("active", active);
-            panel.hidden = !active;
-        });
-        history.replaceState(null, "", `#${name}`);
-        window.dispatchEvent(new CustomEvent("uot-profile-tab-change", { detail: { name } }));
-        window.scrollTo({ top: 0, behavior: document.body.classList.contains("reduce-motion") ? "auto" : "smooth" });
+    
+    const saveStateNode = document.getElementById("profileSaveState");
+    if (saveStateNode && typeof MutationObserver !== "undefined") {
+        new MutationObserver(() => {
+            syncSaveState();
+        }).observe(saveStateNode, { childList: true, characterData: true, subtree: true });
     }
 
-    function focusables(container) { return [...container.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]; }
-    function openConfirm(title, text, action, trigger) { confirmTrigger = trigger || document.activeElement; pendingConfirm = action; setText("confirmTitle", title); setText("confirmText", text); $("confirmModal").classList.add("open"); $("confirmModal").setAttribute("aria-hidden", "false"); setTimeout(() => $("confirmAction").focus(), 0); }
-    function closeConfirm() { $("confirmModal").classList.remove("open"); $("confirmModal").setAttribute("aria-hidden", "true"); pendingConfirm = null; confirmTrigger?.focus?.(); }
 
-    let profileEditorTrigger = null;
-    function openProfileEditor(trigger) {
-        if (!isLoggedIn()) { location.href = `login.html?returnTo=${encodeURIComponent("profile.html")}`; return; }
-        profileEditorTrigger = trigger || document.activeElement;
-        const modal = $("profileEditorModal");
-        modal.inert = false; modal.classList.add("open"); modal.setAttribute("aria-hidden", "false");
-        document.body.classList.add("profile-editor-open");
-        setTimeout(() => $("profileNameInput").focus(), 0);
+    function syncSaveState() {
+        const node = document.getElementById("profileSaveState");
+        if (!node) return;
+        const value = (node.textContent || "").toLowerCase();
+        node.className = "p-save-state " + (value.includes("gagal") || value.includes("error") ? "error" : value.includes("menyimpan") || value.includes("sinkronisasi") ? "syncing" : "success");
     }
-    function closeProfileEditor() {
-        const modal = $("profileEditorModal");
-        modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true"); modal.inert = true;
-        document.body.classList.remove("profile-editor-open"); profileEditorTrigger?.focus?.();
-    }
+    window.addEventListener("uot-subscription-change", () => setTimeout(() => document.body.classList.toggle("profile-pro", window.QuizNationSubscription?.isPro?.()), 0));
 
-    document.querySelectorAll("[data-tab]").forEach(button => button.addEventListener("click", () => switchTab(button.dataset.tab)));
-    document.querySelectorAll("[data-tab-target]").forEach(button => button.addEventListener("click", () => switchTab(button.dataset.tabTarget)));
-    $("themeToggleBtn").addEventListener("click", () => {
-        localStorage.setItem("eduquest_theme", document.body.classList.contains("dark-theme") ? "light" : "dark");
-        applyPreferences();
-        $("darkModeSetting").checked = document.body.classList.contains("dark-theme");
-    });
-    $("profileForm").addEventListener("submit", event => { event.preventDefault(); saveProfile(true); });
-    ["editProfileBtn", "railEditProfileBtn"].forEach(id => $(id)?.addEventListener("click", event => openProfileEditor(event.currentTarget)));
-    ["closeProfileEditorBtn", "cancelProfileEditorBtn"].forEach(id => $(id)?.addEventListener("click", closeProfileEditor));
-    $("profileEditorModal").addEventListener("click", event => { if (event.target === $("profileEditorModal")) closeProfileEditor(); });
-    ["profileNameInput", "profileEmailInput", "profileHeadlineInput", "profileFocusInput", "profileBioInput"].forEach(id => $(id).addEventListener(id === "profileFocusInput" ? "change" : "input", () => {
-        if (id === "profileBioInput") setText("bioCount", $(id).value.length);
-        updateSaveState("Menyimpan…");
-        clearTimeout(saveTimer);
-        saveTimer = setTimeout(() => {
-            const email = $("profileEmailInput");
-            if (email.value && !email.checkValidity()) { updateSaveState("Periksa format email"); setText("profileEmailError", "Masukkan alamat email yang valid."); return; }
-            setText("profileEmailError", "");
-            saveProfile(false);
-        }, 650);
-    }));
-    document.querySelectorAll("[data-avatar]").forEach(button => button.addEventListener("click", () => {
-        if (!isLoggedIn()) return showToast("Masuk ke akun untuk memilih avatar.");
-        const chosen = button.dataset.avatar;
-        if (typeof window !== "undefined" && window.ProgressionEngine) {
-            window.ProgressionEngine.equipAvatar(chosen);
-        }
-        const rpg = readJSON(RPG_KEY, {});
-        writeJSON(RPG_KEY, { ...rpg, activeAvatar: chosen });
-        render();
-        showToast("Avatar diperbarui.");
-    }));
-    $("darkModeSetting").addEventListener("change", e => { localStorage.setItem("eduquest_theme", e.target.checked ? "dark" : "light"); applyPreferences(); });
-    $("soundSetting").addEventListener("change", e => { localStorage.setItem("eduquest_sound", e.target.checked ? "on" : "off"); showToast("Preferensi suara diperbarui."); });
-    $("motionSetting").addEventListener("change", e => savePrefs({ reducedMotion: e.target.checked }, "Preferensi gerakan diperbarui.")); $("reminderSetting").addEventListener("change", e => savePrefs({ reminder: e.target.checked }, "Pengingat belajar diperbarui.")); ["studyModeSetting", "dailyGoalSetting", "languageSetting", "startPageSetting", "reminderTimeSetting"].forEach(id => $(id).addEventListener("change", e => savePrefs({ [id.replace("Setting", "").replace("studyMode", "studyMode").replace("dailyGoal", "dailyGoal").replace("reminderTime", "reminderTime").replace("startPage", "startPage").replace("language", "language")]: e.target.value }, "Preferensi disimpan.")));
-    $("publicProfileSetting").addEventListener("change", e => savePrefs({ publicProfile: e.target.checked }, "Preferensi privasi diperbarui.")); $("analyticsSetting").addEventListener("change", e => savePrefs({ analytics: e.target.checked }, "Preferensi analitik diperbarui.")); document.querySelectorAll("[data-accent]").forEach(button => button.addEventListener("click", () => savePrefs({ accent: button.dataset.accent }, "Warna aksen diperbarui.")));
-    ["missionRead", "missionQuiz", "missionReview"].forEach(id => $(id).addEventListener("change", () => { const current = getHub(); current.missions = { read: $("missionRead").checked, quiz: $("missionQuiz").checked, review: $("missionReview").checked }; writeJSON(HUB_KEY, current); render(); }));
-    $("resetMissionsBtn").addEventListener("click", event => openConfirm("Reset misi hari ini?", "Checklist misi akan dikosongkan. Catatan fokus tidak dihapus.", () => { saveHub({ missions: { read: false, quiz: false, review: false } }); closeConfirm(); showToast("Misi harian direset."); }, event.currentTarget));
-    $("focusNoteInput").addEventListener("input", e => { setText("focusNoteCount", `${e.target.value.length}/240 karakter`); clearTimeout(noteTimer); noteTimer = setTimeout(() => { saveHub({ focusNote: e.target.value, focusNoteUpdatedAt: new Date().toISOString() }); showToast("Catatan fokus tersimpan."); }, 700); });
-    document.querySelectorAll(".p-note-pill").forEach(pill => pill.addEventListener("click", () => { const note = pill.dataset.note; if (!note) return; $("focusNoteInput").value = note; setText("focusNoteCount", `${note.length}/240 karakter`); saveHub({ focusNote: note, focusNoteUpdatedAt: new Date().toISOString() }); const status = $("focusNoteStatus"); if (status) { status.textContent = "Tersimpan ✨"; setTimeout(() => status.textContent = "Tersimpan", 1500); } showToast("Saran catatan diterapkan."); }));
-    $("resetPreferences").addEventListener("click", event => openConfirm("Kembalikan preferensi default?", "Tema, target, mode belajar, dan pilihan tampilan akan dikembalikan ke nilai awal.", () => { writeJSON(PREFS_KEY, defaults); applyPreferences(); render(); closeConfirm(); showToast("Preferensi dikembalikan ke default."); }, event.currentTarget));
-    document.querySelectorAll("[data-plan]").forEach(button => button.addEventListener("click", event => { const sub = subscription(); if (button.dataset.plan === "pro") { const plan = button.dataset.checkoutPlan || "pro"; if (isPro() && sub?.get?.().planId === plan) return showToast("Paket ini sudah aktif."); location.href = sub?.planUrl?.(plan, "profile") || `payment.html?plan=${plan}&source=profile`; return; } if (!isPro()) return; openConfirm("Kembali ke paket Basic?", "Benefit PRO akan dinonaktifkan di perangkat ini. Seluruh progres belajar tetap tersimpan.", () => { if (sub?.downgrade) sub.downgrade(); else localStorage.setItem("eduquestSubscription", "free"); render(); closeConfirm(); showToast("Paket Basic aktif. Progresmu tetap aman."); }, event.currentTarget); }));
-    $("exportDataBtn").addEventListener("click", () => { const payload = Account?.createBackup() || { exportedAt:new Date().toISOString(), app:"Universe Of Tech", version:3, data:Object.fromEntries(BACKUP_KEYS.map(key => [key, localStorage.getItem(key)])) }; const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "universe-of-tech-account-backup-v3.json"; link.hidden = true; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 0); showToast("Backup versi 3 berhasil dibuat."); });
-    $("importDataBtn").addEventListener("click", () => $("importDataInput").click()); $("importDataInput").addEventListener("change", async event => { const file = event.target.files?.[0]; if (!file) return; try { const inspection = await Account.inspectBackup(file); openConfirm("Pulihkan backup akun?", `Backup versi ${inspection.version} berisi ${inspection.entries.length} kelompok data. Data saat ini pada kelompok yang sama akan diganti.`, () => { Account.importBackup(inspection); applyPreferences(); render(); closeConfirm(); showToast("Backup berhasil dipulihkan."); }, $("importDataBtn")); } catch (error) { showToast(error.message === "FILE_TOO_LARGE" ? "File backup melebihi batas 1 MB." : "File backup tidak valid."); } event.target.value = ""; });
-    $("resetProgressBtn").addEventListener("click", event => openConfirm("Reset seluruh progres belajar?", "XP, streak, quiz, dan progres budaya akan dihapus. Profil, pengaturan, dan paketmu tetap tersimpan.", () => { PROGRESS_KEYS.forEach(key => localStorage.removeItem(key)); render(); closeConfirm(); showToast("Progres belajar telah direset."); }, event.currentTarget));
-    $("deleteAccountBtn").addEventListener("click", event => openConfirm("Hapus seluruh data akun?", "Tindakan ini menghapus profil, progres, preferensi, dan subscription Universe Of Tech dari perangkat ini.", () => { Account?.deleteAccountData(); location.href = "login.html"; }, event.currentTarget));
-    $("logoutLink").addEventListener("click", event => { event.preventDefault(); Account?.signOut(); location.href = "login.html"; });
-    $("confirmCancel").addEventListener("click", closeConfirm); $("confirmAction").addEventListener("click", () => pendingConfirm?.()); $("confirmModal").addEventListener("click", event => { if (event.target === $("confirmModal")) closeConfirm(); });
-    document.addEventListener("keydown", event => { const modal = $("confirmModal").classList.contains("open") ? $("confirmModal") : $("profileEditorModal").classList.contains("open") ? $("profileEditorModal") : null; if (!modal) return; if (event.key === "Escape") { event.preventDefault(); modal === $("confirmModal") ? closeConfirm() : closeProfileEditor(); } if (event.key === "Tab") { const list = focusables(modal); if (!list.length) return; const first = list[0], last = list[list.length - 1]; if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); } else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); } } });
-    window.addEventListener("uot-subscription-change", render);
-    applyPreferences(); render(); const initial = location.hash.slice(1); if (initial) switchTab(initial);
+    renderHealthBreakdown();
+    syncSaveState();
+    updateScrollUI();
+    const requestedRaw = location.hash.slice(1);
+    const requested = legacyAliases[requestedRaw] || requestedRaw;
+    const remembered = localStorage.getItem(LAST_PANEL_KEY);
+    const initial = ["overview", "settings", "privacy", "subscription"].includes(requested) ? requested : ["overview", "settings", "privacy", "subscription"].includes(remembered) ? remembered : "overview";
+    if (!requested && initial !== "overview") document.querySelector(`.p-rail-nav [data-tab="${initial}"]`)?.click();
+    else setSectionContext(initial);
+    document.body.classList.toggle("profile-pro", window.QuizNationSubscription?.isPro?.() || false);
+    requestAnimationFrame(() => document.body.classList.add("profile-refined"));
 })();

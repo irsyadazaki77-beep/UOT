@@ -357,7 +357,7 @@
                 if (part) messageEl.appendChild(document.createTextNode(part));
                 return;
             }
-            const lines = part.replace(/^\w+\n/, "").trim();
+            const lines = part.replace(/^\\w+\\n/, "").trim();
             if (!lines) return;
             const code = createEl("code", "bubub-ai-code", lines);
             messageEl.appendChild(code);
@@ -470,11 +470,15 @@
                 groups[item.region] = (groups[item.region] || 0) + 1;
                 return groups;
             }, {});
-            return `Aku bisa bantu pilih daerah dari data lokal halaman ini. Pilihan cepat:\n${makeList(Object.entries(byRegion).map(([region, count]) => `${region}: ${count} kartu`))}\n\nKalau masih bingung, mulai dari region yang paling kamu penasaran, lalu buka satu kartu dan lanjut flashcard.`;
+            return `Aku bisa bantu pilih daerah dari data lokal halaman ini. Pilihan cepat:
+${makeList(Object.entries(byRegion).map(([region, count]) => `${region}: ${count} kartu`))}
+
+Kalau masih bingung, mulai dari region yang paling kamu penasaran, lalu buka satu kartu dan lanjut flashcard.`;
         }
 
         const cards = (place.cards || []).slice(0, 3).map((card) => `${card[0]} = ${card[1]}`);
-        return `${place.label} cocok dipelajari lewat urutan ini:\n${makeList([
+        return `${place.label} cocok dipelajari lewat urutan ini:
+${makeList([
             `Ringkasan: ${place.summary}`,
             place.tradition ? `Tradisi: ${place.tradition[0]} - ${place.tradition[1]}` : "",
             place.food ? `Kuliner: ${place.food[0]} - ${place.food[1]}` : "",
@@ -500,7 +504,8 @@
 
         const chapters = (track.chapters || []).slice(0, 4).map((chapter) => chapter.title || chapter[1]).filter(Boolean);
         const projectText = (track.project || "membangun skill praktis").replace(/[.!?]+$/g, "");
-        return `${track.title} bagus kalau targetmu ${projectText}.\n${makeList([
+        return `${track.title} bagus kalau targetmu ${projectText}.
+${makeList([
             `Level: ${track.level}`,
             `Ringkasan: ${track.summary}`,
             chapters.length ? `Urutan bab: ${chapters.join(" -> ")}` : "",
@@ -522,11 +527,17 @@
                 facts.questionCount ? `Bank soal lokal terdeteksi: ${facts.questionCount} soal` : "",
                 facts.planStatus ? `Status terlihat: ${facts.planStatus}` : ""
             ]);
-            return `${profile.intro}\n\nYang bisa kulihat sekarang:\n${contextBits || "- Konteks halaman aktif sudah terbaca."}\n\nTanyakan konsep, minta rencana belajar, minta rekomendasi, atau minta hint latihan.`;
+            return `${profile.intro}
+
+Yang bisa kulihat sekarang:
+${contextBits || "- Konteks halaman aktif sudah terbaca."}
+
+Tanyakan konsep, minta rencana belajar, minta rekomendasi, atau minta hint latihan.`;
         }
 
         if (includesAny(normalized, ["rencana", "jadwal", "belajar hari ini", "minggu ini", "target"])) {
-            return `Rencana singkat yang aman dipakai:\n${makeList([
+            return `Rencana singkat yang aman dipakai:
+${makeList([
                 "5 menit: pilih satu topik atau satu region, jangan semuanya.",
                 "20-30 menit: baca konsep/kartu utama dan tulis 3 poin.",
                 "10-15 menit: kerjakan quiz atau flashcard tanpa melihat catatan.",
@@ -558,7 +569,8 @@
 
         if (state.page === "library") {
             if (includesAny(normalized, ["rekomendasi", "buku", "bacaan", "pemula"])) {
-                return `Rekomendasi cepat:\n${makeList([
+                return `Rekomendasi cepat:
+${makeList([
                     "Pemula web: Dasar JavaScript lalu HTML Semantik.",
                     "Data: Prinsip SQL, JOIN, GROUP BY, lalu latihan query.",
                     "Desain produk: UI/UX, heuristic, user flow, dan usability testing.",
@@ -682,7 +694,8 @@
         const matched = findKnowledge(query);
         if (matched) return matched.text;
 
-        return `Aku menangkap pertanyaanmu. Untuk konteks ${profile.label}, coba pilih salah satu arah ini:\n${makeList([
+        return `Aku menangkap pertanyaanmu. Untuk konteks ${profile.label}, coba pilih salah satu arah ini:
+${makeList([
             "Konsep: minta aku jelaskan topik tertentu.",
             "Latihan: minta strategi, hint, atau review kesalahan.",
             "Rekomendasi: minta jalur belajar, buku, region, atau subjek.",
@@ -690,18 +703,114 @@
         ])}`;
     }
 
-    function sendMessage(raw) {
+    
+    let typingElement = null;
+    let abortController = null;
+
+    function showTyping() {
+        if (state.elements.stopBtn) state.elements.stopBtn.style.display = "flex";
+        if (state.elements.send) state.elements.send.style.display = "none";
+        if (typingElement) return;
+        typingElement = createEl("div", "bubub-ai-message assistant typing");
+        typingElement.innerHTML = "<span class='dot'></span><span class='dot'></span><span class='dot'></span>";
+        state.elements.messages.appendChild(typingElement);
+        state.elements.messages.scrollTop = state.elements.messages.scrollHeight;
+    }
+
+    function removeTyping() {
+        if (state.elements.stopBtn) state.elements.stopBtn.style.display = "none";
+        if (state.elements.send) state.elements.send.style.display = "flex";
+        if (typingElement && typingElement.parentNode) {
+            typingElement.parentNode.removeChild(typingElement);
+        }
+        typingElement = null;
+    }
+
+    function cancelGeneration() {
+        if (abortController) {
+            abortController.abort();
+            abortController = null;
+            removeTyping();
+            appendMessage("assistant", "Oke, aku berhenti mikir. Ada yang lain yang mau ditanyakan?");
+        }
+    }
+
+
+    async function sendMessage(raw) {
         const text = String(raw || state.elements.input.value || "").trim();
         if (!text) return;
-
+        
         state.elements.input.value = "";
         appendMessage("user", text);
         safePlay("click");
+        
+        showTyping();
+        
+        // Prepare context data
+        const contextData = {
+            currentPage: state.page,
+            currentTopic: window.UOT_CURRENT_TOPIC || document.title,
+            quizMistakes: window.UOT_QUIZ_MISTAKES || [],
+            userGoal: window.UOT_USER_GOAL || ''
+        };
 
-        window.setTimeout(() => {
+        let mode = 'general';
+        if (state.page.includes('quiz') || state.page.includes('snbt')) {
+            mode = 'quiz';
+        }
+        if (text.toLowerCase().includes('kenapa salah') || text.toLowerCase().includes('error')) {
+            mode = 'error_analysis';
+        }
+
+        // Format history for LLM
+        const messages = state.history.map(m => ({ role: m.sender, text: m.text }));
+        
+        // Add current message since it was just appended to state.history
+        
+        abortController = new AbortController();
+
+        try {
+            const response = await fetch('/api/bubub/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    messages: messages,
+                    contextData,
+                    mode
+                }),
+                signal: abortController.signal
+            });
+            
+            const data = await response.json();
+            removeTyping();
+            
+            if (data.ok && !data.fallback) {
+                let reply = data.text;
+                if (data.sourceLinks && data.sourceLinks.length > 0) {
+                    reply += "\n\n**Sumber Belajar:**\n" + data.sourceLinks.map(l => "- [" + l.title + "](/" + l.domain + ".html)").join("\n");
+                }
+                appendMessage("assistant", reply);
+                
+                if (data.suggestedFollowUps && data.suggestedFollowUps.length > 0) {
+                    renderChips(data.suggestedFollowUps);
+                }
+                safePlay("success");
+            } else {
+                // Fallback
+                appendMessage("assistant", buildResponse(text));
+                safePlay("success");
+            }
+        } catch (err) {
+            removeTyping();
+            if (err.name === 'AbortError') return;
+            console.error('BUBUB Chat Error:', err);
             appendMessage("assistant", buildResponse(text));
             safePlay("success");
-        }, 420);
+        } finally {
+            abortController = null;
+        }
     }
 
     function setOpen(open) {

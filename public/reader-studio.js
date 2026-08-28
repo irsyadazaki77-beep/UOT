@@ -396,6 +396,18 @@
         const existing = activity.findIndex((item) => item.day === day && item.bookId === bookId);
         if (existing >= 0) activity[existing] = record; else activity.push(record);
         storage.set("library_read_activity", activity.slice(-120));
+        
+        if (typeof window !== "undefined" && window.ActivityService && typeof window.ActivityService.recordLesson === "function") {
+            try {
+                window.ActivityService.recordLesson(bookId, {
+                    topic: book.title,
+                    category: "reading",
+                    chapter: chapterIndex,
+                    progress: entry.progress,
+                    duration: Math.max(1, Math.round(estimateMinutes(book.chapters[chapterIndex].content) * chapterProgress))
+                });
+            } catch (err) {}
+        }
     }
 
     function updateProgress() {

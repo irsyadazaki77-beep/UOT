@@ -1,7 +1,7 @@
+
 /**
- * Universe Of Tech (UOT) - Adaptive Learning & Mastery Engine (FASE 12)
- * Domain Models, Multi-Factor Mastery Calculations, Recommendation Engine,
- * Prerequisites Enforcement, Spaced Repetition, Remedial Workflows, Cold-Start Handler.
+ * Universe Of Tech (UOT) - Adaptive Learning & Mastery Engine (FASE 2)
+ * Granular Skill Taxonomy, Unified Pipeline Ready, Robust Mastery Formula.
  */
 (function (root, factory) {
     if (typeof module === "object" && module.exports) {
@@ -13,7 +13,7 @@
     "use strict";
 
     // -------------------------------------------------------------
-    // 1. SKILL & DOMAIN MODEL HIERARCHY
+    // 1. GRANULAR SKILL & DOMAIN MODEL HIERARCHY
     // -------------------------------------------------------------
     const DOMAIN_MODEL = Object.freeze({
         programming: {
@@ -22,95 +22,47 @@
             icon: "fa-code",
             accent: "#6558f5",
             skills: {
-                html_structure: {
-                    id: "html_structure",
-                    name: "HTML Semantik & Aksesibilitas",
-                    domain: "programming",
-                    prerequisites: [],
-                    description: "Struktur dokumen web, elemen semantik, metadata, dan aksesibilitas form.",
-                    recommendedLesson: "materi.html#html-a11y",
-                    practiceQuiz: "quiz.html?category=programming&topic=html"
-                },
-                css_layout: {
-                    id: "css_layout",
-                    name: "CSS Layout & Responsive UI",
-                    domain: "programming",
-                    prerequisites: ["html_structure"],
-                    description: "Flexbox, CSS Grid, media queries, mobile-first design, dan tokens.",
-                    recommendedLesson: "materi.html#css-responsive",
-                    practiceQuiz: "quiz.html?category=programming&topic=css"
-                },
-                javascript_basics: {
-                    id: "javascript_basics",
-                    name: "Logika & Variabel JavaScript",
-                    domain: "programming",
-                    prerequisites: ["html_structure"],
-                    description: "Tipe data, variabel, percabangan, perulangan, dan fungsi murni.",
-                    recommendedLesson: "materi.html#js-basics",
-                    practiceQuiz: "quiz.html?category=programming&topic=js"
-                },
-                javascript_arrays: {
-                    id: "javascript_arrays",
-                    name: "Array & Manipulasi Data JS",
-                    domain: "programming",
-                    prerequisites: ["javascript_basics"],
-                    description: "Array iteration, map/filter/reduce, objek, dan pencarian data.",
-                    recommendedLesson: "materi.html#js-arrays",
-                    practiceQuiz: "quiz.html?category=programming&topic=arrays"
-                },
-                web_apis: {
-                    id: "web_apis",
-                    name: "DOM & Asynchronous Fetch API",
-                    domain: "programming",
-                    prerequisites: ["javascript_basics", "javascript_arrays"],
-                    description: "Manipulasi DOM, event handling, Promises, async/await, dan REST fetch.",
-                    recommendedLesson: "materi.html#javascript-dom",
-                    practiceQuiz: "quiz.html?category=web&topic=dom"
-                },
-                logic_algorithms: {
-                    id: "logic_algorithms",
-                    name: "Algoritma & Problem Solving",
-                    domain: "programming",
-                    prerequisites: ["javascript_basics"],
-                    description: "Kompleksitas waktu, sorting, searching, dan rekursi dasar.",
-                    recommendedLesson: "materi.html#algoritma",
-                    practiceQuiz: "quiz.html?category=programming&topic=algo"
-                }
+                // HTML
+                html_structure: { id: "html_structure", name: "HTML Dasar & Struktur", domain: "programming", prerequisites: [], recommendedLesson: "materi.html#html", practiceQuiz: "quiz.html?category=programming&topic=html" },
+                html_forms: { id: "html_forms", name: "HTML Forms & Input", domain: "programming", prerequisites: ["html_structure"], recommendedLesson: "materi.html#html", practiceQuiz: "quiz.html?category=programming&topic=html_forms" },
+                html_a11y: { id: "html_a11y", name: "HTML Semantik & Aksesibilitas", domain: "programming", prerequisites: ["html_structure"], recommendedLesson: "materi.html#html", practiceQuiz: "quiz.html?category=programming&topic=html_a11y" },
+                
+                // CSS
+                css_basics: { id: "css_basics", name: "CSS Dasar & Styling", domain: "programming", prerequisites: ["html_structure"], recommendedLesson: "materi.html#css", practiceQuiz: "quiz.html?category=programming&topic=css" },
+                css_layout_flex: { id: "css_layout_flex", name: "CSS Flexbox", domain: "programming", prerequisites: ["css_basics"], recommendedLesson: "materi.html#css", practiceQuiz: "quiz.html?category=programming&topic=css_flex" },
+                css_layout_grid: { id: "css_layout_grid", name: "CSS Grid", domain: "programming", prerequisites: ["css_basics"], recommendedLesson: "materi.html#css", practiceQuiz: "quiz.html?category=programming&topic=css_grid" },
+                css_responsive: { id: "css_responsive", name: "Responsive Design & Media Queries", domain: "programming", prerequisites: ["css_layout_flex", "css_layout_grid"], recommendedLesson: "materi.html#css", practiceQuiz: "quiz.html?category=programming&topic=css_responsive" },
+                
+                // JavaScript Core
+                js_variables: { id: "js_variables", name: "Variabel & Tipe Data", domain: "programming", prerequisites: [], recommendedLesson: "materi.html#js-basics", practiceQuiz: "quiz.html?category=programming&topic=js_variables" },
+                js_conditions: { id: "js_conditions", name: "Kondisi & Logika", domain: "programming", prerequisites: ["js_variables"], recommendedLesson: "materi.html#js-basics", practiceQuiz: "quiz.html?category=programming&topic=js_conditions" },
+                js_loops: { id: "js_loops", name: "Perulangan (Loops)", domain: "programming", prerequisites: ["js_variables"], recommendedLesson: "materi.html#js-basics", practiceQuiz: "quiz.html?category=programming&topic=js_loops" },
+                js_functions: { id: "js_functions", name: "Fungsi & Scope", domain: "programming", prerequisites: ["js_conditions", "js_loops"], recommendedLesson: "materi.html#js-basics", practiceQuiz: "quiz.html?category=programming&topic=js_functions" },
+                js_arrays: { id: "js_arrays", name: "Manipulasi Array", domain: "programming", prerequisites: ["js_functions"], recommendedLesson: "materi.html#js-arrays", practiceQuiz: "quiz.html?category=programming&topic=js_arrays" },
+                js_objects: { id: "js_objects", name: "Objek JavaScript", domain: "programming", prerequisites: ["js_arrays"], recommendedLesson: "materi.html#js-arrays", practiceQuiz: "quiz.html?category=programming&topic=js_objects" },
+                js_error_handling: { id: "js_error_handling", name: "Error Handling & Debugging", domain: "programming", prerequisites: ["js_functions"], recommendedLesson: "materi.html#js", practiceQuiz: "quiz.html?category=programming&topic=js_error" },
+                
+                // JavaScript Web API
+                js_dom: { id: "js_dom", name: "Manipulasi DOM", domain: "programming", prerequisites: ["html_structure", "js_objects"], recommendedLesson: "materi.html#javascript-dom", practiceQuiz: "quiz.html?category=programming&topic=js_dom" },
+                js_events: { id: "js_events", name: "Event Listener & Handling", domain: "programming", prerequisites: ["js_dom"], recommendedLesson: "materi.html#javascript-dom", practiceQuiz: "quiz.html?category=programming&topic=js_events" },
+                js_async: { id: "js_async", name: "Asynchronous & Promises", domain: "programming", prerequisites: ["js_events"], recommendedLesson: "materi.html#javascript-dom", practiceQuiz: "quiz.html?category=programming&topic=js_async" },
+                js_fetch: { id: "js_fetch", name: "Fetch API & Network", domain: "programming", prerequisites: ["js_async"], recommendedLesson: "materi.html#javascript-dom", practiceQuiz: "quiz.html?category=programming&topic=js_fetch" },
+                
+                logic_algorithms: { id: "logic_algorithms", name: "Algoritma Dasar", domain: "programming", prerequisites: ["js_loops"], recommendedLesson: "materi.html#algoritma", practiceQuiz: "quiz.html?category=programming&topic=algo" }
             }
         },
         technology: {
             id: "technology",
-            title: "Teknologi & Sistem",
+            title: "Teknologi, Database & Desain",
             icon: "fa-database",
             accent: "#168f76",
             skills: {
-                database_sql: {
-                    id: "database_sql",
-                    name: "Database Relasional & SQL",
-                    domain: "technology",
-                    prerequisites: ["logic_algorithms"],
-                    description: "Desain skema, primary/foreign key, query JOIN, dan agregasi data.",
-                    recommendedLesson: "materi.html#sql-query",
-                    practiceQuiz: "quiz.html?category=database"
-                },
-                ui_ux_design: {
-                    id: "ui_ux_design",
-                    name: "UI/UX & Visual Design",
-                    domain: "technology",
-                    prerequisites: [],
-                    description: "Hirarki visual, kontras warna, wireframing, dan usabilitas.",
-                    recommendedLesson: "materi.html#visual-system",
-                    practiceQuiz: "quiz.html?category=design"
-                },
-                system_architecture: {
-                    id: "system_architecture",
-                    name: "REST API & Server Architecture",
-                    domain: "technology",
-                    prerequisites: ["web_apis", "database_sql"],
-                    description: "Routing server, autentikasi, validasi request, dan arsitektur.",
-                    recommendedLesson: "materi.html#http-rest",
-                    practiceQuiz: "quiz.html?category=backend"
-                }
+                db_sql_basics: { id: "db_sql_basics", name: "SQL Dasar", domain: "technology", prerequisites: [], recommendedLesson: "materi.html#sql-query", practiceQuiz: "quiz.html?category=database" },
+                db_sql_joins: { id: "db_sql_joins", name: "SQL JOIN & Relasi", domain: "technology", prerequisites: ["db_sql_basics"], recommendedLesson: "materi.html#sql-query", practiceQuiz: "quiz.html?category=database" },
+                backend_api: { id: "backend_api", name: "REST API Design", domain: "technology", prerequisites: ["js_fetch", "db_sql_basics"], recommendedLesson: "materi.html#http-rest", practiceQuiz: "quiz.html?category=backend" },
+                backend_auth: { id: "backend_auth", name: "Autentikasi & Keamanan", domain: "technology", prerequisites: ["backend_api"], recommendedLesson: "materi.html#http-rest", practiceQuiz: "quiz.html?category=backend" },
+                ui_design_fundamentals: { id: "ui_design_fundamentals", name: "Fundamental UI Design", domain: "technology", prerequisites: [], recommendedLesson: "materi.html#visual-system", practiceQuiz: "quiz.html?category=design" },
+                ux_research: { id: "ux_research", name: "UX Research & Usability", domain: "technology", prerequisites: ["ui_design_fundamentals"], recommendedLesson: "materi.html#visual-system", practiceQuiz: "quiz.html?category=design" }
             }
         },
         tka: {
@@ -119,82 +71,29 @@
             icon: "fa-graduation-cap",
             accent: "#dd7b28",
             skills: {
-                numerasi: {
-                    id: "numerasi",
-                    name: "Penalaran Matematika & Kuantitatif",
-                    domain: "tka",
-                    prerequisites: [],
-                    description: "Aritmatika, aljabar dasar, rasio, dan analisis grafik.",
-                    recommendedLesson: "snbt.html#numerasi",
-                    practiceQuiz: "tka-quiz.html?subtest=numerasi"
-                },
-                literasi_indonesia: {
-                    id: "literasi_indonesia",
-                    name: "Literasi Bahasa Indonesia",
-                    domain: "tka",
-                    prerequisites: [],
-                    description: "Pemahaman bacaan, gagasan utama, kesimpulan, dan tata bahasa.",
-                    recommendedLesson: "snbt.html#literasi_indonesia",
-                    practiceQuiz: "tka-quiz.html?subtest=literasi_indonesia"
-                },
-                literasi_inggris: {
-                    id: "literasi_inggris",
-                    name: "Literasi Bahasa Inggris",
-                    domain: "tka",
-                    prerequisites: ["literasi_indonesia"],
-                    description: "Reading comprehension, vocabulary in context, and inferencing.",
-                    recommendedLesson: "snbt.html#literasi_inggris",
-                    practiceQuiz: "tka-quiz.html?subtest=literasi_inggris"
-                },
-                reasoning_logis: {
-                    id: "reasoning_logis",
-                    name: "Penalaran Logis & Silogisme",
-                    domain: "tka",
-                    prerequisites: ["numerasi"],
-                    description: "Penalaran analitis, silogisme, premis, dan logika simbolik.",
-                    recommendedLesson: "snbt.html#reasoning_logis",
-                    practiceQuiz: "tka-quiz.html?subtest=penalaran_umum"
-                }
+                snbt_numerasi_dasar: { id: "snbt_numerasi_dasar", name: "Aritmatika & Aljabar", domain: "tka", prerequisites: [], recommendedLesson: "snbt.html#numerasi", practiceQuiz: "tka-quiz.html?subtest=numerasi" },
+                snbt_numerasi_lanjut: { id: "snbt_numerasi_lanjut", name: "Analisis Data & Geometri", domain: "tka", prerequisites: ["snbt_numerasi_dasar"], recommendedLesson: "snbt.html#numerasi", practiceQuiz: "tka-quiz.html?subtest=numerasi" },
+                snbt_literasi_id: { id: "snbt_literasi_id", name: "Literasi Bahasa Indonesia", domain: "tka", prerequisites: [], recommendedLesson: "snbt.html#literasi_indonesia", practiceQuiz: "tka-quiz.html?subtest=literasi_indonesia" },
+                snbt_literasi_en: { id: "snbt_literasi_en", name: "Literasi Bahasa Inggris", domain: "tka", prerequisites: ["snbt_literasi_id"], recommendedLesson: "snbt.html#literasi_inggris", practiceQuiz: "tka-quiz.html?subtest=literasi_inggris" },
+                snbt_penalaran_umum: { id: "snbt_penalaran_umum", name: "Penalaran Umum (Logika)", domain: "tka", prerequisites: [], recommendedLesson: "snbt.html#penalaran_umum", practiceQuiz: "tka-quiz.html?subtest=penalaran_umum" },
+                snbt_penalaran_kognitif: { id: "snbt_penalaran_kognitif", name: "Potensi Kognitif", domain: "tka", prerequisites: ["snbt_penalaran_umum"], recommendedLesson: "snbt.html#potensi_kognitif", practiceQuiz: "tka-quiz.html?subtest=potensi_kognitif" }
             }
         },
         language_culture: {
             id: "language_culture",
-            title: "Bahasa & Kebudayaan",
-            icon: "fa-earth-asia",
-            accent: "#c54d89",
+            title: "Bahasa & Budaya Nusantara",
+            icon: "fa-map-location-dot",
+            accent: "#e11d48",
             skills: {
-                kosakata_daerah: {
-                    id: "kosakata_daerah",
-                    name: "Kosakata Bahasa Daerah",
-                    domain: "language_culture",
-                    prerequisites: [],
-                    description: "Sapaan, kata benda, dan percabangan kosakata lokal Nusantara.",
-                    recommendedLesson: "bahasa-daerah.html",
-                    practiceQuiz: "latihan-bahasa.html"
-                },
-                tata_bahasa: {
-                    id: "tata_bahasa",
-                    name: "Tata Bahasa & Aksara",
-                    domain: "language_culture",
-                    prerequisites: ["kosakata_daerah"],
-                    description: "Tingkatan tutur, struktur kalimat, dan pola ungkapan.",
-                    recommendedLesson: "bahasa-daerah.html",
-                    practiceQuiz: "quiz-budaya.html"
-                },
-                peribahasa_budaya: {
-                    id: "peribahasa_budaya",
-                    name: "Peribahasa & Tradisi Nusantara",
-                    domain: "language_culture",
-                    prerequisites: ["tata_bahasa"],
-                    description: "Kearifan lokal, ungkapan filosofis, dan cerita tradisi.",
-                    recommendedLesson: "library.html",
-                    practiceQuiz: "quiz-budaya.html"
-                }
+                culture_vocab: { id: "culture_vocab", name: "Kosakata Daerah", domain: "language_culture", prerequisites: [], recommendedLesson: "bahasa-daerah.html", practiceQuiz: "latihan-bahasa.html" },
+                culture_pronunciation: { id: "culture_pronunciation", name: "Pelafalan & Intonasi", domain: "language_culture", prerequisites: ["culture_vocab"], recommendedLesson: "bahasa-daerah.html", practiceQuiz: "latihan-bahasa.html" },
+                culture_grammar: { id: "culture_grammar", name: "Tata Bahasa Daerah", domain: "language_culture", prerequisites: ["culture_vocab"], recommendedLesson: "bahasa-daerah.html", practiceQuiz: "quiz-budaya.html" },
+                culture_tradition: { id: "culture_tradition", name: "Sejarah & Tradisi", domain: "language_culture", prerequisites: [], recommendedLesson: "library.html", practiceQuiz: "quiz-budaya.html" },
+                culture_wisdom: { id: "culture_wisdom", name: "Kearifan Lokal & Peribahasa", domain: "language_culture", prerequisites: ["culture_tradition"], recommendedLesson: "library.html", practiceQuiz: "quiz-budaya.html" }
             }
         }
     });
 
-    // Flat Skill Lookup Registry
     const SKILLS_REGISTRY = {};
     Object.values(DOMAIN_MODEL).forEach(domain => {
         Object.entries(domain.skills).forEach(([skillId, skillObj]) => {
@@ -202,9 +101,6 @@
         });
     });
 
-    // -------------------------------------------------------------
-    // 2. MASTERY TIERS & THRESHOLDS
-    // -------------------------------------------------------------
     const MASTERY_TIERS = Object.freeze([
         { min: 0, max: 20, level: "Beginner", label: "Pemula", badge: "🌱", color: "#6b7280" },
         { min: 21, max: 40, level: "Developing", label: "Berkembang", badge: "🌿", color: "#3b82f6" },
@@ -218,53 +114,83 @@
         return MASTERY_TIERS.find(t => valid >= t.min && valid <= t.max) || MASTERY_TIERS[0];
     }
 
-    // -------------------------------------------------------------
-    // 3. ACTIVITY METADATA ENRICHMENT
-    // -------------------------------------------------------------
     function mapCategoryToSkill(category, topic = "") {
         const cat = String(category || "").toLowerCase();
         const top = String(topic || "").toLowerCase();
-
+        
+        // Match Granular Skills
         if (cat === "programming" || cat === "web") {
-            if (top.includes("html") || top.includes("a11y")) return "html_structure";
-            if (top.includes("css") || top.includes("flex") || top.includes("grid")) return "css_layout";
-            if (top.includes("array") || top.includes("object")) return "javascript_arrays";
-            if (top.includes("dom") || top.includes("fetch") || top.includes("async")) return "web_apis";
+            if (top.includes("html")) {
+                if (top.includes("form")) return "html_forms";
+                if (top.includes("a11y") || top.includes("semant")) return "html_a11y";
+                return "html_structure";
+            }
+            if (top.includes("css")) {
+                if (top.includes("flex")) return "css_layout_flex";
+                if (top.includes("grid")) return "css_layout_grid";
+                if (top.includes("responsive") || top.includes("media")) return "css_responsive";
+                return "css_basics";
+            }
+            if (top.includes("js") || top.includes("javascript")) {
+                if (top.includes("var") || top.includes("tipe")) return "js_variables";
+                if (top.includes("cond") || top.includes("if")) return "js_conditions";
+                if (top.includes("loop") || top.includes("perulangan")) return "js_loops";
+                if (top.includes("func")) return "js_functions";
+                if (top.includes("array")) return "js_arrays";
+                if (top.includes("obj")) return "js_objects";
+                if (top.includes("err")) return "js_error_handling";
+                if (top.includes("dom")) return "js_dom";
+                if (top.includes("event")) return "js_events";
+                if (top.includes("async") || top.includes("promise")) return "js_async";
+                if (top.includes("fetch") || top.includes("api")) return "js_fetch";
+                return "js_variables";
+            }
             if (top.includes("algo") || top.includes("search") || top.includes("sort")) return "logic_algorithms";
-            return "javascript_basics";
+            return "js_variables";
         }
-        if (cat === "database" || cat === "sql") return "database_sql";
-        if (cat === "design" || cat === "ux" || cat === "ui") return "ui_ux_design";
-        if (cat === "backend" || cat === "api") return "system_architecture";
+        if (cat === "database" || cat === "sql") {
+            if (top.includes("join") || top.includes("relasi")) return "db_sql_joins";
+            return "db_sql_basics";
+        }
+        if (cat === "design" || cat === "ux" || cat === "ui") {
+            if (top.includes("research") || top.includes("usability")) return "ux_research";
+            return "ui_design_fundamentals";
+        }
+        if (cat === "backend" || cat === "api") {
+            if (top.includes("auth") || top.includes("sec")) return "backend_auth";
+            return "backend_api";
+        }
         if (cat === "snbt" || cat === "tka") {
-            if (top.includes("num") || top.includes("mtk") || top.includes("kuantitatif")) return "numerasi";
-            if (top.includes("ing") || top.includes("eng")) return "literasi_inggris";
-            if (top.includes("logis") || top.includes("silogisme") || top.includes("penalaran")) return "reasoning_logis";
-            return "literasi_indonesia";
+            if (top.includes("num") || top.includes("mtk")) {
+                if (top.includes("lanjut") || top.includes("analisis")) return "snbt_numerasi_lanjut";
+                return "snbt_numerasi_dasar";
+            }
+            if (top.includes("ing") || top.includes("eng")) return "snbt_literasi_en";
+            if (top.includes("logis") || top.includes("nalar") || top.includes("umum")) return "snbt_penalaran_umum";
+            if (top.includes("kognitif") || top.includes("potensi")) return "snbt_penalaran_kognitif";
+            return "snbt_literasi_id";
         }
         if (cat === "bahasa" || cat === "budaya" || cat === "culture") {
-            if (top.includes("aksara") || top.includes("tata")) return "tata_bahasa";
-            if (top.includes("peribahasa") || top.includes("tradisi")) return "peribahasa_budaya";
-            return "kosakata_daerah";
+            if (top.includes("aksara") || top.includes("tata") || top.includes("gram")) return "culture_grammar";
+            if (top.includes("pelafalan") || top.includes("pronun") || top.includes("suara")) return "culture_pronunciation";
+            if (top.includes("sejarah") || top.includes("tradisi")) return "culture_tradition";
+            if (top.includes("kearifan") || top.includes("peribahasa")) return "culture_wisdom";
+            return "culture_vocab";
         }
-
-        return "javascript_basics";
+        return "js_variables";
     }
 
     function getActivityMetadata(activityOrId) {
         let act = activityOrId;
-        if (typeof activityOrId === "string") {
-            act = { id: activityOrId };
-        }
-
+        if (typeof activityOrId === "string") act = { id: activityOrId };
+        
         const skillId = act.skill || mapCategoryToSkill(act.category || act.topic || "", act.topic || act.id || "");
-        const skillObj = SKILLS_REGISTRY[skillId] || SKILLS_REGISTRY["javascript_basics"];
-
-        let difficultyNum = 1; // 1 = Easy, 2 = Medium, 3 = Hard
+        const skillObj = SKILLS_REGISTRY[skillId] || SKILLS_REGISTRY["js_variables"];
+        let difficultyNum = 1;
         const diffStr = String(act.difficulty || "").toLowerCase();
         if (diffStr === "medium" || diffStr === "2") difficultyNum = 2;
         if (diffStr === "hard" || diffStr === "3") difficultyNum = 3;
-
+        
         return {
             id: act.id || `act_${Date.now()}`,
             topic: act.topic || skillObj.name,
@@ -273,7 +199,7 @@
             domain: skillObj.domain,
             difficulty: difficultyNum,
             difficultyLabel: difficultyNum === 3 ? "Hard" : (difficultyNum === 2 ? "Medium" : "Easy"),
-            estimatedDuration: act.estimatedDuration || (difficultyNum * 2 + 1), // in minutes
+            estimatedDuration: act.estimatedDuration || (difficultyNum * 2 + 1),
             prerequisites: skillObj.prerequisites || []
         };
     }
@@ -281,117 +207,83 @@
     // -------------------------------------------------------------
     // 4. RATIONAL MULTI-FACTOR MASTERY CALCULATION
     // -------------------------------------------------------------
-    /**
-     * Calculates mastery score (0-100) taking into account:
-     * - Difficulty weights (Easy = 1.0x, Medium = 1.5x, Hard = 2.0x)
-     * - Recency time decay (exponential decay)
-     * - Retries & attempts (diminishing returns on repeated attempts)
-     * - Hint usage deduction (0.85x factor)
-     * - Consistency streak bonus (up to +15% boost)
-     * - Spaced Repetition due date check
-     */
     function calculateSkillMastery(skillId, attemptsHistory = [], nowMs = Date.now()) {
         const skillObj = SKILLS_REGISTRY[skillId];
         if (!skillObj) {
-            return {
-                skillId,
-                score: 0,
-                tier: MASTERY_TIERS[0],
-                attemptsCount: 0,
-                streak: 0,
-                lastAttemptAt: null,
-                dueForReview: false
-            };
+            return { skillId, score: 0, tier: MASTERY_TIERS[0], attemptsCount: 0, streak: 0, lastAttemptAt: null, dueForReview: false };
         }
 
         const skillAttempts = (attemptsHistory || []).filter(a => {
-            const meta = getActivityMetadata(a);
-            return meta.skill === skillId;
+            const mapped = mapCategoryToSkill(a.category, a.topic) || a.skill || getActivityMetadata(a).skill;
+            return mapped === skillId || a.skill === skillId || getActivityMetadata(a).skill === skillId;
         });
-
         if (skillAttempts.length === 0) {
-            return {
-                skillId,
-                skillName: skillObj.name,
-                domain: skillObj.domain,
-                score: 0,
-                tier: MASTERY_TIERS[0],
-                attemptsCount: 0,
-                correctCount: 0,
-                streak: 0,
-                lastAttemptAt: null,
-                dueForReview: false,
-                consecutiveFailures: 0
-            };
+            return { skillId, skillName: skillObj.name, domain: skillObj.domain, score: 0, tier: MASTERY_TIERS[0], attemptsCount: 0, correctCount: 0, streak: 0, lastAttemptAt: null, dueForReview: false, consecutiveFailures: 0 };
         }
 
-        // Sort attempts chronologically
         skillAttempts.sort((a, b) => new Date(a.timestamp || 0).getTime() - new Date(b.timestamp || 0).getTime());
-
+        
         let totalWeightedScore = 0;
         let totalWeightedMax = 0;
         let currentStreak = 0;
         let consecutiveFailures = 0;
+        let hasConceptError = false;
 
-        skillAttempts.forEach(att => {
+        skillAttempts.forEach((att, idx) => {
             const isCorrect = Boolean(att.correct || att.isCorrect || Number(att.score) >= 70);
             const difficulty = Number(att.difficulty) || (att.difficultyStr === "hard" ? 3 : (att.difficultyStr === "medium" ? 2 : 1));
-
-            // 1. Difficulty Weight Factor
             const diffWeight = difficulty === 3 ? 2.0 : (difficulty === 2 ? 1.5 : 1.0);
-
-            // 2. Recency Exponential Decay (half-life of 14 days)
+            
             const timestampMs = new Date(att.timestamp || nowMs).getTime();
             const daysOld = Math.max(0, (nowMs - timestampMs) / (1000 * 60 * 60 * 24));
-            const recencyWeight = Math.exp(-0.03 * daysOld); // Smooth decay curve
-
-            // 3. Retry Diminishing Returns
+            const recencyWeight = Math.exp(-0.03 * daysOld); // 14-day half-life roughly
+            
+            // Retries & Trend Weight: More recent attempts matter slightly more intrinsically, 
+            // but excessive retries diminish maximum possible gain.
             const retries = Math.max(0, Number(att.retries || att.attemptNumber - 1 || 0));
             const retryMultiplier = 1.0 / (1 + 0.35 * retries);
-
-            // 4. Hint Penalty Factor
             const hintMultiplier = att.usedHint ? 0.85 : 1.0;
+
+            const errorType = String(att.errorType || "").toLowerCase();
+            if (errorType === "concept") hasConceptError = true;
 
             const maxPossible = diffWeight * recencyWeight;
             const earned = isCorrect ? (diffWeight * recencyWeight * retryMultiplier * hintMultiplier) : 0;
-
-            totalWeightedScore += earned;
+            
+            // Penalty for concept errors
+            totalWeightedScore += (errorType === "concept" && !isCorrect) ? (earned - 0.2) : earned; 
             totalWeightedMax += maxPossible;
-
-            if (isCorrect) {
-                currentStreak++;
-                consecutiveFailures = 0;
-            } else {
-                currentStreak = 0;
-                consecutiveFailures++;
-            }
+            
+            if (isCorrect) { currentStreak++; consecutiveFailures = 0; }
+            else { currentStreak = 0; consecutiveFailures++; }
         });
 
-        // Base Accuracy Ratio
-        let baseRatio = totalWeightedMax > 0 ? (totalWeightedScore / totalWeightedMax) : 0;
-
-        // Sample Size Confidence Scaling (Requires multiple attempts to reach full 100% Mastered)
+        // Exponential Moving Average / Weighted Ratio
+        let baseRatio = totalWeightedMax > 0 ? Math.max(0, totalWeightedScore / totalWeightedMax) : 0;
+        
+        // Confidence scale based on number of attempts
         const sampleConfidence = Math.min(1.0, 0.35 + 0.22 * skillAttempts.length);
-
-        // 5. Consistency & Streak Bonus (up to +15%)
+        
+        // Consistency streak bonus
         const streakBonus = Math.min(0.15, currentStreak * 0.03);
         let finalScoreRatio = Math.min(1.0, (baseRatio * sampleConfidence) + streakBonus);
+        
+        if (hasConceptError) {
+            finalScoreRatio = Math.max(0, finalScoreRatio - 0.1); // 10% penalty for unresolved concept errors
+        }
 
-        // Scale to 0 - 100
-        const rawScore = Math.round(finalScoreRatio * 100);
+        let rawScore = Math.round(finalScoreRatio * 100);
 
-        // 6. Spaced Repetition Due Date & Inactivity Decay
+        // Review calculation
         const lastAttemptMs = new Date(skillAttempts[skillAttempts.length - 1].timestamp || nowMs).getTime();
         const daysSinceLast = Math.max(0, (nowMs - lastAttemptMs) / (1000 * 60 * 60 * 24));
-
-        // Review Intervals based on Tier
+        
         let intervalDays = 1;
-        if (rawScore >= 81) intervalDays = 30; // Mastered
-        else if (rawScore >= 61) intervalDays = 14; // Proficient
-        else if (rawScore >= 41) intervalDays = 7; // Intermediate
-        else if (rawScore >= 21) intervalDays = 3; // Developing
+        if (rawScore >= 81) intervalDays = 30;
+        else if (rawScore >= 61) intervalDays = 14;
+        else if (rawScore >= 41) intervalDays = 7;
+        else if (rawScore >= 21) intervalDays = 3;
 
-        // Inactivity decay: If inactive > 14 days, apply gentle decay to score
         let effectiveScore = rawScore;
         if (daysSinceLast > 14 && rawScore > 0) {
             const decayFactor = Math.max(0.65, Math.exp(-0.015 * (daysSinceLast - 14)));
@@ -402,106 +294,49 @@
         const tier = getTierForScore(effectiveScore);
 
         return {
-            skillId,
-            skillName: skillObj.name,
-            domain: skillObj.domain,
-            score: effectiveScore,
-            rawScore,
-            tier,
+            skillId, skillName: skillObj.name, domain: skillObj.domain, 
+            score: effectiveScore, rawScore, tier,
             attemptsCount: skillAttempts.length,
             correctCount: skillAttempts.filter(a => a.correct || a.isCorrect || Number(a.score) >= 70).length,
-            streak: currentStreak,
-            consecutiveFailures,
+            streak: currentStreak, consecutiveFailures,
             lastAttemptAt: skillAttempts[skillAttempts.length - 1].timestamp || null,
             daysSinceLast: Math.round(daysSinceLast * 10) / 10,
-            intervalDays,
-            dueForReview
+            intervalDays, dueForReview, hasConceptError
         };
     }
 
-    // -------------------------------------------------------------
-    // 5. PREREQUISITES VERIFICATION
-    // -------------------------------------------------------------
-    /**
-     * Checks whether all prerequisites for a skill are satisfied (mastery >= 40%).
-     */
     function isPrerequisiteMet(skillId, masteryMap) {
         const skillObj = SKILLS_REGISTRY[skillId];
         if (!skillObj || !Array.isArray(skillObj.prerequisites) || skillObj.prerequisites.length === 0) {
             return { met: true, missingPrereqs: [] };
         }
-
         const missing = [];
         skillObj.prerequisites.forEach(prereqId => {
             const prereqMastery = masteryMap[prereqId]?.score || 0;
-            if (prereqMastery < 40) { // Developing threshold
-                missing.push({
-                    id: prereqId,
-                    name: SKILLS_REGISTRY[prereqId]?.name || prereqId,
-                    currentScore: prereqMastery
-                });
+            if (prereqMastery < 40) {
+                missing.push({ id: prereqId, name: SKILLS_REGISTRY[prereqId]?.name || prereqId, currentScore: prereqMastery });
             }
         });
-
-        return {
-            met: missing.length === 0,
-            missingPrereqs: missing
-        };
+        return { met: missing.length === 0, missingPrereqs: missing };
     }
 
-    // -------------------------------------------------------------
-    // 6. ADAPTIVE RECOMMENDATION ENGINE
-    // -------------------------------------------------------------
-    /**
-     * Generates structured recommendations categorized into:
-     * - recommendedNext: Best logical next skills where prerequisites are met
-     * - continue: Ongoing in-progress skills
-     * - needsPractice: Skills with low score (<60%), recent errors, or SRS due
-     * - readyForChallenge: Proficient skills (61-80%) ready for Hard difficulty/Projects
-     * - reviewDue: Skills due for spaced repetition review
-     * - recentlyMastered: Skills that achieved >= 81%
-     * - remedialTrigger: Remedial workflow if consecutive failures >= 2
-     * - coldStart: Cold-start onboarding set if 0 attempts recorded
-     *
-     * Includes human-readable "Direkomendasikan karena..." explanations.
-     */
     function generateRecommendations(attemptsHistory = [], recommendationHistory = [], nowMs = Date.now()) {
         const masteryMap = {};
         let totalAttemptsAcrossAll = 0;
-
         Object.keys(SKILLS_REGISTRY).forEach(skillId => {
             const m = calculateSkillMastery(skillId, attemptsHistory, nowMs);
             masteryMap[skillId] = m;
             totalAttemptsAcrossAll += m.attemptsCount;
         });
 
-        // 1. Cold-Start Behaviour Handler
         if (totalAttemptsAcrossAll === 0) {
-            const coldStartSkills = ["html_structure", "numerasi", "kosakata_daerah"];
+            const coldStartSkills = ["html_structure", "js_variables", "snbt_numerasi_dasar", "culture_vocab"];
             const coldStartList = coldStartSkills.map(sId => {
                 const sk = SKILLS_REGISTRY[sId];
-                return {
-                    id: sId,
-                    skillName: sk.name,
-                    domain: sk.domain,
-                    type: "cold_start",
-                    lessonUrl: sk.recommendedLesson,
-                    practiceUrl: sk.practiceQuiz,
-                    explanation: `Direkomendasikan sebagai sesi evaluasi diagnosis awal untuk memetakan kemampuan dasar pada ${sk.name}.`
-                };
+                return { id: sId, skillName: sk.name, domain: sk.domain, type: "cold_start", lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Mulai dengan ${sk.name} untuk membangun dasar.` };
             });
-
             return {
-                isColdStart: true,
-                recommendedNext: coldStartList,
-                continue: [],
-                needsPractice: [],
-                readyForChallenge: [],
-                reviewDue: [],
-                recentlyMastered: [],
-                remedialTrigger: null,
-                masterySummary: masteryMap,
-                explanation: "Sesi Diagnosis Awal: Pengguna baru belum memiliki data riwayat. Sistem menyiapkan latihan fondasi awal."
+                isColdStart: true, recommendedNext: coldStartList, continue: [], needsPractice: [], readyForChallenge: [], reviewDue: [], recentlyMastered: [], remedialTrigger: null, masterySummary: masteryMap, explanation: "Sesi Diagnosis Awal: Mulai latihan pertama Anda."
             };
         }
 
@@ -513,199 +348,51 @@
         const recentlyMastered = [];
         let remedialTrigger = null;
 
-        // History deduplication & frequency weighting
-        const recentHistoryList = Array.isArray(recommendationHistory) ? recommendationHistory.slice(-20) : [];
-        const historyFrequency = {};
-        recentHistoryList.forEach(id => {
-            historyFrequency[id] = (historyFrequency[id] || 0) + 1;
-        });
-
-        // Determine most recently active skill for 'continue' section
         const sortedAttempts = [...attemptsHistory].sort((a, b) => new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime());
         const recentSkillIds = [...new Set(sortedAttempts.map(a => getActivityMetadata(a).skill))];
-
         recentSkillIds.slice(0, 3).forEach(sId => {
             const m = masteryMap[sId];
             const sk = SKILLS_REGISTRY[sId];
             if (m && sk && m.score > 0 && m.score < 81) {
-                continueItems.push({
-                    id: sId,
-                    skillName: sk.name,
-                    domain: sk.domain,
-                    type: "continue",
-                    score: m.score,
-                    tier: m.tier,
-                    lessonUrl: sk.recommendedLesson,
-                    practiceUrl: sk.practiceQuiz,
-                    explanation: `Lanjutkan progres belajar ${sk.name} yang sedang berjalan (Tingkat Pemahaman saat ini ${m.score}%).`
-                });
+                continueItems.push({ id: sId, skillName: sk.name, domain: sk.domain, type: "continue", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Lanjutkan pembelajaran ${sk.name} (${m.score}%).` });
             }
         });
 
         Object.values(masteryMap).forEach(m => {
             const sk = SKILLS_REGISTRY[m.skillId];
             if (!sk) return;
-
-            // Check Remedial Trigger (Consecutive Failures >= 2)
+            
             if (m.consecutiveFailures >= 2 && !remedialTrigger) {
-                remedialTrigger = {
-                    skillId: m.skillId,
-                    skillName: sk.name,
-                    domain: sk.domain,
-                    consecutiveFailures: m.consecutiveFailures,
-                    explanation: `Pemicu Pembelajaran Remedial: Terdeteksi ${m.consecutiveFailures} kesalahan berturut-turut pada ${sk.name}. Sistem merekomendasikan ulasan materi singkat sebelum evaluasi ulang.`,
-                    microLesson: {
-                        title: `Micro-Lesson: Fondasi & Kunci ${sk.name}`,
-                        url: sk.recommendedLesson,
-                        durationMinutes: 5,
-                        estimatedTime: "5 menit"
-                    },
-                    reassessmentQuiz: {
-                        title: `Kuis Reassessment: Evaluasi Ulang ${sk.name}`,
-                        url: sk.practiceQuiz + (sk.practiceQuiz.includes("?") ? "&mode=reassessment" : "?mode=reassessment"),
-                        questionsCount: 3,
-                        description: "Kuis evaluasi ulang setelah membaca micro-lesson"
-                    },
-                    focusedPractice: {
-                        title: `Sesi Latihan Terarah ${sk.name}`,
-                        url: sk.practiceQuiz
-                    },
-                    zeroXpPenaltyConfirmed: true
-                };
+                remedialTrigger = { id: m.skillId, skillName: sk.name, domain: sk.domain, type: "remedial", lessonUrl: sk.recommendedLesson, explanation: `Terdeteksi kesulitan pada ${sk.name}. Disarankan membaca ulang materi.` };
             }
-
-            // Check Spaced Repetition Review Due
-            if (m.dueForReview && m.score > 0) {
-                reviewDue.push({
-                    id: m.skillId,
-                    skillName: sk.name,
-                    domain: sk.domain,
-                    type: "review_due",
-                    score: m.score,
-                    tier: m.tier,
-                    daysSinceLast: m.daysSinceLast,
-                    intervalDays: m.intervalDays,
-                    lessonUrl: sk.recommendedLesson,
-                    practiceUrl: sk.practiceQuiz,
-                    explanation: `Direkomendasikan oleh jadwal Spaced Repetition: ${m.daysSinceLast} hari sejak latihan terakhir ${sk.name} (Mastery ${m.score}%).`
-                });
-            }
-
-            // Check Prerequisites
-            const prereqStatus = isPrerequisiteMet(m.skillId, masteryMap);
-
-            if (!prereqStatus.met) {
-                // Do NOT recommend locked skills to recommendedNext.
-                // Instead, ensure missing prerequisites are added to needsPractice if unstarted/low
-                prereqStatus.missingPrereqs.forEach(miss => {
-                    const prereqObj = SKILLS_REGISTRY[miss.id];
-                    if (prereqObj && !needsPractice.some(n => n.id === miss.id)) {
-                        needsPractice.push({
-                            id: miss.id,
-                            skillName: prereqObj.name,
-                            domain: prereqObj.domain,
-                            type: "prerequisite_remedial",
-                            score: miss.currentScore,
-                            tier: getTierForScore(miss.currentScore),
-                            lessonUrl: prereqObj.recommendedLesson,
-                            practiceUrl: prereqObj.practiceQuiz,
-                            explanation: `Direkomendasikan karena merupakan prasyarat utama sebelum kamu dapat mempelajari ${sk.name} (Tingkat Pemahaman Prasyarat ${miss.currentScore}%).`
-                        });
-                    }
-                });
-                return; // Skip locked skill
-            }
-
-            // Categorize based on score & SRS
-            if (m.score >= 81) {
-                recentlyMastered.push({
-                    id: m.skillId,
-                    skillName: sk.name,
-                    domain: sk.domain,
-                    type: "mastered",
-                    score: m.score,
-                    tier: m.tier,
-                    explanation: `Luar biasa! Kamu telah menguasai ${sk.name} dengan skor penguasaan ${m.score}%.`
-                });
-            } else if (m.score >= 61) {
-                readyForChallenge.push({
-                    id: m.skillId,
-                    skillName: sk.name,
-                    domain: sk.domain,
-                    type: "challenge_ready",
-                    score: m.score,
-                    tier: m.tier,
-                    lessonUrl: sk.recommendedLesson,
-                    practiceUrl: sk.practiceQuiz,
-                    explanation: `Direkomendasikan karena kamu sudah Mahir di ${sk.name} (Mastery ${m.score}%). Saatnya mengambil kuis tantangan tingkat sulit!`
-                });
-            } else if (m.consecutiveFailures > 0 || (m.score > 0 && m.score < 60)) {
-                needsPractice.push({
-                    id: m.skillId,
-                    skillName: sk.name,
-                    domain: sk.domain,
-                    type: "needs_practice",
-                    score: m.score,
-                    tier: m.tier,
-                    dueForReview: m.dueForReview,
-                    lessonUrl: sk.recommendedLesson,
-                    practiceUrl: sk.practiceQuiz,
-                    explanation: `Direkomendasikan karena skor ${sk.name} kamu ${m.score}% dan membutuhkan latihan tambahan untuk mencapai tingkat Mahir.`
-                });
-            } else if (m.score === 0) {
-                // Logical Next Step for unstarted skills whose prereqs are met
-                recommendedNext.push({
-                    id: m.skillId,
-                    skillName: sk.name,
-                    domain: sk.domain,
-                    type: "recommended_next",
-                    score: 0,
-                    tier: m.tier,
-                    lessonUrl: sk.recommendedLesson,
-                    practiceUrl: sk.practiceQuiz,
-                    explanation: sk.prerequisites.length > 0
-                        ? `Direkomendasikan karena prasyarat (${sk.prerequisites.map(p => SKILLS_REGISTRY[p]?.name).join(", ")}) sudah dipahami dan kamu siap melangkah ke ${sk.name}.`
-                        : `Direkomendasikan sebagai modul baru berikutnya untuk memperluas wawasan ${sk.name}.`
-                });
+            if (m.dueForReview) reviewDue.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "review", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Waktunya mengulang ${sk.name} (Spaced Repetition).` });
+            if (m.score > 0 && m.score <= 60 && !m.dueForReview) needsPractice.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "practice", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Perbanyak latihan pada ${sk.name} untuk meningkatkan penguasaan.` });
+            if (m.score >= 61 && m.score <= 80 && !m.dueForReview) readyForChallenge.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "challenge", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz + "&difficulty=hard", explanation: `Anda sudah mahir di ${sk.name}. Coba latihan yang lebih sulit!` });
+            if (m.score >= 81 && m.daysSinceLast <= 3) recentlyMastered.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "mastered", score: m.score, tier: m.tier, explanation: `Luar biasa! Anda baru saja menguasai ${sk.name}.` });
+            
+            if (m.score < 40) {
+                const prereqCheck = isPrerequisiteMet(m.skillId, masteryMap);
+                if (prereqCheck.met && !continueItems.find(c => c.id === m.skillId)) recommendedNext.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "next", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Langkah selanjutnya: Pelajari ${sk.name}.` });
             }
         });
 
-        // Diversity & Anti-Looping Sorting:
-        // Sort recommendedNext prioritizing skills with lower recent appearance frequency,
-        // and interleave across different domains.
-        function applyDiversitySort(items) {
-            return [...items].sort((a, b) => {
-                const freqA = historyFrequency[a.id] || 0;
-                const freqB = historyFrequency[b.id] || 0;
-                if (freqA !== freqB) return freqA - freqB;
-                return (a.domain || "").localeCompare(b.domain || "");
-            });
-        }
-
-        const diversifiedNext = applyDiversitySort(recommendedNext);
-        const diversifiedPractice = applyDiversitySort(needsPractice);
-
         return {
             isColdStart: false,
-            recommendedNext: diversifiedNext.slice(0, 3),
-            continue: continueItems.slice(0, 3),
-            needsPractice: diversifiedPractice.slice(0, 3),
-            readyForChallenge: readyForChallenge.slice(0, 3),
-            reviewDue: reviewDue.slice(0, 3),
-            recentlyMastered: recentlyMastered.slice(0, 3),
+            recommendedNext: recommendedNext.sort((a,b) => b.score - a.score).slice(0,3),
+            continue: continueItems,
+            needsPractice: needsPractice.sort((a,b) => a.score - b.score).slice(0,3),
+            readyForChallenge: readyForChallenge.sort((a,b) => b.score - a.score).slice(0,2),
+            reviewDue: reviewDue.sort((a,b) => a.score - b.score).slice(0,3),
+            recentlyMastered: recentlyMastered.slice(0,3),
             remedialTrigger,
-            masterySummary: masteryMap
+            masterySummary: masteryMap,
+            explanation: "Sistem adaptif merekomendasikan jalur optimal berdasarkan performa Anda."
         };
     }
 
     return Object.freeze({
-        DOMAIN_MODEL,
-        SKILLS_REGISTRY,
-        MASTERY_TIERS,
-        getTierForScore,
-        getActivityMetadata,
-        calculateSkillMastery,
-        isPrerequisiteMet,
-        generateRecommendations
+        DOMAIN_MODEL, SKILLS_REGISTRY, MASTERY_TIERS,
+        getActivityMetadata, mapCategoryToSkill,
+        calculateSkillMastery, generateRecommendations, isPrerequisiteMet
     });
 }));

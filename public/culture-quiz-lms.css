@@ -3153,3 +3153,1011 @@ body[data-page="wonder-quiz-menu"] .culture-history-section:has(.culture-empty-s
         grid-template-columns: 1fr;
     }
 }
+/* ============================================================
+   Culture LMS Polish Layer
+   Adds smoother animations, cleaner spacing, refined glass,
+   micro-interactions, and better visual hierarchy.
+   ============================================================ */
+
+/* --- Enhanced Keyframes --- */
+@keyframes lmsSlideUp {
+    from { opacity: 0; transform: translateY(24px) scale(0.98); filter: blur(4px); }
+    to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes lmsFadeScale {
+    from { opacity: 0; transform: scale(0.94); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes lmsShimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes lmsProgressGlow {
+    0%, 100% { box-shadow: 0 0 12px rgba(36, 199, 104, 0.3), 0 0 4px rgba(36, 199, 104, 0.6); }
+    50%      { box-shadow: 0 0 22px rgba(36, 199, 104, 0.5), 0 0 8px rgba(36, 199, 104, 0.8); }
+}
+
+@keyframes lmsFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+}
+
+@keyframes lmsPulseRing {
+    0% { box-shadow: 0 0 0 0 rgba(36, 199, 104, 0.35); }
+    70% { box-shadow: 0 0 0 10px rgba(36, 199, 104, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(36, 199, 104, 0); }
+}
+
+@keyframes lmsGradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes lmsAnswerReveal {
+    from { opacity: 0; transform: translateY(14px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes lmsResultEnter {
+    from { opacity: 0; transform: translateY(30px) scale(0.92); filter: blur(8px); }
+    to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes lmsScoreCount {
+    from { opacity: 0; transform: scale(0.6); }
+    60%  { transform: scale(1.08); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* --- Smoother Global Transitions --- */
+body[data-page="wonder-quiz-lms"] * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Refined Background --- */
+body[data-page="wonder-quiz-lms"] .culture-focus-room {
+    background-image:
+        radial-gradient(ellipse at 8% 6%, rgba(36, 199, 104, 0.14), transparent 36%),
+        radial-gradient(ellipse at 85% 12%, rgba(244, 165, 28, 0.08), transparent 32%),
+        radial-gradient(ellipse at 90% 90%, rgba(63, 125, 246, 0.12), transparent 40%),
+        radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.04), transparent 60%),
+        linear-gradient(160deg, #060e1c 0%, #0d1a2e 35%, #0a1525 65%, #060e1c 100%);
+    background-attachment: fixed;
+}
+
+/* --- Polished Header --- */
+body[data-page="wonder-quiz-lms"] .focus-header {
+    background: rgba(8, 16, 30, 0.92);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+body[data-page="wonder-quiz-lms"] .focus-brand {
+    transition: opacity 0.3s ease;
+}
+
+body[data-page="wonder-quiz-lms"] .focus-brand:hover {
+    opacity: 0.8;
+}
+
+body[data-page="wonder-quiz-lms"] .focus-brand img {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body[data-page="wonder-quiz-lms"] .focus-brand:hover img {
+    transform: rotate(-6deg) scale(1.08);
+}
+
+/* Session meta badges with subtle shimmer */
+body[data-page="wonder-quiz-lms"] .focus-session-meta span {
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+body[data-page="wonder-quiz-lms"] .focus-session-meta span::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        110deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.06) 50%,
+        transparent 70%
+    );
+    background-size: 200% 100%;
+    animation: lmsShimmer 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+body[data-page="wonder-quiz-lms"] .focus-session-meta span:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
+}
+
+/* Live summary score with gradient text */
+body[data-page="wonder-quiz-lms"] .focus-live-summary {
+    background: linear-gradient(135deg, rgba(36, 199, 104, 0.1), rgba(244, 165, 28, 0.06));
+    border-color: rgba(36, 199, 104, 0.18);
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-page="wonder-quiz-lms"] .focus-live-summary:hover {
+    border-color: rgba(36, 199, 104, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(36, 199, 104, 0.12);
+}
+
+body[data-page="wonder-quiz-lms"] .focus-live-summary strong {
+    background: linear-gradient(135deg, #9af2c1, #24c768);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Header action buttons polish */
+body[data-page="wonder-quiz-lms"] .icon-button,
+body[data-page="wonder-quiz-lms"] .exit-button {
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+body[data-page="wonder-quiz-lms"] .icon-button::before,
+body[data-page="wonder-quiz-lms"] .exit-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.08), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+body[data-page="wonder-quiz-lms"] .icon-button:hover::before,
+body[data-page="wonder-quiz-lms"] .exit-button:hover::before {
+    opacity: 1;
+}
+
+body[data-page="wonder-quiz-lms"] .icon-button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+body[data-page="wonder-quiz-lms"] .exit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
+}
+
+/* --- Refined Progress Bar --- */
+body[data-page="wonder-quiz-lms"] .focus-progress {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: none;
+    position: relative;
+}
+
+body[data-page="wonder-quiz-lms"] .focus-progress span {
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    background: linear-gradient(90deg, #24c768, #f4a51c 45%, #3b82f6);
+    background-size: 200% 100%;
+    animation: lmsGradientFlow 4s ease infinite;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 14px rgba(36, 199, 104, 0.4);
+}
+
+body[data-page="wonder-quiz-lms"] .focus-progress span::after {
+    width: 8px;
+    height: 8px;
+    top: -2px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #24c768, 0 0 4px rgba(255, 255, 255, 0.8);
+    animation: lmsProgressGlow 2s ease-in-out infinite;
+}
+
+/* --- Layout Spacing Refinement --- */
+body[data-page="wonder-quiz-lms"] .culture-session-layout {
+    padding: 20px 0;
+    gap: 20px;
+}
+
+/* --- Question Stage Polish --- */
+body[data-page="wonder-quiz-lms"] .culture-question-stage {
+    border-radius: 26px;
+    border-color: rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015) 50%, transparent),
+        rgba(10, 22, 40, 0.82);
+    box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.25),
+        0 2px 0 rgba(255, 255, 255, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    animation: lmsSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-question-stage:hover {
+    box-shadow:
+        0 36px 90px rgba(0, 0, 0, 0.3),
+        0 2px 0 rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Subtle decorative gradient overlay */
+body[data-page="wonder-quiz-lms"] .culture-question-stage::before {
+    background:
+        radial-gradient(ellipse at 0% 0%, rgba(36, 199, 104, 0.08), transparent 40%),
+        radial-gradient(ellipse at 100% 10%, rgba(244, 165, 28, 0.06), transparent 30%);
+    opacity: 1;
+}
+
+/* Stage top section */
+body[data-page="wonder-quiz-lms"] .culture-stage-top {
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 4px;
+}
+
+/* Kicker badge */
+body[data-page="wonder-quiz-lms"] .culture-stage-kicker {
+    background: rgba(36, 199, 104, 0.08);
+    border-color: rgba(36, 199, 104, 0.22);
+    border-radius: 10px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    transition: all 0.3s ease;
+}
+
+/* Question counter pills */
+body[data-page="wonder-quiz-lms"] .culture-stage-top .question-overline span {
+    border-radius: 10px;
+    font-size: 11px;
+    transition: all 0.3s ease;
+}
+
+/* Session facts grid */
+body[data-page="wonder-quiz-lms"] .culture-question-stage .lms-session-facts span {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    font-size: 10px;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-question-stage .lms-session-facts span:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-question-stage .lms-session-facts strong {
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Question text typography */
+body[data-page="wonder-quiz-lms"] .culture-question-stage h1 {
+    font-size: clamp(1.45rem, 2.8vw, 2.15rem);
+    line-height: 1.28;
+    letter-spacing: -0.025em;
+    margin: 12px 0 6px;
+    text-wrap: pretty;
+}
+
+/* --- Learning Context Card --- */
+body[data-page="wonder-quiz-lms"] .culture-learning-context {
+    border-radius: 18px;
+    border-color: rgba(255, 255, 255, 0.07);
+    background:
+        linear-gradient(135deg, rgba(36, 199, 104, 0.06), rgba(255, 255, 255, 0.025) 60%),
+        rgba(255, 255, 255, 0.02);
+    padding: 14px 16px;
+    gap: 14px;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-learning-context:hover {
+    border-color: rgba(36, 199, 104, 0.16);
+    background:
+        linear-gradient(135deg, rgba(36, 199, 104, 0.09), rgba(255, 255, 255, 0.035) 60%),
+        rgba(255, 255, 255, 0.03);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-learning-context strong {
+    font-size: 16px;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-learning-context p {
+    color: rgba(201, 212, 229, 0.85);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-learning-context small {
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 10px;
+}
+
+/* --- Answer Buttons Premium Polish --- */
+body[data-page="wonder-quiz-lms"] .culture-focus-answers {
+    gap: 14px;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn {
+    min-height: 82px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: lmsAnswerReveal 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn:nth-child(1) { animation-delay: 0.04s; }
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn:nth-child(2) { animation-delay: 0.08s; }
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn:nth-child(3) { animation-delay: 0.12s; }
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn:nth-child(4) { animation-delay: 0.16s; }
+
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.005);
+    border-color: rgba(36, 199, 104, 0.3);
+    background:
+        linear-gradient(135deg, rgba(36, 199, 104, 0.1), rgba(255, 255, 255, 0.04));
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.2),
+        0 4px 12px rgba(36, 199, 104, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Answer button letter marker */
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn b {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: rgba(154, 242, 193, 0.8);
+    font-size: 14px;
+    font-weight: 800;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn:hover:not(:disabled) b {
+    background: rgba(36, 199, 104, 0.18);
+    border-color: rgba(36, 199, 104, 0.25);
+    color: #9af2c1;
+    transform: scale(1.05);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn span {
+    font-size: 14.5px;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+/* Correct answer state */
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn.is-correct {
+    border-color: rgba(16, 185, 129, 0.5);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.06));
+    box-shadow:
+        0 8px 28px rgba(16, 185, 129, 0.12),
+        inset 0 1px 0 rgba(16, 185, 129, 0.15);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn.is-correct b {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+/* Wrong answer state */
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn.is-wrong {
+    border-color: rgba(239, 68, 68, 0.45);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn.is-wrong b {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+/* --- Explanation Box --- */
+body[data-page="wonder-quiz-lms"] .culture-question-stage .answer-feedback:not(:empty) {
+    border-radius: 16px;
+    border-color: rgba(244, 165, 28, 0.18);
+    background:
+        linear-gradient(135deg, rgba(244, 165, 28, 0.06), rgba(244, 165, 28, 0.02));
+    padding: 16px 18px;
+    line-height: 1.7;
+    font-size: 13.5px;
+    animation: lmsFadeScale 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* --- Sidebar Polish --- */
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar {
+    border-radius: 26px;
+    border-color: rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 40%),
+        rgba(10, 22, 40, 0.82);
+    box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    padding: 18px;
+    gap: 14px;
+    animation: lmsSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+/* Course readiness meter */
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .language-course-meter {
+    border-radius: 20px;
+    min-height: 120px;
+    padding: 16px;
+    background:
+        radial-gradient(ellipse at 80% 20%, rgba(36, 199, 104, 0.14), transparent 50%),
+        linear-gradient(135deg, rgba(36, 199, 104, 0.06), rgba(63, 125, 246, 0.04));
+    border: 1px solid rgba(36, 199, 104, 0.12);
+    transition: all 0.35s ease;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .language-course-meter:hover {
+    border-color: rgba(36, 199, 104, 0.22);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .language-course-meter strong {
+    font-size: 38px;
+    letter-spacing: -0.04em;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .language-course-meter::after {
+    width: 76px;
+    height: 76px;
+    inset: auto 14px 14px auto;
+    transition: opacity 0.5s ease;
+}
+
+/* Language picker */
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .language-picker-label {
+    border-radius: 16px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .language-picker-label select {
+    min-height: 42px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .language-picker-label select:hover {
+    border-color: rgba(36, 199, 104, 0.3);
+}
+
+/* Progress card */
+body[data-page="wonder-quiz-lms"] .culture-progress-card {
+    border-radius: 16px;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-progress-card strong {
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-progress-card .lms-progress-track {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-progress-card .lms-progress-track i {
+    background: linear-gradient(90deg, #24c768, #f4a51c);
+    transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 999px;
+}
+
+/* Study board */
+body[data-page="wonder-quiz-lms"] .culture-focus-study {
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.035);
+    max-height: 340px;
+    overflow-y: auto;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-study .language-study-head {
+    background: linear-gradient(180deg, rgba(10, 22, 40, 0.98), rgba(10, 22, 40, 0.88));
+    backdrop-filter: blur(8px);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-study .language-vocab-card,
+body[data-page="wonder-quiz-lms"] .culture-focus-study .language-phrase-card {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 12px;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-study .language-vocab-card:hover,
+body[data-page="wonder-quiz-lms"] .culture-focus-study .language-phrase-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(2px);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-study .language-module-card {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s ease;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-study .language-module-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Navigator buttons */
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .question-nav-head {
+    margin-top: 4px;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .question-nav-head strong {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .lms-module-btn {
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    min-height: 52px;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .lms-module-btn:hover {
+    transform: translateX(3px);
+    border-color: rgba(36, 199, 104, 0.25);
+    background: rgba(36, 199, 104, 0.06);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .lms-module-btn span {
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .lms-module-btn.is-active {
+    border-color: rgba(63, 125, 246, 0.4);
+    background: rgba(63, 125, 246, 0.1);
+    box-shadow: 0 4px 16px rgba(63, 125, 246, 0.1);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .lms-module-btn.is-active span {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .lms-module-btn.is-correct {
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .lms-module-btn.is-correct span {
+    background: rgba(16, 185, 129, 0.18);
+    color: #6ee7b7;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-sidebar .lms-module-btn.is-wrong span {
+    background: rgba(239, 68, 68, 0.16);
+    color: #fca5a5;
+}
+
+/* --- Footer Polish --- */
+body[data-page="wonder-quiz-lms"] .culture-focus-actions {
+    background: rgba(8, 16, 30, 0.92);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Answer status pill */
+body[data-page="wonder-quiz-lms"] .culture-focus-actions .lms-answer-status {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 11.5px;
+    letter-spacing: 0.01em;
+    transition: all 0.3s ease;
+}
+
+/* Action buttons */
+body[data-page="wonder-quiz-lms"] .culture-focus-actions .action-button {
+    border-radius: 14px;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    font-size: 13.5px;
+    font-weight: 700;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-actions .action-button.primary {
+    background: linear-gradient(135deg, #9af2c1, #24c768 45%, #f4a51c);
+    background-size: 200% 100%;
+    color: #04111d;
+    box-shadow: 0 8px 24px rgba(36, 199, 104, 0.2);
+    animation: lmsGradientFlow 5s ease infinite;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-actions .action-button.primary:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 14px 36px rgba(36, 199, 104, 0.3);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-actions .action-button.secondary {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-actions .action-button.secondary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Result Panel Premium --- */
+body[data-page="wonder-quiz-lms"] .culture-focus-room .result-overlay {
+    background:
+        radial-gradient(ellipse at 50% 20%, rgba(36, 199, 104, 0.14), transparent 40%),
+        radial-gradient(ellipse at 50% 80%, rgba(63, 125, 246, 0.08), transparent 40%),
+        rgba(4, 8, 17, 0.88);
+    backdrop-filter: blur(16px);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-room .result-overlay .result-panel {
+    border-radius: 28px;
+    border-color: rgba(255, 255, 255, 0.1);
+    background:
+        linear-gradient(180deg, rgba(18, 32, 55, 0.97), rgba(8, 16, 30, 0.97));
+    box-shadow:
+        0 48px 120px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    animation: lmsResultEnter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    padding: 40px;
+}
+
+body[data-page="wonder-quiz-lms"] .culture-focus-room .result-score {
+    animation: lmsScoreCount 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+    border: 2px solid rgba(36, 199, 104, 0.18);
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(36, 199, 104, 0.1);
+}
+
+body[data-page="wonder-quiz-lms"] .culture-result-meta {
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(244, 165, 28, 0.08);
+    font-size: 12px;
+    padding: 8px 14px;
+}
+
+body[data-page="wonder-quiz-lms"] .result-actions .action-button {
+    border-radius: 14px;
+    min-height: 48px;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --- Toast Upgrade --- */
+body[data-page="wonder-quiz-lms"] .focus-toast {
+    border-radius: 14px;
+    background: rgba(10, 22, 40, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+
+/* --- Responsive Fine-tuning --- */
+@media (max-width: 980px) {
+    body[data-page="wonder-quiz-lms"] .culture-question-stage,
+    body[data-page="wonder-quiz-lms"] .culture-focus-sidebar {
+        border-radius: 22px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-actions {
+        border-radius: 18px;
+    }
+}
+
+@media (max-width: 720px) {
+    body[data-page="wonder-quiz-lms"] .culture-question-stage {
+        border-radius: 20px;
+        padding: 18px;
+        gap: 12px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-sidebar {
+        border-radius: 20px;
+        padding: 14px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn {
+        min-height: 68px;
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn b {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-learning-context {
+        border-radius: 14px;
+        padding: 12px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-actions {
+        border-radius: 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    body[data-page="wonder-quiz-lms"] .culture-question-stage {
+        border-radius: 18px;
+        padding: 16px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-sidebar {
+        border-radius: 18px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn {
+        min-height: 62px;
+        border-radius: 14px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-room .result-overlay .result-panel {
+        padding: 28px 22px;
+        border-radius: 22px;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-room .result-score {
+        width: 120px;
+        height: 120px;
+        font-size: 34px;
+    }
+}
+
+/* --- Reduced Motion Respect --- */
+@media (prefers-reduced-motion: reduce) {
+    body[data-page="wonder-quiz-lms"] .culture-question-stage,
+    body[data-page="wonder-quiz-lms"] .culture-focus-sidebar,
+    body[data-page="wonder-quiz-lms"] .culture-focus-answers .lms-answer-btn,
+    body[data-page="wonder-quiz-lms"] .culture-question-stage .answer-feedback,
+    body[data-page="wonder-quiz-lms"] .culture-focus-room .result-overlay .result-panel,
+    body[data-page="wonder-quiz-lms"] .culture-focus-room .result-score {
+        animation: none !important;
+    }
+
+    body[data-page="wonder-quiz-lms"] .focus-session-meta span::after {
+        animation: none !important;
+    }
+
+    body[data-page="wonder-quiz-lms"] .focus-progress span::after {
+        animation: none !important;
+    }
+
+    body[data-page="wonder-quiz-lms"] .culture-focus-actions .action-button.primary {
+        animation: none !important;
+    }
+}
+/* Quiz Budaya 2026 upgrade layer.
+   New behavior-specific rules live here so legacy quiz styles can be retired
+   incrementally without adding more scattered overrides. */
+
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+[hidden] { display: none !important; }
+
+.culture-check-row {
+    min-height: 48px;
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border: 1px solid var(--line, rgba(148, 163, 184, .28));
+    border-radius: 12px;
+    background: var(--surface, #fff);
+    font-weight: 600;
+}
+
+.culture-check-row input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary, #16a36a);
+}
+
+.culture-timer-option.is-disabled { opacity: .55; }
+.culture-timer-option.is-disabled .culture-check-row { cursor: not-allowed; }
+
+.culture-history-tools {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(180px, 260px);
+    gap: 12px;
+    margin: 0 0 10px;
+}
+
+.culture-history-tools input,
+.culture-history-tools select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    color: var(--text, #172033);
+    border: 1px solid var(--line, rgba(148, 163, 184, .28));
+    border-radius: 12px;
+    background: var(--surface, #fff);
+    font: inherit;
+}
+
+.culture-filter-status {
+    min-height: 20px;
+    margin: 0 0 14px;
+    color: var(--muted, #64748b);
+    font-size: .86rem;
+}
+
+.culture-mode-card.is-filtered,
+.culture-region-card.is-filtered,
+.culture-history-item.is-filtered { display: none !important; }
+
+.culture-continue-link:not([hidden]) {
+    display: inline-flex;
+    border-color: color-mix(in srgb, var(--primary, #16a36a) 50%, transparent);
+}
+
+.culture-timer-card {
+    padding: 16px 18px;
+    border: 1px solid color-mix(in srgb, #f59e0b 35%, var(--line, transparent));
+    border-radius: 18px;
+    background: color-mix(in srgb, #f59e0b 8%, var(--surface, #fff));
+}
+
+.culture-timer-card span,
+.culture-timer-card small { display: block; }
+.culture-timer-card strong { display: block; margin: 4px 0; font-size: 1.45rem; font-variant-numeric: tabular-nums; }
+.culture-timer-card.is-over-target { border-color: #f97316; }
+
+.culture-study-panel {
+    border: 1px solid var(--line, rgba(148, 163, 184, .24));
+    border-radius: 16px;
+    background: var(--surface, #fff);
+}
+
+.culture-study-panel summary {
+    padding: 14px 16px;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.culture-study-panel[open] { padding-bottom: 14px; }
+.culture-study-panel[open] summary { margin-bottom: 8px; border-bottom: 1px solid var(--line, rgba(148, 163, 184, .2)); }
+.culture-study-panel > label { display: grid; gap: 6px; padding: 0 14px 10px; font-size: .82rem; font-weight: 700; }
+.culture-study-panel select { width: 100%; min-height: 42px; padding: 0 10px; border: 1px solid var(--line, rgba(148, 163, 184, .28)); border-radius: 10px; background: var(--surface, #fff); color: inherit; }
+.culture-study-panel .language-module-cards,
+.culture-study-panel .language-vocab-grid,
+.culture-study-panel .language-phrase-list { display: grid; gap: 7px; padding: 0 14px 8px; }
+.culture-study-panel .language-module-card,
+.culture-study-panel .language-vocab-card,
+.culture-study-panel .language-phrase-card { padding: 9px 10px; border-radius: 10px; background: color-mix(in srgb, var(--primary, #16a36a) 7%, var(--surface, #fff)); }
+.culture-study-panel .language-module-card { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; }
+.culture-study-panel strong,
+.culture-study-panel span,
+.culture-study-panel small { display: block; }
+
+.culture-result-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.culture-result-breakdown > div {
+    padding: 10px 12px;
+    border: 1px solid var(--line, rgba(148, 163, 184, .24));
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--surface, #fff) 82%, transparent);
+}
+
+.culture-result-breakdown span,
+.culture-result-breakdown small { display: block; }
+.culture-result-breakdown strong { font-size: 1.05rem; }
+
+.culture-result-recommendation {
+    margin-top: 14px;
+    padding: 13px 14px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--primary, #16a36a) 10%, var(--surface, #fff));
+}
+
+.culture-result-recommendation strong,
+.culture-result-recommendation span { display: block; }
+.culture-result-recommendation a { display: inline-flex; margin-top: 8px; font-weight: 800; }
+
+.result-overlay .result-panel {
+    max-height: min(86vh, 760px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.culture-source-notice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    max-width: 1180px;
+    margin: 14px auto 104px;
+    padding: 14px 18px;
+    border: 1px solid color-mix(in srgb, #f59e0b 32%, var(--line, transparent));
+    border-radius: 16px;
+    background: color-mix(in srgb, #f59e0b 7%, var(--surface, #fff));
+}
+
+.culture-source-notice strong,
+.culture-source-notice span { display: block; }
+.culture-source-notice span { margin-top: 3px; color: var(--muted, #64748b); font-size: .86rem; }
+
+.lms-module-btn[aria-current="step"] { outline: 2px solid color-mix(in srgb, var(--primary, #16a36a) 70%, transparent); outline-offset: 2px; }
+.lms-answer-btn:focus-visible,
+.lms-module-btn:focus-visible,
+.action-button:focus-visible,
+.culture-history-tools :focus-visible,
+.culture-check-row:focus-within {
+    outline: 3px solid color-mix(in srgb, var(--primary, #16a36a) 55%, transparent);
+    outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+    .culture-history-tools { grid-template-columns: 1fr; }
+    .culture-source-notice { align-items: stretch; flex-direction: column; margin: 12px 14px 164px; }
+    .culture-source-notice .action-button { width: 100%; justify-content: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .focus-progress span,
+    .lms-progress-track i { transition: none !important; }
+}

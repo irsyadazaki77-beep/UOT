@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script type="module" src="app-shell.js" defer></script>
-    <script type="module" src="navbar-explore.js" defer></script>
+    <script type="module" src="navbar-shared.js" defer></script>
     <script type="module" src="security-helper.js" ></script>
     <title>Profil & Account Hub — Universe Of Tech</title>
 </head>
@@ -261,6 +261,31 @@
                     </article>
                 </section>
 
+                
+                <!-- TIER 2.5: MASTERY & ADAPTIVE INSIGHTS -->
+                <section class="p-section" aria-labelledby="masteryTitle" style="margin-top: 32px;">
+                    <div class="p-section-heading">
+                        <div>
+                            <span class="p-eyebrow"><i class="fa-solid fa-brain"></i> Adaptive Engine</span>
+                            <h2 id="masteryTitle">Skill Mastery & Rekomendasi</h2>
+                        </div>
+                    </div>
+                    <div class="p-overview-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                        <article class="p-card" style="padding: 20px;">
+                            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;">Kekuatan Utama (Strongest Skills)</h3>
+                            <div id="masteryStrongest" style="display: flex; flex-direction: column; gap: 12px;">
+                                <p style="font-size: 13px; color: var(--uot-text-muted);">Memuat data adaptive...</p>
+                            </div>
+                        </article>
+                        <article class="p-card" style="padding: 20px;">
+                            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 16px;">Perlu Latihan (Needs Practice)</h3>
+                            <div id="masteryWeakest" style="display: flex; flex-direction: column; gap: 12px;">
+                                <p style="font-size: 13px; color: var(--uot-text-muted);">Memuat data adaptive...</p>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
                 <!-- TIER 3: IDENTITY & MEMBERSHIP STATUS -->
                 <section class="p-workspace-grid" aria-label="Identitas dan akses keanggotaan">
                     <article class="p-card p-profile-summary">
@@ -482,6 +507,5 @@
     <script type="module" src="account-core.js" defer></script>
     <script type="module" src="subscription-core.js" defer></script>
     <script type="module" src="profile.js" defer></script>
-    <script type="module" src="profile-refinements.js" defer></script>
 </body>
 </html>
