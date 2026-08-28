@@ -366,7 +366,6 @@ class ContentMigrationTool {
             { domain: 'quizzes', file: 'quizzes.json' },
             { domain: 'lessons', file: 'lessons.json' },
             { domain: 'learningPaths', file: 'learning-paths.json' },
-            { domain: 'learningPaths', file: 'learningPaths.json' },
             { domain: 'projects', file: 'projects.json' },
             { domain: 'culture', file: 'culture.json' },
             { domain: 'books', file: 'books.json' }
@@ -461,7 +460,6 @@ class ContentMigrationTool {
             'quizzes.json': Array.from(this.quizzes.values()),
             'lessons.json': Array.from(this.lessons.values()),
             'learning-paths.json': Array.from(this.learningPaths.values()),
-            'learningPaths.json': Array.from(this.learningPaths.values()),
             'projects.json': Array.from(this.projects.values()),
             'culture.json': Array.from(this.culture.values()),
             'books.json': Array.from(this.books.values())

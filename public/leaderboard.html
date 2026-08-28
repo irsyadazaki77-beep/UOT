@@ -9,18 +9,16 @@
     <script type="module" src="app-shell.js" defer></script>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
     <script type="module" src="security-helper.js" ></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Leaderboard Coder - Universe Of Tech</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Leaderboard Coder — Universe Of Tech</title>
     <meta name="description" content="Papan peringkat pengembang global di Universe Of Tech. Bersaing dan kejar XP tertinggi.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="feature-pages.css">
-    <link rel="stylesheet" href="nav-polish.css">
-    <link rel="stylesheet" href="pro-experience.css?v=20260621-clean">
-    <link rel="stylesheet" href="mobile-compat.css">
-    <link rel="stylesheet" href="bubub-ai.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="tokens.css">
+    <link rel="stylesheet" href="app-shell.css">
+    <link rel="stylesheet" href="navbar-shared.css">
     <link rel="stylesheet" href="global-animations.css">
     <style>
         .leaderboard-hero {
@@ -467,143 +465,100 @@
             }
         }
     </style>
-    <link rel="stylesheet" href="coursera-home.css">
-    <link rel="stylesheet" href="responsive-system.css?v=20260716">
-    <link rel="stylesheet" href="navbar-explore.css?v=20260722">
 </head>
 <body data-page="leaderboard">
     <div class="noise"></div><div class="orb one"></div><div class="orb two"></div>
     <main class="page">
-                                                <nav class="navbar">
+        <nav class="navbar" id="siteHeader" aria-label="Navigasi utama">
             <div class="nav-left-group">
-                <a href="index.html" class="brand">
-                    <img src="universe-of-tech-logo.webp" alt="Universe Of Tech Logo" class="brand-logo" width="38" height="38" fetchpriority="high" />
-                    Universe Of Tech
+                <a href="index.html" class="brand" aria-label="Universe Of Tech, kembali ke beranda">
+                    <img src="logo-uot-display.webp" alt="Logo Universe Of Tech" class="brand-logo" width="32" height="32" fetchpriority="high">
+                    <span>Universe Of Tech</span>
                 </a>
-                <div class="explore-wrapper">
-                    <button class="btn-explore" id="btnExplore" aria-label="Explore Menu">
-                        Jelajahi <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-                    <!-- Mega Menu Dropdown -->
-                    <div class="explore-mega-menu" id="exploreMegaMenu">
-                        <!-- Column 1: Kategori Belajar -->
-                        <div class="mega-col">
-                            <h4>Kategori Belajar</h4>
-                            <ul class="mega-list">
-                                <li>
-                                    <a href="materi-basic.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Dasar Pemrograman</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Struktur Data</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="materi.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Web Development</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="snbt.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Persiapan TKA SNBP</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="tka-lms.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>LMS TKA</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="bahasa-daerah.html" class="mega-item-link">
-                                        <div class="mega-icon-box">????</div>
-                                        <span>Wonderful Indonesia</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Column 2: Fitur & Dashboard -->
-                        <div class="mega-col">
-                            <h4>Fitur & Dashboard</h4>
-                            <ul class="mega-list">
-                                <li>
-                                    <a href="learning-path.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Roadmap Belajar</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="leaderboard.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Leaderboard</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="achievements.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Pencapaian</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="profile.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Profil Saya</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="payment.html" class="mega-item-link">
-                                        <div class="mega-icon-box">??</div>
-                                        <span>Upgrade Pro</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Column 3: Spotlight -->
-                        <div class="mega-col">
-                            <div class="mega-spotlight">
-                                <div class="spotlight-header">
-                                    <i class="fa-solid fa-star"></i> Modul Terpopuler
-                                </div>
-                                <h5>Dasar SQL & Database Relasional</h5>
-                                <p>Pelajari cara query data, filter, join table, dan konsep dasar database relasional dalam waktu singkat.</p>
-                                <a href="materi.html" class="btn-spotlight">
-                                    Pelajari Sekarang <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Search Bar -->
-            <div class="nav-search-wrapper">
-                <div class="search-input-group">
-                    <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cari materi: HTML, SQL, SNBT..." autocomplete="off">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <!-- Suggestions Popover -->
-                <div class="search-suggestions-box" id="searchSuggestionsBox"></div>
             </div>
 
             <div class="nav-links">
                 <a href="index.html">Beranda</a>
-                <a href="materi.html">Materi</a>
-                <a href="quiz.html">Quiz</a>
+                <div class="nav-dropdown-wrapper">
+                    <button class="nav-dropdown-trigger" id="navBelajarTrigger" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="navBelajarMenu">
+                        <span>Belajar</span>
+                        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="nav-mega-menu" id="navBelajarMenu" role="menu" aria-label="Menu Belajar & Latihan">
+                        <div class="nav-mega-group">
+                            <span class="nav-mega-heading">Jalur &amp; Materi</span>
+                            <a href="learning-journey.html" class="nav-mega-item" role="menuitem">
+                                <span class="nav-mega-icon"><i class="fa-solid fa-compass" aria-hidden="true"></i></span>
+                                <div class="nav-mega-text">
+                                    <span class="nav-mega-title">Learning Journey</span>
+                                    <span class="nav-mega-desc">Roadmap personal &amp; target harian</span>
+                                </div>
+                            </a>
+                            <a href="materi.html" class="nav-mega-item" role="menuitem">
+                                <span class="nav-mega-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></span>
+                                <div class="nav-mega-text">
+                                    <span class="nav-mega-title">Semua Materi</span>
+                                    <span class="nav-mega-desc">Katalog modul tech terstruktur</span>
+                                </div>
+                            </a>
+                            <a href="materi-basic.html?topik=programming" class="nav-mega-item" role="menuitem">
+                                <span class="nav-mega-icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span>
+                                <div class="nav-mega-text">
+                                    <span class="nav-mega-title">Dasar Pemrograman</span>
+                                    <span class="nav-mega-desc">Logika, variabel, dan algoritma</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="nav-mega-group">
+                            <span class="nav-mega-heading">Latihan &amp; Eksplorasi</span>
+                            <a href="quiz.html" class="nav-mega-item" role="menuitem">
+                                <span class="nav-mega-icon"><i class="fa-solid fa-circle-question" aria-hidden="true"></i></span>
+                                <div class="nav-mega-text">
+                                    <span class="nav-mega-title">Quiz &amp; Latihan</span>
+                                    <span class="nav-mega-desc">Uji pemahaman dengan feedback cepat</span>
+                                </div>
+                            </a>
+                            <a href="snbt.html" class="nav-mega-item" role="menuitem">
+                                <span class="nav-mega-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></span>
+                                <div class="nav-mega-text">
+                                    <span class="nav-mega-title">Persiapan SNBT</span>
+                                    <span class="nav-mega-desc">Simulasi UTBK &amp; penalaran umum</span>
+                                </div>
+                            </a>
+                            <a href="tka-lms.html" class="nav-mega-item" role="menuitem">
+                                <span class="nav-mega-icon"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span>
+                                <div class="nav-mega-text">
+                                    <span class="nav-mega-title">Persiapan TKA</span>
+                                    <span class="nav-mega-desc">Tes kemampuan akademik terarah</span>
+                                </div>
+                            </a>
+                            <a href="bahasa-daerah.html" class="nav-mega-item" role="menuitem">
+                                <span class="nav-mega-icon"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i></span>
+                                <div class="nav-mega-text">
+                                    <span class="nav-mega-title">Bahasa &amp; Budaya</span>
+                                    <span class="nav-mega-desc">Kekayaan nusantara interaktif</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <a href="projects.html">Proyek</a>
                 <a href="library.html">Library</a>
+                <a href="profile.html">Profil</a>
+            </div>
+
+            <div class="nav-search-wrapper">
+                <div class="search-input-group">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input type="search" class="nav-search-input" id="navSearchInput" placeholder="Cari materi..." autocomplete="off" aria-label="Cari materi" aria-controls="searchSuggestionsBox" aria-expanded="false">
+                </div>
+                <div class="search-suggestions-box" id="searchSuggestionsBox" role="listbox" aria-label="Saran pencarian"></div>
             </div>
 
             <div class="nav-actions">
-                <span id="navSubscriptionBadge" class="subscription-badge basic">Basic</span>
-                <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Theme">??</button>
-                <a class="btn btn-ghost" href="login.html">Masuk</a>
-                <a class="btn btn-primary" href="materi.html">Mulai</a>
+                <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Ganti tema visual"><i class="fa-solid fa-moon" aria-hidden="true"></i></button>
+                <a class="btn-ghost" id="navLoginLink" href="login.html">Masuk</a>
+                <a class="btn-primary" href="learning-journey.html">Lanjut Belajar</a>
             </div>
         </nav>
 

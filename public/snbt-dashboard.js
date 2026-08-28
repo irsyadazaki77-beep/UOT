@@ -74,6 +74,8 @@
 
     const byId = new Map(QUESTIONS.map(item => [item.id, item]));
     const $ = id => document.getElementById(id);
+    const $set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+    const $setHTML = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
     const all = selector => Array.from(document.querySelectorAll(selector));
     const clamp = (value, min, max) => Math.min(max, Math.max(min, Number(value) || 0));
     const todayWeek = () => {
@@ -214,6 +216,7 @@
     }
 
     function init() {
+        if (!$("officialTitle") && !$("panel-overview") && !document.querySelector(".workspace-tab")) return;
         setupTheme();
         setupTabs();
         setupTrackPicker();
@@ -231,22 +234,27 @@
             document.documentElement.dataset.theme = dark ? "dark" : "light";
             document.body.classList.toggle("dark-mode", dark);
             const button = $("themeToggleBtn");
-            button.innerHTML = `<i class="fa-solid ${dark ? "fa-sun" : "fa-moon"}" aria-hidden="true"></i>`;
-            button.setAttribute("aria-label", dark ? "Aktifkan tema terang" : "Aktifkan tema gelap");
+            if (button) {
+                button.innerHTML = `<i class="fa-solid ${dark ? "fa-sun" : "fa-moon"}" aria-hidden="true"></i>`;
+                button.setAttribute("aria-label", dark ? "Aktifkan tema terang" : "Aktifkan tema gelap");
+            }
             document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0f1918" : "#f4f8f7");
         };
         apply(saved ? saved === "dark" : prefersDark);
-        $("themeToggleBtn").addEventListener("click", () => {
-            const dark = document.documentElement.dataset.theme !== "dark";
-            localStorage.setItem("eduquest_theme", dark ? "dark" : "light");
-            apply(dark);
-        });
+        const themeBtn = $("themeToggleBtn");
+        if (themeBtn) {
+            themeBtn.addEventListener("click", () => {
+                const dark = document.documentElement.dataset.theme !== "dark";
+                localStorage.setItem("eduquest_theme", dark ? "dark" : "light");
+                apply(dark);
+            });
+        }
     }
 
     function setupTabs() {
         const tabs = all(".workspace-tab");
         tabs.forEach((tab, index) => {
-            tab.addEventListener("click", () => openTab(tab.getAttribute("aria-controls").replace("panel-", "")));
+            tab.addEventListener("click", () => openTab(tab.getAttribute("aria-controls")?.replace("panel-", "") || ""));
             tab.addEventListener("keydown", event => {
                 if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
                 event.preventDefault();
@@ -259,8 +267,10 @@
             });
         });
         all("[data-open-tab]").forEach(button => button.addEventListener("click", () => openTab(button.dataset.openTab)));
-        $("heroNextAction").addEventListener("click", () => openTab("practice"));
-        $("overviewNextAction").addEventListener("click", () => openTab("practice"));
+        const heroBtn = $("heroNextAction");
+        if (heroBtn) heroBtn.addEventListener("click", () => openTab("practice"));
+        const overviewBtn = $("overviewNextAction");
+        if (overviewBtn) overviewBtn.addEventListener("click", () => openTab("practice"));
     }
 
     function openTab(name) {
@@ -318,9 +328,10 @@
             button.setAttribute("aria-checked", String(active));
         });
         const snbt = state.activeTrack === "snbt";
-        $("officialTitle").textContent = snbt ? "Struktur UTBK-SNBT 2026" : "Struktur TKA SMA";
-        $("officialText").textContent = snbt ? "Materi terdiri atas Tes Potensi Skolastik dan Tes Literasi. Analitik di halaman ini adalah estimasi belajar internal, bukan skor resmi." : "TKA SMA mencakup Bahasa Indonesia, Matematika, Bahasa Inggris, dan dua mata pelajaran pilihan. Indeks kesiapan di halaman ini bukan hasil TKA resmi.";
-        $("officialLink").href = snbt ? "https://www.snpmb.id/utbk-snbt/informasi-umum" : "https://pusmendik.kemdikbud.go.id/tka/";
+        $set("officialTitle", snbt ? "Struktur UTBK-SNBT 2026" : "Struktur TKA SMA");
+        $set("officialText", snbt ? "Materi terdiri atas Tes Potensi Skolastik dan Tes Literasi. Analitik di halaman ini adalah estimasi belajar internal, bukan skor resmi." : "TKA SMA mencakup Bahasa Indonesia, Matematika, Bahasa Inggris, dan dua mata pelajaran pilihan. Indeks kesiapan di halaman ini bukan hasil TKA resmi.");
+        const link = $("officialLink");
+        if (link) link.href = snbt ? "https://www.snpmb.id/utbk-snbt/informasi-umum" : "https://pusmendik.kemdikbud.go.id/tka/";
     }
 
     function calculateReadiness(data = trackState()) {
@@ -345,18 +356,19 @@
     function renderOverview() {
         const data = trackState();
         const readiness = calculateReadiness(data);
-        $("readinessValue").textContent = readiness.score;
-        $("readinessRing").style.setProperty("--value", `${readiness.score * 3.6}deg`);
-        $("metricAnswered").textContent = data.stats.done;
-        $("metricAccuracy").textContent = `${readiness.accuracy}%`;
-        $("metricCoverage").textContent = `${readiness.covered}/${readiness.total}`;
+        $set("readinessValue", readiness.score);
+        const ring = $("readinessRing");
+        if (ring) ring.style.setProperty("--value", `${readiness.score * 3.6}deg`);
+        $set("metricAnswered", data.stats.done);
+        $set("metricAccuracy", `${readiness.accuracy}%`);
+        $set("metricCoverage", `${readiness.covered}/${readiness.total}`);
         let label = "Mulai dari fondasi";
         let description = "Kerjakan beberapa soal agar rekomendasi menjadi lebih personal.";
         if (readiness.score >= 80) { label = "Siap simulasi"; description = "Pertahankan konsistensi dan berlatih dalam batas waktu."; }
         else if (readiness.score >= 60) { label = "Ritme sudah stabil"; description = "Perkuat kompetensi dengan akurasi paling rendah."; }
         else if (readiness.score >= 35) { label = "Sedang bertumbuh"; description = "Lanjutkan paket pendek dan review setiap kesalahan."; }
-        $("readinessLabel").textContent = label;
-        $("readinessDescription").textContent = description;
+        $set("readinessLabel", label);
+        $set("readinessDescription", description);
 
         const performance = trackSubjects().map(subject => {
             const key = questionSubject(subject.id);
@@ -365,31 +377,32 @@
             return { ...subject, accuracy, done: row.done || 0 };
         });
         const weakest = performance.filter(item => item.done).sort((a, b) => a.accuracy - b.accuracy)[0];
-        $("nextTitle").textContent = weakest ? `Perkuat ${weakest.name}` : "Mulai diagnosis singkat";
-        $("nextDescription").textContent = weakest ? `Akurasi ${weakest.accuracy}%. Kerjakan satu set terarah lalu tinjau alasan jawaban.` : "Kerjakan latihan awal untuk menemukan fokus belajar pertamamu.";
-        $("competencyPerformance").innerHTML = performance.map(item => `<div class="competency-row"><span title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</span><div class="competency-bar"><div style="width:${item.accuracy}%"></div></div><strong>${item.done ? `${item.accuracy}%` : "—"}</strong></div>`).join("");
+        $set("nextTitle", weakest ? `Perkuat ${weakest.name}` : "Mulai diagnosis singkat");
+        $set("nextDescription", weakest ? `Akurasi ${weakest.accuracy}%. Kerjakan satu set terarah lalu tinjau alasan jawaban.` : "Kerjakan latihan awal untuk menemukan fokus belajar pertamamu.");
+        $setHTML("competencyPerformance", performance.map(item => `<div class="competency-row"><span title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</span><div class="competency-bar"><div style="width:${item.accuracy}%"></div></div><strong>${item.done ? `${item.accuracy}%` : "—"}</strong></div>`).join(""));
         const goal = data.planner.weeklyGoal;
         const weeklyPct = Math.min(100, Math.round((data.weekly.count / goal) * 100));
-        $("weeklyProgressFill").style.width = `${weeklyPct}%`;
-        $("weeklyProgressText").textContent = `${data.weekly.count} dari ${goal} soal`;
-        $("lastActivity").textContent = data.lastActivity || "Belum ada aktivitas";
+        const fill = $("weeklyProgressFill");
+        if (fill) fill.style.width = `${weeklyPct}%`;
+        $set("weeklyProgressText", `${data.weekly.count} dari ${goal} soal`);
+        $set("lastActivity", data.lastActivity || "Belum ada aktivitas");
     }
 
     function renderMaterials() {
         const data = trackState();
         const subjects = trackSubjects();
-        $("materialsTitle").textContent = `Materi ${TRACK_LABELS[state.activeTrack]}`;
-        $("materialsDescription").textContent = state.activeTrack === "snbt" ? "Tujuh subtes resmi dipetakan menjadi topik kecil yang dapat ditandai dan dilatih." : "Tiga mapel wajib dan dua mapel pilihan tersusun berdasarkan kompetensi inti.";
+        $set("materialsTitle", `Materi ${TRACK_LABELS[state.activeTrack]}`);
+        $set("materialsDescription", state.activeTrack === "snbt" ? "Tujuh subtes resmi dipetakan menjadi topik kecil yang dapat ditandai dan dilatih." : "Tiga mapel wajib dan dua mapel pilihan tersusun berdasarkan kompetensi inti.");
         let total = 0, done = 0;
         subjects.forEach(subject => subject.topics.forEach((_, index) => { total += 1; if (data.materialDone[`${subject.id}:${index}`]) done += 1; }));
-        $("materialProgress").textContent = `${total ? Math.round((done / total) * 100) : 0}%`;
-        $("materialsGrid").innerHTML = subjects.map(subject => {
+        $set("materialProgress", `${total ? Math.round((done / total) * 100) : 0}%`);
+        $setHTML("materialsGrid", subjects.map(subject => {
             const checked = subject.topics.filter((_, index) => data.materialDone[`${subject.id}:${index}`]).length;
             return `<details class="material-card"><summary><span class="material-icon"><i class="fa-solid ${subject.icon}" aria-hidden="true"></i></span><div><h3>${escapeHtml(subject.name)}</h3><p>${checked} dari ${subject.topics.length} topik selesai</p></div><div class="material-progress"><strong>${Math.round((checked / subject.topics.length) * 100)}%</strong><span>${escapeHtml(subject.short)}</span></div></summary><div class="material-body"><div class="topic-checklist">${subject.topics.map((topic, index) => `<label><input type="checkbox" data-material-key="${subject.id}:${index}" ${data.materialDone[`${subject.id}:${index}`] ? "checked" : ""}> <span>${escapeHtml(topic)}</span></label>`).join("")}</div><div class="material-actions"><button class="secondary-button" type="button" data-practice-subject="${subject.id}">Latihan ${escapeHtml(subject.short)}</button></div></div></details>`;
-        }).join("");
+        }).join(""));
         all("[data-material-key]").forEach(input => input.addEventListener("change", () => {
             data.materialDone[input.dataset.materialKey] = input.checked;
-            data.lastActivity = `${input.checked ? "Menuntaskan" : "Memperbarui"} materi ${input.nextElementSibling.textContent}`;
+            data.lastActivity = `${input.checked ? "Menuntaskan" : "Memperbarui"} materi ${input.nextElementSibling?.textContent || ""}`;
             saveState(); renderMaterials(); renderOverview();
         }));
         all("[data-practice-subject]").forEach(button => button.addEventListener("click", () => {
@@ -399,19 +412,27 @@
 
     function setupPractice() {
         all("[data-practice-mode]").forEach(button => button.addEventListener("click", () => setPracticeMode(button.dataset.practiceMode)));
-        $("practiceTimer").addEventListener("change", () => currentQuestion && startQuestionTimer());
-        $("submitAnswer").addEventListener("click", () => submitCurrentAnswer(false));
-        $("nextQuestion").addEventListener("click", nextQuestion);
-        $("bookmarkQuestion").addEventListener("click", toggleBookmark);
-        $("mistakeSearch").addEventListener("input", renderReviewLists);
+        const timer = $("practiceTimer");
+        if (timer) timer.addEventListener("change", () => currentQuestion && startQuestionTimer());
+        const submit = $("submitAnswer");
+        if (submit) submit.addEventListener("click", () => submitCurrentAnswer(false));
+        const next = $("nextQuestion");
+        if (next) next.addEventListener("click", nextQuestion);
+        const bm = $("bookmarkQuestion");
+        if (bm) bm.addEventListener("click", toggleBookmark);
+        const search = $("mistakeSearch");
+        if (search) search.addEventListener("input", renderReviewLists);
     }
 
     function setPracticeMode(mode) {
         practiceMode = mode === "tryout" ? "tryout" : "practice";
         all("[data-practice-mode]").forEach(button => button.classList.toggle("active", button.dataset.practiceMode === practiceMode));
-        $("subjectFilter").hidden = practiceMode === "tryout";
-        $("navigatorCard").hidden = practiceMode !== "tryout";
-        $("tryoutProgress").hidden = practiceMode !== "tryout";
+        const sf = $("subjectFilter");
+        if (sf) sf.hidden = practiceMode === "tryout";
+        const nc = $("navigatorCard");
+        if (nc) nc.hidden = practiceMode !== "tryout";
+        const tp = $("tryoutProgress");
+        if (tp) tp.hidden = practiceMode !== "tryout";
         if (practiceMode === "tryout") startMiniTryout();
         else { tryoutQuestions = []; practiceIndex = 0; loadPracticeQuestion(); }
     }
@@ -419,7 +440,7 @@
     function renderSubjectFilter() {
         const subjects = trackSubjects();
         if (!subjects.some(item => item.id === activeSubject)) activeSubject = subjects[0].id;
-        $("subjectFilter").innerHTML = subjects.map(subject => `<button class="subject-chip ${subject.id === activeSubject ? "active" : ""}" type="button" data-subject="${subject.id}">${escapeHtml(subject.short)}</button>`).join("");
+        $setHTML("subjectFilter", subjects.map(subject => `<button class="subject-chip ${subject.id === activeSubject ? "active" : ""}" type="button" data-subject="${subject.id}">${escapeHtml(subject.short)}</button>`).join(""));
         all("[data-subject]").forEach(button => button.addEventListener("click", () => {
             activeSubject = button.dataset.subject; practiceIndex = 0; renderSubjectFilter(); loadPracticeQuestion();
         }));
@@ -445,32 +466,38 @@
         currentQuestion = pool[practiceIndex % pool.length];
         currentSubmitted = Boolean(practiceMode === "tryout" && tryoutResponses[currentQuestion.id]?.submitted);
         selectedAnswers = new Set(practiceMode === "tryout" ? (tryoutResponses[currentQuestion.id]?.selected || []) : []);
-        $("questionMeta").textContent = `${TRACK_LABELS[state.activeTrack]} · ${subjectLabel(currentQuestion.subject)} · ${currentQuestion.topic} · ${currentQuestion.difficulty}`;
-        $("questionPrompt").textContent = currentQuestion.prompt;
-        $("questionInstruction").textContent = currentQuestion.correctIndexes.length > 1 ? "Pilih semua jawaban yang benar." : "Pilih satu jawaban yang paling tepat.";
-        $("questionFeedback").hidden = !currentSubmitted;
-        $("mistakeNoteWrap").hidden = true;
-        $("mistakeNote").value = trackState().mistakes[currentQuestion.id]?.note || "";
+        $set("questionMeta", `${TRACK_LABELS[state.activeTrack]} · ${subjectLabel(currentQuestion.subject)} · ${currentQuestion.topic} · ${currentQuestion.difficulty}`);
+        $set("questionPrompt", currentQuestion.prompt);
+        $set("questionInstruction", currentQuestion.correctIndexes.length > 1 ? "Pilih semua jawaban yang benar." : "Pilih satu jawaban yang paling tepat.");
+        const qf = $("questionFeedback");
+        if (qf) qf.hidden = !currentSubmitted;
+        const mnw = $("mistakeNoteWrap");
+        if (mnw) mnw.hidden = true;
+        const mn = $("mistakeNote");
+        if (mn) mn.value = trackState().mistakes[currentQuestion.id]?.note || "";
         renderAnswers();
         updateBookmarkButton();
-        $("submitAnswer").disabled = currentSubmitted;
-        $("nextQuestion").disabled = !currentSubmitted;
+        const subBtn = $("submitAnswer");
+        if (subBtn) subBtn.disabled = currentSubmitted;
+        const nxtBtn = $("nextQuestion");
+        if (nxtBtn) nxtBtn.disabled = !currentSubmitted;
         if (currentSubmitted) showStoredFeedback();
         if (practiceMode === "tryout") {
-            $("tryoutProgressFill").style.width = `${((practiceIndex + 1) / tryoutQuestions.length) * 100}%`;
+            const tpFill = $("tryoutProgressFill");
+            if (tpFill) tpFill.style.width = `${((practiceIndex + 1) / tryoutQuestions.length) * 100}%`;
             renderNavigator();
         }
         startQuestionTimer();
     }
 
     function renderAnswers() {
-        $("answerList").innerHTML = currentQuestion.choices.map((choice, index) => {
+        $setHTML("answerList", currentQuestion.choices.map((choice, index) => {
             const selected = selectedAnswers.has(index);
             const correct = currentSubmitted && currentQuestion.correctIndexes.includes(index);
             const wrong = currentSubmitted && selected && !correct;
             const classes = ["answer-option", selected ? "selected" : "", correct ? "correct" : "", wrong ? "wrong" : ""].filter(Boolean).join(" ");
             return `<button class="${classes}" type="button" data-answer-index="${index}" ${currentSubmitted ? "disabled" : ""} aria-pressed="${selected}"><span class="answer-marker">${String.fromCharCode(65 + index)}</span><span>${escapeHtml(choice)}</span></button>`;
-        }).join("");
+        }).join(""));
         all("[data-answer-index]").forEach(button => button.addEventListener("click", () => selectAnswer(Number(button.dataset.answerIndex))));
     }
 
@@ -502,15 +529,20 @@
         saveState();
         renderAnswers();
         showFeedback(correct, fromTimeout);
-        $("submitAnswer").disabled = true;
-        $("nextQuestion").disabled = false;
-        $("mistakeNoteWrap").hidden = correct;
-        if (!correct) $("mistakeNote").addEventListener("change", saveMistakeNote, { once: true });
+        const subBtn = $("submitAnswer");
+        if (subBtn) subBtn.disabled = true;
+        const nxtBtn = $("nextQuestion");
+        if (nxtBtn) nxtBtn.disabled = false;
+        const mnw = $("mistakeNoteWrap");
+        if (mnw) mnw.hidden = correct;
+        const mn = $("mistakeNote");
+        if (!correct && mn) mn.addEventListener("change", saveMistakeNote, { once: true });
         renderOverview(); renderReviewLists(); renderNavigator();
     }
 
     function showFeedback(correct, timedOut) {
         const box = $("questionFeedback");
+        if (!box) return;
         box.hidden = false;
         box.className = `feedback-box ${correct ? "correct" : "wrong"}`;
         box.innerHTML = `<strong>${timedOut ? "Waktu habis." : correct ? "Tepat." : "Belum tepat."}</strong> ${escapeHtml(currentQuestion.explanation)}`;
@@ -520,13 +552,15 @@
         const response = tryoutResponses[currentQuestion.id];
         if (!response) return;
         showFeedback(response.correct, false);
-        $("mistakeNoteWrap").hidden = response.correct;
+        const mnw = $("mistakeNoteWrap");
+        if (mnw) mnw.hidden = response.correct;
     }
 
     function saveMistakeNote() {
         const entry = trackState().mistakes[currentQuestion.id];
         if (!entry) return;
-        entry.note = $("mistakeNote").value.trim().slice(0, 500);
+        const mn = $("mistakeNote");
+        if (mn) entry.note = mn.value.trim().slice(0, 500);
         entry.updatedAt = new Date().toISOString();
         saveState(); renderReviewLists(); showToast("Catatan evaluasi disimpan.");
     }
@@ -539,10 +573,14 @@
             const completed = Object.values(tryoutResponses).filter(item => item.submitted).length;
             const correct = Object.values(tryoutResponses).filter(item => item.correct).length;
             if (completed === pool.length) {
-                $("questionFeedback").hidden = false;
-                $("questionFeedback").className = "feedback-box correct";
-                $("questionFeedback").innerHTML = `<strong>Mini tryout selesai.</strong> ${correct} dari ${completed} jawaban benar (${Math.round((correct / completed) * 100)}%). Buka catatan salah untuk menentukan sesi berikutnya.`;
-                $("nextQuestion").disabled = true;
+                const qf = $("questionFeedback");
+                if (qf) {
+                    qf.hidden = false;
+                    qf.className = "feedback-box correct";
+                    qf.innerHTML = `<strong>Mini tryout selesai.</strong> ${correct} dari ${completed} jawaban benar (${Math.round((correct / completed) * 100)}%). Buka catatan salah untuk menentukan sesi berikutnya.`;
+                }
+                const nxtBtn = $("nextQuestion");
+                if (nxtBtn) nxtBtn.disabled = true;
                 trackState().lastActivity = `Menyelesaikan mini tryout · ${correct}/${completed} benar`;
                 saveState(); renderOverview(); return;
             }
@@ -553,7 +591,8 @@
 
     function startQuestionTimer() {
         stopQuestionTimer();
-        const configured = Number($("practiceTimer").value);
+        const timer = $("practiceTimer");
+        const configured = Number(timer?.value || 0);
         questionSeconds = configured || 0;
         renderQuestionTimer();
         if (!configured || currentSubmitted) return;
@@ -566,13 +605,14 @@
     function stopQuestionTimer() { if (questionTimerId) clearInterval(questionTimerId); questionTimerId = null; }
     function renderQuestionTimer() {
         const badge = $("questionTimer");
+        if (!badge) return;
         badge.innerHTML = `<i class="fa-regular fa-clock" aria-hidden="true"></i> ${questionSeconds ? formatTime(questionSeconds) : "—"}`;
         badge.classList.toggle("urgent", questionSeconds > 0 && questionSeconds <= 15);
     }
 
     function renderNavigator() {
         if (practiceMode !== "tryout") return;
-        $("questionNavigator").innerHTML = tryoutQuestions.map((question, index) => `<button type="button" data-nav-index="${index}" class="${index === practiceIndex ? "active" : ""} ${tryoutResponses[question.id]?.submitted ? "answered" : ""}" aria-label="Buka soal ${index + 1}">${index + 1}</button>`).join("");
+        $setHTML("questionNavigator", tryoutQuestions.map((question, index) => `<button type="button" data-nav-index="${index}" class="${index === practiceIndex ? "active" : ""} ${tryoutResponses[question.id]?.submitted ? "answered" : ""}" aria-label="Buka soal ${index + 1}">${index + 1}</button>`).join(""));
         all("[data-nav-index]").forEach(button => button.addEventListener("click", () => { practiceIndex = Number(button.dataset.navIndex); loadPracticeQuestion(); }));
     }
 
@@ -585,19 +625,23 @@
     }
     function updateBookmarkButton() {
         const saved = currentQuestion && trackState().bookmarks.includes(currentQuestion.id);
-        $("bookmarkQuestion").setAttribute("aria-pressed", String(Boolean(saved)));
-        $("bookmarkQuestion").innerHTML = `<i class="${saved ? "fa-solid" : "fa-regular"} fa-bookmark" aria-hidden="true"></i>`;
+        const bm = $("bookmarkQuestion");
+        if (bm) {
+            bm.setAttribute("aria-pressed", String(Boolean(saved)));
+            bm.innerHTML = `<i class="${saved ? "fa-solid" : "fa-regular"} fa-bookmark" aria-hidden="true"></i>`;
+        }
     }
 
     function renderReviewLists() {
         const data = trackState();
-        const query = $("mistakeSearch").value.trim().toLowerCase();
+        const searchInput = $("mistakeSearch");
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
         const mistakes = Object.entries(data.mistakes).map(([id, entry]) => ({ question: byId.get(id), entry })).filter(item => item.question && (!query || `${item.question.prompt} ${item.entry.note || ""}`.toLowerCase().includes(query)));
-        $("mistakeCount").textContent = Object.keys(data.mistakes).length;
-        $("mistakeList").innerHTML = mistakes.length ? mistakes.map(item => `<div class="review-item"><strong>${escapeHtml(item.question.topic)}</strong><span>${escapeHtml(item.entry.note || item.question.prompt)}</span><button type="button" data-review-question="${item.question.id}">Latih ulang</button></div>`).join("") : `<p class="review-empty">Belum ada jawaban salah pada jalur ini.</p>`;
+        $set("mistakeCount", Object.keys(data.mistakes).length);
+        $setHTML("mistakeList", mistakes.length ? mistakes.map(item => `<div class="review-item"><strong>${escapeHtml(item.question.topic)}</strong><span>${escapeHtml(item.entry.note || item.question.prompt)}</span><button type="button" data-review-question="${item.question.id}">Latih ulang</button></div>`).join("") : `<p class="review-empty">Belum ada jawaban salah pada jalur ini.</p>`);
         const bookmarks = data.bookmarks.map(id => byId.get(id)).filter(Boolean);
-        $("bookmarkCount").textContent = bookmarks.length;
-        $("bookmarkList").innerHTML = bookmarks.length ? bookmarks.map(item => `<div class="review-item"><strong>${escapeHtml(item.topic)}</strong><span>${escapeHtml(item.prompt)}</span><button type="button" data-review-question="${item.id}">Buka soal</button></div>`).join("") : `<p class="review-empty">Belum ada soal yang disimpan.</p>`;
+        $set("bookmarkCount", bookmarks.length);
+        $setHTML("bookmarkList", bookmarks.length ? bookmarks.map(item => `<div class="review-item"><strong>${escapeHtml(item.topic)}</strong><span>${escapeHtml(item.prompt)}</span><button type="button" data-review-question="${item.id}">Buka soal</button></div>`).join("") : `<p class="review-empty">Belum ada soal yang disimpan.</p>`);
         all("[data-review-question]").forEach(button => button.addEventListener("click", () => openQuestionById(button.dataset.reviewQuestion)));
     }
 
@@ -609,51 +653,61 @@
         const pool = questionsFor(activeSubject);
         practiceIndex = Math.max(0, pool.findIndex(item => item.id === id));
         all("[data-practice-mode]").forEach(button => button.classList.toggle("active", button.dataset.practiceMode === "practice"));
-        $("subjectFilter").hidden = false; $("navigatorCard").hidden = true; $("tryoutProgress").hidden = true;
+        const sf = $("subjectFilter"); if (sf) sf.hidden = false;
+        const nc = $("navigatorCard"); if (nc) nc.hidden = true;
+        const tp = $("tryoutProgress"); if (tp) tp.hidden = true;
         renderSubjectFilter(); openTab("practice"); loadPracticeQuestion();
     }
 
     function setupPlanner() {
+        const fe = $("firstElective");
+        const se = $("secondElective");
         ELECTIVES.forEach(value => {
-            $("firstElective").add(new Option(value, value));
-            $("secondElective").add(new Option(value, value));
+            if (fe) fe.add(new Option(value, value));
+            if (se) se.add(new Option(value, value));
         });
-        $("plannerForm").addEventListener("submit", event => { event.preventDefault(); savePlanner(); });
-        $("firstElective").addEventListener("change", validateElectives);
-        $("secondElective").addEventListener("change", validateElectives);
-        $("focusStart").addEventListener("click", toggleFocusTimer);
-        $("focusReset").addEventListener("click", resetFocusTimer);
-        $("printPlan").addEventListener("click", () => window.print());
+        const pf = $("plannerForm");
+        if (pf) pf.addEventListener("submit", event => { event.preventDefault(); savePlanner(); });
+        if (fe) fe.addEventListener("change", validateElectives);
+        if (se) se.addEventListener("change", validateElectives);
+        const fs = $("focusStart");
+        if (fs) fs.addEventListener("click", toggleFocusTimer);
+        const fr = $("focusReset");
+        if (fr) fr.addEventListener("click", resetFocusTimer);
+        const pp = $("printPlan");
+        if (pp) pp.addEventListener("click", () => window.print());
     }
 
     function loadPlanner() {
         const planner = trackState().planner;
-        $("targetUniversity").value = planner.university;
-        $("targetProgram").value = planner.program;
-        $("studyWeeks").value = planner.weeks;
-        $("weeklyGoal").value = planner.weeklyGoal;
-        $("firstElective").value = planner.firstElective;
-        $("secondElective").value = planner.secondElective;
-        $("firstElectiveWrap").hidden = state.activeTrack !== "tka";
-        $("secondElectiveWrap").hidden = state.activeTrack !== "tka";
+        const tu = $("targetUniversity"); if (tu) tu.value = planner.university;
+        const tp = $("targetProgram"); if (tp) tp.value = planner.program;
+        const sw = $("studyWeeks"); if (sw) sw.value = planner.weeks;
+        const wg = $("weeklyGoal"); if (wg) wg.value = planner.weeklyGoal;
+        const fe = $("firstElective"); if (fe) fe.value = planner.firstElective;
+        const se = $("secondElective"); if (se) se.value = planner.secondElective;
+        const few = $("firstElectiveWrap"); if (few) few.hidden = state.activeTrack !== "tka";
+        const sew = $("secondElectiveWrap"); if (sew) sew.hidden = state.activeTrack !== "tka";
         validateElectives();
     }
 
     function validateElectives() {
-        const duplicate = state.activeTrack === "tka" && $("firstElective").value === $("secondElective").value;
-        $("plannerValidation").textContent = duplicate ? "Pilih dua mata pelajaran yang berbeda." : "";
+        const fe = $("firstElective");
+        const se = $("secondElective");
+        const duplicate = state.activeTrack === "tka" && fe && se && fe.value === se.value;
+        $set("plannerValidation", duplicate ? "Pilih dua mata pelajaran yang berbeda." : "");
         return !duplicate;
     }
 
     function savePlanner() {
         if (!validateElectives()) return;
         const planner = trackState().planner;
-        planner.university = $("targetUniversity").value.trim().slice(0, 80);
-        planner.program = $("targetProgram").value.trim().slice(0, 80);
-        planner.weeks = clamp($("studyWeeks").value, 2, 24);
-        planner.weeklyGoal = clamp($("weeklyGoal").value, 5, 200);
-        planner.firstElective = $("firstElective").value;
-        planner.secondElective = $("secondElective").value;
+        const tu = $("targetUniversity"); if (tu) planner.university = tu.value.trim().slice(0, 80);
+        const tp = $("targetProgram"); if (tp) planner.program = tp.value.trim().slice(0, 80);
+        const sw = $("studyWeeks"); if (sw) planner.weeks = clamp(sw.value, 2, 24);
+        const wg = $("weeklyGoal"); if (wg) planner.weeklyGoal = clamp(wg.value, 5, 200);
+        const fe = $("firstElective"); if (fe) planner.firstElective = fe.value;
+        const se = $("secondElective"); if (se) planner.secondElective = se.value;
         trackState().lastActivity = `Memperbarui planner ${TRACK_LABELS[state.activeTrack]}`;
         saveState(); renderRoadmap(); renderMaterials(); renderSubjectFilter(); renderOverview(); showToast("Rencana belajar diperbarui.");
     }
@@ -668,42 +722,43 @@
         const weakest = performance.filter(item => item.done).sort((a, b) => a.accuracy - b.accuracy)[0]?.name || subjects[0].name;
         const firstEnd = Math.max(1, Math.ceil(planner.weeks / 3));
         const secondEnd = Math.max(firstEnd + 1, Math.ceil(planner.weeks * 2 / 3));
-        $("roadmapTitle").textContent = `Rencana ${planner.weeks} minggu${planner.program ? ` · ${planner.program}` : ""}`;
+        $set("roadmapTitle", `Rencana ${planner.weeks} minggu${planner.program ? ` · ${planner.program}` : ""}`);
         const items = [
             [`Minggu 1–${firstEnd}`, "Bangun fondasi", `Prioritaskan ${weakest}, tandai materi inti, dan tulis alasan setiap jawaban salah.`],
             [`Minggu ${firstEnd + 1}–${secondEnd}`, "Perluas cakupan", `Capai ${planner.weeklyGoal} soal per minggu dan seimbangkan latihan lintas kompetensi.`],
             [`Minggu ${secondEnd + 1}–${planner.weeks}`, "Simulasi dan review", "Kerjakan mini tryout dengan timer, lalu ulangi soal salah setelah jeda belajar."]
         ];
-        $("roadmapList").innerHTML = items.map(([week, title, body]) => `<article class="roadmap-item"><span>${week}</span><strong>${escapeHtml(title)}</strong><p>${escapeHtml(body)}</p></article>`).join("");
+        $setHTML("roadmapList", items.map(([week, title, body]) => `<article class="roadmap-item"><span>${week}</span><strong>${escapeHtml(title)}</strong><p>${escapeHtml(body)}</p></article>`).join(""));
     }
 
     function toggleFocusTimer() {
         if (focusTimerId) {
             clearInterval(focusTimerId); focusTimerId = null;
-            $("focusStart").innerHTML = `<i class="fa-solid fa-play" aria-hidden="true"></i> Lanjutkan`;
-            $("focusStatus").textContent = "Sesi dijeda.";
+            const fs = $("focusStart"); if (fs) fs.innerHTML = `<i class="fa-solid fa-play" aria-hidden="true"></i> Lanjutkan`;
+            $set("focusStatus", "Sesi dijeda.");
             return;
         }
-        $("focusStart").innerHTML = `<i class="fa-solid fa-pause" aria-hidden="true"></i> Jeda`;
-        $("focusStatus").textContent = "Fokus pada satu target kecil.";
+        const fs = $("focusStart"); if (fs) fs.innerHTML = `<i class="fa-solid fa-pause" aria-hidden="true"></i> Jeda`;
+        $set("focusStatus", "Fokus pada satu target kecil.");
         focusTimerId = window.setInterval(() => {
-            focusSeconds -= 1; $("focusTimer").textContent = formatTime(focusSeconds);
+            focusSeconds -= 1; $set("focusTimer", formatTime(focusSeconds));
             if (focusSeconds <= 0) {
                 clearInterval(focusTimerId); focusTimerId = null; focusSeconds = 25 * 60;
-                $("focusTimer").textContent = "25:00"; $("focusStart").innerHTML = `<i class="fa-solid fa-play" aria-hidden="true"></i> Mulai`;
-                $("focusStatus").textContent = "Sesi selesai. Ambil jeda singkat.";
+                $set("focusTimer", "25:00");
+                const fs = $("focusStart"); if (fs) fs.innerHTML = `<i class="fa-solid fa-play" aria-hidden="true"></i> Mulai`;
+                $set("focusStatus", "Sesi selesai. Ambil jeda singkat.");
                 trackState().lastActivity = "Menyelesaikan sesi fokus 25 menit"; saveState(); renderOverview(); showToast("Sesi fokus selesai. Bagus!");
             }
         }, 1000);
     }
-    function resetFocusTimer() { if (focusTimerId) clearInterval(focusTimerId); focusTimerId = null; focusSeconds = 25 * 60; $("focusTimer").textContent = "25:00"; $("focusStart").innerHTML = `<i class="fa-solid fa-play" aria-hidden="true"></i> Mulai`; $("focusStatus").textContent = "Siap memulai sesi fokus."; }
+    function resetFocusTimer() { if (focusTimerId) clearInterval(focusTimerId); focusTimerId = null; focusSeconds = 25 * 60; $set("focusTimer", "25:00"); const fs = $("focusStart"); if (fs) fs.innerHTML = `<i class="fa-solid fa-play" aria-hidden="true"></i> Mulai`; $set("focusStatus", "Siap memulai sesi fokus."); }
 
     function setupDialogs() {
-        $("openFormulaBtn").addEventListener("click", () => $("formulaDialog").showModal());
-        $("closeFormulaBtn").addEventListener("click", () => $("formulaDialog").close());
-        $("formulaDialog").addEventListener("click", event => { if (event.target === $("formulaDialog")) $("formulaDialog").close(); });
-        $("cancelConfirm").addEventListener("click", () => { pendingReset = null; $("confirmDialog").close(); });
-        $("acceptConfirm").addEventListener("click", performReset);
+        const ofb = $("openFormulaBtn"); if (ofb) ofb.addEventListener("click", () => $("formulaDialog")?.showModal());
+        const cfb = $("closeFormulaBtn"); if (cfb) cfb.addEventListener("click", () => $("formulaDialog")?.close());
+        const fd = $("formulaDialog"); if (fd) fd.addEventListener("click", event => { if (event.target === fd) fd.close(); });
+        const cc = $("cancelConfirm"); if (cc) cc.addEventListener("click", () => { pendingReset = null; $("confirmDialog")?.close(); });
+        const ac = $("acceptConfirm"); if (ac) ac.addEventListener("click", performReset);
     }
 
     function renderFormula() {
@@ -716,15 +771,15 @@
             ["Bahasa", "Temukan gagasan utama, hubungan antarparagraf, bukti yang mendukung klaim, dan makna kata dalam konteks."],
             ["Mapel Pilihan", "Mulai dari konsep kurikulum, lanjutkan penerapan, lalu kerjakan masalah kontekstual dan penalaran tingkat lanjut."]
         ];
-        $("formulaTitle").textContent = `Ringkasan konsep ${TRACK_LABELS[state.activeTrack]}`;
-        $("formulaContent").innerHTML = blocks.map(([title, body]) => `<section class="formula-block"><h3>${title}</h3><p>${body}</p></section>`).join("");
+        $set("formulaTitle", `Ringkasan konsep ${TRACK_LABELS[state.activeTrack]}`);
+        $setHTML("formulaContent", blocks.map(([title, body]) => `<section class="formula-block"><h3>${title}</h3><p>${body}</p></section>`).join(""));
     }
 
     function setupUtilities() {
-        $("exportProgress").addEventListener("click", exportProgress);
-        $("importProgress").addEventListener("change", importProgress);
-        $("resetTrack").addEventListener("click", () => askReset("track"));
-        $("resetAll").addEventListener("click", () => askReset("all"));
+        const ep = $("exportProgress"); if (ep) ep.addEventListener("click", exportProgress);
+        const ip = $("importProgress"); if (ip) ip.addEventListener("change", importProgress);
+        const rt = $("resetTrack"); if (rt) rt.addEventListener("click", () => askReset("track"));
+        const ra = $("resetAll"); if (ra) ra.addEventListener("click", () => askReset("all"));
     }
 
     function exportProgress() {
@@ -755,9 +810,9 @@
 
     function askReset(scope) {
         pendingReset = scope;
-        $("confirmTitle").textContent = scope === "all" ? "Reset semua progres?" : `Reset progres ${TRACK_LABELS[state.activeTrack]}?`;
-        $("confirmText").textContent = scope === "all" ? "Progres SNBT dan TKA di perangkat ini akan dihapus." : "Hanya statistik, materi, planner, bookmark, dan catatan jalur aktif yang akan dihapus.";
-        $("confirmDialog").showModal();
+        $set("confirmTitle", scope === "all" ? "Reset semua progres?" : `Reset progres ${TRACK_LABELS[state.activeTrack]}?`);
+        $set("confirmText", scope === "all" ? "Progres SNBT dan TKA di perangkat ini akan dihapus." : "Hanya statistik, materi, planner, bookmark, dan catatan jalur aktif yang akan dihapus.");
+        $("confirmDialog")?.showModal();
     }
 
     function performReset() {
@@ -765,7 +820,7 @@
             const active = state.activeTrack; state = freshState(); state.activeTrack = active; state.migratedLegacy = true;
         } else if (pendingReset === "track") state.tracks[state.activeTrack] = freshTrack();
         pendingReset = null; currentQuestion = null; activeSubject = SUBJECTS[state.activeTrack][0].id;
-        saveState(); $("confirmDialog").close(); renderAll(); showToast("Progres berhasil direset.");
+        saveState(); $("confirmDialog")?.close(); renderAll(); showToast("Progres berhasil direset.");
     }
 
     function shuffle(items) {
@@ -775,7 +830,7 @@
     }
     function formatTime(seconds) { const safe = Math.max(0, seconds); return `${String(Math.floor(safe / 60)).padStart(2, "0")}:${String(safe % 60).padStart(2, "0")}`; }
     function escapeHtml(value) { return String(value ?? "").replace(/[&<>"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char])); }
-    function showToast(message) { const toast = $("toast"); toast.textContent = message; toast.classList.add("show"); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 2400); }
+    function showToast(message) { const toast = $("toast"); if (!toast) return; toast.textContent = message; toast.classList.add("show"); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 2400); }
 
     function validateImportPayload(payload) {
         return Boolean(payload && payload.app === "universe-of-tech-exam-hub" && payload.version === STORE_VERSION && payload.state && payload.state.tracks && payload.state.tracks.snbt && payload.state.tracks.tka);

@@ -164,10 +164,13 @@
         renderCollection();
         loadNotes();
         document.querySelectorAll(".chapter-item").forEach((item) => item.classList.toggle("active", Number(item.dataset.chapter) === chapterIndex));
-        document.getElementById("prevChapter").disabled = chapterIndex === 0;
-        document.getElementById("nextChapter").textContent = chapterIndex === book.chapters.length - 1 ? "Selesai membaca" : "Bab berikutnya →";
+        const prevChapterBtn = document.getElementById("prevChapter");
+        if (prevChapterBtn) prevChapterBtn.disabled = chapterIndex === 0;
+        const nextChapterBtn = document.getElementById("nextChapter");
+        if (nextChapterBtn) nextChapterBtn.textContent = chapterIndex === book.chapters.length - 1 ? "Selesai membaca" : "Bab berikutnya →";
         const stage = document.getElementById("bookStage");
         requestAnimationFrame(() => {
+            if (!stage) return;
             const offset = restoreScroll ? Number(positions[bookId]?.offsets?.[chapterIndex] || 0) : 0;
             stage.scrollTop = Math.min(offset, Math.max(0, stage.scrollHeight - stage.clientHeight));
             if (pendingParagraph !== null) {
@@ -367,7 +370,8 @@
         chapterIndex = index;
         closePanel("bookToc");
         renderChapter(true);
-        document.getElementById("readerArticle").focus({ preventScroll: true });
+        const article = document.getElementById("readerArticle");
+        if (article) article.focus({ preventScroll: true });
     }
 
     function savePosition() {
@@ -450,10 +454,10 @@
     }
 
     function noteKey() { return `library_notes_${bookId}_${chapterIndex}`; }
-    function loadNotes() { document.getElementById("readerNotes").value = storage.get(noteKey(), ""); }
-    function scheduleNoteSave() { document.getElementById("noteStatus").textContent = "Menyimpan…"; clearTimeout(noteTimer); noteTimer = setTimeout(saveNotes, 420); }
-    function saveNotes() { const input = document.getElementById("readerNotes"); if (!input) return; storage.set(noteKey(), input.value); document.getElementById("noteStatus").textContent = "Tersimpan otomatis"; renderCollection(); }
-    async function copyNotes() { const value = document.getElementById("readerNotes").value; if (!value) return showToast("Catatan masih kosong."); try { await navigator.clipboard.writeText(value); showToast("Catatan disalin."); } catch { document.getElementById("readerNotes").select(); showToast("Catatan dipilih. Salin secara manual."); } }
+    function loadNotes() { const el = document.getElementById("readerNotes"); if (el) el.value = storage.get(noteKey(), ""); }
+    function scheduleNoteSave() { const el = document.getElementById("noteStatus"); if (el) el.textContent = "Menyimpan…"; clearTimeout(noteTimer); noteTimer = setTimeout(saveNotes, 420); }
+    function saveNotes() { const input = document.getElementById("readerNotes"); if (!input) return; storage.set(noteKey(), input.value); const el = document.getElementById("noteStatus"); if (el) el.textContent = "Tersimpan otomatis"; renderCollection(); }
+    async function copyNotes() { const input = document.getElementById("readerNotes"); const value = input?.value; if (!value) return showToast("Catatan masih kosong."); try { await navigator.clipboard.writeText(value); showToast("Catatan disalin."); } catch { input?.select(); showToast("Catatan dipilih. Salin secara manual."); } }
 
     function renderCollection() {
         const container = document.getElementById("collectionList");
@@ -577,11 +581,24 @@
             if (nextText) text += ` — ${nextText.slice(0, 140)}${nextText.length > 140 ? "…" : ""}`;
             return text;
         }) : [...content.querySelectorAll("p")].slice(0, 5).map((p) => p.textContent.slice(0, 160));
-        document.getElementById("summaryList").innerHTML = items.map((item, index) => `<li><span>${String(index + 1).padStart(2, "0")}</span>${escapeHtml(item)}</li>`).join("") || "<li>Belum ada poin rangkuman pada bab ini.</li>";
+        const listEl = document.getElementById("summaryList");
+        if (listEl) listEl.innerHTML = items.map((item, index) => `<li><span>${String(index + 1).padStart(2, "0")}</span>${escapeHtml(item)}</li>`).join("") || "<li>Belum ada poin rangkuman pada bab ini.</li>";
     }
 
-    function openSearch() { document.getElementById("readerSearchbar").classList.add("open"); document.getElementById("readerSearchInput").focus(); }
-    function closeSearch() { clearTimeout(searchTimer); document.getElementById("readerSearchbar").classList.remove("open"); const input = document.getElementById("readerSearchInput"); if (input) input.value = ""; clearSearch(); }
+    function openSearch() { 
+        const bar = document.getElementById("readerSearchbar"); 
+        if (bar) bar.classList.add("open"); 
+        const input = document.getElementById("readerSearchInput"); 
+        if (input) input.focus(); 
+    }
+    function closeSearch() { 
+        clearTimeout(searchTimer); 
+        const bar = document.getElementById("readerSearchbar"); 
+        if (bar) bar.classList.remove("open"); 
+        const input = document.getElementById("readerSearchInput"); 
+        if (input) input.value = ""; 
+        clearSearch(); 
+    }
     function clearSearch() { searchHits.forEach((mark) => mark.replaceWith(document.createTextNode(mark.textContent))); searchHits = []; searchIndex = -1; document.getElementById("bookContent")?.normalize(); updateSearchCount(); }
     function scheduleSearch(event) {
         const input = event.target;

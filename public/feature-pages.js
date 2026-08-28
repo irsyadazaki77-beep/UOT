@@ -183,15 +183,20 @@ function initTKAPage() {
         ]
     };
 
+    function safeSetText(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    }
+
     function updateStats() {
         const done = Number(stats.done) || 0;
         const correct = Number(stats.correct) || 0;
         const accuracy = done > 0 ? Math.round((correct / done) * 100) : 0;
-        document.getElementById("snbtDone").textContent = done;
-        document.getElementById("snbtAccuracy").textContent = `${accuracy}%`;
-        document.getElementById("snbtLevel").textContent = accuracy >= 80 ? "Siap" : accuracy >= 60 ? "Stabil" : accuracy >= 40 ? "Naik" : "Fondasi";
-        ring.style.setProperty("--progress", `${Math.min(accuracy, 100)}%`);
-        ringText.textContent = `${accuracy}%`;
+        safeSetText("snbtDone", done);
+        safeSetText("snbtAccuracy", `${accuracy}%`);
+        safeSetText("snbtLevel", accuracy >= 80 ? "Siap" : accuracy >= 60 ? "Stabil" : accuracy >= 40 ? "Naik" : "Fondasi");
+        if (ring) ring.style.setProperty("--progress", `${Math.min(accuracy, 100)}%`);
+        if (ringText) ringText.textContent = `${accuracy}%`;
         stats.done = done;
         stats.correct = correct;
         storage.set("snbt_stats", stats);
@@ -2303,11 +2308,12 @@ function initBahasaPage() {
         const accuracy = Math.round((progress.correct / Math.max(progress.reviewed, 1)) * 100);
         const remainingCount = Math.max(places.length - exploredCount, 0);
         const completion = Math.round((exploredCount / places.length) * 100);
-        document.getElementById("languageReviewed").textContent = progress.reviewed;
-        document.getElementById("languageCorrect").textContent = `${accuracy}%`;
-        document.getElementById("languageTotal").textContent = places.length;
-        document.getElementById("missionCount").textContent = `${exploredCount}/${places.length}`;
-        document.getElementById("missionBar").style.width = `${Math.round((exploredCount / places.length) * 100)}%`;
+        safeSetText("languageReviewed", progress.reviewed);
+        safeSetText("languageCorrect", `${accuracy}%`);
+        safeSetText("languageTotal", places.length);
+        safeSetText("missionCount", `${exploredCount}/${places.length}`);
+        const missionBar = document.getElementById("missionBar");
+        if (missionBar) missionBar.style.width = `${Math.round((exploredCount / places.length) * 100)}%`;
         setOptionalText("languageFavoriteCount", favoriteCount);
         setOptionalText("languageMasteredCount", masteredCount);
         setOptionalText("languageStreakCount", progress.streak || 0);
@@ -2331,15 +2337,16 @@ function initBahasaPage() {
             title = "Eksplorasi mulai panas.";
             text = "Buka beberapa kartu budaya lagi untuk menaikkan badge.";
         }
-        document.getElementById("explorerBadge").textContent = badge;
-        document.getElementById("missionBadge").textContent = badge;
-        document.getElementById("missionTitle").textContent = title;
-        document.getElementById("missionText").textContent = text;
-        document.getElementById("phoneRegionTitle").textContent = `${getVisiblePlaces().length} pilihan`;
-        document.getElementById("phoneRegionText").textContent = selectedRegion === "Semua" ? "Jelajah semua region Indonesia." : `Fokus region ${selectedRegion}.`;
-        document.querySelector(".language-progress-track div").style.width = `${Math.round((exploredCount / places.length) * 100)}%`;
-        toggleFavorite.textContent = (progress.favorites || []).includes(selectedPlaceId) ? "Hapus Favorit" : "Favorit";
-        markMastered.textContent = (progress.mastered || []).includes(selectedPlaceId) ? "Sudah Dikuasai" : "Tandai Dikuasai";
+        safeSetText("explorerBadge", badge);
+        safeSetText("missionBadge", badge);
+        safeSetText("missionTitle", title);
+        safeSetText("missionText", text);
+        safeSetText("phoneRegionTitle", `${getVisiblePlaces().length} pilihan`);
+        safeSetText("phoneRegionText", selectedRegion === "Semua" ? "Jelajah semua region Indonesia." : `Fokus region ${selectedRegion}.`);
+        const langTrack = document.querySelector(".language-progress-track div");
+        if (langTrack) langTrack.style.width = `${Math.round((exploredCount / places.length) * 100)}%`;
+        if (toggleFavorite) toggleFavorite.textContent = (progress.favorites || []).includes(selectedPlaceId) ? "Hapus Favorit" : "Favorit";
+        if (markMastered) markMastered.textContent = (progress.mastered || []).includes(selectedPlaceId) ? "Sudah Dikuasai" : "Tandai Dikuasai";
         storage.set("bahasa_progress", progress);
         storage.set("wonder_region", selectedRegion);
         storage.set("wonder_place", selectedPlaceId);
@@ -2484,10 +2491,10 @@ function initBahasaPage() {
 
     function renderDossier() {
         const selected = getSelectedPlace();
-        document.getElementById("skillFocusTitle").textContent = `${selected.label}: frasa sopan dan identitas lokal`;
-        document.getElementById("skillFocusText").textContent = `Prioritaskan sapaan "${selected.cards[0][0]}", ucapan terima kasih, dan satu frasa percakapan. Setelah itu hubungkan dengan fakta: ${selected.fact}`;
-        document.getElementById("miniProjectTitle").textContent = `Kartu Cerita ${selected.destination[0]}`;
-        document.getElementById("miniProjectText").textContent = `Buat 4 kalimat pendek: sapaan lokal, alasan mengunjungi ${selected.destination[0]}, kuliner ${selected.food[0]}, dan tradisi ${selected.tradition[0]}.`;
+        safeSetText("skillFocusTitle", `${selected.label}: frasa sopan dan identitas lokal`);
+        safeSetText("skillFocusText", `Prioritaskan sapaan "${selected.cards[0][0]}", ucapan terima kasih, dan satu frasa percakapan. Setelah itu hubungkan dengan fakta: ${selected.fact}`);
+        safeSetText("miniProjectTitle", `Kartu Cerita ${selected.destination[0]}`);
+        safeSetText("miniProjectText", `Buat 4 kalimat pendek: sapaan lokal, alasan mengunjungi ${selected.destination[0]}, kuliner ${selected.food[0]}, dan tradisi ${selected.tradition[0]}.`);
     }
 
     function renderCompare() {
@@ -2535,16 +2542,16 @@ function initBahasaPage() {
 
     function renderCultureDetails() {
         const selected = getSelectedPlace();
-        document.getElementById("cultureTitle").textContent = selected.label;
-        document.getElementById("cultureSummary").textContent = selected.summary;
-        document.getElementById("destinationTitle").textContent = `${selected.label}: destinasi, kuliner, tradisi.`;
-        document.getElementById("cultureFact").textContent = selected.fact;
-        document.getElementById("destinationName").textContent = selected.destination[0];
-        document.getElementById("destinationDesc").textContent = selected.destination[1];
-        document.getElementById("foodName").textContent = selected.food[0];
-        document.getElementById("foodDesc").textContent = selected.food[1];
-        document.getElementById("traditionName").textContent = selected.tradition[0];
-        document.getElementById("traditionDesc").textContent = selected.tradition[1];
+        safeSetText("cultureTitle", selected.label);
+        safeSetText("cultureSummary", selected.summary);
+        safeSetText("destinationTitle", `${selected.label}: destinasi, kuliner, tradisi.`);
+        safeSetText("cultureFact", selected.fact);
+        safeSetText("destinationName", selected.destination[0]);
+        safeSetText("destinationDesc", selected.destination[1]);
+        safeSetText("foodName", selected.food[0]);
+        safeSetText("foodDesc", selected.food[1]);
+        safeSetText("traditionName", selected.tradition[0]);
+        safeSetText("traditionDesc", selected.tradition[1]);
         renderDossier();
         renderCompare();
     }
@@ -2553,32 +2560,34 @@ function initBahasaPage() {
         const selected = getSelectedPlace();
         const correctAnswer = selected.quiz.answers[selected.quiz.correct];
         const answers = [...selected.quiz.answers].sort(() => Math.random() - 0.5);
-        document.getElementById("languageQuizMeta").textContent = `${selected.label} - ${selected.region}`;
-        quizQuestion.textContent = selected.quiz.q;
-        answerGrid.classList.remove("answered");
-        answerGrid.innerHTML = answers.map(answer => `<button class="answer-choice answer-btn">${answer}</button>`).join("");
-        answerGrid.querySelectorAll("button").forEach(btn => {
-            btn.addEventListener("click", () => {
-                recordActivity();
-                progress.reviewed += 1;
-                progress.quizDone = (progress.quizDone || 0) + 1;
-                answerGrid.classList.add("answered");
-                if (btn.textContent === correctAnswer) {
-                    progress.correct += 1;
-                    btn.classList.add("correct");
-                    showToast("Jawaban budaya benar.");
-                } else {
-                    btn.classList.add("wrong");
-                    showToast(`Jawaban tepat: ${correctAnswer}`);
-                }
-                answerGrid.querySelectorAll("button").forEach(button => {
-                    button.disabled = true;
-                    if (button.textContent === correctAnswer) button.classList.add("correct");
+        safeSetText("languageQuizMeta", `${selected.label} - ${selected.region}`);
+        if (quizQuestion) quizQuestion.textContent = selected.quiz.q;
+        if (answerGrid) {
+            answerGrid.classList.remove("answered");
+            answerGrid.innerHTML = answers.map(answer => `<button class="answer-choice answer-btn">${answer}</button>`).join("");
+            answerGrid.querySelectorAll("button").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    recordActivity();
+                    progress.reviewed += 1;
+                    progress.quizDone = (progress.quizDone || 0) + 1;
+                    answerGrid.classList.add("answered");
+                    if (btn.textContent === correctAnswer) {
+                        progress.correct += 1;
+                        btn.classList.add("correct");
+                        showToast("Jawaban budaya benar.");
+                    } else {
+                        btn.classList.add("wrong");
+                        showToast(`Jawaban tepat: ${correctAnswer}`);
+                    }
+                    answerGrid.querySelectorAll("button").forEach(button => {
+                        button.disabled = true;
+                        if (button.textContent === correctAnswer) button.classList.add("correct");
+                    });
+                    markExplored(selected.id);
+                    updateMetrics();
                 });
-                markExplored(selected.id);
-                updateMetrics();
             });
-        });
+        }
     }
 
     function renderLanguage() {

@@ -867,37 +867,51 @@
 
     async function copyCode(event) {
         const button = event.currentTarget;
-        const code = document.getElementById("studioCodeInput").value;
+        const codeInput = document.getElementById("studioCodeInput");
+        const code = codeInput ? codeInput.value : "";
         try {
             await navigator.clipboard.writeText(code);
             button.textContent = "Disalin";
         } catch {
-            document.getElementById("studioCodeInput").select();
+            if (codeInput) codeInput.select();
             button.textContent = "Pilih & salin";
         }
         setTimeout(() => { if (button.isConnected) button.textContent = "Salin"; }, 1500);
     }
 
+    function safeStudioText(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    }
+
     function resetCode() {
-        document.getElementById("studioCodeInput").value = lesson.example.code;
-        document.getElementById("studioConsole").textContent = "Contoh dikembalikan ke versi awal.";
+        const input = document.getElementById("studioCodeInput");
+        if (input) input.value = lesson.example.code;
+        safeStudioText("studioConsole", "Contoh dikembalikan ke versi awal.");
         const preview = document.getElementById("studioPreview");
-        preview.hidden = true;
-        preview.removeAttribute("srcdoc");
+        if (preview) {
+            preview.hidden = true;
+            preview.removeAttribute("srcdoc");
+        }
     }
 
     function runPlayground() {
         const language = String(lesson.example.language).toLowerCase();
-        const code = document.getElementById("studioCodeInput").value;
+        const codeInput = document.getElementById("studioCodeInput");
+        const code = codeInput ? codeInput.value : "";
         const output = document.getElementById("studioConsole");
         const preview = document.getElementById("studioPreview");
         clearTimeout(playgroundFrame);
-        preview.hidden = true;
-        preview.removeAttribute("srcdoc");
+        if (preview) {
+            preview.hidden = true;
+            preview.removeAttribute("srcdoc");
+        }
         if (language.includes("html")) {
-            preview.hidden = false;
-            preview.srcdoc = code;
-            output.textContent = "Preview HTML dirender dalam area terisolasi.";
+            if (preview) {
+                preview.hidden = false;
+                preview.srcdoc = code;
+            }
+            if (output) output.textContent = "Preview HTML dirender dalam area terisolasi.";
             return;
         }
         if (!language.includes("javascript") && language !== "js") {
@@ -951,8 +965,9 @@
             if (buttonIndex === lesson.checkpoint.correctIndex) button.classList.add("correct");
             else if (buttonIndex === index) button.classList.add("wrong");
         });
-        document.getElementById("checkpointFeedback").textContent = `${correct ? "Benar." : "Belum tepat."} ${lesson.checkpoint.explanation}`;
-        document.getElementById("checkpointRetryBtn").hidden = correct;
+        safeStudioText("checkpointFeedback", `${correct ? "Benar." : "Belum tepat."} ${lesson.checkpoint.explanation}`);
+        const retryBtn = document.getElementById("checkpointRetryBtn");
+        if (retryBtn) retryBtn.hidden = correct;
         recalculateStatus();
         updateCompletion();
         showToast(correct ? "Jawaban benar. Pemahamanmu bertambah." : "Belum tepat. Pelajari penjelasan lalu coba lagi.");
@@ -961,8 +976,9 @@
     function resetCheckpoint() {
         selectedCheckpoint = null;
         document.querySelectorAll(".checkpoint-option").forEach((button) => { button.disabled = false; button.classList.remove("correct", "wrong"); });
-        document.getElementById("checkpointFeedback").textContent = "Coba lagi. Bandingkan setiap pilihan dengan kebutuhan dan constraint.";
-        document.getElementById("checkpointRetryBtn").hidden = true;
+        safeStudioText("checkpointFeedback", "Coba lagi. Bandingkan setiap pilihan dengan kebutuhan dan constraint.");
+        const retryBtn = document.getElementById("checkpointRetryBtn");
+        if (retryBtn) retryBtn.hidden = true;
         document.querySelector(".checkpoint-option")?.focus();
     }
 
@@ -992,12 +1008,14 @@
 
     function updateCompletion() {
         const record = getLessonRecord();
-        document.getElementById("completionTitle").textContent = record.status === "mastered" ? "Pelajaran sudah dikuasai" : "Siap menyelesaikan pelajaran?";
-        document.getElementById("completionText").textContent = `Latihan: ${record.practiceCompleted ? "selesai" : "belum"} · Skor terbaik: ${record.bestScore || 0}%`;
+        safeStudioText("completionTitle", record.status === "mastered" ? "Pelajaran sudah dikuasai" : "Siap menyelesaikan pelajaran?");
+        safeStudioText("completionText", `Latihan: ${record.practiceCompleted ? "selesai" : "belum"} · Skor terbaik: ${record.bestScore || 0}%`);
         const button = document.getElementById("completeLessonBtn");
-        button.textContent = record.status === "mastered" ? "Sudah dikuasai" : "Tandai selesai";
-        button.disabled = record.status === "mastered";
-        document.getElementById("lessonStatusPill").textContent = statusLabel(record.status);
+        if (button) {
+            button.textContent = record.status === "mastered" ? "Sudah dikuasai" : "Tandai selesai";
+            button.disabled = record.status === "mastered";
+        }
+        safeStudioText("lessonStatusPill", statusLabel(record.status));
     }
 
     function submitCapstone() {
@@ -1005,7 +1023,7 @@
         if (!input || input.value === "") return;
         const parsedScore = Number(input.value);
         if (!Number.isFinite(parsedScore)) {
-            document.getElementById("capstoneFeedback").textContent = "Masukkan nilai antara 0 dan 100.";
+            safeStudioText("capstoneFeedback", "Masukkan nilai antara 0 dan 100.");
             input.focus();
             return;
         }
@@ -1020,7 +1038,7 @@
             awardXpSafely(track.capstone.xp);
         }
         save();
-        document.getElementById("capstoneFeedback").textContent = trackRecord.capstone.passed ? `Lulus dengan skor terbaik ${trackRecord.capstone.bestScore}. XP capstone diberikan satu kali.` : `Skor terbaik ${trackRecord.capstone.bestScore}. Perbaiki artefak hingga mencapai ${track.capstone.passingScore}.`;
+        safeStudioText("capstoneFeedback", trackRecord.capstone.passed ? `Lulus dengan skor terbaik ${trackRecord.capstone.bestScore}. XP capstone diberikan satu kali.` : `Skor terbaik ${trackRecord.capstone.bestScore}. Perbaiki artefak hingga mencapai ${track.capstone.passingScore}.`);
         showToast(trackRecord.capstone.passed ? "Capstone dinyatakan lulus." : "Penilaian capstone tersimpan.");
     }
 

@@ -1,72 +1,97 @@
 /* ========================================================================== */
-/* Universe of Tech - Global Design Tokens System (FASE 5)                    */
+/* Universe of Tech - Global Design Tokens System                             */
 /* Single source of truth for typography, spacing, radius, shadows, surfaces, */
-/* borders, z-index, motion, and accessibility tokens across all pages.       */
+/* borders, z-index, motion, components, and accessibility tokens.            */
 /* ========================================================================== */
 
 :root {
     /* -------------------------------------------------------------------------- */
-    /* 1. Color Palette - Light Theme (WCAG AA Compliant >= 4.5:1 for body)       */
+    /* 1. Color Palette - Light Theme (WCAG AA Compliant >= 4.5:1 for body text)  */
     /* -------------------------------------------------------------------------- */
+    /* Emerald Primary Brand */
     --uot-primary: #15803d;
     --uot-primary-hover: #166534;
+    --uot-primary-active: #14532d;
     --uot-primary-soft: #f0fdf4;
+    --uot-primary-soft-hover: #dcfce7;
     --uot-primary-border: rgba(21, 128, 61, 0.24);
+    --uot-primary-contrast: #ffffff;
     
+    /* Amber Accent */
     --uot-accent: #d97706;
     --uot-accent-hover: #b45309;
     --uot-accent-soft: #fffbeb;
+    --uot-accent-border: rgba(217, 119, 6, 0.24);
     
+    /* Surfaces & Neutrals (Cool Slate / Clean Ivory Tint) */
     --uot-bg: #f8faf9;
     --uot-surface: #ffffff;
     --uot-surface-soft: #f1f5f3;
     --uot-surface-raised: #ffffff;
     --uot-surface-subtle: #edf2ef;
     --uot-surface-overlay: rgba(15, 23, 42, 0.6);
+    --uot-navbar-bg: rgba(255, 255, 255, 0.92);
 
+    /* Text Hierarchy */
     --uot-text-primary: #0f172a;
     --uot-text-secondary: #334155;
     --uot-text-muted: #64748b;
+    --uot-text-subtle: #94a3b8;
     --uot-text-inverted: #ffffff;
 
+    /* Borders & Dividers */
     --uot-border: rgba(15, 23, 42, 0.12);
     --uot-border-subtle: rgba(15, 23, 42, 0.06);
     --uot-border-strong: rgba(15, 23, 42, 0.22);
     
+    /* Accessibility Focus Ring */
     --uot-focus-ring: #15803d;
+    --uot-focus-ring-offset: #ffffff;
 
-    /* Semantic Status */
+    /* Semantic Status Tokens */
     --uot-success: #16a34a;
     --uot-success-soft: #dcfce7;
+    --uot-success-text: #14532d;
     --uot-warning: #d97706;
     --uot-warning-soft: #fef3c7;
+    --uot-warning-text: #78350f;
     --uot-danger: #dc2626;
     --uot-danger-soft: #fee2e2;
+    --uot-danger-text: #7f1d1d;
     --uot-info: #2563eb;
     --uot-info-soft: #dbeafe;
+    --uot-info-text: #1e3a8a;
 
-    /* Legacy Aliases for seamless backwards compatibility across all views */
+    /* Universal Framework Aliases (Backwards compatibility across all views) */
     --green: var(--uot-primary);
     --green-hover: var(--uot-primary-hover);
     --green-soft: var(--uot-primary-soft);
     --primary: var(--uot-primary);
     --primary-color: var(--uot-primary);
+    --primary-hover: var(--uot-primary-hover);
     --accent: var(--uot-accent);
     --blue: var(--uot-info);
+    --blue-soft: var(--uot-info-soft);
+    --purple: #7c3aed;
+    --purple-soft: #f5f3ff;
     --bg: var(--uot-bg);
     --surface: var(--uot-surface);
     --surface-soft: var(--uot-surface-soft);
     --card-bg: var(--uot-surface);
     --card-surface: var(--uot-surface);
+    --navbar-bg: var(--uot-navbar-bg);
     --text: var(--uot-text-primary);
     --text-primary: var(--uot-text-primary);
     --text-secondary: var(--uot-text-secondary);
     --muted: var(--uot-text-muted);
     --border: var(--uot-border);
     --line: var(--uot-border);
+    --item-bg: var(--uot-surface-soft);
+    --dark: var(--uot-text-primary);
+    --white: #ffffff;
 
     /* -------------------------------------------------------------------------- */
-    /* 2. Spacing Scale (4px Base Grid)                                           */
+    /* 2. Spacing Scale (4px Base Grid with Standard Tokens)                      */
     /* -------------------------------------------------------------------------- */
     --space-0: 0;
     --space-1: 4px;
@@ -79,6 +104,16 @@
     --space-10: 40px;
     --space-12: 48px;
     --space-16: 64px;
+    --space-20: 80px;
+
+    /* Semantic Spacing Aliases */
+    --space-xs: var(--space-1);
+    --space-sm: var(--space-2);
+    --space-md: var(--space-4);
+    --space-lg: var(--space-6);
+    --space-xl: var(--space-8);
+    --space-2xl: var(--space-12);
+    --space-3xl: var(--space-16);
 
     /* -------------------------------------------------------------------------- */
     /* 3. Mathematical Radius Scale (Outer -> Inner nested calculation)           */
@@ -87,22 +122,26 @@
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
-    --radius-xl: 22px;
+    --radius-xl: 20px;
+    --radius-2xl: 28px;
+    --radius-full: 9999px;
     --radius-pill: 9999px;
 
     --uot-radius-container: var(--radius-xl);
     --uot-radius-card: var(--radius-lg);
     --uot-radius-item: var(--radius-md);
-    --uot-radius-pill: var(--radius-pill);
+    --uot-radius-input: var(--radius-md);
+    --uot-radius-button: var(--radius-md);
+    --uot-radius-pill: var(--radius-full);
 
     /* -------------------------------------------------------------------------- */
-    /* 4. Elevation & Shadow Tokens (No muddy or excessive glows)                 */
+    /* 4. Elevation & Shadow Tokens (Clear, optical depth without muddy glows)    */
     /* -------------------------------------------------------------------------- */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.08), 0 3px 6px rgba(0, 0, 0, 0.04);
-    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12), 0 6px 12px rgba(0, 0, 0, 0.06);
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 10px 24px rgba(15, 23, 42, 0.08), 0 3px 6px rgba(15, 23, 42, 0.04);
+    --shadow-xl: 0 20px 40px rgba(15, 23, 42, 0.12), 0 6px 12px rgba(15, 23, 42, 0.06);
 
     /* -------------------------------------------------------------------------- */
     /* 5. Typography Scale & Standards                                            */
@@ -111,16 +150,17 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
     --text-display: clamp(32px, 5vw, 44px);
-    --text-h1: clamp(26px, 4vw, 34px);
-    --text-h2: clamp(20px, 3vw, 26px);
-    --text-h3: clamp(17px, 2.5vw, 20px);
+    --text-h1: clamp(24px, 3.8vw, 32px);
+    --text-h2: clamp(20px, 2.8vw, 24px);
+    --text-h3: clamp(16px, 2.2vw, 19px);
     --text-h4: 15px;
     --text-body-lg: 17px;
     --text-body: 15px;
-    --text-body-sm: 13px;
+    --text-body-sm: 13.5px;
     --text-caption: 12px;
+    --text-xs: 11px;
 
-    --leading-tight: 1.15;
+    --leading-tight: 1.18;
     --leading-snug: 1.35;
     --leading-normal: 1.55;
     --leading-relaxed: 1.7;
@@ -131,7 +171,7 @@
     --font-bold: 700;
     --font-extrabold: 800;
 
-    --max-line-ch: 72ch;
+    --max-line-ch: 70ch;
 
     /* -------------------------------------------------------------------------- */
     /* 6. Motion & Transitions                                                    */
@@ -141,6 +181,7 @@
     --duration-slow: 320ms;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
     /* -------------------------------------------------------------------------- */
     /* 7. Z-Index Layering Scale                                                  */
@@ -148,36 +189,54 @@
     --z-base: 1;
     --z-sticky: 100;
     --z-dropdown: 200;
-    --z-drawer: 400;
-    --z-modal: 500;
-    --z-popover: 600;
-    --z-toast: 1000;
+    --z-navbar: 1000;
+    --z-drawer: 1200;
+    --z-modal: 1400;
+    --z-popover: 1500;
+    --z-toast: 1600;
+
+    /* -------------------------------------------------------------------------- */
+    /* 8. Component Standard Tokens                                               */
+    /* -------------------------------------------------------------------------- */
+    --btn-height-sm: 34px;
+    --btn-height-md: 42px;
+    --btn-height-lg: 48px;
+    --input-height: 42px;
+    --navbar-height: 60px;
+    --navbar-height-scrolled: 54px;
+    --container-max-width: 1200px;
 }
 
 /* -------------------------------------------------------------------------- */
-/* 8. Dark Mode Token Overrides                                               */
+/* 9. Dark Mode Token Overrides                                               */
 /* -------------------------------------------------------------------------- */
 :root.dark-theme,
 body.dark-theme {
     --uot-primary: #22c55e;
     --uot-primary-hover: #4ade80;
-    --uot-primary-soft: rgba(34, 197, 94, 0.12);
-    --uot-primary-border: rgba(34, 197, 94, 0.28);
+    --uot-primary-active: #16a34a;
+    --uot-primary-soft: rgba(34, 197, 94, 0.14);
+    --uot-primary-soft-hover: rgba(34, 197, 94, 0.22);
+    --uot-primary-border: rgba(34, 197, 94, 0.32);
+    --uot-primary-contrast: #09130e;
 
     --uot-accent: #f59e0b;
     --uot-accent-hover: #fbbf24;
-    --uot-accent-soft: rgba(245, 158, 11, 0.12);
+    --uot-accent-soft: rgba(245, 158, 11, 0.14);
+    --uot-accent-border: rgba(245, 158, 11, 0.3);
 
-    --uot-bg: #09130e;
-    --uot-surface: #112019;
-    --uot-surface-soft: #182e24;
-    --uot-surface-raised: #1c3529;
-    --uot-surface-subtle: #14281f;
-    --uot-surface-overlay: rgba(0, 0, 0, 0.75);
+    --uot-bg: #0b1410;
+    --uot-surface: #12211a;
+    --uot-surface-soft: #172b22;
+    --uot-surface-raised: #1d362b;
+    --uot-surface-subtle: #14261f;
+    --uot-surface-overlay: rgba(0, 0, 0, 0.78);
+    --uot-navbar-bg: rgba(18, 33, 26, 0.92);
 
     --uot-text-primary: #f8fafc;
     --uot-text-secondary: #cbd5e1;
     --uot-text-muted: #94a3b8;
+    --uot-text-subtle: #64748b;
     --uot-text-inverted: #0f172a;
 
     --uot-border: rgba(255, 255, 255, 0.12);
@@ -185,32 +244,51 @@ body.dark-theme {
     --uot-border-strong: rgba(255, 255, 255, 0.24);
 
     --uot-focus-ring: #4ade80;
+    --uot-focus-ring-offset: #12211a;
 
     --uot-success: #4ade80;
-    --uot-success-soft: rgba(74, 222, 128, 0.14);
+    --uot-success-soft: rgba(74, 222, 128, 0.16);
+    --uot-success-text: #bbf7d0;
     --uot-warning: #fbbf24;
-    --uot-warning-soft: rgba(251, 191, 36, 0.14);
+    --uot-warning-soft: rgba(251, 191, 36, 0.16);
+    --uot-warning-text: #fef08a;
     --uot-danger: #f87171;
-    --uot-danger-soft: rgba(248, 113, 113, 0.14);
+    --uot-danger-soft: rgba(248, 113, 113, 0.16);
+    --uot-danger-text: #fecaca;
     --uot-info: #60a5fa;
-    --uot-info-soft: rgba(96, 165, 250, 0.14);
+    --uot-info-soft: rgba(96, 165, 250, 0.16);
+    --uot-info-text: #bfdbfe;
 
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.6);
-    --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.7);
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.45);
+    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.65);
+    --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.75);
+
+    --card-bg: var(--uot-surface);
+    --card-surface: var(--uot-surface);
+    --navbar-bg: var(--uot-navbar-bg);
+    --surface: var(--uot-surface);
+    --surface-soft: var(--uot-surface-soft);
+    --text: var(--uot-text-primary);
+    --text-primary: var(--uot-text-primary);
+    --text-secondary: var(--uot-text-secondary);
+    --muted: var(--uot-text-muted);
+    --border: var(--uot-border);
+    --item-bg: var(--uot-surface-soft);
+    --dark: var(--uot-text-primary);
+    --white: #12211a;
 }
 
 /* -------------------------------------------------------------------------- */
-/* 9. Baseline Accessibility Utilities                                        */
+/* 10. Baseline Accessibility Utilities                                       */
 /* -------------------------------------------------------------------------- */
 .skip-link {
     position: fixed;
     top: -100px;
     left: 16px;
     background: var(--uot-primary);
-    color: #ffffff;
+    color: #ffffff !important;
     padding: 10px 18px;
     border-radius: var(--radius-sm);
     font-weight: var(--font-bold);
@@ -259,3 +337,4 @@ body.dark-theme {
         scroll-behavior: auto !important;
     }
 }
+

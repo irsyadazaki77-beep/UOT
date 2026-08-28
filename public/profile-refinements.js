@@ -13,7 +13,8 @@
 
     function setSectionContext(name) {
         const resolved = labels[name] ? name : "overview";
-        $("currentSectionLabel").textContent = labels[resolved];
+        const labelEl = $("currentSectionLabel");
+        if (labelEl) labelEl.textContent = labels[resolved];
         localStorage.setItem(LAST_PANEL_KEY, resolved);
         document.title = `${labels[resolved]} — Universe Of Tech`;
     }
@@ -32,21 +33,25 @@
         ];
         const doneCount = checks.filter(c => c[0]).length;
         if ($("healthDoneCount")) $("healthDoneCount").textContent = `${doneCount}/6`;
-        $("healthBreakdown").innerHTML = checks.map(([done, label]) => `<div class="${done ? "done" : ""}" role="menuitem" tabindex="0" title="${done ? "Tuntas" : "Klik untuk melengkapi"}"><i class="fa-solid ${done ? "fa-check" : "fa-minus"}" aria-hidden="true"></i><span>${label}</span></div>`).join("");
-        $("healthBreakdown").querySelectorAll("div[role='menuitem']").forEach(item => {
-            item.addEventListener("click", () => {
-                if (!item.classList.contains("done")) {
-                    $("editProfileBtn")?.click();
-                    $("healthDetailsBtn").setAttribute("aria-expanded", "false");
-                    $("healthBreakdown").hidden = true;
-                }
+        const breakdown = $("healthBreakdown");
+        if (breakdown) {
+            breakdown.innerHTML = checks.map(([done, label]) => `<div class="${done ? "done" : ""}" role="menuitem" tabindex="0" title="${done ? "Tuntas" : "Klik untuk melengkapi"}"><i class="fa-solid ${done ? "fa-check" : "fa-minus"}" aria-hidden="true"></i><span>${label}</span></div>`).join("");
+            breakdown.querySelectorAll("div[role='menuitem']").forEach(item => {
+                item.addEventListener("click", () => {
+                    if (!item.classList.contains("done")) {
+                        $("editProfileBtn")?.click();
+                        $("healthDetailsBtn")?.setAttribute("aria-expanded", "false");
+                        breakdown.hidden = true;
+                    }
+                });
             });
-        });
+        }
     }
 
     function syncSaveState() {
         const node = $("profileSaveState");
-        const value = node.textContent.toLowerCase();
+        if (!node) return;
+        const value = (node.textContent || "").toLowerCase();
         node.classList.toggle("is-saving", value.includes("menyimpan"));
         node.classList.toggle("is-blocked", value.includes("masuk"));
     }
@@ -54,16 +59,20 @@
     function openPalette(trigger) {
         paletteTrigger = trigger || document.activeElement;
         const palette = $("commandPalette");
+        if (!palette) return;
         palette.inert = false;
         palette.classList.add("open");
         palette.setAttribute("aria-hidden", "false");
-        $("commandSearch").value = "";
-        filterCommands("");
-        requestAnimationFrame(() => $("commandSearch").focus());
+        if ($("commandSearch")) {
+            $("commandSearch").value = "";
+            filterCommands("");
+            requestAnimationFrame(() => $("commandSearch").focus());
+        }
     }
 
     function closePalette() {
         const palette = $("commandPalette");
+        if (!palette) return;
         palette.classList.remove("open");
         palette.setAttribute("aria-hidden", "true");
         palette.inert = true;
@@ -72,23 +81,28 @@
 
     function filterCommands(query) {
         const normalized = query.trim().toLowerCase();
-        const items = [...$("commandList").children];
+        const list = $("commandList");
+        if (!list) return;
+        const items = [...list.children];
         let visible = 0;
         items.forEach(item => {
             const match = !normalized || item.textContent.toLowerCase().includes(normalized);
             item.hidden = !match;
             if (match) visible++;
         });
-        $("commandEmpty").hidden = visible > 0;
+        if ($("commandEmpty")) $("commandEmpty").hidden = visible > 0;
     }
 
     function updateScrollUI() {
         const active = window.scrollY > 24;
         document.querySelector(".p-topbar")?.classList.toggle("is-scrolled", active);
         const showBackTop = window.scrollY > 560;
-        $("profileBackTop").classList.toggle("show", showBackTop);
-        $("profileBackTop").tabIndex = showBackTop ? 0 : -1;
-        $("profileBackTop").setAttribute("aria-hidden", String(!showBackTop));
+        const backTop = $("profileBackTop");
+        if (backTop) {
+            backTop.classList.toggle("show", showBackTop);
+            backTop.tabIndex = showBackTop ? 0 : -1;
+            backTop.setAttribute("aria-hidden", String(!showBackTop));
+        }
     }
 
     document.querySelectorAll("[data-tab]").forEach(button => button.addEventListener("click", () => {
@@ -97,40 +111,44 @@
     }));
     window.addEventListener("uot-profile-tab-change", event => setSectionContext(event.detail?.name));
 
-    $("healthDetailsBtn").addEventListener("click", event => {
+    $("healthDetailsBtn")?.addEventListener("click", event => {
         const open = event.currentTarget.getAttribute("aria-expanded") !== "true";
         event.currentTarget.setAttribute("aria-expanded", String(open));
-        $("healthBreakdown").hidden = !open;
+        if ($("healthBreakdown")) $("healthBreakdown").hidden = !open;
     });
     document.addEventListener("click", event => {
         if (!event.target.closest(".p-health-card")) {
-            $("healthDetailsBtn").setAttribute("aria-expanded", "false");
-            $("healthBreakdown").hidden = true;
+            $("healthDetailsBtn")?.setAttribute("aria-expanded", "false");
+            if ($("healthBreakdown")) $("healthBreakdown").hidden = true;
         }
     });
 
-    $("commandPaletteBtn").addEventListener("click", event => openPalette(event.currentTarget));
-    $("commandSearch").addEventListener("input", event => filterCommands(event.target.value));
-    $("commandSearch").addEventListener("keydown", event => {
+    $("commandPaletteBtn")?.addEventListener("click", event => openPalette(event.currentTarget));
+    $("commandSearch")?.addEventListener("input", event => filterCommands(event.target.value));
+    $("commandSearch")?.addEventListener("keydown", event => {
         if (event.key !== "Enter") return;
-        const first = [...$("commandList").children].find(item => !item.hidden);
+        const list = $("commandList");
+        if (!list) return;
+        const first = [...list.children].find(item => !item.hidden);
         if (first) { event.preventDefault(); first.click(); }
     });
-    $("commandList").addEventListener("click", event => {
+    $("commandList")?.addEventListener("click", event => {
         const tabCommand = event.target.closest("[data-command-tab]");
         if (!tabCommand) return;
         document.querySelector(`.p-rail-nav [data-tab="${tabCommand.dataset.commandTab}"]`)?.click();
         closePalette();
     });
-    $("commandPalette").addEventListener("click", event => { if (event.target === $("commandPalette")) closePalette(); });
+    $("commandPalette")?.addEventListener("click", event => { if (event.target === $("commandPalette")) closePalette(); });
 
     document.addEventListener("keydown", event => {
-        const paletteOpen = $("commandPalette").classList.contains("open");
+        const palette = $("commandPalette");
+        if (!palette) return;
+        const paletteOpen = palette.classList.contains("open");
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); paletteOpen ? closePalette() : openPalette(); return; }
         if (!paletteOpen) return;
         if (event.key === "Escape") { event.preventDefault(); closePalette(); return; }
         if (event.key === "Tab") {
-            const items = focusable($("commandPalette"));
+            const items = focusable(palette);
             if (!items.length) return;
             const first = items[0], last = items[items.length - 1];
             if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
@@ -138,9 +156,12 @@
         }
     });
 
-    $("profileBackTop").addEventListener("click", () => window.scrollTo({ top: 0, behavior: document.body.classList.contains("reduce-motion") ? "auto" : "smooth" }));
+    $("profileBackTop")?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: document.body.classList.contains("reduce-motion") ? "auto" : "smooth" }));
     window.addEventListener("scroll", updateScrollUI, { passive: true });
-    new MutationObserver(() => { renderHealthBreakdown(); syncSaveState(); }).observe($("profileSaveState"), { childList: true, characterData: true, subtree: true });
+    const saveStateNode = $("profileSaveState");
+    if (saveStateNode) {
+        new MutationObserver(() => { renderHealthBreakdown(); syncSaveState(); }).observe(saveStateNode, { childList: true, characterData: true, subtree: true });
+    }
     window.addEventListener("uot-subscription-change", () => setTimeout(() => document.body.classList.toggle("profile-pro", window.QuizNationSubscription?.isPro?.()), 0));
 
     renderHealthBreakdown();

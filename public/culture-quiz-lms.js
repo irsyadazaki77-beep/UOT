@@ -445,8 +445,10 @@
             summary.style.setProperty("--summary-progress", `${best || displayAccuracy}%`);
             const label = summary.querySelector(":scope > span");
             if (label) label.textContent = selectedPlace ? `Progress ${selectedPlace.label}` : "Progress budaya";
-            summary.querySelector("strong").textContent = `${best || displayAccuracy}%`;
-            summary.querySelector("p").textContent = selectedPlace
+            const strong = summary.querySelector("strong");
+            if (strong) strong.textContent = `${best || displayAccuracy}%`;
+            const pEl = summary.querySelector("p");
+            if (pEl) pEl.textContent = selectedPlace
                 ? scopedHistory.length
                     ? `Skor terbaik ${selectedPlace.label} ${best}%. Total latihan daerah ini: ${placeCorrect}/${placeAttempts} benar.`
                     : `Belum ada sesi ${selectedPlace.label}. Mulai satu kuis untuk menyimpan skor daerah ini.`

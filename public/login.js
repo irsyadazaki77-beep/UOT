@@ -223,9 +223,13 @@
             registerName: input => input.value.trim().length >= 2 ? "" : "Nama lengkap minimal 2 karakter.",
             registerEmail: input => isValidEmail(input.value) ? "" : "Masukkan alamat email yang valid.",
             registerPassword: input => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(input.value) ? "" : "Kata sandi minimal 8 karakter (harus ada huruf besar, kecil, dan angka).",
-            registerConfirmPassword: input => input.value === document.getElementById("registerPassword").value && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(input.value)
-                ? ""
-                : "Konfirmasi kata sandi belum cocok."
+            registerConfirmPassword: input => {
+                const passEl = document.getElementById("registerPassword");
+                const pass = passEl ? passEl.value : "";
+                return input.value === pass && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(input.value)
+                    ? ""
+                    : "Konfirmasi kata sandi belum cocok.";
+            }
         };
 
         Object.entries(validators).forEach(([id, validator]) => {
@@ -471,7 +475,8 @@
         });
 
         document.getElementById("registerTerms")?.addEventListener("change", event => {
-            if (event.target.checked) document.getElementById("registerTermsError").textContent = "";
+            const errEl = document.getElementById("registerTermsError");
+            if (event.target.checked && errEl) errEl.textContent = "";
         });
     }
 

@@ -192,18 +192,18 @@
             core.renderMetricSummary();
 
             // Fill content
-            document.getElementById("drawerRegion").textContent = drawerPlace.region;
-            document.getElementById("drawerMark").textContent = drawerPlace.mark;
-            document.getElementById("drawerTitle").textContent = drawerPlace.label;
-            document.getElementById("drawerSummary").textContent = drawerPlace.summary;
-            document.getElementById("drawerFact").textContent = drawerPlace.fact;
+            core.setText("drawerRegion", drawerPlace.region);
+            core.setText("drawerMark", drawerPlace.mark);
+            core.setText("drawerTitle", drawerPlace.label);
+            core.setText("drawerSummary", drawerPlace.summary);
+            core.setText("drawerFact", drawerPlace.fact);
 
-            document.getElementById("drawerDestName").textContent = drawerPlace.destination[0];
-            document.getElementById("drawerDestDesc").textContent = drawerPlace.destination[1];
-            document.getElementById("drawerFoodName").textContent = drawerPlace.food[0];
-            document.getElementById("drawerFoodDesc").textContent = drawerPlace.food[1];
-            document.getElementById("drawerTradName").textContent = drawerPlace.tradition[0];
-            document.getElementById("drawerTradDesc").textContent = drawerPlace.tradition[1];
+            core.setText("drawerDestName", drawerPlace.destination[0]);
+            core.setText("drawerDestDesc", drawerPlace.destination[1]);
+            core.setText("drawerFoodName", drawerPlace.food[0]);
+            core.setText("drawerFoodDesc", drawerPlace.food[1]);
+            core.setText("drawerTradName", drawerPlace.tradition[0]);
+            core.setText("drawerTradDesc", drawerPlace.tradition[1]);
 
             const detailLink = document.getElementById("drawerFullDetailLink");
             if (detailLink) detailLink.href = core.placeUrl("daerah-detail.html", placeId);
@@ -285,13 +285,15 @@
             }
         }
 
-        document.getElementById("drawerFavoriteBtn").addEventListener("click", () => {
+        document.getElementById("drawerFavoriteBtn")?.addEventListener("click", () => {
+            if (!drawerPlace) return;
             core.toggleProgressList("favorites", drawerPlace.id);
             updateDrawerButtons();
             core.showToast("Status favorit diperbarui.");
         });
 
-        document.getElementById("drawerMasteredBtn").addEventListener("click", () => {
+        document.getElementById("drawerMasteredBtn")?.addEventListener("click", () => {
+            if (!drawerPlace) return;
             core.toggleProgressList("mastered", drawerPlace.id);
             updateDrawerButtons();
             core.showToast("Status dikuasai diperbarui.");
@@ -303,7 +305,7 @@
         const vocabListEl = document.getElementById("drawerVocabList");
 
         function renderDrawerCard() {
-            if (!drawerPlace || !drawerPlace.cards.length) return;
+            if (!drawerPlace || !drawerPlace.cards.length || !flashcardEl) return;
             const card = drawerPlace.cards[drawerCardIndex % drawerPlace.cards.length];
             drawerShowingMeaning = false;
             flashcardEl.classList.remove("is-flipped", "is-flipping");
@@ -313,18 +315,21 @@
                 <span>${card[2]}</span>
             `;
             const activeIndex = (drawerCardIndex % drawerPlace.cards.length) + 1;
-            cardProgressText.textContent = `Kartu ${activeIndex}/${drawerPlace.cards.length}`;
-            cardProgressBar.style.width = `${Math.round((activeIndex / drawerPlace.cards.length) * 100)}%`;
+            if (cardProgressText) cardProgressText.textContent = `Kartu ${activeIndex}/${drawerPlace.cards.length}`;
+            if (cardProgressBar) cardProgressBar.style.width = `${Math.round((activeIndex / drawerPlace.cards.length) * 100)}%`;
 
-            vocabListEl.innerHTML = drawerPlace.cards.map((item, index) => `
-                <div class="vocab-item ${index === drawerCardIndex % drawerPlace.cards.length ? "is-active" : ""}">
-                    <div><strong>${item[0]}</strong><span class="muted">${item[1]}</span></div>
-                    <span class="mini-tag">${item[2]}</span>
-                </div>
-            `).join("");
+            if (vocabListEl) {
+                vocabListEl.innerHTML = drawerPlace.cards.map((item, index) => `
+                    <div class="vocab-item ${index === drawerCardIndex % drawerPlace.cards.length ? "is-active" : ""}">
+                        <div><strong>${item[0]}</strong><span class="muted">${item[1]}</span></div>
+                        <span class="mini-tag">${item[2]}</span>
+                    </div>
+                `).join("");
+            }
         }
 
-        flashcardEl.addEventListener("click", () => {
+        flashcardEl?.addEventListener("click", () => {
+            if (!drawerPlace || !drawerPlace.cards.length) return;
             const card = drawerPlace.cards[drawerCardIndex % drawerPlace.cards.length];
             drawerShowingMeaning = !drawerShowingMeaning;
             flashcardEl.classList.add("is-flipping");
@@ -337,7 +342,8 @@
             }, 120);
         });
 
-        document.getElementById("drawerPrevWord").addEventListener("click", () => {
+        document.getElementById("drawerPrevWord")?.addEventListener("click", () => {
+            if (!drawerPlace || !drawerPlace.cards.length) return;
             if (drawerCardIndex > 0) {
                 drawerCardIndex -= 1;
             } else {
@@ -346,7 +352,8 @@
             renderDrawerCard();
         });
 
-        document.getElementById("drawerNextWord").addEventListener("click", () => {
+        document.getElementById("drawerNextWord")?.addEventListener("click", () => {
+            if (!drawerPlace || !drawerPlace.cards.length) return;
             const progress = core.getProgress();
             progress.reviewed += 1;
             core.saveProgress(progress);
@@ -354,7 +361,8 @@
             renderDrawerCard();
         });
 
-        document.getElementById("drawerListenWord").addEventListener("click", () => {
+        document.getElementById("drawerListenWord")?.addEventListener("click", () => {
+            if (!drawerPlace || !drawerPlace.cards.length) return;
             const card = drawerPlace.cards[drawerCardIndex % drawerPlace.cards.length];
             if (!("speechSynthesis" in window)) {
                 core.showToast("Browser belum mendukung suara otomatis.");
@@ -371,7 +379,7 @@
         const quizAnswersEl = document.getElementById("drawerQuizAnswers");
 
         function renderDrawerQuiz() {
-            if (!drawerPlace || !drawerPlace.quiz) return;
+            if (!drawerPlace || !drawerPlace.quiz || !quizQuestionEl || !quizAnswersEl) return;
             const quiz = drawerPlace.quiz;
             const correctAnswer = quiz.answers[quiz.correct];
             const shuffledAnswers = [...quiz.answers].sort(() => Math.random() - 0.5);
@@ -1164,7 +1172,7 @@
         const quizAnswers = document.getElementById("detailQuizAnswers");
 
         function renderDetailQuiz() {
-            if (!place.quiz) return;
+            if (!place.quiz || !quizQuestion || !quizAnswers) return;
             const quiz = place.quiz;
             const correctAnswer = quiz.answers[quiz.correct];
             const answers = [...quiz.answers].sort(() => Math.random() - 0.5);
@@ -1238,28 +1246,32 @@
 
         function updateButtons() {
             const progress = core.getProgress();
-            favoriteBtn.textContent = (progress.favorites || []).includes(place.id) ? "Hapus Favorit" : "Favorit";
-            masteredBtn.textContent = (progress.mastered || []).includes(place.id) ? "Sudah Dikuasai" : "Tandai Dikuasai";
+            if (favoriteBtn) favoriteBtn.textContent = (progress.favorites || []).includes(place.id) ? "Hapus Favorit" : "Favorit";
+            if (masteredBtn) masteredBtn.textContent = (progress.mastered || []).includes(place.id) ? "Sudah Dikuasai" : "Tandai Dikuasai";
         }
 
         function renderCard() {
+            if (!flashcard || !place.cards || !place.cards.length) return;
             const card = place.cards[currentIndex % place.cards.length];
             showingMeaning = false;
             flashcard.classList.remove("is-flipped", "is-flipping");
             flashcard.innerHTML = `<small>${place.label}</small><strong>${card[0]}</strong><span>${card[2]}</span>`;
             const activeIndex = (currentIndex % place.cards.length) + 1;
-            progressText.textContent = `Kartu ${activeIndex}/${place.cards.length}`;
-            progressBar.style.width = `${Math.round((activeIndex / place.cards.length) * 100)}%`;
-            vocabList.innerHTML = place.cards.map((item, index) => `
-                <div class="vocab-item ${index === currentIndex % place.cards.length ? "is-active" : ""}">
-                    <div><strong>${item[0]}</strong><span class="muted">${item[1]}</span></div>
-                    <span class="mini-tag">${item[2]}</span>
-                </div>
-            `).join("");
+            if (progressText) progressText.textContent = `Kartu ${activeIndex}/${place.cards.length}`;
+            if (progressBar) progressBar.style.width = `${Math.round((activeIndex / place.cards.length) * 100)}%`;
+            if (vocabList) {
+                vocabList.innerHTML = place.cards.map((item, index) => `
+                    <div class="vocab-item ${index === currentIndex % place.cards.length ? "is-active" : ""}">
+                        <div><strong>${item[0]}</strong><span class="muted">${item[1]}</span></div>
+                        <span class="mini-tag">${item[2]}</span>
+                    </div>
+                `).join("");
+            }
             updateButtons();
         }
 
-        flashcard.addEventListener("click", () => {
+        flashcard?.addEventListener("click", () => {
+            if (!place.cards || !place.cards.length) return;
             const card = place.cards[currentIndex % place.cards.length];
             showingMeaning = !showingMeaning;
             flashcard.classList.add("is-flipping");
@@ -1271,14 +1283,15 @@
                 flashcard.classList.remove("is-flipping");
             }, 120);
         });
-        document.getElementById("nextWord").addEventListener("click", () => {
+        document.getElementById("nextWord")?.addEventListener("click", () => {
             const progress = core.getProgress();
             progress.reviewed += 1;
             core.saveProgress(progress);
             currentIndex += 1;
             renderCard();
         });
-        document.getElementById("listenWord").addEventListener("click", () => {
+        document.getElementById("listenWord")?.addEventListener("click", () => {
+            if (!place.cards || !place.cards.length) return;
             const card = place.cards[currentIndex % place.cards.length];
             if (!("speechSynthesis" in window)) {
                 core.showToast("Browser belum mendukung suara otomatis.");
@@ -1290,12 +1303,12 @@
             utterance.rate = 0.88;
             window.speechSynthesis.speak(utterance);
         });
-        favoriteBtn.addEventListener("click", () => {
+        favoriteBtn?.addEventListener("click", () => {
             core.toggleProgressList("favorites", place.id);
             updateButtons();
             core.showToast("Status favorit diperbarui.");
         });
-        masteredBtn.addEventListener("click", () => {
+        masteredBtn?.addEventListener("click", () => {
             core.toggleProgressList("mastered", place.id);
             updateButtons();
             core.showToast("Status dikuasai diperbarui.");
@@ -1314,6 +1327,7 @@
         const stat = document.getElementById("quizProgressSummary");
 
         function renderQuiz() {
+            if (!place.quiz || !question || !answerGrid) return;
             const correctAnswer = place.quiz.answers[place.quiz.correct];
             const answers = [...place.quiz.answers].sort(() => Math.random() - 0.5);
             question.textContent = place.quiz.q;
@@ -1344,6 +1358,7 @@
         }
 
         function renderStats() {
+            if (!stat) return;
             const progress = core.getProgress();
             const accuracy = Math.round((progress.correct / Math.max(progress.reviewed, 1)) * 100);
             stat.innerHTML = `
@@ -1352,7 +1367,7 @@
             `;
         }
 
-        nextButton.addEventListener("click", () => {
+        nextButton?.addEventListener("click", () => {
             const sameRegion = data.getPlacesByRegion(place.region);
             const currentPosition = sameRegion.findIndex(item => item.id === place.id);
             const nextPlace = sameRegion[(currentPosition + 1) % sameRegion.length] || data.getDefaultPlace();

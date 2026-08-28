@@ -133,24 +133,35 @@
         return { progress, completed, total, active, percent: total ? Math.round(completed / total * 100) : 0, continueTrack };
     }
 
+    function setText(id, val) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    }
+
     function updateOverview() {
         const data = readOverview();
         const totalLessons = curriculum.tracks.reduce((sum, track) => sum + curriculum.flattenLessons(track).length, 0);
-        document.getElementById("heroTrackCount").textContent = curriculum.tracks.length;
-        document.getElementById("heroLessonCount").textContent = totalLessons;
-        document.getElementById("completedLessons").textContent = data.completed;
-        document.getElementById("activeTracks").textContent = data.active;
-        document.getElementById("progressPercent").textContent = `${data.percent}%`;
+        setText("heroTrackCount", curriculum.tracks.length);
+        setText("heroLessonCount", totalLessons);
+        setText("completedLessons", data.completed);
+        setText("activeTracks", data.active);
+        setText("progressPercent", `${data.percent}%`);
         const ring = document.getElementById("progressRing");
-        ring.style.setProperty("--progress", `${data.percent * 3.6}deg`);
-        ring.setAttribute("aria-label", `Progres belajar ${data.percent} persen`);
+        if (ring) {
+            ring.style.setProperty("--progress", `${data.percent * 3.6}deg`);
+            ring.setAttribute("aria-label", `Progres belajar ${data.percent} persen`);
+        }
 
         const track = data.continueTrack;
-        document.getElementById("continueMark").textContent = track.mark;
-        document.getElementById("continueTitle").textContent = track.title;
-        const link = document.getElementById("continueLink");
-        link.href = `materi-basic.html?topik=${encodeURIComponent(track.id)}`;
-        link.setAttribute("aria-label", `Lanjutkan ${track.title}`);
+        if (track) {
+            setText("continueMark", track.mark);
+            setText("continueTitle", track.title);
+            const link = document.getElementById("continueLink");
+            if (link) {
+                link.href = `materi-basic.html?topik=${encodeURIComponent(track.id)}`;
+                link.setAttribute("aria-label", `Lanjutkan ${track.title}`);
+            }
+        }
     }
 
     function renderCategories() {
@@ -482,10 +493,12 @@
         initReveal();
         const subscription = storage.get("eduquestSubscription") === "pro" ? "pro" : "basic";
         const badge = document.getElementById("navSubscriptionBadge");
-        badge.className = `subscription-badge ${subscription}`;
-        badge.textContent = subscription === "pro" ? "Pro" : "Basic";
-        elements.mobileNav.setAttribute("inert", "");
-        elements.header.classList.toggle("ux-scrolled", window.scrollY > 24);
+        if (badge) {
+            badge.className = `subscription-badge ${subscription}`;
+            badge.textContent = subscription === "pro" ? "Pro" : "Basic";
+        }
+        if (elements.mobileNav) elements.mobileNav.setAttribute("inert", "");
+        if (elements.header) elements.header.classList.toggle("ux-scrolled", window.scrollY > 24);
 
         if (window.RecommendationService) {
             window.RecommendationService.getRecommendations().then(recs => {

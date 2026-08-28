@@ -25,12 +25,20 @@
 
     function updateDashboard(){
         const data=overview(),track=data.continueTrack,trackProgress=curriculum.getTrackProgress(track.id,data.progress);
-        $("trackMetric").dataset.target=curriculum.tracks.length;$("lessonMetric").dataset.target=data.total;
-        $("visualTrackTitle").textContent=track.title;$("visualProgress").textContent=`${trackProgress.percent}%`;
-        $("visualProgressBar").style.width=`${trackProgress.percent}%`;$("visualLessonText").textContent=`${trackProgress.completed} dari ${trackProgress.total} pelajaran`;
-        $("visualContinueLink").href=`materi-basic.html?topik=${encodeURIComponent(track.id)}`;$("visualCompleted").textContent=data.completed;
-        document.querySelector(".skill-ring").style.background=`radial-gradient(circle at center,var(--surface) 56%,transparent 58%),conic-gradient(var(--green) ${data.percent*3.6}deg,var(--surface-soft) 0)`;
-        $("bentoProgress").textContent=`${data.percent}%`;document.querySelector(".progress-orbit").style.setProperty("--total",`${data.percent*3.6}deg`);
+        const trackMetric=$("trackMetric"), lessonMetric=$("lessonMetric");
+        if(trackMetric) trackMetric.dataset.target=curriculum.tracks.length;
+        if(lessonMetric) lessonMetric.dataset.target=data.total;
+        if($("visualTrackTitle")) $("visualTrackTitle").textContent=track.title;
+        if($("visualProgress")) $("visualProgress").textContent=`${trackProgress.percent}%`;
+        if($("visualProgressBar")) $("visualProgressBar").style.width=`${trackProgress.percent}%`;
+        if($("visualLessonText")) $("visualLessonText").textContent=`${trackProgress.completed} dari ${trackProgress.total} pelajaran`;
+        if($("visualContinueLink")) $("visualContinueLink").href=`materi-basic.html?topik=${encodeURIComponent(track.id)}`;
+        if($("visualCompleted")) $("visualCompleted").textContent=data.completed;
+        const skillRing=document.querySelector(".skill-ring");
+        if(skillRing) skillRing.style.background=`radial-gradient(circle at center,var(--surface) 56%,transparent 58%),conic-gradient(var(--green) ${data.percent*3.6}deg,var(--surface-soft) 0)`;
+        if($("bentoProgress")) $("bentoProgress").textContent=`${data.percent}%`;
+        const progressOrbit=document.querySelector(".progress-orbit");
+        if(progressOrbit) progressOrbit.style.setProperty("--total",`${data.percent*3.6}deg`);
 
         if (typeof window.ProgressionEngine !== "undefined") {
             try {
@@ -41,9 +49,9 @@
                 }
                 const nextObj = window.ProgressionEngine.getNextObjective(data.progress);
                 if (nextObj) {
-                    $("visualTrackTitle").textContent = nextObj.title || track.title;
-                    $("visualLessonText").textContent = nextObj.reason || `${trackProgress.completed} dari ${trackProgress.total} pelajaran`;
-                    if (nextObj.url) $("visualContinueLink").href = nextObj.url;
+                    if($("visualTrackTitle")) $("visualTrackTitle").textContent = nextObj.title || track.title;
+                    if($("visualLessonText")) $("visualLessonText").textContent = nextObj.reason || `${trackProgress.completed} dari ${trackProgress.total} pelajaran`;
+                    if (nextObj.url && $("visualContinueLink")) $("visualContinueLink").href = nextObj.url;
                 }
             } catch (e) {
                 console.warn("[IndexClean] ProgressionEngine dashboard sync error:", e);
@@ -55,6 +63,7 @@
 
     function updateResume(data,track,trackProgress){
         const section=$("resumeSection");
+        if(!section) return;
         let nextObj = null;
         if (typeof window.ProgressionEngine !== "undefined") {
             try {
@@ -64,18 +73,20 @@
         if (data.completed===0 && !nextObj){section.hidden=true;return;}
         section.hidden=false;
         if (nextObj) {
-            $("resumeTitle").textContent = nextObj.title;
-            $("resumeText").textContent = nextObj.reason;
-            $("resumePercent").textContent = `${trackProgress.percent}%`;
-            $("resumeBar").style.width = `${trackProgress.percent}%`;
-            $("resumeLink").href = nextObj.url || `materi-basic.html?topik=${encodeURIComponent(track.id)}`;
-            $("resumeLink").innerHTML = `${escapeHTML(nextObj.actionLabel || "Lanjutkan")} <span aria-hidden="true">→</span>`;
+            if($("resumeTitle")) $("resumeTitle").textContent = nextObj.title;
+            if($("resumeText")) $("resumeText").textContent = nextObj.reason;
+            if($("resumePercent")) $("resumePercent").textContent = `${trackProgress.percent}%`;
+            if($("resumeBar")) $("resumeBar").style.width = `${trackProgress.percent}%`;
+            if($("resumeLink")) {
+                $("resumeLink").href = nextObj.url || `materi-basic.html?topik=${encodeURIComponent(track.id)}`;
+                $("resumeLink").innerHTML = `${escapeHTML(nextObj.actionLabel || "Lanjutkan")} <span aria-hidden="true">→</span>`;
+            }
         } else {
-            $("resumeTitle").textContent=`Lanjutkan ${track.title}`;
-            $("resumeText").textContent=`${trackProgress.completed} dari ${trackProgress.total} pelajaran sudah selesai.`;
-            $("resumePercent").textContent=`${trackProgress.percent}%`;
-            $("resumeBar").style.width=`${trackProgress.percent}%`;
-            $("resumeLink").href=`materi-basic.html?topik=${encodeURIComponent(track.id)}`;
+            if($("resumeTitle")) $("resumeTitle").textContent=`Lanjutkan ${track.title}`;
+            if($("resumeText")) $("resumeText").textContent=`${trackProgress.completed} dari ${trackProgress.total} pelajaran sudah selesai.`;
+            if($("resumePercent")) $("resumePercent").textContent=`${trackProgress.percent}%`;
+            if($("resumeBar")) $("resumeBar").style.width=`${trackProgress.percent}%`;
+            if($("resumeLink")) $("resumeLink").href=`materi-basic.html?topik=${encodeURIComponent(track.id)}`;
         }
     }
 
@@ -119,26 +130,54 @@
     }
     function initTilt(){
         if(matchMedia("(prefers-reduced-motion:reduce)").matches||matchMedia("(pointer:coarse)").matches)return;
-        const card=elements.heroVisual.querySelector(".learning-dashboard");elements.heroVisual.addEventListener("pointermove",event=>{const rect=elements.heroVisual.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width-.5,y=(event.clientY-rect.top)/rect.height-.5;card.style.transform=`rotateY(${x*7}deg) rotateX(${-y*6}deg) translateY(-3px)`;});elements.heroVisual.addEventListener("pointerleave",()=>card.style.transform="");
+        if(!elements.heroVisual) return;
+        const card=elements.heroVisual.querySelector(".learning-dashboard");
+        if(!card) return;
+        elements.heroVisual.addEventListener("pointermove",event=>{const rect=elements.heroVisual.getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width-.5,y=(event.clientY-rect.top)/rect.height-.5;card.style.transform=`rotateY(${x*7}deg) rotateX(${-y*6}deg) translateY(-3px)`;});elements.heroVisual.addEventListener("pointerleave",()=>card.style.transform="");
     }
-    function syncSubscription(){const pro=storage.get("eduquestSubscription")==="pro",badge=$("navSubscriptionBadge");badge.textContent=pro?"Pro":"Basic";badge.className=`subscription-badge ${pro?"pro":"basic"}`;}
+    function syncSubscription(){
+        const pro=storage.get("eduquestSubscription")==="pro",badge=$("navSubscriptionBadge");
+        if(badge){
+            badge.textContent=pro?"Pro":"Basic";
+            badge.className=`subscription-badge ${pro?"pro":"basic"}`;
+        }
+    }
     function syncSession(){
         let session=null;try{session=JSON.parse(storage.get("eduquestUserSession")||"null");}catch(_){}
         if(!session?.isLoggedIn)return;
         const label=String(session.username||"Profil").trim().slice(0,18),desktop=$("navLoginLink"),mobile=$("mobileLoginLink");
-        desktop.href="profile.html";desktop.textContent=label;desktop.setAttribute("aria-label",`Buka profil ${label}`);
-        mobile.href="profile.html";mobile.textContent="Buka Profil";
+        if(desktop){
+            desktop.href="profile.html";desktop.textContent=label;desktop.setAttribute("aria-label",`Buka profil ${label}`);
+        }
+        if(mobile){
+            mobile.href="profile.html";mobile.textContent="Buka Profil";
+        }
     }
 
     function bindEvents(){
-        elements.pathFilters.addEventListener("click",event=>{const button=event.target.closest("[data-career]");if(!button)return;activeCareer=button.dataset.career;elements.pathFilters.querySelectorAll("button").forEach(item=>{const active=item===button;item.classList.toggle("active",active);item.setAttribute("aria-pressed",String(active));});renderPaths(true);});
-        elements.menu.addEventListener("click",()=>toggleMenu(!elements.mobileNav.classList.contains("is-active")));elements.menuClose.addEventListener("click",()=>toggleMenu(false));elements.mobileNav.addEventListener("click",event=>{if(event.target===elements.mobileNav)toggleMenu(false);});elements.mobileNav.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>toggleMenu(false)));
-        document.addEventListener("keydown",event=>{if(event.key==="Escape"&&elements.mobileNav.classList.contains("is-active"))toggleMenu(false);});
-        window.addEventListener("scroll",()=>elements.header.classList.toggle("ux-scrolled",scrollY>24),{passive:true});window.addEventListener("curriculum-progress",()=>{updateDashboard();renderPaths();});
+        if(elements.pathFilters){
+            elements.pathFilters.addEventListener("click",event=>{const button=event.target.closest("[data-career]");if(!button)return;activeCareer=button.dataset.career;elements.pathFilters.querySelectorAll("button").forEach(item=>{const active=item===button;item.classList.toggle("active",active);item.setAttribute("aria-pressed",String(active));});renderPaths(true);});
+        }
+        if(elements.menu && elements.mobileNav){
+            elements.menu.addEventListener("click",()=>toggleMenu(!elements.mobileNav.classList.contains("is-active")));
+        }
+        if(elements.menuClose){
+            elements.menuClose.addEventListener("click",()=>toggleMenu(false));
+        }
+        if(elements.mobileNav){
+            elements.mobileNav.addEventListener("click",event=>{if(event.target===elements.mobileNav)toggleMenu(false);});
+            elements.mobileNav.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>toggleMenu(false)));
+        }
+        document.addEventListener("keydown",event=>{if(event.key==="Escape"&&elements.mobileNav&&elements.mobileNav.classList.contains("is-active"))toggleMenu(false);});
+        if(elements.header){
+            window.addEventListener("scroll",()=>elements.header.classList.toggle("ux-scrolled",scrollY>24),{passive:true});
+        }
+        window.addEventListener("curriculum-progress",()=>{updateDashboard();renderPaths();});
     }
 
     function init(){
-        initTheme();syncSubscription();syncSession();updateDashboard();renderPaths();bindEvents();initReveal();initCounters();initTilt();elements.header.classList.toggle("ux-scrolled",scrollY>24);
+        initTheme();syncSubscription();syncSession();updateDashboard();renderPaths();bindEvents();initReveal();initCounters();initTilt();
+        if(elements.header) elements.header.classList.toggle("ux-scrolled",scrollY>24);
         if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol))window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}),{once:true});
     }
     init();

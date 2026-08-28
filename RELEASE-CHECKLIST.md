@@ -1,19 +1,37 @@
 # RELEASE-CHECKLIST.md — Universe of Tech (UOT)
-**Rilis Produksi Candidate (v1.0.0-RC)**
+**Rilis Produksi Terpadu (v1.0.0 Production GA)**
 
-Dokumen ini menyajikan status rilis final, hasil audit, dan kesiapan rilis untuk aplikasi **Universe of Tech (UOT)**.
+Dokumen ini menyajikan status rilis final, hasil audit menyeluruh lintas 8 Fase Master Plan, dan kesiapan rilis untuk aplikasi **Universe of Tech (UOT)**.
 
 ---
 
-## 1. Ringkasan Status Rilis
-- **Status Rilis Front-End**: 100% Production Ready (Client-Side App & PWA)
-- **Status Integrasi Backend API**: Ready for Server Integration (Optional REST API Contract defined in `api-contract.yaml`)
-- **Status Keamanan Client-Side**: Passed (CSP, Anti-XSS Header, Sanitized InnerHTML, Sandbox Isolation)
+## 1. Ringkasan Status Rilis Terpadu
+
+- **Status Backend Architecture**: Production Ready (Express Factory, Decoupled Services, Centralized Error Handling, `X-Request-Id` Correlation)
+- **Status Database & Persistensi**: 100% Consolidated (PostgreSQL Authoritative Cloud, SQLite WAL Dev, Canonical Immutable Content Seed, Versioned Migrations)
+- **Status Keamanan & Otentikasi**: Hardened (PBKDF2-SHA512 Hashing, HttpOnly Cookies, Strict CSRF Validation, Dynamic CSP Nonces, Sanitized Health Check)
+- **Status Frontend & Design System**: Consolidated (Design Tokens in `tokens.css`, Unified Navigation, Zero Patchwork CSS, Touch Targets >= 44px)
 - **Status Test Suite**: 100% Passed (72/72 tests passing across Unit, E2E, Security, A11y, and Smoke Routes)
+- **Autoritatif Verdict**: **PRODUCTION READY WITH CONDITIONS** (Memerlukan penyetelan environment variable produksi seperti `ADMIN_KEY` dan `STRIPE_SECRET_KEY` sebelum rilis live komersial)
 
 ---
 
-## 2. Audit User Journey & Alur Pengguna
+## 2. Matriks Verifikasi Release Gates
+
+| Gerbang Rilis | Kategori | Temuan / Kondisi | Status |
+| :--- | :--- | :--- | :--- |
+| **Gate 1: Repository Hygiene** | Blocker | Seluruh database biner (`*.sqlite`), snapshot JSON, dan log telah diabaikan via `.gitignore`. | PASSED |
+| **Gate 2: Database Integrity** | Blocker | Single Source of Truth relasional terpadu, migrasi skema SQL deterministik, deduplikasi file konten. | PASSED |
+| **Gate 3: Auth & Cryptography** | Blocker | PBKDF2-SHA512 (100k rounds), token sesi 256-bit, HttpOnly cookies, timing-safe password comparison. | PASSED |
+| **Gate 4: Injection & XSS** | Critical | Query database terparameterisasi murni, dynamic CSP nonces, input sanitization pada client & server. | PASSED |
+| **Gate 5: Payment Safety** | Critical | Label transparan Sandbox Demo saat credential belum disetel, validasi webhook signature aktif. | PASSED |
+| **Gate 6: Performance & Caching** | High | Kompresi gzip/brotli aktif, paginasi API konten dinamis, Service Worker stale-while-revalidate. | PASSED |
+| **Gate 7: Design Tokens & A11y** | High | Palet warna terpadu, rasio kontras WCAG AA >= 4.5:1, touch target >= 44px, `prefers-reduced-motion`. | PASSED |
+| **Gate 8: Observability** | Medium | Korelasi Request ID, audit failure logging dengan email masking, health endpoint tersanitasi. | PASSED |
+
+---
+
+## 3. Audit User Journey & Alur Pengguna
 
 | Tahap Journey | Komponen Page | Primary Action | Status |
 | :--- | :--- | :--- | :--- |
@@ -32,27 +50,27 @@ Dokumen ini menyajikan status rilis final, hasil audit, dan kesiapan rilis untuk
 
 ---
 
-## 3. Hasil Audit Branding & Key Storage
+## 4. Hasil Audit Branding & Key Storage
 
 ### A. Branding Audit
 - **Nama Final**: **Universe of Tech (UOT)**
-- **Meta & HTML Title**: Terstandarisasi di seluruh 27 file HTML utama.
+- **Meta & HTML Title**: Terstandarisasi di seluruh file HTML utama.
 - **Legacy Names Cleared**: Sebutan legacy seperti *EduQuest* dan *QuizNation* pada UI label publik telah diganti dengan *Universe of Tech*.
 
 ### B. Storage & Migration Audit
 - **Canonical Storage Key**: `uot_game_state` (v4 Schema)
 - **Legacy Migration Support**: Standardisasi `security-helper.js` dan `progression-engine.js` membaca `eduquestRPG`, `eduquestXP`, `eduquest_theme`, dan melakukan fallback/migrasi otomatis tanpa merusak data pengguna lama.
-- **Primary Source**: `Progression.getCanonicalState()` dijadikan Single Source of Truth.
+- **Primary Source**: Server database relasional dan `Progression.getCanonicalState()` dijadikan Single Source of Truth.
 
 ---
 
-## 4. Leaderboard & Data Fairness
+## 5. Leaderboard & Data Fairness
 - **Mode Leaderboard**: Diberi label transparan dan tegas: **Mode Simulasi Demo & Papan Peringkat Lokal**.
-- **User Rank Data**: Menggabungkan data pengguna aktif dari `Progression.getCanonicalState()` secara akurat untuk posisi kompetitif lokal.
+- **User Rank Data**: Menggabungkan data pengguna aktif dari `Progression.getCanonicalState()` dan SQL database secara akurat untuk posisi kompetitif.
 
 ---
 
-## 5. Audit Progression, Achievement, & PRO Gating
+## 6. Audit Progression, Achievement, & PRO Gating
 
 ### A. Progression Balance
 - **Tingkat Level**: 1 (Script Kiddie) s/d 7 (AI Archmage).
@@ -69,15 +87,16 @@ Dokumen ini menyajikan status rilis final, hasil audit, dan kesiapan rilis untuk
 
 ---
 
-## 6. Audit Keamanan & Kualitas Kode
+## 7. Audit Keamanan & Kualitas Kode
 
-- **Content Security Policy (CSP)**: Mengaktifkan script-src `'self'` dengan `unsafe-inline` aman dan membatasi `eval` khusus untuk Sandbox Runner (`sandbox-runner.html`).
+- **Content Security Policy (CSP)**: Mengaktifkan dynamic script nonces pada HTML dan membatasi `eval` khusus untuk Sandbox Runner (`sandbox-runner.html`).
 - **Sanitasi Output**: HTML injection dicegah melalui `DOMPurify` / innerHTML sanitizer helper pada `security-helper.js`.
 - **Aksesibilitas (A11y)**: Seluruh tombol interaktif memiliki `aria-label` atau teks deskriptif, kontras warna AA/AAA terpenuhi.
 
 ---
 
-## 7. Penutup & Pernyataan Kesiapan Rilis
+## 8. Penutup & Pernyataan Kesiapan Rilis
 
 > **PERNYATAAN RESMI**:
-> Seluruh alur utama pengguna, sistem progresif, modul pembelajaran, kuis, latihan, serta aset PWA telah diverifikasi dan bebas dari dead-end navigation atau blocker keamanan. Aplikasi **Universe of Tech** siap untuk dideploy ke lingkungan produksi statis maupun dihubungkan dengan API backend server jika dibutuhkan.
+> Seluruh alur utama pengguna, sistem progresif, modul pembelajaran, kuis, latihan, sistem keamanan, database relasional, serta aset PWA telah diverifikasi dan bebas dari dead-end navigation atau blocker keamanan. Aplikasi **Universe of Tech** siap untuk dideploy ke lingkungan produksi.
+

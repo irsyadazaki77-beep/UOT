@@ -1301,7 +1301,9 @@
     function init() {
         cacheElements();
         if (!restoreSession()) {
-            document.getElementById("focusRoom").innerHTML = `
+            const focusRoom = document.getElementById("focusRoom");
+        if (focusRoom) {
+            focusRoom.innerHTML = `
                 <section class="session-empty-state">
                     <img src="universe-of-tech-logo.jpg" alt="" aria-hidden="true">
                     <span class="result-kicker">Session expired</span>
@@ -1310,6 +1312,7 @@
                     <a class="action-button primary" href="quiz.html"><i class="fa-solid fa-arrow-left"></i> Kembali ke Quiz</a>
                 </section>
             `;
+        }
             window.setTimeout(() => window.location.replace("quiz.html"), 1800);
             return;
         }
@@ -1330,7 +1333,8 @@
         if (state.payload.source === "lms") {
             document.body.classList.add("lms-session");
             document.title = `${state.payload.lms.moduleTitle} - LMS Focus Room`;
-            document.querySelector(".focus-brand span").textContent = "LMS Focus Room";
+            const fb = document.querySelector(".focus-brand span");
+            if (fb) fb.textContent = "LMS Focus Room";
         }
         state.running = true;
         state.lastTickAt = Date.now();

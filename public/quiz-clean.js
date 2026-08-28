@@ -425,13 +425,19 @@
             animateNumber(bookmarkBadgeElem, bookmarks.length);
         }
 
-        document.getElementById("bestScoreNote").textContent = best >= 80 ? "Pemahamanmu sudah kuat" : best > 0 ? "Terus naikkan akurasimu" : "Selesaikan quiz pertamamu";
-        document.getElementById("scoreRing").style.setProperty("--score", String(best));
-        document.getElementById("lastActivityLabel").textContent = last ? formatDate(last.date) : "Belum mulai";
-        document.getElementById("lastAccuracyMetric").textContent = last ? `${clamp(last.score, 0, 100)}%` : "—";
-        document.getElementById("lastAccuracyNote").textContent = last ? `${clamp(last.correct, 0, 99)} benar dari ${clamp(last.total, 0, 99)} soal` : "Belum ada sesi";
-        document.getElementById("focusMetric").textContent = weakest?.name || "Mulai quiz";
-        document.getElementById("focusNote").textContent = weakest ? `Akurasi terakhir ${weakest.accuracy}%` : "Rekomendasi muncul dari hasilmu";
+        function setText(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
+
+        setText("bestScoreNote", best >= 80 ? "Pemahamanmu sudah kuat" : best > 0 ? "Terus naikkan akurasimu" : "Selesaikan quiz pertamamu");
+        const scoreRing = document.getElementById("scoreRing");
+        if (scoreRing) scoreRing.style.setProperty("--score", String(best));
+        setText("lastActivityLabel", last ? formatDate(last.date) : "Belum mulai");
+        setText("lastAccuracyMetric", last ? `${clamp(last.score, 0, 100)}%` : "—");
+        setText("lastAccuracyNote", last ? `${clamp(last.correct, 0, 99)} benar dari ${clamp(last.total, 0, 99)} soal` : "Belum ada sesi");
+        setText("focusMetric", weakest?.name || "Mulai quiz");
+        setText("focusNote", weakest ? `Akurasi terakhir ${weakest.accuracy}%` : "Rekomendasi muncul dari hasilmu");
 
         renderLastSession(last, weakest);
         renderBookmarks(bookmarks);
@@ -441,8 +447,8 @@
         const empty = document.getElementById("lastSessionEmpty");
         const content = document.getElementById("lastSessionContent");
         if (!session || typeof session !== "object") return;
-        empty.hidden = true;
-        content.hidden = false;
+        if (empty) empty.hidden = true;
+        if (content) content.hidden = false;
         const score = clamp(session.score, 0, 100);
         const total = clamp(session.total, 0, 99);
         const correct = clamp(session.correct, 0, total);
@@ -591,19 +597,25 @@
         elements.catalogReviewEmpty.hidden = true;
         elements.catalogReviewContent.hidden = false;
         elements.catalogReview?.setAttribute("aria-labelledby", "catalogReviewName");
-        document.getElementById("catalogReviewTopic").textContent = labels[item.category];
-        document.getElementById("catalogReviewLevel").textContent = catalogLevelLabels[item.difficulty];
-        document.getElementById("catalogReviewName").textContent = item.title;
-        document.getElementById("catalogReviewDescription").textContent = item.description;
-        document.getElementById("catalogReviewAmount").textContent = `${item.amount} soal`;
-        document.getElementById("catalogReviewMode").textContent = labels[item.mode];
-        document.getElementById("catalogReviewDuration").textContent = formatDuration(getTimeLimit(item.amount, item.mode));
+        function setReviewText(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
+        setReviewText("catalogReviewTopic", labels[item.category]);
+        setReviewText("catalogReviewLevel", catalogLevelLabels[item.difficulty]);
+        setReviewText("catalogReviewName", item.title);
+        setReviewText("catalogReviewDescription", item.description);
+        setReviewText("catalogReviewAmount", `${item.amount} soal`);
+        setReviewText("catalogReviewMode", labels[item.mode]);
+        setReviewText("catalogReviewDuration", formatDuration(getTimeLimit(item.amount, item.mode)));
         const availability = document.getElementById("catalogAvailability");
-        availability.classList.toggle("is-unavailable", !ready);
-        availability.textContent = ready
-            ? `${available} soal cocok tersedia. Paket siap dimulai.`
-            : `Paket belum tersedia karena baru ada ${available} dari ${item.amount} soal yang dibutuhkan.`;
-        elements.startCatalog.disabled = !ready;
+        if (availability) {
+            availability.classList.toggle("is-unavailable", !ready);
+            availability.textContent = ready
+                ? `${available} soal cocok tersedia. Paket siap dimulai.`
+                : `Paket belum tersedia karena baru ada ${available} dari ${item.amount} soal yang dibutuhkan.`;
+        }
+        if (elements.startCatalog) elements.startCatalog.disabled = !ready;
     }
 
     function selectCatalogPackage(id) {

@@ -157,36 +157,46 @@
             if (!res.ok) throw new Error("Gagal memuat profil");
             const profile = await res.json();
             
-            document.getElementById("modalName").textContent = profile.username;
-            document.getElementById("modalAvatar").textContent = profile.avatar || "👨‍💻";
-            document.getElementById("modalTitle").textContent = `Level ${profile.level || 1} Coder`;
+            function setModalText(id, val) {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            }
+            
+            setModalText("modalName", profile.username || "User");
+            setModalText("modalAvatar", profile.avatar || "👨‍💻");
+            setModalText("modalTitle", `Level ${profile.level || 1} Coder`);
             
             if (profile.isPrivate) {
-                document.getElementById("modalBio").textContent = "Profil ini bersifat privat.";
-                document.getElementById("modalXp").textContent = "---";
-                document.getElementById("modalStreak").textContent = "---";
+                setModalText("modalBio", "Profil ini bersifat privat.");
+                setModalText("modalXp", "---");
+                setModalText("modalStreak", "---");
             } else {
-                document.getElementById("modalBio").textContent = profile.bio || "Pelajar di Universe of Tech.";
-                document.getElementById("modalXp").textContent = (profile.xp || 0).toLocaleString();
-                document.getElementById("modalStreak").textContent = `${profile.streak || 0} Hari`;
+                setModalText("modalBio", profile.bio || "Pelajar di Universe of Tech.");
+                setModalText("modalXp", (profile.xp || 0).toLocaleString());
+                setModalText("modalStreak", `${profile.streak || 0} Hari`);
             }
 
             const btnFollow = document.getElementById("btnFollow");
+            const btnChallenge = document.getElementById("btnChallenge");
             if (userId === myUserId) {
-                btnFollow.style.display = "none";
-                document.getElementById("btnChallenge").style.display = "none";
+                if (btnFollow) btnFollow.style.display = "none";
+                if (btnChallenge) btnChallenge.style.display = "none";
             } else {
-                btnFollow.style.display = "inline-flex";
-                document.getElementById("btnChallenge").style.display = "inline-flex";
+                if (btnFollow) btnFollow.style.display = "inline-flex";
+                if (btnChallenge) btnChallenge.style.display = "inline-flex";
                 
                 if (profile.isFollowing) {
-                    btnFollow.innerHTML = `<i class="fa-solid fa-user-check"></i> Mengikuti`;
-                    btnFollow.className = "btn btn-ghost";
-                    btnFollow.onclick = () => handleFollowToggle(userId, false);
+                    if (btnFollow) {
+                        btnFollow.innerHTML = `<i class="fa-solid fa-user-check"></i> Mengikuti`;
+                        btnFollow.className = "btn btn-ghost";
+                        btnFollow.onclick = () => handleFollowToggle(userId, false);
+                    }
                 } else {
-                    btnFollow.innerHTML = `<i class="fa-solid fa-user-plus"></i> Ikuti`;
-                    btnFollow.className = "btn btn-primary";
-                    btnFollow.onclick = () => handleFollowToggle(userId, true);
+                    if (btnFollow) {
+                        btnFollow.innerHTML = `<i class="fa-solid fa-user-plus"></i> Ikuti`;
+                        btnFollow.className = "btn btn-primary";
+                        btnFollow.onclick = () => handleFollowToggle(userId, true);
+                    }
                 }
             }
 
@@ -218,7 +228,8 @@
     }
 
     document.getElementById("closeProfileModal")?.addEventListener("click", () => {
-        document.getElementById("socialProfileModal").style.display = "none";
+        const modal = document.getElementById("socialProfileModal");
+        if (modal) modal.style.display = "none";
     });
 
     function showLoadingState() {
@@ -226,9 +237,9 @@
         const leaderboardBody = document.getElementById("leaderboardBody");
         const myRankingBar = document.getElementById("myRankingBar");
 
-        podiumContainer.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-secondary);">Memuat data...</div>`;
-        leaderboardBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>`;
-        myRankingBar.innerHTML = ``;
+        if (podiumContainer) podiumContainer.innerHTML = `<div style="text-align:center; width:100%; color:var(--text-secondary);">Memuat data...</div>`;
+        if (leaderboardBody) leaderboardBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>`;
+        if (myRankingBar) myRankingBar.innerHTML = ``;
     }
 
     function renderErrorState() {
@@ -236,9 +247,9 @@
         const leaderboardBody = document.getElementById("leaderboardBody");
         const myRankingBar = document.getElementById("myRankingBar");
 
-        podiumContainer.innerHTML = `<div style="text-align:center; width:100%; color:var(--danger-color);">Gagal memuat papan peringkat. Coba lagi nanti.</div>`;
-        leaderboardBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--danger-color);">Data tidak tersedia.</td></tr>`;
-        myRankingBar.innerHTML = ``;
+        if (podiumContainer) podiumContainer.innerHTML = `<div style="text-align:center; width:100%; color:var(--danger-color);">Gagal memuat papan peringkat. Coba lagi nanti.</div>`;
+        if (leaderboardBody) leaderboardBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--danger-color);">Data tidak tersedia.</td></tr>`;
+        if (myRankingBar) myRankingBar.innerHTML = ``;
     }
 
     function renderLeaderboard(data, cachedTimestamp = null) {
@@ -255,90 +266,96 @@
         }
 
         const podiumContainer = document.getElementById("podiumContainer");
-        podiumContainer.innerHTML = `
-            <div class="podium-card podium-2" onclick="window.openSocialProfile('${top3[1].userId}')" style="cursor:pointer;">
-                <div class="podium-rank">2</div>
-                <span class="podium-avatar">${top3[1].avatar || '👨‍💻'}</span>
-                <div class="podium-username">${top3[1].username}</div>
-                <div class="podium-title">${top3[1].title || 'Coder'} • Lv. ${top3[1].level}</div>
-                <span class="podium-xp">${top3[1].xp.toLocaleString()} XP</span>
-            </div>
-            <div class="podium-card podium-1" onclick="window.openSocialProfile('${top3[0].userId}')" style="cursor:pointer;">
-                <div class="podium-rank">1</div>
-                <span class="podium-avatar" style="font-size: 64px;">??<br>${top3[0].avatar || '👨‍💻'}</span>
-                <div class="podium-username" style="font-size: 21px;">${top3[0].username}</div>
-                <div class="podium-title">${top3[0].title || 'Coder'} • Lv. ${top3[0].level}</div>
-                <span class="podium-xp">${top3[0].xp.toLocaleString()} XP</span>
-            </div>
-            <div class="podium-card podium-3" onclick="window.openSocialProfile('${top3[2].userId}')" style="cursor:pointer;">
-                <div class="podium-rank">3</div>
-                <span class="podium-avatar">${top3[2].avatar || '👨‍💻'}</span>
-                <div class="podium-username">${top3[2].username}</div>
-                <div class="podium-title">${top3[2].title || 'Coder'} • Lv. ${top3[2].level}</div>
-                <span class="podium-xp">${top3[2].xp.toLocaleString()} XP</span>
-            </div>
-        `;
-
-        const leaderboardBody = document.getElementById("leaderboardBody");
-        leaderboardBody.innerHTML = "";
-        
-        if (cachedTimestamp) {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `<td colspan="4" style="text-align:center; font-size:12px; color:var(--text-secondary); background: var(--bg-secondary);">Data offline (Terakhir diperbarui: ${new Date(cachedTimestamp).toLocaleString()})</td>`;
-            leaderboardBody.appendChild(tr);
+        if (podiumContainer) {
+            podiumContainer.innerHTML = `
+                <div class="podium-card podium-2" onclick="window.openSocialProfile('${top3[1].userId}')" style="cursor:pointer;">
+                    <div class="podium-rank">2</div>
+                    <span class="podium-avatar">${top3[1].avatar || '👨‍💻'}</span>
+                    <div class="podium-username">${top3[1].username}</div>
+                    <div class="podium-title">${top3[1].title || 'Coder'} • Lv. ${top3[1].level}</div>
+                    <span class="podium-xp">${top3[1].xp.toLocaleString()} XP</span>
+                </div>
+                <div class="podium-card podium-1" onclick="window.openSocialProfile('${top3[0].userId}')" style="cursor:pointer;">
+                    <div class="podium-rank">1</div>
+                    <span class="podium-avatar" style="font-size: 64px;">??<br>${top3[0].avatar || '👨‍💻'}</span>
+                    <div class="podium-username" style="font-size: 21px;">${top3[0].username}</div>
+                    <div class="podium-title">${top3[0].title || 'Coder'} • Lv. ${top3[0].level}</div>
+                    <span class="podium-xp">${top3[0].xp.toLocaleString()} XP</span>
+                </div>
+                <div class="podium-card podium-3" onclick="window.openSocialProfile('${top3[2].userId}')" style="cursor:pointer;">
+                    <div class="podium-rank">3</div>
+                    <span class="podium-avatar">${top3[2].avatar || '👨‍💻'}</span>
+                    <div class="podium-username">${top3[2].username}</div>
+                    <div class="podium-title">${top3[2].title || 'Coder'} • Lv. ${top3[2].level}</div>
+                    <span class="podium-xp">${top3[2].xp.toLocaleString()} XP</span>
+                </div>
+            `;
         }
 
-        dataList.forEach((item, index) => {
-            const isUser = item.isCurrentUser;
-
-            // Only show rows inside the list limit (e.g. up to top 20, starting from 4th)
-            if (index >= 3 && index < 20) {
+        const leaderboardBody = document.getElementById("leaderboardBody");
+        if (leaderboardBody) {
+            leaderboardBody.innerHTML = "";
+            
+            if (cachedTimestamp) {
                 const tr = document.createElement("tr");
-                if (isUser) tr.className = "highlight-user";
-                tr.style.cursor = "pointer";
-                tr.onclick = () => window.openSocialProfile(item.userId);
-                tr.innerHTML = `
-                    <td class="rank-col">#${item.rank}</td>
-                    <td>
-                        <div class="user-col">
-                            <span class="user-col-avatar">${item.avatar || '👨‍💻'}</span>
-                            <div class="user-col-info">
-                                <span class="user-col-name">${item.username}${isUser ? ' (Anda)' : ''}</span>
-                                <span class="user-col-title">${item.title || 'Coder'} • Lv. ${item.level}</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="badge-col"><span>Explorer</span></td>
-                    <td class="xp-col">${item.xp.toLocaleString()}</td>
-                `;
+                tr.innerHTML = `<td colspan="4" style="text-align:center; font-size:12px; color:var(--text-secondary); background: var(--bg-secondary);">Data offline (Terakhir diperbarui: ${new Date(cachedTimestamp).toLocaleString()})</td>`;
                 leaderboardBody.appendChild(tr);
             }
-        });
+
+            dataList.forEach((item, index) => {
+                const isUser = item.isCurrentUser;
+
+                // Only show rows inside the list limit (e.g. up to top 20, starting from 4th)
+                if (index >= 3 && index < 20) {
+                    const tr = document.createElement("tr");
+                    if (isUser) tr.className = "highlight-user";
+                    tr.style.cursor = "pointer";
+                    tr.onclick = () => window.openSocialProfile(item.userId);
+                    tr.innerHTML = `
+                        <td class="rank-col">#${item.rank}</td>
+                        <td>
+                            <div class="user-col">
+                                <span class="user-col-avatar">${item.avatar || '👨‍💻'}</span>
+                                <div class="user-col-info">
+                                    <span class="user-col-name">${item.username}${isUser ? ' (Anda)' : ''}</span>
+                                    <span class="user-col-title">${item.title || 'Coder'} • Lv. ${item.level}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="badge-col"><span>Explorer</span></td>
+                        <td class="xp-col">${item.xp.toLocaleString()}</td>
+                    `;
+                    leaderboardBody.appendChild(tr);
+                }
+            });
+        }
 
         const myRankingBar = document.getElementById("myRankingBar");
-        if (myRank && data.userRank) {
-            myRankingBar.innerHTML = `
-                <div class="my-ranking-left">
-                    <div class="my-ranking-badge">Peringkat #${data.userRank.rank}</div>
-                    <div class="my-ranking-info">
-                        <strong>Anda</strong>
-                        <span>Level ${data.userRank.level || 1} Coder</span>
+        if (myRankingBar) {
+            if (myRank && data.userRank) {
+                myRankingBar.innerHTML = `
+                    <div class="my-ranking-left">
+                        <div class="my-ranking-badge">Peringkat #${data.userRank.rank}</div>
+                        <div class="my-ranking-info">
+                            <strong>Anda</strong>
+                            <span>Level ${data.userRank.level || 1} Coder</span>
+                        </div>
                     </div>
-                </div>
-                <div class="my-ranking-right">
-                    ${data.userRank.xp.toLocaleString()} XP
-                </div>
-            `;
-        } else {
-            myRankingBar.innerHTML = `
-                <div class="my-ranking-left" style="opacity: 0.7">
-                    <div class="my-ranking-badge">Belum ada peringkat</div>
-                    <div class="my-ranking-info">
-                        <strong>Anda</strong>
-                        <span>Kumpulkan XP untuk masuk leaderboard</span>
+                    <div class="my-ranking-right">
+                        ${data.userRank.xp.toLocaleString()} XP
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                myRankingBar.innerHTML = `
+                    <div class="my-ranking-left" style="opacity: 0.7">
+                        <div class="my-ranking-badge">Belum ada peringkat</div>
+                        <div class="my-ranking-info">
+                            <strong>Anda</strong>
+                            <span>Kumpulkan XP untuk masuk leaderboard</span>
+                        </div>
+                    </div>
+                `;
+            }
         }
     }
 

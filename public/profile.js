@@ -27,7 +27,7 @@
     function subscription() { return window.QuizNationSubscription || null; }
     function isPro() { return subscription() ? subscription().isPro() : localStorage.getItem("eduquestSubscription") === "pro"; }
     function setText(id, value) { const node = $(id); if (node) node.textContent = value; }
-    function showToast(text) { const toast = $("profileToast"); toast.textContent = text; toast.classList.add("show"); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600); }
+    function showToast(text) { const toast = $("profileToast"); if (!toast) return; toast.textContent = text; toast.classList.add("show"); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600); }
     function formatDate(value) { const date = value ? new Date(value) : null; return date && !Number.isNaN(date.getTime()) ? new Intl.DateTimeFormat("id-ID", { day: "2-digit", month: "short", year: "numeric" }).format(date) : "—"; }
     function updateSaveState(text = "Tersimpan otomatis") { setText("profileSaveState", text); }
 
@@ -69,18 +69,27 @@
 
     function renderSubscription() {
         const sub = subscription(); const pro = isPro(); const details = sub?.get?.() || {}; const plan = details.planName || (pro ? "Pro Learning" : "Basic");
-        $("membershipCard").classList.toggle("is-pro", pro); $("profileSubscriptionStatus").classList.toggle("is-pro", pro);
-        setText("navSubscriptionBadge", pro ? "PRO" : "Basic"); $("navSubscriptionBadge").classList.toggle("is-pro", pro);
-        setText("profilePlan", pro ? "PRO" : "Basic"); $("profilePlan").classList.toggle("is-pro", pro);
+        $("membershipCard")?.classList.toggle("is-pro", pro); $("profileSubscriptionStatus")?.classList.toggle("is-pro", pro);
+        setText("navSubscriptionBadge", pro ? "PRO" : "Basic"); $("navSubscriptionBadge")?.classList.toggle("is-pro", pro);
+        setText("profilePlan", pro ? "PRO" : "Basic"); $("profilePlan")?.classList.toggle("is-pro", pro);
         setText("membershipKicker", pro ? "PRO membership active" : "Basic membership");
         setText("membershipTitle", pro ? `Selamat datang kembali di ${plan}.` : "Mulai unlock cara belajar yang lebih terarah.");
         setText("membershipDescription", pro ? "Benefit premium aktif di seluruh command center belajar kamu." : "Upgrade untuk membuka Smart Route, planner SNBT, dan Culture Passport.");
         setText("membershipStatus", pro ? "Aktif" : "Basic"); setText("membershipTimeLabel", pro ? "Berakhir" : "Akses"); setText("subscriptionDays", pro ? `${sub?.daysRemaining?.() || 0} hari` : "Terbatas"); setText("subscriptionInvoice", pro && details.invoice ? String(details.invoice).replace(/^UOT-/, "") : "—");
-        const primary = $("membershipPrimaryAction"); primary.href = pro ? "pro-hub.html" : (sub?.planUrl?.("pro", "profile") || "payment.html?plan=pro&source=profile"); primary.querySelector("span").textContent = pro ? "Buka PRO Learning Hub" : "Upgrade ke PRO";
+        const primary = $("membershipPrimaryAction");
+        if (primary) {
+            primary.href = pro ? "pro-hub.html" : (sub?.planUrl?.("pro", "profile") || "payment.html?plan=pro&source=profile");
+            const span = primary.querySelector("span");
+            if (span) span.textContent = pro ? "Buka PRO Learning Hub" : "Upgrade ke PRO";
+        }
         setText("subscriptionDescription", pro ? "Paketmu aktif. Kelola akses premium tanpa kehilangan progres belajar." : "Pilih paket yang memberi ruang belajar paling sesuai.");
         setText("subscriptionStatusText", pro ? "PRO aktif" : "Akun Basic"); setText("subscriptionPlanName", pro ? plan : "Mulai perjalanan PRO-mu"); setText("subscriptionStatusDescription", pro ? "Seluruh benefit premium aktif dan progresmu tersimpan pada perangkat ini." : "Aktifkan akses premium untuk membuka seluruh command center belajar."); setText("subscriptionRenewal", pro ? formatDate(details.renewsAt) : "—"); setText("subscriptionInvoiceDetail", pro && details.invoice ? String(details.invoice) : "—");
         document.querySelectorAll("[data-checkout-plan]").forEach(button => { const current = pro && button.dataset.checkoutPlan === details.planId; button.disabled = current; button.textContent = current ? "Paket Aktif" : button.dataset.checkoutPlan === "annual" ? "Pilih Pro Tahunan" : "Pilih Pro Bulanan"; });
-        $("manageBasicPlan").disabled = !pro; $("manageBasicPlan").textContent = pro ? "Kembali ke Basic" : "Paket Basic Aktif";
+        const manageBasic = $("manageBasicPlan");
+        if (manageBasic) {
+            manageBasic.disabled = !pro;
+            manageBasic.textContent = pro ? "Kembali ke Basic" : "Paket Basic Aktif";
+        }
         renderBenefits(pro);
     }
 

@@ -1717,11 +1717,14 @@ function renderOutlineSidebar() {
     const track = lmsTracks.find(t => t.id === lmsState.currentTrackId);
     if (!track) return;
 
-    document.getElementById("lmsSidebarTrackTitle").textContent = track.title;
+    const titleEl = document.getElementById("lmsSidebarTrackTitle");
+    if (titleEl) titleEl.textContent = track.title;
 
     const progress = calculateTrackProgress(track.id);
-    document.getElementById("lmsSidebarProgressPct").textContent = `${progress.percent}%`;
-    document.getElementById("lmsSidebarProgressFill").style.width = `${progress.percent}%`;
+    const pctEl = document.getElementById("lmsSidebarProgressPct");
+    if (pctEl) pctEl.textContent = `${progress.percent}%`;
+    const fillEl = document.getElementById("lmsSidebarProgressFill");
+    if (fillEl) fillEl.style.width = `${progress.percent}%`;
 
     const tree = document.getElementById("lmsSyllabusTree");
     if (!tree) return;
@@ -2184,11 +2187,13 @@ function renderLmsQuizActiveLayout() {
 
     // Disable helper actions in Challenge/Exam Mode
     if (lmsState.quiz.mode === "challenge") {
-        document.getElementById("lmsQuizHintBtn").disabled = true;
-        document.getElementById("lmsQuizFiftyBtn").disabled = true;
+        const hintBtn = document.getElementById("lmsQuizHintBtn");
+        if (hintBtn) hintBtn.disabled = true;
+        const fiftyBtn = document.getElementById("lmsQuizFiftyBtn");
+        if (fiftyBtn) fiftyBtn.disabled = true;
     } else {
-        document.getElementById("lmsQuizHintBtn").addEventListener("click", triggerLmsHint);
-        document.getElementById("lmsQuizFiftyBtn").addEventListener("click", triggerLmsFifty);
+        document.getElementById("lmsQuizHintBtn")?.addEventListener("click", triggerLmsHint);
+        document.getElementById("lmsQuizFiftyBtn")?.addEventListener("click", triggerLmsFifty);
 
 }
 
@@ -2243,13 +2248,18 @@ function showLmsQuestion() {
         }
 
         // HUD and metadata
-        document.getElementById("lmsQuizCounter").textContent = `Soal ${qIndex + 1}/5`;
-        document.getElementById("lmsQuizProgressFill").style.width = `${((qIndex + 1) / 5) * 100}%`;
-        document.getElementById("lmsQuestionLabel").textContent = `${q.category.toUpperCase()} - LEVEL: ${q.difficulty.toUpperCase()}`;
-        document.getElementById("lmsQuestionText").textContent = q.question;
+        const quizCounterEl = document.getElementById("lmsQuizCounter");
+        if (quizCounterEl) quizCounterEl.textContent = `Soal ${qIndex + 1}/5`;
+        const quizFillEl = document.getElementById("lmsQuizProgressFill");
+        if (quizFillEl) quizFillEl.style.width = `${((qIndex + 1) / 5) * 100}%`;
+        const qLabelEl = document.getElementById("lmsQuestionLabel");
+        if (qLabelEl) qLabelEl.textContent = `${q.category.toUpperCase()} - LEVEL: ${q.difficulty.toUpperCase()}`;
+        const qTextEl = document.getElementById("lmsQuestionText");
+        if (qTextEl) qTextEl.textContent = q.question;
 
         // Render options
         const ansGrid = document.getElementById("lmsQuestionAnswers");
+        if (!ansGrid) return;
         ansGrid.innerHTML = "";
 
         const savedSelection = lmsState.quiz.selected[qIndex];
@@ -2404,10 +2414,13 @@ function triggerLmsHint() {
     playSound('click');
     
     const feedback = document.getElementById("lmsQuestionFeedback");
-    feedback.innerHTML = `<strong>Hint Soal:</strong> ${q.hint}`;
-    feedback.classList.add("show");
+    if (feedback) {
+        feedback.innerHTML = `<strong>Hint Soal:</strong> ${q.hint}`;
+        feedback.classList.add("show");
+    }
 
-    document.getElementById("lmsQuizHintBtn").disabled = true;
+    const hintBtn = document.getElementById("lmsQuizHintBtn");
+    if (hintBtn) hintBtn.disabled = true;
 }
 
 function triggerLmsFifty() {
@@ -2433,7 +2446,8 @@ function triggerLmsFifty() {
         }
     });
 
-    document.getElementById("lmsQuizFiftyBtn").disabled = true;
+    const fiftyBtn = document.getElementById("lmsQuizFiftyBtn");
+    if (fiftyBtn) fiftyBtn.disabled = true;
 }
 
 // --- Finish Quiz Sesi & Result Renderer ---
@@ -2815,20 +2829,28 @@ function showCertificate(trackId) {
     `;
 
     const nameInput = document.getElementById("lmsCertStudentName");
-    nameInput.value = lmsState.progress.userName;
-    document.getElementById("lmsCertDisplayName").textContent = lmsState.progress.userName;
-    document.getElementById("lmsTranscriptStudentName").textContent = lmsState.progress.userName;
-    document.getElementById("lmsCertCourse").textContent = track.title;
-    document.getElementById("lmsTranscriptCourseName").textContent = track.title;
+    if (nameInput) nameInput.value = lmsState.progress.userName;
+    const certName = document.getElementById("lmsCertDisplayName");
+    if (certName) certName.textContent = lmsState.progress.userName;
+    const transcriptName = document.getElementById("lmsTranscriptStudentName");
+    if (transcriptName) transcriptName.textContent = lmsState.progress.userName;
+    const certCourse = document.getElementById("lmsCertCourse");
+    if (certCourse) certCourse.textContent = track.title;
+    const transcriptCourse = document.getElementById("lmsTranscriptCourseName");
+    if (transcriptCourse) transcriptCourse.textContent = track.title;
     
     const formattedDate = new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" });
-    document.getElementById("lmsCertDate").textContent = formattedDate;
-    document.getElementById("lmsTranscriptDate").textContent = formattedDate;
+    const certDate = document.getElementById("lmsCertDate");
+    if (certDate) certDate.textContent = formattedDate;
+    const transcriptDate = document.getElementById("lmsTranscriptDate");
+    if (transcriptDate) transcriptDate.textContent = formattedDate;
     
     const randomHash = Math.floor(100000 + Math.random() * 900000);
     const verificationText = `Verification ID: UOT-${trackId.toUpperCase()}-${randomHash} - Verified Academic Honor`;
-    document.getElementById("lmsCertVerification").textContent = verificationText;
-    document.getElementById("lmsTranscriptVerification").textContent = verificationText;
+    const certVerif = document.getElementById("lmsCertVerification");
+    if (certVerif) certVerif.textContent = verificationText;
+    const transcriptVerif = document.getElementById("lmsTranscriptVerification");
+    if (transcriptVerif) transcriptVerif.textContent = verificationText;
 
     // Populate Transcript Table dynamically
     const tableBody = document.getElementById("lmsTranscriptTableBody");
@@ -3376,8 +3398,10 @@ function setupLmsEventListeners() {
             // Re-render tracks to reflect fresh progress pct
             renderTrackCards();
             
-            document.getElementById("classroomView").style.display = "none";
-            document.getElementById("tracksView").style.display = "block";
+            const cv = document.getElementById("classroomView");
+            if (cv) cv.style.display = "none";
+            const tv = document.getElementById("tracksView");
+            if (tv) tv.style.display = "block";
         });
     }
 }

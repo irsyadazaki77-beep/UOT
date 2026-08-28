@@ -39,8 +39,8 @@ class ContentRepository {
     }
 
     _getDiskFileNames(canonicalDomain) {
-        if (canonicalDomain === 'learningPaths') {
-            return ['learning-paths.json', 'learningPaths.json'];
+        if (canonicalDomain === 'learningPaths' || canonicalDomain === 'learning-paths') {
+            return ['learning-paths.json'];
         }
         return [`${canonicalDomain}.json`];
     }

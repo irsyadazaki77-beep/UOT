@@ -744,7 +744,8 @@
                 if (modeIcon) {
                     modeIcon.className = "fa-solid fa-shield-halved text-emerald-500";
                 }
-                $("payNowBtn").querySelector(".btn-text").textContent = "Lanjut ke Checkout Stripe";
+                const btnText = $("payNowBtn")?.querySelector(".btn-text");
+                if (btnText) btnText.textContent = "Lanjut ke Checkout Stripe";
                 
                 // Hide input elements for card payments because we will use hosted checkout!
                 const helperEl = document.querySelector(".demo-card-helper");
@@ -770,7 +771,8 @@
                 if (modeIcon) {
                     modeIcon.className = "fa-solid fa-flask text-amber-500";
                 }
-                $("payNowBtn").querySelector(".btn-text").textContent = "Jalankan Simulasi";
+                const btnText = $("payNowBtn")?.querySelector(".btn-text");
+                if (btnText) btnText.textContent = "Jalankan Simulasi";
             }
         } catch (e) {
             console.error("Gagal memeriksa status konfigurasi pembayaran:", e);

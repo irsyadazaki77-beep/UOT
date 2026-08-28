@@ -106,6 +106,17 @@
         let icon = "fa-cloud-check";
         let label = "Synced";
 
+        if (status === "synced") {
+            container.style.opacity = "0";
+            container.style.pointerEvents = "none";
+            setTimeout(() => { if (syncStatus === "synced") container.style.display = "none"; }, 300);
+            return;
+        } else {
+            container.style.display = "inline-flex";
+            container.style.opacity = "1";
+            container.style.pointerEvents = "auto";
+        }
+
         if (status === "syncing") {
             bg = "rgba(59, 130, 246, 0.12)";
             border = "1px solid rgba(59, 130, 246, 0.3)";
@@ -122,8 +133,16 @@
             bg = "rgba(239, 68, 68, 0.12)";
             border = "1px solid rgba(239, 68, 68, 0.3)";
             color = "#ef4444";
-            icon = "fa-triangle-exclamation";
-            label = "Sync Error";
+            icon = "fa-rotate-right";
+            label = "Mencoba lagi...";
+            
+            // Hide error badge after 5 seconds to prevent permanent navbar clutter
+            setTimeout(() => {
+                if (syncStatus === "error") {
+                    container.style.opacity = "0";
+                    container.style.pointerEvents = "none";
+                }
+            }, 5000);
         }
 
         container.style.background = bg;

@@ -402,10 +402,12 @@ window.increaseStreakDemo = function(btn) {
         setTimeout(() => valEl.style.transform = "scale(1)", 250);
     }
     
-    btn.textContent = `✅ Streak Hari Ke-${demoStreakCount} Diklaim!`;
-    btn.style.background = "var(--green, #10b981)";
-    btn.style.color = "#fff";
-    btn.style.borderColor = "var(--green, #10b981)";
+    if (btn) {
+        btn.textContent = `✅ Streak Hari Ke-${demoStreakCount} Diklaim!`;
+        btn.style.background = "var(--green, #10b981)";
+        btn.style.color = "#fff";
+        btn.style.borderColor = "var(--green, #10b981)";
+    }
     
     if (typeof playSound === "function") playSound("success");
 };
@@ -421,10 +423,12 @@ window.boostXPDemo = function(btn) {
         setTimeout(() => xpEl.style.transform = "scale(1)", 250);
     }
     
-    btn.textContent = `🚀 +100 XP Ditambahkan! (Total: ${demoXpCount})`;
-    btn.style.background = "rgba(16, 185, 129, 0.15)";
-    btn.style.borderColor = "#10b981";
-    btn.style.color = "#10b981";
+    if (btn) {
+        btn.textContent = `🚀 +100 XP Ditambahkan! (Total: ${demoXpCount})`;
+        btn.style.background = "rgba(16, 185, 129, 0.15)";
+        btn.style.borderColor = "#10b981";
+        btn.style.color = "#10b981";
+    }
     if (typeof playSound === "function") playSound("coin");
 };
 
