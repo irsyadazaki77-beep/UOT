@@ -13,9 +13,9 @@ class SubscriptionService {
         this.stripeWebhookSecret = stripeWebhookSecret;
     }
 
-    getStatus(userId) {
+    async getStatus(userId) {
         if (!userId) return null;
-        const sub = this.subscriptionStore.get(userId);
+        const sub = await this.subscriptionStore.get(userId);
         if (!sub) return null;
         const isActive = sub.status === 'active' && Date.now() < new Date(sub.expiresAt).getTime();
         return {

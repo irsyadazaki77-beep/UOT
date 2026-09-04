@@ -19,20 +19,25 @@ class BackupService {
         }
     }
 
-    createSnapshot(label = 'manual') {
+    async createSnapshot(label = 'manual') {
         this.ensureBackupDir();
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const filename = `uot_snapshot_${label}_${timestamp}.json`;
         const filePath = path.join(this.backupDir, filename);
 
+        const users = this.repos.user ? await this.repos.user.getAll(10000, 0) : [];
+        const content = this.repos.content ? await this.repos.content.exportAll() : {};
+        const featureFlags = this.repos.analytics ? await this.repos.analytics.getFeatureFlags() : {};
+        const events = this.repos.analytics ? await this.repos.analytics.getEvents(10000) : [];
+
         const snapshot = {
             version: 1,
             createdAt: new Date().toISOString(),
             label,
-            users: this.repos.user?.getAll(10000, 0) || [],
-            content: this.repos.content?.exportAll() || {},
-            featureFlags: this.repos.analytics?.getFeatureFlags() || {},
-            analyticsEventsCount: this.repos.analytics?.getEvents(10000)?.length || 0
+            users,
+            content,
+            featureFlags,
+            analyticsEventsCount: events?.length || 0
         };
 
         fs.writeFileSync(filePath, JSON.stringify(snapshot, null, 2), 'utf8');
@@ -53,7 +58,7 @@ class BackupService {
         });
     }
 
-    restoreFromSnapshot(filePath) {
+    async restoreFromSnapshot(filePath) {
         if (!fs.existsSync(filePath)) {
             throw new Error(`Backup file not found: ${filePath}`);
         }
@@ -62,7 +67,7 @@ class BackupService {
         const snapshot = JSON.parse(raw);
 
         if (snapshot.content && this.repos.content) {
-            this.repos.content.importBundle(snapshot.content);
+            await this.repos.content.importBundle(snapshot.content);
         }
 
         console.log(`[BackupService] Restored snapshot from ${filePath}`);

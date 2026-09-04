@@ -15,9 +15,9 @@ async function runCloudSyncTests() {
     let passed = 0;
     let failed = 0;
 
-    function test(name, fn) {
+    async function test(name, fn) {
         try {
-            fn();
+            await fn();
             console.log(`  ✅ [PASS] ${name}`);
             passed++;
         } catch (err) {
@@ -32,8 +32,8 @@ async function runCloudSyncTests() {
     // -------------------------------------------------------------
     // TEST 1: Server Default Progress Creation
     // -------------------------------------------------------------
-    test('Server creates default Schema progress document for new user', () => {
-        const p = dbInstance.getUserProgress(testUserId);
+    await test('Server creates default Schema progress document for new user', async () => {
+        const p = await dbInstance.getUserProgress(testUserId);
         assert.strictEqual(p.userId, testUserId);
         assert.strictEqual(p.schemaVersion >= 5, true);
         assert.strictEqual(p.level, 1);
@@ -45,7 +45,7 @@ async function runCloudSyncTests() {
     // -------------------------------------------------------------
     // TEST 2: Process Valid Event (Lesson Complete)
     // -------------------------------------------------------------
-    test('Server processes valid lesson_complete event and awards exact rewards', () => {
+    await test('Server processes valid lesson_complete event and awards exact rewards', async () => {
         const event = {
             eventId: `evt_lesson_${Date.now()}`,
             eventType: 'lesson_complete',
@@ -53,12 +53,12 @@ async function runCloudSyncTests() {
             payload: { lessonId: 'web-html-semantik' }
         };
 
-        const res = dbInstance.processActivityEvent(testUserId, event);
+        const res = await dbInstance.processActivityEvent(testUserId, event);
         assert.strictEqual(res.ok, true);
         assert.strictEqual(res.rewardGiven.xp, SERVER_REWARDS.READ_LESSON.xp);
         assert.strictEqual(res.rewardGiven.coins, SERVER_REWARDS.READ_LESSON.coins);
 
-        const updated = dbInstance.getUserProgress(testUserId);
+        const updated = await dbInstance.getUserProgress(testUserId);
         assert.strictEqual(updated.lifetimeXp, SERVER_REWARDS.READ_LESSON.xp);
         assert.strictEqual(updated.coins, 50 + SERVER_REWARDS.READ_LESSON.coins);
         assert(updated.learningProgress.completedLessons.includes('web-html-semantik'));
@@ -67,7 +67,7 @@ async function runCloudSyncTests() {
     // -------------------------------------------------------------
     // TEST 3: Duplicate Event (Idempotency)
     // -------------------------------------------------------------
-    test('Duplicate event with same eventId returns alreadyProcessed without double-awarding XP', () => {
+    await test('Duplicate event with same eventId returns alreadyProcessed without double-awarding XP', async () => {
         const eventId = `evt_dup_${Date.now()}`;
         const event = {
             eventId,
@@ -77,24 +77,24 @@ async function runCloudSyncTests() {
         };
 
         // First attempt
-        const res1 = dbInstance.processActivityEvent(testUserId, event);
+        const res1 = await dbInstance.processActivityEvent(testUserId, event);
         assert.strictEqual(res1.ok, true);
         assert.strictEqual(res1.alreadyProcessed, false);
-        const xpAfterFirst = dbInstance.getUserProgress(testUserId).lifetimeXp;
+        const xpAfterFirst = (await dbInstance.getUserProgress(testUserId)).lifetimeXp;
 
         // Second attempt with exact same eventId
-        const res2 = dbInstance.processActivityEvent(testUserId, event);
+        const res2 = await dbInstance.processActivityEvent(testUserId, event);
         assert.strictEqual(res2.ok, true);
         assert.strictEqual(res2.alreadyProcessed, true);
 
-        const xpAfterSecond = dbInstance.getUserProgress(testUserId).lifetimeXp;
+        const xpAfterSecond = (await dbInstance.getUserProgress(testUserId)).lifetimeXp;
         assert.strictEqual(xpAfterFirst, xpAfterSecond, 'XP must remain unchanged on duplicate event replay');
     });
 
     // -------------------------------------------------------------
     // TEST 4: Rejection of Arbitrary XP Submissions
     // -------------------------------------------------------------
-    test('Server rejects arbitrary XP payload attempting cheat manipulation', () => {
+    await test('Server rejects arbitrary XP payload attempting cheat manipulation', async () => {
         const cheatEvent = {
             eventId: `evt_cheat_${Date.now()}`,
             eventType: 'custom_hack',
@@ -102,7 +102,7 @@ async function runCloudSyncTests() {
             payload: { xp: 999999 }
         };
 
-        const res = dbInstance.processActivityEvent(testUserId, cheatEvent);
+        const res = await dbInstance.processActivityEvent(testUserId, cheatEvent);
         assert.strictEqual(res.ok, false);
         assert.strictEqual(res.error, 'ARBITRARY_XP_REJECTED');
     });
@@ -110,7 +110,7 @@ async function runCloudSyncTests() {
     // -------------------------------------------------------------
     // TEST 5: Batch Sync Processing
     // -------------------------------------------------------------
-    test('Batch sync processes multiple queued events in order', () => {
+    await test('Batch sync processes multiple queued events in order', async () => {
         const syncUserId = `usr_batch_${Date.now()}`;
 
         const events = [
@@ -126,11 +126,11 @@ async function runCloudSyncTests() {
             }
         ];
 
-        const syncRes = dbInstance.syncProgress(syncUserId, { events });
+        const syncRes = await dbInstance.syncProgress(syncUserId, { events });
         assert.strictEqual(syncRes.ok, true);
         assert.strictEqual(syncRes.eventsProcessedCount, 2);
 
-        const progress = dbInstance.getUserProgress(syncUserId);
+        const progress = await dbInstance.getUserProgress(syncUserId);
         assert(progress.learningProgress.completedLessons.includes('css-flexbox'));
         assert.strictEqual(progress.quizHistory['css_flexbox_quiz'].bestScore, 85);
     });
@@ -138,11 +138,11 @@ async function runCloudSyncTests() {
     // -------------------------------------------------------------
     // TEST 6: Conflict Resolution & One-time Legacy Migration
     // -------------------------------------------------------------
-    test('Domain-specific conflict resolution correctly merges legacy local data', () => {
+    await test('Domain-specific conflict resolution correctly merges legacy local data', async () => {
         const migUserId = `usr_mig_${Date.now()}`;
 
         // Initialize server state
-        dbInstance.processActivityEvent(migUserId, {
+        await dbInstance.processActivityEvent(migUserId, {
             eventId: `evt_m1_${Date.now()}`,
             eventType: 'achievement_unlock',
             payload: { achievementId: 'first_step' }
@@ -159,10 +159,10 @@ async function runCloudSyncTests() {
             completedLessons: ['web-css-flexbox']
         };
 
-        const res = dbInstance.syncProgress(migUserId, { events: [], legacyData });
+        const res = await dbInstance.syncProgress(migUserId, { events: [], legacyData });
         assert.strictEqual(res.ok, true);
 
-        const merged = dbInstance.getUserProgress(migUserId);
+        const merged = await dbInstance.getUserProgress(migUserId);
         assert.strictEqual(merged.lifetimeXp, 350, 'Lifetime XP takes max');
         assert(merged.achievements.includes('first_step') && merged.achievements.includes('drill_champion'), 'Achievements form union');
         assert(merged.inventory.includes('👨‍💻') && merged.inventory.includes('🧙‍♂️'), 'Inventory forms union');
@@ -172,22 +172,22 @@ async function runCloudSyncTests() {
     // -------------------------------------------------------------
     // TEST 7: Settings Update and Inventory Equip
     // -------------------------------------------------------------
-    test('Settings patch and inventory equipping validate ownership and update state', () => {
+    await test('Settings patch and inventory equipping validate ownership and update state', async () => {
         const user = `usr_equip_${Date.now()}`;
-        dbInstance.getUserProgress(user);
+        await dbInstance.getUserProgress(user);
 
         // Update settings
-        const settingsRes = dbInstance.updateSettings(user, { soundEnabled: false, theme: 'dark' });
+        const settingsRes = await dbInstance.updateSettings(user, { soundEnabled: false, theme: 'dark' });
         assert.strictEqual(settingsRes.ok, true);
         assert.strictEqual(settingsRes.settings.soundEnabled, false);
 
         // Equip unowned item fails
-        const equipFail = dbInstance.equipItem(user, { avatar: '🐉' });
+        const equipFail = await dbInstance.equipItem(user, { avatar: '🐉' });
         assert.strictEqual(equipFail.ok, false);
         assert.strictEqual(equipFail.error, 'ITEM_NOT_OWNED');
 
         // Equip owned default item succeeds
-        const equipSuccess = dbInstance.equipItem(user, { avatar: '👨‍💻' });
+        const equipSuccess = await dbInstance.equipItem(user, { avatar: '👨‍💻' });
         assert.strictEqual(equipSuccess.ok, true);
         assert.strictEqual(equipSuccess.equippedItems.avatar, '👨‍💻');
     });

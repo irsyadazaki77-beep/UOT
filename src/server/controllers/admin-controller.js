@@ -33,10 +33,12 @@ class AdminController {
         });
     };
 
-    getObservability = (req, res) => {
+    getObservability = async (req, res) => {
         const mem = process.memoryUsage();
         const dbPath = path.resolve(__dirname, '..', '..', '..', 'data', 'uot_db_store.json');
         const dbSize = fs.existsSync(dbPath) ? fs.statSync(dbPath).size : 0;
+
+        const totalUsers = await this.dbInstance.userRepo.count();
 
         return res.json({
             ok: true,
@@ -53,8 +55,8 @@ class AdminController {
                     status: 'healthy',
                     storeSizeBytes: dbSize,
                     schemaVersion: 6,
-                    totalUsers: this.dbInstance.users.size,
-                    totalProgressRecords: this.dbInstance.progress.size
+                    totalUsers,
+                    totalProgressRecords: totalUsers
                 },
                 telemetry: {
                     totalEvents: this.analyticsEngineInstance.events.length,
@@ -298,13 +300,14 @@ class AdminController {
         }
     };
 
-    getDbStatus = (req, res) => {
+    getDbStatus = async (req, res) => {
         try {
-            const { db, userRepository, sessionRepository, analyticsRepository } = require('../../../db');
-            const userCount = userRepository.count();
-            const eventCountRow = db.get('SELECT COUNT(*) as count FROM progress_events');
-            const quizCountRow = db.get('SELECT COUNT(*) as count FROM quiz_attempts');
-            const migrationVersionRow = db.get('SELECT MAX(version) as version FROM schema_migrations');
+            const { db, userRepository, analyticsRepository } = require('../../../db');
+            const userCount = await userRepository.count();
+            const eventCountRow = await db.getAsync('SELECT COUNT(*) as count FROM progress_events');
+            const quizCountRow = await db.getAsync('SELECT COUNT(*) as count FROM quiz_attempts');
+            const migrationVersionRow = await db.getAsync('SELECT MAX(version) as version FROM schema_migrations');
+            const analyticsEvents = await analyticsRepository.getEvents(1000);
             const isPostgres = !!process.env.DATABASE_URL;
 
             return res.json({
@@ -319,7 +322,7 @@ class AdminController {
                     users: userCount,
                     progressEvents: eventCountRow?.count || 0,
                     quizAttempts: quizCountRow?.count || 0,
-                    analyticsEvents: analyticsRepository.getEvents(1000).length
+                    analyticsEvents: analyticsEvents.length
                 },
                 timestamp: new Date().toISOString()
             });

@@ -1,717 +1,264 @@
 @import url('tokens.css');
 
 /* ========================================================================== */
-/* QuizNation responsive system — loaded last on every page.                 */
-/* Provides safe cross-device behavior without replacing page-specific UI.   */
+/* Universe of Tech - Consolidated Intrinsic Responsive Layout System          */
+/* Provides robust fluid container layouts, modern grid structures, and touch */
+/* area constraints across all viewports without page-specific overrides.     */
 /* ========================================================================== */
 
 :root {
-    --responsive-gutter: clamp(14px, 3vw, 36px);
-    --responsive-content: min(100% - clamp(24px, 4vw, 64px), 1780px);
-    --responsive-touch: 34px;
+    --responsive-gutter: clamp(16px, 3.5vw, 32px);
+    --responsive-content: min(100% - calc(var(--responsive-gutter) * 2), var(--container-max-width, 1200px));
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --safe-left: env(safe-area-inset-left, 0px);
 }
 
+/* 1. Reset & Global Intrinsic Setup */
 html {
     max-width: 100%;
-    scroll-padding-top: 82px;
+    scroll-padding-top: calc(var(--navbar-height, 60px) + var(--space-4, 16px));
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
 }
 
 body {
     max-width: 100%;
     overflow-x: clip;
     overscroll-behavior-x: none;
+    background: var(--uot-bg);
+    color: var(--uot-text-primary);
+    font-family: var(--font-sans);
+    line-height: var(--leading-normal, 1.55);
 }
 
+.page,
+main,
+section {
+    padding-top: calc(var(--navbar-height, 60px) + var(--space-4, 16px));
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: max(var(--responsive-gutter), var(--safe-right));
+    padding-left: max(var(--responsive-gutter), var(--safe-left));
+    box-sizing: border-box;
+}
+
+/* Fluid Layout Elements */
 img,
 video,
 svg,
 canvas,
 iframe {
     max-width: 100%;
-}
-
-img,
-video {
     height: auto;
 }
 
-main,
-.page,
-.section,
-.page-shell,
-.content,
-.container,
-[class*="-layout"],
-[class*="-grid"],
-[class*="-shell"],
-[class*="-panel"] {
-    min-width: 0;
-}
-
-:where([class*="-grid"], [class*="-layout"]) > * {
-    min-width: 0;
-}
-
-h1,
-h2,
-h3,
-h4,
-p,
-li,
-label,
-button,
-a,
-strong,
-span {
-    overflow-wrap: break-word;
-}
-
 pre,
-code,
-.code-block,
-.code-editor,
-.query-box {
+code {
     max-width: 100%;
     overflow-x: auto;
     overscroll-behavior-inline: contain;
-    scrollbar-width: thin;
+    font-family: var(--font-mono);
 }
 
+/* 2. Canonical Modern Intrinsic Grids (Zero Media Queries Required) */
+.uot-grid-auto-fit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--space-4, 16px);
+}
+
+.uot-grid-auto-fill {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+    gap: var(--space-3, 12px);
+}
+
+/* Backwards compatibility for existing class-based grids */
+.badge-grid,
+.cert-grid,
+.learning-pulse-grid,
+.rpg-shop-grid,
+.tka-info-grid,
+.lms-advanced-grid,
+.quick-recommendations-grid,
+.achievement-grid,
+.culture-grid,
+.pro-benefit-grid,
+.overview-grid,
+.insight-grid,
+.museum-grid,
+.phrase-grid,
+.metric-grid,
+.card-grid,
+.concept-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)) !important;
+    gap: var(--space-4, 16px) !important;
+}
+
+/* Specific grids that need a slightly smaller card minimum width */
+.region-progress-grid,
+.badges-grid,
+.phrase-grid,
+.shortcut-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)) !important;
+    gap: var(--space-3, 12px) !important;
+}
+
+/* 3. Fluid Responsive Typography */
+h1 {
+    font-size: clamp(24px, 4.5vw, 36px);
+    font-weight: var(--font-extrabold, 800);
+    letter-spacing: -0.03em;
+    line-height: var(--leading-tight, 1.18);
+}
+
+h2 {
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: var(--font-bold, 700);
+    letter-spacing: -0.02em;
+    line-height: var(--leading-snug, 1.35);
+}
+
+h3 {
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: var(--font-semibold, 600);
+    line-height: var(--leading-snug, 1.35);
+}
+
+p {
+    font-size: var(--text-body, 15px);
+    color: var(--uot-text-secondary);
+}
+
+/* 4. Touch Targets & Universal Interactive Area Constraints */
+button,
 input,
 select,
 textarea,
-button {
-    max-width: 100%;
+.btn,
+.button,
+[role="button"],
+[role="tab"] {
+    min-height: 44px; /* WCAG 2.2 AA Minimum Target */
+    min-width: 44px;
+    touch-action: manipulation;
+    box-sizing: border-box;
 }
 
-textarea {
-    resize: vertical;
+/* Small interactive icons or pills should keep padded tap space */
+.theme-toggle-btn,
+.sound-toggle-btn,
+.social-btn,
+.topic-link,
+.filter-btn,
+.question-jump,
+.bubub-ai-chip {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 8px 12px !important;
 }
 
-table {
-    width: 100%;
-    border-spacing: 0;
-}
-
+/* 5. Fluid Tables & Scroll Containment */
 .table-responsive,
 .table-container,
 .leaderboard-table-container,
-.topic-table,
-.history-table,
-.review-table,
-.vocab-list-wrap,
-.drawer-vocab-list-wrap {
+.vocab-list-wrap {
     max-width: 100%;
     overflow-x: auto;
     overscroll-behavior-inline: contain;
-    scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    border-radius: var(--radius-md, 12px);
+    border: 1px solid var(--uot-border);
 }
 
-:where(.modal, .modal-overlay, .lms-modal, .confirm-modal, .concept-modal, .review-modal-overlay, .pro-paywall-modal, .drawer-overlay) {
+/* 6. Unified Modal, Dialog, and Drawer Overlays */
+dialog,
+.modal-overlay {
     max-width: 100vw;
     max-height: 100dvh;
+    padding: var(--space-4, 16px);
 }
 
-:where(.modal-content, .lms-modal-content, .confirm-modal > div, .concept-modal-box, .review-modal-content, .pro-paywall-modal > div) {
-    max-width: min(calc(100vw - 32px), 760px);
-    max-height: min(calc(100dvh - 32px), 900px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
+dialog::backdrop {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
 }
 
-.drawer-content,
-.review-drawer-panel,
-.formula-drawer-content,
-.mobile-menu-drawer {
-    overscroll-behavior: contain;
+.modal-content,
+.lms-modal-content,
+.concept-modal-box {
+    max-width: min(calc(100vw - 32px), 640px);
+    max-height: min(calc(100dvh - 32px), 800px);
+    padding: var(--space-6, 24px) !important;
+    border-radius: var(--radius-xl, 20px) !important;
+    border: 1px solid var(--uot-border) !important;
+    background: var(--uot-surface) !important;
+    box-shadow: var(--shadow-xl) !important;
+}
+
+/* 7. Specific Layout Structures & Split-Screen Panels */
+.layout-split {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6, 24px);
+}
+
+.layout-split > .main-content {
+    flex: 1 1 650px;
+}
+
+.layout-split > .sidebar-panel {
+    flex: 1 1 320px;
+    max-width: 400px;
+}
+
+@media (max-width: 980px) {
+    .layout-split > .sidebar-panel {
+        max-width: none;
+    }
+}
+
+/* 8. Mobile Scroll Snap for Carousel Lists */
+.mobile-snap-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: var(--space-4, 16px);
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
 }
 
-/* Large desktop: keep reading widths intentional while using available space. */
-@media (min-width: 1440px) {
-    :where(.page-shell, body[data-page] > .page, body[data-page] main > .section, body[data-page] footer) {
-        max-width: var(--responsive-content);
-    }
-
-    body[data-page] .navbar {
-        padding-right: clamp(20px, 3.5vw, 48px) !important;
-        padding-left: clamp(20px, 3.5vw, 48px) !important;
-    }
+.mobile-snap-scroll > * {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
 }
 
-/* Laptop and tablet landscape. */
-@media (max-width: 1180px) {
-    :where(.page, .page-shell, main > section, footer) {
-        max-width: 100%;
-    }
-
-    body[data-page] .navbar {
-        gap: 12px !important;
-        padding-inline: clamp(18px, 2.6vw, 34px) !important;
-    }
-
-    body[data-page] .nav-search-wrapper {
-        max-width: 250px !important;
-    }
-
-    body[data-page="achievements"] .badge-grid,
-    body[data-page="achievements"] .cert-grid,
-    body[data-page="quiz"] .learning-pulse-grid,
-    body[data-page="quiz"] .rpg-shop-grid,
-    body[data-page="snbt"] .tka-info-grid,
-    body[data-page="snbt"] .irt-sim-option-grid,
-    body[data-page="tka-lms"] .lms-advanced-grid,
-    body[data-page="tka-lms"] .quick-recommendations-grid,
-    body[data-page="profile"] .achievement-grid,
-    body[data-page="bahasa"] .culture-grid,
-    body[data-page="bahasa"] .pro-benefit-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    }
-}
-
-/* Tablet portrait and compact laptops. */
-@media (max-width: 980px) {
-    :root {
-        --responsive-gutter: clamp(18px, 3.2vw, 30px);
-    }
-
-    html { scroll-padding-top: 72px; }
-
-    :where(.page, .page-shell, main > section, footer) {
-        padding-right: max(var(--responsive-gutter), var(--safe-right));
-        padding-left: max(var(--responsive-gutter), var(--safe-left));
-    }
-
-    body[data-page] .nav-links {
-        display: none !important;
-    }
-
-    body[data-page] .nav-hamburger {
-        display: inline-flex !important;
-    }
-
-    body[data-page="profile"] .account-layout,
-    body[data-page="pro-hub"] .hub-layout,
-    body[data-page="wonder-detail"] .dashboard-main-layout,
-    body[data-page="wonder-latihan-custom"] .latihan-layout,
-    body[data-page="payment"] .checkout-layout,
-    body[data-page="quiz"] .quiz-shell,
-    body[data-page="quiz"] .quiz-setup-grid,
-    body[data-page="snbt"] .hero-layout-grid,
-    body[data-page="snbt"] .lms-layout,
-    body[data-page="tka-lms"] .lms-session-grid,
-    body[data-page="bahasa"] .explorer-dashboard-grid,
-    body[data-page="bahasa"] .region-progress-grid,
-    .reader-layout,
-    .focus-layout,
-    .layout {
-        grid-template-columns: minmax(0, 1fr) !important;
-    }
-
-    body[data-page="profile"] .account-sidebar,
-    body[data-page="pro-hub"] .hub-sidebar,
-    body[data-page="wonder-detail"] .dashboard-sidebar-panel,
-    body[data-page="wonder-latihan-custom"] .latihan-sidebar,
-    .reader-sidebar,
-    .reader-notes-sidebar,
-    .focus-sidebar,
-    .side-panel {
-        position: static !important;
-        width: 100% !important;
-        max-width: none !important;
-        max-height: none;
-    }
-
-    body[data-page="achievements"] .badge-grid,
-    body[data-page="achievements"] .cert-grid,
-    body[data-page="quiz"] .learning-pulse-grid,
-    body[data-page="quiz"] .rpg-shop-grid,
-    body[data-page="quiz"] .result-grid,
-    body[data-page="snbt"] .tka-info-grid,
-    body[data-page="snbt"] .planner-schedule-grid,
-    body[data-page="tka-lms"] .lms-advanced-grid,
-    body[data-page="tka-lms"] .quick-recommendations-grid,
-    body[data-page="tka-lms"] .lms-analytics-grid,
-    body[data-page="profile"] .profile-stat-grid,
-    body[data-page="profile"] .overview-grid,
-    body[data-page="profile"] .overview-extra-grid,
-    body[data-page="profile"] .insight-grid,
-    body[data-page="profile"] .plan-grid,
-    body[data-page="library"] .resource-grid,
-    body[data-page="bahasa"] .culture-grid,
-    body[data-page="bahasa"] .pro-benefit-grid,
-    body[data-page="bahasa"] .badges-grid,
-    body[data-page="bahasa"] .museum-grid,
-    body[data-page="wonder-detail"] .culture-context-grid,
-    body[data-page="wonder-detail"] .phrase-grid,
-    body[data-page="wonder-quiz-menu"] .culture-mode-grid,
-    body[data-page="wonder-quiz-menu"] .culture-region-quiz-grid,
-    .metric-grid,
-    .split-grid,
-    .preset-grid,
-    .card-grid,
-    .concept-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-
-    .hero,
-    .account-hero,
-    .achievements-hero,
-    .wonder-page-hero,
-    .lms-hero,
-    .culture-quiz-hero {
-        min-height: auto;
-    }
-
-    .hero-actions,
-    .panel-actions,
-    .setup-actions,
-    .result-actions,
-    .primary-actions,
-    .assist-actions,
-    .form-actions,
-    .data-actions,
-    .backup-actions,
-    .drawer-action-row {
-        flex-wrap: wrap;
-    }
-}
-
-/* Phones and small tablets. */
-@media (max-width: 768px) {
-    :root {
-        --responsive-gutter: 16px;
-    }
-
-    html { scroll-padding-top: 66px; }
-
-    body {
-        padding-right: var(--safe-right);
-        padding-left: var(--safe-left);
-    }
-
-    :where(.page, .page-shell, main > section, footer) {
-        width: 100%;
-        margin-right: auto;
-        margin-left: auto;
-        padding-right: var(--responsive-gutter);
-        padding-left: var(--responsive-gutter);
-    }
-
-    body[data-page] .navbar {
-        top: var(--safe-top) !important;
-        padding-right: max(14px, var(--safe-right)) !important;
-        padding-left: max(14px, var(--safe-left)) !important;
-    }
-
-    body[data-page] .page {
-        padding-top: calc(60px + var(--safe-top)) !important;
-    }
-
-    body[data-page] .nav-search-wrapper,
-    body[data-page] .explore-wrapper {
-        display: none !important;
-    }
-
-    body[data-page] .mobile-menu-drawer {
-        width: min(88vw, 340px);
-        height: 100dvh;
-        padding-top: max(22px, var(--safe-top));
-        padding-right: max(20px, var(--safe-right));
-        padding-bottom: max(22px, var(--safe-bottom));
-    }
-
-    body[data-page] .mobile-menu-overlay.is-active .mobile-menu-drawer {
-        transform: translateX(min(-88vw, -340px));
-    }
-
-    button,
-    input,
-    select,
-    textarea,
-    .btn,
-    .button,
-    [role="button"] {
-        min-height: var(--responsive-touch);
-    }
-
-    input,
-    select,
-    textarea {
-        font-size: 16px;
-    }
-
-    h1 { font-size: clamp(32px, 10vw, 50px); }
-    h2 { font-size: clamp(25px, 7vw, 36px); }
-
-    .section-header,
-    .section-heading,
-    .panel-heading,
-    .panel-top,
-    .card-header-row,
-    .culture-grid-header,
-    .panel-title-row,
-    .vocab-panel-header,
-    .footer-bottom {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .hero-actions,
-    .setup-actions,
-    .quiz-actions,
-    .result-actions,
-    .primary-actions,
-    .form-actions,
-    .data-actions,
-    .backup-actions,
-    .drawer-action-row,
-    .culture-hero-actions,
-    .cta-actions {
-        display: grid;
-        width: 100%;
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    :where(.hero-actions, .setup-actions, .quiz-actions, .result-actions, .primary-actions, .form-actions, .data-actions, .backup-actions, .drawer-action-row, .culture-hero-actions, .cta-actions) > :where(a, button, .btn, .button) {
-        width: 100%;
-    }
-
-    body[data-page="achievements"] .badge-grid,
-    body[data-page="achievements"] .cert-grid,
-    body[data-page="quiz"] .learning-pulse-grid,
-    body[data-page="quiz"] .rpg-shop-grid,
-    body[data-page="quiz"] .result-grid,
-    body[data-page="quiz"] .answer-grid,
-    body[data-page="snbt"] .tka-info-grid,
-    body[data-page="snbt"] .planner-schedule-grid,
-    body[data-page="snbt"] .answer-grid,
-    body[data-page="snbt"] .irt-sim-option-grid,
-    body[data-page="tka-lms"] .lms-advanced-grid,
-    body[data-page="tka-lms"] .quick-recommendations-grid,
-    body[data-page="tka-lms"] .lms-analytics-grid,
-    body[data-page="tka-lms"] .lms-bottom-grid,
-    body[data-page="profile"] .profile-stat-grid,
-    body[data-page="profile"] .overview-grid,
-    body[data-page="profile"] .overview-extra-grid,
-    body[data-page="profile"] .insight-grid,
-    body[data-page="profile"] .achievement-grid,
-    body[data-page="profile"] .plan-grid,
-    body[data-page="library"] .resource-grid,
-    body[data-page="bahasa"] .culture-grid,
-    body[data-page="bahasa"] .explorer-stats,
-    body[data-page="bahasa"] .pro-benefit-grid,
-    body[data-page="bahasa"] .badges-grid,
-    body[data-page="bahasa"] .museum-grid,
-    body[data-page="wonder-detail"] .culture-context-grid,
-    body[data-page="wonder-detail"] .phrase-grid,
-    body[data-page="wonder-detail"] .matching-grid,
-    body[data-page="wonder-detail"] .answer-grid,
-    body[data-page="wonder-latihan-custom"] .quiz-grid-options,
-    body[data-page="wonder-latihan-custom"] .match-grid-board,
-    body[data-page="wonder-quiz-menu"] .culture-mode-grid,
-    body[data-page="wonder-quiz-menu"] .culture-region-quiz-grid,
-    .metric-grid,
-    .split-grid,
-    .topic-table,
-    .preset-grid,
-    .card-grid,
-    .concept-grid,
-    .answer-grid,
-    .command-grid,
-    .shortcut-grid,
-    .settings-grid,
-    .wallet-grid-stripe,
-    .typology-grid,
-    .lms-answer-grid {
-        grid-template-columns: minmax(0, 1fr) !important;
-    }
-
-    .leaderboard-table {
-        min-width: 620px;
-    }
-
-    table {
-        display: block;
-        min-width: 0;
-        max-width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .leaderboard-table-container,
-    .table-container,
-    .table-responsive {
-        margin-right: calc(var(--responsive-gutter) * -1);
-        margin-left: calc(var(--responsive-gutter) * -1);
-        padding-right: var(--responsive-gutter);
-        padding-left: var(--responsive-gutter);
-    }
-
-    :where(.modal, .modal-overlay, .lms-modal, .confirm-modal, .concept-modal, .review-modal-overlay, .pro-paywall-modal) {
-        padding: 12px;
-    }
-
-    :where(.modal-content, .lms-modal-content, .confirm-modal > div, .concept-modal-box, .review-modal-content, .pro-paywall-modal > div) {
-        width: 100%;
-        max-width: calc(100vw - 24px);
-        max-height: calc(100dvh - 24px);
-        border-radius: 18px;
-    }
-
-    .detail-drawer,
-    .formula-drawer,
-    .review-drawer-panel {
-        width: min(100%, 520px) !important;
-        max-width: 100vw !important;
-        max-height: 92dvh;
-        padding-bottom: var(--safe-bottom);
-    }
-
-    .toast,
-    .learning-toast,
-    .offline-status,
-    [role="status"].is-visible {
-        right: max(12px, var(--safe-right));
-        bottom: max(12px, var(--safe-bottom));
-        left: max(12px, var(--safe-left));
-        width: auto;
-        max-width: none;
-    }
-
-    .footer-grid,
-    .footer-main {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-
-    .footer-brand,
-    .footer-intro {
-        grid-column: 1 / -1;
-    }
-
-    .orb,
-    .ambient,
-    .noise {
-        max-width: 100vw;
-        pointer-events: none;
-    }
-}
-
-/* Narrow phones. */
-@media (max-width: 480px) {
-    :root { --responsive-gutter: 13px; }
-
-    body[data-page] .navbar .brand {
-        max-width: 130px;
-    }
-
-    body[data-page] .navbar .brand-logo {
-        flex-shrink: 0 !important;
-    }
-
-    body[data-page] .nav-actions .btn-primary {
-        display: none !important;
-    }
-
-    .hero-stats,
-    .hero-metrics,
-    .learning-quick-stats,
-    .leaderboard-stats,
-    .result-stats,
-    .matching-stats-bar {
-        display: grid;
-        width: 100%;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    }
-
-    .footer-grid,
-    .footer-main {
-        grid-template-columns: minmax(0, 1fr) !important;
-    }
-
-    .footer-col,
-    .footer-column,
-    .footer-intro,
-    .footer-brand {
-        grid-column: auto;
-    }
-
-    .tab-list,
-    .hub-tabs,
-    .drawer-tabs,
-    .tka-tabs,
-    .filter-options,
-    .region-chip-row,
-    .question-toolbar,
-    .history-controls {
-        max-width: calc(100vw - 26px);
-        overflow-x: auto;
-        overscroll-behavior-inline: contain;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    :where(.tab-list, .hub-tabs, .drawer-tabs, .tka-tabs, .filter-options, .region-chip-row)::-webkit-scrollbar {
-        display: none;
-    }
-
-    :where(.tab-list, .hub-tabs, .drawer-tabs, .tka-tabs, .filter-options, .region-chip-row) > * {
-        flex: 0 0 auto;
-    }
-
-    .card,
-    .glass-card,
-    .content-card,
-    .section-card,
-    .hub-panel,
-    .metric-card,
-    .settings-card {
-        border-radius: min(18px, 5vw);
-    }
-}
-
-/* Short landscape devices: protect dialogs and fixed headers from clipping. */
-@media (max-height: 520px) and (orientation: landscape) {
-    :where(.modal-content, .lms-modal-content, .confirm-modal > div, .concept-modal-box, .review-modal-content, .pro-paywall-modal > div, .mobile-menu-drawer) {
-        max-height: calc(100dvh - 16px);
-        overflow-y: auto;
-    }
-
-    .hero,
-    .account-hero,
-    .achievements-hero,
-    .wonder-page-hero {
-        min-height: auto !important;
-    }
-}
-
-/* Focus visible high-contrast ring across light and dark themes */
+/* 9. Accessibility Visible Focus Indicator */
 :focus-visible {
-    outline: 2px solid var(--uot-focus-ring, #10b981) !important;
+    outline: 2px solid var(--uot-focus-ring) !important;
     outline-offset: 2px !important;
 }
 
 body.dark-theme :focus-visible {
-    outline-color: #34d399 !important;
-}
-
-/* Quiz options robust wrapping & touch area */
-.quiz-option,
-.answer-btn,
-.lms-option,
-.culture-option,
-.choice-card,
-.option-item,
-.match-card,
-.irt-sim-option-card,
-.lms-answer-option {
-    white-space: normal !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
-    hyphens: auto;
-    min-height: 48px;
-    height: auto !important;
-    text-align: left;
-    display: flex;
-    align-items: center;
-}
-
-/* Touch targets on mobile / coarse pointers */
-@media (max-width: 768px), (pointer: coarse) {
-    button,
-    input,
-    select,
-    textarea,
-    .btn,
-    .button,
-    .nav-links a,
-    .mega-item-link,
-    .tab-btn,
-    .filter-chip,
-    [role="button"],
-    [role="tab"] {
-        min-height: 44px;
-        touch-action: manipulation;
-    }
-}
-
-/* Ultra-wide desktop (1920px+) */
-@media (min-width: 1920px) {
-    :root {
-        --responsive-content: 1680px;
-    }
-
-    body {
-        font-size: 16.5px;
-    }
-}
-
-/* Ultra-compact phones (320px - 360px) */
-@media (max-width: 360px) {
-    :root {
-        --responsive-gutter: 10px;
-    }
-
-    body {
-        font-size: 14px;
-    }
-
-    .navbar {
-        padding-inline: 8px !important;
-    }
-
-    .brand span {
-        display: none;
-    }
-
-    .btn, button, .button {
-        padding-inline: 10px;
-        font-size: 12px;
-    }
-
-    .hero-actions, .cta-actions {
-        gap: 8px;
-    }
-
-    .card, .glass-card, .content-card, .section-card {
-        padding: 14px !important;
-    }
-}
-
-@media (hover: none) and (pointer: coarse) {
-    .card:hover,
-    .glass-card:hover,
-    .content-card:hover,
-    .module-card:hover,
-    .path-card:hover,
-    .bento-card:hover {
-        transform: none;
-    }
+    outline-color: var(--uot-focus-ring) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-
+    html {
+        scroll-behavior: auto !important;
+    }
     *,
     *::before,
     *::after {
-        animation-duration: .01ms !important;
+        animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
     }
 }

@@ -45,12 +45,12 @@ class ContentRepository {
         return [`${canonicalDomain}.json`];
     }
 
-    _syncDomainToDisk(canonicalDomain) {
+    async _syncDomainToDisk(canonicalDomain) {
         try {
             if (!fs.existsSync(this.contentDir)) {
                 fs.mkdirSync(this.contentDir, { recursive: true });
             }
-            const allItems = this.getAll(canonicalDomain, { includeDrafts: true });
+            const allItems = await this.getAll(canonicalDomain, { includeDrafts: true });
             const fileNames = this._getDiskFileNames(canonicalDomain);
             for (const fn of fileNames) {
                 const targetPath = path.join(this.contentDir, fn);
@@ -62,12 +62,12 @@ class ContentRepository {
         }
     }
 
-    get(domain, id, options = {}) {
+    async get(domain, id, options = {}) {
         if (!domain || !id) return null;
         const normDomain = this.normalizeDomain(domain);
         const { includeDrafts = false } = options;
 
-        const row = this.db.get('SELECT * FROM content WHERE domain = ? AND id = ?', [normDomain, id]);
+        const row = await this.db.getAsync('SELECT * FROM content WHERE domain = ? AND id = ?', [normDomain, id]);
         if (!row) return null;
 
         if (!includeDrafts && row.status === 'draft') {
@@ -83,7 +83,7 @@ class ContentRepository {
         }
     }
 
-    getAll(domain, options = {}) {
+    async getAll(domain, options = {}) {
         const normDomain = this.normalizeDomain(domain);
         const {
             includeDrafts = false,
@@ -108,7 +108,7 @@ class ContentRepository {
         }
 
         query += ' ORDER BY id ASC';
-        const rows = this.db.all(query, params);
+        const rows = await this.db.allAsync(query, params);
 
         let items = rows.map(r => {
             try {
@@ -165,9 +165,9 @@ class ContentRepository {
         return items;
     }
 
-    queryQuestions(options = {}) {
+    async queryQuestions(options = {}) {
         const { category = null, difficulty = null, limit = 10, skill = null, search = null } = options;
-        const allQuizzes = this.getAll('quizzes', { includeDrafts: false, category, difficulty, skill, search });
+        const allQuizzes = await this.getAll('quizzes', { includeDrafts: false, category, difficulty, skill, search });
 
         // If quizzes are single question items
         const flatQuestions = [];
@@ -193,7 +193,7 @@ class ContentRepository {
         return flatQuestions;
     }
 
-    save(domain, item, options = {}) {
+    async save(domain, item, options = {}) {
         if (!domain || !item || !item.id) {
             throw new Error('Invalid content item or missing id');
         }
@@ -210,7 +210,7 @@ class ContentRepository {
 
         const contentJson = JSON.stringify(item);
 
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO content (domain, id, title, status, content_json, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(domain, id) DO UPDATE SET
@@ -229,30 +229,20 @@ class ContentRepository {
         ]);
 
         if (syncToDisk) {
-            this._syncDomainToDisk(normDomain);
+            await this._syncDomainToDisk(normDomain);
         }
 
         return item;
     }
 
-    importBundle(bundle, options = {}) {
+    async importBundle(bundle, options = {}) {
         if (!bundle || typeof bundle !== 'object') return { ok: false, error: 'INVALID_BUNDLE' };
         const { syncToDisk = true } = options;
         let count = 0;
         const domainsToSync = new Set();
-        const stmt = this.db.prepare(`
-            INSERT INTO content (domain, id, title, status, content_json, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(domain, id) DO UPDATE SET
-                title = excluded.title,
-                status = excluded.status,
-                content_json = excluded.content_json,
-                updated_at = excluded.updated_at
-        `);
-
         const now = new Date().toISOString();
 
-        this.db.transaction(() => {
+        await this.db.transactionAsync(async (tx) => {
             for (const [domainKey, items] of Object.entries(bundle)) {
                 if (!Array.isArray(items)) continue;
                 const normDomain = this.normalizeDomain(domainKey);
@@ -266,7 +256,15 @@ class ContentRepository {
                     item.createdAt = item.createdAt || now;
                     const contentJson = JSON.stringify(item);
 
-                    stmt.run(
+                    await tx.runAsync(`
+                        INSERT INTO content (domain, id, title, status, content_json, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(domain, id) DO UPDATE SET
+                            title = excluded.title,
+                            status = excluded.status,
+                            content_json = excluded.content_json,
+                            updated_at = excluded.updated_at
+                    `, [
                         normDomain,
                         item.id,
                         title,
@@ -274,7 +272,7 @@ class ContentRepository {
                         contentJson,
                         item.createdAt,
                         item.updatedAt
-                    );
+                    ]);
                     count++;
                 }
             }
@@ -284,36 +282,36 @@ class ContentRepository {
 
         if (syncToDisk) {
             for (const dom of domainsToSync) {
-                this._syncDomainToDisk(dom);
+                await this._syncDomainToDisk(dom);
             }
         }
 
         return { ok: true, count };
     }
 
-    publish(domain, id, publishStatus = 'published') {
+    async publish(domain, id, publishStatus = 'published') {
         const normDomain = this.normalizeDomain(domain);
-        const item = this.get(normDomain, id, { includeDrafts: true });
+        const item = await this.get(normDomain, id, { includeDrafts: true });
         if (!item) return null;
         item.status = publishStatus;
         return this.save(normDomain, item);
     }
 
-    delete(domain, id) {
+    async delete(domain, id) {
         const normDomain = this.normalizeDomain(domain);
-        const res = this.db.run('DELETE FROM content WHERE domain = ? AND id = ?', [normDomain, id]);
+        const res = await this.db.runAsync('DELETE FROM content WHERE domain = ? AND id = ?', [normDomain, id]);
         if (res.changes > 0) {
-            this._syncDomainToDisk(normDomain);
+            await this._syncDomainToDisk(normDomain);
             return true;
         }
         return false;
     }
 
-    getMeta() {
+    async getMeta() {
         const counts = {};
         const domains = ['quizzes', 'lessons', 'learningPaths', 'projects', 'culture', 'books'];
         for (const d of domains) {
-            const rows = this.db.all('SELECT status, COUNT(*) as count FROM content WHERE domain = ? GROUP BY status', [d]);
+            const rows = await this.db.allAsync('SELECT status, COUNT(*) as count FROM content WHERE domain = ? GROUP BY status', [d]);
             counts[d] = { published: 0, draft: 0, total: 0 };
             for (const r of rows) {
                 if (r.status === 'published') counts[d].published = Number(r.count);
@@ -329,8 +327,8 @@ class ContentRepository {
         };
     }
 
-    exportAll() {
-        const rows = this.db.all('SELECT * FROM content ORDER BY domain, id');
+    async exportAll() {
+        const rows = await this.db.allAsync('SELECT * FROM content ORDER BY domain, id');
         const bundle = {
             quizzes: [],
             lessons: [],

@@ -15,7 +15,7 @@ class AuthController {
         this.clearSessionCookie = clearSessionCookie;
     }
 
-    register = (req, res) => {
+    register = async (req, res) => {
         const { username, email, password } = req.body || {};
 
         if (!username || typeof username !== 'string' || username.trim().length < 2 || username.trim().length > 60) {
@@ -33,7 +33,8 @@ class AuthController {
             });
         }
 
-        if (this.userStore.has(cleanEmail)) {
+        const emailExists = await this.userStore.has(cleanEmail);
+        if (emailExists) {
             return res.status(409).json({ ok: false, error: 'EMAIL_EXISTS', message: 'Alamat email sudah terdaftar. Silakan masuk.' });
         }
 
@@ -49,18 +50,18 @@ class AuthController {
             isPro: false,
             createdAt: new Date().toISOString()
         };
-        this.userStore.set(cleanEmail, newUser);
+        await this.userStore.set(cleanEmail, newUser);
 
         // Rotate Session
         if (req.session && req.session.sessionToken) {
-            this.sessionStore.delete(req.session.sessionToken);
+            await this.sessionStore.delete(req.session.sessionToken);
         }
 
         const sessionToken = 'uot_sess_' + crypto.randomBytes(32).toString('hex');
         const csrfToken = crypto.randomBytes(24).toString('hex');
         const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 Hours Expiration
 
-        this.sessionStore.set(sessionToken, {
+        await this.sessionStore.set(sessionToken, {
             sessionToken,
             userId,
             csrfToken,
@@ -84,7 +85,7 @@ class AuthController {
         });
     };
 
-    login = (req, res) => {
+    login = async (req, res) => {
         const { email, password } = req.body || {};
         const cleanEmail = String(email || '').trim().toLowerCase();
 
@@ -92,7 +93,7 @@ class AuthController {
             return res.status(400).json({ ok: false, error: 'MISSING_CREDENTIALS', message: 'Email dan kata sandi wajib diisi.' });
         }
 
-        const user = this.userStore.get(cleanEmail);
+        const user = await this.userStore.get(cleanEmail);
         if (!user || !verifyPassword(password, user.passwordHash, user.salt)) {
             this.recordAuthFailure(req.ip, cleanEmail, 'INVALID_CREDENTIALS');
             return res.status(401).json({
@@ -104,14 +105,14 @@ class AuthController {
 
         // Rotate Session on login
         if (req.session && req.session.sessionToken) {
-            this.sessionStore.delete(req.session.sessionToken);
+            await this.sessionStore.delete(req.session.sessionToken);
         }
 
         const sessionToken = 'uot_sess_' + crypto.randomBytes(32).toString('hex');
         const csrfToken = crypto.randomBytes(24).toString('hex');
         const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 Hours Expiration
 
-        this.sessionStore.set(sessionToken, {
+        await this.sessionStore.set(sessionToken, {
             sessionToken,
             userId: user.id,
             csrfToken,
@@ -121,7 +122,7 @@ class AuthController {
 
         this.setSessionCookie(res, sessionToken, csrfToken);
 
-        const sub = this.subscriptionStore.get(user.id);
+        const sub = await this.subscriptionStore.get(user.id);
         const isPro = Boolean(sub && sub.status === 'active' && Date.now() < sub.expiresAt);
 
         return res.json({
@@ -157,7 +158,7 @@ class AuthController {
         });
     };
 
-    logout = (req, res) => {
+    logout = async (req, res) => {
         const authHeader = req.headers.authorization;
         let token = req.cookies?.uot_session;
         if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -166,7 +167,7 @@ class AuthController {
             token = req.session.sessionToken;
         }
         if (token) {
-            this.sessionStore.delete(token);
+            await this.sessionStore.delete(token);
         }
         this.clearSessionCookie(res);
         return res.json({ ok: true, message: 'Berhasil keluar.' });

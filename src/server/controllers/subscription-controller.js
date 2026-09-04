@@ -13,7 +13,7 @@ class SubscriptionController {
         this.stripeWebhookSecret = stripeWebhookSecret;
     }
 
-    verify = (req, res) => {
+    verify = async (req, res) => {
         if (!req.user) {
             return res.json({
                 ok: true,
@@ -24,7 +24,7 @@ class SubscriptionController {
             });
         }
 
-        const sub = this.subscriptionStore.get(req.user.id);
+        const sub = await this.subscriptionStore.get(req.user.id);
         if (!sub || sub.status !== 'active' || Date.now() > new Date(sub.expiresAt).getTime()) {
             return res.json({
                 ok: true,
@@ -138,7 +138,7 @@ class SubscriptionController {
         }
     };
 
-    sandboxActivate = (req, res) => {
+    sandboxActivate = async (req, res) => {
         if (IS_PRODUCTION) {
             return res.status(403).json({
                 ok: false,
@@ -164,14 +164,14 @@ class SubscriptionController {
             cancelAtPeriodEnd: false
         };
 
-        this.subscriptionStore.set(userId, demoSub);
+        await this.subscriptionStore.set(userId, demoSub);
 
         if (req.user) {
-            this.dbInstance.run('UPDATE users SET is_pro = 1, updated_at = ? WHERE id = ?', [new Date().toISOString(), userId]);
+            await this.dbInstance.run('UPDATE users SET is_pro = 1, updated_at = ? WHERE id = ?', [new Date().toISOString(), userId]);
         }
 
         const reference = 'SANDBOX-ACTIVATE-' + crypto.randomBytes(4).toString('hex').toUpperCase();
-        this.dbInstance.invoices.create({
+        await this.dbInstance.invoices.create({
             id: reference,
             userId,
             planId,
@@ -195,7 +195,7 @@ class SubscriptionController {
     };
 
     cancel = async (req, res) => {
-        const sub = this.subscriptionStore.get(req.user.id);
+        const sub = await this.subscriptionStore.get(req.user.id);
         if (!sub || sub.status !== 'active') {
             return res.status(400).json({ ok: false, error: 'NO_ACTIVE_SUBSCRIPTION', message: 'Anda tidak memiliki langganan PRO aktif.' });
         }
@@ -203,7 +203,7 @@ class SubscriptionController {
         if (sub.source === 'stripe' && IS_PAYMENT_CONFIGURED && sub.providerSubscriptionId) {
             try {
                 await this.paymentProviderInstance.cancelSubscription(sub.providerSubscriptionId);
-                this.subscriptionStore.set(req.user.id, {
+                await this.subscriptionStore.set(req.user.id, {
                     ...sub,
                     cancelAtPeriodEnd: true
                 });
@@ -212,18 +212,18 @@ class SubscriptionController {
                 return res.status(500).json({ ok: false, error: 'PROVIDER_ERROR', message: e.message });
             }
         } else {
-            this.subscriptionStore.set(req.user.id, {
+            await this.subscriptionStore.set(req.user.id, {
                 ...sub,
                 cancelAtPeriodEnd: true,
                 status: 'canceled'
             });
-            this.dbInstance.run('UPDATE users SET is_pro = 0, updated_at = ? WHERE id = ?', [new Date().toISOString(), req.user.id]);
+            await this.dbInstance.run('UPDATE users SET is_pro = 0, updated_at = ? WHERE id = ?', [new Date().toISOString(), req.user.id]);
             return res.json({ ok: true, message: 'Langganan sandbox simulasi dibatalkan.' });
         }
     };
 
-    history = (req, res) => {
-        const invoices = this.dbInstance.invoices.getByUserId(req.user.id);
+    history = async (req, res) => {
+        const invoices = await this.dbInstance.invoices.getByUserId(req.user.id);
         return res.json({
             ok: true,
             invoices

@@ -8,16 +8,16 @@ class SubscriptionRepository {
         this.db = dbAdapter;
     }
 
-    findByUserId(userId) {
+    async findByUserId(userId) {
         if (!userId) return null;
-        const row = this.db.get('SELECT * FROM subscriptions WHERE user_id = ?', [userId]);
+        const row = await this.db.getAsync('SELECT * FROM subscriptions WHERE user_id = ?', [userId]);
         if (!row) return null;
         return this._mapSubscription(row);
     }
 
-    save({ userId, planId, status = 'active', source = 'manual', startsAt = new Date().toISOString(), expiresAt = null, isTrial = false, providerCustomerId = null, providerSubscriptionId = null, cancelAtPeriodEnd = 0 }) {
+    async save({ userId, planId, status = 'active', source = 'manual', startsAt = new Date().toISOString(), expiresAt = null, isTrial = false, providerCustomerId = null, providerSubscriptionId = null, cancelAtPeriodEnd = 0 }) {
         const now = new Date().toISOString();
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO subscriptions (user_id, plan_id, status, source, starts_at, expires_at, is_trial, provider_customer_id, provider_subscription_id, cancel_at_period_end, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(user_id) DO UPDATE SET
@@ -49,9 +49,9 @@ class SubscriptionRepository {
         return this.findByUserId(userId);
     }
 
-    updateStatus(userId, status) {
+    async updateStatus(userId, status) {
         if (!userId) return null;
-        this.db.run('UPDATE subscriptions SET status = ?, updated_at = ? WHERE user_id = ?', [
+        await this.db.runAsync('UPDATE subscriptions SET status = ?, updated_at = ? WHERE user_id = ?', [
             status,
             new Date().toISOString(),
             userId
@@ -60,9 +60,9 @@ class SubscriptionRepository {
     }
 
     // Invoices / reference history
-    createInvoice({ id, userId, planId, amount, currency = 'IDR', status = 'pending', provider = 'sandbox' }) {
+    async createInvoice({ id, userId, planId, amount, currency = 'IDR', status = 'pending', provider = 'sandbox' }) {
         const now = new Date().toISOString();
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO payment_invoices (id, user_id, plan_id, amount, currency, status, provider, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(id) DO UPDATE SET
@@ -71,9 +71,10 @@ class SubscriptionRepository {
         `, [id, userId, planId, amount, currency, status, provider, now, now]);
     }
 
-    getInvoicesByUserId(userId) {
+    async getInvoicesByUserId(userId) {
         if (!userId) return [];
-        return this.db.all('SELECT * FROM payment_invoices WHERE user_id = ? ORDER BY created_at DESC', [userId]).map(row => ({
+        const rows = await this.db.allAsync('SELECT * FROM payment_invoices WHERE user_id = ? ORDER BY created_at DESC', [userId]);
+        return rows.map(row => ({
             id: row.id,
             userId: row.user_id,
             planId: row.plan_id,
@@ -86,8 +87,8 @@ class SubscriptionRepository {
         }));
     }
 
-    updateInvoiceStatus(id, status) {
-        this.db.run('UPDATE payment_invoices SET status = ?, updated_at = ? WHERE id = ?', [
+    async updateInvoiceStatus(id, status) {
+        await this.db.runAsync('UPDATE payment_invoices SET status = ?, updated_at = ? WHERE id = ?', [
             status,
             new Date().toISOString(),
             id

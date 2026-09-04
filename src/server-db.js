@@ -1,6 +1,6 @@
 /**
  * UNIVERSE OF TECH - SERVER DATABASE INTEGRATION LAYER
- * FASE 18: High-Reliability Persistent Data Access Bridge
+ * FASE 18: High-Reliability Persistent Data Access Bridge (Async Canonical)
  */
 
 const {
@@ -29,34 +29,35 @@ class ServerDatabaseBridge {
         this.analyticsRepo = analyticsRepository;
         this.backup = backupService;
 
-        // Map compatibility proxies for legacy tests
+        // Map compatibility proxies for legacy callers & test suites
         this._initCompatibilityProxies();
     }
 
-    run(sql, params) {
-        return this.db.run(sql, params);
+    async run(sql, params) {
+        return await this.db.runAsync(sql, params);
     }
 
-    get(sql, params) {
-        return this.db.get(sql, params);
+    async get(sql, params) {
+        return await this.db.getAsync(sql, params);
     }
 
-    all(sql, params) {
-        return this.db.all(sql, params);
+    async all(sql, params) {
+        return await this.db.allAsync(sql, params);
     }
 
     _initCompatibilityProxies() {
         const self = this;
 
         this.users = {
-            has: (email) => !!self.userRepo.findByEmail(email),
-            get: (email) => self.userRepo.findByEmail(email),
-            set: (email, user) => {
-                const existing = self.userRepo.findByEmail(email) || (user.id ? self.userRepo.findById(user.id) : null);
+            has: async (email) => !!(await self.userRepo.findByEmail(email)),
+            get: async (email) => await self.userRepo.findByEmail(email),
+            findById: async (id) => await self.userRepo.findById(id),
+            set: async (email, user) => {
+                const existing = (await self.userRepo.findByEmail(email)) || (user.id ? await self.userRepo.findById(user.id) : null);
                 if (existing) {
-                    return self.userRepo.update(existing.id, user);
+                    return await self.userRepo.update(existing.id, user);
                 } else {
-                    return self.userRepo.create({
+                    return await self.userRepo.create({
                         id: user.id || `usr_${Date.now()}`,
                         username: user.username || 'Learner',
                         email: email,
@@ -67,25 +68,21 @@ class ServerDatabaseBridge {
                     });
                 }
             },
-            delete: (email) => {
-                const u = self.userRepo.findByEmail(email);
-                return u ? self.userRepo.delete(u.id) : false;
+            delete: async (email) => {
+                const u = await self.userRepo.findByEmail(email);
+                return u ? await self.userRepo.delete(u.id) : false;
             },
-            clear: () => {
-                self.db.run('DELETE FROM users');
+            clear: async () => {
+                await self.db.runAsync('DELETE FROM users');
             },
-            values: () => self.userRepo.getAll(10000, 0),
-            [Symbol.iterator]: function* () {
-                for (const u of self.userRepo.getAll(10000, 0)) {
-                    yield [u.email, u];
-                }
-            }
+            values: async () => await self.userRepo.getAll(10000, 0),
+            count: async () => await self.userRepo.count()
         };
 
         this.sessions = {
-            has: (token) => !!self.sessionRepo.findByToken(token),
-            get: (token) => {
-                const s = self.sessionRepo.findByToken(token);
+            has: async (token) => !!(await self.sessionRepo.findByToken(token)),
+            get: async (token) => {
+                const s = await self.sessionRepo.findByToken(token);
                 if (!s) return undefined;
                 return {
                     sessionToken: s.token,
@@ -95,9 +92,9 @@ class ServerDatabaseBridge {
                     expiresAt: new Date(s.expiresAt).getTime()
                 };
             },
-            set: (token, session) => {
+            set: async (token, session) => {
                 const maxAgeMs = (session.expiresAt || (Date.now() + 24 * 60 * 60 * 1000)) - Date.now();
-                return self.sessionRepo.create({
+                return await self.sessionRepo.create({
                     token,
                     userId: session.userId,
                     csrfToken: session.csrfToken || token,
@@ -106,17 +103,17 @@ class ServerDatabaseBridge {
                     maxAgeMs: Math.max(1000, maxAgeMs)
                 });
             },
-            delete: (token) => self.sessionRepo.delete(token),
-            clear: () => {
-                self.db.run('DELETE FROM sessions');
+            delete: async (token) => await self.sessionRepo.delete(token),
+            clear: async () => {
+                await self.db.runAsync('DELETE FROM sessions');
             },
-            cleanExpired: () => self.sessionRepo.cleanExpired()
+            cleanExpired: async () => await self.sessionRepo.cleanExpired()
         };
 
         this.subscriptions = {
-            has: (userId) => !!self.subRepo.findByUserId(userId),
-            get: (userId) => {
-                const s = self.subRepo.findByUserId(userId);
+            has: async (userId) => !!(await self.subRepo.findByUserId(userId)),
+            get: async (userId) => {
+                const s = await self.subRepo.findByUserId(userId);
                 if (!s) return undefined;
                 return {
                     userId: s.userId,
@@ -131,8 +128,8 @@ class ServerDatabaseBridge {
                     cancelAtPeriodEnd: s.cancelAtPeriodEnd
                 };
             },
-            set: (userId, sub) => {
-                return self.subRepo.save({
+            set: async (userId, sub) => {
+                return await self.subRepo.save({
                     userId,
                     planId: sub.planId || 'pro',
                     status: sub.status || 'active',
@@ -145,246 +142,148 @@ class ServerDatabaseBridge {
                     cancelAtPeriodEnd: sub.cancelAtPeriodEnd ? 1 : 0
                 });
             },
-            delete: (userId) => self.subRepo.updateStatus(userId, 'canceled'),
-            clear: () => {
-                self.db.run('DELETE FROM subscriptions');
-            }
+            delete: async (userId) => await self.subRepo.updateStatus(userId, 'canceled'),
+            clear: async () => {
+                await self.db.runAsync('DELETE FROM subscriptions');
+            },
+            values: async () => await self.subRepo.getAll(10000, 0)
         };
 
         this.invoices = {
-            create: (invoice) => self.subRepo.createInvoice(invoice),
-            getByUserId: (userId) => self.subRepo.getInvoicesByUserId(userId),
-            updateStatus: (id, status) => self.subRepo.updateInvoiceStatus(id, status)
+            create: async (invoice) => await self.subRepo.createInvoice(invoice),
+            get: async (id) => await self.subRepo.getInvoiceById(id),
+            getByUserId: async (userId) => await self.subRepo.getInvoicesByUserId(userId),
+            update: async (id, updates) => await self.subRepo.updateInvoiceStatus(id, typeof updates === 'string' ? updates : updates.status),
+            updateStatus: async (id, status) => await self.subRepo.updateInvoiceStatus(id, status)
         };
 
         this.progress = {
-            has: (userId) => !!self.progressRepo.getUserProgress(userId),
-            get: (userId) => self.progressRepo.getUserProgress(userId),
-            set: (userId, p) => {
-                // If direct assignment, sync back to progress repo
-                if (p && p.settings) self.progressRepo.updateSettings(userId, p.settings);
+            has: async (userId) => !!(await self.progressRepo.getUserProgress(userId)),
+            get: async (userId) => await self.progressRepo.getUserProgress(userId),
+            set: async (userId, p) => {
+                if (p && p.settings) await self.progressRepo.updateSettings(userId, p.settings);
             },
-            clear: () => {
-                self.db.run('DELETE FROM user_progress');
-                self.db.run('DELETE FROM progress_events');
-                self.db.run('DELETE FROM quiz_attempts');
-                self.db.run('DELETE FROM user_completed_lessons');
-                self.db.run('DELETE FROM achievements');
-                self.db.run('DELETE FROM user_inventory');
+            clear: async () => {
+                await self.db.runAsync('DELETE FROM user_progress');
+                await self.db.runAsync('DELETE FROM progress_events');
+                await self.db.runAsync('DELETE FROM quiz_attempts');
+                await self.db.runAsync('DELETE FROM user_completed_lessons');
+                await self.db.runAsync('DELETE FROM achievements');
+                await self.db.runAsync('DELETE FROM user_inventory');
             }
         };
     }
 
-    getUserProgress(userId) {
-        const raw = this.progressRepo.getUserProgress(userId);
-        if (!raw) return null;
-
-        const self = this;
-
-        // Reactive xpLedger array
-        const xpLedgerProxy = new Proxy(raw.xpLedger || [], {
-            get(target, prop, receiver) {
-                if (prop === 'push') {
-                    return function(...items) {
-                        for (const item of items) {
-                            if (item) {
-                                const evtId = item.eventId || `evt_leg_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
-                                const timestamp = item.timestamp || new Date().toISOString();
-                                self.db.run(`
-                                    INSERT OR IGNORE INTO progress_events (
-                                        event_id, user_id, event_type, client_timestamp, server_timestamp,
-                                        xp_awarded, coins_awarded, reason, payload_json, result_json
-                                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                                `, [
-                                    evtId,
-                                    userId,
-                                    item.eventType || 'legacy_event',
-                                    timestamp,
-                                    timestamp,
-                                    Number(item.xp) || 0,
-                                    Number(item.coins) || 0,
-                                    item.reason || 'Legacy update',
-                                    JSON.stringify(item),
-                                    JSON.stringify(item)
-                                ]);
-                            }
-                        }
-                        return target.push(...items);
-                    };
-                }
-                return Reflect.get(target, prop, receiver);
-            }
-        });
-
-        // Reactive settings proxy
-        const settingsProxy = new Proxy(raw.settings || {}, {
-            set(target, prop, value) {
-                target[prop] = value;
-                self.progressRepo.updateSettings(userId, { [prop]: value });
-                return true;
-            }
-        });
-
-        // Reactive profile proxy
-        const profileProxy = new Proxy(raw.profile || {}, {
-            set(target, prop, value) {
-                target[prop] = value;
-                if (prop === 'username') {
-                    self.db.run('UPDATE users SET username = ? WHERE id = ?', [value, userId]);
-                }
-                if (prop === 'email') {
-                    self.db.run('UPDATE users SET email = ? WHERE id = ?', [value, userId]);
-                }
-                return true;
-            }
-        });
-
-        raw.xpLedger = xpLedgerProxy;
-        raw.settings = settingsProxy;
-        raw.profile = profileProxy;
-
-        return new Proxy(raw, {
-            get(target, prop, receiver) {
-                if (prop === 'lifetimeXp' || prop === 'coins' || prop === 'level' || prop === 'streak' || prop === 'flagged') {
-                    const row = self.db.get('SELECT lifetime_xp, coins, level, streak, flagged FROM user_progress WHERE user_id = ?', [userId]);
-                    if (row) {
-                        if (prop === 'lifetimeXp') return row.lifetime_xp;
-                        if (prop === 'coins') return row.coins;
-                        if (prop === 'level') return row.level;
-                        if (prop === 'streak') return row.streak;
-                        if (prop === 'flagged') return Boolean(row.flagged);
-                    }
-                }
-                if (prop === 'suspiciousFlags') {
-                    return self.db.all('SELECT reason as type, reason, created_at as timestamp FROM suspicious_flags WHERE user_id = ?', [userId]);
-                }
-                return Reflect.get(target, prop, receiver);
-            },
-            set(target, prop, value) {
-                target[prop] = value;
-                if (prop === 'lifetimeXp') {
-                    self.db.run('UPDATE user_progress SET lifetime_xp = ? WHERE user_id = ?', [Number(value) || 0, userId]);
-                }
-                if (prop === 'coins') {
-                    self.db.run('UPDATE user_progress SET coins = ? WHERE user_id = ?', [Number(value) || 0, userId]);
-                }
-                if (prop === 'level') {
-                    self.db.run('UPDATE user_progress SET level = ? WHERE user_id = ?', [Number(value) || 1, userId]);
-                }
-                if (prop === 'streak') {
-                    self.db.run('UPDATE user_progress SET streak = ? WHERE user_id = ?', [Number(value) || 0, userId]);
-                }
-                return true;
-            }
-        });
+    async getUserProgress(userId) {
+        return await this.progressRepo.getUserProgress(userId);
     }
 
-    processActivityEvent(userId, event) {
-        return this.progressRepo.processActivityEvent(userId, event);
+    async processActivityEvent(userId, event) {
+        return await this.progressRepo.processActivityEvent(userId, event);
     }
 
-    syncProgress(userId, payload) {
-        return this.progressRepo.syncProgress(userId, payload);
+    async syncProgress(userId, payload) {
+        return await this.progressRepo.syncProgress(userId, payload);
     }
 
-    updateSettings(userId, patch) {
-        return this.progressRepo.updateSettings(userId, patch);
+    async updateSettings(userId, patch) {
+        return await this.progressRepo.updateSettings(userId, patch);
     }
 
-    equipItem(userId, items) {
-        return this.progressRepo.equipItem(userId, items);
+    async equipItem(userId, items) {
+        return await this.progressRepo.equipItem(userId, items);
     }
 
-    getUserMastery(userId) {
-        return this.progressRepo.getUserMastery(userId);
+    async getUserMastery(userId) {
+        return await this.progressRepo.getUserMastery(userId);
     }
 
-    getUserRecommendations(userId, options) {
-        return this.progressRepo.getUserRecommendations(userId, options);
+    async getUserRecommendations(userId, options) {
+        return await this.progressRepo.getUserRecommendations(userId, options);
     }
 
-    recordRecommendationInteraction(userId, interactionType, recommendationId, metadata) {
-        return this.progressRepo.recordRecommendationInteraction(userId, interactionType, recommendationId, metadata);
+    async recordRecommendationInteraction(userId, interactionType, recommendationId, metadata) {
+        return await this.progressRepo.recordRecommendationInteraction(userId, interactionType, recommendationId, metadata);
     }
 
-    getLeaderboard(options) {
-        return this.progressRepo.getLeaderboard(options);
+    async getLeaderboard(options) {
+        return await this.progressRepo.getLeaderboard(options);
     }
 
-    followUser(currentUserId, targetUserId) {
-        return this.progressRepo.followUser(currentUserId, targetUserId);
+    async followUser(currentUserId, targetUserId) {
+        return await this.progressRepo.followUser(currentUserId, targetUserId);
     }
 
-    unfollowUser(currentUserId, targetUserId) {
-        return this.progressRepo.unfollowUser(currentUserId, targetUserId);
+    async unfollowUser(currentUserId, targetUserId) {
+        return await this.progressRepo.unfollowUser(currentUserId, targetUserId);
     }
 
-    claimChallengeReward(currentUserId, challengeId) {
-        return this.progressRepo.claimChallengeReward(currentUserId, challengeId);
+    async claimChallengeReward(currentUserId, challengeId) {
+        return await this.progressRepo.claimChallengeReward(currentUserId, challengeId);
     }
 
-    createFriendChallenge(currentUserId, targetUserId, details) {
-        return this.progressRepo.createFriendChallenge(currentUserId, targetUserId, details);
+    async createFriendChallenge(currentUserId, targetUserId, details) {
+        return await this.progressRepo.createFriendChallenge(currentUserId, targetUserId, details);
     }
 
-    acceptFriendChallenge(currentUserId, challengeId) {
-        return this.progressRepo.acceptFriendChallenge(currentUserId, challengeId);
+    async acceptFriendChallenge(currentUserId, challengeId) {
+        return await this.progressRepo.acceptFriendChallenge(currentUserId, challengeId);
     }
 
-    addNotification(userId, notif) {
-        return this.progressRepo.addNotification(userId, notif);
+    async addNotification(userId, notif) {
+        return await this.progressRepo.addNotification(userId, notif);
     }
 
-    getNotifications(userId) {
-        return this.progressRepo.getNotifications(userId);
+    async getNotifications(userId) {
+        return await this.progressRepo.getNotifications(userId);
     }
 
-    markNotificationsRead(currentUserId) {
-        return this.progressRepo.markNotificationsRead(currentUserId);
+    async markNotificationsRead(currentUserId) {
+        return await this.progressRepo.markNotificationsRead(currentUserId);
     }
 
-    getNotificationSummary(userId) {
-        return this.progressRepo.getNotificationSummary(userId);
+    async getNotificationSummary(userId) {
+        return await this.progressRepo.getNotificationSummary(userId);
     }
 
-    getSocialProfile(targetUserId, currentUserId) {
-        return this.progressRepo.getSocialProfile(targetUserId, currentUserId);
+    async getSocialProfile(targetUserId, currentUserId) {
+        return await this.progressRepo.getSocialProfile(targetUserId, currentUserId);
     }
 
-    getChallenges(userId) {
-        return this.progressRepo.getChallenges(userId);
+    async getChallenges(userId) {
+        return await this.progressRepo.getChallenges(userId);
     }
 
-    getUserProfile(targetUserId, currentUserId) {
-        const progress = this.getUserProgress(targetUserId);
+    async getUserProfile(targetUserId, currentUserId) {
+        const progress = await this.getUserProgress(targetUserId);
         if (!progress) return null;
 
-        const isFollowing = currentUserId ? progress.followers.includes(currentUserId) : false;
-        const isFollowedBy = currentUserId ? progress.following.includes(currentUserId) : false;
+        const isFollowing = currentUserId ? (progress.followers || []).includes(currentUserId) : false;
+        const isFollowedBy = currentUserId ? (progress.following || []).includes(currentUserId) : false;
 
         return {
             userId: targetUserId,
-            username: progress.profile.username,
-            avatar: progress.equippedItems.avatar,
-            title: progress.profile.title,
+            username: progress.profile?.username,
+            avatar: progress.equippedItems?.avatar,
+            title: progress.profile?.title,
             level: progress.level,
             lifetimeXp: progress.lifetimeXp,
             streak: progress.streak,
             achievements: progress.achievements,
             isFollowing,
             isFollowedBy,
-            followersCount: progress.followers.length,
-            followingCount: progress.following.length,
-            badges: progress.achievements.map(id => ACHIEVEMENTS_CATALOG.find(a => a.id === id)).filter(Boolean)
+            followersCount: (progress.followers || []).length,
+            followingCount: (progress.following || []).length,
+            badges: (progress.achievements || []).map(id => ACHIEVEMENTS_CATALOG.find(a => a.id === id)).filter(Boolean)
         };
     }
 
-    getPublicProfile(targetUserId, currentUserId) {
-        const profile = this.getUserProfile(targetUserId, currentUserId);
+    async getPublicProfile(targetUserId, currentUserId) {
+        const profile = await this.getUserProfile(targetUserId, currentUserId);
         if (!profile) return null;
 
-        const progress = this.getUserProgress(targetUserId);
-        if (progress.settings.privateProfile && targetUserId !== currentUserId) {
+        const progress = await this.getUserProgress(targetUserId);
+        if (progress?.settings?.privateProfile && targetUserId !== currentUserId) {
             return {
                 userId: targetUserId,
                 username: profile.username,
@@ -403,7 +302,7 @@ class ServerDatabaseBridge {
 
     saveToDisk() {
         // SQLite automatically persists to disk with WAL mode.
-        // Backup snapshot can also be triggered if needed.
+        // PostgreSQL handles transaction durability natively.
     }
 }
 

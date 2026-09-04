@@ -26,25 +26,29 @@
     const listeners = new Map();
 
     function emitEvent(eventName, detailData) {
-        // Dispatch in browser
-        if (typeof window !== "undefined" && typeof window.dispatchEvent === "function") {
-            try {
-                const event = new CustomEvent(eventName, { detail: detailData, bubbles: true });
-                window.dispatchEvent(event);
-            } catch (err) {
-                console.warn(`[ActivityService] CustomEvent dispatch error (${eventName}):`, err);
-            }
-        }
+        const enriched = detailData || {};
+        const isAlreadyInternal = enriched._dispatchedInternally;
+        enriched._dispatchedInternally = true;
 
-        // Notify direct internal subscribers
+        // 1. Notify direct internal subscribers first
         if (listeners.has(eventName)) {
             listeners.get(eventName).forEach(handler => {
                 try {
-                    handler(detailData);
+                    handler(enriched);
                 } catch (err) {
                     console.error(`[ActivityService] Listener error on ${eventName}:`, err);
                 }
             });
+        }
+
+        // 2. Dispatch in browser for window-level listeners (only if not already dispatched)
+        if (!isAlreadyInternal && typeof window !== "undefined" && typeof window.dispatchEvent === "function") {
+            try {
+                const event = new CustomEvent(eventName, { detail: enriched, bubbles: true });
+                window.dispatchEvent(event);
+            } catch (err) {
+                console.warn(`[ActivityService] CustomEvent dispatch error (${eventName}):`, err);
+            }
         }
     }
 
@@ -55,8 +59,14 @@
         }
         listeners.get(eventName).add(handler);
 
-        // Also add window event listener if in browser
-        const windowHandler = (e) => handler(e.detail);
+        // Also add window event listener if in browser, but make it strictly ignore internally-dispatched events
+        const windowHandler = (e) => {
+            if (e.detail && e.detail._dispatchedInternally) {
+                return; // already executed by the internal listener
+            }
+            handler(e.detail);
+        };
+
         if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
             window.addEventListener(eventName, windowHandler);
         }

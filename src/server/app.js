@@ -301,6 +301,94 @@ function createApp(options = {}) {
         return res.json({ ok: true, domain, data: item });
     });
 
+    app.get('/api/learning-journey/goals', (req, res) => {
+        try {
+            const goalsPath = path.join(__dirname, '../../data/content/journey-goals.json');
+            if (fs.existsSync(goalsPath)) {
+                const data = fs.readFileSync(goalsPath, 'utf8');
+                return res.json({ ok: true, goals: JSON.parse(data) });
+            }
+            return res.status(404).json({ ok: false, message: "Journey goals configuration file not found." });
+        } catch (err) {
+            return res.status(500).json({ ok: false, error: "SERVER_ERROR", message: err.message });
+        }
+    });
+
+    // Content-backed Search Endpoint (FASE 3)
+    app.get('/api/search', (req, res) => {
+        try {
+            const query = String(req.query.q || '').trim().toLowerCase();
+            if (!query || query.length < 2) {
+                return res.json({ ok: true, query, results: [] });
+            }
+
+            const files = [
+                { name: 'books.json', type: 'Buku & Referensi', defaultUrl: 'library.html' },
+                { name: 'culture.json', type: 'Budaya Nusantara', defaultUrl: 'quiz-budaya-lms.html' },
+                { name: 'learning-paths.json', type: 'Learning Path', defaultUrl: 'learning-journey.html' },
+                { name: 'lessons.json', type: 'Materi Belajar', defaultUrl: 'materi.html' },
+                { name: 'projects.json', type: 'Proyek Nyata', defaultUrl: 'projects.html' },
+                { name: 'quizzes.json', type: 'Quiz & Latihan', defaultUrl: 'quiz.html' }
+            ];
+
+            const results = [];
+            const dirPath = path.join(__dirname, '../../data/content');
+
+            for (const file of files) {
+                const filePath = path.join(dirPath, file.name);
+                if (!fs.existsSync(filePath)) continue;
+
+                try {
+                    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+                    const items = Array.isArray(data) ? data : (data.items || []);
+
+                    for (const item of items) {
+                        const title = item.title || item.name || '';
+                        const desc = item.description || item.summary || item.content || '';
+                        const tags = Array.isArray(item.tags) ? item.tags.join(' ') : '';
+                        
+                        const matchText = `${title} ${desc} ${tags}`.toLowerCase();
+                        if (matchText.includes(query)) {
+                            let itemUrl = file.defaultUrl;
+                            if (file.name === 'books.json' && item.id) {
+                                itemUrl = `reader.html?book=${encodeURIComponent(item.id)}`;
+                            } else if (file.name === 'lessons.json' && item.id) {
+                                itemUrl = `materi-basic.html?topik=${encodeURIComponent(item.track || 'programming')}`;
+                            } else if (file.name === 'culture.json' && item.id) {
+                                itemUrl = `daerah-detail.html?id=${encodeURIComponent(item.id)}`;
+                            } else if (file.name === 'projects.json' && item.id) {
+                                itemUrl = `projects.html?id=${encodeURIComponent(item.id)}`;
+                            }
+
+                            results.push({
+                                title,
+                                description: desc.substring(0, 120) + (desc.length > 120 ? '...' : ''),
+                                type: file.type,
+                                url: itemUrl
+                            });
+                        }
+                    }
+                } catch (e) {
+                    // Ignore single file parse errors
+                }
+            }
+
+            const uniqueResults = [];
+            const seen = new Set();
+            for (const r of results) {
+                const key = `${r.title}-${r.type}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    uniqueResults.push(r);
+                }
+            }
+
+            return res.json({ ok: true, query, results: uniqueResults.slice(0, 8) });
+        } catch (err) {
+            return res.status(500).json({ ok: false, error: "SERVER_ERROR", message: err.message });
+        }
+    });
+
     // 6. CSRF Token Endpoint
     app.get('/api/csrf-token', (req, res) => {
         let csrfToken = req.session?.csrfToken || req.cookies?.uot_csrf;
@@ -323,8 +411,9 @@ function createApp(options = {}) {
     });
 
     // 7. Sanitized Public Health Endpoint (FASE 4 OWASP Hardening)
-    app.get('/api/health', (req, res) => {
+    app.get('/api/health', async (req, res) => {
         const mem = process.memoryUsage();
+        const activeUsers = await dbInstance.userRepo.count();
         res.json({
             status: 'ok',
             app: 'Universe Of Tech',
@@ -336,8 +425,8 @@ function createApp(options = {}) {
             observability: {
                 uptimeSeconds: Math.round(process.uptime()),
                 memoryUsageRssMb: Math.round(mem.rss / (1024 * 1024)),
-                activeUsers: dbInstance.users ? (dbInstance.users.size || 0) : 0,
-                activeProgressRecords: dbInstance.progress ? (dbInstance.progress.size || 0) : 0,
+                activeUsers,
+                activeProgressRecords: activeUsers,
                 telemetryEvents: analyticsEngineInstance.events ? analyticsEngineInstance.events.length : 0,
                 telemetryErrors: analyticsEngineInstance.errors ? analyticsEngineInstance.errors.length : 0
             }

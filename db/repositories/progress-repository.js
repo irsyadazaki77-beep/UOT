@@ -126,28 +126,28 @@ class ProgressRepository {
         this.rewardLedger = new RewardLedger(this.db);
     }
 
-    getUserProgress(userId) {
+    async getUserProgress(userId) {
         if (!userId) return null;
 
         // Check if progress row exists
-        let row = this.db.get('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
+        let row = await this.db.getAsync('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
         if (!row) {
-            this._initUserProgress(userId);
-            row = this.db.get('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
+            await this._initUserProgress(userId);
+            row = await this.db.getAsync('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
         }
 
         return this._assembleFullProgress(userId, row);
     }
 
-    _initUserProgress(userId) {
-        let userRow = this.db.get('SELECT * FROM users WHERE id = ?', [userId]);
+    async _initUserProgress(userId) {
+        let userRow = await this.db.getAsync('SELECT * FROM users WHERE id = ?', [userId]);
         const now = new Date().toISOString();
         if (!userRow) {
-            this.db.run(`
+            await this.db.runAsync(`
                 INSERT OR IGNORE INTO users (id, username, email, password_hash, salt, role, is_pro, created_at, updated_at)
                 VALUES (?, ?, ?, 'auto', 'auto', 'user', 0, ?, ?)
             `, [userId, userId, `${userId}@auto.local`, now, now]);
-            userRow = this.db.get('SELECT * FROM users WHERE id = ?', [userId]);
+            userRow = await this.db.getAsync('SELECT * FROM users WHERE id = ?', [userId]);
         }
 
         const defaultSettings = {
@@ -171,7 +171,7 @@ class ProgressRepository {
             fastestQuizCompletionSeconds: null
         };
 
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT OR IGNORE INTO user_progress (
                 user_id, lifetime_xp, level, coins, streak, last_active_date, streak_freeze_count,
                 equipped_avatar, equipped_theme, equipped_accent, flagged,
@@ -185,17 +185,22 @@ class ProgressRepository {
             now
         ]);
 
-        this.db.run(`INSERT OR IGNORE INTO user_inventory (user_id, item_id, unlocked_at) VALUES (?, '👨‍💻', ?)`, [userId, now]);
+        await this.db.runAsync(`INSERT OR IGNORE INTO user_inventory (user_id, item_id, unlocked_at) VALUES (?, '👨‍💻', ?)`, [userId, now]);
     }
 
-    _assembleFullProgress(userId, row) {
-        const userRow = this.db.get('SELECT * FROM users WHERE id = ?', [userId]);
-        const completedLessons = this.db.all('SELECT lesson_id FROM user_completed_lessons WHERE user_id = ?', [userId]).map(r => r.lesson_id);
-        const achievementsList = this.db.all('SELECT achievement_id FROM achievements WHERE user_id = ?', [userId]).map(r => r.achievement_id);
-        const inventoryList = this.db.all('SELECT item_id FROM user_inventory WHERE user_id = ?', [userId]).map(r => r.item_id);
+    async _assembleFullProgress(userId, row) {
+        const userRow = await this.db.getAsync('SELECT * FROM users WHERE id = ?', [userId]);
+        const completedLessonsRows = await this.db.allAsync('SELECT lesson_id FROM user_completed_lessons WHERE user_id = ?', [userId]);
+        const completedLessons = completedLessonsRows.map(r => r.lesson_id);
+
+        const achievementsRows = await this.db.allAsync('SELECT achievement_id FROM achievements WHERE user_id = ?', [userId]);
+        const achievementsList = achievementsRows.map(r => r.achievement_id);
+
+        const inventoryRows = await this.db.allAsync('SELECT item_id FROM user_inventory WHERE user_id = ?', [userId]);
+        const inventoryList = inventoryRows.map(r => r.item_id);
 
         // Quiz history map
-        const quizRows = this.db.all('SELECT * FROM quiz_attempts WHERE user_id = ? ORDER BY created_at ASC', [userId]);
+        const quizRows = await this.db.allAsync('SELECT * FROM quiz_attempts WHERE user_id = ? ORDER BY created_at ASC', [userId]);
         const quizHistory = {};
         for (const q of quizRows) {
             if (!quizHistory[q.quiz_id]) {
@@ -210,7 +215,7 @@ class ProgressRepository {
         }
 
         // Project progress map
-        const projectRows = this.db.all('SELECT * FROM projects_progress WHERE user_id = ?', [userId]);
+        const projectRows = await this.db.allAsync('SELECT * FROM projects_progress WHERE user_id = ?', [userId]);
         const projectProgress = {};
         for (const pr of projectRows) {
             projectProgress[pr.project_id] = {
@@ -222,7 +227,7 @@ class ProgressRepository {
         }
 
         // Processed events ledger (last 100 for fast idempotency cache & metrics)
-        const eventRows = this.db.all('SELECT * FROM progress_events WHERE user_id = ? ORDER BY server_timestamp DESC LIMIT 100', [userId]);
+        const eventRows = await this.db.allAsync('SELECT * FROM progress_events WHERE user_id = ? ORDER BY server_timestamp DESC LIMIT 100', [userId]);
         const processedEvents = {};
         const xpLedger = [];
         for (const ev of eventRows) {
@@ -246,11 +251,14 @@ class ProgressRepository {
         }
 
         // Social relationships
-        const following = this.db.all('SELECT following_id FROM followers WHERE follower_id = ?', [userId]).map(r => r.following_id);
-        const followers = this.db.all('SELECT follower_id FROM followers WHERE following_id = ?', [userId]).map(r => r.follower_id);
+        const followingRows = await this.db.allAsync('SELECT following_id FROM followers WHERE follower_id = ?', [userId]);
+        const following = followingRows.map(r => r.following_id);
+        const followersRows = await this.db.allAsync('SELECT follower_id FROM followers WHERE following_id = ?', [userId]);
+        const followers = followersRows.map(r => r.follower_id);
 
         // Notifications
-        const notifications = this.db.all('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 50', [userId]).map(n => ({
+        const notificationRows = await this.db.allAsync('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 50', [userId]);
+        const notifications = notificationRows.map(n => ({
             id: n.id,
             type: n.type,
             title: n.title,
@@ -261,7 +269,8 @@ class ProgressRepository {
         }));
 
         // Friend Challenges
-        const challenges = this.db.all('SELECT * FROM challenges WHERE creator_id = ? OR target_id = ? ORDER BY created_at DESC LIMIT 20', [userId, userId]).map(c => ({
+        const challengeRows = await this.db.allAsync('SELECT * FROM challenges WHERE creator_id = ? OR target_id = ? ORDER BY created_at DESC LIMIT 20', [userId, userId]);
+        const challenges = challengeRows.map(c => ({
             id: c.id,
             creatorId: c.creator_id,
             targetId: c.target_id,
@@ -276,7 +285,8 @@ class ProgressRepository {
         }));
 
         // Suspicious flags
-        const suspiciousFlags = this.db.all('SELECT * FROM suspicious_flags WHERE user_id = ? ORDER BY created_at DESC', [userId]).map(s => ({
+        const suspiciousFlagRows = await this.db.allAsync('SELECT * FROM suspicious_flags WHERE user_id = ? ORDER BY created_at DESC', [userId]);
+        const suspiciousFlags = suspiciousFlagRows.map(s => ({
             id: s.id,
             reason: s.reason,
             eventId: s.event_id,
@@ -396,7 +406,7 @@ class ProgressRepository {
      * Process Activity Event within an ACID SQL transaction with server-authoritative verification,
      * Content Catalog validation, score evaluation, duplicate reward prevention, and immutable ledger recording.
      */
-    processActivityEvent(userId, event) {
+    async processActivityEvent(userId, event) {
         if (!userId || !event || typeof event !== 'object') {
             return { ok: false, error: "INVALID_REQUEST", message: "Event payload tidak valid." };
         }
@@ -417,9 +427,9 @@ class ProgressRepository {
         }
 
         // Check if event already exists in database (Idempotency)
-        const existingEvent = this.db.get('SELECT * FROM progress_events WHERE user_id = ? AND event_id = ?', [userId, eventId]);
+        const existingEvent = await this.db.getAsync('SELECT * FROM progress_events WHERE user_id = ? AND event_id = ?', [userId, eventId]);
         if (existingEvent) {
-            const currentProgress = this.getUserProgress(userId);
+            const currentProgress = await this.getUserProgress(userId);
             return {
                 ok: true,
                 alreadyProcessed: true,
@@ -430,40 +440,44 @@ class ProgressRepository {
         }
 
         // Execute processing inside ACID SQL transaction
-        return this.db.transaction((tx) => {
+        return this.db.transactionAsync(async (tx) => {
+            const getFn = (sql, params) => tx.getAsync ? tx.getAsync(sql, params) : Promise.resolve(tx.get(sql, params));
+            const runFn = (sql, params) => tx.runAsync ? tx.runAsync(sql, params) : Promise.resolve(tx.run(sql, params));
+
             // Ensure user progress row exists
-            let progressRow = tx.get('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
+            let progressRow = await getFn('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
             if (!progressRow) {
-                this._initUserProgress(userId);
-                progressRow = tx.get('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
+                await this._initUserProgress(userId);
+                progressRow = await getFn('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
             }
 
             const now = new Date();
-            const serverTimestamp = now.toISOString();
-            const todayStr = now.toISOString().split('T')[0];
+            const eventTime = (event.timestamp || event.clientTimestamp) ? new Date(event.timestamp || event.clientTimestamp) : now;
+            const serverTimestamp = isNaN(eventTime.getTime()) ? now.toISOString() : eventTime.toISOString();
+            const todayStr = (isNaN(eventTime.getTime()) ? now : eventTime).toISOString().split('T')[0];
 
             // Anti-abuse velocity checks
-            const recent10sXpRow = tx.get(`
+            const recent10sXpRow = await getFn(`
                 SELECT COALESCE(SUM(xp_awarded), 0) as totalXp
                 FROM progress_events
                 WHERE user_id = ? AND server_timestamp >= ?
             `, [userId, new Date(now.getTime() - 10000).toISOString()]);
 
-            const recent1hXpRow = tx.get(`
+            const recent1hXpRow = await getFn(`
                 SELECT COALESCE(SUM(xp_awarded), 0) as totalXp
                 FROM progress_events
                 WHERE user_id = ? AND server_timestamp >= ?
             `, [userId, new Date(now.getTime() - 3600000).toISOString()]);
 
             if (recent10sXpRow && recent10sXpRow.totalXp > 500) {
-                tx.run('UPDATE user_progress SET flagged = 1 WHERE user_id = ?', [userId]);
-                tx.run(`
+                await runFn('UPDATE user_progress SET flagged = 1 WHERE user_id = ?', [userId]);
+                await runFn(`
                     INSERT INTO suspicious_flags (id, user_id, reason, event_id, created_at)
                     VALUES (?, ?, ?, ?, ?)
                 `, [`flag_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, `XP Spike Abnormal: Earnt ${recent10sXpRow.totalXp} XP in 10s (severity: high)`, eventId, serverTimestamp]);
             } else if (recent1hXpRow && recent1hXpRow.totalXp > 3000) {
-                tx.run('UPDATE user_progress SET flagged = 1 WHERE user_id = ?', [userId]);
-                tx.run(`
+                await runFn('UPDATE user_progress SET flagged = 1 WHERE user_id = ?', [userId]);
+                await runFn(`
                     INSERT INTO suspicious_flags (id, user_id, reason, event_id, created_at)
                     VALUES (?, ?, ?, ?, ?)
                 `, [`flag_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, `XP Spike Abnormal: Earnt ${recent1hXpRow.totalXp} XP in 1h (severity: high)`, eventId, serverTimestamp]);
@@ -482,8 +496,8 @@ class ProgressRepository {
 
                     // 1. Authoritative Content Catalog Verification
                     if (!contentCatalog.isValidLesson(lessonId)) {
-                        this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, lessonId, "Invalid Lesson ID", serverTimestamp);
-                        tx.run(`
+                        await this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, lessonId, "Invalid Lesson ID", serverTimestamp);
+                        await runFn(`
                             INSERT INTO suspicious_flags (id, user_id, reason, event_id, created_at)
                             VALUES (?, ?, ?, ?, ?)
                         `, [`flag_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, `Materi tidak terdaftar di katalog: ${lessonId} (severity: medium)`, eventId, serverTimestamp]);
@@ -491,15 +505,15 @@ class ProgressRepository {
                     }
 
                     // 2. Check first completion vs replay
-                    const existingLesson = tx.get('SELECT * FROM user_completed_lessons WHERE user_id = ? AND lesson_id = ?', [userId, lessonId]);
+                    const existingLesson = await getFn('SELECT * FROM user_completed_lessons WHERE user_id = ? AND lesson_id = ?', [userId, lessonId]);
                     const isFirstCompletion = !existingLesson;
 
                     if (isFirstCompletion) {
-                        tx.run('INSERT INTO user_completed_lessons (user_id, lesson_id, completed_at) VALUES (?, ?, ?)', [userId, lessonId, serverTimestamp]);
+                        await runFn('INSERT INTO user_completed_lessons (user_id, lesson_id, completed_at) VALUES (?, ?, ?)', [userId, lessonId, serverTimestamp]);
                     }
 
                     // 3. Process Reward Mutation via Ledger
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType: 'lesson_complete',
@@ -521,18 +535,18 @@ class ProgressRepository {
                     }
 
                     if (!contentCatalog.isValidLesson(chapterId)) {
-                        this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, chapterId, "Invalid Chapter ID", serverTimestamp);
+                        await this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, chapterId, "Invalid Chapter ID", serverTimestamp);
                         return { ok: false, error: "INVALID_CHAPTER_ID", message: `Bab materi "${chapterId}" tidak ditemukan di katalog kurikulum resmi.` };
                     }
 
-                    const existingChapter = tx.get('SELECT * FROM user_completed_lessons WHERE user_id = ? AND lesson_id = ?', [userId, chapterId]);
+                    const existingChapter = await getFn('SELECT * FROM user_completed_lessons WHERE user_id = ? AND lesson_id = ?', [userId, chapterId]);
                     const isFirstCompletion = !existingChapter;
 
                     if (isFirstCompletion) {
-                        tx.run('INSERT INTO user_completed_lessons (user_id, lesson_id, completed_at) VALUES (?, ?, ?)', [userId, chapterId, serverTimestamp]);
+                        await runFn('INSERT INTO user_completed_lessons (user_id, lesson_id, completed_at) VALUES (?, ?, ?)', [userId, chapterId, serverTimestamp]);
                     }
 
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType: 'chapter_complete',
@@ -555,8 +569,8 @@ class ProgressRepository {
 
                     // 1. Authoritative Quiz ID Verification
                     if (!contentCatalog.isValidQuiz(quizId)) {
-                        this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, quizId, "Invalid Quiz ID", serverTimestamp);
-                        tx.run(`
+                        await this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, quizId, "Invalid Quiz ID", serverTimestamp);
+                        await runFn(`
                             INSERT INTO suspicious_flags (id, user_id, reason, event_id, created_at)
                             VALUES (?, ?, ?, ?, ?)
                         `, [`flag_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, `Kuis tidak terdaftar di katalog: ${quizId} (severity: medium)`, eventId, serverTimestamp]);
@@ -568,19 +582,19 @@ class ProgressRepository {
                     const evaluation = contentCatalog.evaluateQuizSubmission(quizId, payload.answers, payload.score, compTime);
 
                     if (evaluation.tampered) {
-                        tx.run(`
+                        await runFn(`
                             INSERT INTO suspicious_flags (id, user_id, reason, event_id, created_at)
                             VALUES (?, ?, ?, ?, ?)
                         `, [`flag_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, `Manipulasi Skor Kuis: Client klaim ${payload.score} vs Evaluasi Server ${evaluation.authoritativeScore} (severity: high)`, eventId, serverTimestamp]);
-                        tx.run('UPDATE user_progress SET flagged = 1 WHERE user_id = ?', [userId]);
+                        await runFn('UPDATE user_progress SET flagged = 1 WHERE user_id = ?', [userId]);
                     }
 
                     if (evaluation.isSuspiciousSpeed) {
-                        tx.run(`
+                        await runFn(`
                             INSERT INTO suspicious_flags (id, user_id, reason, event_id, created_at)
                             VALUES (?, ?, ?, ?, ?)
                         `, [`flag_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, `Kecepatan Kuis Mencurigakan: Selesai ${quizId} dalam ${compTime}s (severity: high)`, eventId, serverTimestamp]);
-                        tx.run('UPDATE user_progress SET flagged = 1 WHERE user_id = ?', [userId]);
+                        await runFn('UPDATE user_progress SET flagged = 1 WHERE user_id = ?', [userId]);
                     }
 
                     const score = evaluation.authoritativeScore;
@@ -588,7 +602,7 @@ class ProgressRepository {
                     const isPerfect = evaluation.isPerfect;
 
                     // 3. Attempt History & First Pass Detection
-                    const prevAttempts = tx.get(`
+                    const prevAttempts = await getFn(`
                         SELECT COUNT(*) as count, MAX(is_passed) as hadPassed, MAX(is_perfect) as hadPerfect
                         FROM quiz_attempts WHERE user_id = ? AND quiz_id = ?
                     `, [userId, quizId]);
@@ -608,7 +622,7 @@ class ProgressRepository {
                     const answersJson = payload.answers ? JSON.stringify(payload.answers) : null;
                     const metadataJson = payload.metadata ? JSON.stringify(payload.metadata) : null;
 
-                    tx.run(`
+                    await runFn(`
                         INSERT INTO quiz_attempts (
                             id, user_id, quiz_id, score, is_passed, is_perfect, time_spent_seconds, attempt_number,
                             skill, topic, difficulty, answers_json, hint_count, metadata_json, created_at
@@ -634,7 +648,7 @@ class ProgressRepository {
 
                     // 4. Reward policy based on pass & perfection
                     if (isPerfect) {
-                        ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                        ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                             userId,
                             eventId,
                             eventType: 'quiz_complete_perfect',
@@ -646,7 +660,7 @@ class ProgressRepository {
                             serverTimestamp
                         });
                     } else if (isPassed) {
-                        ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                        ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                             userId,
                             eventId,
                             eventType: 'quiz_complete',
@@ -659,7 +673,7 @@ class ProgressRepository {
                         });
                     } else {
                         // Did not pass: small attempt effort reward
-                        ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                        ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                             userId,
                             eventId,
                             eventType: 'quiz_attempt',
@@ -680,7 +694,7 @@ class ProgressRepository {
                     if (compTime > 0 && (!pb.fastestQuizCompletionSeconds || compTime < pb.fastestQuizCompletionSeconds)) {
                         pb.fastestQuizCompletionSeconds = compTime;
                     }
-                    tx.run('UPDATE user_progress SET personal_bests_json = ? WHERE user_id = ?', [JSON.stringify(pb), userId]);
+                    await runFn('UPDATE user_progress SET personal_bests_json = ? WHERE user_id = ?', [JSON.stringify(pb), userId]);
 
                     actionResult = {
                         quizId,
@@ -703,26 +717,26 @@ class ProgressRepository {
                     }
 
                     if (!contentCatalog.isValidProject(projectId)) {
-                        this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, projectId, "Invalid Project ID", serverTimestamp);
+                        await this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, projectId, "Invalid Project ID", serverTimestamp);
                         return { ok: false, error: "INVALID_PROJECT_ID", message: `Proyek "${projectId}" tidak ditemukan di katalog resmi.` };
                     }
 
                     // Check if step number is valid
                     if (!contentCatalog.isValidProjectStep(projectId, stepNumber)) {
-                        this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, `${projectId}:${stepNumber}`, "Invalid Step Number", serverTimestamp);
+                        await this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, `${projectId}:${stepNumber}`, "Invalid Step Number", serverTimestamp);
                         return { ok: false, error: "INVALID_STEP_NUMBER", message: `Langkah ${stepNumber} tidak valid untuk proyek "${projectId}".` };
                     }
 
                     // Check if step was already completed by this user
-                    const existingStep = tx.get('SELECT * FROM user_completed_steps WHERE user_id = ? AND project_id = ? AND step_number = ?', [userId, projectId, stepNumber]);
+                    const existingStep = await getFn('SELECT * FROM user_completed_steps WHERE user_id = ? AND project_id = ? AND step_number = ?', [userId, projectId, stepNumber]);
                     const isFirstStep = !existingStep;
 
                     if (isFirstStep) {
-                        tx.run('INSERT INTO user_completed_steps (user_id, project_id, step_number, completed_at) VALUES (?, ?, ?, ?)', [userId, projectId, stepNumber, serverTimestamp]);
+                        await runFn('INSERT INTO user_completed_steps (user_id, project_id, step_number, completed_at) VALUES (?, ?, ?, ?)', [userId, projectId, stepNumber, serverTimestamp]);
                     }
 
                     // Update projects_progress completed steps
-                    const currentProj = tx.get('SELECT completed_steps_json FROM projects_progress WHERE user_id = ? AND project_id = ?', [userId, projectId]);
+                    const currentProj = await getFn('SELECT completed_steps_json FROM projects_progress WHERE user_id = ? AND project_id = ?', [userId, projectId]);
                     let stepArray = [];
                     try {
                         stepArray = currentProj ? JSON.parse(currentProj.completed_steps_json || '[]') : [];
@@ -731,7 +745,7 @@ class ProgressRepository {
                         stepArray.push(stepNumber);
                     }
 
-                    tx.run(`
+                    await runFn(`
                         INSERT INTO projects_progress (user_id, project_id, current_step, completed_steps_json, is_completed, created_at, updated_at)
                         VALUES (?, ?, ?, ?, 0, ?, ?)
                         ON CONFLICT(user_id, project_id) DO UPDATE SET
@@ -740,7 +754,7 @@ class ProgressRepository {
                             updated_at = excluded.updated_at
                     `, [userId, projectId, stepNumber, JSON.stringify(stepArray), serverTimestamp, serverTimestamp]);
 
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType: 'project_step',
@@ -763,8 +777,8 @@ class ProgressRepository {
 
                     // 1. Authoritative Project ID Verification
                     if (!contentCatalog.isValidProject(projectId)) {
-                        this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, projectId, "Invalid Project ID", serverTimestamp);
-                        tx.run(`
+                        await this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, projectId, "Invalid Project ID", serverTimestamp);
+                        await runFn(`
                             INSERT INTO suspicious_flags (id, user_id, reason, event_id, created_at)
                             VALUES (?, ?, ?, ?, ?)
                         `, [`flag_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, `Proyek tidak terdaftar di katalog: ${projectId} (severity: medium)`, eventId, serverTimestamp]);
@@ -772,11 +786,11 @@ class ProgressRepository {
                     }
 
                     // 2. Check if project was already completed before (CRITICAL: Reward given strictly ONCE)
-                    const existingProject = tx.get('SELECT is_completed FROM projects_progress WHERE user_id = ? AND project_id = ?', [userId, projectId]);
+                    const existingProject = await getFn('SELECT is_completed FROM projects_progress WHERE user_id = ? AND project_id = ?', [userId, projectId]);
                     const wasAlreadyCompleted = !!(existingProject && existingProject.is_completed === 1);
                     const isFirstCompletion = !wasAlreadyCompleted;
 
-                    tx.run(`
+                    await runFn(`
                         INSERT INTO projects_progress (user_id, project_id, current_step, completed_steps_json, is_completed, created_at, updated_at)
                         VALUES (?, ?, 10, ?, 1, ?, ?)
                         ON CONFLICT(user_id, project_id) DO UPDATE SET
@@ -785,7 +799,7 @@ class ProgressRepository {
                     `, [userId, projectId, JSON.stringify([1, 2, 3, 4, 5]), serverTimestamp, serverTimestamp]);
 
                     // 3. Process Reward Mutation (oneTimeOnly = true in policy ensures replay = 0 XP)
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType: 'project_complete',
@@ -807,7 +821,7 @@ class ProgressRepository {
                     }
 
                     // 1. Check if already unlocked in database
-                    const existingAch = tx.get('SELECT * FROM achievements WHERE user_id = ? AND achievement_id = ?', [userId, achievementId]);
+                    const existingAch = await getFn('SELECT * FROM achievements WHERE user_id = ? AND achievement_id = ?', [userId, achievementId]);
                     if (existingAch) {
                         return {
                             ok: true,
@@ -817,15 +831,15 @@ class ProgressRepository {
                             awardedCoins: 0,
                             reason: "Pencapaian sudah dibuka sebelumnya.",
                             result: { achievementId, alreadyUnlocked: true },
-                            progress: this.sanitizeProgressForResponse(this.getUserProgress(userId))
+                            progress: this.sanitizeProgressForResponse(await this.getUserProgress(userId))
                         };
                     }
 
                     // 2. Server-Authoritative Verification of Achievement Condition
                     const eligibility = contentCatalog.verifyAchievementEligibility(userId, achievementId, tx);
                     if (!eligibility.eligible) {
-                        this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, achievementId, `Criteria not met: ${eligibility.reason}`, serverTimestamp);
-                        tx.run(`
+                        await this.rewardLedger.recordRejectedTransaction(tx, userId, eventId, eventType, achievementId, `Criteria not met: ${eligibility.reason}`, serverTimestamp);
+                        await runFn(`
                             INSERT INTO suspicious_flags (id, user_id, reason, event_id, created_at)
                             VALUES (?, ?, ?, ?, ?)
                         `, [`flag_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, `Klaim achievement tidak terverifikasi: ${achievementId} (${eligibility.reason}) (severity: medium)`, eventId, serverTimestamp]);
@@ -838,9 +852,9 @@ class ProgressRepository {
 
                     // 3. Unlock and award
                     const ach = eligibility.achievement;
-                    tx.run('INSERT INTO achievements (user_id, achievement_id, unlocked_at) VALUES (?, ?, ?)', [userId, achievementId, serverTimestamp]);
+                    await runFn('INSERT INTO achievements (user_id, achievement_id, unlocked_at) VALUES (?, ?, ?)', [userId, achievementId, serverTimestamp]);
 
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType: 'achievement_unlock',
@@ -856,7 +870,7 @@ class ProgressRepository {
                 }
 
                 case 'sandbox_run': {
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType: 'sandbox_run',
@@ -872,7 +886,7 @@ class ProgressRepository {
 
                 case 'sandbox_challenge': {
                     const challengeId = String(payload.challengeId || "lab").trim();
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType: 'sandbox_challenge',
@@ -888,7 +902,7 @@ class ProgressRepository {
 
                 case 'daily_mission_claim': {
                     const missionId = String(payload.missionId || "daily_all").trim();
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType: 'daily_mission_claim',
@@ -903,7 +917,7 @@ class ProgressRepository {
                 }
 
                 default: {
-                    ledgerResult = this.rewardLedger.processRewardMutation(tx, {
+                    ledgerResult = await this.rewardLedger.processRewardMutation(tx, {
                         userId,
                         eventId,
                         eventType,
@@ -935,7 +949,7 @@ class ProgressRepository {
                     newStreak += 1;
                 } else if (diffDays > 1) {
                     if (progressRow.streak_freeze_count > 0) {
-                        tx.run('UPDATE user_progress SET streak_freeze_count = streak_freeze_count - 1 WHERE user_id = ?', [userId]);
+                        await runFn('UPDATE user_progress SET streak_freeze_count = streak_freeze_count - 1 WHERE user_id = ?', [userId]);
                     } else {
                         newStreak = 1;
                     }
@@ -948,7 +962,7 @@ class ProgressRepository {
             const nextCoins = ledgerResult ? ledgerResult.balanceCoinsAfter : (progressRow.coins + awardedCoins);
             const nextMetrics = calculateLevelMetrics(nextLifetimeXp);
 
-            tx.run(`
+            await runFn(`
                 UPDATE user_progress SET
                     lifetime_xp = ?,
                     level = ?,
@@ -968,7 +982,7 @@ class ProgressRepository {
             ]);
 
             // Record Event in progress_events Ledger
-            tx.run(`
+            await runFn(`
                 INSERT INTO progress_events (
                     event_id, user_id, event_type, client_timestamp, server_timestamp,
                     xp_awarded, coins_awarded, reason, payload_json, result_json
@@ -987,7 +1001,8 @@ class ProgressRepository {
             ]);
 
             // Assemble and return updated progress
-            const updatedProgress = this._assembleFullProgress(userId, tx.get('SELECT * FROM user_progress WHERE user_id = ?', [userId]));
+            const updatedRow = await getFn('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
+            const updatedProgress = await this._assembleFullProgress(userId, updatedRow);
 
             return {
                 ok: true,
@@ -1017,19 +1032,22 @@ class ProgressRepository {
     /**
      * Batch Synchronization with Deterministic Event Acknowledgment (FASE 18 requirement)
      */
-    syncProgress(userId, { events = [], legacyData = null }) {
+    async syncProgress(userId, { events = [], legacyData = null }) {
         if (!userId) return { ok: false, error: "INVALID_USER" };
 
         const results = [];
         const acknowledgedEventIds = [];
         const now = new Date().toISOString();
 
-        this.db.transaction((tx) => {
+        await this.db.transactionAsync(async (tx) => {
+            const getFn = (sql, params) => tx.getAsync ? tx.getAsync(sql, params) : Promise.resolve(tx.get(sql, params));
+            const runFn = (sql, params) => tx.runAsync ? tx.runAsync(sql, params) : Promise.resolve(tx.run(sql, params));
+
             // 1. Process queued events in strict sequence
             if (Array.isArray(events) && events.length > 0) {
                 for (const evt of events) {
                     if (!evt || !evt.eventId) continue;
-                    const res = this.processActivityEvent(userId, evt);
+                    const res = await this.processActivityEvent(userId, evt);
                     results.push({ eventId: evt.eventId, ok: res.ok, result: res.result, alreadyProcessed: !!res.alreadyProcessed });
                     if (res.ok) {
                         acknowledgedEventIds.push(evt.eventId);
@@ -1039,10 +1057,10 @@ class ProgressRepository {
 
             // 2. Deterministic conflict resolution for legacy data migration
             if (legacyData && typeof legacyData === 'object') {
-                let curRow = tx.get('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
+                let curRow = await getFn('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
                 if (!curRow) {
-                    this._initUserProgress(userId);
-                    curRow = tx.get('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
+                    await this._initUserProgress(userId);
+                    curRow = await getFn('SELECT * FROM user_progress WHERE user_id = ?', [userId]);
                 }
 
                 if (curRow) {
@@ -1052,7 +1070,7 @@ class ProgressRepository {
                     const mergedCoins = Math.max(curRow.coins, legacyCoins);
                     const metrics = calculateLevelMetrics(maxLifetimeXp);
 
-                    tx.run(`
+                    await runFn(`
                         UPDATE user_progress SET
                             lifetime_xp = ?,
                             level = ?,
@@ -1066,7 +1084,7 @@ class ProgressRepository {
                 if (Array.isArray(legacyData.achievements)) {
                     for (const ach of legacyData.achievements) {
                         if (ach) {
-                            tx.run('INSERT OR IGNORE INTO achievements (user_id, achievement_id, unlocked_at) VALUES (?, ?, ?)', [userId, String(ach), now]);
+                            await runFn('INSERT OR IGNORE INTO achievements (user_id, achievement_id, unlocked_at) VALUES (?, ?, ?)', [userId, String(ach), now]);
                         }
                     }
                 }
@@ -1075,7 +1093,7 @@ class ProgressRepository {
                 if (Array.isArray(legacyData.inventory)) {
                     for (const item of legacyData.inventory) {
                         if (item) {
-                            tx.run('INSERT OR IGNORE INTO user_inventory (user_id, item_id, unlocked_at) VALUES (?, ?, ?)', [userId, String(item), now]);
+                            await runFn('INSERT OR IGNORE INTO user_inventory (user_id, item_id, unlocked_at) VALUES (?, ?, ?)', [userId, String(item), now]);
                         }
                     }
                 }
@@ -1084,7 +1102,7 @@ class ProgressRepository {
                 if (Array.isArray(legacyData.completedLessons)) {
                     for (const les of legacyData.completedLessons) {
                         if (les) {
-                            tx.run('INSERT OR IGNORE INTO user_completed_lessons (user_id, lesson_id, completed_at) VALUES (?, ?, ?)', [userId, String(les), now]);
+                            await runFn('INSERT OR IGNORE INTO user_completed_lessons (user_id, lesson_id, completed_at) VALUES (?, ?, ?)', [userId, String(les), now]);
                         }
                     }
                 }
@@ -1095,7 +1113,7 @@ class ProgressRepository {
                         const score = Number(qData.bestScore || qData.score || 0);
                         const isPassed = score >= 70 ? 1 : 0;
                         const isPerfect = score === 100 ? 1 : 0;
-                        tx.run(`
+                        await runFn(`
                             INSERT INTO quiz_attempts (id, user_id, quiz_id, score, is_passed, is_perfect, time_spent_seconds, attempt_number, created_at)
                             VALUES (?, ?, ?, ?, ?, ?, 0, 1, ?)
                         `, [`att_mig_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`, userId, quizId, score, isPassed, isPerfect, now]);
@@ -1104,7 +1122,7 @@ class ProgressRepository {
             }
         });
 
-        const fullProgress = this.getUserProgress(userId);
+        const fullProgress = await this.getUserProgress(userId);
         return {
             ok: true,
             acknowledgedEventIds,
@@ -1115,30 +1133,31 @@ class ProgressRepository {
         };
     }
 
-    updateSettings(userId, patch = {}) {
+    async updateSettings(userId, patch = {}) {
         if (!userId || !patch || typeof patch !== 'object') {
             return { ok: false, error: "INVALID_PATCH" };
         }
-        const current = this.getUserProgress(userId);
+        const current = await this.getUserProgress(userId);
         if (!current) return { ok: false, error: "USER_NOT_FOUND" };
 
         const newSettings = { ...current.settings, ...patch };
-        this.db.run('UPDATE user_progress SET settings_json = ?, updated_at = ? WHERE user_id = ?', [
+        await this.db.runAsync('UPDATE user_progress SET settings_json = ?, updated_at = ? WHERE user_id = ?', [
             JSON.stringify(newSettings),
             new Date().toISOString(),
             userId
         ]);
 
+        const updatedProgress = await this.getUserProgress(userId);
         return {
             ok: true,
             settings: newSettings,
-            progress: this.sanitizeProgressForResponse(this.getUserProgress(userId))
+            progress: this.sanitizeProgressForResponse(updatedProgress)
         };
     }
 
-    equipItem(userId, { avatar, theme, accent }) {
+    async equipItem(userId, { avatar, theme, accent }) {
         if (!userId) return { ok: false, error: "INVALID_USER" };
-        const progress = this.getUserProgress(userId);
+        const progress = await this.getUserProgress(userId);
         if (!progress) return { ok: false, error: "USER_NOT_FOUND" };
 
         if (avatar && !progress.inventory.includes(avatar)) {
@@ -1165,10 +1184,10 @@ class ProgressRepository {
             updates.push('updated_at = ?');
             params.push(new Date().toISOString());
             params.push(userId);
-            this.db.run(`UPDATE user_progress SET ${updates.join(', ')} WHERE user_id = ?`, params);
+            await this.db.runAsync(`UPDATE user_progress SET ${updates.join(', ')} WHERE user_id = ?`, params);
         }
 
-        const updated = this.getUserProgress(userId);
+        const updated = await this.getUserProgress(userId);
         return {
             ok: true,
             equippedItems: updated.equippedItems,
@@ -1176,18 +1195,18 @@ class ProgressRepository {
         };
     }
 
-    getLeaderboard({ period = "weekly", page = 1, limit = 50, offset = 0, cohort = "global", currentUserId = null }) {
+    async getLeaderboard({ period = "weekly", page = 1, limit = 50, offset = 0, cohort = "global", currentUserId = null }) {
         const safeLimit = Math.max(1, Math.min(100, Number(limit) || 50));
         const safePage = Math.max(1, Number(page) || 1);
         const calcOffset = offset !== undefined && offset !== 0 ? Number(offset) : (safePage - 1) * safeLimit;
 
         // Fetch all active, non-flagged users and progress
-        const users = this.db.all(`
+        const users = await this.db.allAsync(`
             SELECT
                 p.user_id, p.lifetime_xp, p.level, p.streak, p.equipped_avatar,
                 p.settings_json, u.username
             FROM user_progress p
-            JOIN users u ON p.user_id = u.id
+            LEFT JOIN users u ON p.user_id = u.id
             WHERE p.flagged = 0
         `);
 
@@ -1196,7 +1215,7 @@ class ProgressRepository {
         if (cohort === 'friends' || cohort === 'following') {
             if (currentUserId) {
                 friendsSet.add(currentUserId);
-                const follows = this.db.all('SELECT following_id FROM followers WHERE follower_id = ?', [currentUserId]);
+                const follows = await this.db.allAsync('SELECT following_id FROM followers WHERE follower_id = ?', [currentUserId]);
                 for (const f of follows) friendsSet.add(f.following_id);
             }
         }
@@ -1219,14 +1238,14 @@ class ProgressRepository {
 
             let xp = u.lifetime_xp;
             if (period === 'weekly') {
-                const row = this.db.get(`
+                const row = await this.db.getAsync(`
                     SELECT SUM(xp_awarded) as period_xp
                     FROM progress_events
                     WHERE user_id = ? AND server_timestamp >= ?
                 `, [u.user_id, oneWeekAgo]);
                 xp = row && row.period_xp !== null ? Number(row.period_xp) : 0;
             } else if (period === 'monthly') {
-                const row = this.db.get(`
+                const row = await this.db.getAsync(`
                     SELECT SUM(xp_awarded) as period_xp
                     FROM progress_events
                     WHERE user_id = ? AND server_timestamp >= ?
@@ -1274,12 +1293,13 @@ class ProgressRepository {
         };
     }
 
-    getSocialProfile(targetUserId, currentUserId) {
+    async getSocialProfile(targetUserId, currentUserId) {
         if (!targetUserId) return { ok: false, error: "INVALID_USER" };
-        const progress = this.getUserProgress(targetUserId);
+        const progress = await this.getUserProgress(targetUserId);
         if (!progress) return { ok: false, error: "USER_NOT_FOUND" };
 
-        const isFollowing = currentUserId ? !!this.db.get('SELECT 1 FROM followers WHERE follower_id = ? AND following_id = ?', [currentUserId, targetUserId]) : false;
+        const isFollowingRow = currentUserId ? await this.db.getAsync('SELECT 1 FROM followers WHERE follower_id = ? AND following_id = ?', [currentUserId, targetUserId]) : null;
+        const isFollowing = !!isFollowingRow;
         const isPrivate = !!progress.settings.privateProfile && targetUserId !== currentUserId;
 
         if (isPrivate) {
@@ -1308,25 +1328,25 @@ class ProgressRepository {
         };
     }
 
-    followUser(currentUserId, targetUserId) {
+    async followUser(currentUserId, targetUserId) {
         if (!currentUserId || !targetUserId || currentUserId === targetUserId) {
             return { ok: false, error: "INVALID_TARGET", message: "Target follow tidak valid." };
         }
-        this.db.run('INSERT OR IGNORE INTO followers (follower_id, following_id, created_at) VALUES (?, ?, ?)', [
+        await this.db.runAsync('INSERT OR IGNORE INTO followers (follower_id, following_id, created_at) VALUES (?, ?, ?)', [
             currentUserId, targetUserId, new Date().toISOString()
         ]);
         return { ok: true, following: true, isFollowing: true };
     }
 
-    unfollowUser(currentUserId, targetUserId) {
+    async unfollowUser(currentUserId, targetUserId) {
         if (!currentUserId || !targetUserId) return { ok: false, error: "INVALID_TARGET" };
-        this.db.run('DELETE FROM followers WHERE follower_id = ? AND following_id = ?', [currentUserId, targetUserId]);
+        await this.db.runAsync('DELETE FROM followers WHERE follower_id = ? AND following_id = ?', [currentUserId, targetUserId]);
         return { ok: true, following: false, isFollowing: false };
     }
 
-    getChallenges(userId) {
+    async getChallenges(userId) {
         if (!userId) return { ok: false, error: "INVALID_USER" };
-        const progress = this.getUserProgress(userId);
+        const progress = await this.getUserProgress(userId);
         const completedLessonsCount = progress.learningProgress?.completedLessons?.length || 0;
         const quizzesCount = Object.keys(progress.quizHistory || {}).length;
         const claims = progress.challengeProgress?.claims || {};
@@ -1360,8 +1380,8 @@ class ProgressRepository {
         };
     }
 
-    claimChallengeReward(currentUserId, challengeId) {
-        const progress = this.getUserProgress(currentUserId);
+    async claimChallengeReward(currentUserId, challengeId) {
+        const progress = await this.getUserProgress(currentUserId);
         const claims = progress.challengeProgress?.claims || {};
         if (claims[challengeId]) {
             return { ok: false, error: "ALREADY_CLAIMED", message: "Hadiah tantangan ini sudah diklaim." };
@@ -1374,17 +1394,17 @@ class ProgressRepository {
         const reward = challengeCatalog[challengeId] || { xp: 50, coins: 25 };
 
         claims[challengeId] = { claimedAt: new Date().toISOString() };
-        this.db.run('UPDATE user_progress SET challenge_progress_json = ? WHERE user_id = ?', [
+        await this.db.runAsync('UPDATE user_progress SET challenge_progress_json = ? WHERE user_id = ?', [
             JSON.stringify({ ...progress.challengeProgress, claims }),
             currentUserId
         ]);
 
-        const curRow = this.db.get('SELECT lifetime_xp, coins, level FROM user_progress WHERE user_id = ?', [currentUserId]);
+        const curRow = await this.db.getAsync('SELECT lifetime_xp, coins, level FROM user_progress WHERE user_id = ?', [currentUserId]);
         const nextXp = (curRow?.lifetime_xp || 0) + reward.xp;
         const nextCoins = (curRow?.coins || 0) + reward.coins;
         const nextMetrics = calculateLevelMetrics(nextXp);
 
-        this.db.run(`
+        await this.db.runAsync(`
             UPDATE user_progress SET
                 lifetime_xp = ?,
                 coins = ?,
@@ -1394,7 +1414,7 @@ class ProgressRepository {
         `, [nextXp, nextCoins, nextMetrics.level, new Date().toISOString(), currentUserId]);
 
         const evtId = `evt_claim_${challengeId}_${Date.now()}`;
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO progress_events (
                 event_id, user_id, event_type, client_timestamp, server_timestamp,
                 xp_awarded, coins_awarded, reason, payload_json, result_json
@@ -1410,20 +1430,21 @@ class ProgressRepository {
             JSON.stringify({ reward })
         ]);
 
+        const updatedProgress = await this.getUserProgress(currentUserId);
         return {
             ok: true,
             rewardGiven: {
                 xp: reward.xp,
                 coins: reward.coins
             },
-            progress: this.getUserProgress(currentUserId)
+            progress: updatedProgress
         };
     }
 
-    createFriendChallenge(currentUserId, targetUserId, { challengeType = 'lessons', targetGoal = 3 }) {
+    async createFriendChallenge(currentUserId, targetUserId, { challengeType = 'lessons', targetGoal = 3 }) {
         const id = `fch_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
         const now = new Date().toISOString();
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO challenges (id, creator_id, target_id, challenge_type, target_goal, creator_progress, target_progress, status, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, 0, 0, 'pending', ?, ?)
         `, [id, currentUserId, targetUserId, challengeType, targetGoal, now, now]);
@@ -1431,32 +1452,32 @@ class ProgressRepository {
         return { ok: true, challengeId: id };
     }
 
-    acceptFriendChallenge(currentUserId, challengeId) {
-        const challenge = this.db.get('SELECT * FROM challenges WHERE id = ?', [challengeId]);
+    async acceptFriendChallenge(currentUserId, challengeId) {
+        const challenge = await this.db.getAsync('SELECT * FROM challenges WHERE id = ?', [challengeId]);
         if (!challenge || challenge.target_id !== currentUserId) {
             return { ok: false, error: "CHALLENGE_NOT_FOUND" };
         }
-        this.db.run('UPDATE challenges SET status = "active", updated_at = ? WHERE id = ?', [
+        await this.db.runAsync('UPDATE challenges SET status = "active", updated_at = ? WHERE id = ?', [
             new Date().toISOString(),
             challengeId
         ]);
         return { ok: true, status: 'active' };
     }
 
-    addNotification(userId, { type, title, message, data = {} }) {
+    async addNotification(userId, { type, title, message, data = {} }) {
         if (!userId || !type || !title) return { ok: false, error: "INVALID_NOTIFICATION" };
 
-        const userExists = this.db.get('SELECT 1 FROM users WHERE id = ?', [userId]);
+        const userExists = await this.db.getAsync('SELECT 1 FROM users WHERE id = ?', [userId]);
         if (!userExists) {
             const now = new Date().toISOString();
-            this.db.run(`
+            await this.db.runAsync(`
                 INSERT OR IGNORE INTO users (id, username, email, password_hash, salt, role, is_pro, created_at, updated_at)
                 VALUES (?, ?, ?, 'auto', 'auto', 'user', 0, ?, ?)
             `, [userId, userId, `${userId}@auto.local`, now, now]);
         }
 
         const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
-        const existing = this.db.get(`
+        const existing = await this.db.getAsync(`
             SELECT id FROM notifications
             WHERE user_id = ? AND type = ? AND title = ? AND created_at >= ?
         `, [userId, type, title, oneHourAgo]);
@@ -1467,7 +1488,7 @@ class ProgressRepository {
 
         const id = `notif_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
         const now = new Date().toISOString();
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO notifications (id, user_id, type, title, message, is_read, data_json, created_at)
             VALUES (?, ?, ?, ?, ?, 0, ?, ?)
         `, [id, userId, type, title, message || "", JSON.stringify(data), now]);
@@ -1475,9 +1496,9 @@ class ProgressRepository {
         return { ok: true, id };
     }
 
-    getNotifications(userId) {
+    async getNotifications(userId) {
         if (!userId) return { ok: false, error: "INVALID_USER" };
-        const rows = this.db.all('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC', [userId]);
+        const rows = await this.db.allAsync('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC', [userId]);
         return {
             ok: true,
             notifications: rows.map(r => ({
@@ -1492,24 +1513,24 @@ class ProgressRepository {
         };
     }
 
-    markNotificationsRead(currentUserId) {
-        this.db.run('UPDATE notifications SET is_read = 1 WHERE user_id = ?', [currentUserId]);
+    async markNotificationsRead(currentUserId) {
+        await this.db.runAsync('UPDATE notifications SET is_read = 1 WHERE user_id = ?', [currentUserId]);
         return { ok: true };
     }
 
-    getNotificationSummary(userId) {
-        const row = this.db.get('SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND is_read = 0', [userId]);
+    async getNotificationSummary(userId) {
+        const row = await this.db.getAsync('SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND is_read = 0', [userId]);
         return { unreadCount: row ? row.count : 0 };
     }
 
-    getLearningState(userId) {
-        const row = this.db.get('SELECT state_json FROM learning_state WHERE user_id = ?', [userId]);
+    async getLearningState(userId) {
+        const row = await this.db.getAsync('SELECT state_json FROM learning_state WHERE user_id = ?', [userId]);
         return row ? JSON.parse(row.state_json) : null;
     }
 
-    saveLearningState(userId, state) {
+    async saveLearningState(userId, state) {
         const now = new Date().toISOString();
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO learning_state (user_id, state_json, updated_at)
             VALUES (?, ?, ?)
             ON CONFLICT(user_id) DO UPDATE SET
@@ -1519,8 +1540,8 @@ class ProgressRepository {
         return { ok: true };
     }
 
-    getUserMastery(userId, nowMs = Date.now()) {
-        const quizRows = this.db.all('SELECT * FROM quiz_attempts WHERE user_id = ? ORDER BY created_at ASC', [userId]);
+    async getUserMastery(userId, nowMs = Date.now()) {
+        const quizRows = await this.db.allAsync('SELECT * FROM quiz_attempts WHERE user_id = ? ORDER BY created_at ASC', [userId]);
         const attemptHistory = quizRows.map(q => {
             let answers = null;
             try { if (q.answers_json) answers = JSON.parse(q.answers_json); } catch (e) {}
@@ -1558,10 +1579,10 @@ class ProgressRepository {
         return {};
     }
 
-    getUserRecommendations(userId, options = {}, nowMs = Date.now()) {
-        const row = this.db.get('SELECT recommendation_history_json FROM user_progress WHERE user_id = ?', [userId]);
+    async getUserRecommendations(userId, options = {}, nowMs = Date.now()) {
+        const row = await this.db.getAsync('SELECT recommendation_history_json FROM user_progress WHERE user_id = ?', [userId]);
         const recommendationHistory = JSON.parse(row?.recommendation_history_json || '[]');
-        const quizRows = this.db.all('SELECT * FROM quiz_attempts WHERE user_id = ? ORDER BY created_at ASC', [userId]);
+        const quizRows = await this.db.allAsync('SELECT * FROM quiz_attempts WHERE user_id = ? ORDER BY created_at ASC', [userId]);
         const attemptHistory = quizRows.map(q => {
             let answers = null;
             try { if (q.answers_json) answers = JSON.parse(q.answers_json); } catch (e) {}
@@ -1605,17 +1626,17 @@ class ProgressRepository {
         };
     }
 
-    recordRecommendationInteraction(userId, interactionType, recommendationId, metadata = {}) {
+    async recordRecommendationInteraction(userId, interactionType, recommendationId, metadata = {}) {
         if (!userId || !recommendationId) {
             return { ok: false, error: "INVALID_PARAMS" };
         }
-        const row = this.db.get('SELECT recommendation_history_json FROM user_progress WHERE user_id = ?', [userId]);
+        const row = await this.db.getAsync('SELECT recommendation_history_json FROM user_progress WHERE user_id = ?', [userId]);
         if (!row) return { ok: false, error: "USER_NOT_FOUND" };
 
         const history = JSON.parse(row.recommendation_history_json || '[]');
         history.push(recommendationId);
         const trimmed = history.slice(-30);
-        this.db.run('UPDATE user_progress SET recommendation_history_json = ?, updated_at = ? WHERE user_id = ?', [
+        await this.db.runAsync('UPDATE user_progress SET recommendation_history_json = ?, updated_at = ? WHERE user_id = ?', [
             JSON.stringify(trimmed),
             new Date().toISOString(),
             userId

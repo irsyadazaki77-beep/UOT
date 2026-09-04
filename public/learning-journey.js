@@ -4,7 +4,7 @@
     const STORAGE_KEY = "quiznationLearningJourneyV1";
     const Account = window.QuizNationAccount;
     const $ = id => document.getElementById(id);
-    const GOALS = Object.freeze({
+    const GOALS_STATIC = Object.freeze({
         frontend: {
             label: "Web & Frontend", icon: "fa-code", accent: "#6558f5", start: "materi.html",
             description: "Dari fondasi web hingga project antarmuka yang siap dipamerkan.",
@@ -90,6 +90,21 @@
             ]
         }
     });
+    let GOALS = GOALS_STATIC;
+
+    async function initGoals() {
+        try {
+            const res = await fetch("/api/learning-journey/goals");
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.goals) {
+                    GOALS = data.goals;
+                }
+            }
+        } catch (err) {
+            console.warn("[LearningJourney] Failed to fetch server goals, using static fallback:", err);
+        }
+    }
     const LEVELS = Object.freeze({ beginner: "Pemula", intermediate: "Menengah", advanced: "Lanjutan" });
 
     function defaultState() {
@@ -416,7 +431,7 @@
     function renderPath() {
         const goal = getGoal(), completed = new Set(state.completedSteps), progress = Math.round(completed.size / goal.steps.length * 100);
         if ($("pathGoalTitle")) $("pathGoalTitle").textContent = goal.label;
-        if ($("pathDescription")) $("pathDescription").textContent = `${goal.description} Klik milestone di bawah untuk melihat rincian & checklist pemahaman sub-topik.`;
+        if ($("pathDescription")) $("pathDescription").textContent = `${goal.description} Selesaikan milestone secara berurutan. Milestone selanjutnya akan terbuka setelah milestone saat ini selesai dikerjakan.`;
         if ($("learnerLevel")) $("learnerLevel").textContent = LEVELS[state.level] || LEVELS.beginner;
         if ($("pathProgressText")) $("pathProgressText").textContent = `${progress}%`;
         if ($("pathProgressBar")) $("pathProgressBar").style.width = `${progress}%`;
@@ -424,24 +439,51 @@
         
         if ($("roadmapList")) {
             $("roadmapList").innerHTML = goal.steps.map((step, index) => {
-                const done = completed.has(index), active = index === currentStepIndex() && !done;
+                const done = completed.has(index);
+                const active = index === currentStepIndex() && !done;
+                const locked = index > currentStepIndex();
                 const stepKey = `${state.goal}-${index}`;
                 const subitems = goal.checklists?.[index] || [];
                 const checkedCount = (state.subtasks[stepKey] || []).filter(Boolean).length;
                 const subText = subitems.length ? ` • ${checkedCount}/${subitems.length} checklist` : "";
 
+                let statusBadge = "";
+                let stateText = "";
+                let itemClass = "";
+
+                if (done) {
+                    itemClass = "complete";
+                    stateText = "Selesai (Klik Detail)";
+                    statusBadge = '<span class="j-badge j-badge-complete"><i class="fa-solid fa-check-double"></i> Selesai</span>';
+                } else if (active) {
+                    itemClass = "active nba-focus";
+                    stateText = "Mulai &amp; Lihat Rincian";
+                    statusBadge = '<span class="j-badge j-badge-nba"><span class="nba-pulse"></span> Next Best Action</span>';
+                } else if (locked) {
+                    itemClass = "locked";
+                    stateText = "Belum Terbuka";
+                    statusBadge = '<span class="j-badge j-badge-locked"><i class="fa-solid fa-lock"></i> Terkunci</span>';
+                } else {
+                    stateText = "Lihat Rincian";
+                }
+
                 return `
-                    <article class="j-roadmap-item ${done ? "complete" : active ? "active" : ""}" data-open-drawer="${index}">
-                        <span class="j-roadmap-index">${done ? '<i class="fa-solid fa-check"></i>' : String(index + 1).padStart(2, "0")}</span>
+                    <article class="j-roadmap-item ${itemClass}" data-open-drawer="${index}" ${locked ? 'style="opacity: 0.5; pointer-events: none; cursor: not-allowed;"' : ""}>
+                        <span class="j-roadmap-index">
+                            ${done ? '<i class="fa-solid fa-check"></i>' : locked ? '<i class="fa-solid fa-lock"></i>' : String(index + 1).padStart(2, "0")}
+                        </span>
                         <div>
-                            <h2>${escapeHTML(step[0])}</h2>
+                            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px;">
+                                <h2 style="margin: 0; font-size: 16px; font-weight: 700;">${escapeHTML(step[0])}</h2>
+                                ${statusBadge}
+                            </div>
                             <p>${escapeHTML(step[1])}</p>
                             <div class="j-roadmap-meta">
-                                <span>${step[3]} menit</span>
+                                <span><i class="fa-solid fa-clock" style="font-size: 11px; margin-right: 4px;"></i>${step[3]} menit</span>
                                 <span>${index === goal.steps.length - 1 ? "Evaluasi" : index === 4 ? "Project" : "Milestone"}${subText}</span>
                             </div>
                         </div>
-                        <span class="j-roadmap-state">${done ? "Selesai (Klik Detail)" : active ? "Mulai & Lihat Rincian" : "Lihat Rincian"}</span>
+                        <span class="j-roadmap-state">${stateText}</span>
                     </article>
                 `;
             }).join("");
@@ -950,4 +992,5 @@
     }
 
     initTheme(); bindEvents(); renderAll(); const initialView = location.hash.slice(1); if (["today", "path", "insights", "achievements"].includes(initialView)) switchView(initialView); if (!state.onboardingComplete) openOnboarding(false);
+    initGoals().then(() => renderAll());
 })();

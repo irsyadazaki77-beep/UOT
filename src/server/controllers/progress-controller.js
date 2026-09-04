@@ -12,7 +12,7 @@ class ProgressController {
         this.ACHIEVEMENTS_CATALOG = ACHIEVEMENTS_CATALOG;
     }
 
-    getMe = (req, res) => {
+    getMe = async (req, res) => {
         if (!req.user) {
             return res.json({
                 ok: false,
@@ -22,8 +22,8 @@ class ProgressController {
             });
         }
 
-        const progress = this.dbInstance.getUserProgress(req.user.id);
-        const sub = this.subscriptionStore.get(req.user.id);
+        const progress = await this.dbInstance.getUserProgress(req.user.id);
+        const sub = await this.subscriptionStore.get(req.user.id);
         const isPro = Boolean(sub && sub.status === 'active' && Date.now() < sub.expiresAt);
 
         return res.json({
@@ -38,15 +38,15 @@ class ProgressController {
                 lifetimeXp: progress.lifetimeXp,
                 coins: progress.coins,
                 streak: progress.streak,
-                achievementsCount: progress.achievements.length,
-                inventoryCount: progress.inventory.length
+                achievementsCount: (progress.achievements || []).length,
+                inventoryCount: (progress.inventory || []).length
             }
         });
     };
 
-    getProgress = (req, res) => {
+    getProgress = async (req, res) => {
         const userId = req.user ? req.user.id : 'usr_demo_7701';
-        const progress = this.dbInstance.getUserProgress(userId);
+        const progress = await this.dbInstance.getUserProgress(userId);
 
         return res.json({
             ok: true,
@@ -55,9 +55,9 @@ class ProgressController {
         });
     };
 
-    getMastery = (req, res) => {
+    getMastery = async (req, res) => {
         const userId = req.user ? req.user.id : 'usr_demo_7701';
-        const mastery = this.dbInstance.getUserMastery(userId);
+        const mastery = await this.dbInstance.getUserMastery(userId);
 
         return res.json({
             ok: true,
@@ -66,9 +66,9 @@ class ProgressController {
         });
     };
 
-    getRecommendations = (req, res) => {
+    getRecommendations = async (req, res) => {
         const userId = req.user ? req.user.id : 'usr_demo_7701';
-        const recommendations = this.dbInstance.getUserRecommendations(userId);
+        const recommendations = await this.dbInstance.getUserRecommendations(userId);
 
         return res.json({
             ok: true,
@@ -77,7 +77,7 @@ class ProgressController {
         });
     };
 
-    recordRecommendationInteraction = (req, res) => {
+    recordRecommendationInteraction = async (req, res) => {
         const userId = req.user ? req.user.id : (req.body?.userId || 'usr_demo_7701');
         const { interactionType, recommendationId, metadata } = req.body || {};
 
@@ -85,7 +85,7 @@ class ProgressController {
             return res.status(400).json({ ok: false, error: "INVALID_PAYLOAD", message: "interactionType dan recommendationId diperlukan." });
         }
 
-        const result = this.dbInstance.recordRecommendationInteraction(userId, interactionType, recommendationId, metadata);
+        const result = await this.dbInstance.recordRecommendationInteraction(userId, interactionType, recommendationId, metadata);
 
         if (this.analyticsEngineInstance && typeof this.analyticsEngineInstance.recordEvent === 'function') {
             this.analyticsEngineInstance.recordEvent({
@@ -102,9 +102,9 @@ class ProgressController {
         return res.json(result);
     };
 
-    getLearningState = (req, res) => {
+    getLearningState = async (req, res) => {
         const userId = req.user ? req.user.id : 'usr_demo_7701';
-        const item = this.learningStateStore.get(userId) || { state: {}, updatedAt: null };
+        const item = (await this.learningStateStore.get(userId)) || { state: {}, updatedAt: null };
         return res.json({
             status: 'ok',
             userId: userId,
@@ -113,12 +113,12 @@ class ProgressController {
         });
     };
 
-    putLearningState = (req, res) => {
+    putLearningState = async (req, res) => {
         const userId = req.user ? req.user.id : 'usr_demo_7701';
         const { state } = req.body || {};
         const updatedAt = new Date().toISOString();
 
-        this.learningStateStore.set(userId, {
+        await this.learningStateStore.set(userId, {
             state: state || {},
             updatedAt
         });
@@ -130,11 +130,11 @@ class ProgressController {
         });
     };
 
-    processEvent = (req, res) => {
+    processEvent = async (req, res) => {
         const userId = req.user.id;
         const event = sanitizeClientPayload(req.body || {});
 
-        const result = this.dbInstance.processActivityEvent(userId, event);
+        const result = await this.dbInstance.processActivityEvent(userId, event);
         if (!result.ok) {
             return res.status(400).json(result);
         }
@@ -151,7 +151,7 @@ class ProgressController {
         return res.json(result);
     };
 
-    syncProgress = (req, res) => {
+    syncProgress = async (req, res) => {
         const userId = req.user.id;
         const { events = [], legacyData = null } = req.body || {};
 
@@ -160,7 +160,7 @@ class ProgressController {
         }
 
         const cleanLegacyData = sanitizeClientPayload(legacyData);
-        const result = this.dbInstance.syncProgress(userId, { events, legacyData: cleanLegacyData });
+        const result = await this.dbInstance.syncProgress(userId, { events, legacyData: cleanLegacyData });
 
         if (result.processedCount > 0 && this.analyticsEngineInstance) {
             this.analyticsEngineInstance.recordEvent({
@@ -177,20 +177,20 @@ class ProgressController {
         return res.json(result);
     };
 
-    patchSettings = (req, res) => {
+    patchSettings = async (req, res) => {
         const userId = req.user.id;
         const { preferences = {} } = req.body || {};
 
-        const result = this.dbInstance.updateUserSettings(userId, preferences);
+        const result = await this.dbInstance.updateSettings(userId, preferences);
         return res.json({
             ok: true,
             preferences: result.preferences
         });
     };
 
-    getAchievements = (req, res) => {
+    getAchievements = async (req, res) => {
         const userId = req.user ? req.user.id : 'usr_demo_7701';
-        const progress = this.dbInstance.getUserProgress(userId);
+        const progress = await this.dbInstance.getUserProgress(userId);
         const unlockedSet = new Set(progress.achievements || []);
 
         const catalog = this.ACHIEVEMENTS_CATALOG.map(item => ({
@@ -206,9 +206,9 @@ class ProgressController {
         });
     };
 
-    getInventory = (req, res) => {
+    getInventory = async (req, res) => {
         const userId = req.user ? req.user.id : 'usr_demo_7701';
-        const progress = this.dbInstance.getUserProgress(userId);
+        const progress = await this.dbInstance.getUserProgress(userId);
 
         return res.json({
             ok: true,

@@ -13,6 +13,30 @@ try {
     console.warn('[DBAdapter] node:sqlite not available directly, attempting fallback:', err.message);
 }
 
+function convertSql(sql) {
+    if (!sql || typeof sql !== 'string') return sql;
+    let paramIndex = 1;
+    let inSingleQuote = false;
+    let inDoubleQuote = false;
+    let result = '';
+
+    for (let i = 0; i < sql.length; i++) {
+        const char = sql[i];
+        if (char === "'" && !inDoubleQuote) {
+            inSingleQuote = !inSingleQuote;
+            result += char;
+        } else if (char === '"' && !inSingleQuote) {
+            inDoubleQuote = !inDoubleQuote;
+            result += char;
+        } else if (char === '?' && !inSingleQuote && !inDoubleQuote) {
+            result += `$${paramIndex++}`;
+        } else {
+            result += char;
+        }
+    }
+    return result;
+}
+
 class DBAdapter {
     constructor(options = {}) {
         this.databaseUrl = options.databaseUrl || process.env.DATABASE_URL || null;
@@ -137,10 +161,7 @@ class DBAdapter {
 
     async getAsync(sql, params = []) {
         if (this.isPostgres) {
-            let pgSql = sql;
-            // Convert ? to $1, $2, etc for postgres if needed
-            let pIndex = 1;
-            pgSql = pgSql.replace(/\?/g, () => `$${pIndex++}`);
+            const pgSql = convertSql(sql);
             const result = await this.pgPool.query(pgSql, params);
             return result.rows[0] || null;
         } else {
@@ -150,9 +171,7 @@ class DBAdapter {
 
     async allAsync(sql, params = []) {
         if (this.isPostgres) {
-            let pgSql = sql;
-            let pIndex = 1;
-            pgSql = pgSql.replace(/\?/g, () => `$${pIndex++}`);
+            const pgSql = convertSql(sql);
             const result = await this.pgPool.query(pgSql, params);
             return result.rows;
         } else {
@@ -162,9 +181,7 @@ class DBAdapter {
 
     async runAsync(sql, params = []) {
         if (this.isPostgres) {
-            let pgSql = sql;
-            let pIndex = 1;
-            pgSql = pgSql.replace(/\?/g, () => `$${pIndex++}`);
+            const pgSql = convertSql(sql);
             const result = await this.pgPool.query(pgSql, params);
             return { changes: result.rowCount };
         } else {
@@ -212,9 +229,41 @@ class DBAdapter {
     async transactionAsync(fn) {
         if (this.isPostgres) {
             const client = await this.pgPool.connect();
+            const txWrapper = {
+                get: async (sql, params = []) => {
+                    const res = await client.query(convertSql(sql), params);
+                    return res.rows[0] || null;
+                },
+                getAsync: async (sql, params = []) => {
+                    const res = await client.query(convertSql(sql), params);
+                    return res.rows[0] || null;
+                },
+                all: async (sql, params = []) => {
+                    const res = await client.query(convertSql(sql), params);
+                    return res.rows;
+                },
+                allAsync: async (sql, params = []) => {
+                    const res = await client.query(convertSql(sql), params);
+                    return res.rows;
+                },
+                run: async (sql, params = []) => {
+                    const res = await client.query(convertSql(sql), params);
+                    return { changes: res.rowCount };
+                },
+                runAsync: async (sql, params = []) => {
+                    const res = await client.query(convertSql(sql), params);
+                    return { changes: res.rowCount };
+                },
+                exec: async (sql) => {
+                    await client.query(sql);
+                },
+                execAsync: async (sql) => {
+                    await client.query(sql);
+                }
+            };
             try {
                 await client.query('BEGIN');
-                const result = await fn(client);
+                const result = await fn(txWrapper);
                 await client.query('COMMIT');
                 return result;
             } catch (err) {
@@ -224,7 +273,34 @@ class DBAdapter {
                 client.release();
             }
         } else {
-            return this.transaction(fn);
+            const self = this;
+            const txWrapper = {
+                get: (sql, params = []) => self.get(sql, params),
+                getAsync: async (sql, params = []) => self.get(sql, params),
+                all: (sql, params = []) => self.all(sql, params),
+                allAsync: async (sql, params = []) => self.all(sql, params),
+                run: (sql, params = []) => self.run(sql, params),
+                runAsync: async (sql, params = []) => self.run(sql, params),
+                exec: (sql) => self.exec(sql),
+                execAsync: async (sql) => self.exec(sql)
+            };
+
+            if (this._inTx) {
+                return await fn(txWrapper);
+            }
+
+            this._inTx = true;
+            this.driver.exec('BEGIN');
+            try {
+                const result = await fn(txWrapper);
+                this.driver.exec('COMMIT');
+                return result;
+            } catch (err) {
+                try { this.driver.exec('ROLLBACK'); } catch (_) {}
+                throw err;
+            } finally {
+                this._inTx = false;
+            }
         }
     }
 

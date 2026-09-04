@@ -8,12 +8,12 @@ class SessionRepository {
         this.db = dbAdapter;
     }
 
-    create({ token, userId, csrfToken = null, role = 'user', isPro = false, maxAgeMs = 7 * 24 * 60 * 60 * 1000 }) {
+    async create({ token, userId, csrfToken = null, role = 'user', isPro = false, maxAgeMs = 7 * 24 * 60 * 60 * 1000 }) {
         const now = new Date();
         const expiresAt = new Date(now.getTime() + maxAgeMs).toISOString();
         const nowStr = now.toISOString();
 
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO sessions (token, user_id, csrf_token, role, is_pro, expires_at, created_at, last_seen_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `, [
@@ -30,9 +30,9 @@ class SessionRepository {
         return this.findByToken(token);
     }
 
-    findByToken(token) {
+    async findByToken(token) {
         if (!token) return null;
-        const row = this.db.get(`
+        const row = await this.db.getAsync(`
             SELECT s.*, u.username, u.email
             FROM sessions s
             JOIN users u ON s.user_id = u.id
@@ -43,7 +43,7 @@ class SessionRepository {
 
         // Check expiration
         if (new Date(row.expires_at).getTime() < Date.now()) {
-            this.delete(token);
+            await this.delete(token);
             return null;
         }
 
@@ -61,28 +61,28 @@ class SessionRepository {
         };
     }
 
-    touch(token) {
+    async touch(token) {
         if (!token) return;
-        this.db.run('UPDATE sessions SET last_seen_at = ? WHERE token = ?', [
+        await this.db.runAsync('UPDATE sessions SET last_seen_at = ? WHERE token = ?', [
             new Date().toISOString(),
             token
         ]);
     }
 
-    delete(token) {
+    async delete(token) {
         if (!token) return false;
-        const result = this.db.run('DELETE FROM sessions WHERE token = ?', [token]);
+        const result = await this.db.runAsync('DELETE FROM sessions WHERE token = ?', [token]);
         return result.changes > 0;
     }
 
-    deleteByUserId(userId) {
+    async deleteByUserId(userId) {
         if (!userId) return false;
-        const result = this.db.run('DELETE FROM sessions WHERE user_id = ?', [userId]);
+        const result = await this.db.runAsync('DELETE FROM sessions WHERE user_id = ?', [userId]);
         return result.changes > 0;
     }
 
-    cleanExpired() {
-        const result = this.db.run('DELETE FROM sessions WHERE expires_at < ?', [new Date().toISOString()]);
+    async cleanExpired() {
+        const result = await this.db.runAsync('DELETE FROM sessions WHERE expires_at < ?', [new Date().toISOString()]);
         return result.changes;
     }
 }

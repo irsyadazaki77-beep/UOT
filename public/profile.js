@@ -173,6 +173,39 @@
     }
 
 
+    const LAST_PANEL_KEY = "eduquestProfileLastPanel";
+    const legacyAliases = tabAliases;
+
+    function updateScrollUI() {
+        const btn = document.getElementById("profileBackTop");
+        if (btn) {
+            btn.classList.toggle("show", window.scrollY > 300);
+        }
+    }
+    window.addEventListener("scroll", updateScrollUI);
+
+    function setSectionContext(tabId) {
+        if (!tabId) return;
+        const targetTab = legacyAliases[tabId] || tabId;
+
+        try {
+            localStorage.setItem(LAST_PANEL_KEY, targetTab);
+        } catch (_) {}
+
+        document.querySelectorAll('.p-rail-nav button, .p-mobile-nav button').forEach(btn => {
+            const isTarget = btn.dataset.tab === targetTab;
+            btn.classList.toggle('active', isTarget);
+            btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+        });
+
+        document.querySelectorAll('.p-content .p-panel').forEach(panel => {
+            const isTarget = panel.dataset.panel === targetTab;
+            panel.classList.toggle('active', isTarget);
+        });
+
+        updateScrollUI();
+    }
+
     function syncSaveState() {
         const node = document.getElementById("profileSaveState");
         if (!node) return;
@@ -181,15 +214,26 @@
     }
     window.addEventListener("uot-subscription-change", () => setTimeout(() => document.body.classList.toggle("profile-pro", window.QuizNationSubscription?.isPro?.()), 0));
 
+    // Bind Tab Click Handlers for both Rail and Mobile Navs
+    document.querySelectorAll('.p-rail-nav button, .p-mobile-nav button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tab = btn.dataset.tab;
+            if (tab) {
+                setSectionContext(tab);
+                location.hash = tab;
+            }
+        });
+    });
+
     renderHealthBreakdown();
     syncSaveState();
     updateScrollUI();
     const requestedRaw = location.hash.slice(1);
     const requested = legacyAliases[requestedRaw] || requestedRaw;
     const remembered = localStorage.getItem(LAST_PANEL_KEY);
-    const initial = ["overview", "settings", "privacy", "subscription"].includes(requested) ? requested : ["overview", "settings", "privacy", "subscription"].includes(remembered) ? remembered : "overview";
-    if (!requested && initial !== "overview") document.querySelector(`.p-rail-nav [data-tab="${initial}"]`)?.click();
-    else setSectionContext(initial);
+    const initial = ["overview", "progress", "settings", "privacy", "subscription"].includes(requested) ? requested : ["overview", "progress", "settings", "privacy", "subscription"].includes(remembered) ? remembered : "overview";
+    setSectionContext(initial);
+    
     document.body.classList.toggle("profile-pro", window.QuizNationSubscription?.isPro?.() || false);
     requestAnimationFrame(() => document.body.classList.add("profile-refined"));
 })();

@@ -8,22 +8,22 @@ class UserRepository {
         this.db = dbAdapter;
     }
 
-    findById(id) {
+    async findById(id) {
         if (!id) return null;
-        const row = this.db.get('SELECT * FROM users WHERE id = ?', [id]);
+        const row = await this.db.getAsync('SELECT * FROM users WHERE id = ?', [id]);
         return row ? this._mapUser(row) : null;
     }
 
-    findByEmail(email) {
+    async findByEmail(email) {
         if (!email) return null;
-        const row = this.db.get('SELECT * FROM users WHERE email = ?', [email.toLowerCase().trim()]);
+        const row = await this.db.getAsync('SELECT * FROM users WHERE email = ?', [email.toLowerCase().trim()]);
         return row ? this._mapUser(row) : null;
     }
 
-    create({ id, username, email, passwordHash, salt, role = 'user', isPro = false }) {
+    async create({ id, username, email, passwordHash, salt, role = 'user', isPro = false }) {
         const now = new Date().toISOString();
         const cleanEmail = email.toLowerCase().trim();
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO users (id, username, email, password_hash, salt, role, is_pro, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [
@@ -41,9 +41,9 @@ class UserRepository {
         return this.findById(id);
     }
 
-    update(id, fields = {}) {
+    async update(id, fields = {}) {
         if (!id) return null;
-        const existing = this.findById(id);
+        const existing = await this.findById(id);
         if (!existing) return null;
 
         const updates = [];
@@ -80,24 +80,24 @@ class UserRepository {
         params.push(new Date().toISOString());
         params.push(id);
 
-        this.db.run(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, params);
+        await this.db.runAsync(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, params);
         return this.findById(id);
     }
 
-    delete(id) {
+    async delete(id) {
         if (!id) return false;
-        const result = this.db.run('DELETE FROM users WHERE id = ?', [id]);
+        const result = await this.db.runAsync('DELETE FROM users WHERE id = ?', [id]);
         return result.changes > 0;
     }
 
-    getAll(limit = 100, offset = 0) {
-        const rows = this.db.all('SELECT * FROM users ORDER BY created_at DESC LIMIT ? OFFSET ?', [limit, offset]);
+    async getAll(limit = 100, offset = 0) {
+        const rows = await this.db.allAsync('SELECT * FROM users ORDER BY created_at DESC LIMIT ? OFFSET ?', [limit, offset]);
         return rows.map(r => this._mapUser(r));
     }
 
-    count() {
-        const row = this.db.get('SELECT COUNT(*) as count FROM users');
-        return row ? row.count : 0;
+    async count() {
+        const row = await this.db.getAsync('SELECT COUNT(*) as count FROM users');
+        return row ? Number(row.count) : 0;
     }
 
     _mapUser(row) {

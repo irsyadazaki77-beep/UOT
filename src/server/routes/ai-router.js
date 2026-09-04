@@ -8,20 +8,73 @@ function createAIRouter({ aiController, middlewares, rateLimiter }) {
     // Or we could enforce auth. The prompt mentions "Jangan memanggil external AI API langsung dari browser."
     // and "rate limiting, input size limit, prompt sanitization".
     
-    // Simple input size validation middleware
+    // Strict input schema validation middleware (Phase 4 Hardening)
     const validateChatInput = (req, res, next) => {
         const { messages } = req.body;
-        if (messages) {
-            // limit to 10 recent messages
-            if (messages.length > 10) req.body.messages = messages.slice(-10);
-            
-            // limit each message length
-            for (let m of req.body.messages) {
-                if (m.text && m.text.length > 1000) {
-                    m.text = m.text.substring(0, 1000);
-                }
-            }
+        
+        if (!messages || !Array.isArray(messages)) {
+            return res.status(400).json({
+                ok: false,
+                error: 'BAD_REQUEST',
+                message: 'Messages are required and must be a valid array.'
+            });
         }
+
+        if (messages.length === 0 || messages.length > 10) {
+            return res.status(400).json({
+                ok: false,
+                error: 'BAD_REQUEST',
+                message: 'Messages array length must be between 1 and 10.'
+            });
+        }
+
+        let totalLength = 0;
+        for (let i = 0; i < messages.length; i++) {
+            const m = messages[i];
+            if (!m || typeof m !== 'object') {
+                return res.status(400).json({
+                    ok: false,
+                    error: 'BAD_REQUEST',
+                    message: `Message at index ${i} is not a valid object.`
+                });
+            }
+
+            if (m.role !== 'user' && m.role !== 'assistant') {
+                return res.status(400).json({
+                    ok: false,
+                    error: 'BAD_REQUEST',
+                    message: `Message role at index ${i} must be either 'user' or 'assistant'.`
+                });
+            }
+
+            if (typeof m.text !== 'string') {
+                return res.status(400).json({
+                    ok: false,
+                    error: 'BAD_REQUEST',
+                    message: `Message text at index ${i} must be a valid string.`
+                });
+            }
+
+            if (m.text.length > 2000) {
+                return res.status(400).json({
+                    ok: false,
+                    error: 'BAD_REQUEST',
+                    message: `Message text at index ${i} exceeds the max length of 2000 characters.`
+                });
+            }
+
+            totalLength += m.text.length;
+        }
+
+        // Strict total budget restriction
+        if (totalLength > 10000) {
+            return res.status(400).json({
+                ok: false,
+                error: 'BAD_REQUEST',
+                message: 'Total combined message content exceeds context budget limit of 10,000 characters.'
+            });
+        }
+
         next();
     };
 

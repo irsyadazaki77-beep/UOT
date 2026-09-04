@@ -13,23 +13,19 @@
         sound: "eduquest_sound"
     });
     const OWNED_KEYS = Object.freeze([
-        ...Object.values(KEYS), "uot_game_state", "eduquestRememberedEmail", "eduquestLmsProgress",
-        "eduquestXP", "eduquestStreak", "eduquestLevel", "eduquestBestScore",
-        "eduquestLastSession", "bahasa_progress", "uotProfileLastPanel",
-        "quiznationLearningJourneyV1", "eduquestProjectProgress",
+        "eduquestUserSession", "eduquestProfileSettings", "eduquestProfileHub",
+        "eduquest_theme", "eduquest_sound", "uot_game_state", "eduquestRememberedEmail",
+        "eduquestBestScore", "eduquestLastSession", "uotProfileLastPanel",
         "snbt_stats", "tka_checklist", "tka_syllabus_progress", "tka_weekly_roadmap_checked",
         "tka_daily_schedule", "tka_bookmarks", "tka_mistakes_diary", "tka_planner_prefs",
         "tka_diagnostic_result", "tka_prev_readiness_level"
     ]);
     const BACKUP_KEYS = Object.freeze([
-        "uot_game_state", KEYS.session, KEYS.rpg, KEYS.preferences, KEYS.hub, "bahasa_progress",
-        "quiznationLearningJourneyV1", "eduquestProjectProgress",
-        "eduquestLmsProgress", KEYS.subscription, KEYS.subscriptionDetails,
-        "eduquestXP", "eduquestStreak",
-        KEYS.subscriptionHistory, KEYS.theme, KEYS.sound, "snbt_stats", "tka_checklist",
-        "tka_syllabus_progress", "tka_weekly_roadmap_checked", "tka_daily_schedule",
-        "tka_bookmarks", "tka_mistakes_diary", "tka_planner_prefs", "tka_diagnostic_result",
-        "tka_prev_readiness_level"
+        "uot_game_state", "eduquestUserSession", "eduquestProfileSettings", "eduquestProfileHub",
+        "eduquestSubscriptionDetails", "eduquestSubscriptionHistory", "eduquest_theme", "eduquest_sound",
+        "snbt_stats", "tka_checklist", "tka_syllabus_progress", "tka_weekly_roadmap_checked",
+        "tka_daily_schedule", "tka_bookmarks", "tka_mistakes_diary", "tka_planner_prefs",
+        "tka_diagnostic_result", "tka_prev_readiness_level"
     ]);
     const PREF_DEFAULTS = Object.freeze({
         headline: "", bio: "", focus: "frontend", language: "id", dailyGoal: "30",

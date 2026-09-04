@@ -1,0 +1,98 @@
+{
+  "frontend": {
+    "label": "Web & Frontend",
+    "icon": "fa-code",
+    "accent": "#6558f5",
+    "start": "materi.html",
+    "description": "Dari fondasi web hingga project antarmuka yang siap dipamerkan.",
+    "topics": ["HTML Semantik", "CSS Layout", "JavaScript DOM", "Aksesibilitas"],
+    "steps": [
+      ["Fondasi web yang kokoh", "Pahami HTML semantik, struktur dokumen, dan cara browser membaca halaman.", "materi.html", 35],
+      ["Layout responsif modern", "Kuasai Flexbox, Grid, spacing, dan strategi mobile-first.", "materi.html", 45],
+      ["JavaScript dan DOM", "Bangun interaksi menggunakan event, state, dan manipulasi DOM yang aman.", "learning-path.html", 55],
+      ["Evaluasi frontend", "Uji pemahaman melalui quiz adaptif dan tinjau kesalahan utama.", "quiz.html", 30],
+      ["Project UI nyata", "Satukan fondasi menjadi dashboard interaktif yang responsif.", "materi.html", 75],
+      ["Final mastery check", "Capai akurasi minimal 75% untuk menyelesaikan perjalanan.", "quiz.html", 35]
+    ],
+    "checklists": [
+      ["Struktur HTML Semantik (<header>, <main>, <article>, <section>)", "Elemen Metadata & SEO dasar pada <head>", "Form & Input accessibility (label, aria-describedby)", "Validasi sintaks di W3C Validator"],
+      ["Flexbox untuk komponen linier (navbar, kartu, baris tombol)", "CSS Grid untuk tata letak halaman & galeri multikolom", "Media queries & strategi Mobile-First responsive design", "Sistem spacing, tipografi modern, dan variabel CSS"],
+      ["Selektor DOM (querySelector) & penanganan Event Listener", "Manajemen state lokal & render elemen secara dinamis", "Validasi form sisi klien & penanganan error aman", "Penyimpanan data lokal (localStorage / sessionStorage)"],
+      ["Simulasi quiz pemahaman HTML, CSS, dan DOM dasar", "Tinjau pembahasan soal salah untuk memperkuat ingatan", "Analisis waktu pengerjaan agar tetap efisien"],
+      ["Rancang wireframe sederhana dashboard antarmuka", "Implementasi Dark/Light mode transisi halus", "Penyatuan komponen menjadi aplikasi interaktif utuh", "Uji coba responsivitas di berbagai layar (Mobile, Tablet, Desktop)"],
+      ["Uji kompetensi menyeluruh frontend standar industri", "Pencapaian akurasi minimal 75% di sesi evaluasi akhir", "Klaim & unduh sertifikat kelulusan Web & Frontend"]
+    ]
+  },
+  "backend": {
+    "label": "Backend & Data",
+    "icon": "fa-database",
+    "accent": "#168f76",
+    "start": "materi.html",
+    "description": "Bangun cara berpikir sistematis untuk API, database, dan alur data.",
+    "topics": ["Logika Program", "Database SQL", "REST API", "Keamanan Data"],
+    "steps": [
+      ["Logika dan struktur data", "Bangun fondasi fungsi, koleksi data, dan pemecahan masalah.", "materi.html", 40],
+      ["Database relasional", "Pelajari tabel, relasi, query, dan desain data yang konsisten.", "materi.html", 50],
+      ["REST API dan async flow", "Pahami request, response, validasi, serta error handling.", "learning-path.html", 55],
+      ["Evaluasi backend", "Uji konsep database, API, dan keamanan melalui latihan adaptif.", "quiz.html", 30],
+      ["Project service sederhana", "Rancang alur data lengkap untuk aplikasi pembelajaran.", "materi.html", 80],
+      ["Final mastery check", "Buktikan penguasaan melalui evaluasi akhir minimal 75%.", "quiz.html", 35]
+    ],
+    "checklists": [
+      ["Tipe data primitif, array, object, dan perulangan efisien", "Penyusunan fungsi murni & penanganan nilai kembalian (return)", "Rekursi dasar & analisis kompleksitas sederhana", "Teknik debugging & penelusuran alur eksekusi"],
+      ["Desain skema tabel (Primary Key, Foreign Key, Relasi 1:N, N:M)", "Query CRUD dasar (SELECT, INSERT, UPDATE, DELETE)", "Agregasi data & penggunaan JOIN antar tabel", "Normalisasi database dan indeks performa"],
+      ["Arsitektur RESTful & penggunaan HTTP Methods (GET, POST, PUT, DELETE)", "Penanganan Asynchronous (Promise, async/await, fetch API)", "Validasi request payload & struktur JSON response standar", "HTTP Status codes & penanganan error global"],
+      ["Simulasi evaluasi database dan logika API", "Tinjauan query yang kurang efisien dan perbaikannya", "Latihan skenario kasus penanganan error data"],
+      ["Struktur direktori modular untuk web service sederhana", "Implementasi autentikasi dasar & token handling", "Simulasi penyimpanan dan pemanggilan data interaktif"],
+      ["Uji kelayakan sistem backend & ketahanan API", "Pencapaian akurasi minimal 75% di evaluasi akhir", "Klaim kredensial Backend & Data Mastery"]
+    ]
+  },
+  "snbt": {
+    "label": "Persiapan SNBT",
+    "icon": "fa-graduation-cap",
+    "accent": "#dd7b28",
+    "start": "snbt.html",
+    "description": "Persiapan terukur melalui diagnosis, latihan, review, dan simulasi.",
+    "topics": ["Penalaran Umum", "Literasi", "Matematika", "Strategi Waktu"],
+    "steps": [
+      ["Diagnosis kemampuan", "Petakan titik kuat dan lemah sebelum menyusun prioritas latihan.", "snbt.html", 35],
+      ["Fondasi penalaran", "Bangun pola berpikir logis dan strategi eliminasi jawaban.", "tka-lms.html", 50],
+      ["Latihan topik prioritas", "Fokus pada topik dengan peluang kenaikan skor terbesar.", "tka-quiz.html", 45],
+      ["Review kesalahan", "Kelompokkan kesalahan konsep, hitung, baca, dan manajemen waktu.", "snbt.html", 30],
+      ["Simulasi terarah", "Kerjakan paket dengan batas waktu dan evaluasi keputusanmu.", "tka-quiz.html", 75],
+      ["Final readiness check", "Capai kesiapan minimal 75% sebelum menyelesaikan path.", "snbt.html", 40]
+    ],
+    "checklists": [
+      ["Mengerjakan paket tes diagnosis awal lengkap", "Pencatatan sub-tes dengan persentase skor terendah", "Penetapan jadwal harian sesuai sisa waktu jelang ujian"],
+      ["Logika proposisi dan silogisme dasar", "Analisis teks argumen dan identifikasi kesimpulan logis", "Strategi eliminasi 3 opsi salah dengan cepat"],
+      ["Latihan soal Penalaran Matematika tingkat sedang", "Latihan intensif Literasi Bahasa Indonesia & Inggris", "Pencatatan pola soal yang kerap berulang"],
+      ["Bedah pembahasan 10 soal salah di latihan sebelumnya", "Identifikasi jebakan kata kunci pada soal panjang", "Perbaikan teknik manajemen waktu pengerjaan"],
+      ["Simulasi Try Out dengan batas waktu ketat (tanpa pause)", "Evaluasi rasio kecepatan vs akurasi jawaban", "Latihan mental ketenangan menghadapi soal sulit"],
+      ["Simulasi akhir dengan standar passing grade target", "Pencapaian konsistensi akurasi minimal 75%", "Klaim lencana kesiapan ujian SNBT"]
+    ]
+  },
+  "culture": {
+    "label": "Bahasa & Budaya",
+    "icon": "fa-earth-asia",
+    "accent": "#c54d89",
+    "start": "bahasa-daerah.html",
+    "description": "Jelajahi keragaman Nusantara melalui bahasa, cerita, dan latihan budaya.",
+    "topics": ["Bahasa Daerah", "Tradisi", "Geografi Budaya", "Cerita Rakyat"],
+    "steps": [
+      ["Peta budaya Nusantara", "Kenali wilayah budaya dan hubungan bahasa dengan komunitasnya.", "bahasa-daerah.html", 35],
+      ["Bahasa dalam konteks", "Pelajari sapaan, ungkapan, dan penggunaan bahasa sehari-hari.", "bahasa-daerah.html", 45],
+      ["Cerita dan tradisi", "Hubungkan cerita lokal dengan nilai serta sejarah masyarakat.", "library.html", 45],
+      ["Quiz budaya adaptif", "Uji pemahaman dan identifikasi wilayah yang perlu ditinjau.", "quiz-budaya.html", 30],
+      ["Culture Passport", "Selesaikan eksplorasi lintas wilayah dan catat penemuan utama.", "bahasa-daerah.html", 70],
+      ["Final culture check", "Raih akurasi minimal 75% untuk menutup perjalanan.", "quiz-budaya.html", 35]
+    ],
+    "checklists": [
+      ["Eksplorasi peta bahasa daerah utama di Sumatera, Jawa, dan Sulawesi", "Mengenali rumpun bahasa dan persebaran dialek lokal", "Menghubungkan kondisi geografis dengan tradisi masyarakat"],
+      ["Kosakata sapaan hormat dan percakapan sehari-hari", "Ungkapan khas / pepatah tradisional dan maknanya", "Praktik pelafalan sederhana bahasa daerah pilihan"],
+      ["Membaca 2 cerita rakyat lokal dari perpustakaan (Library)", "Analisis pesan moral dan latar belakang sejarah cerita", "Mengenali kesenian dan upacara adat yang terkait"],
+      ["Mengerjakan quiz adaptif kebudayaan Nusantara", "Review wilayah yang masih kurang dikuasai", "Pencatatan fakta unik budaya pada catatan harian"],
+      ["Mengumpulkan 5 stempel eksplorasi pada Culture Passport", "Berbagi wawasan budaya di forum atau catatan sesi", "Dokumentasi rangkuman wawasan lintas pulau"],
+      ["Uji akhir wawasan kebudayaan dan bahasa Nusantara", "Pencapaian akurasi minimal 75% pada evaluasi budaya", "Klaim sertifikat dan lencana Duta Budaya Nusantara"]
+    ]
+  }
+}

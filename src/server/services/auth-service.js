@@ -25,7 +25,7 @@ class AuthService {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean) && clean.length <= 254;
     }
 
-    register({ username, email, password, ip = '127.0.0.1' }) {
+    async register({ username, email, password, ip = '127.0.0.1' }) {
         if (!username || typeof username !== 'string' || username.trim().length < 2 || username.trim().length > 60) {
             const err = new Error('Nama lengkap harus terdiri dari 2 - 60 karakter.');
             err.status = 400;
@@ -48,7 +48,8 @@ class AuthService {
             throw err;
         }
 
-        if (this.userStore.has(cleanEmail)) {
+        const emailExists = await this.userStore.has(cleanEmail);
+        if (emailExists) {
             const err = new Error('Alamat email sudah terdaftar. Silakan masuk.');
             err.status = 409;
             err.code = 'EMAIL_EXISTS';
@@ -68,13 +69,13 @@ class AuthService {
             createdAt: new Date().toISOString()
         };
 
-        this.userStore.set(cleanEmail, newUser);
+        await this.userStore.set(cleanEmail, newUser);
 
         const sessionToken = 'uot_sess_' + crypto.randomBytes(32).toString('hex');
         const csrfToken = crypto.randomBytes(24).toString('hex');
         const expiresAt = Date.now() + 24 * 60 * 60 * 1000;
 
-        this.sessionStore.set(sessionToken, {
+        await this.sessionStore.set(sessionToken, {
             sessionToken,
             userId,
             csrfToken,
@@ -96,7 +97,7 @@ class AuthService {
         };
     }
 
-    login({ email, password, previousSessionToken, ip = '127.0.0.1' }) {
+    async login({ email, password, previousSessionToken, ip = '127.0.0.1' }) {
         const cleanEmail = String(email || '').trim().toLowerCase();
         if (!cleanEmail || !password) {
             const err = new Error('Email dan kata sandi wajib diisi.');
@@ -105,7 +106,7 @@ class AuthService {
             throw err;
         }
 
-        const user = this.userStore.get(cleanEmail);
+        const user = await this.userStore.get(cleanEmail);
         if (!user || !verifyPassword(password, user.passwordHash, user.salt)) {
             if (this.auditLogger) {
                 this.auditLogger(ip, cleanEmail, 'INVALID_CREDENTIALS');
@@ -118,14 +119,14 @@ class AuthService {
 
         // Invalidate old session on login (session fixation prevention)
         if (previousSessionToken) {
-            this.sessionStore.delete(previousSessionToken);
+            await this.sessionStore.delete(previousSessionToken);
         }
 
         const sessionToken = 'uot_sess_' + crypto.randomBytes(32).toString('hex');
         const csrfToken = crypto.randomBytes(24).toString('hex');
         const expiresAt = Date.now() + 24 * 60 * 60 * 1000;
 
-        this.sessionStore.set(sessionToken, {
+        await this.sessionStore.set(sessionToken, {
             sessionToken,
             userId: user.id,
             csrfToken,
@@ -133,7 +134,7 @@ class AuthService {
             expiresAt
         });
 
-        const sub = this.subscriptionStore.get(user.id);
+        const sub = await this.subscriptionStore.get(user.id);
         const isPro = Boolean(sub && sub.status === 'active' && Date.now() < sub.expiresAt);
 
         return {
@@ -150,9 +151,9 @@ class AuthService {
         };
     }
 
-    logout(sessionToken) {
+    async logout(sessionToken) {
         if (sessionToken) {
-            this.sessionStore.delete(sessionToken);
+            await this.sessionStore.delete(sessionToken);
         }
         return true;
     }

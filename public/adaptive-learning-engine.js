@@ -236,13 +236,16 @@
             
             const timestampMs = new Date(att.timestamp || nowMs).getTime();
             const daysOld = Math.max(0, (nowMs - timestampMs) / (1000 * 60 * 60 * 24));
-            const recencyWeight = Math.exp(-0.03 * daysOld); // 14-day half-life roughly
             
-            // Retries & Trend Weight: More recent attempts matter slightly more intrinsically, 
-            // but excessive retries diminish maximum possible gain.
+            // Explicit 14-day half-life recency decay: lambda = ln(2)/14 = 0.04951
+            const recencyWeight = Math.exp(-0.04951 * daysOld);
+            
+            // Retries & Trend Weight
             const retries = Math.max(0, Number(att.retries || att.attemptNumber - 1 || 0));
             const retryMultiplier = 1.0 / (1 + 0.35 * retries);
-            const hintMultiplier = att.usedHint ? 0.85 : 1.0;
+            
+            // Assistance penalty: 50% cut if hints used
+            const hintMultiplier = (att.usedHint || att.hintCount > 0) ? 0.5 : 1.0;
 
             const errorType = String(att.errorType || "").toLowerCase();
             if (errorType === "concept") hasConceptError = true;
@@ -272,7 +275,8 @@
             finalScoreRatio = Math.max(0, finalScoreRatio - 0.1); // 10% penalty for unresolved concept errors
         }
 
-        let rawScore = Math.round(finalScoreRatio * 100);
+        // Float continuous score from 0.0 to 100.0 (no integer discrete step)
+        let rawScore = Number((finalScoreRatio * 100).toFixed(1));
 
         // Review calculation
         const lastAttemptMs = new Date(skillAttempts[skillAttempts.length - 1].timestamp || nowMs).getTime();
@@ -287,7 +291,7 @@
         let effectiveScore = rawScore;
         if (daysSinceLast > 14 && rawScore > 0) {
             const decayFactor = Math.max(0.65, Math.exp(-0.015 * (daysSinceLast - 14)));
-            effectiveScore = Math.max(20, Math.round(rawScore * decayFactor));
+            effectiveScore = Number((rawScore * decayFactor).toFixed(1));
         }
 
         const dueForReview = (daysSinceLast >= intervalDays || daysSinceLast >= 14) && effectiveScore > 0;
@@ -329,6 +333,17 @@
             totalAttemptsAcrossAll += m.attemptsCount;
         });
 
+        // Parse recommendation history to filter out fatigue (recent 3 recommendations)
+        const fatiguedIds = new Set();
+        if (Array.isArray(recommendationHistory) && recommendationHistory.length > 0) {
+            const sortedHistory = [...recommendationHistory]
+                .sort((a, b) => new Date(b.timestamp || b.created_at || 0).getTime() - new Date(a.timestamp || a.created_at || 0).getTime());
+            sortedHistory.slice(0, 3).forEach(r => {
+                if (r.skillId) fatiguedIds.add(r.skillId);
+                else if (r.id) fatiguedIds.add(r.id);
+            });
+        }
+
         if (totalAttemptsAcrossAll === 0) {
             const coldStartSkills = ["html_structure", "js_variables", "snbt_numerasi_dasar", "culture_vocab"];
             const coldStartList = coldStartSkills.map(sId => {
@@ -348,42 +363,119 @@
         const recentlyMastered = [];
         let remedialTrigger = null;
 
+        // 1. Spaced Repetition (Review Due) filter
+        Object.values(masteryMap).forEach(m => {
+            const sk = SKILLS_REGISTRY[m.skillId];
+            if (!sk) return;
+
+            if (m.dueForReview) {
+                reviewDue.push({
+                    id: m.skillId, skillName: sk.name, domain: sk.domain, type: "review",
+                    score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz,
+                    explanation: `Waktunya mengulang ${sk.name} (Spaced Repetition).`
+                });
+            }
+        });
+
+        // 2. Continue Items
         const sortedAttempts = [...attemptsHistory].sort((a, b) => new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime());
-        const recentSkillIds = [...new Set(sortedAttempts.map(a => getActivityMetadata(a).skill))];
+        const recentSkillIds = [...new Set(sortedAttempts.map(a => {
+            return mapCategoryToSkill(a.category, a.topic) || a.skill || getActivityMetadata(a).skill;
+        }))];
+
         recentSkillIds.slice(0, 3).forEach(sId => {
             const m = masteryMap[sId];
             const sk = SKILLS_REGISTRY[sId];
             if (m && sk && m.score > 0 && m.score < 81) {
-                continueItems.push({ id: sId, skillName: sk.name, domain: sk.domain, type: "continue", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Lanjutkan pembelajaran ${sk.name} (${m.score}%).` });
+                continueItems.push({
+                    id: sId, skillName: sk.name, domain: sk.domain, type: "continue",
+                    score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz,
+                    explanation: `Lanjutkan pembelajaran ${sk.name} (${m.score}%).`
+                });
             }
         });
+
+        // 3. Populate other buckets with Fatigue and Prerequisite Readiness filters
+        const domainCounts = {};
 
         Object.values(masteryMap).forEach(m => {
             const sk = SKILLS_REGISTRY[m.skillId];
             if (!sk) return;
-            
+
+            // Remedial Trigger: consecutive failures >= 2
             if (m.consecutiveFailures >= 2 && !remedialTrigger) {
-                remedialTrigger = { id: m.skillId, skillName: sk.name, domain: sk.domain, type: "remedial", lessonUrl: sk.recommendedLesson, explanation: `Terdeteksi kesulitan pada ${sk.name}. Disarankan membaca ulang materi.` };
+                remedialTrigger = {
+                    id: m.skillId, skillName: sk.name, domain: sk.domain, type: "remedial",
+                    lessonUrl: sk.recommendedLesson, explanation: `Terdeteksi kesulitan pada ${sk.name}. Disarankan membaca ulang materi.`
+                };
             }
-            if (m.dueForReview) reviewDue.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "review", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Waktunya mengulang ${sk.name} (Spaced Repetition).` });
-            if (m.score > 0 && m.score <= 60 && !m.dueForReview) needsPractice.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "practice", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Perbanyak latihan pada ${sk.name} untuk meningkatkan penguasaan.` });
-            if (m.score >= 61 && m.score <= 80 && !m.dueForReview) readyForChallenge.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "challenge", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz + "&difficulty=hard", explanation: `Anda sudah mahir di ${sk.name}. Coba latihan yang lebih sulit!` });
-            if (m.score >= 81 && m.daysSinceLast <= 3) recentlyMastered.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "mastered", score: m.score, tier: m.tier, explanation: `Luar biasa! Anda baru saja menguasai ${sk.name}.` });
-            
+
+            const fatigued = fatiguedIds.has(m.skillId);
+
+            // Needs Practice
+            if (m.score > 0 && m.score <= 60 && !m.dueForReview) {
+                const prereq = isPrerequisiteMet(m.skillId, masteryMap);
+                if (prereq.met && !fatigued) {
+                    needsPractice.push({
+                        id: m.skillId, skillName: sk.name, domain: sk.domain, type: "practice",
+                        score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz,
+                        explanation: `Perbanyak latihan pada ${sk.name} untuk meningkatkan penguasaan.`
+                    });
+                }
+            }
+
+            // Ready For Challenge
+            if (m.score >= 61 && m.score <= 80 && !m.dueForReview) {
+                if (!fatigued) {
+                    readyForChallenge.push({
+                        id: m.skillId, skillName: sk.name, domain: sk.domain, type: "challenge",
+                        score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz + "&difficulty=hard",
+                        explanation: `Anda sudah mahir di ${sk.name}. Coba latihan yang lebih sulit!`
+                    });
+                }
+            }
+
+            // Recently Mastered
+            if (m.score >= 81 && m.daysSinceLast <= 3) {
+                recentlyMastered.push({
+                    id: m.skillId, skillName: sk.name, domain: sk.domain, type: "mastered",
+                    score: m.score, tier: m.tier, explanation: `Luar biasa! Anda baru saja menguasai ${sk.name}.`
+                });
+            }
+
+            // Recommended Next (next logical step)
             if (m.score < 40) {
                 const prereqCheck = isPrerequisiteMet(m.skillId, masteryMap);
-                if (prereqCheck.met && !continueItems.find(c => c.id === m.skillId)) recommendedNext.push({ id: m.skillId, skillName: sk.name, domain: sk.domain, type: "next", score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz, explanation: `Langkah selanjutnya: Pelajari ${sk.name}.` });
+                if (prereqCheck.met && !fatigued && !continueItems.find(c => c.id === m.skillId)) {
+                    recommendedNext.push({
+                        id: m.skillId, skillName: sk.name, domain: sk.domain, type: "next",
+                        score: m.score, tier: m.tier, lessonUrl: sk.recommendedLesson, practiceUrl: sk.practiceQuiz,
+                        explanation: `Langkah selanjutnya: Pelajari ${sk.name}.`
+                    });
+                }
             }
         });
 
+        // Diversity filter on recommendedNext: limit to at most 2 items per domain
+        const filteredNext = [];
+        recommendedNext
+            .sort((a, b) => b.score - a.score)
+            .forEach(item => {
+                const dom = item.domain;
+                domainCounts[dom] = (domainCounts[dom] || 0) + 1;
+                if (domainCounts[dom] <= 2) {
+                    filteredNext.push(item);
+                }
+            });
+
         return {
             isColdStart: false,
-            recommendedNext: recommendedNext.sort((a,b) => b.score - a.score).slice(0,3),
+            recommendedNext: filteredNext.slice(0, 3),
             continue: continueItems,
-            needsPractice: needsPractice.sort((a,b) => a.score - b.score).slice(0,3),
-            readyForChallenge: readyForChallenge.sort((a,b) => b.score - a.score).slice(0,2),
-            reviewDue: reviewDue.sort((a,b) => a.score - b.score).slice(0,3),
-            recentlyMastered: recentlyMastered.slice(0,3),
+            needsPractice: needsPractice.sort((a, b) => a.score - b.score).slice(0, 3),
+            readyForChallenge: readyForChallenge.sort((a, b) => b.score - a.score).slice(0, 2),
+            reviewDue: reviewDue.sort((a, b) => b.daysSinceLast - a.daysSinceLast).slice(0, 3),
+            recentlyMastered: recentlyMastered.slice(0, 3),
             remedialTrigger,
             masterySummary: masteryMap,
             explanation: "Sistem adaptif merekomendasikan jalur optimal berdasarkan performa Anda."

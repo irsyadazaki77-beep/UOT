@@ -9,16 +9,16 @@ class SocialService {
         this.subscriptionStore = subscriptionStore;
     }
 
-    getLeaderboard({ limit = 50, currentUserId = null } = {}) {
-        return this.dbInstance.getLeaderboard(limit, currentUserId);
+    async getLeaderboard({ limit = 50, currentUserId = null } = {}) {
+        return await this.dbInstance.getLeaderboard(limit, currentUserId);
     }
 
-    getWeeklyChallenges(userId = null) {
-        return this.dbInstance.getWeeklyChallenges(userId);
+    async getWeeklyChallenges(userId = null) {
+        return await this.dbInstance.getWeeklyChallenges(userId);
     }
 
-    getPublicProfile(userId) {
-        return this.dbInstance.getPublicProfile(userId);
+    async getPublicProfile(userId) {
+        return await this.dbInstance.getPublicProfile(userId);
     }
 }
 

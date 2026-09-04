@@ -8,72 +8,72 @@ class SocialController {
         this.dbInstance = dbInstance;
     }
 
-    patchSettings = (req, res) => {
+    patchSettings = async (req, res) => {
         const userId = req.user.id;
         const patch = sanitizeClientPayload(req.body || {});
 
-        const result = this.dbInstance.updateSettings(userId, patch);
+        const result = await this.dbInstance.updateSettings(userId, patch);
         if (!result.ok) {
             return res.status(400).json(result);
         }
         return res.json(result);
     };
 
-    equipItem = (req, res) => {
+    equipItem = async (req, res) => {
         const userId = req.user.id;
         const { avatar, theme, accent } = req.body || {};
 
-        const result = this.dbInstance.equipItem(userId, { avatar, theme, accent });
+        const result = await this.dbInstance.equipItem(userId, { avatar, theme, accent });
         if (!result.ok) {
             return res.status(400).json(result);
         }
         return res.json(result);
     };
 
-    getLeaderboard = (req, res) => {
+    getLeaderboard = async (req, res) => {
         const currentUserId = req.user ? req.user.id : 'usr_demo_7701';
         const { period = 'weekly', cohort = 'global', page = 1, limit = 20 } = req.query || {};
-        const result = this.dbInstance.getLeaderboard({ period, cohort, page, limit, currentUserId });
+        const result = await this.dbInstance.getLeaderboard({ period, cohort, page, limit, currentUserId });
         return res.json(result);
     };
 
-    getSocialProfile = (req, res) => {
+    getSocialProfile = async (req, res) => {
         const currentUserId = req.user ? req.user.id : 'usr_demo_7701';
         const { targetUserId } = req.params;
-        const result = this.dbInstance.getSocialProfile(targetUserId, currentUserId);
+        const result = await this.dbInstance.getSocialProfile(targetUserId, currentUserId);
         if (!result.ok) {
             return res.status(404).json(result);
         }
         return res.json(result);
     };
 
-    follow = (req, res) => {
+    follow = async (req, res) => {
         const currentUserId = req.user.id;
         const { targetUserId } = req.body || {};
-        const result = this.dbInstance.followUser(currentUserId, targetUserId);
+        const result = await this.dbInstance.followUser(currentUserId, targetUserId);
         if (!result.ok) {
             return res.status(400).json(result);
         }
         return res.json(result);
     };
 
-    unfollow = (req, res) => {
+    unfollow = async (req, res) => {
         const currentUserId = req.user.id;
         const { targetUserId } = req.body || {};
-        const result = this.dbInstance.unfollowUser(currentUserId, targetUserId);
+        const result = await this.dbInstance.unfollowUser(currentUserId, targetUserId);
         if (!result.ok) {
             return res.status(400).json(result);
         }
         return res.json(result);
     };
 
-    getFriends = (req, res) => {
+    getFriends = async (req, res) => {
         const currentUserId = req.user ? req.user.id : 'usr_demo_7701';
-        const progress = this.dbInstance.getUserProgress(currentUserId);
+        const progress = await this.dbInstance.getUserProgress(currentUserId);
         if (!progress) return res.status(404).json({ ok: false, error: "USER_NOT_FOUND" });
 
-        const followingProfiles = (progress.following || []).map(id => this.dbInstance.getSocialProfile(id, currentUserId)).filter(r => r.ok);
-        const followerProfiles = (progress.followers || []).map(id => this.dbInstance.getSocialProfile(id, currentUserId)).filter(r => r.ok);
+        const followingProfiles = (await Promise.all((progress.following || []).map(id => this.dbInstance.getSocialProfile(id, currentUserId)))).filter(r => r && r.ok);
+        const followerProfiles = (await Promise.all((progress.followers || []).map(id => this.dbInstance.getSocialProfile(id, currentUserId)))).filter(r => r && r.ok);
 
         return res.json({
             ok: true,
@@ -82,51 +82,51 @@ class SocialController {
         });
     };
 
-    getChallenges = (req, res) => {
+    getChallenges = async (req, res) => {
         const currentUserId = req.user ? req.user.id : 'usr_demo_7701';
-        const result = this.dbInstance.getChallenges(currentUserId);
+        const result = await this.dbInstance.getChallenges(currentUserId);
         return res.json(result);
     };
 
-    claimChallengeReward = (req, res) => {
+    claimChallengeReward = async (req, res) => {
         const currentUserId = req.user.id;
         const { challengeId } = req.body || {};
-        const result = this.dbInstance.claimChallengeReward(currentUserId, challengeId);
+        const result = await this.dbInstance.claimChallengeReward(currentUserId, challengeId);
         if (!result.ok) {
             return res.status(400).json(result);
         }
         return res.json(result);
     };
 
-    createFriendChallenge = (req, res) => {
+    createFriendChallenge = async (req, res) => {
         const currentUserId = req.user.id;
         const { targetUserId, challengeType, targetGoal } = req.body || {};
-        const result = this.dbInstance.createFriendChallenge(currentUserId, targetUserId, { challengeType, targetGoal });
+        const result = await this.dbInstance.createFriendChallenge(currentUserId, targetUserId, { challengeType, targetGoal });
         if (!result.ok) {
             return res.status(400).json(result);
         }
         return res.json(result);
     };
 
-    acceptFriendChallenge = (req, res) => {
+    acceptFriendChallenge = async (req, res) => {
         const currentUserId = req.user.id;
         const { challengeId } = req.body || {};
-        const result = this.dbInstance.acceptFriendChallenge(currentUserId, challengeId);
+        const result = await this.dbInstance.acceptFriendChallenge(currentUserId, challengeId);
         if (!result.ok) {
             return res.status(400).json(result);
         }
         return res.json(result);
     };
 
-    getNotifications = (req, res) => {
+    getNotifications = async (req, res) => {
         const currentUserId = req.user ? req.user.id : 'usr_demo_7701';
-        const result = this.dbInstance.getNotifications(currentUserId);
+        const result = await this.dbInstance.getNotifications(currentUserId);
         return res.json(result);
     };
 
-    markNotificationsRead = (req, res) => {
+    markNotificationsRead = async (req, res) => {
         const currentUserId = req.user.id;
-        const result = this.dbInstance.markNotificationsRead(currentUserId);
+        const result = await this.dbInstance.markNotificationsRead(currentUserId);
         return res.json(result);
     };
 }

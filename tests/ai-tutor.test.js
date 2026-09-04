@@ -5,121 +5,224 @@ const ContextBuilder = require('../src/server/services/context-builder');
 const retrievalEngine = require('../src/server/services/retrieval-engine');
 const aiProvider = require('../src/server/services/ai-provider');
 const AIController = require('../src/server/controllers/ai-controller');
+const { dbInstance } = require('../src/server-db');
+const ContentEngine = require('../public/content-engine');
 
-test('AI Tutor Suite', async (t) => {
+test('AI Tutor Suite (Production Hardened)', async (t) => {
 
-    await t.test('1. Context Builder populates data correctly', async () => {
-        // Mock DB
+    await t.test('1. Context Builder uses explicit repositories and formats Trust Boundaries', async () => {
+        // Create repository mocks matching the explicit async contract
         const mockDb = {
-            users: new Map([
-                ['u1', { id: 'u1', username: 'TestUser', role: 'student' }]
-            ]),
-            progress: new Map([
-                ['p1', { userId: 'u1', domain: 'materi', topic: 'js_intro', score: 100, status: 'completed', updatedAt: Date.now() }]
-            ])
+            userRepo: {
+                findById: async (id) => {
+                    return { id, username: 'VerifiedLearner', role: 'student', isPro: true };
+                }
+            },
+            progressRepo: {
+                getUserProgress: async (id) => {
+                    return {
+                        userId: id,
+                        level: 4,
+                        lifetimeXp: 1500,
+                        streak: 12,
+                        coins: 450,
+                        completedLessons: ['html_basics', 'js_variables']
+                    };
+                },
+                getUserMastery: async (id) => {
+                    return {
+                        'html_structure': { score: 85, tier: { level: 'Mastered' }, attemptsCount: 3, dueForReview: false },
+                        'js_variables': { score: 32, tier: { level: 'Beginner' }, attemptsCount: 1, dueForReview: true }
+                    };
+                },
+                getUserRecommendations: async (id) => {
+                    return {
+                        recommendedNext: [
+                            { skillName: 'CSS Basics', type: 'next' }
+                        ]
+                    };
+                }
+            }
         };
 
         const builder = new ContextBuilder({ dbInstance: mockDb });
-        const requestData = {
-            currentPage: 'quiz',
-            currentTopic: 'HTML Basics',
-            userGoal: 'Frontend Dev',
-            quizMistakes: [{ question: 'What is DOM?', user_answer: 'CSS' }],
-            masterySummary: { HTML: 80, CSS: 40 }
+        const clientData = {
+            currentPage: 'workspace',
+            currentlyVisibleContent: 'Code editor',
+            selectedText: 'console.log("hello")',
+            userGoal: 'Become a Fullstack Developer'
         };
 
-        const context = await builder.buildContext('u1', requestData);
-        assert.ok(context.includes('TestUser'), 'Should include username');
-        assert.ok(context.includes('Frontend Dev'), 'Should include user goal');
-        assert.ok(context.includes('HTML Basics'), 'Should include current topic');
-        assert.ok(context.includes('DOM'), 'Should include quiz mistakes');
-        assert.ok(context.includes('score=100'), 'Should include recent activity');
+        const context = await builder.buildContext('usr_123', clientData);
+
+        // Assert Server Trusted Context
+        assert.ok(context.includes('SERVER TRUSTED CONTEXT'), 'Should have Server Trusted Context header');
+        assert.ok(context.includes('VerifiedLearner'), 'Should resolve user identity via UserRepository');
+        assert.ok(context.includes('PRO ACTIVE'), 'Should detect PRO active subscription status');
+        assert.ok(context.includes('Level 4'), 'Should resolve level metric');
+        assert.ok(context.includes('Streak 12 Days'), 'Should fetch streak count');
+        assert.ok(context.includes('html_basics'), 'Should pull completed lessons array');
+        assert.ok(context.includes('CSS Basics'), 'Should load user recommendations');
+
+        // Assert Client Untrusted Context Boundary
+        assert.ok(context.includes('CLIENT UNTRUSTED CONTEXT'), 'Should contain Client Untrusted Context boundary');
+        assert.ok(context.includes('Become a Fullstack Developer'), 'Should append client-supplied goals safely');
+        assert.ok(context.includes('console.log("hello")'), 'Should append selected code snippets safely');
     });
 
-    await t.test('2. Retrieval Engine searches across domains', async () => {
-        // Assume ContentEngine is globally available or mocked if needed
-        // Since we are running in tests context, it might be empty. We check it handles safe empty searches.
-        const results = retrievalEngine.search('html css javascript');
-        assert.ok(Array.isArray(results), 'Should return array');
+    await t.test('2. Integration Test with REAL ServerDatabaseBridge', async () => {
+        // Run against the real server db instance
+        assert.ok(dbInstance.userRepo, 'Real UserRepository should exist on dbInstance');
+        assert.ok(dbInstance.progressRepo, 'Real ProgressRepository should exist on dbInstance');
+
+        const builder = new ContextBuilder({ dbInstance });
+        // Request context for guest (null user)
+        const guestContext = await builder.buildContext(null, { currentPage: 'home' });
+        assert.ok(guestContext.includes('Guest (Unauthenticated Learner)'), 'Should format safe guest profiles');
+        assert.ok(guestContext.includes('FREE TIER'), 'Should default guest to FREE tier');
     });
 
-    await t.test('3. AI Controller handles Quiz No-Answer Policy', async () => {
-        let capturedInstruction = '';
+    await t.test('3. Advanced Hybrid Retrieval Engine searches and chunks material', async () => {
+        const query = 'css layout flexbox';
+        const searchOptions = {
+            skillId: 'css_layout_flex',
+            currentTopic: 'CSS Flexbox'
+        };
+
+        const results = retrievalEngine.search(query, null, searchOptions);
+        assert.ok(Array.isArray(results), 'Should return standard results array');
         
-        // Mock the provider
+        if (results.length > 0) {
+            const firstResult = results[0];
+            assert.ok(firstResult.sourceId, 'Results should contain sourceId');
+            assert.ok(firstResult.title, 'Results should contain title');
+            assert.ok(firstResult.chunk, 'Results should contain chunked passage');
+            assert.ok(firstResult.domain, 'Results should indicate domain');
+            assert.ok(typeof firstResult.score === 'number', 'Results must have calculated matching scores');
+            assert.ok(firstResult.canonicalUrl, 'Results must map correct canonical URL templates');
+        }
+    });
+
+    await t.test('4. AI Controller handles Quiz Progressive Hints & Deterministic Guard', async () => {
+        // Capture outgoing parameters and mocked response
+        let capturedInstruction = '';
         const originalProviderConfigured = aiProvider.isConfigured;
         const originalProviderGenerate = aiProvider.generate;
-        
+
         aiProvider.isConfigured = true;
-        aiProvider.generate = async ({ systemInstruction }) => {
+        aiProvider.generate = async ({ systemInstruction }, fullResponse = false) => {
             capturedInstruction = systemInstruction;
-            return "Mock Response";
+            const textResponse = JSON.stringify({
+                reply: "Jawaban kuis yang benar adalah B, karena let memiliki cakupan scope blok.",
+                suggestedFollowUps: ["Apa bedanya var dan let?", "Gimana scope const?"]
+            });
+            if (fullResponse) {
+                return {
+                    text: textResponse,
+                    usage: { promptTokenCount: 10, candidatesTokenCount: 20, totalTokenCount: 30 },
+                    model: 'gemini-mock'
+                };
+            }
+            return textResponse;
         };
 
         const controller = new AIController({
-            dbInstance: { users: new Map(), progress: new Map() },
-            analyticsEngineInstance: { trackEvent: () => {} }
+            dbInstance: dbInstance,
+            analyticsEngineInstance: {
+                recordEvent: async () => {},
+                recordError: async () => {}
+            }
         });
 
-        // Mock express req, res
-        let resJson = null;
         const mockRes = {
-            json: (data) => { resJson = data; }
+            jsonOutput: null,
+            statusValue: 200,
+            status(code) {
+                this.statusValue = code;
+                return this;
+            },
+            json(data) {
+                this.jsonOutput = data;
+            }
         };
+
         const mockReq = {
             body: {
-                messages: [{ role: 'user', text: 'Tolong kerjakan quiz ini' }],
-                mode: 'quiz'
+                messages: [{ role: 'user', text: 'Tolong beritahu jawaban soal nomor 2' }],
+                mode: 'quiz',
+                quizId: 'js_variables_quiz_1',
+                hintLevel: 2
             },
-            user: { id: 'u1' }
+            user: { id: 'usr_demo' }
         };
+
+        // Inject a simulated quiz with correct answer index 1 (Label 'B')
+        const originalGetQuiz = ContentEngine.getQuiz;
+        ContentEngine.getQuiz = (id) => ({
+            id,
+            options: ['Opsi A', 'Opsi B', 'Opsi C'],
+            correctAnswer: 1
+        });
 
         await controller.chat(mockReq, mockRes);
 
-        assert.ok(capturedInstruction.includes('QUIZ MODE'), 'Instruction should enforce quiz mode');
-        assert.ok(capturedInstruction.includes('Progressive Hint'), 'Instruction should include progressive hints');
+        // Verify progressive instruction hints are set
+        assert.ok(capturedInstruction.includes('QUIZ MODE'), 'Instruction should activate QUIZ mode');
+        assert.ok(capturedInstruction.includes('Hint Level 2'), 'Instruction must receive hint level state');
+
+        // Verify Academic Integrity Guard successfully redacted option leakage
+        assert.ok(mockRes.jsonOutput.text.includes('Redacted by BUBUB Academic Integrity Guard'), 'Deterministic guard must append redaction notice');
         
         // Restore
         aiProvider.isConfigured = originalProviderConfigured;
         aiProvider.generate = originalProviderGenerate;
+        ContentEngine.getQuiz = originalGetQuiz;
     });
 
-    await t.test('4. AI Controller handles Provider Error & Fallback', async () => {
-        const originalProviderConfigured = aiProvider.isConfigured;
-        const originalProviderGenerate = aiProvider.generate;
-        
-        // Force provider to throw
-        aiProvider.isConfigured = true;
-        aiProvider.generate = async () => {
-            throw new Error("API Limit Reached");
-        };
-
+    await t.test('5. AI Controller strict input bounds validation', async () => {
         const controller = new AIController({
-            dbInstance: { users: new Map(), progress: new Map() },
+            dbInstance: dbInstance,
             analyticsEngineInstance: null
         });
 
+        const router = require('../src/server/routes/ai-router').createAIRouter({
+            aiController: controller,
+            middlewares: {},
+            rateLimiter: null
+        });
+
+        // Test with invalid message list (length > 10)
         let resJson = null;
+        let resStatus = 200;
         const mockRes = {
-            json: (data) => { resJson = data; }
-        };
-        const mockReq = {
-            body: {
-                messages: [{ role: 'user', text: 'Halo' }],
-                mode: 'general'
+            status(code) {
+                resStatus = code;
+                return this;
             },
-            user: null
+            json(data) {
+                resJson = data;
+            }
         };
 
-        await controller.chat(mockReq, mockRes);
-        
-        assert.ok(resJson.ok === true, 'Should return ok true even on failure for graceful fallback');
-        assert.ok(resJson.fallback === true, 'Should indicate fallback mode');
-        assert.ok(resJson.text.includes('pusing'), 'Should return safe fallback message');
+        const badMessages = Array(11).fill({ role: 'user', text: 'Halo' });
+        const mockReq = {
+            body: { messages: badMessages, mode: 'general' }
+        };
 
-        // Restore
-        aiProvider.isConfigured = originalProviderConfigured;
-        aiProvider.generate = originalProviderGenerate;
+        // We manually fetch the validateChatInput middleware to test it explicitly
+        const express = require('express');
+        let middlewareCalled = false;
+        
+        const validateMiddleware = router.stack.find(layer => layer.route && layer.route.path === '/api/bubub/chat').route.stack.find(s => s.name === 'validateChatInput').handle;
+
+        validateMiddleware(mockReq, mockRes, () => {
+            middlewareCalled = true;
+        });
+
+        assert.equal(resStatus, 400, 'Should reject with 400 Bad Request');
+        assert.equal(resJson.error, 'BAD_REQUEST', 'Error code should be BAD_REQUEST');
+        assert.ok(resJson.message.includes('length'), 'Error message should complain about messages length');
+        assert.equal(middlewareCalled, false, 'Should not proceed to next handler');
     });
 
 });

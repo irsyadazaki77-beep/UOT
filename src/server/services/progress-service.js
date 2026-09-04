@@ -11,10 +11,10 @@ class ProgressService {
         this.ACHIEVEMENTS_CATALOG = ACHIEVEMENTS_CATALOG;
     }
 
-    getUserSummary(userId) {
+    async getUserSummary(userId) {
         if (!userId) return null;
-        const progress = this.dbInstance.getUserProgress(userId);
-        const sub = this.subscriptionStore.get(userId);
+        const progress = await this.dbInstance.getUserProgress(userId);
+        const sub = await this.subscriptionStore.get(userId);
         const isPro = Boolean(sub && sub.status === 'active' && Date.now() < sub.expiresAt);
 
         return {
@@ -28,34 +28,34 @@ class ProgressService {
         };
     }
 
-    getUserProgress(userId) {
+    async getUserProgress(userId) {
         const targetId = userId || 'usr_demo_7701';
-        const progress = this.dbInstance.getUserProgress(targetId);
+        const progress = await this.dbInstance.getUserProgress(targetId);
         return {
             userId: targetId,
             progress: this.dbInstance.sanitizeProgressForResponse(progress)
         };
     }
 
-    getUserMastery(userId) {
+    async getUserMastery(userId) {
         const targetId = userId || 'usr_demo_7701';
         return {
             userId: targetId,
-            mastery: this.dbInstance.getUserMastery(targetId)
+            mastery: await this.dbInstance.getUserMastery(targetId)
         };
     }
 
-    getUserRecommendations(userId) {
+    async getUserRecommendations(userId) {
         const targetId = userId || 'usr_demo_7701';
         return {
             userId: targetId,
-            recommendations: this.dbInstance.getUserRecommendations(targetId)
+            recommendations: await this.dbInstance.getUserRecommendations(targetId)
         };
     }
 
-    processActivity(userId, activityData) {
+    async processActivity(userId, activityData) {
         const targetId = userId || 'usr_demo_7701';
-        const result = this.dbInstance.processActivity(targetId, activityData);
+        const result = await this.dbInstance.processActivity(targetId, activityData);
 
         if (this.analyticsEngineInstance && typeof this.analyticsEngineInstance.recordEvent === 'function') {
             this.analyticsEngineInstance.recordEvent({

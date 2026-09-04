@@ -523,6 +523,9 @@
                 const metrics = calculateLevelMetrics(state.lifetimeXp);
                 state.level = metrics.level;
                 state.currentLevelXp = metrics.currentLevelXp;
+                
+                // Explicitly mark as migrated so we never write to legacy keys
+                state.migrated_legacy = true;
                 return state;
             }
 
@@ -608,8 +611,28 @@
                         timestamp: new Date().toISOString()
                     }
                 ],
-                updatedAt: new Date().toISOString()
+                updatedAt: new Date().toISOString(),
+                migrated_legacy: true
             };
+
+            // Wipe out legacy keys forever to prevent cluttering or multiple sources of truth (excluding active synced keys for backward compatibility)
+            const legacyKeys = [
+                "quiznationCurrentUser",
+                "uot_current_user",
+                "eduquestUserSession",
+                "eduquestLevel",
+                "eduquestSubscription",
+                "bahasa_progress",
+                "eduquestLmsProgress",
+                "eduquestProjectProgress",
+                "quiznationLearningJourneyV1",
+                "uot_curriculum_progress"
+            ];
+            legacyKeys.forEach(k => {
+                try {
+                    this.storage.removeItem(k);
+                } catch (_) {}
+            });
 
             this.persist(migratedState);
             return migratedState;
@@ -628,7 +651,7 @@
                 console.warn("[ProgressionEngine] Failed to write canonical storage:", err);
             }
 
-            // 2. Synchronize Legacy Storage Keys for Seamless Backward Compatibility
+            // 2. Synchronize Legacy Storage Keys for complete backward compatibility
             try {
                 const legacyRpgData = {
                     level: state.level,

@@ -14,7 +14,7 @@ class RewardLedger {
      * Compute and record an economy mutation into the reward_ledger table within an active transaction.
      * Enforces daily caps, cooldowns, replay rates, and the monotonic Lifetime XP invariant.
      */
-    processRewardMutation(tx, options) {
+    async processRewardMutation(tx, options) {
         const {
             userId,
             eventId,
@@ -28,13 +28,16 @@ class RewardLedger {
             serverTimestamp = new Date().toISOString()
         } = options;
 
+        const getFn = (sql, params) => tx.getAsync ? tx.getAsync(sql, params) : Promise.resolve(tx.get(sql, params));
+        const runFn = (sql, params) => tx.runAsync ? tx.runAsync(sql, params) : Promise.resolve(tx.run(sql, params));
+
         const todayStart = serverTimestamp.split('T')[0] + 'T00:00:00.000Z';
         const todayDateStr = serverTimestamp.split('T')[0];
 
         // 1. Get current balance before mutation
-        const progressRow = tx.get('SELECT lifetime_xp, coins, level FROM user_progress WHERE user_id = ?', [userId]);
-        const balanceXpBefore = progressRow ? progressRow.lifetime_xp : 0;
-        const balanceCoinsBefore = progressRow ? progressRow.coins : 0;
+        const progressRow = await getFn('SELECT lifetime_xp, coins, level FROM user_progress WHERE user_id = ?', [userId]);
+        const balanceXpBefore = progressRow ? Number(progressRow.lifetime_xp) : 0;
+        const balanceCoinsBefore = progressRow ? Number(progressRow.coins) : 0;
 
         // 2. Resolve Policy
         const policy = policyKey && REWARD_POLICY[policyKey] ? REWARD_POLICY[policyKey] : null;
@@ -55,7 +58,7 @@ class RewardLedger {
         // 3. Cooldown Check
         if (policy && policy.cooldownMs > 0) {
             const cooldownThreshold = new Date(new Date(serverTimestamp).getTime() - policy.cooldownMs).toISOString();
-            const recentEvent = tx.get(`
+            const recentEvent = await getFn(`
                 SELECT created_at FROM reward_ledger
                 WHERE user_id = ? AND event_type = ? AND created_at >= ? AND status != 'REJECTED'
                 ORDER BY created_at DESC LIMIT 1
@@ -72,12 +75,12 @@ class RewardLedger {
 
         // 4. Max Daily Runs Check (e.g. Sandbox max 3 runs per day)
         if (policy && policy.maxDailyRuns > 0 && status !== 'CAPPED') {
-            const dailyRunsRow = tx.get(`
+            const dailyRunsRow = await getFn(`
                 SELECT COUNT(*) as count FROM reward_ledger
                 WHERE user_id = ? AND event_type = ? AND created_at >= ? AND awarded_xp > 0
             `, [userId, eventType, todayStart]);
 
-            const runsCount = dailyRunsRow?.count || 0;
+            const runsCount = Number(dailyRunsRow?.count) || 0;
             if (runsCount >= policy.maxDailyRuns) {
                 status = 'CAPPED';
                 baseExp = 0;
@@ -88,12 +91,12 @@ class RewardLedger {
 
         // 5. Daily Cap Check
         if (policy && policy.dailyCap > 0 && baseExp > 0 && status !== 'CAPPED') {
-            const dailyTotalXpRow = tx.get(`
+            const dailyTotalXpRow = await getFn(`
                 SELECT COALESCE(SUM(awarded_xp), 0) as totalXp FROM reward_ledger
                 WHERE user_id = ? AND event_type = ? AND created_at >= ?
             `, [userId, eventType, todayStart]);
 
-            const currentDailyXp = dailyTotalXpRow?.totalXp || 0;
+            const currentDailyXp = Number(dailyTotalXpRow?.totalXp) || 0;
             if (currentDailyXp >= policy.dailyCap) {
                 status = 'CAPPED';
                 baseExp = 0;
@@ -128,7 +131,7 @@ class RewardLedger {
 
         // 7. Record to reward_ledger table
         const ledgerId = `led_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-        tx.run(`
+        await runFn(`
             INSERT INTO reward_ledger (
                 id, user_id, event_id, event_type, content_id, status,
                 base_xp, awarded_xp, base_coins, awarded_coins,
@@ -171,13 +174,16 @@ class RewardLedger {
     /**
      * Record a rejected transaction attempt into the ledger for auditability
      */
-    recordRejectedTransaction(tx, userId, eventId, eventType, contentId, reason, serverTimestamp = new Date().toISOString()) {
-        const progressRow = tx.get('SELECT lifetime_xp, coins FROM user_progress WHERE user_id = ?', [userId]);
-        const xp = progressRow ? progressRow.lifetime_xp : 0;
-        const coins = progressRow ? progressRow.coins : 0;
+    async recordRejectedTransaction(tx, userId, eventId, eventType, contentId, reason, serverTimestamp = new Date().toISOString()) {
+        const getFn = (sql, params) => tx.getAsync ? tx.getAsync(sql, params) : Promise.resolve(tx.get(sql, params));
+        const runFn = (sql, params) => tx.runAsync ? tx.runAsync(sql, params) : Promise.resolve(tx.run(sql, params));
+
+        const progressRow = await getFn('SELECT lifetime_xp, coins FROM user_progress WHERE user_id = ?', [userId]);
+        const xp = progressRow ? Number(progressRow.lifetime_xp) : 0;
+        const coins = progressRow ? Number(progressRow.coins) : 0;
 
         const ledgerId = `led_rej_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-        tx.run(`
+        await runFn(`
             INSERT INTO reward_ledger (
                 id, user_id, event_id, event_type, content_id, status,
                 base_xp, awarded_xp, base_coins, awarded_coins,

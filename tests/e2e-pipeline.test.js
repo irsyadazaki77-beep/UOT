@@ -62,9 +62,9 @@ async function runPipelineTest() {
     console.log('====================================================\n');
     let passed = 0; let failed = 0;
 
-    function test(name, fn) {
+    async function test(name, fn) {
         try {
-            fn();
+            await fn();
             console.log(`  ✅ [PASS] ${name}`);
             passed++;
         } catch (err) {
@@ -74,7 +74,7 @@ async function runPipelineTest() {
         }
     }
 
-    test('1. ActivityService sets proper metadata and defaults before delegating', () => {
+    await test('1. ActivityService sets proper metadata and defaults before delegating', async () => {
         ActivityService.recordQuiz("quiz-123", 80, {
             topic: "Variabel dan Tipe Data JavaScript"
         });
@@ -85,7 +85,7 @@ async function runPipelineTest() {
         assert.ok(mastery.score > 0, 'Mastery score should be updated via ActivityService pipeline. Score: ' + mastery.score);
     });
 
-    test('2. ActivityService handles errors (concept vs careless)', () => {
+    await test('2. ActivityService handles errors (concept vs careless)', async () => {
         ActivityService.recordQuiz("quiz-124", 50, {
             topic: "Fungsi Asynchronous",
             errorType: "concept"
@@ -95,7 +95,7 @@ async function runPipelineTest() {
         assert.equal(global.lastProgressionActivity.type, "quiz_complete");
     });
     
-    test('3. RecommendationService consumes mastery correctly', async () => {
+    await test('3. RecommendationService consumes mastery correctly', async () => {
         const recommendations = await RecommendationService.getRecommendations();
         assert.ok(recommendations.recommendedNext, 'Should recommend a next action');
         assert.ok(recommendations.masterySummary, 'Should return mastery summary');
@@ -109,4 +109,7 @@ async function runPipelineTest() {
     if (failed > 0) process.exit(1);
 }
 
-runPipelineTest();
+runPipelineTest().catch(err => {
+    console.error("Pipeline test crashed:", err);
+    process.exit(1);
+});

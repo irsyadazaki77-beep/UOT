@@ -4,22 +4,23 @@ const { dbInstance, SERVER_REWARDS } = require('../src/server-db');
 console.log('=== MEMULAI TEST SUITE: SOCIAL LEARNING & REAL LEADERBOARD (FASE 14) ===\n');
 
 // Helper to clear database state before testing
-function resetTestDatabase() {
-    dbInstance.users.clear();
-    dbInstance.progress.clear();
-    dbInstance.sessions.clear();
+async function resetTestDatabase() {
+    await dbInstance.users.clear();
+    await dbInstance.progress.clear();
+    await dbInstance.sessions.clear();
 }
 
+async function runSocialLeaderboardTests() {
 // 1. TEST REAL LEADERBOARD & PERIOD BOUNDARIES
-(() => {
+await (async () => {
     console.log('[Test 1] Real Leaderboard & Timestamped Event Boundaries...');
-    resetTestDatabase();
+    await resetTestDatabase();
 
     const u1 = 'usr_test_alpha';
     const u2 = 'usr_test_beta';
 
-    const p1 = dbInstance.getUserProgress(u1);
-    const p2 = dbInstance.getUserProgress(u2);
+    const p1 = await dbInstance.getUserProgress(u1);
+    const p2 = await dbInstance.getUserProgress(u2);
 
     p1.profile.username = 'AlphaCoder';
     p1.settings.displayName = 'Alpha Coder';
@@ -28,33 +29,30 @@ function resetTestDatabase() {
     p2.settings.displayName = 'Beta Dev';
 
     // Current event for Alpha
-    dbInstance.processActivityEvent(u1, {
+    await dbInstance.processActivityEvent(u1, {
         eventId: 'evt_alpha_1',
         eventType: 'quiz_complete',
         payload: { quizId: 'q1', score: 100, completionTimeSeconds: 45 }
     });
 
-    // Old event for Alpha (30 days ago)
+    // Old event for Alpha (30 days ago) - Project Complete (200 XP)
     const oldTimestamp = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    p1.xpLedger.push({
+    await dbInstance.processActivityEvent(u1, {
         eventId: 'evt_alpha_old',
-        eventType: 'lesson_complete',
-        xp: 200,
-        coins: 100,
+        eventType: 'project_complete',
         timestamp: oldTimestamp,
-        reason: 'Legacy Lesson'
+        payload: { projectId: 'api-notes', isComplete: true }
     });
-    p1.lifetimeXp += 200;
 
     // Current event for Beta
-    dbInstance.processActivityEvent(u2, {
+    await dbInstance.processActivityEvent(u2, {
         eventId: 'evt_beta_1',
         eventType: 'project_complete',
         payload: { projectId: 'proj1', isComplete: true }
     });
 
     // Test Weekly Leaderboard
-    const weeklyLb = dbInstance.getLeaderboard({ period: 'weekly', currentUserId: u1 });
+    const weeklyLb = await dbInstance.getLeaderboard({ period: 'weekly', currentUserId: u1 });
     assert.strictEqual(weeklyLb.ok, true, 'Weekly leaderboard harus ok');
     assert.strictEqual(weeklyLb.entries.length, 2, 'Harus ada 2 user di leaderboard');
 
@@ -70,40 +68,38 @@ function resetTestDatabase() {
     assert.strictEqual(weeklyLb.entries[1].xp, 75);
 
     // Test All Time Leaderboard
-    const allTimeLb = dbInstance.getLeaderboard({ period: 'all_time', currentUserId: u1 });
+    const allTimeLb = await dbInstance.getLeaderboard({ period: 'all_time', currentUserId: u1 });
     assert.strictEqual(allTimeLb.ok, true);
-    // Alpha lifetimeXp = 75 + 200 = 275. Beta lifetimeXp = 120.
+    // Alpha lifetimeXp = 75 + 120 = 195. Beta lifetimeXp = 120.
     // Alpha should be rank 1 in all_time
     assert.strictEqual(allTimeLb.entries[0].userId, u1, 'AlphaCoder harus rank 1 di all_time');
-    assert.strictEqual(allTimeLb.entries[0].xp, 275);
+    assert.strictEqual(allTimeLb.entries[0].xp, 195);
 
     console.log('✓ Test 1 Berhasil: Weekly vs All Time leaderboard dihitung dari event timestamp aktual.\n');
 })();
 
 // 2. TEST PAGINATION & USER RANK CALCULATION
-(() => {
+await (async () => {
     console.log('[Test 2] Leaderboard Pagination & Caller Rank...');
-    resetTestDatabase();
+    await resetTestDatabase();
 
     // Create 25 test users
     for (let i = 1; i <= 25; i++) {
         const uid = `usr_page_${i}`;
-        const p = dbInstance.getUserProgress(uid);
-        p.profile.username = `User_${i}`;
-        p.settings.displayName = `User ${i}`;
-        p.lifetimeXp = i * 10;
-        p.xpLedger.push({
-            eventId: `evt_p_${i}`,
-            eventType: 'sandbox_run',
-            xp: i * 10,
-            coins: 5,
-            timestamp: new Date().toISOString(),
-            reason: 'Sandbox'
-        });
+        await dbInstance.getUserProgress(uid);
+        const now = new Date().toISOString();
+        await dbInstance.db.runAsync(
+            'INSERT INTO progress_events (event_id, user_id, event_type, xp_awarded, coins_awarded, client_timestamp, server_timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [`evt_p_${i}`, uid, 'sandbox_run', i * 10, 5, now, now]
+        );
+        await dbInstance.db.runAsync(
+            'UPDATE user_progress SET lifetime_xp = ? WHERE user_id = ?',
+            [i * 10, uid]
+        );
     }
 
     // Page 1 with limit 10
-    const page1 = dbInstance.getLeaderboard({ period: 'weekly', page: 1, limit: 10, currentUserId: 'usr_page_5' });
+    const page1 = await dbInstance.getLeaderboard({ period: 'weekly', page: 1, limit: 10, currentUserId: 'usr_page_5' });
     assert.strictEqual(page1.entries.length, 10, 'Page 1 harus berisi 10 item');
     assert.strictEqual(page1.totalCount, 25, 'Total user harus 25');
     assert.strictEqual(page1.totalPages, 3, 'Total pages harus 3');
@@ -111,7 +107,7 @@ function resetTestDatabase() {
     assert.strictEqual(page1.userRank.rank, 21, 'User 5 dengan 50 XP harus rank 21');
 
     // Page 2
-    const page2 = dbInstance.getLeaderboard({ period: 'weekly', page: 2, limit: 10, currentUserId: 'usr_page_5' });
+    const page2 = await dbInstance.getLeaderboard({ period: 'weekly', page: 2, limit: 10, currentUserId: 'usr_page_5' });
     assert.strictEqual(page2.entries.length, 10);
     assert.strictEqual(page2.entries[0].userId, 'usr_page_15');
 
@@ -119,31 +115,27 @@ function resetTestDatabase() {
 })();
 
 // 3. TEST PRIVACY CONTROLS & EXCLUSION OF SENSITIVE DATA
-(() => {
+await (async () => {
     console.log('[Test 3] Privacy Controls & Sensitive Data Protection...');
-    resetTestDatabase();
+    await resetTestDatabase();
 
     const u1 = 'usr_public';
     const u2 = 'usr_hidden';
     const u3 = 'usr_private';
 
-    const p1 = dbInstance.getUserProgress(u1);
-    const p2 = dbInstance.getUserProgress(u2);
-    const p3 = dbInstance.getUserProgress(u3);
+    const p1 = await dbInstance.getUserProgress(u1);
+    const p2 = await dbInstance.getUserProgress(u2);
+    const p3 = await dbInstance.getUserProgress(u3);
 
-    p1.profile.email = 'public@example.com';
-    p2.profile.email = 'secret_hidden@example.com';
-    p3.profile.email = 'secret_private@example.com';
+    await dbInstance.updateSettings(u2, { showOnLeaderboard: false });
+    await dbInstance.updateSettings(u3, { privateProfile: true });
 
-    p2.settings.showOnLeaderboard = false; // Opt-out from leaderboard
-    p3.settings.privateProfile = true;      // Private social profile
-
-    dbInstance.processActivityEvent(u1, { eventId: 'e1', eventType: 'sandbox_run' });
-    dbInstance.processActivityEvent(u2, { eventId: 'e2', eventType: 'sandbox_run' });
-    dbInstance.processActivityEvent(u3, { eventId: 'e3', eventType: 'sandbox_run' });
+    await dbInstance.processActivityEvent(u1, { eventId: 'e1', eventType: 'sandbox_run' });
+    await dbInstance.processActivityEvent(u2, { eventId: 'e2', eventType: 'sandbox_run' });
+    await dbInstance.processActivityEvent(u3, { eventId: 'e3', eventType: 'sandbox_run' });
 
     // Leaderboard test
-    const lb = dbInstance.getLeaderboard({ period: 'weekly', currentUserId: u1 });
+    const lb = await dbInstance.getLeaderboard({ period: 'weekly', currentUserId: u1 });
     const userIdsInLb = lb.entries.map(e => e.userId);
     assert.strictEqual(userIdsInLb.includes(u1), true, 'Public user harus masuk leaderboard');
     assert.strictEqual(userIdsInLb.includes(u2), false, 'Hidden user tidak boleh muncul di leaderboard');
@@ -155,7 +147,7 @@ function resetTestDatabase() {
     });
 
     // Social Profile test for private user
-    const privateProf = dbInstance.getSocialProfile(u3, u1);
+    const privateProf = await dbInstance.getSocialProfile(u3, u1);
     assert.strictEqual(privateProf.ok, true);
     assert.strictEqual(privateProf.isPrivate, true, 'Profile harus bertanda private');
     assert.strictEqual(privateProf.achievementsShowcase, undefined, 'Private profile tidak boleh mengekspos achievements');
@@ -165,33 +157,33 @@ function resetTestDatabase() {
 })();
 
 // 4. TEST FRIEND / FOLLOW SYSTEM & FRIENDS COHORT
-(() => {
+await (async () => {
     console.log('[Test 4] Friend/Follow System & Cohort Filtering...');
-    resetTestDatabase();
+    await resetTestDatabase();
 
     const u1 = 'usr_f1';
     const u2 = 'usr_f2';
     const u3 = 'usr_stranger';
 
-    dbInstance.getUserProgress(u1);
-    dbInstance.getUserProgress(u2);
-    dbInstance.getUserProgress(u3);
+    await dbInstance.getUserProgress(u1);
+    await dbInstance.getUserProgress(u2);
+    await dbInstance.getUserProgress(u3);
 
     // Follow u2
-    const followRes = dbInstance.followUser(u1, u2);
+    const followRes = await dbInstance.followUser(u1, u2);
     assert.strictEqual(followRes.ok, true);
     assert.strictEqual(followRes.isFollowing, true);
 
     // Check friends profile for u1
-    const p1Social = dbInstance.getSocialProfile(u2, u1);
+    const p1Social = await dbInstance.getSocialProfile(u2, u1);
     assert.strictEqual(p1Social.isFollowing, true);
 
     // Friend cohort leaderboard for u1
-    dbInstance.processActivityEvent(u1, { eventId: 'e1', eventType: 'sandbox_run' });
-    dbInstance.processActivityEvent(u2, { eventId: 'e2', eventType: 'sandbox_run' });
-    dbInstance.processActivityEvent(u3, { eventId: 'e3', eventType: 'sandbox_run' });
+    await dbInstance.processActivityEvent(u1, { eventId: 'e1', eventType: 'sandbox_run' });
+    await dbInstance.processActivityEvent(u2, { eventId: 'e2', eventType: 'sandbox_run' });
+    await dbInstance.processActivityEvent(u3, { eventId: 'e3', eventType: 'sandbox_run' });
 
-    const friendsLb = dbInstance.getLeaderboard({ cohort: 'friends', currentUserId: u1 });
+    const friendsLb = await dbInstance.getLeaderboard({ cohort: 'friends', currentUserId: u1 });
     const friendIdsInLb = friendsLb.entries.map(e => e.userId);
     assert.strictEqual(friendIdsInLb.includes(u1), true, 'Diri sendiri harus masuk friends leaderboard');
     assert.strictEqual(friendIdsInLb.includes(u2), true, 'Teman yang diikuti harus masuk');
@@ -201,20 +193,20 @@ function resetTestDatabase() {
 })();
 
 // 5. TEST LEARNING CHALLENGE SYSTEM & AUTHORITATIVE REWARDS
-(() => {
+await (async () => {
     console.log('[Test 5] Weekly Learning Challenges & Centralized Reward Engine...');
-    resetTestDatabase();
+    await resetTestDatabase();
 
     const uid = 'usr_challenger';
-    const p = dbInstance.getUserProgress(uid);
+    const p = await dbInstance.getUserProgress(uid);
 
     // Complete 3 lessons
-    dbInstance.processActivityEvent(uid, { eventId: 'l1', eventType: 'lesson_complete', payload: { lessonId: 'les_1' } });
-    dbInstance.processActivityEvent(uid, { eventId: 'l2', eventType: 'lesson_complete', payload: { lessonId: 'les_2' } });
-    dbInstance.processActivityEvent(uid, { eventId: 'l3', eventType: 'lesson_complete', payload: { lessonId: 'les_3' } });
+    await dbInstance.processActivityEvent(uid, { eventId: 'l1', eventType: 'lesson_complete', payload: { lessonId: 'les_1' } });
+    await dbInstance.processActivityEvent(uid, { eventId: 'l2', eventType: 'lesson_complete', payload: { lessonId: 'les_2' } });
+    await dbInstance.processActivityEvent(uid, { eventId: 'l3', eventType: 'lesson_complete', payload: { lessonId: 'les_3' } });
 
     // Check challenges status
-    const chall = dbInstance.getChallenges(uid);
+    const chall = await dbInstance.getChallenges(uid);
     assert.strictEqual(chall.ok, true);
 
     const lessonCh = chall.challenges.find(c => c.id === 'ch_lessons_3');
@@ -224,13 +216,13 @@ function resetTestDatabase() {
     assert.strictEqual(lessonCh.isClaimed, false, 'Belum diklaim');
 
     // Claim challenge reward
-    const claimRes = dbInstance.claimChallengeReward(uid, 'ch_lessons_3');
+    const claimRes = await dbInstance.claimChallengeReward(uid, 'ch_lessons_3');
     assert.strictEqual(claimRes.ok, true);
     assert.strictEqual(claimRes.rewardGiven.xp, 100);
     assert.strictEqual(claimRes.rewardGiven.coins, 50);
 
     // Double claim rejection
-    const claimAgain = dbInstance.claimChallengeReward(uid, 'ch_lessons_3');
+    const claimAgain = await dbInstance.claimChallengeReward(uid, 'ch_lessons_3');
     assert.strictEqual(claimAgain.ok, false);
     assert.strictEqual(claimAgain.error, 'ALREADY_CLAIMED');
 
@@ -238,25 +230,26 @@ function resetTestDatabase() {
 })();
 
 // 6. TEST ANTI-ABUSE ANOMALY DETECTION & FLAGGING
-(() => {
+await (async () => {
     console.log('[Test 6] Anti-Abuse Anomaly Detection & Flagging...');
-    resetTestDatabase();
+    await resetTestDatabase();
 
     const uid = 'usr_cheater';
-    const p = dbInstance.getUserProgress(uid);
+    const p = await dbInstance.getUserProgress(uid);
 
     // 1. Impossible quiz completion time (< 3s with high score)
-    const quizRes = dbInstance.processActivityEvent(uid, {
+    const quizRes = await dbInstance.processActivityEvent(uid, {
         eventId: 'q_speedrun_1',
         eventType: 'quiz_complete',
         payload: { quizId: 'q_fast', score: 100, completionTimeSeconds: 1 }
     });
     assert.strictEqual(quizRes.ok, true, 'Event tetap diproses tanpa kencang-kencang crash');
-    assert.strictEqual(p.flagged, true, 'User harus di-flag karena completion time 1 detik');
-    assert.strictEqual(p.suspiciousFlags.length, 1);
+    const updatedP = await dbInstance.getUserProgress(uid);
+    assert.strictEqual(updatedP.flagged, true, 'User harus di-flag karena completion time 1 detik');
+    assert.strictEqual(updatedP.suspiciousFlags.length, 1);
 
     // Flagged user should be excluded from public leaderboard
-    const lb = dbInstance.getLeaderboard({ period: 'weekly', currentUserId: uid });
+    const lb = await dbInstance.getLeaderboard({ period: 'weekly', currentUserId: uid });
     const isCheaterInLb = lb.entries.some(e => e.userId === uid);
     assert.strictEqual(isCheaterInLb, false, 'User ter-flag tidak boleh muncul di leaderboard publik');
 
@@ -264,24 +257,24 @@ function resetTestDatabase() {
 })();
 
 // 7. TEST PERSONAL BESTS TRACKING
-(() => {
+await (async () => {
     console.log('[Test 7] Personal Bests Tracking...');
-    resetTestDatabase();
+    await resetTestDatabase();
 
     const uid = 'usr_best';
-    dbInstance.processActivityEvent(uid, {
+    await dbInstance.processActivityEvent(uid, {
         eventId: 'q1',
         eventType: 'quiz_complete',
         payload: { quizId: 'q_test', score: 85, completionTimeSeconds: 20 }
     });
 
-    dbInstance.processActivityEvent(uid, {
+    await dbInstance.processActivityEvent(uid, {
         eventId: 'q2',
         eventType: 'quiz_complete',
         payload: { quizId: 'q_test_2', score: 95, completionTimeSeconds: 12 }
     });
 
-    const p = dbInstance.getUserProgress(uid);
+    const p = await dbInstance.getUserProgress(uid);
     assert.strictEqual(p.personalBests.highestQuizScore, 95);
     assert.strictEqual(p.personalBests.fastestQuizCompletionSeconds, 12);
 
@@ -289,21 +282,27 @@ function resetTestDatabase() {
 })();
 
 // 8. TEST NON-SPAM NOTIFICATIONS
-(() => {
+await (async () => {
     console.log('[Test 8] Non-Spam Notification System...');
-    resetTestDatabase();
+    await resetTestDatabase();
 
     const uid = 'usr_notif';
 
-    dbInstance.addNotification(uid, { type: 'rank_milestone', title: 'Top 10', message: 'Kamu masuk Top 10!' });
-    dbInstance.addNotification(uid, { type: 'rank_milestone', title: 'Top 10', message: 'Kamu masuk Top 10!' }); // Duplicate within 1h
+    await dbInstance.addNotification(uid, { type: 'rank_milestone', title: 'Top 10', message: 'Kamu masuk Top 10!' });
+    await dbInstance.addNotification(uid, { type: 'rank_milestone', title: 'Top 10', message: 'Kamu masuk Top 10!' }); // Duplicate within 1h
 
-    const notifs = dbInstance.getNotifications(uid);
+    const notifs = await dbInstance.getNotifications(uid);
     assert.strictEqual(notifs.ok, true);
     assert.strictEqual(notifs.notifications.length, 1, 'Notifikasi duplikat harus di-deduplikasi');
 
     console.log('✓ Test 8 Berhasil: Non-spam notification system tervalidasi.\n');
 })();
+}
+
+runSocialLeaderboardTests().catch(err => {
+    console.error('Fatal test error:', err);
+    process.exit(1);
+});
 
 console.log('================================================================');
 console.log('ALL FASE 14 SOCIAL LEARNING & LEADERBOARD TESTS PASSED (8/8)!');

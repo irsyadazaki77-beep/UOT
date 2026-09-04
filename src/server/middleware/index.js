@@ -17,60 +17,73 @@ function rateLimiter(options = {}) {
 }
 
 function createMiddlewares({ userStore, sessionStore, subscriptionStore }) {
-    function authenticate(req, res, next) {
-        const authHeader = req.headers.authorization;
-        let token = null;
+    async function authenticate(req, res, next) {
+        try {
+            const authHeader = req.headers.authorization;
+            let token = null;
 
-        if (authHeader && authHeader.startsWith('Bearer ')) {
-            token = authHeader.substring(7).trim();
-        } else if (req.cookies && req.cookies.uot_session) {
-            token = req.cookies.uot_session;
-        }
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                token = authHeader.substring(7).trim();
+            } else if (req.cookies && req.cookies.uot_session) {
+                token = req.cookies.uot_session;
+            }
 
-        if (!token) {
+            if (!token) {
+                req.session = null;
+                req.user = null;
+                return next();
+            }
+
+            const session = await sessionStore.get(token);
+            if (!session) {
+                req.session = null;
+                req.user = null;
+                return next();
+            }
+
+            // Check expiration (24 hours)
+            if (Date.now() > session.expiresAt) {
+                await sessionStore.delete(token);
+                req.session = null;
+                req.user = null;
+                return next();
+            }
+
+            let user = null;
+            if (userStore.findById) {
+                user = await userStore.findById(session.userId);
+            } else {
+                const allUsers = typeof userStore.values === 'function' ? await userStore.values() : userStore;
+                user = Array.isArray(allUsers) ? allUsers.find(u => u.id === session.userId) : null;
+            }
+
+            if (!user) {
+                await sessionStore.delete(token);
+                req.session = null;
+                req.user = null;
+                return next();
+            }
+
+            // Verify PRO subscription server-side
+            const sub = await subscriptionStore.get(user.id);
+            const isProActive = Boolean(sub && sub.status === 'active' && Date.now() < sub.expiresAt);
+            user.isPro = isProActive;
+
+            req.session = session;
+            req.user = {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role || 'user',
+                isPro: isProActive,
+                planId: sub?.planId || 'free'
+            };
+            return next();
+        } catch (err) {
             req.session = null;
             req.user = null;
             return next();
         }
-
-        const session = sessionStore.get(token);
-        if (!session) {
-            req.session = null;
-            req.user = null;
-            return next();
-        }
-
-        // Check expiration (24 hours)
-        if (Date.now() > session.expiresAt) {
-            sessionStore.delete(token);
-            req.session = null;
-            req.user = null;
-            return next();
-        }
-
-        const user = Array.from(userStore.values()).find(u => u.id === session.userId);
-        if (!user) {
-            sessionStore.delete(token);
-            req.session = null;
-            req.user = null;
-            return next();
-        }
-
-        // Verify PRO subscription server-side
-        const sub = subscriptionStore.get(user.id);
-        const isProActive = Boolean(sub && sub.status === 'active' && Date.now() < sub.expiresAt);
-        user.isPro = isProActive;
-
-        req.session = session;
-        req.user = {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            role: user.role || 'user',
-            isPro: isProActive,
-            planId: sub?.planId || 'free'
-        };
-        next();
     }
 
     function requireAuth(req, res, next) {

@@ -8,10 +8,10 @@ class AnalyticsRepository {
         this.db = dbAdapter;
     }
 
-    recordEvent({ id, eventName, sessionId = null, userId = null, properties = {}, timestamp = new Date().toISOString() }) {
+    async recordEvent({ id, eventName, sessionId = null, userId = null, properties = {}, timestamp = new Date().toISOString() }) {
         if (!eventName) return null;
         const evtId = id || `evt_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO analytics_events (id, event_name, session_id, user_id, properties_json, timestamp)
             VALUES (?, ?, ?, ?, ?, ?)
         `, [
@@ -25,10 +25,10 @@ class AnalyticsRepository {
         return evtId;
     }
 
-    recordError({ id, message, stack = null, url = null, sessionId = null, userId = null, metadata = {}, timestamp = new Date().toISOString() }) {
+    async recordError({ id, message, stack = null, url = null, sessionId = null, userId = null, metadata = {}, timestamp = new Date().toISOString() }) {
         if (!message) return null;
         const errId = id || `err_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO error_telemetry (id, error_message, error_stack, url, session_id, user_id, metadata_json, timestamp)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `, [
@@ -44,10 +44,10 @@ class AnalyticsRepository {
         return errId;
     }
 
-    recordVital({ id, name, value, rating = 'good', url = null, sessionId = null, timestamp = new Date().toISOString() }) {
+    async recordVital({ id, name, value, rating = 'good', url = null, sessionId = null, timestamp = new Date().toISOString() }) {
         if (!name) return null;
         const vitId = id || `vit_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO web_vitals (id, metric_name, metric_value, rating, url, session_id, timestamp)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         `, [
@@ -62,8 +62,8 @@ class AnalyticsRepository {
         return vitId;
     }
 
-    getEvents(limit = 1000) {
-        const rows = this.db.all('SELECT * FROM analytics_events ORDER BY timestamp DESC LIMIT ?', [limit]);
+    async getEvents(limit = 1000) {
+        const rows = await this.db.allAsync('SELECT * FROM analytics_events ORDER BY timestamp DESC LIMIT ?', [limit]);
         return rows.map(r => ({
             id: r.id,
             eventName: r.event_name,
@@ -74,8 +74,8 @@ class AnalyticsRepository {
         }));
     }
 
-    getErrors(limit = 200) {
-        const rows = this.db.all('SELECT * FROM error_telemetry ORDER BY timestamp DESC LIMIT ?', [limit]);
+    async getErrors(limit = 200) {
+        const rows = await this.db.allAsync('SELECT * FROM error_telemetry ORDER BY timestamp DESC LIMIT ?', [limit]);
         return rows.map(r => ({
             id: r.id,
             message: r.error_message,
@@ -88,8 +88,8 @@ class AnalyticsRepository {
         }));
     }
 
-    getVitals(limit = 500) {
-        const rows = this.db.all('SELECT * FROM web_vitals ORDER BY timestamp DESC LIMIT ?', [limit]);
+    async getVitals(limit = 500) {
+        const rows = await this.db.allAsync('SELECT * FROM web_vitals ORDER BY timestamp DESC LIMIT ?', [limit]);
         return rows.map(r => ({
             id: r.id,
             name: r.metric_name,
@@ -101,8 +101,8 @@ class AnalyticsRepository {
         }));
     }
 
-    getFeatureFlags() {
-        const rows = this.db.all('SELECT * FROM feature_flags');
+    async getFeatureFlags() {
+        const rows = await this.db.allAsync('SELECT * FROM feature_flags');
         const flags = {};
         for (const r of rows) {
             flags[r.flag_key] = {
@@ -116,8 +116,8 @@ class AnalyticsRepository {
         return flags;
     }
 
-    getFeatureFlag(key) {
-        const row = this.db.get('SELECT * FROM feature_flags WHERE flag_key = ?', [key]);
+    async getFeatureFlag(key) {
+        const row = await this.db.getAsync('SELECT * FROM feature_flags WHERE flag_key = ?', [key]);
         if (!row) return null;
         return {
             key: row.flag_key,
@@ -128,9 +128,9 @@ class AnalyticsRepository {
         };
     }
 
-    setFeatureFlag(key, { enabled, fallback = false, description = '' }) {
+    async setFeatureFlag(key, { enabled, fallback = false, description = '' }) {
         const now = new Date().toISOString();
-        this.db.run(`
+        await this.db.runAsync(`
             INSERT INTO feature_flags (flag_key, is_enabled, fallback, description, updated_at)
             VALUES (?, ?, ?, ?, ?)
             ON CONFLICT(flag_key) DO UPDATE SET

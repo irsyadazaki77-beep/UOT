@@ -163,9 +163,10 @@
             </div>
 
             <nav class="p-rail-nav" aria-label="Bagian profil">
-                <button class="active" type="button" data-tab="overview"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Account hub</span></button>
-                <button type="button" data-tab="settings"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Preferensi</span></button>
-                <button type="button" data-tab="privacy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Privasi & data</span></button>
+                <button class="active" type="button" data-tab="overview"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Overview</span></button>
+                <button type="button" data-tab="progress"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Progress</span></button>
+                <button type="button" data-tab="settings"><i class="fa-solid fa-user-gear" aria-hidden="true"></i><span>Account</span></button>
+                <button type="button" data-tab="privacy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Privacy</span></button>
                 <button type="button" data-tab="subscription"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>Subscription</span></button>
             </nav>
 
@@ -196,11 +197,67 @@
                     </div>
                 </header>
 
+                <!-- TIER 3: IDENTITY & MEMBERSHIP STATUS -->
+                <section class="p-workspace-grid" aria-label="Identitas dan akses keanggotaan">
+                    <article class="p-card p-profile-summary">
+                        <div class="p-card-heading">
+                            <div><span class="p-eyebrow"><i class="fa-solid fa-id-card" aria-hidden="true"></i> Identitas</span><h2>Profil Personal</h2></div>
+                            <span class="p-save-state" id="profileSaveState" role="status" aria-live="polite">Tersimpan</span>
+                        </div>
+                        <div class="p-profile-summary-main">
+                            <div class="p-avatar p-avatar-large" id="profileAvatarLarge" aria-hidden="true">👨‍💻</div>
+                            <div>
+                                <strong id="profileEditorName">Pengguna Universe</strong>
+                                <span id="profileHeadlineDisplay">Tambahkan headline agar profilmu lebih personal.</span>
+                                <small id="profileBioDisplay">Identitas ini digunakan di seluruh pengalaman belajarmu.</small>
+                            </div>
+                        </div>
+                        <button class="p-btn p-btn-secondary p-full-btn" id="editProfileBtn" type="button"><i class="fa-solid fa-pen" aria-hidden="true"></i> Edit Profil & Avatar</button>
+                    </article>
+
+                    <article class="p-membership-card" id="membershipCard" aria-labelledby="membershipTitle">
+                        <div class="p-membership-orb" aria-hidden="true"></div>
+                        <div class="p-membership-main">
+                            <span class="p-eyebrow" id="membershipKicker">Basic Membership</span>
+                            <h2 id="membershipTitle">Mulai unlock cara belajar yang lebih terarah.</h2>
+                            <p id="membershipDescription">Upgrade ke PRO untuk membuka Smart Route, planner SNBT, dan Culture Passport.</p>
+                            <div class="p-membership-actions">
+                                <a class="p-btn p-btn-light" id="membershipPrimaryAction" href="payment.html?plan=pro&amp;source=profile"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>Upgrade ke PRO</span></a>
+                                <button class="p-btn p-btn-quiet" id="membershipDetailsAction" type="button" data-tab-target="subscription">Lihat Paket</button>
+                            </div>
+                        </div>
+                        <dl class="p-membership-metrics">
+                            <div><dt>Status</dt><dd id="membershipStatus">Basic</dd></div>
+                            <div><dt id="membershipTimeLabel">Akses</dt><dd id="subscriptionDays">Terbatas</dd></div>
+                            <div><dt>Invoice</dt><dd id="subscriptionInvoice">—</dd></div>
+                        </dl>
+                    </article>
+                </section>
+
+                <section class="p-section" aria-labelledby="benefitsTitle">
+                    <div class="p-section-heading">
+                        <div><span class="p-eyebrow">Your Access</span><h2 id="benefitsTitle">Benefit Yang Siap Kamu Gunakan</h2></div>
+                        <a href="pro-hub.html" class="p-text-link">Buka PRO Learning Hub <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+                    </div>
+                    <details class="account-disclosure p-benefit-disclosure">
+                        <summary>Lihat Seluruh Daftar Benefit & Akses Akun</summary>
+                        <div class="p-benefit-grid" id="benefitGrid"></div>
+                    </details>
+                </section>
+            </section>
+
+            <section class="p-panel" data-panel="progress" aria-labelledby="progressTitle">
+                <header class="p-panel-header">
+                    <span class="p-eyebrow"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Progres &amp; Analytics</span>
+                    <h1 id="progressTitle">Analisis Ritme &amp; Skill Belajar</h1>
+                    <p>Pantau pencapaian, kumpulkan XP harian, dan pantau penguasaan materi berbasis kecerdasan adaptif.</p>
+                </header>
+
                 <!-- TIER 2: DAILY PULSE & MOMENTUM ACTION CENTER -->
-                <section class="p-overview-grid p-action-center" aria-label="Aktivitas dan ritme harian">
+                <section class="p-overview-grid p-action-center" aria-label="Aktivitas dan ritme harian" style="margin-top: 24px;">
                     <article class="p-card p-learning-card">
                         <div class="p-card-heading">
-                            <div><span class="p-eyebrow"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Learning Pulse</span><h2>Ritme & Statistik Belajar</h2></div>
+                            <div><span class="p-eyebrow"><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Learning Pulse</span><h2>Ritme &amp; Statistik Belajar</h2></div>
                             <span class="p-live-dot">Tersimpan lokal</span>
                         </div>
                         <div class="p-stat-row">
@@ -253,7 +310,7 @@
                                 <div class="p-note-suggestions" aria-label="Saran catatan cepat">
                                     <button type="button" class="p-note-pill" data-note="Target: Selesaikan 2 sesi latihan SNBT hari ini">🎯 2 Sesi SNBT</button>
                                     <button type="button" class="p-note-pill" data-note="Fokus: Review catatan bab penting Aljabar">📚 Review Aljabar</button>
-                                    <button type="button" class="p-note-pill" data-note="Eksplorasi: Selesaikan 1 quest Bahasa & Budaya">🏛️ Quest Budaya</button>
+                                    <button type="button" class="p-note-pill" data-note="Eksplorasi: Selesaikan 1 quest Bahasa &amp; Budaya">🏛️ Quest Budaya</button>
                                 </div>
                                 <small id="focusNoteCount">0/240 karakter</small>
                             </div>
@@ -261,13 +318,12 @@
                     </article>
                 </section>
 
-                
                 <!-- TIER 2.5: MASTERY & ADAPTIVE INSIGHTS -->
                 <section class="p-section" aria-labelledby="masteryTitle" style="margin-top: 32px;">
                     <div class="p-section-heading">
                         <div>
                             <span class="p-eyebrow"><i class="fa-solid fa-brain"></i> Adaptive Engine</span>
-                            <h2 id="masteryTitle">Skill Mastery & Rekomendasi</h2>
+                            <h2 id="masteryTitle">Skill Mastery &amp; Rekomendasi</h2>
                         </div>
                     </div>
                     <div class="p-overview-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
@@ -284,54 +340,6 @@
                             </div>
                         </article>
                     </div>
-                </section>
-
-                <!-- TIER 3: IDENTITY & MEMBERSHIP STATUS -->
-                <section class="p-workspace-grid" aria-label="Identitas dan akses keanggotaan">
-                    <article class="p-card p-profile-summary">
-                        <div class="p-card-heading">
-                            <div><span class="p-eyebrow"><i class="fa-solid fa-id-card" aria-hidden="true"></i> Identitas</span><h2>Profil Personal</h2></div>
-                            <span class="p-save-state" id="profileSaveState" role="status" aria-live="polite">Tersimpan</span>
-                        </div>
-                        <div class="p-profile-summary-main">
-                            <div class="p-avatar p-avatar-large" id="profileAvatarLarge" aria-hidden="true">👨‍💻</div>
-                            <div>
-                                <strong id="profileEditorName">Pengguna Universe</strong>
-                                <span id="profileHeadlineDisplay">Tambahkan headline agar profilmu lebih personal.</span>
-                                <small id="profileBioDisplay">Identitas ini digunakan di seluruh pengalaman belajarmu.</small>
-                            </div>
-                        </div>
-                        <button class="p-btn p-btn-secondary p-full-btn" id="editProfileBtn" type="button"><i class="fa-solid fa-pen" aria-hidden="true"></i> Edit Profil & Avatar</button>
-                    </article>
-
-                    <article class="p-membership-card" id="membershipCard" aria-labelledby="membershipTitle">
-                        <div class="p-membership-orb" aria-hidden="true"></div>
-                        <div class="p-membership-main">
-                            <span class="p-eyebrow" id="membershipKicker">Basic Membership</span>
-                            <h2 id="membershipTitle">Mulai unlock cara belajar yang lebih terarah.</h2>
-                            <p id="membershipDescription">Upgrade ke PRO untuk membuka Smart Route, planner SNBT, dan Culture Passport.</p>
-                            <div class="p-membership-actions">
-                                <a class="p-btn p-btn-light" id="membershipPrimaryAction" href="payment.html?plan=pro&amp;source=profile"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>Upgrade ke PRO</span></a>
-                                <button class="p-btn p-btn-quiet" id="membershipDetailsAction" type="button" data-tab-target="subscription">Lihat Paket</button>
-                            </div>
-                        </div>
-                        <dl class="p-membership-metrics">
-                            <div><dt>Status</dt><dd id="membershipStatus">Basic</dd></div>
-                            <div><dt id="membershipTimeLabel">Akses</dt><dd id="subscriptionDays">Terbatas</dd></div>
-                            <div><dt>Invoice</dt><dd id="subscriptionInvoice">—</dd></div>
-                        </dl>
-                    </article>
-                </section>
-
-                <section class="p-section" aria-labelledby="benefitsTitle">
-                    <div class="p-section-heading">
-                        <div><span class="p-eyebrow">Your Access</span><h2 id="benefitsTitle">Benefit Yang Siap Kamu Gunakan</h2></div>
-                        <a href="pro-hub.html" class="p-text-link">Buka PRO Learning Hub <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
-                    </div>
-                    <details class="account-disclosure p-benefit-disclosure">
-                        <summary>Lihat Seluruh Daftar Benefit & Akses Akun</summary>
-                        <div class="p-benefit-grid" id="benefitGrid"></div>
-                    </details>
                 </section>
             </section>
 
@@ -495,7 +503,7 @@
         </div>
     </main>
 
-    <nav class="p-mobile-nav" aria-label="Navigasi account hub mobile"><button class="active" type="button" data-tab="overview"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Hub</span></button><button type="button" data-tab="settings"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Atur</span></button><button type="button" data-tab="privacy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Data</span></button><button type="button" data-tab="subscription"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>PRO</span></button></nav>
+    <nav class="p-mobile-nav" aria-label="Navigasi account hub mobile"><button class="active" type="button" data-tab="overview"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Overview</span></button><button type="button" data-tab="progress"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Progress</span></button><button type="button" data-tab="settings"><i class="fa-solid fa-user-gear" aria-hidden="true"></i><span>Account</span></button><button type="button" data-tab="privacy"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Privacy</span></button><button type="button" data-tab="subscription"><i class="fa-solid fa-crown" aria-hidden="true"></i><span>PRO</span></button></nav>
 
     <div class="p-toast" id="profileToast" role="status" aria-live="polite"></div>
     <button class="p-back-top" id="profileBackTop" type="button" tabindex="-1" aria-hidden="true" aria-label="Kembali ke atas"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
