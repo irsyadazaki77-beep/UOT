@@ -61,7 +61,19 @@
             loginAt: value.loginAt || value.loginTime || undefined
         };
     }
-    function getSession() { return normalizeSession(readJSON(KEYS.session, null)); }
+    function getSession() {
+        const canonical = readJSON("uot_canonical_user_state", null);
+        if (canonical && canonical.authenticated && canonical.user) {
+            return {
+                isLoggedIn: true,
+                username: canonical.user.username,
+                email: canonical.user.email,
+                avatar: canonical.user.avatar,
+                isPro: Boolean(canonical.subscription?.isPro || canonical.user?.isPro)
+            };
+        }
+        return normalizeSession(readJSON(KEYS.session, null));
+    }
     function setSession(session) {
         const normalized = normalizeSession(session);
         if (!normalized) return false;
@@ -100,6 +112,22 @@
             ((progress.quizDone || 0) * 15) + ((progress.voiceSuccessCount || 0) * 25) + Number(progress.bonusXP || 0);
     }
     function getStats() {
+        const canonical = readJSON("uot_canonical_user_state", null);
+        if (canonical && canonical.authenticated && canonical.progress) {
+            const p = canonical.progress;
+            const scores = Object.values(p.quizScores || {});
+            const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + (typeof b === 'number' ? b : b.score || 0), 0) / scores.length) : 100;
+            return {
+                xp: p.lifetimeXp || 0,
+                level: p.level || 1,
+                currentLevelXp: p.currentLevelXp || (p.lifetimeXp % 100),
+                xpNeededForNext: p.xpNeededForNext || 100,
+                percentage: p.levelProgressPercent || 0,
+                coins: p.coins || 0,
+                streak: p.streak || 0,
+                accuracy: avgScore
+            };
+        }
         if (typeof window !== "undefined" && window.ProgressionEngine) {
             const gameState = window.ProgressionEngine.getGameState();
             const progress = window.ProgressionEngine.getLevelProgress();

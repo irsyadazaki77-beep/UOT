@@ -743,6 +743,15 @@ ${makeList([
         state.elements.input.value = "";
         appendMessage("user", text);
         safePlay("click");
+
+        // 1. Offline Detection
+        if (typeof navigator !== "undefined" && !navigator.onLine) {
+            const offlineReply = buildResponse(text);
+            appendMessage("assistant", `[Mode Offline] ${offlineReply}`);
+            renderChips(["Tips belajar", "Rekomendasi materi", "Strategi quiz"]);
+            safePlay("success");
+            return;
+        }
         
         showTyping();
         
@@ -764,9 +773,6 @@ ${makeList([
 
         // Format history for LLM
         const messages = state.history.map(m => ({ role: m.sender, text: m.text }));
-        
-        // Add current message since it was just appended to state.history
-        
         abortController = new AbortController();
 
         try {
@@ -783,30 +789,44 @@ ${makeList([
                 signal: abortController.signal
             });
             
+            if (!response.ok) {
+                removeTyping();
+                const fallbackReply = buildResponse(text);
+                appendMessage("assistant", fallbackReply);
+                renderChips(["Coba lagi", "Jelaskan lebih simpel", "Beri contoh praktis"]);
+                safePlay("success");
+                return;
+            }
+
             const data = await response.json();
             removeTyping();
             
             if (data.ok && !data.fallback) {
                 let reply = data.text;
-                if (data.sourceLinks && data.sourceLinks.length > 0) {
-                    reply += "\n\n**Sumber Belajar:**\n" + data.sourceLinks.map(l => "- [" + l.title + "](/" + l.domain + ".html)").join("\n");
+                if (data.sourceLinks && Array.isArray(data.sourceLinks) && data.sourceLinks.length > 0) {
+                    reply += "\n\n**Sumber Terkait:**\n" + data.sourceLinks.map(l => `- [${l.title || 'Materi Belajar'}](/${l.domain || 'materi'}.html)`).join("\n");
                 }
                 appendMessage("assistant", reply);
                 
-                if (data.suggestedFollowUps && data.suggestedFollowUps.length > 0) {
+                if (data.suggestedFollowUps && Array.isArray(data.suggestedFollowUps) && data.suggestedFollowUps.length > 0) {
                     renderChips(data.suggestedFollowUps);
+                } else {
+                    renderChips();
                 }
                 safePlay("success");
             } else {
-                // Fallback
-                appendMessage("assistant", buildResponse(text));
+                // Friendly Local Knowledge Fallback
+                const fallbackReply = buildResponse(text);
+                appendMessage("assistant", fallbackReply);
+                renderChips(["Lanjutkan topik ini", "Beri contoh kode", "Tips latihan"]);
                 safePlay("success");
             }
         } catch (err) {
             removeTyping();
             if (err.name === 'AbortError') return;
-            console.error('BUBUB Chat Error:', err);
+            console.warn('[BUBUB] Network/service fallback:', err.message);
             appendMessage("assistant", buildResponse(text));
+            renderChips(["Coba lagi", "Bantuan navigasi", "Materi pemula"]);
             safePlay("success");
         } finally {
             abortController = null;
@@ -823,10 +843,12 @@ ${makeList([
         }
     }
 
-    function renderChips() {
+    function renderChips(customChips = null) {
+        if (!state.elements.chips) return;
         const profile = pageProfiles[state.page] || pageProfiles.index;
+        const chipsList = Array.isArray(customChips) && customChips.length > 0 ? customChips : (profile.chips || []);
         state.elements.chips.textContent = "";
-        profile.chips.forEach((label) => {
+        chipsList.forEach((label) => {
             const chip = createEl("button", "bubub-ai-chip", label);
             chip.type = "button";
             chip.addEventListener("click", () => sendMessage(label));
@@ -888,14 +910,22 @@ ${makeList([
         const send = createEl("button", "bubub-ai-send", ">");
         send.type = "submit";
         send.setAttribute("aria-label", "Kirim pesan ke BUBUB");
+
+        const stopBtn = createEl("button", "bubub-ai-stop-btn", "■");
+        stopBtn.id = "bububAiStop";
+        stopBtn.type = "button";
+        stopBtn.setAttribute("aria-label", "Batalkan pembuatan respon");
+        stopBtn.style.display = "none";
+        stopBtn.addEventListener("click", cancelGeneration);
+
         const footnote = createEl("div", "bubub-ai-footnote", "BUBUB menjawab dari konteks lokal UNIVERSE OF TECH.");
-        compose.append(input, send, footnote);
+        compose.append(input, send, stopBtn, footnote);
 
         panel.append(header, messages, chips, compose);
         widget.append(toggle, panel);
         document.body.appendChild(widget);
 
-        state.elements = { widget, toggle, pulse, panel, close, messages, chips, compose, input, send };
+        state.elements = { widget, toggle, pulse, panel, close, messages, chips, compose, input, send, stopBtn };
         renderChips();
 
         state.history = loadHistory();

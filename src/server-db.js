@@ -182,6 +182,10 @@ class ServerDatabaseBridge {
         return await this.progressRepo.processActivityEvent(userId, event);
     }
 
+    async processActivity(userId, event) {
+        return await this.processActivityEvent(userId, event);
+    }
+
     async syncProgress(userId, payload) {
         return await this.progressRepo.syncProgress(userId, payload);
     }

@@ -253,41 +253,46 @@ Bantu user menganalisis error log, kegagalan test run, atau kesalahan logika kui
             return text;
         }
 
-        const normalizedText = text.toLowerCase();
-        const normalizedCorrect = correctText.toLowerCase();
+        let redactedText = text;
+        let wasRedacted = false;
 
-        let needsRedaction = false;
-
-        // 1. Check for exact correct option text inside the response
-        if (normalizedText.includes(normalizedCorrect)) {
-            needsRedaction = true;
-        }
-
-        // 2. Check for explicit reveal patterns of the option label/index
-        const labels = ['a', 'b', 'c', 'd', 'e'];
-        const correctLabel = labels[correctAnswerIndex];
-
-        const revealPatterns = [
-            new RegExp(`jawaban(?:\\s+kuis|\\s+soal)?(?:\\s+yang)?(?:\\s+benar|\\s+tepat)?\\s+adalah\\s+${correctLabel}`),
-            new RegExp(`jawabannya\\s+adalah\\s+${correctLabel}`),
-            new RegExp(`jawabannya\\s+${correctLabel}`),
-            new RegExp(`pilih(?:lah)?\\s+(?:opsi\\s+|pilihan\\s+)?${correctLabel}`),
-            new RegExp(`jawaban\\s*:\\s*${correctLabel}`),
-            new RegExp(`opsi\\s+${correctLabel}\\s+adalah\\s+yang\\s+benar`),
-            new RegExp(`opsi\\s+yang\\s+benar\\s+adalah\\s+${correctLabel}`),
-            new RegExp(`pilihan\\s+${correctLabel}\\s+benar`),
-            new RegExp(`pilihan\\s+yang\\s+benar\\s+adalah\\s+${correctLabel}`)
-        ];
-
-        for (const pattern of revealPatterns) {
-            if (pattern.test(normalizedText)) {
-                needsRedaction = true;
-                break;
+        // 1. Redact exact correct option text if longer than 3 characters
+        if (correctText.trim().length > 3) {
+            const escapedCorrect = correctText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const correctRegex = new RegExp(escapedCorrect, 'gi');
+            if (correctRegex.test(redactedText)) {
+                redactedText = redactedText.replace(correctRegex, '[JAWABAN_DISEMBUNYIKAN]');
+                wasRedacted = true;
             }
         }
 
-        if (needsRedaction) {
-            return text + "\n\n*[Redacted by BUBUB Academic Integrity Guard: Pembocoran kunci jawaban dideteksi dan disembunyikan. Silakan pelajari petunjuk di atas!]*";
+        // 2. Redact explicit reveal patterns of the option label/index
+        const labels = ['a', 'b', 'c', 'd', 'e'];
+        const correctLabel = labels[correctAnswerIndex];
+
+        if (correctLabel) {
+            const revealPatterns = [
+                new RegExp(`jawaban(?:\\s+kuis|\\s+soal)?(?:\\s+yang)?(?:\\s+benar|\\s+tepat)?\\s+adalah\\s+${correctLabel}\\b`, 'gi'),
+                new RegExp(`jawabannya\\s+adalah\\s+${correctLabel}\\b`, 'gi'),
+                new RegExp(`jawabannya\\s+${correctLabel}\\b`, 'gi'),
+                new RegExp(`pilih(?:lah)?\\s+(?:opsi\\s+|pilihan\\s+)?${correctLabel}\\b`, 'gi'),
+                new RegExp(`jawaban\\s*:\\s*${correctLabel}\\b`, 'gi'),
+                new RegExp(`opsi\\s+${correctLabel}\\s+adalah\\s+yang\\s+benar`, 'gi'),
+                new RegExp(`opsi\\s+yang\\s+benar\\s+adalah\\s+${correctLabel}\\b`, 'gi'),
+                new RegExp(`pilihan\\s+${correctLabel}\\s+benar`, 'gi'),
+                new RegExp(`pilihan\\s+yang\\s+benar\\s+adalah\\s+${correctLabel}\\b`, 'gi')
+            ];
+
+            for (const pattern of revealPatterns) {
+                if (pattern.test(redactedText)) {
+                    redactedText = redactedText.replace(pattern, '[PETUNJUK_DISEMBUNYIKAN]');
+                    wasRedacted = true;
+                }
+            }
+        }
+
+        if (wasRedacted) {
+            return redactedText + "\n\n*[Redacted by BUBUB Academic Integrity Guard: Pembocoran kunci jawaban dideteksi dan konten telah disensor. Silakan gunakan petunjuk konsep untuk memecahkan kuis!]*";
         }
 
         return text;

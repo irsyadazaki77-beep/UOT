@@ -1,6 +1,6 @@
 /**
  * UNIVERSE OF TECH - CONTENT CATALOG SERVICE
- * FASE 3 & 6 Architecture Refactoring & Dynamic Content Pagination
+ * FASE 1 & 6 Architecture Refactoring & Dynamic Content Pagination (Async Canonical)
  */
 
 class ContentService {
@@ -9,7 +9,7 @@ class ContentService {
         this.ContentEngine = ContentEngine;
     }
 
-    getMetadata() {
+    async getMetadata() {
         if (!this.contentRepository) {
             return {
                 version: Date.now(),
@@ -17,7 +17,7 @@ class ContentService {
                 counts: {}
             };
         }
-        const meta = this.contentRepository.getMeta();
+        const meta = await this.contentRepository.getMeta();
         return {
             version: meta.version,
             engineVersion: this.ContentEngine ? this.ContentEngine.ENGINE_VERSION : '2.0.0',
@@ -26,9 +26,12 @@ class ContentService {
         };
     }
 
-    getAllDomainContent(domain, { includeDrafts = false, page = null, limit = null, category = null, track = null, search = null } = {}) {
+    async getAllDomainContent(domain, { includeDrafts = false, page = null, limit = null, category = null, track = null, search = null } = {}) {
         if (!this.contentRepository) return [];
-        let items = this.contentRepository.getAll(domain, { includeDrafts });
+        let items = await this.contentRepository.getAll(domain, { includeDrafts });
+        if (!Array.isArray(items)) {
+            items = [];
+        }
 
         if (category) {
             const catLower = String(category).toLowerCase();
@@ -74,9 +77,9 @@ class ContentService {
         return items;
     }
 
-    getItem(domain, id, { includeDrafts = false } = {}) {
+    async getItem(domain, id, { includeDrafts = false } = {}) {
         if (!this.contentRepository) return null;
-        return this.contentRepository.get(domain, id, { includeDrafts });
+        return await this.contentRepository.get(domain, id, { includeDrafts });
     }
 }
 

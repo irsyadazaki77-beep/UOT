@@ -1,20 +1,85 @@
 const ContentEngine = require('../../../public/content-engine');
 
 /**
- * Advanced Hybrid Retrieval Engine
- * Supports passage chunking, token normalization, TF-IDF scoring, title/tags weighting,
- * exact-phrase boosts, recency/versioning weighting, and current topic relevance.
+ * Advanced Hybrid Retrieval Engine with In-Memory Caching & Semantic Chunking
+ * FASE 3: Optimized RAG Retrieval Pipeline
  */
 class RetrievalEngine {
     constructor() {
         this.domains = ['lessons', 'quizzes', 'learningPaths', 'projects', 'culture', 'books'];
+        this.cachedPassages = null;
+        this.cachedDfMap = null;
+        this.lastBuildTime = 0;
+        this.contentVersion = '1.0.0';
     }
 
     /**
-     * Build passages (chunks) from all registered content across domains
+     * Invalidate cached retrieval index
+     */
+    invalidateIndex() {
+        this.cachedPassages = null;
+        this.cachedDfMap = null;
+        this.lastBuildTime = 0;
+    }
+
+    /**
+     * Semantic text chunker: splits by code blocks, paragraphs, and headings
+     */
+    semanticChunk(text, maxChunkLen = 450, minChunkLen = 60) {
+        if (!text || typeof text !== 'string') return [];
+        const raw = text.trim();
+        if (raw.length <= maxChunkLen) return [raw];
+
+        const chunks = [];
+        // Split by major semantic boundaries: code blocks, double newlines, headings
+        const sections = raw.split(/\n\s*\n+/);
+
+        let current = '';
+        for (const sec of sections) {
+            const trimmedSec = sec.trim();
+            if (!trimmedSec) continue;
+
+            if (current.length + trimmedSec.length + 1 <= maxChunkLen) {
+                current = current ? `${current}\n\n${trimmedSec}` : trimmedSec;
+            } else {
+                if (current.length >= minChunkLen) {
+                    chunks.push(current);
+                    current = '';
+                }
+                
+                // If a single section exceeds maxChunkLen, split by sentences or lines
+                if (trimmedSec.length > maxChunkLen) {
+                    const sentences = trimmedSec.split(/(?<=[.!?])\s+/);
+                    for (const sent of sentences) {
+                        if (current.length + sent.length + 1 <= maxChunkLen) {
+                            current = current ? `${current} ${sent}` : sent;
+                        } else {
+                            if (current.length >= minChunkLen) chunks.push(current);
+                            current = sent;
+                        }
+                    }
+                } else {
+                    current = trimmedSec;
+                }
+            }
+        }
+
+        if (current && current.length >= 30) {
+            chunks.push(current);
+        }
+
+        return chunks.length > 0 ? chunks : [raw.substring(0, maxChunkLen)];
+    }
+
+    /**
+     * Build passages (chunks) from all registered content across domains (Cached)
      * @returns {Array} List of passages
      */
     buildPassages() {
+        if (this.cachedPassages && Array.isArray(this.cachedPassages)) {
+            return this.cachedPassages;
+        }
+
         const passages = [];
         
         for (const d of this.domains) {
@@ -31,49 +96,47 @@ class RetrievalEngine {
 
                 // Build canonical URL based on the domain type
                 let canonicalUrl = '/index.html';
-                if (d === 'lessons') canonicalUrl = `/materi.html?id=${item.id}`;
-                else if (d === 'projects') canonicalUrl = `/projects.html?id=${item.id}`;
-                else if (d === 'culture') canonicalUrl = `/daerah-detail.html?id=${item.id}`;
-                else if (d === 'books') canonicalUrl = `/reader.html?id=${item.id}`;
-                else if (d === 'quizzes') canonicalUrl = `/quiz-session.html?id=${item.id}`;
+                if (d === 'lessons') canonicalUrl = `/materi-basic.html?topik=${encodeURIComponent(item.track || 'programming')}`;
+                else if (d === 'projects') canonicalUrl = `/projects.html?id=${encodeURIComponent(item.id)}`;
+                else if (d === 'culture') canonicalUrl = `/daerah-detail.html?id=${encodeURIComponent(item.id)}`;
+                else if (d === 'books') canonicalUrl = `/reader.html?book=${encodeURIComponent(item.id)}`;
+                else if (d === 'quizzes') canonicalUrl = `/quiz.html?id=${encodeURIComponent(item.id)}`;
 
-                // Gather all possible textual blocks to form the corpus
-                const textParts = [];
-                if (item.title) textParts.push(item.title);
-                if (item.name) textParts.push(item.name);
-                if (item.description) textParts.push(item.description);
-                if (item.content) textParts.push(item.content);
-                if (item.synopsis) textParts.push(item.synopsis);
-                if (item.question || item.prompt) textParts.push(item.question || item.prompt);
-                if (item.explanation) textParts.push(item.explanation);
+                const itemVersion = item.version || 1;
+                const itemSkills = item.skills || item.tags || [];
+                const primarySkill = itemSkills[0] || 'general';
+                const title = item.title || item.name || item.id;
+
+                // Gather all structured textual blocks
+                const textBlocks = [];
+                if (item.description) textBlocks.push(item.description);
+                if (item.synopsis) textBlocks.push(item.synopsis);
+                if (item.content) textBlocks.push(item.content);
+                if (item.question || item.prompt) textBlocks.push(`Pertanyaan: ${item.question || item.prompt}`);
+                if (item.explanation) textBlocks.push(`Penjelasan: ${item.explanation}`);
 
                 if (Array.isArray(item.options)) {
-                    textParts.push(`Pilihan Opsi: ${item.options.join(', ')}`);
+                    textBlocks.push(`Pilihan Opsi: ${item.options.join(', ')}`);
                 }
 
                 if (Array.isArray(item.contentBlocks)) {
                     item.contentBlocks.forEach(block => {
                         if (block && typeof block.data === 'string') {
-                            textParts.push(block.data);
+                            textBlocks.push(block.data);
                         }
                     });
                 }
 
-                const fullContentText = textParts.join('\n').trim();
-                const textLength = fullContentText.length;
-                
-                // Define sliding chunk size of ~400 characters with 100 character overlap
-                const chunkSize = 400;
-                const overlap = 100;
-                const itemVersion = item.version || 1;
-                const itemSkills = item.skills || item.tags || [];
-                const primarySkill = itemSkills[0] || 'general';
+                const fullContentText = textBlocks.join('\n\n').trim();
 
-                if (textLength <= chunkSize) {
+                // Semantic chunking
+                const chunks = this.semanticChunk(fullContentText);
+
+                if (chunks.length === 0 && (title || item.description)) {
                     passages.push({
                         sourceId: item.id,
-                        title: item.title || item.name || item.id,
-                        chunk: fullContentText,
+                        title,
+                        chunk: item.description || title,
                         domain: d,
                         contentVersion: itemVersion,
                         contentId: item.id,
@@ -82,28 +145,40 @@ class RetrievalEngine {
                         skillId: primarySkill
                     });
                 } else {
-                    let start = 0;
-                    while (start < textLength) {
-                        const end = Math.min(start + chunkSize, textLength);
-                        const chunkText = fullContentText.substring(start, end).trim();
-                        if (chunkText.length > 40) {
-                            passages.push({
-                                sourceId: item.id,
-                                title: item.title || item.name || item.id,
-                                chunk: chunkText,
-                                domain: d,
-                                contentVersion: itemVersion,
-                                contentId: item.id,
-                                canonicalUrl,
-                                tags: itemSkills,
-                                skillId: primarySkill
-                            });
-                        }
-                        start += (chunkSize - overlap);
+                    for (const chunkText of chunks) {
+                        passages.push({
+                            sourceId: item.id,
+                            title,
+                            chunk: chunkText,
+                            domain: d,
+                            contentVersion: itemVersion,
+                            contentId: item.id,
+                            canonicalUrl,
+                            tags: itemSkills,
+                            skillId: primarySkill
+                        });
                     }
                 }
             }
         }
+
+        // Build precalculated Document Frequency (DF) map for fast search
+        const dfMap = {};
+        passages.forEach(p => {
+            const seen = new Set();
+            const textToAnalyze = `${p.title} ${p.chunk} ${(p.tags || []).join(' ')}`.toLowerCase();
+            const words = textToAnalyze.replace(/[.,/#!$%^&*;:{}=\-_`~()?]/g, ' ').split(/\s+/).filter(w => w.length > 2);
+            for (const w of words) {
+                if (!seen.has(w)) {
+                    seen.add(w);
+                    dfMap[w] = (dfMap[w] || 0) + 1;
+                }
+            }
+        });
+
+        this.cachedPassages = passages;
+        this.cachedDfMap = dfMap;
+        this.lastBuildTime = Date.now();
 
         return passages;
     }
@@ -121,6 +196,7 @@ class RetrievalEngine {
         }
 
         const passages = this.buildPassages();
+        const dfMap = this.cachedDfMap || {};
         const normalizedQuery = query.toLowerCase().trim();
         
         // Basic tokenization and normalization
@@ -132,21 +208,6 @@ class RetrievalEngine {
         if (queryTokens.length === 0) {
             return [];
         }
-
-        // Calculate Document Frequency (DF) map
-        const dfMap = {};
-        passages.forEach(p => {
-            const seen = new Set();
-            const textToAnalyze = `${p.title} ${p.chunk} ${(p.tags || []).join(' ')}`.toLowerCase();
-            queryTokens.forEach(t => {
-                if (textToAnalyze.includes(t)) {
-                    seen.add(t);
-                }
-            });
-            seen.forEach(t => {
-                dfMap[t] = (dfMap[t] || 0) + 1;
-            });
-        });
 
         const totalDocuments = passages.length;
         const results = [];
@@ -164,11 +225,11 @@ class RetrievalEngine {
 
             // 1. EXACT PHRASE MATCHING BOOST
             if (textCorpus.includes(normalizedQuery)) {
-                score += 18.0; // Enormous boost for exact phrase match
+                score += 20.0;
             }
 
             // 2. TF-IDF VECTOR SCORING WITH FIELD WEIGHTS
-            queryTokens.forEach(t => {
+            for (const t of queryTokens) {
                 const df = dfMap[t] || 0;
                 // IDF formula with Laplace smoothing
                 const idf = Math.log((totalDocuments + 1) / (df + 0.5)) + 1;
@@ -182,12 +243,12 @@ class RetrievalEngine {
 
                 const tfWeighted = (termCountInTitle * titleWeight) + (termCountInChunk * chunkWeight);
                 score += tfWeighted * idf;
-            });
+            }
 
             // 3. TAGS & SKILLID WEIGHTING BOOSTS
             if (options.skillId) {
                 const querySkill = String(options.skillId).toLowerCase();
-                if (p.skillId.toLowerCase() === querySkill || p.tags.some(tag => tag.toLowerCase() === querySkill)) {
+                if (p.skillId.toLowerCase() === querySkill || (p.tags && p.tags.some(tag => tag.toLowerCase() === querySkill))) {
                     score += 6.0;
                 }
             }
@@ -201,7 +262,6 @@ class RetrievalEngine {
             }
 
             // 5. RECENCY & VERSION WEIGHTING
-            // SLight boost for higher version numbers to prioritize latest iterations
             score *= (1.0 + ((p.contentVersion || 1) * 0.05));
 
             if (score > 0) {

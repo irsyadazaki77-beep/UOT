@@ -25,14 +25,31 @@ class ProgressController {
         const progress = await this.dbInstance.getUserProgress(req.user.id);
         const sub = await this.subscriptionStore.get(req.user.id);
         const isPro = Boolean(sub && sub.status === 'active' && Date.now() < sub.expiresAt);
+        const mastery = await this.dbInstance.getUserMastery(req.user.id);
+        const recommendations = await this.dbInstance.getUserRecommendations(req.user.id);
+        const sanitizedProgress = this.dbInstance.sanitizeProgressForResponse(progress);
 
         return res.json({
             ok: true,
             authenticated: true,
             user: {
-                ...req.user,
-                isPro
+                id: req.user.id,
+                username: req.user.username,
+                email: req.user.email,
+                role: req.user.role,
+                avatar: req.user.avatar || (progress.equippedItems ? progress.equippedItems.avatar : '👨‍💻'),
+                isPro,
+                is_pro: isPro ? 1 : 0
             },
+            subscription: {
+                plan: sub ? sub.plan : 'free',
+                status: sub ? sub.status : 'none',
+                isPro,
+                expiresAt: sub ? sub.expiresAt : null
+            },
+            progress: sanitizedProgress,
+            mastery,
+            recommendations,
             summary: {
                 level: progress.level,
                 lifetimeXp: progress.lifetimeXp,

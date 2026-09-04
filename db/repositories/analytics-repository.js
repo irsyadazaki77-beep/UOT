@@ -44,6 +44,25 @@ class AnalyticsRepository {
         return errId;
     }
 
+    async recordAuthFailure({ ip, email, reason, timestamp = new Date().toISOString() }) {
+        const masked = email ? email.replace(/(^.x?)(.*)(@.*$)/, '$1***$3') : 'unknown';
+        return await this.recordError({
+            message: `AUTH_FAILURE: ${reason || 'UNKNOWN'}`,
+            metadata: {
+                ip: ip || '127.0.0.1',
+                email: masked,
+                reason: reason || 'UNKNOWN',
+                auditType: 'AUTH_AUDIT'
+            },
+            timestamp
+        });
+    }
+
+    async getAuthFailures(limit = 200) {
+        const errors = await this.getErrors(limit);
+        return errors.filter(e => e.metadata && e.metadata.auditType === 'AUTH_AUDIT');
+    }
+
     async recordVital({ id, name, value, rating = 'good', url = null, sessionId = null, timestamp = new Date().toISOString() }) {
         if (!name) return null;
         const vitId = id || `vit_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;

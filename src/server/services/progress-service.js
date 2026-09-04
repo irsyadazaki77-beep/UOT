@@ -55,7 +55,7 @@ class ProgressService {
 
     async processActivity(userId, activityData) {
         const targetId = userId || 'usr_demo_7701';
-        const result = await this.dbInstance.processActivity(targetId, activityData);
+        const result = await this.dbInstance.processActivityEvent(targetId, activityData);
 
         if (this.analyticsEngineInstance && typeof this.analyticsEngineInstance.recordEvent === 'function') {
             this.analyticsEngineInstance.recordEvent({

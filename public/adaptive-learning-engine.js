@@ -177,7 +177,7 @@
             if (top.includes("kearifan") || top.includes("peribahasa")) return "culture_wisdom";
             return "culture_vocab";
         }
-        return "js_variables";
+        return null;
     }
 
     function getActivityMetadata(activityOrId) {
@@ -185,18 +185,35 @@
         if (typeof activityOrId === "string") act = { id: activityOrId };
         
         const skillId = act.skill || mapCategoryToSkill(act.category || act.topic || "", act.topic || act.id || "");
-        const skillObj = SKILLS_REGISTRY[skillId] || SKILLS_REGISTRY["js_variables"];
+        const skillObj = skillId ? SKILLS_REGISTRY[skillId] : null;
+
         let difficultyNum = 1;
         const diffStr = String(act.difficulty || "").toLowerCase();
         if (diffStr === "medium" || diffStr === "2") difficultyNum = 2;
         if (diffStr === "hard" || diffStr === "3") difficultyNum = 3;
+
+        if (!skillObj) {
+            return {
+                id: act.id || `act_${Math.random().toString(36).substring(2, 9)}`,
+                topic: act.topic || act.id || "Aktivitas Tanpa Metadata",
+                skill: null,
+                skillName: "Aktivitas Tanpa Metadata",
+                domain: "unmapped",
+                unmapped: true,
+                difficulty: difficultyNum,
+                difficultyLabel: difficultyNum === 3 ? "Hard" : (difficultyNum === 2 ? "Medium" : "Easy"),
+                estimatedDuration: act.estimatedDuration || (difficultyNum * 2 + 1),
+                prerequisites: []
+            };
+        }
         
         return {
-            id: act.id || `act_${Date.now()}`,
+            id: act.id || `act_${Math.random().toString(36).substring(2, 9)}`,
             topic: act.topic || skillObj.name,
             skill: skillObj.id,
             skillName: skillObj.name,
             domain: skillObj.domain,
+            unmapped: false,
             difficulty: difficultyNum,
             difficultyLabel: difficultyNum === 3 ? "Hard" : (difficultyNum === 2 ? "Medium" : "Easy"),
             estimatedDuration: act.estimatedDuration || (difficultyNum * 2 + 1),
@@ -214,8 +231,10 @@
         }
 
         const skillAttempts = (attemptsHistory || []).filter(a => {
-            const mapped = mapCategoryToSkill(a.category, a.topic) || a.skill || getActivityMetadata(a).skill;
-            return mapped === skillId || a.skill === skillId || getActivityMetadata(a).skill === skillId;
+            if (a.unmapped || a.skill === null) return false;
+            const meta = getActivityMetadata(a);
+            if (meta.unmapped || !meta.skill) return false;
+            return meta.skill === skillId;
         });
         if (skillAttempts.length === 0) {
             return { skillId, skillName: skillObj.name, domain: skillObj.domain, score: 0, tier: MASTERY_TIERS[0], attemptsCount: 0, correctCount: 0, streak: 0, lastAttemptAt: null, dueForReview: false, consecutiveFailures: 0 };

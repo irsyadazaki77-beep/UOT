@@ -1,54 +1,85 @@
 @import url('tokens.css');
 
 /* ========================================================================== */
-/* Universe of Tech - Consolidated Intrinsic Responsive Layout System          */
-/* Provides robust fluid container layouts, modern grid structures, and touch */
-/* area constraints across all viewports without page-specific overrides.     */
+/* Universe of Tech - Consolidated Canonical Responsive Architecture          */
+/* Mobile-first, desktop-optimized, fluid typography, zero overflow           */
 /* ========================================================================== */
 
 :root {
-    --responsive-gutter: clamp(16px, 3.5vw, 32px);
-    --responsive-content: min(100% - calc(var(--responsive-gutter) * 2), var(--container-max-width, 1200px));
+    --responsive-gutter: clamp(14px, 3.5vw, 32px);
+    --responsive-content: min(100% - calc(var(--responsive-gutter) * 2), var(--container-max-width, 1280px));
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --safe-left: env(safe-area-inset-left, 0px);
+    --navbar-height-computed: var(--navbar-height, 64px);
 }
 
-/* 1. Reset & Global Intrinsic Setup */
+/* 1. Global Box Model, Root & Anti-Overflow */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
 html {
     max-width: 100%;
-    scroll-padding-top: calc(var(--navbar-height, 60px) + var(--space-4, 16px));
+    min-height: 100%;
+    scroll-padding-top: calc(var(--navbar-height-computed) + var(--space-4, 16px));
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: clip;
 }
 
 body {
     max-width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
     overflow-x: clip;
     overscroll-behavior-x: none;
     background: var(--uot-bg);
     color: var(--uot-text-primary);
-    font-family: var(--font-sans);
+    font-family: var(--font-sans, "Manrope", system-ui, sans-serif);
     line-height: var(--leading-normal, 1.55);
 }
 
+/* 2. Top-Level Page Shells (Applies Navbar Offset ONLY to Top Shells) */
 .page,
-main,
-section {
-    padding-top: calc(var(--navbar-height, 60px) + var(--space-4, 16px));
+body > main,
+.app-shell,
+.account-shell,
+.learning-shell,
+.library-shell,
+.materi-shell,
+.quiz-shell-wrap,
+.reader-shell,
+.focus-shell,
+.arena-shell,
+.workspace-shell {
     width: 100%;
+    max-width: var(--container-max-width, 1280px);
     margin-right: auto;
     margin-left: auto;
+    padding-top: calc(var(--navbar-height-computed) + var(--space-4, 16px) + var(--safe-top));
     padding-right: max(var(--responsive-gutter), var(--safe-right));
+    padding-bottom: max(var(--space-8, 32px), var(--safe-bottom));
     padding-left: max(var(--responsive-gutter), var(--safe-left));
-    box-sizing: border-box;
 }
 
-/* Fluid Layout Elements */
+/* 3. Nested Sections (Uses Standard Relational Spacing, NO Navbar Offset) */
+section,
+.section {
+    width: 100%;
+    padding-top: var(--space-6, 24px);
+    padding-bottom: var(--space-6, 24px);
+}
+
+/* 4. Fluid Media & Code Elements */
 img,
-video,
 svg,
+video,
 canvas,
 iframe {
     max-width: 100%;
@@ -60,23 +91,41 @@ code {
     max-width: 100%;
     overflow-x: auto;
     overscroll-behavior-inline: contain;
-    font-family: var(--font-mono);
+    font-family: var(--font-mono, "DM Mono", monospace);
 }
 
-/* 2. Canonical Modern Intrinsic Grids (Zero Media Queries Required) */
-.uot-grid-auto-fit {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-    gap: var(--space-4, 16px);
+/* 5. Fluid Responsive Typography */
+h1 {
+    font-size: clamp(24px, 4.5vw, 36px);
+    font-weight: var(--font-extrabold, 800);
+    letter-spacing: -0.03em;
+    line-height: var(--leading-tight, 1.18);
+    color: var(--uot-text-primary);
 }
 
-.uot-grid-auto-fill {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
-    gap: var(--space-3, 12px);
+h2 {
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: var(--font-bold, 700);
+    letter-spacing: -0.02em;
+    line-height: var(--leading-snug, 1.35);
+    color: var(--uot-text-primary);
 }
 
-/* Backwards compatibility for existing class-based grids */
+h3 {
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: var(--font-semibold, 600);
+    line-height: var(--leading-snug, 1.35);
+    color: var(--uot-text-primary);
+}
+
+p {
+    font-size: var(--text-body, 15px);
+    color: var(--uot-text-secondary);
+    line-height: 1.6;
+}
+
+/* 6. Intrinsic Responsive Grids */
+.uot-grid-auto-fit,
 .badge-grid,
 .cert-grid,
 .learning-pulse-grid,
@@ -90,52 +139,25 @@ code {
 .overview-grid,
 .insight-grid,
 .museum-grid,
-.phrase-grid,
 .metric-grid,
 .card-grid,
 .concept-grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)) !important;
-    gap: var(--space-4, 16px) !important;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--space-4, 16px);
 }
 
-/* Specific grids that need a slightly smaller card minimum width */
+.uot-grid-auto-fill,
 .region-progress-grid,
 .badges-grid,
 .phrase-grid,
 .shortcut-grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)) !important;
-    gap: var(--space-3, 12px) !important;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: var(--space-3, 12px);
 }
 
-/* 3. Fluid Responsive Typography */
-h1 {
-    font-size: clamp(24px, 4.5vw, 36px);
-    font-weight: var(--font-extrabold, 800);
-    letter-spacing: -0.03em;
-    line-height: var(--leading-tight, 1.18);
-}
-
-h2 {
-    font-size: clamp(20px, 3.5vw, 28px);
-    font-weight: var(--font-bold, 700);
-    letter-spacing: -0.02em;
-    line-height: var(--leading-snug, 1.35);
-}
-
-h3 {
-    font-size: clamp(16px, 2.5vw, 22px);
-    font-weight: var(--font-semibold, 600);
-    line-height: var(--leading-snug, 1.35);
-}
-
-p {
-    font-size: var(--text-body, 15px);
-    color: var(--uot-text-secondary);
-}
-
-/* 4. Touch Targets & Universal Interactive Area Constraints */
+/* 7. Touch Targets & Universal Interactive Area Constraints (WCAG 2.2 AA) */
 button,
 input,
 select,
@@ -144,13 +166,17 @@ textarea,
 .button,
 [role="button"],
 [role="tab"] {
-    min-height: 44px; /* WCAG 2.2 AA Minimum Target */
+    min-height: 44px;
     min-width: 44px;
     touch-action: manipulation;
-    box-sizing: border-box;
 }
 
-/* Small interactive icons or pills should keep padded tap space */
+input,
+select,
+textarea {
+    font-size: 16px; /* Prevents auto-zoom on iOS */
+}
+
 .theme-toggle-btn,
 .sound-toggle-btn,
 .social-btn,
@@ -158,12 +184,12 @@ textarea,
 .filter-btn,
 .question-jump,
 .bubub-ai-chip {
-    min-height: 44px !important;
-    min-width: 44px !important;
-    padding: 8px 12px !important;
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 12px;
 }
 
-/* 5. Fluid Tables & Scroll Containment */
+/* 8. Fluid Tables & Data Views */
 .table-responsive,
 .table-container,
 .leaderboard-table-container,
@@ -177,7 +203,7 @@ textarea,
     border: 1px solid var(--uot-border);
 }
 
-/* 6. Unified Modal, Dialog, and Drawer Overlays */
+/* 9. Modal, Dialog & Drawer Responsive Overlays */
 dialog,
 .modal-overlay {
     max-width: 100vw;
@@ -195,14 +221,15 @@ dialog::backdrop {
 .concept-modal-box {
     max-width: min(calc(100vw - 32px), 640px);
     max-height: min(calc(100dvh - 32px), 800px);
-    padding: var(--space-6, 24px) !important;
-    border-radius: var(--radius-xl, 20px) !important;
-    border: 1px solid var(--uot-border) !important;
-    background: var(--uot-surface) !important;
-    box-shadow: var(--shadow-xl) !important;
+    padding: var(--space-6, 24px);
+    border-radius: var(--radius-xl, 20px);
+    border: 1px solid var(--uot-border);
+    background: var(--uot-surface);
+    box-shadow: var(--shadow-xl);
+    overflow-y: auto;
 }
 
-/* 7. Specific Layout Structures & Split-Screen Panels */
+/* 10. Split Layouts */
 .layout-split {
     display: flex;
     flex-wrap: wrap;
@@ -211,47 +238,24 @@ dialog::backdrop {
 
 .layout-split > .main-content {
     flex: 1 1 650px;
+    min-width: min(100%, 300px);
 }
 
 .layout-split > .sidebar-panel {
     flex: 1 1 320px;
-    max-width: 400px;
+    max-width: 420px;
+    min-width: min(100%, 280px);
 }
 
-@media (max-width: 980px) {
-    .layout-split > .sidebar-panel {
-        max-width: none;
-    }
-}
-
-/* 8. Mobile Scroll Snap for Carousel Lists */
-.mobile-snap-scroll {
-    display: flex;
-    overflow-x: auto;
-    gap: var(--space-4, 16px);
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
-    -webkit-overflow-scrolling: touch;
-}
-
-.mobile-snap-scroll > * {
-    flex: 0 0 85%;
-    scroll-snap-align: start;
-}
-
-/* 9. Accessibility Visible Focus Indicator */
+/* 11. Accessibility Focus & Motion */
 :focus-visible {
-    outline: 2px solid var(--uot-focus-ring) !important;
-    outline-offset: 2px !important;
-}
-
-body.dark-theme :focus-visible {
-    outline-color: var(--uot-focus-ring) !important;
+    outline: 2px solid var(--uot-focus-ring);
+    outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
     html {
-        scroll-behavior: auto !important;
+        scroll-behavior: auto;
     }
     *,
     *::before,
@@ -260,5 +264,61 @@ body.dark-theme :focus-visible {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+}
+
+/* 12. Breakpoint Strategies (320px - 2560px) */
+
+/* Small Phones: 320px to 560px */
+@media (max-width: 560px) {
+    :root {
+        --responsive-gutter: 12px;
+        --navbar-height-computed: 58px;
+    }
+
+    .page,
+    body > main,
+    .app-shell,
+    .account-shell {
+        padding-top: calc(var(--navbar-height-computed) + 12px + var(--safe-top));
+    }
+
+    .layout-split > .sidebar-panel {
+        max-width: 100%;
+    }
+
+    .uot-grid-auto-fit,
+    .badge-grid,
+    .cert-grid,
+    .learning-pulse-grid,
+    .culture-grid,
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablets & Medium Screens: 561px to 1024px */
+@media (min-width: 561px) and (max-width: 1024px) {
+    :root {
+        --responsive-gutter: 20px;
+    }
+
+    .layout-split > .sidebar-panel {
+        max-width: 100%;
+    }
+}
+
+/* Ultra-wide & 2K / 4K Monitors: 1440px to 2560px */
+@media (min-width: 1440px) {
+    :root {
+        --container-max-width: 1400px;
+    }
+
+    .page,
+    body > main,
+    .app-shell,
+    .account-shell,
+    .learning-shell {
+        max-width: 1400px;
     }
 }

@@ -58,12 +58,27 @@ class BackupService {
         });
     }
 
+    async listSnapshotsAsync() {
+        this.ensureBackupDir();
+        const files = (await fs.promises.readdir(this.backupDir)).filter(f => f.endsWith('.json') || f.endsWith('.sqlite'));
+        const results = [];
+        for (const file of files) {
+            const stat = await fs.promises.stat(path.join(this.backupDir, file));
+            results.push({
+                filename: file,
+                size: stat.size,
+                createdAt: stat.mtime.toISOString()
+            });
+        }
+        return results;
+    }
+
     async restoreFromSnapshot(filePath) {
         if (!fs.existsSync(filePath)) {
             throw new Error(`Backup file not found: ${filePath}`);
         }
 
-        const raw = fs.readFileSync(filePath, 'utf8');
+        const raw = await fs.promises.readFile(filePath, 'utf8');
         const snapshot = JSON.parse(raw);
 
         if (snapshot.content && this.repos.content) {

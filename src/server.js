@@ -5,6 +5,7 @@
 const { createApp } = require('./server/app');
 const { PORT, APP_ENV, IS_PRODUCTION } = require('./server/config');
 const { dbInstance } = require('./server-db');
+const dbLayer = require('../db');
 
 // Fail fast in production if ADMIN_KEY is insecure
 if (IS_PRODUCTION) {
@@ -19,9 +20,17 @@ const app = createApp();
 
 let server = null;
 if (require.main === module) {
-    server = app.listen(PORT, '0.0.0.0', () => {
-        console.log(`[UniverseOfTech] Server successfully listening on http://0.0.0.0:${PORT} [${APP_ENV}]`);
-    });
+    (async () => {
+        try {
+            await dbLayer.init();
+            server = app.listen(PORT, '0.0.0.0', () => {
+                console.log(`[UniverseOfTech] Server successfully listening on http://0.0.0.0:${PORT} [${APP_ENV}]`);
+            });
+        } catch (err) {
+            console.error('[UniverseOfTech] FATAL: Failed to initialize database and migrations on startup:', err);
+            process.exit(1);
+        }
+    })();
 
     // Graceful Shutdown
     const handleShutdown = (signal) => {

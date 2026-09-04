@@ -144,8 +144,9 @@ class ProgressRepository {
         const now = new Date().toISOString();
         if (!userRow) {
             await this.db.runAsync(`
-                INSERT OR IGNORE INTO users (id, username, email, password_hash, salt, role, is_pro, created_at, updated_at)
+                INSERT INTO users (id, username, email, password_hash, salt, role, is_pro, created_at, updated_at)
                 VALUES (?, ?, ?, 'auto', 'auto', 'user', 0, ?, ?)
+                ON CONFLICT (id) DO NOTHING
             `, [userId, userId, `${userId}@auto.local`, now, now]);
             userRow = await this.db.getAsync('SELECT * FROM users WHERE id = ?', [userId]);
         }
@@ -172,11 +173,12 @@ class ProgressRepository {
         };
 
         await this.db.runAsync(`
-            INSERT OR IGNORE INTO user_progress (
+            INSERT INTO user_progress (
                 user_id, lifetime_xp, level, coins, streak, last_active_date, streak_freeze_count,
                 equipped_avatar, equipped_theme, equipped_accent, flagged,
                 settings_json, personal_bests_json, created_at, updated_at
             ) VALUES (?, 0, 1, 50, 0, NULL, 0, '👨‍💻', 'ocean', 'ocean', 0, ?, ?, ?, ?)
+            ON CONFLICT (user_id) DO NOTHING
         `, [
             userId,
             JSON.stringify(defaultSettings),
@@ -185,7 +187,11 @@ class ProgressRepository {
             now
         ]);
 
-        await this.db.runAsync(`INSERT OR IGNORE INTO user_inventory (user_id, item_id, unlocked_at) VALUES (?, '👨‍💻', ?)`, [userId, now]);
+        await this.db.runAsync(`
+            INSERT INTO user_inventory (user_id, item_id, unlocked_at)
+            VALUES (?, '👨‍💻', ?)
+            ON CONFLICT (user_id, item_id) DO NOTHING
+        `, [userId, now]);
     }
 
     async _assembleFullProgress(userId, row) {
@@ -1084,7 +1090,7 @@ class ProgressRepository {
                 if (Array.isArray(legacyData.achievements)) {
                     for (const ach of legacyData.achievements) {
                         if (ach) {
-                            await runFn('INSERT OR IGNORE INTO achievements (user_id, achievement_id, unlocked_at) VALUES (?, ?, ?)', [userId, String(ach), now]);
+                            await runFn('INSERT INTO achievements (user_id, achievement_id, unlocked_at) VALUES (?, ?, ?) ON CONFLICT (user_id, achievement_id) DO NOTHING', [userId, String(ach), now]);
                         }
                     }
                 }
@@ -1093,7 +1099,7 @@ class ProgressRepository {
                 if (Array.isArray(legacyData.inventory)) {
                     for (const item of legacyData.inventory) {
                         if (item) {
-                            await runFn('INSERT OR IGNORE INTO user_inventory (user_id, item_id, unlocked_at) VALUES (?, ?, ?)', [userId, String(item), now]);
+                            await runFn('INSERT INTO user_inventory (user_id, item_id, unlocked_at) VALUES (?, ?, ?) ON CONFLICT (user_id, item_id) DO NOTHING', [userId, String(item), now]);
                         }
                     }
                 }
@@ -1102,7 +1108,7 @@ class ProgressRepository {
                 if (Array.isArray(legacyData.completedLessons)) {
                     for (const les of legacyData.completedLessons) {
                         if (les) {
-                            await runFn('INSERT OR IGNORE INTO user_completed_lessons (user_id, lesson_id, completed_at) VALUES (?, ?, ?)', [userId, String(les), now]);
+                            await runFn('INSERT INTO user_completed_lessons (user_id, lesson_id, completed_at) VALUES (?, ?, ?) ON CONFLICT (user_id, lesson_id) DO NOTHING', [userId, String(les), now]);
                         }
                     }
                 }
@@ -1332,7 +1338,7 @@ class ProgressRepository {
         if (!currentUserId || !targetUserId || currentUserId === targetUserId) {
             return { ok: false, error: "INVALID_TARGET", message: "Target follow tidak valid." };
         }
-        await this.db.runAsync('INSERT OR IGNORE INTO followers (follower_id, following_id, created_at) VALUES (?, ?, ?)', [
+        await this.db.runAsync('INSERT INTO followers (follower_id, following_id, created_at) VALUES (?, ?, ?) ON CONFLICT (follower_id, following_id) DO NOTHING', [
             currentUserId, targetUserId, new Date().toISOString()
         ]);
         return { ok: true, following: true, isFollowing: true };
@@ -1471,8 +1477,9 @@ class ProgressRepository {
         if (!userExists) {
             const now = new Date().toISOString();
             await this.db.runAsync(`
-                INSERT OR IGNORE INTO users (id, username, email, password_hash, salt, role, is_pro, created_at, updated_at)
+                INSERT INTO users (id, username, email, password_hash, salt, role, is_pro, created_at, updated_at)
                 VALUES (?, ?, ?, 'auto', 'auto', 'user', 0, ?, ?)
+                ON CONFLICT (id) DO NOTHING
             `, [userId, userId, `${userId}@auto.local`, now, now]);
         }
 
@@ -1547,11 +1554,14 @@ class ProgressRepository {
             try { if (q.answers_json) answers = JSON.parse(q.answers_json); } catch (e) {}
             let meta = null;
             try { if (q.metadata_json) meta = JSON.parse(q.metadata_json); } catch (e) {}
-            const skillId = q.skill || (AdaptiveLearningEngine && typeof AdaptiveLearningEngine.getActivityMetadata === 'function' ? AdaptiveLearningEngine.getActivityMetadata(q.quiz_id).skill : 'javascript_basics');
+            const actMeta = (AdaptiveLearningEngine && typeof AdaptiveLearningEngine.getActivityMetadata === 'function') ? AdaptiveLearningEngine.getActivityMetadata(q.quiz_id) : null;
+            const skillId = q.skill || (actMeta && !actMeta.unmapped ? actMeta.skill : null);
+            const isUnmapped = !skillId || Boolean(actMeta && actMeta.unmapped);
             return {
                 id: q.id,
                 quizId: q.quiz_id,
                 skill: skillId,
+                unmapped: isUnmapped,
                 topic: q.topic || q.quiz_id,
                 difficulty: Number(q.difficulty) || 1,
                 score: q.score,
@@ -1588,11 +1598,14 @@ class ProgressRepository {
             try { if (q.answers_json) answers = JSON.parse(q.answers_json); } catch (e) {}
             let meta = null;
             try { if (q.metadata_json) meta = JSON.parse(q.metadata_json); } catch (e) {}
-            const skillId = q.skill || (AdaptiveLearningEngine && typeof AdaptiveLearningEngine.getActivityMetadata === 'function' ? AdaptiveLearningEngine.getActivityMetadata(q.quiz_id).skill : 'javascript_basics');
+            const actMeta = (AdaptiveLearningEngine && typeof AdaptiveLearningEngine.getActivityMetadata === 'function') ? AdaptiveLearningEngine.getActivityMetadata(q.quiz_id) : null;
+            const skillId = q.skill || (actMeta && !actMeta.unmapped ? actMeta.skill : null);
+            const isUnmapped = !skillId || Boolean(actMeta && actMeta.unmapped);
             return {
                 id: q.id,
                 quizId: q.quiz_id,
                 skill: skillId,
+                unmapped: isUnmapped,
                 topic: q.topic || q.quiz_id,
                 difficulty: Number(q.difficulty) || 1,
                 score: q.score,

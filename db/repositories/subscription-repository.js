@@ -87,6 +87,28 @@ class SubscriptionRepository {
         }));
     }
 
+    async getAll(limit = 100, offset = 0) {
+        const rows = await this.db.allAsync('SELECT * FROM subscriptions ORDER BY created_at DESC LIMIT ? OFFSET ?', [limit, offset]);
+        return rows.map(r => this._mapSubscription(r));
+    }
+
+    async getInvoiceById(id) {
+        if (!id) return null;
+        const row = await this.db.getAsync('SELECT * FROM payment_invoices WHERE id = ?', [id]);
+        if (!row) return null;
+        return {
+            id: row.id,
+            userId: row.user_id,
+            planId: row.plan_id,
+            amount: row.amount,
+            currency: row.currency,
+            status: row.status,
+            provider: row.provider,
+            createdAt: row.created_at,
+            updatedAt: row.updated_at
+        };
+    }
+
     async updateInvoiceStatus(id, status) {
         await this.db.runAsync('UPDATE payment_invoices SET status = ?, updated_at = ? WHERE id = ?', [
             status,

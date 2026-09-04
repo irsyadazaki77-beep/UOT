@@ -1,6 +1,6 @@
 /**
  * UNIVERSE OF TECH - DATABASE & REPOSITORY DATA ACCESS LAYER
- * FASE 18 Centralized Entry Point
+ * FASE 1 & 18 Centralized Entry Point (Async Canonical Database Initialization)
  */
 
 const { getDb } = require('./db-adapter');
@@ -17,10 +17,9 @@ const { ContentCatalog, contentCatalog } = require('./content-catalog');
 const { RewardLedger } = require('./reward-ledger');
 const { REWARD_POLICY } = require('./reward-policy');
 
-// Initialize DB and Run Migrations
+// Initialize DB and Migrator
 const db = getDb();
 const migrator = new Migrator(db);
-migrator.runMigrations();
 
 // Instantiate Repositories
 const userRepository = new UserRepository(db);
@@ -39,7 +38,30 @@ const backupService = new BackupService(db, {
     analytics: analyticsRepository
 });
 
+let initPromise = null;
+
+async function init() {
+    if (!initPromise) {
+        initPromise = (async () => {
+            await migrator.runMigrations();
+            return {
+                db,
+                migrator,
+                userRepository,
+                sessionRepository,
+                progressRepository,
+                subscriptionRepository,
+                contentRepository,
+                analyticsRepository,
+                backupService
+            };
+        })();
+    }
+    return await initPromise;
+}
+
 module.exports = {
+    init,
     db,
     migrator,
     userRepository,

@@ -195,12 +195,19 @@ class AIProvider {
 
     async _callWithTimeout(model, contents, systemInstruction, config) {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => {
-            controller.abort();
-        }, this.timeoutMs);
+        let timeoutId;
+        const timeoutPromise = new Promise((_, reject) => {
+            timeoutId = setTimeout(() => {
+                controller.abort();
+                const timeoutErr = new Error(`Request timeout: BUBUB AI tidak merespons dalam ${this.timeoutMs}ms.`);
+                timeoutErr.code = 'ETIMEDOUT';
+                timeoutErr.status = 504;
+                reject(timeoutErr);
+            }, this.timeoutMs);
+        });
 
         try {
-            const response = await this.ai.models.generateContent({
+            const callPromise = this.ai.models.generateContent({
                 model: model,
                 contents: contents,
                 config: {
@@ -209,11 +216,13 @@ class AIProvider {
                     maxOutputTokens: config.maxOutputTokens || 1024,
                     responseMimeType: config.responseMimeType,
                     responseSchema: config.responseSchema,
+                    abortSignal: controller.signal
                 }
             });
+            const response = await Promise.race([callPromise, timeoutPromise]);
             return response;
         } finally {
-            clearTimeout(timeoutId);
+            if (timeoutId) clearTimeout(timeoutId);
         }
     }
 }

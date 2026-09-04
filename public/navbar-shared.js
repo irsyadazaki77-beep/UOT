@@ -242,30 +242,101 @@ function initUnifiedNavbar() {
 }
 
 /* --- Login & Auth Dynamic Status Updates --- */
-function updateLoginStatus() {
-    try {
-        const uotUser = JSON.parse(localStorage.getItem('uot_game_state') || '{}');
-        const loginLink = document.getElementById('navLoginLink');
-        const mobileLoginLink = document.getElementById('mobileLoginLink');
+async function updateLoginStatus() {
+    const loginLink = document.getElementById('navLoginLink');
+    const mobileLoginLink = document.getElementById('mobileLoginLink');
 
-        if (uotUser && uotUser.authenticated && uotUser.name) {
-            const initial = uotUser.name.charAt(0).toUpperCase();
-            const userBadgeHTML = `
-                <a href="profile.html" class="user-nav-badge" aria-label="Buka profil">
-                    <span class="user-nav-avatar">${initial}</span>
-                    <span>${uotUser.name.split(' ')[0]}</span>
-                </a>
-            `;
-            if (loginLink) {
-                loginLink.outerHTML = userBadgeHTML;
-            }
-            if (mobileLoginLink) {
-                mobileLoginLink.innerHTML = `<i class="fa-solid fa-user-circle" aria-hidden="true"></i> Dashboard Profil`;
-                mobileLoginLink.href = 'profile.html';
-                mobileLoginLink.className = 'mobile-login';
+    function renderLoggedIn(user) {
+        const name = user.username || user.name || 'Pengguna';
+        const initial = name.charAt(0).toUpperCase();
+        const firstName = name.split(' ')[0] || 'User';
+        const avatar = user.avatar || initial;
+
+        const existingBadge = document.querySelector('.user-nav-badge');
+        if (!existingBadge && loginLink) {
+            const userBadge = document.createElement('a');
+            userBadge.href = 'profile.html';
+            userBadge.className = 'user-nav-badge';
+            userBadge.setAttribute('aria-label', 'Buka profil');
+
+            const avatarSpan = document.createElement('span');
+            avatarSpan.className = 'user-nav-avatar';
+            avatarSpan.textContent = avatar.length <= 2 ? avatar : initial;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = firstName;
+
+            userBadge.appendChild(avatarSpan);
+            userBadge.appendChild(nameSpan);
+
+            loginLink.replaceWith(userBadge);
+        }
+
+        if (mobileLoginLink) {
+            mobileLoginLink.textContent = '';
+            mobileLoginLink.href = 'profile.html';
+            mobileLoginLink.className = 'mobile-login';
+
+            const icon = document.createElement('i');
+            icon.className = 'fa-solid fa-user-circle';
+            icon.setAttribute('aria-hidden', 'true');
+
+            const text = document.createTextNode(` Dashboard Profil (${firstName})`);
+            mobileLoginLink.appendChild(icon);
+            mobileLoginLink.appendChild(text);
+        }
+    }
+
+    function renderLoggedOut() {
+        const existingBadge = document.querySelector('.user-nav-badge');
+        if (existingBadge) {
+            const newLoginLink = document.createElement('a');
+            newLoginLink.className = 'btn-ghost';
+            newLoginLink.id = 'navLoginLink';
+            newLoginLink.href = 'login.html';
+            newLoginLink.textContent = 'Masuk';
+            existingBadge.replaceWith(newLoginLink);
+        }
+        if (mobileLoginLink) {
+            mobileLoginLink.textContent = 'Masuk / Daftar Akun';
+            mobileLoginLink.href = 'login.html';
+            mobileLoginLink.className = 'mobile-login';
+        }
+    }
+
+    // 1. Read cached server snapshot for instant rendering (cache only)
+    let cachedSnapshot = null;
+    try {
+        cachedSnapshot = JSON.parse(localStorage.getItem('uot_canonical_user_state') || 'null');
+    } catch (_) {}
+
+    if (cachedSnapshot && cachedSnapshot.authenticated && cachedSnapshot.user) {
+        renderLoggedIn(cachedSnapshot.user);
+    }
+
+    // 2. Authoritative Verification with Server (/api/me)
+    try {
+        const res = await fetch('/api/me', {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include'
+        });
+        if (res.ok) {
+            const data = await res.json();
+            if (data && data.authenticated && data.user) {
+                // Server confirmed authenticated
+                localStorage.setItem('uot_canonical_user_state', JSON.stringify(data));
+                renderLoggedIn(data.user);
+                return;
             }
         }
-    } catch (_) {}
+        // Server says unauthenticated (401 or authenticated: false) -> Server Wins!
+        if (cachedSnapshot && cachedSnapshot.authenticated) {
+            localStorage.removeItem('uot_canonical_user_state');
+            renderLoggedOut();
+        }
+    } catch (err) {
+        // Network offline: retain cached snapshot if offline
+    }
 }
 
 /* --- Theme Selection & Persistence Handler --- */
@@ -401,23 +472,48 @@ function setupContentBackedSearch() {
                 const result = await response.json();
 
                 if (result.ok && Array.isArray(result.results) && result.results.length > 0) {
-                    suggestionBox.innerHTML = result.results.map(item => `
-                        <a href="${item.url}" class="search-suggestion-item">
-                            <i class="fa-solid fa-file-lines" style="opacity: 0.7;"></i>
-                            <div style="display: flex; flex-direction: column;">
-                                <span style="font-weight: 700; font-size: 13.5px;">${escapeHTML(item.title)}</span>
-                                <span style="font-size: 11px; opacity: 0.8;">${escapeHTML(item.type)} - ${escapeHTML(item.description)}</span>
-                            </div>
-                        </a>
-                    `).join('');
+                    suggestionBox.textContent = '';
+                    for (const item of result.results) {
+                        const a = document.createElement('a');
+                        a.href = item.url;
+                        a.className = 'search-suggestion-item';
+
+                        const icon = document.createElement('i');
+                        icon.className = 'fa-solid fa-file-lines';
+                        icon.style.opacity = '0.7';
+
+                        const textContainer = document.createElement('div');
+                        textContainer.style.display = 'flex';
+                        textContainer.style.flexDirection = 'column';
+
+                        const titleSpan = document.createElement('span');
+                        titleSpan.style.fontWeight = '700';
+                        titleSpan.style.fontSize = '13.5px';
+                        titleSpan.textContent = item.title;
+
+                        const descSpan = document.createElement('span');
+                        descSpan.style.fontSize = '11px';
+                        descSpan.style.opacity = '0.8';
+                        descSpan.textContent = `${item.type} - ${item.description}`;
+
+                        textContainer.appendChild(titleSpan);
+                        textContainer.appendChild(descSpan);
+
+                        a.appendChild(icon);
+                        a.appendChild(textContainer);
+                        suggestionBox.appendChild(a);
+                    }
                     suggestionBox.classList.add('is-active');
                     searchInput.setAttribute('aria-expanded', 'true');
                 } else {
-                    suggestionBox.innerHTML = `
-                        <div style="padding: 12px 14px; text-align: center; color: var(--uot-text-muted); font-size: 13px;">
-                            Tidak ada hasil untuk "${escapeHTML(query)}"
-                        </div>
-                    `;
+                    suggestionBox.textContent = '';
+                    const emptyDiv = document.createElement('div');
+                    emptyDiv.style.padding = '12px 14px';
+                    emptyDiv.style.textAlign = 'center';
+                    emptyDiv.style.color = 'var(--uot-text-muted)';
+                    emptyDiv.style.fontSize = '13px';
+                    emptyDiv.textContent = `Tidak ada hasil untuk "${query}"`;
+                    suggestionBox.appendChild(emptyDiv);
                     suggestionBox.classList.add('is-active');
                     searchInput.setAttribute('aria-expanded', 'true');
                 }

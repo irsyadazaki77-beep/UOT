@@ -18,32 +18,75 @@
     let saveTimer = null;
     let noteTimer = null;
 
+    let canonicalState = null;
+
     function readJSON(key, fallback) { return Account?.readJSON(key, fallback) ?? fallback; }
     function writeJSON(key, value) { return Account?.writeJSON(key, value) ?? false; }
     function getPrefs() { return Account?.getPreferences() || { ...defaults, ...readJSON(PREFS_KEY, {}) }; }
     function getHub() { return Account?.getHub() || { ...hubDefaults, ...readJSON(HUB_KEY, {}) }; }
-    function session() { return Account?.getSession() || readJSON(SESSION_KEY, null); }
-    function isLoggedIn() { return Boolean(session()?.isLoggedIn); }
+    function session() {
+        if (canonicalState && canonicalState.authenticated) {
+            return {
+                isLoggedIn: true,
+                username: canonicalState.user?.username,
+                email: canonicalState.user?.email,
+                avatar: canonicalState.user?.avatar,
+                isPro: Boolean(canonicalState.subscription?.isPro || canonicalState.user?.isPro)
+            };
+        }
+        return Account?.getSession() || readJSON(SESSION_KEY, null);
+    }
+    function isLoggedIn() {
+        if (canonicalState !== null) return Boolean(canonicalState.authenticated);
+        return Boolean(session()?.isLoggedIn);
+    }
     function subscription() { return window.QuizNationSubscription || null; }
-    function isPro() { return subscription() ? subscription().isPro() : localStorage.getItem("eduquestSubscription") === "pro"; }
+    function isPro() {
+        if (canonicalState && canonicalState.authenticated) {
+            return Boolean(canonicalState.subscription?.isPro || canonicalState.user?.isPro);
+        }
+        return subscription() ? subscription().isPro() : false;
+    }
     function setText(id, value) { const node = $(id); if (node) node.textContent = value; }
     function showToast(text) { const toast = $("profileToast"); if (!toast) return; toast.textContent = text; toast.classList.add("show"); clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600); }
     function formatDate(value) { const date = value ? new Date(value) : null; return date && !Number.isNaN(date.getTime()) ? new Intl.DateTimeFormat("id-ID", { day: "2-digit", month: "short", year: "numeric" }).format(date) : "—"; }
     function updateSaveState(text = "Tersimpan otomatis") { setText("profileSaveState", text); }
+    function renderHealthBreakdown() {
+        // Safe placeholder for profile health/breakdown metrics
+    }
 
     function calculateWonderfulXP(progress) {
         return ((progress.explored || []).length * 10) + ((progress.mastered || []).length * 20) + ((progress.quizDone || 0) * 15) + ((progress.voiceSuccessCount || 0) * 25) + Number(progress.bonusXP || 0);
     }
     function getStats() {
+        if (canonicalState && canonicalState.authenticated) {
+            const p = canonicalState.progress || {};
+            const scores = Object.values(p.quizScores || {});
+            const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + (typeof b === 'number' ? b : b.score || 0), 0) / scores.length) : 100;
+            return {
+                xp: p.lifetimeXp || 0,
+                streak: p.streak || 0,
+                coins: p.coins || 0,
+                accuracy: avgScore
+            };
+        }
         if (Account) return Account.getStats();
-        const culture = readJSON("bahasa_progress", {}); const lms = readJSON("eduquestLmsProgress", {}); const rpg = readJSON(RPG_KEY, {});
-        const xp = Math.max(Number(localStorage.getItem("eduquestXP") || 0), Number(rpg.xp || 0), Number(lms.xp || 0), calculateWonderfulXP(culture));
-        return { xp, streak: Math.max(Number(localStorage.getItem("eduquestStreak") || 0), Number(culture.streak || 0), Number(lms.streak || 0), Number(rpg.streak || 0)), accuracy: Math.round((Number(culture.correct || 0) / Math.max(Number(culture.reviewed || 0), 1)) * 100) };
+        // Fallback for unauthenticated guest
+        const cached = readJSON("uot_game_state", {});
+        return {
+            xp: Number(cached.lifetimeXp || cached.xp || 0),
+            streak: Number(cached.streak || 0),
+            accuracy: 100
+        };
     }
     function getProjectStats() {
-        const progress = readJSON("eduquestProjectProgress", {});
-        const records = progress?.projects && typeof progress.projects === "object" ? Object.values(progress.projects) : [];
-        return { completed: records.filter(record => record?.status === "completed").length };
+        if (canonicalState && canonicalState.authenticated) {
+            const completed = (canonicalState.progress?.completedLessons || []).filter(l => String(l).toLowerCase().includes("project")).length;
+            return { completed };
+        }
+        const cached = readJSON("uot_game_state", {});
+        const completed = (cached.completedLessons || []).filter(l => String(l).toLowerCase().includes("project")).length;
+        return { completed };
     }
     function getTip(stats, prefs) {
         if (stats.accuracy && stats.accuracy < 70) return { title: "Perkuat akurasi dengan review singkat.", copy: "Baca ringkasan materi lalu ulang satu quiz pendek. Pola kecil ini membantu jawabanmu lebih konsisten." };
@@ -54,21 +97,30 @@
 
     
     async function renderMastery() {
-        if (typeof window === "undefined" || !window.RecommendationService) return;
+        let masterySummary = null;
+        if (canonicalState && canonicalState.mastery && Object.keys(canonicalState.mastery).length > 0) {
+            masterySummary = canonicalState.mastery;
+        } else if (typeof window !== "undefined" && window.RecommendationService) {
+            try {
+                const recs = await window.RecommendationService.getRecommendations();
+                if (recs && recs.masterySummary) masterySummary = recs.masterySummary;
+            } catch (e) {
+                console.error("Mastery rendering failed:", e);
+            }
+        }
+        if (!masterySummary) return;
+
         try {
-            const recs = await window.RecommendationService.getRecommendations();
-            if (!recs || !recs.masterySummary) return;
-            
-            const skills = Object.values(recs.masterySummary).filter(m => m.score > 0);
+            const skills = Object.values(masterySummary).filter(m => m && m.score > 0);
             const strongest = [...skills].sort((a,b) => b.score - a.score).slice(0, 3);
             const weakest = [...skills].sort((a,b) => a.score - b.score).slice(0, 3);
             
             const renderSkill = (s) => `<div style="display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; flex-direction: column;">
-                    <span style="font-size: 13px; font-weight: 600; color: var(--uot-text);">${s.skillName}</span>
-                    <span style="font-size: 11px; color: var(--uot-text-muted);">${s.tier.label} ${s.tier.badge} · ${s.attemptsCount} percobaan</span>
+                    <span style="font-size: 13px; font-weight: 600; color: var(--uot-text);">${s.skillName || s.skillId}</span>
+                    <span style="font-size: 11px; color: var(--uot-text-muted);">${s.tier ? s.tier.label + ' ' + (s.tier.badge || '') : 'Pemula'} · ${s.attemptsCount || 0} percobaan</span>
                 </div>
-                <div style="font-weight: 800; font-size: 14px; color: ${s.tier.color};">${s.score}%</div>
+                <div style="font-weight: 800; font-size: 14px; color: ${s.tier ? s.tier.color : 'var(--uot-primary)'};">${s.score}%</div>
             </div>`;
             
             const strongEl = document.getElementById("masteryStrongest");
@@ -128,38 +180,62 @@
 
     
     function render() {
-        const session = readJSON("eduquestUserSession", null);
+        const stats = getStats();
+        const projectStats = getProjectStats();
         const prefs = getPrefs();
-        const rpg = readJSON("eduquestRPG", {});
-        const avatar = rpg.activeAvatar || session?.avatar || "👨‍💻";
-        const name = session?.username || "Pengguna Universe";
-        
+
+        let name = "Pengguna Universe";
+        let avatar = "👨‍💻";
+        let level = 1;
+        let xp = stats.xp || 0;
+        let streak = stats.streak || 0;
+        let accuracy = stats.accuracy || 100;
+        let projects = projectStats.completed || 0;
+
+        if (canonicalState && canonicalState.authenticated) {
+            const u = canonicalState.user || {};
+            const p = canonicalState.progress || {};
+            name = u.username || u.name || "Pengguna Universe";
+            avatar = u.avatar || p.equippedItems?.avatar || "👨‍💻";
+            level = p.level || 1;
+            xp = p.lifetimeXp || 0;
+            streak = p.streak || 0;
+            if (p.coins !== undefined && document.getElementById("profileCoins")) {
+                document.getElementById("profileCoins").textContent = p.coins;
+            }
+        } else {
+            const s = readJSON("uot_game_state", {});
+            name = s.name || s.username || "Pengguna Universe";
+            avatar = s.equippedItems?.avatar || s.avatar || "👨‍💻";
+            level = s.level || 1;
+            xp = s.lifetimeXp || s.xp || 0;
+            streak = s.streak || 0;
+        }
+
         if (document.getElementById("profileEditorName")) document.getElementById("profileEditorName").textContent = name;
         if (document.getElementById("profileAvatarLarge")) document.getElementById("profileAvatarLarge").textContent = avatar;
-        
+
         const headline = prefs.headline || "Tambahkan headline agar profilmu lebih personal.";
         if (document.getElementById("profileHeadlineDisplay")) document.getElementById("profileHeadlineDisplay").textContent = headline;
-        
+
         const bio = prefs.bio || "Identitas ini digunakan di seluruh pengalaman belajarmu.";
         if (document.getElementById("profileBioDisplay")) document.getElementById("profileBioDisplay").textContent = bio;
-        
-        // Stats
-        if (document.getElementById("profileXp")) document.getElementById("profileXp").textContent = rpg.xp || 0;
-        if (document.getElementById("profileStreak")) document.getElementById("profileStreak").textContent = rpg.streak || 0;
-        if (document.getElementById("profileAccuracy")) document.getElementById("profileAccuracy").textContent = (rpg.accuracy || 0) + "%";
-        if (document.getElementById("profileProjectCount")) document.getElementById("profileProjectCount").textContent = rpg.projects || 0;
-        
-        const level = rpg.level || 1;
+
+        if (document.getElementById("profileXp")) document.getElementById("profileXp").textContent = xp;
+        if (document.getElementById("profileStreak")) document.getElementById("profileStreak").textContent = streak;
+        if (document.getElementById("profileAccuracy")) document.getElementById("profileAccuracy").textContent = accuracy + "%";
+        if (document.getElementById("profileProjectCount")) document.getElementById("profileProjectCount").textContent = projects;
+
         if (document.getElementById("profileLevel")) document.getElementById("profileLevel").textContent = "Level " + level;
-        
+
         const xpForNext = level * 100;
-        if (document.getElementById("profileXpLabel")) document.getElementById("profileXpLabel").textContent = (rpg.xp || 0) + " / " + xpForNext + " XP";
-        
-        const pct = Math.min(100, ((rpg.xp || 0) / xpForNext) * 100);
+        if (document.getElementById("profileXpLabel")) document.getElementById("profileXpLabel").textContent = xp + " / " + xpForNext + " XP";
+
+        const pct = Math.min(100, Math.round((xp / Math.max(xpForNext, 1)) * 100));
         if (document.getElementById("profileXpBar")) document.getElementById("profileXpBar").style.width = pct + "%";
-        
-        if (document.getElementById("nextLevelLabel")) document.getElementById("nextLevelLabel").textContent = (xpForNext - (rpg.xp || 0)) + " XP lagi menuju level berikutnya";
-        
+
+        if (document.getElementById("nextLevelLabel")) document.getElementById("nextLevelLabel").textContent = Math.max(0, xpForNext - xp) + " XP lagi menuju level berikutnya";
+
         renderHealthBreakdown();
         renderSubscription();
         renderMastery();
@@ -225,6 +301,52 @@
         });
     });
 
+    async function initCanonicalProfile() {
+        // 1. Initial render from cache if available
+        try {
+            const cached = JSON.parse(localStorage.getItem("uot_canonical_user_state") || "null");
+            if (cached && cached.authenticated) {
+                canonicalState = cached;
+                document.body.classList.toggle("profile-pro", Boolean(cached.subscription?.isPro || cached.user?.isPro));
+                render();
+            }
+        } catch (_) {}
+
+        // 2. Authoritative fetch from server
+        try {
+            const res = await fetch("/api/me", {
+                headers: { "Accept": "application/json" },
+                credentials: "include"
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.authenticated) {
+                    canonicalState = data;
+                    localStorage.setItem("uot_canonical_user_state", JSON.stringify(data));
+                    document.body.classList.toggle("profile-pro", Boolean(data.subscription?.isPro || data.user?.isPro));
+                    render();
+                } else {
+                    canonicalState = { authenticated: false };
+                    localStorage.removeItem("uot_canonical_user_state");
+                    render();
+                }
+            }
+        } catch (err) {
+            console.warn("[Profile] Server snapshot fetch deferred:", err);
+        }
+
+        // 3. Legacy data migration layer (only executed once)
+        if (localStorage.getItem("uot_legacy_migrated") !== "true" && window.SyncEngine && typeof window.SyncEngine.checkLegacyDataToMigrate === "function") {
+            try {
+                const legacyData = window.SyncEngine.checkLegacyDataToMigrate();
+                if (legacyData && typeof window.SyncEngine.migrateLegacyData === "function") {
+                    await window.SyncEngine.migrateLegacyData();
+                }
+            } catch (_) {}
+            localStorage.setItem("uot_legacy_migrated", "true");
+        }
+    }
+
     renderHealthBreakdown();
     syncSaveState();
     updateScrollUI();
@@ -234,6 +356,6 @@
     const initial = ["overview", "progress", "settings", "privacy", "subscription"].includes(requested) ? requested : ["overview", "progress", "settings", "privacy", "subscription"].includes(remembered) ? remembered : "overview";
     setSectionContext(initial);
     
-    document.body.classList.toggle("profile-pro", window.QuizNationSubscription?.isPro?.() || false);
+    initCanonicalProfile();
     requestAnimationFrame(() => document.body.classList.add("profile-refined"));
 })();

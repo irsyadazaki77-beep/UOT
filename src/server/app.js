@@ -37,6 +37,8 @@ const ProgressService = require('./services/progress-service');
 const ContentService = require('./services/content-service');
 const SocialService = require('./services/social-service');
 const AnalyticsService = require('./services/analytics-service');
+const SearchIndexService = require('./services/search-index-service');
+const retrievalEngine = require('./services/retrieval-engine');
 
 // Controllers & Routes
 const AuthController = require('./controllers/auth-controller');
@@ -116,7 +118,7 @@ function clearSessionCookie(res) {
     res.setHeader('Set-Cookie', [clearSession.join('; '), clearCsrf.join('; ')]);
 }
 
-// In-memory auth failure log for auditing
+// In-memory cache and structured repository logging for auth failure auditing
 const authFailureAuditLog = [];
 function recordAuthFailure(ip, email, reason) {
     const masked = email ? email.replace(/(^.x?)(.*)(@.*$)/, '$1***$3') : 'unknown';
@@ -127,6 +129,12 @@ function recordAuthFailure(ip, email, reason) {
         reason
     });
     if (authFailureAuditLog.length > 500) authFailureAuditLog.shift();
+
+    if (dbInstance && dbInstance.analyticsRepo && typeof dbInstance.analyticsRepo.recordAuthFailure === 'function') {
+        dbInstance.analyticsRepo.recordAuthFailure({ ip, email, reason }).catch(err => {
+            console.error('[Audit] Failed to record structured auth failure:', err.message);
+        });
+    }
 }
 
 function saveDomainContentToDisk(domain) {
@@ -210,6 +218,13 @@ function createApp(options = {}) {
         ContentEngine
     });
 
+    const searchIndexService = new SearchIndexService({
+        contentRepository,
+        ContentEngine
+    });
+    // Prime the search index at startup asynchronously
+    searchIndexService.buildIndex().catch(e => console.warn('[SearchIndex] Warmup note:', e.message));
+
     const socialService = new SocialService({
         dbInstance,
         subscriptionStore
@@ -269,36 +284,46 @@ function createApp(options = {}) {
         contentRepository,
         saveDomainContentToDisk,
         ContentMigrationTool,
-        APP_ENV
+        APP_ENV,
+        searchIndexService,
+        retrievalEngine
     });
     app.use('/', createAdminRouter({ adminController, middlewares, rateLimiter }));
 
     // 5. Dynamic Content Catalog APIs with Pagination & Filtering (FASE 6)
-    app.get('/api/content/:domain', (req, res) => {
-        const { domain } = req.params;
-        const { page, limit, category, track, search, includeDrafts } = req.query;
-        const result = contentService.getAllDomainContent(domain, {
-            includeDrafts: includeDrafts === 'true',
-            page,
-            limit,
-            category,
-            track,
-            search
-        });
-        return res.json({
-            ok: true,
-            domain,
-            data: result
-        });
+    app.get('/api/content/:domain', async (req, res) => {
+        try {
+            const { domain } = req.params;
+            const { page, limit, category, track, search, includeDrafts } = req.query;
+            const result = await contentService.getAllDomainContent(domain, {
+                includeDrafts: includeDrafts === 'true',
+                page,
+                limit,
+                category,
+                track,
+                search
+            });
+            return res.json({
+                ok: true,
+                domain,
+                data: result
+            });
+        } catch (err) {
+            return res.status(500).json({ ok: false, error: 'CONTENT_FETCH_ERROR', message: err.message });
+        }
     });
 
-    app.get('/api/content/:domain/:id', (req, res) => {
-        const { domain, id } = req.params;
-        const item = contentService.getItem(domain, id);
-        if (!item) {
-            return res.status(404).json({ ok: false, error: 'NOT_FOUND', message: 'Konten tidak ditemukan.' });
+    app.get('/api/content/:domain/:id', async (req, res) => {
+        try {
+            const { domain, id } = req.params;
+            const item = await contentService.getItem(domain, id);
+            if (!item) {
+                return res.status(404).json({ ok: false, error: 'NOT_FOUND', message: 'Konten tidak ditemukan.' });
+            }
+            return res.json({ ok: true, domain, data: item });
+        } catch (err) {
+            return res.status(500).json({ ok: false, error: 'CONTENT_ITEM_ERROR', message: err.message });
         }
-        return res.json({ ok: true, domain, data: item });
     });
 
     app.get('/api/learning-journey/goals', (req, res) => {
@@ -314,76 +339,20 @@ function createApp(options = {}) {
         }
     });
 
-    // Content-backed Search Endpoint (FASE 3)
-    app.get('/api/search', (req, res) => {
+    // Content-backed Search Endpoint (FASE 3 - In-Memory Search Index Service)
+    app.get('/api/search', async (req, res) => {
         try {
-            const query = String(req.query.q || '').trim().toLowerCase();
+            const query = String(req.query.q || '').trim();
             if (!query || query.length < 2) {
                 return res.json({ ok: true, query, results: [] });
             }
 
-            const files = [
-                { name: 'books.json', type: 'Buku & Referensi', defaultUrl: 'library.html' },
-                { name: 'culture.json', type: 'Budaya Nusantara', defaultUrl: 'quiz-budaya-lms.html' },
-                { name: 'learning-paths.json', type: 'Learning Path', defaultUrl: 'learning-journey.html' },
-                { name: 'lessons.json', type: 'Materi Belajar', defaultUrl: 'materi.html' },
-                { name: 'projects.json', type: 'Proyek Nyata', defaultUrl: 'projects.html' },
-                { name: 'quizzes.json', type: 'Quiz & Latihan', defaultUrl: 'quiz.html' }
-            ];
-
-            const results = [];
-            const dirPath = path.join(__dirname, '../../data/content');
-
-            for (const file of files) {
-                const filePath = path.join(dirPath, file.name);
-                if (!fs.existsSync(filePath)) continue;
-
-                try {
-                    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-                    const items = Array.isArray(data) ? data : (data.items || []);
-
-                    for (const item of items) {
-                        const title = item.title || item.name || '';
-                        const desc = item.description || item.summary || item.content || '';
-                        const tags = Array.isArray(item.tags) ? item.tags.join(' ') : '';
-                        
-                        const matchText = `${title} ${desc} ${tags}`.toLowerCase();
-                        if (matchText.includes(query)) {
-                            let itemUrl = file.defaultUrl;
-                            if (file.name === 'books.json' && item.id) {
-                                itemUrl = `reader.html?book=${encodeURIComponent(item.id)}`;
-                            } else if (file.name === 'lessons.json' && item.id) {
-                                itemUrl = `materi-basic.html?topik=${encodeURIComponent(item.track || 'programming')}`;
-                            } else if (file.name === 'culture.json' && item.id) {
-                                itemUrl = `daerah-detail.html?id=${encodeURIComponent(item.id)}`;
-                            } else if (file.name === 'projects.json' && item.id) {
-                                itemUrl = `projects.html?id=${encodeURIComponent(item.id)}`;
-                            }
-
-                            results.push({
-                                title,
-                                description: desc.substring(0, 120) + (desc.length > 120 ? '...' : ''),
-                                type: file.type,
-                                url: itemUrl
-                            });
-                        }
-                    }
-                } catch (e) {
-                    // Ignore single file parse errors
-                }
+            if (!searchIndexService.isReady) {
+                await searchIndexService.buildIndex();
             }
 
-            const uniqueResults = [];
-            const seen = new Set();
-            for (const r of results) {
-                const key = `${r.title}-${r.type}`;
-                if (!seen.has(key)) {
-                    seen.add(key);
-                    uniqueResults.push(r);
-                }
-            }
-
-            return res.json({ ok: true, query, results: uniqueResults.slice(0, 8) });
+            const results = searchIndexService.search(query, 8);
+            return res.json({ ok: true, query, results });
         } catch (err) {
             return res.status(500).json({ ok: false, error: "SERVER_ERROR", message: err.message });
         }
@@ -413,15 +382,36 @@ function createApp(options = {}) {
     // 7. Sanitized Public Health Endpoint (FASE 4 OWASP Hardening)
     app.get('/api/health', async (req, res) => {
         const mem = process.memoryUsage();
-        const activeUsers = await dbInstance.userRepo.count();
-        res.json({
-            status: 'ok',
+        let dbHealthy = true;
+        let dbError = null;
+        try {
+            await dbInstance.db.getAsync('SELECT 1');
+        } catch (err) {
+            dbHealthy = false;
+            dbError = err.message;
+        }
+
+        let activeUsers = 0;
+        if (dbHealthy && dbInstance.userRepo) {
+            try {
+                activeUsers = await dbInstance.userRepo.count();
+            } catch (_) {}
+        }
+
+        const statusCode = dbHealthy ? 200 : 503;
+
+        res.status(statusCode).json({
+            status: dbHealthy ? 'ok' : 'degraded',
             app: 'Universe Of Tech',
             schemaVersion: 6,
             timestamp: new Date().toISOString(),
             environment: APP_ENV,
             paymentConfigured: IS_PAYMENT_CONFIGURED,
             authAuthoritative: true,
+            database: {
+                status: dbHealthy ? 'healthy' : 'unhealthy',
+                ...(dbError ? { error: dbError } : {})
+            },
             observability: {
                 uptimeSeconds: Math.round(process.uptime()),
                 memoryUsageRssMb: Math.round(mem.rss / (1024 * 1024)),

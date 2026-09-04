@@ -81,18 +81,36 @@
         };
     }
 
+    function generateUUID() {
+        if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+            return crypto.randomUUID();
+        }
+        if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+            const bytes = new Uint8Array(16);
+            crypto.getRandomValues(bytes);
+            bytes[6] = (bytes[6] & 0x0f) | 0x40;
+            bytes[8] = (bytes[8] & 0x3f) | 0x80;
+            return [...bytes].map((b, i) => ([4, 6, 8, 10].includes(i) ? '-' : '') + b.toString(16).padStart(2, '0')).join('');
+        }
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
     /**
-     * Unified Pipeline Execution Function
-     * Handles: Local State -> Sync Queue -> Telemetry -> Mastery -> Event Bus -> Cloud Sync
+     * Unified Async Reconciliation Pipeline Execution Function
+     * Pipeline: Pending -> Sync -> Validation -> Reward -> Mastery -> Recommendation
      */
     function processPipeline(activityType, payload = {}, options = {}) {
         const timestamp = new Date().toISOString();
-        const activityId = options.activityId || payload.activityId || `${activityType}_${Date.now()}`;
+        const activityId = options.activityId || payload.activityId || `${activityType}_${generateUUID()}`;
+        const eventId = options.eventId || payload.eventId || `evt_${generateUUID()}`;
 
-        // 1. Local Optimistic Progress Update via Progression Engine
+        // 1. STEP 1: PENDING & LOCAL OPTIMISTIC FEEDBACK
         let progressionFeedback = null;
         let progressionResult = null;
-
         const progressionEngine = typeof window !== "undefined" ? (window.Progression || window.ProgressionEngine) : null;
 
         if (progressionEngine) {
@@ -124,7 +142,7 @@
                         nextObjective: progressionEngine.getNextObjective()
                     };
                 } else {
-                                        progressionFeedback = progressionEngine.recordActivity(activityType, {
+                    progressionFeedback = progressionEngine.recordActivity(activityType, {
                         ...options,
                         ...payload,
                         count: payload.count || 1,
@@ -142,12 +160,13 @@
             }
         }
 
-        // 2. Queue Event into SyncEngine for Authoritative Server Validation
+        // 2. STEP 2: SYNC QUEUE WITH UUID IDEMPOTENCY
         let syncEvent = null;
         const syncEngine = typeof window !== "undefined" ? window.SyncEngine : null;
         if (syncEngine && typeof syncEngine.queueEvent === "function") {
             try {
                 syncEvent = syncEngine.queueEvent(mapToSyncEventType(activityType), {
+                    eventId,
                     activityId,
                     activityType,
                     clientTimestamp: timestamp,
@@ -158,7 +177,7 @@
             }
         }
 
-        // 3. Telemetry & Analytics Logging
+        // 3. STEP 3: TELEMETRY & ANALYTICS
         const analytics = typeof window !== "undefined" ? window.UOTAnalytics : null;
         if (analytics) {
             try {
@@ -174,46 +193,52 @@
             }
         }
 
-        // 4. Mastery Calculation Update via Recommendation Service
+        // 4. STEP 4: MASTERY CALCULATION (ONLY FOR MAPPED ACTIVITIES)
         let masterySummary = null;
-        if (typeof window !== "undefined" && window.RecommendationService) {
-            try {
-                window.RecommendationService.invalidateCache();
-                window.RecommendationService.getMastery().then(mastery => {
-                    masterySummary = mastery;
-                    emitEvent(EVENTS.MASTERY, {
-                        activityType,
-                        activityId,
-                        masterySummary,
-                        timestamp
-                    });
-                }).catch(() => {});
-            } catch (err) {
-                console.warn("[ActivityService] RecommendationService update failed:", err);
-            }
-        } else {
-            const adaptiveEngine = typeof window !== "undefined" ? window.AdaptiveLearningEngine : null;
-            if (adaptiveEngine && typeof adaptiveEngine.generateRecommendations === "function") {
+        const isActivityUnmapped = Boolean(payload.unmapped || (!payload.skill && !payload.category && !payload.topic));
+
+        if (!isActivityUnmapped) {
+            if (typeof window !== "undefined" && window.RecommendationService) {
                 try {
-                    masterySummary = adaptiveEngine.generateRecommendations().masterySummary || {};
-                    emitEvent(EVENTS.MASTERY, {
-                        activityType,
-                        activityId,
-                        masterySummary,
-                        timestamp
-                    });
+                    window.RecommendationService.invalidateCache();
+                    window.RecommendationService.getMastery().then(mastery => {
+                        masterySummary = mastery;
+                        emitEvent(EVENTS.MASTERY, {
+                            activityType,
+                            activityId,
+                            masterySummary,
+                            timestamp
+                        });
+                    }).catch(() => {});
                 } catch (err) {
-                    console.warn("[ActivityService] Adaptive Learning update failed:", err);
+                    console.warn("[ActivityService] RecommendationService update failed:", err);
+                }
+            } else {
+                const adaptiveEngine = typeof window !== "undefined" ? window.AdaptiveLearningEngine : null;
+                if (adaptiveEngine && typeof adaptiveEngine.generateRecommendations === "function") {
+                    try {
+                        masterySummary = adaptiveEngine.generateRecommendations().masterySummary || {};
+                        emitEvent(EVENTS.MASTERY, {
+                            activityType,
+                            activityId,
+                            masterySummary,
+                            timestamp
+                        });
+                    } catch (err) {
+                        console.warn("[ActivityService] Adaptive Learning update failed:", err);
+                    }
                 }
             }
         }
 
-        // 5. Build Aggregated Pipeline Result
+        // 5. STEP 5: OPTIMISTIC STATE & EVENT DISPATCH
         const currentGameState = progressionEngine ? progressionEngine.getGameState() : null;
-        const pipelineResult = {
+        const optimisticResult = {
             ok: true,
             activityId,
+            eventId,
             activityType,
+            status: "pending",
             timestamp,
             feedback: progressionFeedback,
             gameState: currentGameState,
@@ -221,11 +246,11 @@
             masterySummary
         };
 
-        // 6. Dispatch Event Bus Custom Events
         emitEvent(EVENTS.ACTIVITY, {
             type: activityType,
             activityId,
-            status: "completed",
+            eventId,
+            status: "pending",
             payload,
             feedback: progressionFeedback,
             timestamp
@@ -242,14 +267,44 @@
             });
         }
 
-        // 7. Trigger Immediate Sync if device is online
-        if (syncEngine && typeof syncEngine.flushQueue === "function" && typeof navigator !== "undefined" && navigator.onLine) {
-            syncEngine.flushQueue().catch(err => {
-                console.warn("[ActivityService] Cloud flush attempt deferred:", err);
-            });
-        }
+        // 6. STEP 6: ASYNC BACKEND RECONCILIATION PROMISE
+        const reconciliationPromise = (async () => {
+            let serverResponse = null;
+            if (syncEngine && typeof syncEngine.flushQueue === "function" && typeof navigator !== "undefined" && navigator.onLine) {
+                try {
+                    const flushResult = await syncEngine.flushQueue();
+                    if (flushResult && flushResult.syncedCount > 0) {
+                        serverResponse = flushResult;
+                    }
+                } catch (err) {
+                    console.warn("[ActivityService] Cloud flush deferred:", err);
+                }
+            }
 
-        return pipelineResult;
+            // Emit final completed event
+            emitEvent(EVENTS.ACTIVITY, {
+                type: activityType,
+                activityId,
+                eventId,
+                status: "completed",
+                payload,
+                feedback: progressionFeedback,
+                serverReconciled: Boolean(serverResponse),
+                timestamp: new Date().toISOString()
+            });
+
+            return {
+                ...optimisticResult,
+                status: "completed",
+                serverReconciled: Boolean(serverResponse),
+                reconciledAt: new Date().toISOString()
+            };
+        })();
+
+        // Dual-nature return: Can be treated synchronously (has .ok, .feedback, etc.)
+        // AND awaited asynchronously (resolves to full reconciliation result)
+        Object.assign(reconciliationPromise, optimisticResult);
+        return reconciliationPromise;
     }
 
     function mapToSyncEventType(type) {
